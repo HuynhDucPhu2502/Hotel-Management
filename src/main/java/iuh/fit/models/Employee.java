@@ -34,6 +34,7 @@ public class Employee {
     /**
      * Hàm khởi tạo đầy đủ cho lớp Employee.
      *
+     * @param employeeID mã định danh của nhân viên.
      * @param fullName Họ và tên của nhân viên.
      * @param phoneNumber Số điện thoại của nhân viên.
      * @param email Email của nhân viên.
@@ -43,15 +44,25 @@ public class Employee {
      * @param dob Ngày sinh của nhân viên.
      * @param position Vị trí của nhân viên trong công ty.
      */
-    public Employee(String fullName, String phoneNumber, String email, String address, Gender gender, String idCardNumber, LocalDate dob, Position position) {
-        this.fullName = fullName;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.address = address;
-        this.gender = gender;
-        this.idCardNumber = idCardNumber;
-        this.dob = dob;
-        this.position = position;
+    public Employee(String employeeID, String fullName, String phoneNumber, String email, String address, String idCardNumber, Gender gender, LocalDate dob, Position position) {
+        setEmployeeID(employeeID);
+        setFullName(fullName);
+        setPhoneNumber(phoneNumber);
+        setEmail(email);
+        setAddress(address);
+        setIdCardNumber(idCardNumber);
+        setGender(gender);
+        setDob(dob);
+        setPosition(position);
+    }
+
+    /**
+     * Hàm khởi tạo đầy đủ cho lớp Employee.
+     *
+     * @param employeeID mã định danh của nhân viên.
+     */
+    public Employee(String employeeID) {
+        this.employeeID = employeeID;
     }
 
     /**
