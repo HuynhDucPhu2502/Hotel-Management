@@ -128,7 +128,11 @@ public class RegexChecker {
     }
 
 
+    public static boolean isValidPassword(String password){
+        String regex = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()])[a-zA-Z\\d!@#$%^&*()]{8,30}$";
 
+        return password.matches(regex);
+    }
 
 
 }
