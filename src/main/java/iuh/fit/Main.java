@@ -18,6 +18,7 @@ public class Main {
 //            System.out.println("i = " + i);
 //        }
 //
+        //Thêm newACC để test regex
 //        Account newACC = new Account("ACC-000001", new Employee("EMP-000001"), "LeTranGiaHuy", "gh22!020046920!6", AccountStatus.ACTIVE);
 //
 //        System.out.printf(newACC.toString());
