@@ -62,7 +62,7 @@ public class Employee {
      * @param employeeID mã định danh của nhân viên.
      */
     public Employee(String employeeID) {
-        this.employeeID = employeeID;
+        setEmployeeID(employeeID);
     }
 
     /**
