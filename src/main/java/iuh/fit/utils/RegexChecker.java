@@ -127,7 +127,12 @@ public class RegexChecker {
         return yearsBetween >= 18;
     }
 
-
+    /**
+     * Phương thức kiểm tra xem mật khẩu có đúng theo mẫu cho sẵn không.
+     *
+     * @param password Mật khẩu cần kiểm tra (dạng String).
+     * @return true nếu mật khẩu có từ 8 đến 30 ký tự, có ít nhất 1 ký tự, 1 ký ố và 1 ký tự đặc biệt như !@#$%^&*().
+     */
     public static boolean isValidPassword(String password){
         String regex = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()])[a-zA-Z\\d!@#$%^&*()]{8,30}$";
 
