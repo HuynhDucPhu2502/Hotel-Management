@@ -94,9 +94,9 @@ public class Tax {
      * @throws IllegalArgumentException nếu tỷ lệ thuế không hợp lệ
      */
     public void setTaxRate(double taxRate) {
-        if (!RegexChecker.isValidTaxRate(taxRate)) {
+        if (taxRate <= 0)
             throw new IllegalArgumentException(ErrorMessages.TAX_INVALID_TAXRATE);
-        }
+
         this.taxRate = taxRate;
     }
 
@@ -123,25 +123,15 @@ public class Tax {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 41 * hash + Objects.hashCode(this.taxName);
-        return hash;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Tax tax)) return false;
+        return Objects.equals(taxName, tax.taxName);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        final Tax other = (Tax) obj;
-        if (!Objects.equals(this.taxName.toUpperCase(), other.taxName.toUpperCase())) {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        return Objects.hashCode(taxName);
     }
 
     @Override
