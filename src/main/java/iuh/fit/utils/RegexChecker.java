@@ -234,9 +234,6 @@ public class RegexChecker {
         // Thay thế các khoảng trắng lặp lại bằng một khoảng trắng duy nhất
         String trimmedInput = input.replaceAll("\\s+", " ");
 
-        // In ra giá trị sau khi xử lý khoảng trắng (chỉ để kiểm tra quá trình, có thể bỏ nếu không cần)
-        System.out.println(trimmedInput);
-
         // Biểu thức chính quy kiểm tra tên:
         // ^: Bắt đầu chuỗi
         // [a-zA-Z\\s]: Cho phép các ký tự chữ cái (a-z, A-Z) và khoảng trắng
