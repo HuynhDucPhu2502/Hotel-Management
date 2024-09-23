@@ -5,13 +5,11 @@ package iuh.fit.models.enums;
  * - AVAILABLE: Phòng trống
  * - ON_USE: Phòng đang sử dụng
  * - UNAVAILABLE: Phòng không được sử dụng
- * - ORDERED: Phòng đã được đặt
  */
 public enum RoomStatus {
     AVAILABLE("Phòng trống"),
     ON_USE("Phòng đang sử dụng"),
-    UNAVAILABLE("Phòng không được sử dụng"),
-    ORDERED("Phòng đã được đặt");
+    UNAVAILABLE("Phòng không được sử dụng");
 
     // Tên hiển thị cho trạng thái phòng
     private final String displayName;
