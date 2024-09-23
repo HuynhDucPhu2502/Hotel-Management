@@ -1,6 +1,7 @@
 package iuh.fit.utils;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 public class RegexChecker {
@@ -139,5 +140,27 @@ public class RegexChecker {
         return password.matches(regex);
     }
 
+    /**
+     * Phương thức kiểm tra mã ca (shiftID) có đúng định dạng hay không.
+     *
+     * Quy tắc mã ca:
+     * - Bắt đầu với chuỗi "SHIFT".
+     * - Sau đó là ký hiệu thời gian "AM" hoặc "PM" tùy thuộc vào thời gian bắt đầu (startTime).
+     * - Kết thúc bằng chuỗi gồm 4 chữ số.
+     * Ví dụ hợp lệ: SHIFT-AM-0001, SHIFT-PM-1234.
+     *
+     * @param input Mã ca (shiftID) cần kiểm tra.
+     * @param startTime Thời gian bắt đầu để xác định mã thời gian là AM hoặc PM.
+     * @return true nếu mã ca hợp lệ theo quy tắc trên, false nếu không.
+     */
+    public static boolean isValidShiftID(String input, LocalTime startTime) {
+        // Xác định AM hoặc PM dựa trên startTime
+        String prefix = "SHIFT";
+        String timePeriod = startTime.isBefore(LocalTime.NOON) ? "AM" : "PM";
 
+        // Regex kiểm tra định dạng của shiftID
+        String regex = "^" + prefix + "-" + timePeriod + "-\\d{4}$";
+
+        return input.matches(regex);
+    }
 }
