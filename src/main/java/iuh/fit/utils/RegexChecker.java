@@ -138,5 +138,4 @@ public class RegexChecker {
 
         return password.matches(regex);
     }
-
 }
