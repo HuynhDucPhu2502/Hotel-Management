@@ -191,19 +191,8 @@ public class RegexChecker {
     }
 
     /**
-     * Kiểm tra tính hợp lệ của tỷ lệ thuế.
-     * 
-     * @param input Tỷ lệ thuế cần kiểm tra
-     * @return true nếu tỷ lệ thuế là số dương, false nếu không
-     */
-    public static boolean isValidTaxRate(double input) {
-        // Kiểm tra xem input có phải là số dương không
-        return input > 0;
-    }
-
-    /**
      * Kiểm tra tính hợp lệ của ngày tạo thuế.
-     * 
+     *
      * @param input Ngày tạo thuế cần kiểm tra
      * @return true nếu ngày tạo thuế nhỏ hơn ngày hiện tại, false nếu không hợp lệ
      *         (hoặc nếu input là null)
@@ -214,6 +203,7 @@ public class RegexChecker {
             return false; // Kiểm tra null
         }
         return input.isBefore(LocalDate.now());
+    }
 
     /**
      * Kiểm tra tính hợp lệ của mã phòng theo định dạng nhất định.
