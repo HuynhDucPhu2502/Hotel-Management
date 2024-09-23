@@ -1,11 +1,14 @@
 package iuh.fit.utils;
 
 public class ErrorMessages {
+    //Global ErrorMessages
+    public static final String INVALID_PHONENUMBER = "Số điện thoại phải có 10 chữ số và chữ số đầu tiên là số 0";
+    public static final String INVALID_ADDRESS = "Địa chỉ không được rỗng";
+    public static final String INVALID_EMAIL = "Email phải từ 4 đến 30 ký tự và không cứ ký tự đặc biệt";
+    public static final String INVALID_CCCD = "CCCD phải gồm 12 chữ số";
     // Employee
     public static final String EMP_INVALID_ID = "Mã nhân viên phải theo định dạng EMP-XXXXXX, với X là ký số";
     public static final String EMP_INVALID_FULLNAME = "Tên nhân viên phải từ 2 đến 50 ký tự";
-    public static final String EMP_INVALID_PHONENUMBER = "Số điện thoại từ 8 đến 11 ký số";
-    public static final String EMP_INVALID_ADDRESS = "Email phải từ 4 đến 30 ký tự và không cứ ký tự đặc biệt";
     public static final String EMP_INVALID_DOB = "Ngày sinh không hợp lý, tuổi ít nhât từ 18 trở lên";
 
     // Account
@@ -32,6 +35,10 @@ public class ErrorMessages {
     public static final String SHIFT_NULL_STARTTIME = "Thời gian bắt đầu ca đang trống";
     public static final String SHIFT_NULL_ENDTIME = "Thời gian kết thúc ca đang trống";
     public static final String SHIFT_INVALID_WORKHOURS = "Thời gian trên mỗi ca làm ít nhất 6 tiếng";
+
+    //Customer
+    public static final String CUS_INVALID_ID = "Mã khách hàng phải theo định dạng CUS-XXXXXX, với X là ký số";
+    public static final String CUS_INVALID_FULLNAME = "Tên Khách hàng phải từ 3 đến 30 ký tự";
     
     //Tax
     public static final String TAX_INVALID_TAXNAME = "Tên thuế không được trùng, không rỗng và không chưa khoảng trắng";

@@ -11,4 +11,5 @@ public class GlobalConstants {
     public static final String PRICING_PREFIX = "P";
     public static final String EMPLOYEE_PREFIX = "EMP";
     public static final String ACCOUNT_PREFIX = "ACC";
+    public static final String CUSTOMER_PREFIX = "CUS";
 }
