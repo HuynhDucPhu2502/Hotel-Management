@@ -139,11 +139,4 @@ public class RegexChecker {
         return password.matches(regex);
     }
 
-
-    // RoomCategory
-    public static boolean isValidRoomCategoryidFormat(String roomCategoryId){
-        return roomCategoryId.matches("^(RC-)\\d{6}");
-    }
-
-
 }
