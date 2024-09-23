@@ -1,6 +1,7 @@
 package iuh.fit.utils;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 public class RegexChecker {
@@ -46,7 +47,8 @@ public class RegexChecker {
      */
     public static boolean isValidNameLength(String input, int minLength, int maxLength) {
         // Loại bỏ tất cả khoảng trắng trong chuỗi
-        String trimmedInput = input.replaceAll("\\s+", "");
+        input = input.trim();
+        String trimmedInput = input.replaceAll("\\s+", " ");
 
         // Kiểm tra độ dài chuỗi sau khi loại bỏ khoảng trắng có nằm trong khoảng minLength và maxLength không
         return trimmedInput.length() >= minLength && trimmedInput.length() <= maxLength;
@@ -55,14 +57,14 @@ public class RegexChecker {
     /**
      * Phương thức kiểm tra xem chuỗi đầu vào có phải là số điện thoại hợp lệ hay không.
      *
-     * Một số điện thoại hợp lệ có độ dài từ 8 đến 11 chữ số.
+     * Một số điện thoại hợp lệ có độ dài 10 chữ số. Ký số đầu tiên bắt đầu bằng số 0
      *
      * @param input Chuỗi đầu vào cần kiểm tra.
-     * @return true nếu chuỗi đầu vào là một số điện thoại hợp lệ (từ 8 đến 11 chữ số), ngược lại trả về false.
+     * @return true nếu chuỗi đầu vào là một số điện thoại hợp lệ (10 chữ số), ngược lại trả về false.
      *
      */
     public static boolean isValidPhoneNumber(String input) {
-        return input.matches("\\d{8,11}");
+        return input.matches("^[0]\\d{9}$");
     }
 
     /**
@@ -139,5 +141,36 @@ public class RegexChecker {
         return password.matches(regex);
     }
 
+    /**
+     * Phương thức kiểm tra mã ca (shiftID) có đúng định dạng hay không.
+     *
+     * Quy tắc mã ca:
+     * - Bắt đầu với chuỗi "SHIFT".
+     * - Sau đó là ký hiệu thời gian "AM" hoặc "PM" tùy thuộc vào thời gian bắt đầu (startTime).
+     * - Kết thúc bằng chuỗi gồm 4 chữ số.
+     * Ví dụ hợp lệ: SHIFT-AM-0001, SHIFT-PM-1234.
+     *
+     * @param input Mã ca (shiftID) cần kiểm tra.
+     * @param startTime Thời gian bắt đầu để xác định mã thời gian là AM hoặc PM.
+     * @return true nếu mã ca hợp lệ theo quy tắc trên, false nếu không.
+     */
+    public static boolean isValidShiftID(String input, LocalTime startTime) {
+        // Xác định AM hoặc PM dựa trên startTime
+        String prefix = "SHIFT";
+        String timePeriod = startTime.isBefore(LocalTime.NOON) ? "AM" : "PM";
 
+        // Regex kiểm tra định dạng của shiftID
+        String regex = "^" + prefix + "-" + timePeriod + "-\\d{4}$";
+
+        return input.matches(regex);
+    }
+
+    public static boolean isValidCusFullName(String input) {
+        input = input.trim();
+        String trimmedInput = input.replaceAll("\\s+", " ");
+        System.out.println(trimmedInput);
+        String regex = "^[a-zA-Z\\s]{3,30}$";
+
+        return trimmedInput.matches(regex);
+    }
 }
