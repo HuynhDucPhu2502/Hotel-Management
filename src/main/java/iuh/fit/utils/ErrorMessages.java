@@ -32,4 +32,12 @@ public class ErrorMessages {
     public static final String SHIFT_NULL_STARTTIME = "Thời gian bắt đầu ca đang trống";
     public static final String SHIFT_NULL_ENDTIME = "Thời gian kết thúc ca đang trống";
     public static final String SHIFT_INVALID_WORKHOURS = "Thời gian trên mỗi ca làm ít nhất 6 tiếng";
+
+    // Room
+    public static final String ROOM_INVALID_ID_ISNULL = "Mã phòng không được rỗng!!!";
+    public static final String ROOM_INVALID_ID_FORMAT = "Mã phòng phải theo cấu trúc : XYZZ, gồm:\nX: \"T\" (phòng thường) hoặc \"V\" (phòng VIP), Y: 1 hoặc 2 (số giường), ZZ: số thứ tự phòng từ 01 đến 99.";
+    public static final String ROOM_INVALID_ROOMSTATUS_ISNULL = "Trạng thái phòng không được rỗng!!!";
+    public static final String ROOM_INVALID_ROOMSTATUS_TYPES = "Trạng thái phòng phải là một trong các giá trị AVAILABLE, ON_USE,  UNAVAILABLE!!!";
+    public static final String ROOM_INVALID_DATEOFCREATION = "Ngày tạo phải trước ngày giờ hiện tại!!!";
+    public static final String ROOM_INVALID_ROOMCATEGORY_ISNULL = "Loại phòng không được rỗng!!!";
 }

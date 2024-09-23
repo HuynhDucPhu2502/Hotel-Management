@@ -1,6 +1,7 @@
 package iuh.fit.utils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
@@ -162,5 +163,25 @@ public class RegexChecker {
         String regex = "^" + prefix + "-" + timePeriod + "-\\d{4}$";
 
         return input.matches(regex);
+    }
+
+    /**
+     * Kiểm tra xem thời gian tạo có trước thời gian hiện tại hay không.
+     *
+     * @param dateOfCreation Thời gian tạo cần kiểm tra
+     * @return true nếu dateOfCreation trước thời gian hiện tại, ngược lại là false
+     */
+    public static boolean isBeforeNow(LocalDateTime dateOfCreation) {
+        return dateOfCreation.isBefore(LocalDateTime.now());
+    }
+
+    /**
+     * Kiểm tra tính hợp lệ của mã phòng theo định dạng nhất định.
+     *
+     * @param roomID Mã phòng cần kiểm tra
+     * @return true nếu roomID hợp lệ theo định dạng "^([TV])[12]\\d{2}$", ngược lại là false
+     */
+    public static boolean isValidRoomID(String roomID) {
+        return roomID.matches("^([TV])[12]\\d{2}$");
     }
 }
