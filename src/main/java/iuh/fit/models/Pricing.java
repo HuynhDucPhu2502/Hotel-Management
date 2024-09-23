@@ -2,6 +2,7 @@ package iuh.fit.models;
 
 import iuh.fit.models.enums.PriceUnit;
 import iuh.fit.utils.ErrorMessages;
+import iuh.fit.utils.GlobalConstants;
 import iuh.fit.utils.RegexChecker;
 
 import java.util.Objects;
@@ -85,7 +86,7 @@ public class Pricing {
      * @param pricingID Mã định danh của định giá.
      */
     public void setPricingID(String pricingID) {
-        if (!RegexChecker.isValidIDFormat("P", pricingID))
+        if (!RegexChecker.isValidIDFormat(GlobalConstants.PRICING_PREFIX, pricingID))
             throw new IllegalArgumentException(ErrorMessages.PRICING_INVALID_ID);
         this.pricingID = pricingID;
     }

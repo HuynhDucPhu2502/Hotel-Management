@@ -1,6 +1,7 @@
 package iuh.fit.models;
 
 import iuh.fit.utils.ErrorMessages;
+import iuh.fit.utils.GlobalConstants;
 import iuh.fit.utils.RegexChecker;
 
 import java.util.Objects;
@@ -55,10 +56,9 @@ public class RoomCategory {
      * @throws IllegalArgumentException nếu mã rỗng hoặc sai định dạng
      */
     public void setRoomCategoryid(String roomCategoryid) {
-        final String prefix = "RC";
         if(roomCategoryid.isEmpty())
             throw new IllegalArgumentException(ErrorMessages.ROOM_CATEGORY_INVALID_ID_ISNULL);
-        else if(RegexChecker.isValidIDFormat(prefix, roomCategoryid))
+        else if(!RegexChecker.isValidIDFormat(GlobalConstants.ROOMCATEGORY_PREFIX, roomCategoryid))
             throw new IllegalArgumentException(ErrorMessages.ROOM_CATEGORY_INVALID_ID_FORMAT);
         this.roomCategoryid = roomCategoryid;
     }

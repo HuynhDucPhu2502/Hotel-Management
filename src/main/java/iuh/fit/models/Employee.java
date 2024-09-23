@@ -3,6 +3,7 @@ package iuh.fit.models;
 import iuh.fit.models.enums.Gender;
 import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ErrorMessages;
+import iuh.fit.utils.GlobalConstants;
 import iuh.fit.utils.RegexChecker;
 
 import java.time.LocalDate;
@@ -111,7 +112,7 @@ public class Employee {
      * @param employeeID ID của nhân viên.
      */
     public void setEmployeeID(String employeeID) {
-        if (!RegexChecker.isValidIDFormat("EMP", employeeID))
+        if (!RegexChecker.isValidIDFormat(GlobalConstants.EMPLOYEE_PREFIX, employeeID))
             throw new IllegalArgumentException(ErrorMessages.EMP_INVALID_ID);
         this.employeeID = employeeID;
     }
