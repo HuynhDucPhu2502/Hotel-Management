@@ -54,7 +54,7 @@ public class RoomCategory {
 
     public void setNumberOfBed(int numberOfBed) {
         if(numberOfBed < 1)
-            throw new IllegalArgumentException(ErrorMessages.ROOM_CATEGORY_INVALID_NUMOFBED_NAN)
+            throw new IllegalArgumentException(ErrorMessages.ROOM_CATEGORY_INVALID_NUMOFBED_NAN);
         this.numberOfBed = numberOfBed;
     }
 
