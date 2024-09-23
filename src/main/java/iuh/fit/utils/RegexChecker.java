@@ -48,7 +48,8 @@ public class RegexChecker {
      */
     public static boolean isValidNameLength(String input, int minLength, int maxLength) {
         // Loại bỏ tất cả khoảng trắng trong chuỗi
-        String trimmedInput = input.replaceAll("\\s+", "");
+        input = input.trim();
+        String trimmedInput = input.replaceAll("\\s+", " ");
 
         // Kiểm tra độ dài chuỗi sau khi loại bỏ khoảng trắng có nằm trong khoảng minLength và maxLength không
         return trimmedInput.length() >= minLength && trimmedInput.length() <= maxLength;
@@ -64,7 +65,7 @@ public class RegexChecker {
      *
      */
     public static boolean isValidPhoneNumber(String input) {
-        return input.matches("\\d{8,11}");
+        return input.matches("^[0]\\d{9}$");
     }
 
     /**
@@ -213,5 +214,14 @@ public class RegexChecker {
      */
     public static boolean isValidRoomID(String roomID) {
         return roomID.matches("^([TV])[12]\\d{2}$");
+    }
+
+    public static boolean isValidCusFullName(String input) {
+        input = input.trim();
+        String trimmedInput = input.replaceAll("\\s+", " ");
+        System.out.println(trimmedInput);
+        String regex = "^[a-zA-Z\\s]{3,30}$";
+
+        return trimmedInput.matches(regex);
     }
 }
