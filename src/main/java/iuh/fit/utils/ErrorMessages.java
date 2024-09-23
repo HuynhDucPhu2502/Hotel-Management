@@ -16,7 +16,7 @@ public class ErrorMessages {
     // Pricing
     public static final String PRICING_INVALID_PRICE = "Số tiền không được rỗng, phải lớn hơn 0";
     public static final String PRICING_INVALID_ID = "Mã giá phải theo định dạng P-XXXXXX, với X là ký số";
-
+    public static final String PRICING_INVALID_ROOMCATEGORY_ISNULL = "Loại phòng không được rỗng";
     // Room category
     public static final String ROOM_CATEGORY_INVALID_ID_ISNULL = "Mã loại phòng không được rỗng!!!";
     public static final String ROOM_CATEGORY_INVALID_ID_FORMAT = "Mã loại phòng phải theo định dạng RC-XXXXXX, với XXXXXX là dãy số!!!";

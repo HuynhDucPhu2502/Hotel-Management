@@ -15,6 +15,8 @@ public class Pricing {
     private String pricingID;
     // Đơn vị tính giá (ví dụ: theo giờ, theo ngày)
     private PriceUnit priceUnit;
+    // Loại phòng
+    private RoomCategory roomCategory;
     // Mức giá
     private double price;
 
@@ -25,9 +27,10 @@ public class Pricing {
      * @param priceUnit Đơn vị tính giá (PriceUnit).
      * @param price Mức giá.
      */
-    public Pricing(String pricingID, PriceUnit priceUnit, double price) {
+    public Pricing(String pricingID, PriceUnit priceUnit, double price, RoomCategory roomCategory) {
         setPricingID(pricingID);
         setPriceUnit(priceUnit);
+        setRoomCategory(roomCategory);
         setPrice(price);
     }
 
@@ -110,10 +113,34 @@ public class Pricing {
     }
 
     /**
+     * Lấy danh mục phòng.
+     *
+     * @return roomCategory Danh mục phòng hiện tại.
+     */
+    public RoomCategory getRoomCategory() {
+        return roomCategory;
+    }
+
+    /**
+     * Thiết lập danh mục phòng và kiểm tra tính hợp lệ.
+     *
+     * @param roomCategory Danh mục phòng cần thiết lập.
+     * @throws IllegalArgumentException nếu danh mục phòng rỗng (null).
+     */
+    public void setRoomCategory(RoomCategory roomCategory) {
+        if (roomCategory == null)
+            throw new IllegalArgumentException(ErrorMessages.PRICING_INVALID_ROOMCATEGORY_ISNULL);
+        this.roomCategory = roomCategory;
+    }
+
+
+    /**
      * Trả về mức giá.
      *
      * @return Mức giá.
      */
+
+
     public double getPrice() {
         return price;
     }
