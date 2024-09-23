@@ -153,7 +153,7 @@ public class Employee {
      */
     public void setPhoneNumber(String phoneNumber) {
         if (!RegexChecker.isValidPhoneNumber(phoneNumber))
-            throw new IllegalArgumentException(ErrorMessages.EMP_INVALID_PHONENUMBER);
+            throw new IllegalArgumentException(ErrorMessages.INVALID_PHONENUMBER);
         this.phoneNumber = phoneNumber;
     }
 
@@ -173,7 +173,7 @@ public class Employee {
      */
     public void setEmail(String email) {
         if (!RegexChecker.isValidEmail(email))
-            throw new IllegalArgumentException(ErrorMessages.EMP_INVALID_ADDRESS);
+            throw new IllegalArgumentException(ErrorMessages.INVALID_EMAIL);
         this.email = email;
     }
 
@@ -249,7 +249,7 @@ public class Employee {
      */
     public void setIdCardNumber(String idCardNumber) {
         if (!RegexChecker.isValidCCCD(idCardNumber))
-            throw new IllegalArgumentException(ErrorMessages.EMP_INVALID_ID);
+            throw new IllegalArgumentException(ErrorMessages.INVALID_CCCD);
         this.idCardNumber = idCardNumber;
     }
 
