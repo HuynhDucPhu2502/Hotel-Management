@@ -2,6 +2,7 @@ package iuh.fit.models;
 
 import iuh.fit.models.enums.AccountStatus;
 import iuh.fit.utils.ErrorMessages;
+import iuh.fit.utils.GlobalConstants;
 import iuh.fit.utils.RegexChecker;
 
 import java.util.Objects;
@@ -81,7 +82,7 @@ public class Account {
      * @throws IllegalArgumentException nếu ID không hợp lệ.
      */
     public void setAccountID(String accountID) {
-        if(!RegexChecker.isValidIDFormat("ACC", accountID)) {
+        if(!RegexChecker.isValidIDFormat(GlobalConstants.ACCOUNT_PREFIX, accountID)) {
             throw new IllegalArgumentException(ErrorMessages.ACC_INVALID_ID);
         }
         this.accountID = accountID;
