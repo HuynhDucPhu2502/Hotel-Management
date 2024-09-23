@@ -216,12 +216,36 @@ public class RegexChecker {
         return roomID.matches("^([TV])[12]\\d{2}$");
     }
 
+    /**
+     * Phương thức kiểm tra tính hợp lệ của tên đầy đủ khách hàng.
+     *
+     * @param input Tên đầy đủ của khách hàng cần kiểm tra (chuỗi ký tự).
+     * @return Trả về true nếu tên hợp lệ, false nếu không hợp lệ.
+     *
+     * Tên hợp lệ cần thỏa mãn các điều kiện sau:
+     *  - Tên có độ dài từ 3 đến 30 ký tự.
+     *  - Chỉ chứa các chữ cái (viết hoa, viết thường) và khoảng trắng.
+     *  - Khoảng trắng không được trùng lặp (tức là không có khoảng trắng thừa).
+     */
     public static boolean isValidCusFullName(String input) {
+        // Loại bỏ khoảng trắng ở đầu và cuối chuỗi
         input = input.trim();
+
+        // Thay thế các khoảng trắng lặp lại bằng một khoảng trắng duy nhất
         String trimmedInput = input.replaceAll("\\s+", " ");
+
+        // In ra giá trị sau khi xử lý khoảng trắng (chỉ để kiểm tra quá trình, có thể bỏ nếu không cần)
         System.out.println(trimmedInput);
+
+        // Biểu thức chính quy kiểm tra tên:
+        // ^: Bắt đầu chuỗi
+        // [a-zA-Z\\s]: Cho phép các ký tự chữ cái (a-z, A-Z) và khoảng trắng
+        // {3,30}: Độ dài của tên từ 3 đến 30 ký tự
+        // $: Kết thúc chuỗi
         String regex = "^[a-zA-Z\\s]{3,30}$";
 
+        // Kiểm tra xem tên đã xử lý có khớp với biểu thức chính quy hay không
         return trimmedInput.matches(regex);
     }
+
 }
