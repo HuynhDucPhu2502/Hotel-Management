@@ -244,5 +244,4 @@ public class RegexChecker {
         // Kiểm tra xem tên đã xử lý có khớp với biểu thức chính quy hay không
         return trimmedInput.matches(regex);
     }
-
 }
