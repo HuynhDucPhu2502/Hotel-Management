@@ -166,16 +166,6 @@ public class RegexChecker {
     }
 
     /**
-     * Kiểm tra xem thời gian tạo có trước thời gian hiện tại hay không.
-     *
-     * @param dateOfCreation Thời gian tạo cần kiểm tra
-     * @return true nếu dateOfCreation trước thời gian hiện tại, ngược lại là false
-     */
-    public static boolean isBeforeNow(LocalDateTime dateOfCreation) {
-        return dateOfCreation.isBefore(LocalDateTime.now());
-    }
-
-    /**
      * Kiểm tra tính hợp lệ của mã phòng theo định dạng nhất định.
      *
      * @param roomID Mã phòng cần kiểm tra

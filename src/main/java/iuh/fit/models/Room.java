@@ -105,7 +105,7 @@ public class Room {
      * @throws IllegalArgumentException nếu thời gian không hợp lệ (không trước thời gian hiện tại)
      */
     public void setDateOfCreation(LocalDateTime dateOfCreation) {
-        if(!RegexChecker.isBeforeNow(dateOfCreation))
+        if(dateOfCreation.isBefore(LocalDateTime.now()))
             throw new IllegalArgumentException(ErrorMessages.ROOM_INVALID_DATEOFCREATION);
         this.dateOfCreation = dateOfCreation;
     }
