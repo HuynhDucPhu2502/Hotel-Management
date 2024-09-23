@@ -163,4 +163,55 @@ public class RegexChecker {
 
         return input.matches(regex);
     }
+ 
+    /**
+     * Kiểm tra tính hợp lệ của tên thuế.
+     * 
+     * @param input Tên thuế cần kiểm tra
+     * @return true nếu tên thuế hợp lệ, false nếu không hợp lệ
+     *         (không rỗng, không chứa khoảng trắng và không có ký tự đặc biệt)
+     */
+    public static boolean isValidTaxName(String input) {
+        // Kiểm tra rỗng
+        if (input == null || input.trim().isEmpty()) {
+            return false;
+        }
+
+        // Kiểm tra khoảng trắng
+        if (input.contains(" ")) {
+            return false;
+        }
+
+        // Kiểm tra ký tự đặc biệt
+        if (!input.matches("[a-zA-Z0-9]+")) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Kiểm tra tính hợp lệ của tỷ lệ thuế.
+     * 
+     * @param input Tỷ lệ thuế cần kiểm tra
+     * @return true nếu tỷ lệ thuế là số dương, false nếu không
+     */
+    public static boolean isValidTaxRate(double input) {
+        // Kiểm tra xem input có phải là số dương không
+        return input > 0;
+    }
+
+    /**
+     * Kiểm tra tính hợp lệ của ngày tạo thuế.
+     * 
+     * @param input Ngày tạo thuế cần kiểm tra
+     * @return true nếu ngày tạo thuế nhỏ hơn ngày hiện tại, false nếu không hợp lệ
+     *         (hoặc nếu input là null)
+     */
+    public static boolean isValidTaxDateOfCreation(LocalDate input) {
+        // Kiểm tra xem input có nhỏ hơn ngày hiện tại không
+        if (input == null) {
+            return false; // Kiểm tra null
+        }
+        return input.isBefore(LocalDate.now());
+    }
 }

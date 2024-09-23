@@ -32,4 +32,9 @@ public class ErrorMessages {
     public static final String SHIFT_NULL_STARTTIME = "Thời gian bắt đầu ca đang trống";
     public static final String SHIFT_NULL_ENDTIME = "Thời gian kết thúc ca đang trống";
     public static final String SHIFT_INVALID_WORKHOURS = "Thời gian trên mỗi ca làm ít nhất 6 tiếng";
+    
+    //Tax
+    public static final String TAX_INVALID_TAXNAME = "Tên thuế không được trùng, không rỗng và không chưa khoảng trắng";
+    public static final String TAX_INVALID_TAXRATE = "Hệ số thuế phải là số dương";
+    public static final String TAX_INVALID_TAXDATEOFCREATION = "Ngày gian thêm thuế phải trước ngày hiện tại";
 }
