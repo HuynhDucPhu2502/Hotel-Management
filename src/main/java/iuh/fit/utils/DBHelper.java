@@ -13,7 +13,7 @@ public class DBHelper {
 
     private static final String USER_NAME = "sa";
     private static final String USER_PASSWORD = "sapassword";
-    private static final String DATABASE_NAME = "SellingManagement";
+    private static final String DATABASE_NAME = "HotelDatabase";
 
     // Đếm số lượng kết nối đã được thiết lập
     private static int connectCount = 0;
