@@ -1,7 +1,5 @@
-package iuh.fit.models.enums;
+package iuh.fit.models;
 
-import iuh.fit.models.Employee;
-import iuh.fit.models.Shift;
 import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.RegexChecker;
 
