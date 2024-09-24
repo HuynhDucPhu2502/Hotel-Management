@@ -6,6 +6,7 @@ public class ErrorMessages {
     public static final String INVALID_ADDRESS = "Địa chỉ không được rỗng";
     public static final String INVALID_EMAIL = "Email phải từ 4 đến 30 ký tự và không cứ ký tự đặc biệt";
     public static final String INVALID_CCCD = "CCCD phải gồm 12 chữ số";
+
     // Employee
     public static final String EMP_INVALID_ID = "Mã nhân viên phải theo định dạng EMP-XXXXXX, với X là ký số";
     public static final String EMP_INVALID_FULLNAME = "Tên nhân viên phải từ 2 đến 50 ký tự";
@@ -35,6 +36,12 @@ public class ErrorMessages {
     public static final String SHIFT_NULL_STARTTIME = "Thời gian bắt đầu ca đang trống";
     public static final String SHIFT_NULL_ENDTIME = "Thời gian kết thúc ca đang trống";
     public static final String SHIFT_INVALID_WORKHOURS = "Thời gian trên mỗi ca làm ít nhất 6 tiếng";
+
+    // ShiftAssignment
+    public static final String SHIFTASSIGNMENT_INVALID_ID = "Mã phân công ca làm việc phải theo định dạng SA-XXXXXX, với X là ký số";
+    public static final String SHIFTASSIGNMENT_INVALID_DESCRIPTION = "Mô tả không được để trống";
+    public static final String SHIFTASSIGNMENT_INVALID_EMPLOYEE_ISNULL = "Nhân viên không được để trống";
+    public static final String SHIFTASSIGNMENT_INVALID_SHIFT_ISNULL = "Ca làm không được để trống";
 
     //Customer
     public static final String CUS_INVALID_ID = "Mã khách hàng phải theo định dạng CUS-XXXXXX, với X là ký số";
