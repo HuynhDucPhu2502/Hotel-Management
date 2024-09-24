@@ -16,4 +16,5 @@ public class GlobalConstants {
     public static final String SERVICECATEGORY_PREFIX = "SC";
     public static final String HOTELSERVICE_PREFIX = "HS";
     public static final String ROOMUSAGESERVICE_PREFIX = "RUS";
+    public static final String ROOMUSAGE_PREFIX = "RU";
 }
