@@ -71,4 +71,11 @@ public class ErrorMessages {
     public static final String ROOM_USAGE_SERVICE_INVALID_ID_FORMAT = "Mã sử dụng dịch vụ phòng phải theo định dạng RUS-XXXXXX, với XXXXXX là dãy số!!!";
     public static final String ROOM_USAGE_SERVICE_INVALID_QUANTITY = "Số lượng dịch vụ phải lớn hơn 0!!!";
     public static final String ROOM_USAGE_SERVICE_INVALID_HOTELSERVICE_ISNULL = "Dịch vụ không được rỗng!!!";
+
+    //RoomUsage
+    public static final String ROOM_USAGE_INVALID_ID_ISNULL = "Mã sử dụng phòng không được rỗng";
+    public static final String ROOM_USAGE_INVALID_ID_FORMAT = "Mã sử dụng phòng phải theo định dạng RU-XXXXXX, với XXXXXX là dãy số";
+    public static final String ROOM_USAGE_INVALID_TOTAL_SERVICE_CHARGE = "Tổng giá tiền dịch vụ phải lớn hơn 0";
+    public static final String ROOM_USAGE_INVALID_ROOM_CHARGE = "Tiền phòng phải lớn hơn 0";
+
 }
