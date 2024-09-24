@@ -270,4 +270,19 @@ public class Employee {
     public void setPosition(Position position) {
         this.position = position;
     }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeID='" + employeeID + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", gender=" + gender +
+                ", idCardNumber='" + idCardNumber + '\'' +
+                ", dob=" + dob +
+                ", position=" + position +
+                '}';
+    }
 }
