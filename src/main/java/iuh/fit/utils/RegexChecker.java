@@ -77,7 +77,9 @@ public class RegexChecker {
      */
     public static boolean isValidEmail(String input) {
         // Regex kiểm tra chuỗi với điều kiện đặt ra
-        String regex = "^[a-zA-Z0-9_-]{4,30}$";
+        String regex = "^[a-zA-Z0-9_-]{4,30}@(gmail\\.com|yahoo\\.com)$";
+
+
         return input.matches(regex);
     }
 

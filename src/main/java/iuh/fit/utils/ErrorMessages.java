@@ -5,7 +5,7 @@ public class ErrorMessages {
     public static final String INVALID_PHONENUMBER = "Số điện thoại phải có 10 chữ số và chữ số đầu tiên là số 0";
     public static final String INVALID_ADDRESS = "Địa chỉ không được rỗng";
     public static final String INVALID_EMAIL = "Email phải từ 4 đến 30 ký tự và không cứ ký tự đặc biệt";
-    public static final String INVALID_CCCD = "CCCD phải gồm 12 chữ số";
+    public static final String INVALID_CCCD = "CCCD có cấu trúc XYZ. X là chuỗi 3 chữ số, Y là 1 chữ số thuộc khoảng từ 1 đến 3, và Z là chuỗi 8 chữ số.";
 
     // Employee
     public static final String EMP_INVALID_ID = "Mã nhân viên phải theo định dạng EMP-XXXXXX, với X là ký số";
