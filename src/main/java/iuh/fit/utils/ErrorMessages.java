@@ -91,5 +91,9 @@ public class ErrorMessages {
     public static final String HISTORY_CHECKIN_IVALID_CHECKIN_DATE_ISNULL = "Ngày nhận phòng không được rỗng!!!";
     public static final String HISTORY_CHECKIN_IVALID_CHECKIN_DATE = "Ngày nhận phòng phải sau ngày nhận phòng dự kiến";
     public static final String HISTORY_CHECKIN_IVALID_RESERVATION = "Thông tin phiếu đặt phòng không được rỗng!!!";
-
+    //RoomUsage
+    public static final String ROOM_USAGE_INVALID_ID_ISNULL = "Mã sử dụng phòng không được rỗng";
+    public static final String ROOM_USAGE_INVALID_ID_FORMAT = "Mã sử dụng phòng phải theo định dạng RU-XXXXXX, với XXXXXX là dãy số";
+    public static final String ROOM_USAGE_INVALID_TOTAL_SERVICE_CHARGE = "Tổng giá tiền dịch vụ phải lớn hơn 0";
+    public static final String ROOM_USAGE_INVALID_ROOM_CHARGE = "Tiền phòng phải lớn hơn 0";
 }
