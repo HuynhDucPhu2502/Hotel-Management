@@ -52,4 +52,23 @@ public class ErrorMessages {
     public static final String ROOM_INVALID_ROOMSTATUS_TYPES = "Trạng thái phòng phải là một trong các giá trị AVAILABLE, ON_USE,  UNAVAILABLE!!!";
     public static final String ROOM_INVALID_DATEOFCREATION = "Ngày tạo phải trước ngày giờ hiện tại!!!";
     public static final String ROOM_INVALID_ROOMCATEGORY_ISNULL = "Loại phòng không được rỗng!!!";
+
+    //ServiceCategory
+    public static final String SERVICE_CATEGORY_INVALID_ID_ISNULL = "Mã loại dịch vụ không được rỗng!!!";
+    public static final String SERVICE_CATEGORY_INVALID_ID_FORMAT = "Mã loại dịch vụ phải theo định dạng SC-XXXXXX, với XXXXXX là dãy số!!!";
+    public static final String SERVICE_CATEGORY_INVALID_NAME_ISNULL = "Tên loại dịch vụ không được rỗng!!!";
+
+    //HotelService
+    public static final String HOTEL_SERVICE_INVALID_ID_ISNULL = "Mã dịch vụ không được rỗng!!!";
+    public static final String HOTEL_SERVICE_INVALID_ID_FORMAT = "Mã dịch vụ phải theo định dạng HS-XXXXXX, với XXXXXX là dãy số!!!";
+    public static final String HOTEL_SERVICE_INVALID_NAME_ISNULL = "Tên dịch vụ không được rỗng!!!";
+    public static final String HOTEL_SERVICE_DESCRIPTION_ISNULL = "Mô tả dịch vụ không được rỗng!!!";
+    public static final String HOTEL_SERVICE_INVALID_PRICE = "Giá dịch vụ không được rỗng, phải lớn hơn 0!!!";
+    public static final String HOTEL_SERVICE_INVALID_SERVICECATEGORY_ISNULL = "Loại dịch vụ không được rỗng!!!";
+
+    //RoomUsageService
+    public static final String ROOM_USAGE_SERVICE_INVALID_ID_ISNULL = "Mã sử dụng dịch vụ phòng không được rỗng!!!";
+    public static final String ROOM_USAGE_SERVICE_INVALID_ID_FORMAT = "Mã sử dụng dịch vụ phòng phải theo định dạng RUS-XXXXXX, với XXXXXX là dãy số!!!";
+    public static final String ROOM_USAGE_SERVICE_INVALID_QUANTITY = "Số lượng dịch vụ phải lớn hơn 0!!!";
+    public static final String ROOM_USAGE_SERVICE_INVALID_HOTELSERVICE_ISNULL = "Dịch vụ không được rỗng!!!";
 }
