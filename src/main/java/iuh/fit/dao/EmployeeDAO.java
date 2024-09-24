@@ -38,7 +38,6 @@ public class EmployeeDAO {
                         ? Gender.MALE : Gender.FEMALE;
 
                 employee.setGender(gender);
-                System.out.println(rs.getString(7));
                 employee.setIdCardNumber(rs.getString(7));
                 employee.setDob(rs.getDate(8).toLocalDate());
 
