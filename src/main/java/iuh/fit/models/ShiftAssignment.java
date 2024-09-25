@@ -1,6 +1,7 @@
 package iuh.fit.models;
 
 import iuh.fit.utils.ErrorMessages;
+import iuh.fit.utils.GlobalConstants;
 import iuh.fit.utils.RegexChecker;
 
 import java.util.Objects;
@@ -42,7 +43,7 @@ public class ShiftAssignment {
     }
 
     public void setShiftAssignmentId(String shiftAssignmentId) {
-        if (!RegexChecker.isValidIDFormat("SA", shiftAssignmentId))
+        if (!RegexChecker.isValidIDFormat(GlobalConstants.SHIFTASSIGNMENT_PREFIX, shiftAssignmentId))
             throw new IllegalArgumentException(ErrorMessages.SHIFTASSIGNMENT_INVALID_ID);
         this.shiftAssignmentId = shiftAssignmentId;
     }
