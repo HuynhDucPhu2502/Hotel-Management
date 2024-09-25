@@ -1,5 +1,6 @@
 package iuh.fit.models;
 
+import iuh.fit.models.enums.ShiftDaysSchedule;
 import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.GlobalConstants;
 import iuh.fit.utils.RegexChecker;
@@ -9,11 +10,16 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+/**
+ * Lớp Shift đại diện cho một ca làm việc, bao gồm mã ca, thời gian bắt đầu, thời gian kết thúc, số giờ làm việc và lịch làm việc theo ngày.
+ * Lớp này cũng cung cấp các phương thức để kiểm tra và tính toán số giờ làm việc dựa trên thời gian bắt đầu và kết thúc.
+ */
 public class Shift {
     private String shiftID;
     private LocalTime startTime;
     private LocalTime endTime;
     private LocalDateTime updatedDate;
+    private ShiftDaysSchedule shiftDaysSchedule;
     private int numberOfHour = 0;
 
     /**
@@ -25,12 +31,14 @@ public class Shift {
      * @param startTime    Thời gian bắt đầu ca (LocalTime).
      * @param endTime      Thời gian kết thúc ca (LocalTime).
      * @param updatedDate  Ngày cập nhật thông tin ca (LocalDateTime).
+     * @param shiftDaysSchedule Lịch làm việc theo ca (ShiftDaysSchedule).
      */
-    public Shift(String shiftID, LocalTime startTime, LocalTime endTime, LocalDateTime updatedDate) {
+    public Shift(String shiftID, LocalTime startTime, LocalTime endTime, LocalDateTime updatedDate, ShiftDaysSchedule shiftDaysSchedule) {
         setStartTime(startTime);
         setEndTime(endTime);
         setShiftID(shiftID);
         setUpdatedDate(updatedDate);
+        setShiftDaysSchedule(shiftDaysSchedule);
         calcNumberOfHour(); // Tính toán số giờ làm việc
     }
 
@@ -81,10 +89,10 @@ public class Shift {
      * @throws IllegalArgumentException nếu startTime là null hoặc mã ca không hợp lệ.
      */
     public void setShiftID(String shiftID) {
-        if (this.startTime == null)
-            throw new IllegalArgumentException(ErrorMessages.SHIFT_NULL_STARTTIME);
+        if (this.endTime == null)
+            throw new IllegalArgumentException(ErrorMessages.SHIFT_NULL_ENDTIME);
 
-        if (!RegexChecker.isValidShiftID(shiftID, startTime))
+        if (!RegexChecker.isValidShiftID(shiftID, this.endTime))
             throw new IllegalArgumentException(ErrorMessages.SHIFT_INVALID_SHIFTID);
         this.shiftID = shiftID;
     }
@@ -169,7 +177,7 @@ public class Shift {
      *
      * @throws IllegalArgumentException nếu startTime hoặc endTime không hợp lệ, hoặc nếu số giờ nhỏ hơn số giờ tối thiểu.
      */
-    private void calcNumberOfHour() {
+    public void calcNumberOfHour() {
         if (startTime == null)
             throw new IllegalArgumentException(ErrorMessages.SHIFT_NULL_STARTTIME);
 
@@ -185,6 +193,24 @@ public class Shift {
     }
 
     /**
+     * Lấy lịch làm việc theo ca (shiftDaysSchedule).
+     *
+     * @return Lịch làm việc (ShiftDaysSchedule).
+     */
+    public ShiftDaysSchedule getShiftDaysSchedule() {
+        return shiftDaysSchedule;
+    }
+
+    /**
+     * Thiết lập lịch làm việc theo ca (shiftDaysSchedule).
+     *
+     * @param shiftDaysSchedule Lịch làm việc (ShiftDaysSchedule).
+     */
+    public void setShiftDaysSchedule(ShiftDaysSchedule shiftDaysSchedule) {
+        this.shiftDaysSchedule = shiftDaysSchedule;
+    }
+
+    /**
      * Lấy số giờ làm việc.
      * Tự động tính toán nếu chưa được tính.
      *
@@ -193,5 +219,23 @@ public class Shift {
     public int getNumberOfHour() {
         calcNumberOfHour();  // Tính toán số giờ mỗi khi gọi hàm
         return numberOfHour;
+    }
+
+    /**
+     * Trả về chuỗi biểu diễn đối tượng Shift, bao gồm các thông tin chi tiết như
+     * shiftID, startTime, endTime, updatedDate, shiftDaysSchedule và numberOfHour.
+     *
+     * @return Chuỗi biểu diễn của đối tượng Shift với các giá trị của các thuộc tính được phân cách bởi dấu ','.
+     */
+    @Override
+    public String toString() {
+        return "Shift{" +
+                "shiftID='" + shiftID + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", updatedDate=" + updatedDate +
+                ", shiftDaysSchedule=" + shiftDaysSchedule +
+                ", numberOfHour=" + numberOfHour +
+                '}';
     }
 }

@@ -154,13 +154,13 @@ public class RegexChecker {
      * Ví dụ hợp lệ: SHIFT-AM-0001, SHIFT-PM-1234.
      *
      * @param input Mã ca (shiftID) cần kiểm tra.
-     * @param startTime Thời gian bắt đầu để xác định mã thời gian là AM hoặc PM.
+     * @param endTime Thời gian bắt đầu để xác định mã thời gian là AM hoặc PM.
      * @return true nếu mã ca hợp lệ theo quy tắc trên, false nếu không.
      */
-    public static boolean isValidShiftID(String input, LocalTime startTime) {
+    public static boolean isValidShiftID(String input, LocalTime endTime) {
         // Xác định AM hoặc PM dựa trên startTime
         String prefix = "SHIFT";
-        String timePeriod = startTime.isBefore(LocalTime.NOON) ? "AM" : "PM";
+        String timePeriod = endTime.isBefore(LocalTime.NOON) ? "AM" : "PM";
 
         // Regex kiểm tra định dạng của shiftID
         String regex = "^" + prefix + "-" + timePeriod + "-\\d{4}$";
