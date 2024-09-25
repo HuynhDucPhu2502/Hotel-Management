@@ -92,10 +92,11 @@ CREATE TABLE CategoryService (
 Go 
 --Thêm dữ liệu vào bảng CategoryService
 INSERT INTO CategoryService (serviceCategoryID, serviceCategoryName)
-VALUES ('CS-000001', 'IT Services'),
-       ('CS-000002', 'Healthcare Services'),
-       ('CS-000003', 'Financial Services'),
-       ('CS-000004', 'Education Services');
+VALUES 
+('CS-000001', 'Dịch vụ Khách sạn'),  -- Cập nhật tên loại dịch vụ
+('CS-000002', 'Dịch vụ Spa'),         -- Cập nhật tên loại dịch vụ
+('CS-000003', 'Dịch vụ Hội nghị'),     -- Cập nhật tên loại dịch vụ
+('CS-000004', 'Dịch vụ Đón sân bay');  -- Cập nhật tên loại dịch vụ
 
 Go
 --Tạo bảo HotelService
@@ -109,12 +110,12 @@ CREATE TABLE HotelService (
 )
 
 -- Thêm dữ liệu vào bảng HotelService
-INSERT INTO HotelService (serviceId, serviceName, description, servicePrice, serviceCategoryID)
+INSERT INTO HotelService (hotelServiceId, serviceName, description, servicePrice, serviceCategoryID)
 VALUES 
 ('HS-000001', 'Dịch vụ phòng', 'Dịch vụ phòng 24/7 cho tất cả khách', 50.00, 'CS-000001'),
 ('HS-000002', 'Dịch vụ Spa', 'Massage toàn thân và liệu trình spa', 120.00, 'CS-000002'),
 ('HS-000003', 'Đặt phòng hội nghị', 'Đặt phòng hội nghị cho các cuộc họp', 200.00, 'CS-000003'),
-('HS-000004', 'Đón sân bay', 'Dịch vụ xe sang cho việc đón sân bay', 75.00, 'CS-000004');
+('HS-000004', 'Dịch vụ đón sân bay', 'Dịch vụ xe sang cho việc đón sân bay', 75.00, 'CS-000004');
 
 --Tạo bảng RoomUsageService
 CREATE TABLE RoomUsageService (
@@ -127,7 +128,7 @@ CREATE TABLE RoomUsageService (
 --Thêm dữ liệu vào bảng RoomUsageService
 INSERT INTO RoomUsageService (roomUsageServiceId, quantity, hotelServiceId)
 VALUES 
-('RUS-000001', 2, 'HS-000001'),  -- Room Service
-('RUS-000002', 1, 'HS-000002'),  -- Spa Service
-('RUS-000003', 3, 'HS-000003'),  -- Conference Room Booking
-('RUS-000004', 1, 'HS-000004');  -- Airport Pickup
+('RUS-000001', 2, 'HS-000001'),  -- Dịch vụ phòng
+('RUS-000002', 1, 'HS-000002'),  -- Dịch vụ Spa
+('RUS-000003', 3, 'HS-000003'),  -- Đặt phòng hội nghị
+('RUS-000004', 1, 'HS-000004');  -- Dịch vụ đón sân bay
