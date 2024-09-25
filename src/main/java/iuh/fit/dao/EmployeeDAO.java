@@ -3,6 +3,7 @@ package iuh.fit.dao;
 import iuh.fit.models.Employee;
 import iuh.fit.models.enums.Gender;
 import iuh.fit.models.enums.Position;
+import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 
 import java.sql.Connection;
@@ -33,18 +34,10 @@ public class EmployeeDAO {
                 employee.setPhoneNumber(rs.getString(3));
                 employee.setEmail(rs.getString(4));
                 employee.setAddress(rs.getString(5));
-
-                Gender gender = rs.getString(6).equals("MALE")
-                        ? Gender.MALE : Gender.FEMALE;
-
-                employee.setGender(gender);
+                employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
                 employee.setIdCardNumber(rs.getString(7));
-                employee.setDob(rs.getDate(8).toLocalDate());
-
-                Position position = rs.getString(9).equals("MANAGER")
-                        ? Position.MANAGER : Position.RECEPTIONIST;
-
-                employee.setPosition(position);
+                employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(8)));
+                employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
 
                 data.add(employee);
             }
