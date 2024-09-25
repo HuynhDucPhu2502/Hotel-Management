@@ -1,5 +1,6 @@
 package iuh.fit.models;
 
+import iuh.fit.models.enums.ShiftDaysSchedule;
 import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.GlobalConstants;
 import iuh.fit.utils.RegexChecker;
@@ -9,11 +10,16 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
+/**
+ * Lớp Shift đại diện cho một ca làm việc, bao gồm mã ca, thời gian bắt đầu, thời gian kết thúc, số giờ làm việc và lịch làm việc theo ngày.
+ * Lớp này cũng cung cấp các phương thức để kiểm tra và tính toán số giờ làm việc dựa trên thời gian bắt đầu và kết thúc.
+ */
 public class Shift {
     private String shiftID;
     private LocalTime startTime;
     private LocalTime endTime;
     private LocalDateTime updatedDate;
+    private ShiftDaysSchedule shiftDaysSchedule;
     private int numberOfHour = 0;
 
     /**
@@ -25,12 +31,14 @@ public class Shift {
      * @param startTime    Thời gian bắt đầu ca (LocalTime).
      * @param endTime      Thời gian kết thúc ca (LocalTime).
      * @param updatedDate  Ngày cập nhật thông tin ca (LocalDateTime).
+     * @param shiftDaysSchedule Lịch làm việc theo ca (ShiftDaysSchedule).
      */
-    public Shift(String shiftID, LocalTime startTime, LocalTime endTime, LocalDateTime updatedDate) {
+    public Shift(String shiftID, LocalTime startTime, LocalTime endTime, LocalDateTime updatedDate, ShiftDaysSchedule shiftDaysSchedule) {
         setStartTime(startTime);
         setEndTime(endTime);
         setShiftID(shiftID);
         setUpdatedDate(updatedDate);
+        setShiftDaysSchedule(shiftDaysSchedule);
         calcNumberOfHour(); // Tính toán số giờ làm việc
     }
 
@@ -182,6 +190,24 @@ public class Shift {
             throw new IllegalArgumentException(ErrorMessages.SHIFT_INVALID_WORKHOURS);
 
         this.numberOfHour = hours;
+    }
+
+    /**
+     * Lấy lịch làm việc theo ca (shiftDaysSchedule).
+     *
+     * @return Lịch làm việc (ShiftDaysSchedule).
+     */
+    public ShiftDaysSchedule getShiftDaysSchedule() {
+        return shiftDaysSchedule;
+    }
+
+    /**
+     * Thiết lập lịch làm việc theo ca (shiftDaysSchedule).
+     *
+     * @param shiftDaysSchedule Lịch làm việc (ShiftDaysSchedule).
+     */
+    public void setShiftDaysSchedule(ShiftDaysSchedule shiftDaysSchedule) {
+        this.shiftDaysSchedule = shiftDaysSchedule;
     }
 
     /**
