@@ -246,4 +246,8 @@ public class RegexChecker {
         // Kiểm tra xem tên đã xử lý có khớp với biểu thức chính quy hay không
         return trimmedInput.matches(regex);
     }
+
+    public static boolean isValidInvoiceID(String invoiceID){
+        return invoiceID.matches("^(INV)(\\d{10}-)(\\d{4})$");
+    }
 }
