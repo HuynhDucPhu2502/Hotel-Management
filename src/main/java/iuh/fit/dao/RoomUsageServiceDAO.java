@@ -18,21 +18,33 @@ public class RoomUsageServiceDAO {
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement();
         ){
-            String sql = "SELECT roomUsageServiceId, quantity, hotelServiceId " +
-                    "FROM RoomUsageService";
+            String sql = "SELECT a.roomUsageServiceId, a.quantity, a.hotelServiceId,  " +
+                    "b.serviceName, b.description, b.servicePrice, b.serviceCategoryID " +
+                    "c.serviceCategoryName" +
+                    "FROM RoomUsageService a join HotelService b on a.hotelServiceId = b.serviceId" +
+                    " join ServiceCategory c on b.serviceCategoryID = c.service";
             ResultSet rs = statement.executeQuery(sql);
 
 
             while (rs.next()) {
                 RoomUsageService roomUsageService = new RoomUsageService();
+                HotelService hotelService = new HotelService();
+                ServiceCategory serviceCategory = new ServiceCategory();
 
                 roomUsageService.setRoomUsageServiceId(rs.getString(1));
                 roomUsageService.setQuantity(rs.getInt(2));
 
-                String hotelServiceId = rs.getString(3);
-                HotelService hotelService = new HotelService(hotelServiceId);
+                hotelService.setServiceId(rs.getString(3));
+                hotelService.setServiceName(rs.getString(4));
+                hotelService.setDescription(rs.getString(5));
+                hotelService.setServicePrice(rs.getDouble(6));
 
+                serviceCategory.setServiceCategoryID(rs.getString(7));
+                serviceCategory.setServiceCategoryName(rs.getString(8));
+
+                hotelService.setServiceCategory(serviceCategory);
                 roomUsageService.setHotelService(hotelService);
+
                 data.add(roomUsageService);
             }
 
