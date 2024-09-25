@@ -89,10 +89,10 @@ public class Shift {
      * @throws IllegalArgumentException nếu startTime là null hoặc mã ca không hợp lệ.
      */
     public void setShiftID(String shiftID) {
-        if (this.startTime == null)
-            throw new IllegalArgumentException(ErrorMessages.SHIFT_NULL_STARTTIME);
+        if (this.endTime == null)
+            throw new IllegalArgumentException(ErrorMessages.SHIFT_NULL_ENDTIME);
 
-        if (!RegexChecker.isValidShiftID(shiftID, startTime))
+        if (!RegexChecker.isValidShiftID(shiftID, this.endTime))
             throw new IllegalArgumentException(ErrorMessages.SHIFT_INVALID_SHIFTID);
         this.shiftID = shiftID;
     }
@@ -177,7 +177,7 @@ public class Shift {
      *
      * @throws IllegalArgumentException nếu startTime hoặc endTime không hợp lệ, hoặc nếu số giờ nhỏ hơn số giờ tối thiểu.
      */
-    private void calcNumberOfHour() {
+    public void calcNumberOfHour() {
         if (startTime == null)
             throw new IllegalArgumentException(ErrorMessages.SHIFT_NULL_STARTTIME);
 
@@ -219,5 +219,23 @@ public class Shift {
     public int getNumberOfHour() {
         calcNumberOfHour();  // Tính toán số giờ mỗi khi gọi hàm
         return numberOfHour;
+    }
+
+    /**
+     * Trả về chuỗi biểu diễn đối tượng Shift, bao gồm các thông tin chi tiết như
+     * shiftID, startTime, endTime, updatedDate, shiftDaysSchedule và numberOfHour.
+     *
+     * @return Chuỗi biểu diễn của đối tượng Shift với các giá trị của các thuộc tính được phân cách bởi dấu ','.
+     */
+    @Override
+    public String toString() {
+        return "Shift{" +
+                "shiftID='" + shiftID + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", updatedDate=" + updatedDate +
+                ", shiftDaysSchedule=" + shiftDaysSchedule +
+                ", numberOfHour=" + numberOfHour +
+                '}';
     }
 }
