@@ -17,7 +17,7 @@ public class HotelServiceDAO {
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement();
         ){
-            String sql = "SELECT * " +
+            String sql = "SELECT serviceId, serviceName, description, servicePrice, serviceCategoryID " +
                     "FROM HotelService";
             ResultSet rs = statement.executeQuery(sql);
 

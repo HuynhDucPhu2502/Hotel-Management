@@ -17,7 +17,7 @@ public class ServiceCategoryDAO {
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement();
         ){
-            String sql = "SELECT * " +
+            String sql = "SELECT serviceCategoryID, serviceCategoryName " +
                     "FROM ServiceCategory";
             ResultSet rs = statement.executeQuery(sql);
 
