@@ -32,10 +32,10 @@ public class Tax {
      * @param activate Trạng thái kích hoạt
      */
     public Tax(String taxName, double taxRate, LocalDate dateOfCreation, boolean activate) {
-        this.taxName = taxName;
-        this.taxRate = taxRate;
-        this.dateOfCreation = dateOfCreation;
-        this.activate = activate;
+        this.setTaxName(taxName);
+        this.setTaxRate(taxRate);
+        this.setDateOfCreation(dateOfCreation);
+        this.setActivate(activate);
     }
 
     /**

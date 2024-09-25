@@ -17,11 +17,15 @@ public class HotelService {
     }
 
     public HotelService(String serviceId, String serviceName, double servicePrice, String description, ServiceCategory serviceCategory) {
-        this.serviceId = serviceId;
-        this.serviceName = serviceName;
-        this.servicePrice = servicePrice;
-        this.description = description;
-        this.serviceCategory = serviceCategory;
+        this.setServiceId(serviceId);
+        this.setServiceName(serviceName);
+        this.setServicePrice(servicePrice);
+        this.setDescription(description);
+        this.setServiceCategory(serviceCategory);
+    }
+
+    public HotelService(String serviceId) {
+        this.setServiceId(serviceId);
     }
 
     public String getServiceId() {

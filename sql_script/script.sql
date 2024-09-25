@@ -2,8 +2,8 @@
 go
 
 -- PHƯƠNG THỨC XÓA DATABASE (dùng cho việc xóa cài lại)
---use master
---DROP DATABASE HotelDatabase
+use master
+DROP DATABASE HotelDatabase
 
 
 
@@ -81,3 +81,53 @@ VALUES
 ('SHIFT-PM-0009', '17:00', '23:00', GETDATE(), 6, 'SUNDAY');
 
 
+Go
+
+--Tạo bảo CategoryService
+CREATE TABLE CategoryService (
+    serviceCategoryID VARCHAR(10) NOT NULL PRIMARY KEY,
+    serviceCategoryName NVARCHAR(50) NOT NULL
+)
+
+Go 
+--Thêm dữ liệu vào bảng CategoryService
+INSERT INTO CategoryService (serviceCategoryID, serviceCategoryName)
+VALUES ('CS-000001', 'IT Services'),
+       ('CS-000002', 'Healthcare Services'),
+       ('CS-000003', 'Financial Services'),
+       ('CS-000004', 'Education Services');
+
+Go
+--Tạo bảo HotelService
+CREATE TABLE HotelService (
+    hotelServiceId VARCHAR(10) NOT NULL PRIMARY KEY,
+    serviceName NVARCHAR(50) NOT NULL,
+    description NVARCHAR(255) NOT NULL,
+    servicePrice MONEY NOT NULL,
+    serviceCategoryID VARCHAR(10) NOT NULL,
+    FOREIGN KEY (serviceCategoryID) REFERENCES CategoryService(serviceCategoryID)
+)
+
+-- Thêm dữ liệu vào bảng HotelService
+INSERT INTO HotelService (hotelServiceId, serviceName, description, servicePrice, serviceCategoryID)
+VALUES 
+('HS-000001', 'Room Service', '24/7 room service for all guests', 50.00, 'CS-000001'),
+('HS-000002', 'Spa Service', 'Full body massage and spa treatments', 120.00, 'CS-000002'),
+('HS-000003', 'Conference Room Booking', 'Booking of conference room for meetings', 200.00, 'CS-000003'),
+('HS-000004', 'Airport Pickup', 'Luxury car service for airport transfers', 75.00, 'CS-000004');
+
+--Tạo bảng RoomUsageService
+CREATE TABLE RoomUsageService (
+    roomUsageServiceId VARCHAR(10) NOT NULL PRIMARY KEY,
+    quantity INT NOT NULL,
+    hotelServiceId VARCHAR(10) NOT NULL,
+    FOREIGN KEY (hotelServiceId) REFERENCES HotelService(hotelServiceId)
+)
+
+--Thêm dữ liệu vào bảng RoomUsageService
+INSERT INTO RoomUsageService (roomUsageServiceId, quantity, hotelServiceId)
+VALUES 
+('RUS-000001', 2, 'HS-000001'),  -- Room Service
+('RUS-000002', 1, 'HS-000002'),  -- Spa Service
+('RUS-000003', 3, 'HS-000003'),  -- Conference Room Booking
+('RUS-000004', 1, 'HS-000004');  -- Airport Pickup
