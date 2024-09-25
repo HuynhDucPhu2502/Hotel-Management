@@ -14,8 +14,12 @@ public class ServiceCategory {
     }
 
     public ServiceCategory(String serviceCategoryID, String serviceCategoryName) {
-        this.serviceCategoryID = serviceCategoryID;
-        this.serviceCategoryName = serviceCategoryName;
+        this.setServiceCategoryID(serviceCategoryID);
+        this.setServiceCategoryName(serviceCategoryName);
+    }
+
+    public ServiceCategory(String serviceCategoryID) {
+        this.setServiceCategoryID(serviceCategoryID);
     }
 
     public String getServiceCategoryID() {

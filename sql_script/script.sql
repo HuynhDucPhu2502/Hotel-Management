@@ -81,3 +81,54 @@ VALUES
 ('SHIFT-PM-0009', '17:00', '23:00', GETDATE(), 6, 'SUNDAY');
 
 
+Go
+
+--Tạo bảo CategoryService
+CREATE TABLE CategoryService (
+    serviceCategoryID VARCHAR(10) NOT NULL PRIMARY KEY,
+    serviceCategoryName NVARCHAR(50) NOT NULL
+)
+
+Go 
+--Thêm dữ liệu vào bảng CategoryService
+INSERT INTO CategoryService (serviceCategoryID, serviceCategoryName)
+VALUES 
+('CS-000001', 'Dịch vụ Khách sạn'),  -- Cập nhật tên loại dịch vụ
+('CS-000002', 'Dịch vụ Spa'),         -- Cập nhật tên loại dịch vụ
+('CS-000003', 'Dịch vụ Hội nghị'),     -- Cập nhật tên loại dịch vụ
+('CS-000004', 'Dịch vụ Đón sân bay');  -- Cập nhật tên loại dịch vụ
+
+Go
+--Tạo bảo HotelService
+CREATE TABLE HotelService (
+    hotelServiceId VARCHAR(10) NOT NULL PRIMARY KEY,
+    serviceName NVARCHAR(50) NOT NULL,
+    description NVARCHAR(255) NOT NULL,
+    servicePrice MONEY NOT NULL,
+    serviceCategoryID VARCHAR(10) NOT NULL,
+    FOREIGN KEY (serviceCategoryID) REFERENCES CategoryService(serviceCategoryID)
+)
+
+-- Thêm dữ liệu vào bảng HotelService
+INSERT INTO HotelService (hotelServiceId, serviceName, description, servicePrice, serviceCategoryID)
+VALUES 
+('HS-000001', 'Dịch vụ phòng', 'Dịch vụ phòng 24/7 cho tất cả khách', 50.00, 'CS-000001'),
+('HS-000002', 'Dịch vụ Spa', 'Massage toàn thân và liệu trình spa', 120.00, 'CS-000002'),
+('HS-000003', 'Đặt phòng hội nghị', 'Đặt phòng hội nghị cho các cuộc họp', 200.00, 'CS-000003'),
+('HS-000004', 'Dịch vụ đón sân bay', 'Dịch vụ xe sang cho việc đón sân bay', 75.00, 'CS-000004');
+
+--Tạo bảng RoomUsageService
+CREATE TABLE RoomUsageService (
+    roomUsageServiceId VARCHAR(10) NOT NULL PRIMARY KEY,
+    quantity INT NOT NULL,
+    hotelServiceId VARCHAR(10) NOT NULL,
+    FOREIGN KEY (hotelServiceId) REFERENCES HotelService(hotelServiceId)
+)
+
+--Thêm dữ liệu vào bảng RoomUsageService
+INSERT INTO RoomUsageService (roomUsageServiceId, quantity, hotelServiceId)
+VALUES 
+('RUS-000001', 2, 'HS-000001'),  -- Dịch vụ phòng
+('RUS-000002', 1, 'HS-000002'),  -- Dịch vụ Spa
+('RUS-000003', 3, 'HS-000003'),  -- Đặt phòng hội nghị
+('RUS-000004', 1, 'HS-000004');  -- Dịch vụ đón sân bay

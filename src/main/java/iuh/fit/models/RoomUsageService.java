@@ -15,9 +15,9 @@ public class RoomUsageService {
     }
 
     public RoomUsageService(String roomUsageServiceId, int quantity, HotelService hotelService) {
-        this.roomUsageServiceId = roomUsageServiceId;
-        this.quantity = quantity;
-        this.hotelService = hotelService;
+        this.setRoomUsageServiceId(roomUsageServiceId);
+        this.setQuantity(quantity);
+        this.setHotelService(hotelService);
     }
 
     public String getRoomUsageServiceId() {

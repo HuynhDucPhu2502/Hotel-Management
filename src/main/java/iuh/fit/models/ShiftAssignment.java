@@ -13,10 +13,10 @@ public class ShiftAssignment {
     private Employee employee;
 
     public ShiftAssignment(String shiftAssignmentId, String description, Shift shift, Employee employee) {
-        this.shiftAssignmentId = shiftAssignmentId;
-        this.description = description;
-        this.shift = shift;
-        this.employee = employee;
+        this.setShiftAssignmentId(shiftAssignmentId);
+        this.setDescription(description);
+        this.setShift(shift);
+        this.setEmployee(employee);
     }
 
     public ShiftAssignment(String shiftAssignmentId) {
