@@ -109,5 +109,6 @@ public class ErrorMessages {
     public static final String CONVERT_HELPER_INVALID_LOCALTIME = "Thời gian phải nằm từ 5:00 đến 23:00";
     public static final String CONVERT_HELPER_INVALID_GENDER = "Giới tính không hợp lệ. Phải nằm trong FEMALE,  MALE";
     public static final String CONVERT_HELPER_INVALID_POSITION = "Chức vụ không hợp lệ. Phải nằm trong RECEPTIONIST, MANAGER";
+    public static final String CONVERT_HELPER_INVALID_SHIFT_DAYS_SCHEDULE = "Ngày ca làm việc không hợp lệ. Phải nằm trong MON_WED_FRI, TUE_THU_SAT, SUNDAY";
 
 }
