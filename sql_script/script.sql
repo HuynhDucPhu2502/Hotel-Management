@@ -2,8 +2,8 @@
 go
 
 -- PHƯƠNG THỨC XÓA DATABASE (dùng cho việc xóa cài lại)
-use master
-DROP DATABASE HotelDatabase
+--use master
+--DROP DATABASE HotelDatabase
 
 
 
@@ -109,12 +109,12 @@ CREATE TABLE HotelService (
 )
 
 -- Thêm dữ liệu vào bảng HotelService
-INSERT INTO HotelService (hotelServiceId, serviceName, description, servicePrice, serviceCategoryID)
+INSERT INTO HotelService (serviceId, serviceName, description, servicePrice, serviceCategoryID)
 VALUES 
-('HS-000001', 'Room Service', '24/7 room service for all guests', 50.00, 'CS-000001'),
-('HS-000002', 'Spa Service', 'Full body massage and spa treatments', 120.00, 'CS-000002'),
-('HS-000003', 'Conference Room Booking', 'Booking of conference room for meetings', 200.00, 'CS-000003'),
-('HS-000004', 'Airport Pickup', 'Luxury car service for airport transfers', 75.00, 'CS-000004');
+('HS-000001', 'Dịch vụ phòng', 'Dịch vụ phòng 24/7 cho tất cả khách', 50.00, 'CS-000001'),
+('HS-000002', 'Dịch vụ Spa', 'Massage toàn thân và liệu trình spa', 120.00, 'CS-000002'),
+('HS-000003', 'Đặt phòng hội nghị', 'Đặt phòng hội nghị cho các cuộc họp', 200.00, 'CS-000003'),
+('HS-000004', 'Đón sân bay', 'Dịch vụ xe sang cho việc đón sân bay', 75.00, 'CS-000004');
 
 --Tạo bảng RoomUsageService
 CREATE TABLE RoomUsageService (
