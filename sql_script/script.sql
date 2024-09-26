@@ -132,3 +132,31 @@ VALUES
 ('RUS-000002', 1, 'HS-000002'),  -- Dịch vụ Spa
 ('RUS-000003', 3, 'HS-000003'),  -- Đặt phòng hội nghị
 ('RUS-000004', 1, 'HS-000004');  -- Dịch vụ đón sân bay
+
+Go
+
+--Tạo bảng Customer
+CREATE TABLE Customer (
+    customerID VARCHAR(10) NOT NULL PRIMARY KEY,
+    fullName NVARCHAR(50) NOT NULL,
+    phoneNumber VARCHAR(10),
+    email VARCHAR(50) NOT NULL,
+    address NVARCHAR(100) NOT NULL,
+    gender VARCHAR(6) NOT NULL CHECK (gender IN ('MALE', 'FEMALE')),
+    idCardNumber VARCHAR(12) NOT NULL,
+    dob DATE NOT NULL
+)
+
+--Thêm dữ liệu vào bảng Custormer
+INSERT INTO Customer (customerID, fullName, phoneNumber, email, address, gender, idCardNumber, dob)
+VALUES 
+('CUS-000001', N'Nguyễn Văn A', '0912345678', 'nguyenvana@gmail.com', N'123 Đường ABC, Quận 1, TP HCM', 'MALE', '123456789012', '1990-05-15'),
+('CUS-000002', N'Lê Thị B', '0912345679', 'lethib@gmail.com', N'456 Đường XYZ, Quận 3, TP HCM', 'FEMALE', '987654321012', '1992-07-22'),
+('CUS-000003', N'Trần Văn C', '0912345680', 'tranvanc@gmail.com', N'789 Đường MNO, Quận 5, TP HCM', 'MALE', '345678901234', '1988-03-30'),
+('CUS-000004', N'Phạm Thị D', '0912345681', 'phamthid@gmail.com', N'321 Đường PQR, Quận 7, TP HCM', 'FEMALE', '567890123456', '1995-12-01'),
+('CUS-000005', N'Hoàng Văn E', '0912345682', 'hoangvane@gmail.com', N'987 Đường STU, Quận 10, TP HCM', 'MALE', '678901234567', '1991-11-20'),
+('CUS-000006', N'Đỗ Thị F', '0912345683', 'dothif@gmail.com', N'654 Đường VWX, Quận 9, TP HCM', 'FEMALE', '789012345678', '1993-04-18'),
+('CUS-000007', N'Vũ Văn G', '0912345684', 'vuvang@gmail.com', N'321 Đường YZ, Quận Bình Thạnh, TP HCM', 'MALE', '890123456789', '1985-02-25'),
+('CUS-000008', N'Nguyễn Thị H', '0912345685', 'nguyenthih@gmail.com', N'543 Đường LMN, Quận Phú Nhuận, TP HCM', 'FEMALE', '901234567890', '1990-08-14'),
+('CUS-000009', N'Phan Văn I', '0912345686', 'phanvani@gmail.com', N'876 Đường QRS, Quận 2, TP HCM', 'MALE', '012345678901', '1994-09-09'),
+('CUS-000010', N'Trịnh Thị K', '0912345687', 'trinhthik@gmail.com', N'123 Đường OPQ, Quận Gò Vấp, TP HCM', 'FEMALE', '234567890123', '1996-06-06');
