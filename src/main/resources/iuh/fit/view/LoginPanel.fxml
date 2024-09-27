@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -24,20 +25,20 @@
                   <Image url="@../images/hotel-logo.png" />
                </image>
             </ImageView>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="logo-panel-banner-title" text="Khách Sạn">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-panel-banner-title" text="Khách Sạn">
                <font>
                   <Font name="Arial" size="18.0" />
                </font></Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="logo-panel-banner-title" text="Chức Phú Gia Tiến">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-panel-banner-title" text="Chức Phú Gia Tiến">
                <font>
                   <Font name="Arial Bold" size="20.0" />
                </font>
             </Text>
          </children>
       </VBox>
-      <VBox layoutX="200.0" prefHeight="400.0" prefWidth="400.0" styleClass="logo-panel-login-widget">
+      <VBox layoutX="200.0" prefHeight="400.0" prefWidth="400.0" styleClass="login-panel-widget">
          <children>
-            <Label styleClass="logo-panel-login-widget-title" text="ĐĂNG NHẬP">
+            <Label styleClass="login-panel-widget-title" text="ĐĂNG NHẬP">
                <font>
                   <Font size="36.0" />
                </font>
@@ -55,20 +56,33 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label styleClass="logo-panel-login-widget-label" text="Tài khoản" />
-                  <Label styleClass="logo-panel-login-widget-label" text="Mật khẩu" GridPane.rowIndex="1" />
+                  <Label styleClass="login-panel-widget-label" text="Tài khoản" />
+                  <Label styleClass="login-panel-widget-label" text="Mật khẩu" GridPane.rowIndex="1" />
                   <TextField prefHeight="26.0" prefWidth="302.0" GridPane.columnIndex="1">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
                   </TextField>
-                  <PasswordField GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                        <PasswordField fx:id="hiddenPasswordField"/>
+                        <TextField visible="false" managed="false" fx:id="visiblePasswordField"/>
+                     </children>
+                  </VBox>
                </children>
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
             </GridPane>
-            <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="370.0" styleClass="logo-panel-login-widget-button" text="Đăng nhập" textAlignment="CENTER" textFill="WHITE">
+            <VBox prefHeight="29.0" prefWidth="400.0" styleClass="login-panel-widget-checkbox">
+               <children>
+                  <CheckBox mnemonicParsing="false" text="Hiện mật khẩu"  fx:id="passwordCheckbox"/>
+               </children>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </VBox.margin>
+            </VBox>
+            <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="370.0" styleClass="login-panel-widget-button" text="Đăng nhập" textAlignment="CENTER" textFill="WHITE">
                <VBox.margin>
                   <Insets top="50.0" />
                </VBox.margin>
