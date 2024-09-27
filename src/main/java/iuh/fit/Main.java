@@ -10,8 +10,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/iuh/fit/test.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 500, 500);
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/iuh/fit/view/LoginPanel.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Huynh Duc Phu!");
         stage.setScene(scene);
         stage.show();
