@@ -132,7 +132,7 @@ public class Employee {
      * @param fullName Họ và tên của nhân viên.
      */
     public void setFullName(String fullName) {
-        if (!RegexChecker.isValidNameLength(fullName, 2, 50))
+        if (!RegexChecker.isValidName(fullName, 3, 50))
             throw new IllegalArgumentException(ErrorMessages.EMP_INVALID_FULLNAME);
         this.fullName = fullName;
     }

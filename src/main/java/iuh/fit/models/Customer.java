@@ -69,7 +69,7 @@ public class Customer {
     }
 
     public void setFulName(String fulName) {
-        if (!RegexChecker.isValidCusFullName(fulName))
+        if (!RegexChecker.isValidName(fulName, 3, 20))
             throw new IllegalArgumentException(ErrorMessages.CUS_INVALID_FULLNAME);
         this.fulName = fulName;
     }
