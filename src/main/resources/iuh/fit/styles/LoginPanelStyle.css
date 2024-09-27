@@ -4,25 +4,30 @@
     -fx-spacing: 10px;
 }
 
-.logo-panel-banner-title {
+.login-panel-banner-title {
     -fx-fill: white;
 
 }
 
-.logo-panel-login-widget {
+.login-panel-widget {
     -fx-alignment: center;
 }
 
-.logo-panel-login-widget-title {
+.login-panel-widget-title {
     -fx-text-fill: rgb(255, 77, 109);
     -fx-font-weight: bold;
 }
 
-.logo-panel-login-widget-label {
+.login-panel-widget-label {
     -fx-font-weight: bold;
 }
 
-.logo-panel-login-widget-button {
+.login-panel-widget-checkbox {
+    -fx-alignment: center-right;
+}
+
+.login-panel-widget-button {
     -fx-background-color: rgb(255, 77, 109);
     -fx-text-color: rgb(255, 255, 255);
 }
+

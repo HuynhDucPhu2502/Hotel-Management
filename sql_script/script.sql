@@ -69,66 +69,68 @@ INSERT INTO Shift (shiftID, startTime, endTime, modifiedDate, numberOfHour, shif
 VALUES
 -- Ca làm cho MON_WEB_FRI
 ('SHIFT-AM-0001', '05:00', '11:00', GETDATE(), 6, 'MON_WEB_FRI'),
-('SHIFT-AM-0002', '11:00', '17:00', GETDATE(), 6, 'MON_WEB_FRI'),
+('SHIFT-PM-0002', '11:00', '17:00', GETDATE(), 6, 'MON_WEB_FRI'),
 ('SHIFT-PM-0003', '17:00', '23:00', GETDATE(), 6, 'MON_WEB_FRI'),
 -- Ca làm cho TUE_THU_SAT
 ('SHIFT-AM-0004', '05:00', '11:00', GETDATE(), 6, 'TUE_THU_SAT'),
-('SHIFT-AM-0005', '11:00', '17:00', GETDATE(), 6, 'TUE_THU_SAT'),
+('SHIFT-PM-0005', '11:00', '17:00', GETDATE(), 6, 'TUE_THU_SAT'),
 ('SHIFT-PM-0006', '17:00', '23:00', GETDATE(), 6, 'TUE_THU_SAT'),
 -- Ca làm cho SUNDAY
 ('SHIFT-AM-0007', '05:00', '11:00', GETDATE(), 6, 'SUNDAY'),
-('SHIFT-AM-0008', '11:00', '17:00', GETDATE(), 6, 'SUNDAY'),
+('SHIFT-PM-0008', '11:00', '17:00', GETDATE(), 6, 'SUNDAY'),
 ('SHIFT-PM-0009', '17:00', '23:00', GETDATE(), 6, 'SUNDAY');
 
 
 Go
 
 --Tạo bảo CategoryService
-CREATE TABLE CategoryService (
+CREATE TABLE ServiceCategory (
     serviceCategoryID VARCHAR(10) NOT NULL PRIMARY KEY,
     serviceCategoryName NVARCHAR(50) NOT NULL
 )
 
 Go 
---Thêm dữ liệu vào bảng CategoryService
-INSERT INTO CategoryService (serviceCategoryID, serviceCategoryName)
+-- Them du lieu vao bang ServiceCategory
+INSERT INTO ServiceCategory (serviceCategoryID, serviceCategoryName)
 VALUES 
-('CS-000001', 'Dịch vụ Khách sạn'),  -- Cập nhật tên loại dịch vụ
-('CS-000002', 'Dịch vụ Spa'),         -- Cập nhật tên loại dịch vụ
-('CS-000003', 'Dịch vụ Hội nghị'),     -- Cập nhật tên loại dịch vụ
-('CS-000004', 'Dịch vụ Đón sân bay');  -- Cập nhật tên loại dịch vụ
+('SC-000001', 'Dich vu Khach san'),  
+('SC-000002', 'Dich vu Spa'),         
+('SC-000003', 'Dich vu Hoi nghi'),   
+('SC-000004', 'Dich vu Don san bay'); 
 
 Go
---Tạo bảo HotelService
+
+-- Tạo bảng HotelServce
 CREATE TABLE HotelService (
-    hotelServiceId VARCHAR(10) NOT NULL PRIMARY KEY,
+	serviceId VARCHAR(10) NOT NULL PRIMARY KEY,
     serviceName NVARCHAR(50) NOT NULL,
     description NVARCHAR(255) NOT NULL,
     servicePrice MONEY NOT NULL,
     serviceCategoryID VARCHAR(10) NOT NULL,
-    FOREIGN KEY (serviceCategoryID) REFERENCES CategoryService(serviceCategoryID)
-)
+    FOREIGN KEY (serviceCategoryID) REFERENCES ServiceCategory(serviceCategoryID)
+);
 
 -- Thêm dữ liệu vào bảng HotelService
-INSERT INTO HotelService (hotelServiceId, serviceName, description, servicePrice, serviceCategoryID)
+INSERT INTO HotelService (serviceId, serviceName, description, servicePrice, serviceCategoryID)
 VALUES 
-('HS-000001', 'Dịch vụ phòng', 'Dịch vụ phòng 24/7 cho tất cả khách', 50.00, 'CS-000001'),
-('HS-000002', 'Dịch vụ Spa', 'Massage toàn thân và liệu trình spa', 120.00, 'CS-000002'),
-('HS-000003', 'Đặt phòng hội nghị', 'Đặt phòng hội nghị cho các cuộc họp', 200.00, 'CS-000003'),
-('HS-000004', 'Dịch vụ đón sân bay', 'Dịch vụ xe sang cho việc đón sân bay', 75.00, 'CS-000004');
+('HS-000001', 'Dich vu phong', 'Dich vu phong 24/7 cho tat ca khach', 50.00, 'SC-000001'),
+('HS-000002', 'Dich vu Spa', 'Massage toan than va lieu trinh spa', 120.00, 'SC-000002'),
+('HS-000003', 'Dat phong hoi nghi', 'Dat phong hoi nghi cho cac cuoc hop', 200.00, 'SC-000003'),
+('HS-000004', 'Dich vu don san bay', 'Dich vu xe sang cho viec don san bay', 75.00, 'SC-000004');
 
 --Tạo bảng RoomUsageService
 CREATE TABLE RoomUsageService (
     roomUsageServiceId VARCHAR(10) NOT NULL PRIMARY KEY,
     quantity INT NOT NULL,
-    hotelServiceId VARCHAR(10) NOT NULL,
-    FOREIGN KEY (hotelServiceId) REFERENCES HotelService(hotelServiceId)
+    serviceId VARCHAR(10) NOT NULL,
+    FOREIGN KEY (serviceId) REFERENCES HotelService(serviceId)
 )
 
 --Thêm dữ liệu vào bảng RoomUsageService
-INSERT INTO RoomUsageService (roomUsageServiceId, quantity, hotelServiceId)
+INSERT INTO RoomUsageService (roomUsageServiceId, quantity, serviceId)
 VALUES 
 ('RUS-000001', 2, 'HS-000001'),  -- Dịch vụ phòng
 ('RUS-000002', 1, 'HS-000002'),  -- Dịch vụ Spa
 ('RUS-000003', 3, 'HS-000003'),  -- Đặt phòng hội nghị
 ('RUS-000004', 1, 'HS-000004');  -- Dịch vụ đón sân bay
+
