@@ -7,9 +7,9 @@ package iuh.fit.models.enums;
  * - LOCKED: Tài khoản bị khóa
  */
 public enum AccountStatus {
-    ACTIVE("Kích hoạt"),
-    INACTIVE("Không kích hoạt"),
-    LOCKED("Bị khóa");
+    ACTIVE("Active"),
+    INACTIVE("Inactive"),
+    LOCKED("Locked");
 
     // Tên hiển thị cho trạng thái tài khoản
     private final String displayName;
