@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -58,7 +59,7 @@
                <children>
                   <Label styleClass="login-panel-widget-label" text="Tài khoản" />
                   <Label styleClass="login-panel-widget-label" text="Mật khẩu" GridPane.rowIndex="1" />
-                  <TextField prefHeight="26.0" prefWidth="302.0" GridPane.columnIndex="1">
+                  <TextField fx:id="userNameField" prefHeight="26.0" prefWidth="302.0" GridPane.columnIndex="1">
                      <GridPane.margin>
                         <Insets />
                      </GridPane.margin>
@@ -79,10 +80,18 @@
                   <CheckBox fx:id="passwordCheckbox" mnemonicParsing="false" text="Hiện mật khẩu" />
                </children>
                <VBox.margin>
-                  <Insets left="10.0" right="10.0" />
+                  <Insets left="30.0" right="30.0" />
                </VBox.margin>
             </VBox>
-            <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="370.0" styleClass="login-panel-widget-button" text="Đăng nhập" textAlignment="CENTER" textFill="WHITE">
+            <HBox prefHeight="26.0" prefWidth="400.0">
+               <children>
+                  <Text fx:id="errorMessage" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-panel-widget-error-message" />
+               </children>
+               <VBox.margin>
+                  <Insets left="30.0" right="30.0" />
+               </VBox.margin>
+            </HBox>
+            <Button fx:id="signInButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="370.0" styleClass="login-panel-widget-button" text="Đăng nhập" textAlignment="CENTER" textFill="WHITE">
                <VBox.margin>
                   <Insets top="50.0" />
                </VBox.margin>
