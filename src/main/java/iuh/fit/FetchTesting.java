@@ -19,8 +19,7 @@ public class FetchTesting {
 //        System.out.println();
 //        System.out.println(AccountDAO.getLogin("huynhducphu", "test123@"));
 //        System.out.println();
-
-
+        testServiceCategoryDAO();
     }
 
     private static void testServiceCategoryDAO() {
