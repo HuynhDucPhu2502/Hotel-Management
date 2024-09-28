@@ -69,7 +69,8 @@ public class Customer {
     }
 
     public void setFullName(String fullName) {
-        if (!RegexChecker.isValidCusFullName(fullName))
+        fullName = fullName.trim().replaceAll("\\s+", " ");
+        if (!RegexChecker.isValidName(fullName, 3, 30))
             throw new IllegalArgumentException(ErrorMessages.CUS_INVALID_FULLNAME);
         this.fullName = fullName;
     }

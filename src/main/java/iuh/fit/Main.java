@@ -1,17 +1,25 @@
 package iuh.fit;
 
-import iuh.fit.dao.*;
-import iuh.fit.models.Account;
-import iuh.fit.models.Employee;
-import iuh.fit.models.RoomUsageService;
-import iuh.fit.models.ServiceCategory;
-import iuh.fit.models.enums.AccountStatus;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-//        EmployeeDAO.getEmployees().forEach(System.out::println);
-//        ShiftDAO.getShifts().forEach(System.out::println);
+public class Main extends Application {
+    @Override
+    public void start(Stage stage) throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/iuh/fit/view/LoginPanel.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle("Quản Lý Khách Sạn");
+        stage.setScene(scene);
+        stage.show();
     }
+
+    public static void main(String[] args) {
+        launch();
+    }
+
+
 }

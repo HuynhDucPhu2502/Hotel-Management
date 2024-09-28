@@ -123,7 +123,7 @@ public class Account {
      * @throws IllegalArgumentException nếu tên đăng nhập không hợp lệ.
      */
     public void setUserName(String userName) {
-        if(!RegexChecker.isValidNameLength(userName, 5, 20))
+        if(!RegexChecker.isValidUsername(userName, 5, 30))
             throw new IllegalArgumentException(ErrorMessages.ACC_INVALID_USERNAME);
         this.userName = userName;
     }

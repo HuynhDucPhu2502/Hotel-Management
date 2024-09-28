@@ -1,4 +1,4 @@
-﻿use master
+use master
 go
 
 -- PHƯƠNG THỨC XÓA DATABASE (dùng cho việc xóa cài lại)
@@ -162,3 +162,29 @@ VALUES
 ('CUS-000008', N'Nguyen Thi H', '0912345685', 'nguyenthih@gmail.com', N'543 Duong LMN, Quan Phu Nhuan, TP HCM', 'FEMALE', '001099012859', '1990-08-14'),
 ('CUS-000009', N'Phan Van I', '0912345686', 'phanvani@gmail.com', N'876 Duong QRS, Quan 2, TP HCM', 'MALE', '001099012978', '1994-09-09'),
 ('CUS-000010', N'Trinh Thi K', '0912345687', 'trinhthik@gmail.com', N'123 Duong OPQ, Quan Go Vap, TP HCM', 'FEMALE', '001099012234', '1996-06-06');
+go
+-- Tạo bảng Account
+CREATE TABLE Account (
+    accountID NVARCHAR(10) PRIMARY KEY,  
+    -- Mã tài khoản
+    userName NVARCHAR(20) NOT NULL,  
+    -- Tên đăng nhập
+    password NVARCHAR(30) NOT NULL,  
+    -- Mật khẩu
+    status NVARCHAR(10) NOT NULL CHECK (status IN ('ACTIVE', 'INACTIVE', 'LOCKED')),  
+    -- Trạng thái tài khoản
+    employeeID VARCHAR(10) NOT NULL,  
+    -- Mã nhân viên
+    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)  
+    -- Liên kết đến bảng Employee
+);
+
+-- Thêm dữ liệu vào bảng Account
+INSERT INTO Account (accountID, userName, password, status, employeeID)
+VALUES 
+('ACC-000001', 'huynhducphu', 'test123@', 'ACTIVE', 'EMP-000001'),
+('ACC-000002', 'nguyenxuanchuc', 'test123@', 'ACTIVE', 'EMP-000002'),
+('ACC-000003', 'tranlegiahuy', 'test123@', 'ACTIVE', 'EMP-000003'),
+('ACC-000004', 'dangnguyentienphat', 'test123@', 'ACTIVE', 'EMP-000004'),
+('ACC-000005', 'vubahai', 'test123@', 'ACTIVE', 'EMP-000005');
+

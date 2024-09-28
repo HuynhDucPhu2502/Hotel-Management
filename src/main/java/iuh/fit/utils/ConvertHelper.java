@@ -1,5 +1,6 @@
 package iuh.fit.utils;
 
+import iuh.fit.models.enums.AccountStatus;
 import iuh.fit.models.enums.Gender;
 import iuh.fit.models.enums.Position;
 import iuh.fit.models.enums.ShiftDaysSchedule;
@@ -54,6 +55,15 @@ public class ConvertHelper {
             case "TUE_THU_SAT" -> ShiftDaysSchedule.TUE_THU_SAT;
             case "SUNDAY" -> ShiftDaysSchedule.SUNDAY;
             default -> throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_SHIFT_DAYS_SCHEDULE);
+        };
+    }
+
+    public static AccountStatus accountStatusConverter(String input) {
+        return switch (input.toUpperCase()) {
+            case "ACTIVE" -> AccountStatus.ACTIVE;
+            case "INACTIVE" -> AccountStatus.INACTIVE;
+            case "LOCKED" -> AccountStatus.LOCKED;
+            default -> throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_ACCOUNT_STATUS);
         };
     }
 

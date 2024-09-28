@@ -1,7 +1,6 @@
 package iuh.fit.utils;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
@@ -36,7 +35,7 @@ public class RegexChecker {
     }
 
     /**
-     * Phương thức simpleNameChecker kiểm tra xem chuỗi đầu vào có tuân theo quy tắc về độ dài hay không.
+     * Phương thức isValidName kiểm tra xem chuỗi đầu vào có tuân theo quy tắc về độ dài hay không.
      * <p>
      * Chuỗi đầu vào sẽ được loại bỏ tất cả các khoảng trắng và kiểm tra xem độ dài của chuỗi
      * sau khi loại bỏ có nằm trong khoảng độ dài tối thiểu và tối đa được chỉ định không.
@@ -46,13 +45,12 @@ public class RegexChecker {
      * @param maxLength Độ dài tối đa của chuỗi (sau khi loại bỏ khoảng trắng).
      * @return true nếu độ dài của chuỗi sau khi loại bỏ khoảng trắng nằm trong khoảng từ minLength đến maxLength, ngược lại trả về false.
      */
-    public static boolean isValidNameLength(String input, int minLength, int maxLength) {
-        // Loại bỏ tất cả khoảng trắng trong chuỗi
-        input = input.trim();
-        String trimmedInput = input.replaceAll("\\s+", " ");
+    public static boolean isValidName(String input, int minLength, int maxLength) {
+        if (!input.matches("[a-zA-Z0-9 ]+")) {
+            return false;
+        }
 
-        // Kiểm tra độ dài chuỗi sau khi loại bỏ khoảng trắng có nằm trong khoảng minLength và maxLength không
-        return trimmedInput.length() >= minLength && trimmedInput.length() <= maxLength;
+        return input.length() >= minLength && input.length() <= maxLength;
     }
 
     /**
@@ -130,6 +128,28 @@ public class RegexChecker {
 
         // Kiểm tra xem khoảng cách có ít nhất là 18 năm không
         return yearsBetween >= 18;
+    }
+
+    /**
+     * Phương thức kiểm tra tính hợp lệ của tên người dùng (username).
+     * Username phải có độ dài trong khoảng cho phép và không chứa khoảng trắng
+     * hoặc ký tự đặc biệt (chỉ cho phép chữ cái và số).
+     *
+     * @param input Tên người dùng cần kiểm tra.
+     * @param minLength Độ dài tối thiểu cho tên người dùng.
+     * @param maxLength Độ dài tối đa cho tên người dùng.
+     * @return true nếu tên người dùng hợp lệ (chỉ chứa chữ cái và số, và độ dài nằm trong khoảng cho phép),
+     *         ngược lại trả về false.
+     */
+    public static boolean isValidUsername(String input, int minLength, int maxLength) {
+        // Kiểm tra xem chuỗi có chứa khoảng trắng hoặc ký tự đặc biệt không
+        // Regex [a-zA-Z0-9]+ chỉ cho phép các ký tự chữ cái và số
+        if (!input.matches("[a-zA-Z0-9]+")) {
+            return false; // Nếu chuỗi chứa khoảng trắng hoặc ký tự đặc biệt, trả về false
+        }
+
+        // Kiểm tra độ dài chuỗi có nằm trong khoảng từ minLength đến maxLength không
+        return input.length() >= minLength && input.length() <= maxLength;
     }
 
     /**
@@ -216,35 +236,6 @@ public class RegexChecker {
      */
     public static boolean isValidRoomID(String roomID) {
         return roomID.matches("^([TV])[12]\\d{2}$");
-    }
-
-    /**
-     * Phương thức kiểm tra tính hợp lệ của tên đầy đủ khách hàng.
-     *
-     * @param input Tên đầy đủ của khách hàng cần kiểm tra (chuỗi ký tự).
-     * @return Trả về true nếu tên hợp lệ, false nếu không hợp lệ.
-     *
-     * Tên hợp lệ cần thỏa mãn các điều kiện sau:
-     *  - Tên có độ dài từ 3 đến 30 ký tự.
-     *  - Chỉ chứa các chữ cái (viết hoa, viết thường) và khoảng trắng.
-     *  - Khoảng trắng không được trùng lặp (tức là không có khoảng trắng thừa).
-     */
-    public static boolean isValidCusFullName(String input) {
-        // Loại bỏ khoảng trắng ở đầu và cuối chuỗi
-        input = input.trim();
-
-        // Thay thế các khoảng trắng lặp lại bằng một khoảng trắng duy nhất
-        String trimmedInput = input.replaceAll("\\s+", " ");
-
-        // Biểu thức chính quy kiểm tra tên:
-        // ^: Bắt đầu chuỗi
-        // [a-zA-Z\\s]: Cho phép các ký tự chữ cái (a-z, A-Z) và khoảng trắng
-        // {3,30}: Độ dài của tên từ 3 đến 30 ký tự
-        // $: Kết thúc chuỗi
-        String regex = "^[a-zA-Z\\s]{3,30}$";
-
-        // Kiểm tra xem tên đã xử lý có khớp với biểu thức chính quy hay không
-        return trimmedInput.matches(regex);
     }
 
     public static boolean isValidInvoiceID(String invoiceID){
