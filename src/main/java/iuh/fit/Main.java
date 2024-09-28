@@ -1,6 +1,5 @@
 package iuh.fit;
 
-import iuh.fit.dao.EmployeeDAO;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,7 +10,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/iuh/fit/view/LoginPanel.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/iuh/fit/view/MenuBar.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Quản Lý Khách Sạn");
         stage.setScene(scene);
