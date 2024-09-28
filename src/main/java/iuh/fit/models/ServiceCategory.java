@@ -63,7 +63,8 @@ public class ServiceCategory {
     @Override
     public String toString() {
         return "ServiceCategory{" +
-                "serviceCategoryName='" + serviceCategoryName + '\'' +
+                "serviceCategoryID='" + serviceCategoryID + '\'' +
+                ", serviceCategoryName='" + serviceCategoryName + '\'' +
                 '}';
     }
 }
