@@ -13,7 +13,7 @@ public class FetchTesting {
 //        System.out.println();
 //        HotelServiceDAO.getHotelService().forEach(System.out::println);
 //        System.out.println();
-//        testServiceCategoryDAO();
+//        ServiceCategoryDAO.getServiceCategory().forEach(System.out::println);
 //        System.out.println();
 //        AccountDAO.getEmployees().forEach(System.out::println);
 //        System.out.println();
