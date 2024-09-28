@@ -13,9 +13,5 @@ public class Main {
     public static void main(String[] args) {
 //        EmployeeDAO.getEmployees().forEach(System.out::println);
 //        ShiftDAO.getShifts().forEach(System.out::println);
-//        ServiceCategoryDAO.getServiceCategory().forEach(System.out::println);
-//        HotelServiceDAO.getHotelService().forEach(System.out::println);
-//        RoomUsageServiceDAO.getRoomUsageService().forEach(System.out::println);
-        CustomerDAO.getCustomer().forEach(System.out::println);
     }
 }
