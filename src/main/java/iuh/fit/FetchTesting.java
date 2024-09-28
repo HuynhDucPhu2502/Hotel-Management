@@ -13,7 +13,10 @@ public class FetchTesting {
         HotelServiceDAO.getHotelService().forEach(System.out::println);
         System.out.println();
         ServiceCategoryDAO.getServiceCategory().forEach(System.out::println);
-
+        System.out.println();
+        AccountDAO.getEmployees().forEach(System.out::println);
+        System.out.println();
+        System.out.println(AccountDAO.getLogin("huynhducphu", "test123@"));
 
     }
 }
