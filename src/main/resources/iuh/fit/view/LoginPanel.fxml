@@ -22,7 +22,7 @@
          <children>
             <ImageView fitHeight="100.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/hotel-logo.png" />
+                  <Image url="@../icons/hotel-logo.png" />
                </image>
             </ImageView>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-panel-banner-title" text="Khách Sạn">
@@ -46,10 +46,10 @@
                   <Insets bottom="50.0" />
                </VBox.margin>
             </Label>
-            <GridPane alignment="CENTER" vgap="20.0">
+            <GridPane alignment="CENTER" prefHeight="81.0" prefWidth="352.0" vgap="20.0">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.20001220703125" minWidth="10.0" prefWidth="68.7999755859375" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="325.8" minWidth="10.0" prefWidth="310.4000244140625" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.20001220703125" minWidth="10.0" prefWidth="127.19996337890625" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="325.8" minWidth="10.0" prefWidth="252.80003662109374" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -65,18 +65,18 @@
                   </TextField>
                   <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <PasswordField fx:id="hiddenPasswordField"/>
-                        <TextField visible="false" managed="false" fx:id="visiblePasswordField"/>
+                        <PasswordField fx:id="hiddenPasswordField" />
+                        <TextField fx:id="visiblePasswordField" managed="false" visible="false" />
                      </children>
                   </VBox>
                </children>
                <VBox.margin>
-                  <Insets left="10.0" right="10.0" />
+                  <Insets left="30.0" right="30.0" />
                </VBox.margin>
             </GridPane>
             <VBox prefHeight="29.0" prefWidth="400.0" styleClass="login-panel-widget-checkbox">
                <children>
-                  <CheckBox mnemonicParsing="false" text="Hiện mật khẩu"  fx:id="passwordCheckbox"/>
+                  <CheckBox fx:id="passwordCheckbox" mnemonicParsing="false" text="Hiện mật khẩu" />
                </children>
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />
