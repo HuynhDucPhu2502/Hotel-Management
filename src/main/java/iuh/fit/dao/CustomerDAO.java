@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerDAO {
-    public static List<Customer> getEmployees() {
+    public static List<Customer> getCustomer() {
         ArrayList<Customer> data = new ArrayList<Customer>();
         try (
                 Connection connection = DBHelper.getConnection();

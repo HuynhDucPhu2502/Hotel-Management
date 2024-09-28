@@ -83,20 +83,21 @@ VALUES
 
 Go
 
---Tạo bảo CategoryService
-CREATE TABLE CategoryService (
+--Tạo bảo ServiceCategory
+CREATE TABLE ServiceCategory (
     serviceCategoryID VARCHAR(10) NOT NULL PRIMARY KEY,
     serviceCategoryName NVARCHAR(50) NOT NULL
 )
 
 Go 
---Thêm dữ liệu vào bảng CategoryService
-INSERT INTO CategoryService (serviceCategoryID, serviceCategoryName)
+--Thêm dữ liệu vào bảng ServiceCategory
+INSERT INTO ServiceCategory (serviceCategoryID, serviceCategoryName)
 VALUES 
-('CS-000001', 'Dịch vụ Khách sạn'),  -- Cập nhật tên loại dịch vụ
-('CS-000002', 'Dịch vụ Spa'),         -- Cập nhật tên loại dịch vụ
-('CS-000003', 'Dịch vụ Hội nghị'),     -- Cập nhật tên loại dịch vụ
-('CS-000004', 'Dịch vụ Đón sân bay');  -- Cập nhật tên loại dịch vụ
+('SC-000001', 'Dich vu Khach san'),  -- Cap nhat ten loai dich vu
+('SC-000002', 'Dich vu Spa'),        -- Cap nhat ten loai dich vu
+('SC-000003', 'Dich vu Hoi nghi'),   -- Cap nhat ten loai dich vu
+('SC-000004', 'Dich vu Don san bay'); -- Cap nhat ten loai dich vu
+
 
 Go
 --Tạo bảo HotelService
@@ -106,16 +107,17 @@ CREATE TABLE HotelService (
     description NVARCHAR(255) NOT NULL,
     servicePrice MONEY NOT NULL,
     serviceCategoryID VARCHAR(10) NOT NULL,
-    FOREIGN KEY (serviceCategoryID) REFERENCES CategoryService(serviceCategoryID)
+    FOREIGN KEY (serviceCategoryID) REFERENCES ServiceCategory(serviceCategoryID)
 )
 
 -- Thêm dữ liệu vào bảng HotelService
 INSERT INTO HotelService (hotelServiceId, serviceName, description, servicePrice, serviceCategoryID)
 VALUES 
-('HS-000001', 'Dịch vụ phòng', 'Dịch vụ phòng 24/7 cho tất cả khách', 50.00, 'CS-000001'),
-('HS-000002', 'Dịch vụ Spa', 'Massage toàn thân và liệu trình spa', 120.00, 'CS-000002'),
-('HS-000003', 'Đặt phòng hội nghị', 'Đặt phòng hội nghị cho các cuộc họp', 200.00, 'CS-000003'),
-('HS-000004', 'Dịch vụ đón sân bay', 'Dịch vụ xe sang cho việc đón sân bay', 75.00, 'CS-000004');
+('HS-000001', 'Dich vu phong', 'Dich vu phong 24/7 cho tat ca khach', 50.00, 'SC-000001'),
+('HS-000002', 'Dich vu Spa', 'Massage toan than va lieu trinh spa', 120.00, 'SC-000002'),
+('HS-000003', 'Dat phong hoi nghi', 'Dat phong hoi nghi cho cac cuoc hop', 200.00, 'SC-000003'),
+('HS-000004', 'Dich vu don san bay', 'Dich vu xe sang cho viec don san bay', 75.00, 'SC-000004');
+
 
 --Tạo bảng RoomUsageService
 CREATE TABLE RoomUsageService (
@@ -150,13 +152,13 @@ CREATE TABLE Customer (
 --Thêm dữ liệu vào bảng Custormer
 INSERT INTO Customer (customerID, fullName, phoneNumber, email, address, gender, idCardNumber, dob)
 VALUES 
-('CUS-000001', N'Nguyễn Văn A', '0912345678', 'nguyenvana@gmail.com', N'123 Đường ABC, Quận 1, TP HCM', 'MALE', '123456789012', '1990-05-15'),
-('CUS-000002', N'Lê Thị B', '0912345679', 'lethib@gmail.com', N'456 Đường XYZ, Quận 3, TP HCM', 'FEMALE', '987654321012', '1992-07-22'),
-('CUS-000003', N'Trần Văn C', '0912345680', 'tranvanc@gmail.com', N'789 Đường MNO, Quận 5, TP HCM', 'MALE', '345678901234', '1988-03-30'),
-('CUS-000004', N'Phạm Thị D', '0912345681', 'phamthid@gmail.com', N'321 Đường PQR, Quận 7, TP HCM', 'FEMALE', '567890123456', '1995-12-01'),
-('CUS-000005', N'Hoàng Văn E', '0912345682', 'hoangvane@gmail.com', N'987 Đường STU, Quận 10, TP HCM', 'MALE', '678901234567', '1991-11-20'),
-('CUS-000006', N'Đỗ Thị F', '0912345683', 'dothif@gmail.com', N'654 Đường VWX, Quận 9, TP HCM', 'FEMALE', '789012345678', '1993-04-18'),
-('CUS-000007', N'Vũ Văn G', '0912345684', 'vuvang@gmail.com', N'321 Đường YZ, Quận Bình Thạnh, TP HCM', 'MALE', '890123456789', '1985-02-25'),
-('CUS-000008', N'Nguyễn Thị H', '0912345685', 'nguyenthih@gmail.com', N'543 Đường LMN, Quận Phú Nhuận, TP HCM', 'FEMALE', '901234567890', '1990-08-14'),
-('CUS-000009', N'Phan Văn I', '0912345686', 'phanvani@gmail.com', N'876 Đường QRS, Quận 2, TP HCM', 'MALE', '012345678901', '1994-09-09'),
-('CUS-000010', N'Trịnh Thị K', '0912345687', 'trinhthik@gmail.com', N'123 Đường OPQ, Quận Gò Vấp, TP HCM', 'FEMALE', '234567890123', '1996-06-06');
+('CUS-000001', N'Nguyen Van A', '0912345678', 'nguyenvana@gmail.com', N'123 Duong ABC, Quan 1, TP HCM', 'MALE', '001099012333', '1990-05-15'),
+('CUS-000002', N'Le Thi B', '0912345679', 'lethib@gmail.com', N'456 Duong XYZ, Quan 3, TP HCM', 'FEMALE', '001099012323', '1992-07-22'),
+('CUS-000003', N'Tran Van C', '0912345680', 'tranvanc@gmail.com', N'789 Duong MNO, Quan 5, TP HCM', 'MALE', '001099012343', '1988-03-30'),
+('CUS-000004', N'Pham Thi D', '0912345681', 'phamthid@gmail.com', N'321 Duong PQR, Quan 7, TP HCM', 'FEMALE', '001099012546', '1995-12-01'),
+('CUS-000005', N'Hoang Van E', '0912345682', 'hoangvane@gmail.com', N'987 Duong STU, Quan 10, TP HCM', 'MALE', '001099012764', '1991-11-20'),
+('CUS-000006', N'Do Thi F', '0912345683', 'dothif@gmail.com', N'654 Duong VWX, Quan 9, TP HCM', 'FEMALE', '001099012654', '1993-04-18'),
+('CUS-000007', N'Vu Van G', '0912345684', 'vuvang@gmail.com', N'321 Duong YZ, Quan Binh Thanh, TP HCM', 'MALE', '001099012768', '1985-02-25'),
+('CUS-000008', N'Nguyen Thi H', '0912345685', 'nguyenthih@gmail.com', N'543 Duong LMN, Quan Phu Nhuan, TP HCM', 'FEMALE', '001099012859', '1990-08-14'),
+('CUS-000009', N'Phan Van I', '0912345686', 'phanvani@gmail.com', N'876 Duong QRS, Quan 2, TP HCM', 'MALE', '001099012978', '1994-09-09'),
+('CUS-000010', N'Trinh Thi K', '0912345687', 'trinhthik@gmail.com', N'123 Duong OPQ, Quan Go Vap, TP HCM', 'FEMALE', '001099012234', '1996-06-06');

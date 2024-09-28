@@ -17,7 +17,7 @@ public class HotelServiceDAO {
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement();
         ){
-            String sql = "SELECT a.serviceId, a.serviceName, a.description, a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
+            String sql = "SELECT a.hotelServiceId, a.serviceName, a.description, a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
                     "FROM HotelService a inner join ServiceCategory b on a.serviceCategoryID = b.serviceCategoryID";
             ResultSet rs = statement.executeQuery(sql);
 
