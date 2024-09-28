@@ -132,6 +132,8 @@ public class Employee {
      * @param fullName Họ và tên của nhân viên.
      */
     public void setFullName(String fullName) {
+        fullName = fullName.trim().replaceAll("\\s+", " ");
+
         if (!RegexChecker.isValidName(fullName, 3, 50))
             throw new IllegalArgumentException(ErrorMessages.EMP_INVALID_FULLNAME);
         this.fullName = fullName;

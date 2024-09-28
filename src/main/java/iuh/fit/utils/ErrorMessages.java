@@ -14,7 +14,7 @@ public class ErrorMessages {
 
     // Account
     public static final String ACC_INVALID_ID = "Mã tài khoản phải theo định dạng ACC-XXXXXX, với X là ký số";
-    public static final String ACC_INVALID_USERNAME = "Tên đăng nhập phải có ít nhất 5 ký tự và không vượt quá 20 ký tự";
+    public static final String ACC_INVALID_USERNAME = "Tên đăng nhập phải có ít nhất 5 ký tự và không vượt quá 30 ký tự";
     public static final String ACC_INVALID_PASSWORD = "Mật khẩu phải từ 8 đến 30 ký tự\nCó ít nhất một chữ cái, một chữ số và một kí tự đặc biệt như !@#$%^&*()";
 
     // Pricing
@@ -127,4 +127,11 @@ public class ErrorMessages {
     public static final String CONVERT_HELPER_INVALID_GENDER = "Giới tính không hợp lệ. Phải nằm trong FEMALE,  MALE";
     public static final String CONVERT_HELPER_INVALID_POSITION = "Chức vụ không hợp lệ. Phải nằm trong RECEPTIONIST, MANAGER";
     public static final String CONVERT_HELPER_INVALID_SHIFT_DAYS_SCHEDULE = "Ngày ca làm việc không hợp lệ. Phải nằm trong MON_WED_FRI, TUE_THU_SAT, SUNDAY";
+    public static final String CONVERT_HELPER_INVALID_ACCOUNT_STATUS= "Ngày ca làm việc không hợp lệ. Phải nằm trong ACTIVE, INACTIVE, LOCKED";
+
+    // Login message
+    public static final String LOGIN_INVALID_USERNAME = "Tài khoản không được bỏ trống";
+    public static final String LOGIN_INVALID_PASSWORD = "Mật khẩu không được để trống";
+    public static final String LOGIN_INVALID_ACCOUNT = "Tài khoản hoặc mật khẩu không hợp lệ";
+
 }

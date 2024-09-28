@@ -83,21 +83,20 @@ VALUES
 
 Go
 
---Tạo bảo CategoryService
+--Tạo bảng CategoryService
 CREATE TABLE ServiceCategory (
     serviceCategoryID VARCHAR(10) NOT NULL PRIMARY KEY,
     serviceCategoryName NVARCHAR(50) NOT NULL
 )
-
 Go 
--- Them du lieu vao bang ServiceCategory
+
+-- Them dữ liệu vào bảng
 INSERT INTO ServiceCategory (serviceCategoryID, serviceCategoryName)
 VALUES 
 ('SC-000001', 'Dich vu Khach san'),  
 ('SC-000002', 'Dich vu Spa'),         
 ('SC-000003', 'Dich vu Hoi nghi'),   
 ('SC-000004', 'Dich vu Don san bay'); 
-
 Go
 
 -- Tạo bảng HotelServce
@@ -129,8 +128,34 @@ CREATE TABLE RoomUsageService (
 --Thêm dữ liệu vào bảng RoomUsageService
 INSERT INTO RoomUsageService (roomUsageServiceId, quantity, serviceId)
 VALUES 
-('RUS-000001', 2, 'HS-000001'),  -- Dịch vụ phòng
-('RUS-000002', 1, 'HS-000002'),  -- Dịch vụ Spa
-('RUS-000003', 3, 'HS-000003'),  -- Đặt phòng hội nghị
-('RUS-000004', 1, 'HS-000004');  -- Dịch vụ đón sân bay
+('RUS-000001', 2, 'HS-000001'),  
+('RUS-000002', 1, 'HS-000002'),  
+('RUS-000003', 3, 'HS-000003'),  
+('RUS-000004', 1, 'HS-000004');  
+
+-- Tạo bảng Account
+CREATE TABLE Account (
+    accountID NVARCHAR(10) PRIMARY KEY,  
+    -- Mã tài khoản
+    userName NVARCHAR(20) NOT NULL,  
+    -- Tên đăng nhập
+    password NVARCHAR(30) NOT NULL,  
+    -- Mật khẩu
+    status NVARCHAR(10) NOT NULL CHECK (status IN ('ACTIVE', 'INACTIVE', 'LOCKED')),  
+    -- Trạng thái tài khoản
+    employeeID VARCHAR(10) NOT NULL,  
+    -- Mã nhân viên
+    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)  
+    -- Liên kết đến bảng Employee
+);
+
+-- Thêm dữ liệu vào bảng Account
+INSERT INTO Account (accountID, userName, password, status, employeeID)
+VALUES 
+('ACC-000001', 'huynhducphu', 'test123@', 'ACTIVE', 'EMP-000001'),
+('ACC-000002', 'nguyenxuanchuc', 'test123@', 'ACTIVE', 'EMP-000002'),
+('ACC-000003', 'tranlegiahuy', 'test123@', 'ACTIVE', 'EMP-000003'),
+('ACC-000004', 'dangnguyentienphat', 'test123@', 'ACTIVE', 'EMP-000004'),
+('ACC-000005', 'vubahai', 'test123@', 'ACTIVE', 'EMP-000005');
+
 
