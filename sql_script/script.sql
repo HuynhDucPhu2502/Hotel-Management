@@ -298,7 +298,7 @@ VALUES
 
 --Tạo bảng ReservationForm
 CREATE TABLE ReservationForm (
-    reservationID VARCHAR(10) NOT NULL PRIMARY KEY,         -- Mã đặt phòng duy nhất
+    reservationFormID VARCHAR(10) NOT NULL PRIMARY KEY,         -- Mã đặt phòng duy nhất
     reservationDate DATETIME NOT NULL,            -- Ngày đặt phòng
     approxCheckInDate DATETIME NOT NULL,          -- Ngày dự kiến nhận phòng
     approxCheckOutDate DATETIME NOT NULL,         -- Ngày dự kiến trả phòng
@@ -311,7 +311,7 @@ CREATE TABLE ReservationForm (
 );
 
 --Thêm dữ liệu vào bảng ReservationForm
-INSERT INTO ReservationForm (reservationID, reservationDate, approxCheckInDate, approxCheckOutDate, employeeID, roomID, customerID)
+INSERT INTO ReservationForm (reservationFormID, reservationDate, approxCheckInDate, approxCheckOutDate, employeeID, roomID, customerID)
 VALUES 
 ('RF-000001', '2024-09-29 10:00:00', '2024-10-02 14:00:00', '2024-10-05 12:00:00', 'EMP-000001', 'T1101', 'CUS-000001'),
 ('RF-000002', '2024-09-29 11:30:00', '2024-10-03 15:00:00', '2024-10-07 11:00:00', 'EMP-000002', 'T2102', 'CUS-000002'),
