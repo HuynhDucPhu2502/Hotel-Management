@@ -2,8 +2,8 @@
 go
 
 -- PHƯƠNG THỨC XÓA DATABASE (dùng cho việc xóa cài lại)
-use master
-DROP DATABASE HotelDatabase
+--use master
+--DROP DATABASE HotelDatabase
 
 
 
@@ -318,3 +318,22 @@ VALUES
 ('RF-000003', '2024-09-29 09:00:00', '2024-10-04 13:00:00', '2024-10-06 10:00:00', 'EMP-000003', 'V1103', 'CUS-000003'),
 ('RF-000004', '2024-09-29 08:00:00', '2024-10-05 12:00:00', '2024-10-08 09:00:00', 'EMP-000004', 'V2104', 'CUS-000004');
 
+go
+
+--Tạo bảng HistoryCheckin
+CREATE TABLE HistoryCheckin (
+    historyCheckInID VARCHAR(10) NOT NULL PRIMARY KEY,        -- Mã lịch sử nhận phòng
+    checkInDate DATETIME NOT NULL,                            -- Ngày giờ nhận phòng
+    reservationFormID VARCHAR(10) NOT NULL,                       -- Khóa ngoại liên kết đến phiếu đặt phòng
+    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID)  -- Thiết lập khóa ngoại
+);
+
+--Thêm dữ liệu vào bảng HistoryCheckin
+INSERT INTO HistoryCheckin (historyCheckInID, checkInDate, reservationFormID)
+VALUES 
+    ('HCI-000001', '2024-10-03 10:00:00', 'RF-000001'),
+    ('HCI-000002', '2024-10-04 09:00:00', 'RF-000002'),
+    ('HCI-000003', '2024-10-05 08:00:00', 'RF-000003'),
+    ('HCI-000004', '2024-10-06 07:00:00', 'RF-000004');
+
+go
