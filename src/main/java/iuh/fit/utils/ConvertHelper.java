@@ -1,9 +1,6 @@
 package iuh.fit.utils;
 
-import iuh.fit.models.enums.AccountStatus;
-import iuh.fit.models.enums.Gender;
-import iuh.fit.models.enums.Position;
-import iuh.fit.models.enums.ShiftDaysSchedule;
+import iuh.fit.models.enums.*;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -47,6 +44,14 @@ public class ConvertHelper {
 
         return input.equalsIgnoreCase("MANAGER")
                 ? Position.MANAGER : Position.RECEPTIONIST;
+    }
+
+    public static PriceUnit pricingConverter(String input) {
+        if (!input.matches("(DAY|HOUR)"))
+            throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_PRICE_UNIT);
+
+        return input.equalsIgnoreCase("DAY")
+                ? PriceUnit.DAY : PriceUnit.HOUR;
     }
 
     public static ShiftDaysSchedule shiftDaysScheduleConverter(String input) {

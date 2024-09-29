@@ -167,7 +167,7 @@ go
 
 -- Tạo bảng Account
 CREATE TABLE Account (
-    accountID NVARCHAR(10) PRIMARY KEY,  
+    accountID VARCHAR(10) PRIMARY KEY,  
     -- Mã tài khoản
     userName NVARCHAR(20) NOT NULL,  
     -- Tên đăng nhập
@@ -191,3 +191,36 @@ VALUES
 ('ACC-000005', 'vubahai', 'test123@', 'ACTIVE', 'EMP-000005');
 
 
+go
+--Tạo bảng pricing
+CREATE TABLE Pricing (
+    pricingID VARCHAR(10) NOT NULL PRIMARY KEY,  -- ID định giá
+    priceUnit VARCHAR(15) NOT NULL CHECK (priceUnit IN ('DAY', 'HOUR')),  -- Đơn vị tính giá
+    price MONEY NOT NULL  -- Mức giá
+);
+
+--Thêm dữ liệu vào bảng Pricing
+INSERT INTO Pricing (pricingID, priceUnit, price)
+VALUES 
+('P-000001', 'DAY', 100.00),
+('P-000002', 'HOUR', 15.50),
+('P-000003', 'DAY', 200.75),
+('P-000004', 'HOUR', 20.00);
+
+--Tạo bảng RoomCategory
+CREATE TABLE RoomCategory (
+    roomCategoryID VARCHAR(10) NOT NULL PRIMARY KEY,  -- Mã định danh của loại phòng
+    roomCategoryName NVARCHAR(50) NOT NULL,  -- Tên của loại phòng, không được rỗng và không vượt quá 30 ký tự
+    numberOfBed INT NOT NULL,  -- Số lượng giường, phải ít nhất là 1
+    pricingID VARCHAR(10) NOT NULL,  -- Khóa ngoại liên kết đến bảng Pricing
+    
+    CONSTRAINT fk_pricing FOREIGN KEY (pricingID) REFERENCES Pricing(pricingID)  -- Thiết lập khóa ngoại
+);
+
+--Thêm dữ liệu vào bảng RoomCategory
+INSERT INTO RoomCategory (roomCategoryID, roomCategoryName, numberOfBed, pricingID)
+VALUES 
+('RC-000001', 'Phong Hang Sang', 2, 'P-000001'),  -- Phòng Hạng Sang
+('RC-000002', 'Phong Tieu Chuan', 1, 'P-000002'),  -- Phòng Tiêu Chuẩn
+('RC-000003', 'Phong Gia Dinh', 3, 'P-000003'),    -- Phòng Gia Đình
+('RC-000004', 'Phong Don', 1, 'P-000004');         -- Phòng Đơn
