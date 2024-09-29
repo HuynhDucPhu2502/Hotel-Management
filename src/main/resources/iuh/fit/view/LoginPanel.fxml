@@ -48,10 +48,10 @@
         <rowConstraints>
             <RowConstraints maxHeight="130.00000610351563" minHeight="10.0" prefHeight="40.799981689453126" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="130.00000610351563" minHeight="10.0" prefHeight="40.799981689453126" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="130.00000610351563" minHeight="0.0" prefHeight="31.5999755859375" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="200.8" minHeight="10.0" prefHeight="52.59999389648439" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="299.19999389648433" minHeight="10.0" prefHeight="71.0000244140625" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="125.8000457763672" minHeight="10.0" prefHeight="104.59997558593753" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="200.8" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="299.19999389648433" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="104.59997558593753" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="80.0" minHeight="10.0" prefHeight="104.59997558593753" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label alignment="CENTER" prefHeight="38.0" prefWidth="318.0" styleClass="login-panel-widget-title" text="HỆ THỐNG" GridPane.columnIndex="1">
@@ -69,7 +69,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Button>
-            <GridPane prefHeight="37.0" prefWidth="302.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <GridPane prefHeight="37.0" prefWidth="302.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="171.79998779296875" minWidth="10.0" prefWidth="36.60001220703125" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="264.59998779296876" minWidth="10.0" prefWidth="264.59998779296876" />
@@ -86,7 +86,7 @@
                   </ImageView>
                </children>
             </GridPane>
-            <GridPane prefHeight="68.0" prefWidth="302.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <GridPane prefHeight="68.0" prefWidth="302.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="146.20001220703125" minWidth="10.0" prefWidth="36.5999755859375" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="267.7999633789062" minWidth="10.0" prefWidth="241.4000244140625" />
@@ -114,6 +114,7 @@
                   <PasswordField fx:id="hiddenPasswordField" prefHeight="26.0" promptText="Mật khẩu" GridPane.columnIndex="1" />
                </children>
             </GridPane>
+            <Text fx:id="errorMessage" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-panel-widget-error-message" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
    </children>
