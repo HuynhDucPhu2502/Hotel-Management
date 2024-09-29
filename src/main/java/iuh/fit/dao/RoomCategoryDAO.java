@@ -19,23 +19,17 @@ public class RoomCategoryDAO {
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement();
         ){
-            String sql = "SELECT a.roomCategoryID, a.roomCategoryName, a.numberOfBed, b.pricingID, " +
-                    "b.priceUnit, b.price " +
-                    "FROM RoomCategory a inner join Pricing b on a.pricingID = b.pricingID";
+            String sql = "SELECT roomCategoryID, roomCategoryName, numberOfBed " +
+                    "FROM RoomCategory";
             ResultSet rs = statement.executeQuery(sql);
 
 
             while (rs.next()) {
                 RoomCategory roomCategory = new RoomCategory();
-                Pricing pricing = new Pricing();
 
                 roomCategory.setRoomCategoryid(rs.getString(1));
                 roomCategory.setRoomCategoryName(rs.getString(2));
                 roomCategory.setNumberOfBed(rs.getInt(3));
-                pricing.setPricingID(rs.getString(4));
-                pricing.setPriceUnit(ConvertHelper.pricingConverter(rs.getString(5)));
-                pricing.setPrice(rs.getDouble(6));
-                roomCategory.setPricing(pricing);
 
                 data.add(roomCategory);
             }

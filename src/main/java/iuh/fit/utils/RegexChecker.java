@@ -235,7 +235,7 @@ public class RegexChecker {
      * @return true nếu roomID hợp lệ theo định dạng "^([TV])[12]\\d{2}$", ngược lại là false
      */
     public static boolean isValidRoomID(String roomID) {
-        return roomID.matches("^([TV])[12]\\d{2}$");
+        return roomID.matches("^([TV])[12][1-5]\\d{2}$");
     }
 
     public static boolean isValidInvoiceID(String invoiceID){
