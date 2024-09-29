@@ -26,3 +26,12 @@
    -fx-alignment: center-left;
    -fx-padding: 0 0 0 20px;
 }
+
+.scrollPane {
+    -fx-background-color: RGB(70, 130, 180);
+    -fx-border-color: RGB(70, 130, 180);
+}
+
+.scrollPane > .viewport {
+    -fx-background-color: transparent;
+}

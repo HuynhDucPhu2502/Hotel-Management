@@ -18,7 +18,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         try {
             // Load the FXML layout
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/MenuBar.fxml")); // Update with the correct path
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/LoginPanel.fxml")); // Update with the correct path
             AnchorPane root = loader.load();
 
             // Set the scene and stage

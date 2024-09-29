@@ -1,13 +1,11 @@
 package iuh.fit.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.util.Objects;
 
@@ -92,10 +90,17 @@ public class MenuController {
     @FXML
     private Button employeeBtn21111;
 
+    @FXML
+    private ScrollPane scrollPane;
+
     private boolean stateEmployee = false;
+
+
 
     @FXML
     public void initialize() {
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
         employeeBtn.setOnAction(e -> dropDownMenuEvent(buttonOneContainer, buttonTwoContainer, buttonThreeContainer, arrowUpForEmpBtn));
         employeeBtn1.setOnAction(e -> dropDownMenuEvent(buttonOneContainer1, buttonTwoContainer1, buttonThreeContainer1, arrowUpForEmpBtn1));
         employeeBtn2.setOnAction(e -> dropDownMenuEvent(buttonOneContainer2, buttonTwoContainer2, buttonThreeContainer2, arrowUpForEmpBtn2));

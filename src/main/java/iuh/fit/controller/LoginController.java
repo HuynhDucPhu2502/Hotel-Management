@@ -35,9 +35,9 @@ public class LoginController {
     private Button signInButton;
 
     @FXML
-    private ImageView showPassButton; // Reference to the ImageView in FXML
+    private ImageView showPassButton;
 
-    private boolean isDefaultIcon = true; // A flag to track the current icon state
+    private boolean isDefaultIcon = true;
 
 
     @FXML
@@ -54,20 +54,16 @@ public class LoginController {
         showPassButton.setImage(defaultIcon);
     }
 
-    // Event handler for the button click
     @FXML
     public void changeButtonIconForShowPasswordBtn() {
         if (isDefaultIcon) {
-            // Change to a new icon when clicked
             Image newIcon = new Image(getClass().getResourceAsStream("/iuh/fit/icons/unshow_password_icon.png"));
             showPassButton.setImage(newIcon);
         } else {
-            // Revert to the original icon
             Image defaultIcon = new Image(getClass().getResourceAsStream("/iuh/fit/icons/show_password_icon.png"));
             showPassButton.setImage(defaultIcon);
         }
 
-        // Toggle the flag to track icon state
         isDefaultIcon = !isDefaultIcon;
     }
 
@@ -107,7 +103,6 @@ public class LoginController {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/Dashboard.fxml"));
                 Scene dashboardScene = new Scene(fxmlLoader.load());
 
-                // Lấy Stage hiện tại và set Scene mới
                 Stage currentStage = (Stage) signInButton.getScene().getWindow();
                 currentStage.setScene(dashboardScene);
             } catch (Exception e) {
