@@ -2,8 +2,8 @@
 go
 
 -- PHƯƠNG THỨC XÓA DATABASE (dùng cho việc xóa cài lại)
---use master
---DROP DATABASE HotelDatabase
+use master
+DROP DATABASE HotelDatabase
 
 
 
@@ -191,3 +191,18 @@ VALUES
 ('ACC-000005', 'vubahai', 'test123@', 'ACTIVE', 'EMP-000005');
 
 
+go
+--Tạo bảng pricing
+CREATE TABLE Pricing (
+    pricingID VARCHAR(10) PRIMARY KEY,  -- ID định giá
+    priceUnit VARCHAR(15) NOT NULL CHECK (priceUnit IN ('DAY', 'HOUR')),  -- Đơn vị tính giá
+    price MONEY NOT NULL  -- Mức giá
+);
+
+--Thêm dữ liệu vào bảng Pricing
+INSERT INTO Pricing (pricingID, priceUnit, price)
+VALUES 
+('P-000001', 'DAY', 100.00),
+('P-000002', 'HOUR', 15.50),
+('P-000003', 'DAY', 200.75),
+('P-000004', 'HOUR', 20.00);
