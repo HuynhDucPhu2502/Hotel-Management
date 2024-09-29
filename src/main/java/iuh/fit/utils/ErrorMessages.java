@@ -129,6 +129,7 @@ public class ErrorMessages {
     public static final String CONVERT_HELPER_INVALID_SHIFT_DAYS_SCHEDULE = "Ngày ca làm việc không hợp lệ. Phải nằm trong MON_WED_FRI, TUE_THU_SAT, SUNDAY";
     public static final String CONVERT_HELPER_INVALID_ACCOUNT_STATUS= "Ngày ca làm việc không hợp lệ. Phải nằm trong ACTIVE, INACTIVE, LOCKED";
     public static final String CONVERT_HELPER_INVALID_PRICE_UNIT = "Đơn vị giá không hợp lệ. Phải nằm trong DAY, HOUR";
+    public static final String CONVERT_HELPER_INVALID_ROOM_STATUS = "Trạng thái phòng không hợp lệ. Phải nằm trong AVAILABLE, ON_USE, UNAVAILABLE";
     // Login message
     public static final String LOGIN_INVALID_USERNAME = "Tài khoản không được bỏ trống";
     public static final String LOGIN_INVALID_PASSWORD = "Mật khẩu không được để trống";

@@ -105,7 +105,7 @@ public class Room {
      * @throws IllegalArgumentException nếu thời gian không hợp lệ (không trước thời gian hiện tại)
      */
     public void setDateOfCreation(LocalDateTime dateOfCreation) {
-        if(dateOfCreation.isBefore(LocalDateTime.now()))
+        if(dateOfCreation.isAfter(LocalDateTime.now()))
             throw new IllegalArgumentException(ErrorMessages.ROOM_INVALID_DATEOFCREATION);
         this.dateOfCreation = dateOfCreation;
     }
@@ -149,5 +149,15 @@ public class Room {
     @Override
     public int hashCode() {
         return Objects.hashCode(roomID);
+    }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "roomID='" + roomID + '\'' +
+                ", roomStatus=" + roomStatus +
+                ", dateOfCreation=" + dateOfCreation +
+                ", roomCategory=" + roomCategory +
+                '}';
     }
 }

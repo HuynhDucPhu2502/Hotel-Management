@@ -220,7 +220,26 @@ CREATE TABLE RoomCategory (
 --Thêm dữ liệu vào bảng RoomCategory
 INSERT INTO RoomCategory (roomCategoryID, roomCategoryName, numberOfBed, pricingID)
 VALUES 
-('RC-000001', 'Phong Hang Sang', 2, 'P-000001'),  -- Phòng Hạng Sang
-('RC-000002', 'Phong Tieu Chuan', 1, 'P-000002'),  -- Phòng Tiêu Chuẩn
-('RC-000003', 'Phong Gia Dinh', 3, 'P-000003'),    -- Phòng Gia Đình
-('RC-000004', 'Phong Don', 1, 'P-000004');         -- Phòng Đơn
+('RC-000001', 'Phong View Dep', 2, 'P-000001'),     -- Phòng View Đẹp
+('RC-000002', 'Phong Mat Dat', 1, 'P-000002'),      -- Phòng Mặt Đất
+('RC-000003', 'Phong Tren Cao', 3, 'P-000003'),      -- Phòng Trên Cao
+('RC-000004', 'Phong Trung Tam', 1, 'P-000004');     -- Phòng Trung Tâm
+
+go
+--Tạo bảng Room
+CREATE TABLE Room (
+    roomID VARCHAR(10) NOT NULL PRIMARY KEY,  -- Mã phòng
+    roomStatus VARCHAR(20) NOT NULL CHECK (roomStatus IN ('AVAILABLE', 'ON_USE', 'UNAVAILABLE')),  -- Trạng thái của phòng
+    dateOfCreation DATETIME NOT NULL,  -- Thời gian tạo phòng
+    roomCategoryID VARCHAR(10) NOT NULL,  -- Khóa ngoại liên kết đến bảng RoomCategory
+
+    CONSTRAINT fk_roomCategory FOREIGN KEY (roomCategoryID) REFERENCES RoomCategory(roomCategoryID)  -- Thiết lập khóa ngoại
+);
+
+--Thêm dữ liệu vào bảng Room
+INSERT INTO Room (roomID, roomStatus, dateOfCreation, roomCategoryID)
+VALUES 
+('T201', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),  -- Phòng Thường với 2 giường
+('T101', 'ON_USE', '2024-09-28 09:00:00', 'RC-000002'),    -- Phòng Thường với 1 giường
+('V201', 'UNAVAILABLE', '2024-09-28 11:00:00', 'RC-000003'), -- Phòng VIP với 2 giường
+('V101', 'AVAILABLE', '2024-09-28 08:00:00', 'RC-000004');    -- Phòng VIP với 1 giường
