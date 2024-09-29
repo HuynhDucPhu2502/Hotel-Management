@@ -15,6 +15,7 @@ public class RoomCategory {
 
     // Số lượng giường trong loại phòng, phải có ít nhất 1 giường
     private int numberOfBed;
+    private Pricing pricing;
 
     /**
      * Constructor đầy đủ cho RoomCategory
@@ -22,10 +23,11 @@ public class RoomCategory {
      * @param roomCategoryName Tên loại phòng
      * @param numberOfBed Số lượng giường trong loại phòng
      */
-    public RoomCategory(String roomCategoryid, String roomCategoryName, int numberOfBed) {
+    public RoomCategory(String roomCategoryid, String roomCategoryName, int numberOfBed, Pricing pricing) {
         this.setRoomCategoryid(roomCategoryid);
         this.setRoomCategoryName(roomCategoryName);
         this.setNumberOfBed(numberOfBed);
+        this.setPricing(pricing);
     }
 
     /**
@@ -103,6 +105,14 @@ public class RoomCategory {
         this.numberOfBed = numberOfBed;
     }
 
+    public Pricing getPricing() {
+        return pricing;
+    }
+
+    public void setPricing(Pricing pricing) {
+        this.pricing = pricing;
+    }
+
     /**
      * So sánh hai đối tượng RoomCategory dựa trên mã loại phòng
      * @param o Đối tượng cần so sánh
@@ -135,6 +145,7 @@ public class RoomCategory {
                 "roomCategoryid='" + roomCategoryid + '\'' +
                 ", roomCategoryName='" + roomCategoryName + '\'' +
                 ", numberOfBed=" + numberOfBed +
+                ", pricing=" + pricing +
                 '}';
     }
 }

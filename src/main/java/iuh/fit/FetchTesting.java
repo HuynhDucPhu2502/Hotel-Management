@@ -20,7 +20,8 @@ public class FetchTesting {
 //        System.out.println(AccountDAO.getLogin("huynhducphu", "test123@"));
 //        System.out.println();
 //        testServiceCategoryDAO();
-        PricingDAO.getPricing().forEach(System.out::println);
+//        PricingDAO.getPricing().forEach(System.out::println);
+        RoomCategoryDAO.getRoomCategory().forEach(System.out::println);
     }
 
     private static void testServiceCategoryDAO() {
