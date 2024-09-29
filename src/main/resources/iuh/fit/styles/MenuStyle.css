@@ -1,13 +1,13 @@
 .menu-bar-container {
-   -fx-background-color: rgb(100, 57, 255);
+   -fx-background-color: RGB(70, 130, 180);
 }
 
 .menu-bar-topbar {
-   -fx-background-color: rgb(66, 15, 250);
+   -fx-background-color: RGB(70, 130, 180);
 }
 
 .menu-bar-parent {
-   -fx-background-color: rgb(79, 117, 255);
+   -fx-background-color: RGB(70, 130, 180);
    -fx-text-fill: white;
    -fx-font-weight: bold;
    -fx-font-size: 24px;
@@ -17,7 +17,7 @@
 }
 
 .menu-bar-child {
-   -fx-background-color: rgb(107, 139, 255);
+   -fx-background-color: RGB(70, 130, 180);
    -fx-text-fill: white;
    -fx-font-weight: normal;
    -fx-font-size: 16px;

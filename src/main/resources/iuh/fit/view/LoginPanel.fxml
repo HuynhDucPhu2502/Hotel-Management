@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -11,7 +10,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -26,80 +24,97 @@
                   <Image url="@../icons/hotel-logo.png" />
                </image>
             </ImageView>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-panel-banner-title" text="Khách Sạn">
-               <font>
-                  <Font name="Arial" size="18.0" />
-               </font></Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-panel-banner-title" text="Chức Phú Gia Tiến">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-panel-banner-title" text="Chức Phú Gia Tiến" wrappingWidth="180.05859375">
                <font>
                   <Font name="Arial Bold" size="20.0" />
                </font>
             </Text>
-         </children>
-      </VBox>
-      <VBox layoutX="200.0" prefHeight="400.0" prefWidth="400.0" styleClass="login-panel-widget">
-         <children>
-            <Label styleClass="login-panel-widget-title" text="ĐĂNG NHẬP">
+            <Label prefHeight="0.0" prefWidth="38.0" text="HOTEL" textFill="WHITE">
                <font>
-                  <Font size="36.0" />
+                  <Font name="System Bold" size="12.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="50.0" />
+                  <Insets />
                </VBox.margin>
             </Label>
-            <GridPane alignment="CENTER" prefHeight="81.0" prefWidth="352.0" vgap="20.0">
+         </children>
+      </VBox>
+      <GridPane layoutX="209.0" layoutY="28.0" prefHeight="350.0" prefWidth="400.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="97.20001220703125" minWidth="10.0" prefWidth="52.8" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="316.8000244140625" minWidth="10.0" prefWidth="300.8000244140625" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="128.20001220703125" minWidth="10.0" prefWidth="47.19997558593752" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="130.00000610351563" minHeight="10.0" prefHeight="40.799981689453126" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="130.00000610351563" minHeight="10.0" prefHeight="40.799981689453126" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="130.00000610351563" minHeight="0.0" prefHeight="31.5999755859375" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="200.8" minHeight="10.0" prefHeight="52.59999389648439" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="299.19999389648433" minHeight="10.0" prefHeight="71.0000244140625" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="125.8000457763672" minHeight="10.0" prefHeight="104.59997558593753" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label alignment="CENTER" prefHeight="38.0" prefWidth="318.0" styleClass="login-panel-widget-title" text="HỆ THỐNG" GridPane.columnIndex="1">
+               <font>
+                  <Font name="System Bold" size="26.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" contentDisplay="TOP" prefHeight="52.0" prefWidth="302.0" styleClass="login-panel-widget-title" text="QUẢN LÝ KHÁCH SẠN" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font name="System Bold" size="26.0" />
+               </font>
+            </Label>
+            <Button fx:id="signInButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="302.0" styleClass="login-panel-widget-button" text="Đăng nhập" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Button>
+            <GridPane prefHeight="37.0" prefWidth="302.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.20001220703125" minWidth="10.0" prefWidth="127.19996337890625" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="325.8" minWidth="10.0" prefWidth="252.80003662109374" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="171.79998779296875" minWidth="10.0" prefWidth="36.60001220703125" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="264.59998779296876" minWidth="10.0" prefWidth="264.59998779296876" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TextField fx:id="userNameField" prefHeight="26.0" promptText="Tên đăng nhập" GridPane.columnIndex="1" />
+                  <ImageView fitHeight="28.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/username__icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </GridPane>
+            <GridPane prefHeight="68.0" prefWidth="302.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="146.20001220703125" minWidth="10.0" prefWidth="36.5999755859375" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="267.7999633789062" minWidth="10.0" prefWidth="241.4000244140625" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="267.7999633789062" minWidth="10.0" prefWidth="23.200036621093773" />
+              </columnConstraints>
+              <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label styleClass="login-panel-widget-label" text="Tài khoản" />
-                  <Label styleClass="login-panel-widget-label" text="Mật khẩu" GridPane.rowIndex="1" />
-                  <TextField fx:id="userNameField" prefHeight="26.0" prefWidth="302.0" GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets />
-                     </GridPane.margin>
-                  </TextField>
-                  <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <children>
-                        <PasswordField fx:id="hiddenPasswordField" />
-                        <TextField fx:id="visiblePasswordField" managed="false" visible="false" />
-                     </children>
-                  </VBox>
+                   <ImageView fitHeight="28.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0">
+                       <image>
+                           <Image url="@../icons/password_icon.png" />
+                       </image>
+                   </ImageView>
+                  <TextField fx:id="visiblePasswordField" prefHeight="26.0" promptText="Mật khẩu" GridPane.columnIndex="1" />
+                   <Button fx:id="ShowPasswordBtn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="25.0" onAction="#changeButtonIconForShowPasswordBtn" prefHeight="22.0" prefWidth="54.0" style="-fx-background-color: white;" GridPane.columnIndex="2">
+                       <graphic>
+                           <ImageView fx:id="showPassButton" fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                               <image>
+                                   <Image url="@../icons/show_password_icon.png" />
+                               </image>
+                           </ImageView>
+                       </graphic>
+                   </Button>
+                  <PasswordField fx:id="hiddenPasswordField" prefHeight="26.0" promptText="Mật khẩu" GridPane.columnIndex="1" />
                </children>
-               <VBox.margin>
-                  <Insets left="30.0" right="30.0" />
-               </VBox.margin>
             </GridPane>
-            <VBox prefHeight="29.0" prefWidth="400.0" styleClass="login-panel-widget-checkbox">
-               <children>
-                  <CheckBox fx:id="passwordCheckbox" mnemonicParsing="false" text="Hiện mật khẩu" />
-               </children>
-               <VBox.margin>
-                  <Insets left="30.0" right="30.0" />
-               </VBox.margin>
-            </VBox>
-            <HBox prefHeight="26.0" prefWidth="400.0">
-               <children>
-                  <Text fx:id="errorMessage" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-panel-widget-error-message" />
-               </children>
-               <VBox.margin>
-                  <Insets left="30.0" right="30.0" />
-               </VBox.margin>
-            </HBox>
-            <Button fx:id="signInButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="370.0" styleClass="login-panel-widget-button" text="Đăng nhập" textAlignment="CENTER" textFill="WHITE">
-               <VBox.margin>
-                  <Insets top="50.0" />
-               </VBox.margin>
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
          </children>
-      </VBox>
+      </GridPane>
    </children>
 </AnchorPane>
