@@ -192,38 +192,44 @@ VALUES
 
 
 go
---Tạo bảng pricing
-CREATE TABLE Pricing (
-    pricingID VARCHAR(10) NOT NULL PRIMARY KEY,  -- ID định giá
-    priceUnit VARCHAR(15) NOT NULL CHECK (priceUnit IN ('DAY', 'HOUR')),  -- Đơn vị tính giá
-    price MONEY NOT NULL  -- Mức giá
-);
-
---Thêm dữ liệu vào bảng Pricing
-INSERT INTO Pricing (pricingID, priceUnit, price)
-VALUES 
-('P-000001', 'DAY', 100.00),
-('P-000002', 'HOUR', 15.50),
-('P-000003', 'DAY', 200.75),
-('P-000004', 'HOUR', 20.00);
 
 --Tạo bảng RoomCategory
 CREATE TABLE RoomCategory (
     roomCategoryID VARCHAR(10) NOT NULL PRIMARY KEY,  -- Mã định danh của loại phòng
     roomCategoryName NVARCHAR(50) NOT NULL,  -- Tên của loại phòng, không được rỗng và không vượt quá 30 ký tự
-    numberOfBed INT NOT NULL,  -- Số lượng giường, phải ít nhất là 1
-    pricingID VARCHAR(10) NOT NULL,  -- Khóa ngoại liên kết đến bảng Pricing
-    
-    CONSTRAINT fk_pricing FOREIGN KEY (pricingID) REFERENCES Pricing(pricingID)  -- Thiết lập khóa ngoại
+    numberOfBed INT NOT NULL  -- Số lượng giường, phải ít nhất là 1
 );
 
 --Thêm dữ liệu vào bảng RoomCategory
-INSERT INTO RoomCategory (roomCategoryID, roomCategoryName, numberOfBed, pricingID)
+INSERT INTO RoomCategory (roomCategoryID, roomCategoryName, numberOfBed)
 VALUES 
-('RC-000001', 'Phong View Dep', 2, 'P-000001'),     -- Phòng View Đẹp
-('RC-000002', 'Phong Mat Dat', 1, 'P-000002'),      -- Phòng Mặt Đất
-('RC-000003', 'Phong Tren Cao', 3, 'P-000003'),      -- Phòng Trên Cao
-('RC-000004', 'Phong Trung Tam', 1, 'P-000004');     -- Phòng Trung Tâm
+('RC-000001', 'Phong Thuong Giuong Don', 1),
+('RC-000002', 'Phong Thuong Giuong Doi', 2),
+('RC-000003', 'Phong Thuong VIP Don', 1),
+('RC-000004', 'Phong Thuong VIP Doi', 2)
+
+go
+
+--Tạo bảng pricing
+CREATE TABLE Pricing (
+    pricingID VARCHAR(10) NOT NULL PRIMARY KEY,  -- ID định giá
+    priceUnit VARCHAR(15) NOT NULL CHECK (priceUnit IN ('DAY', 'HOUR')),  -- Đơn vị tính giá
+    price MONEY NOT NULL,  -- Mức giá
+	roomCategoryID VARCHAR(10) NOT NULL,
+	CONSTRAINT fk_roomcategory_pricing FOREIGN KEY (roomCategoryID) REFERENCES RoomCategory(roomCategoryID)  -- Thiết lập khóa ngoại
+);
+
+--Thêm dữ liệu vào bảng Pricing
+INSERT INTO Pricing (pricingID, priceUnit, price, roomCategoryID)
+VALUES 
+('P-000001', 'HOUR', 150000.00, 'RC-000001'), --Thường Đơn Giờ
+('P-000002', 'DAY', 800000.00, 'RC-000001'), --Thường Đơn Ngày
+('P-000003', 'HOUR', 200000.00, 'RC-000002'), --Thường Đôi Giờ
+('P-000004', 'DAY', 850000.00, 'RC-000002'), --Thường Đôi Ngày
+('P-000005', 'HOUR', 300000.00, 'RC-000003'), --VIP Đơn Giờ
+('P-000006', 'DAY', 1600000.00, 'RC-000003'), --VIP Đơn Ngày
+('P-000007', 'HOUR', 400000.00, 'RC-000004'), --VIP Đôi Giờ
+('P-000008', 'DAY', 1800000.00, 'RC-000004') --VIP Đôi Ngày
 
 go
 --Tạo bảng Room
@@ -239,7 +245,53 @@ CREATE TABLE Room (
 --Thêm dữ liệu vào bảng Room
 INSERT INTO Room (roomID, roomStatus, dateOfCreation, roomCategoryID)
 VALUES 
-('T201', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),  -- Phòng Thường với 2 giường
-('T101', 'ON_USE', '2024-09-28 09:00:00', 'RC-000002'),    -- Phòng Thường với 1 giường
-('V201', 'UNAVAILABLE', '2024-09-28 11:00:00', 'RC-000003'), -- Phòng VIP với 2 giường
-('V101', 'AVAILABLE', '2024-09-28 08:00:00', 'RC-000004');    -- Phòng VIP với 1 giường
+('T1101', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),  -- Phòng Thường với 1 giường ở tầng 1 phòng số 01
+('T2102', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
+('V1103', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+('V2104', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+('T1105', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+('T2106', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
+('V1107', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+('V2108', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+('T1109', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+('T2110', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
+('V1211', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+('V2212', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+('T1213', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+('T2214', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
+('V1215', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+('V2216', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+('T1217', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+('T2218', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
+('V1219', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+('V2220', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+('T1321', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+('T2322', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
+('V1323', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+('V2324', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+('T1325', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+('T2326', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
+('V1327', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+('V2328', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+('T1329', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+('T2330', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
+('V1431', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+('V2432', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+('T1433', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+('T2434', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
+('V1435', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+('V2436', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+('T1437', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+('T2438', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
+('V1439', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+('V2440', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+('T1541', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+('T2542', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
+('V1543', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+('V2544', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+('T1545', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+('T2546', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
+('V1547', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+('V2548', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+('T1549', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+('T2550', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002')

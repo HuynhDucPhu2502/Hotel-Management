@@ -17,6 +17,7 @@ public class Pricing {
     private PriceUnit priceUnit;
     // Mức giá
     private double price;
+    private RoomCategory roomCategory;
 
     /**
      * Hàm khởi tạo đầy đủ cho lớp Pricing.
@@ -25,10 +26,11 @@ public class Pricing {
      * @param priceUnit Đơn vị tính giá (PriceUnit).
      * @param price Mức giá.
      */
-    public Pricing(String pricingID, PriceUnit priceUnit, double price) {
+    public Pricing(String pricingID, PriceUnit priceUnit, double price, RoomCategory roomCategory) {
         setPricingID(pricingID);
         setPriceUnit(priceUnit);
         setPrice(price);
+        setRoomCategory(roomCategory);
     }
 
     /**
@@ -131,12 +133,21 @@ public class Pricing {
         this.price = price;
     }
 
+    public RoomCategory getRoomCategory() {
+        return roomCategory;
+    }
+
+    public void setRoomCategory(RoomCategory roomCategory) {
+        this.roomCategory = roomCategory;
+    }
+
     @Override
     public String toString() {
         return "Pricing{" +
                 "pricingID='" + pricingID + '\'' +
                 ", priceUnit=" + priceUnit +
                 ", price=" + price +
+                ", roomCategory=" + roomCategory +
                 '}';
     }
 }
