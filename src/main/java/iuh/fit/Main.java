@@ -3,23 +3,36 @@ package iuh.fit;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+/**
+ * @author Le Tran Gia Huy
+ * @created 29/09/2024 - 3:29 PM
+ * @project HotelManagement
+ * @package iuh.fit
+ */
 public class Main extends Application {
+
     @Override
-    public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/iuh/fit/view/LoginPanel.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Quản Lý Khách Sạn");
-        stage.setScene(scene);
-        stage.show();
+    public void start(Stage primaryStage) {
+        try {
+            // Load the FXML layout
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/MenuBar.fxml")); // Update with the correct path
+            AnchorPane root = loader.load();
+
+            // Set the scene and stage
+            Scene scene = new Scene(root);
+            primaryStage.setTitle("Dropdown Menu Example");
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(true); // Optional: prevent resizing
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace(); // Handle exception appropriately
+        }
     }
 
     public static void main(String[] args) {
-        launch();
+        launch(args); // Launch the JavaFX application
     }
-
-
 }

@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -24,7 +26,7 @@ public class LoginController {
     private TextField visiblePasswordField; // hiện mật khẩu
 
     @FXML
-    private CheckBox passwordCheckbox; // checkbox ẩn hiện mật khẩu
+    private Button ShowPasswordBtn; // checkbox ẩn hiện mật khẩu
 
     @FXML
     private Text errorMessage;
@@ -32,14 +34,41 @@ public class LoginController {
     @FXML
     private Button signInButton;
 
+    @FXML
+    private ImageView showPassButton; // Reference to the ImageView in FXML
+
+    private boolean isDefaultIcon = true; // A flag to track the current icon state
+
 
     @FXML
     private void initialize() {
         hiddenPasswordField.textProperty().bindBidirectional(visiblePasswordField.textProperty());
 
-        passwordCheckbox.setOnAction(event -> PasswordVisibility());
+        ShowPasswordBtn.setOnAction(event -> {
+            PasswordVisibility();
+            changeButtonIconForShowPasswordBtn();
+        });
         signInButton.setOnAction(event -> signIn());
 
+        Image defaultIcon = new Image(getClass().getResourceAsStream("/iuh/fit/icons/show_password_icon.png"));
+        showPassButton.setImage(defaultIcon);
+    }
+
+    // Event handler for the button click
+    @FXML
+    public void changeButtonIconForShowPasswordBtn() {
+        if (isDefaultIcon) {
+            // Change to a new icon when clicked
+            Image newIcon = new Image(getClass().getResourceAsStream("/iuh/fit/icons/unshow_password_icon.png"));
+            showPassButton.setImage(newIcon);
+        } else {
+            // Revert to the original icon
+            Image defaultIcon = new Image(getClass().getResourceAsStream("/iuh/fit/icons/show_password_icon.png"));
+            showPassButton.setImage(defaultIcon);
+        }
+
+        // Toggle the flag to track icon state
+        isDefaultIcon = !isDefaultIcon;
     }
 
     private void PasswordVisibility() {

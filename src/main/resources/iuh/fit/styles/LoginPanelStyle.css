@@ -32,7 +32,11 @@
 }
 
 .login-panel-widget-button {
+    -fx-background-radius: 30; /* Độ bo tròn */
     -fx-background-color: rgb(100, 57, 255);
     -fx-text-color: rgb(255, 255, 255);
 }
 
+.login-panel-widget-button:hover {
+    -fx-background-color: rgb(80, 40, 200);
+}
