@@ -72,5 +72,12 @@ public class ConvertHelper {
         };
     }
 
-
+    public static RoomStatus roomStatusConverter(String input) {
+        return switch (input.toUpperCase()) {
+            case "AVAILABLE" -> RoomStatus.AVAILABLE;
+            case "ON_USE" -> RoomStatus.ON_USE;
+            case "UNAVAILABLE" -> RoomStatus.UNAVAILABLE;
+            default -> throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_ROOM_STATUS);
+        };
+    }
 }
