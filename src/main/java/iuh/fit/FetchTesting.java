@@ -1,6 +1,7 @@
 package iuh.fit;
 
 import iuh.fit.dao.*;
+import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
 import iuh.fit.models.ServiceCategory;
 
@@ -23,7 +24,8 @@ public class FetchTesting {
 //        testServiceCategoryDAO();
 //        PricingDAO.getPricing().forEach(System.out::println);
 //        RoomCategoryDAO.getRoomCategory().forEach(System.out::println);
-        RoomDAO.getRoom().forEach(System.out::println);
+//        RoomDAO.getRoom().forEach(System.out::println);
+        ReservationFormDAO.getReservationForm().forEach(System.out::println);
     }
 
     private static void testServiceCategoryDAO() {

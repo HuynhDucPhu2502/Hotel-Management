@@ -2,8 +2,8 @@
 go
 
 -- PHƯƠNG THỨC XÓA DATABASE (dùng cho việc xóa cài lại)
---use master
---DROP DATABASE HotelDatabase
+use master
+DROP DATABASE HotelDatabase
 
 
 
@@ -245,10 +245,10 @@ CREATE TABLE Room (
 --Thêm dữ liệu vào bảng Room
 INSERT INTO Room (roomID, roomStatus, dateOfCreation, roomCategoryID)
 VALUES 
-('T1101', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),  -- Phòng Thường với 1 giường ở tầng 1 phòng số 01
-('T2102', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
-('V1103', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
-('V2104', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+('T1101', 'ON_USE', '2024-09-28 10:00:00', 'RC-000001'),  -- Phòng Thường với 1 giường ở tầng 1 phòng số 01
+('T2102', 'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
+('V1103', 'ON_USE', '2024-09-28 10:00:00', 'RC-000003'),
+('V2104', 'ON_USE', '2024-09-28 10:00:00', 'RC-000004'),
 ('T1105', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
 ('T2106', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
 ('V1107', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
@@ -295,3 +295,26 @@ VALUES
 ('V2548', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
 ('T1549', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
 ('T2550', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002')
+
+--Tạo bảng ReservationForm
+CREATE TABLE ReservationForm (
+    reservationID VARCHAR(10) NOT NULL PRIMARY KEY,         -- Mã đặt phòng duy nhất
+    reservationDate DATETIME NOT NULL,            -- Ngày đặt phòng
+    approxCheckInDate DATETIME NOT NULL,          -- Ngày dự kiến nhận phòng
+    approxCheckOutDate DATETIME NOT NULL,         -- Ngày dự kiến trả phòng
+    employeeID VARCHAR(10) NOT NULL,              -- ID nhân viên liên quan đến đặt phòng
+    roomID VARCHAR(10) NOT NULL,                   -- Mã phòng đặt
+    customerID VARCHAR(10) NOT NULL,               -- ID khách hàng đặt phòng
+    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID),  -- Khóa ngoại liên kết đến bảng Employee
+    FOREIGN KEY (roomID) REFERENCES Room(roomID),              -- Khóa ngoại liên kết đến bảng Room
+    FOREIGN KEY (customerID) REFERENCES Customer(customerID)   -- Khóa ngoại liên kết đến bảng Customer
+);
+
+--Thêm dữ liệu vào bảng ReservationForm
+INSERT INTO ReservationForm (reservationID, reservationDate, approxCheckInDate, approxCheckOutDate, employeeID, roomID, customerID)
+VALUES 
+('RF-000001', '2024-09-29 10:00:00', '2024-10-02 14:00:00', '2024-10-05 12:00:00', 'EMP-000001', 'T1101', 'CUS-000001'),
+('RF-000002', '2024-09-29 11:30:00', '2024-10-03 15:00:00', '2024-10-07 11:00:00', 'EMP-000002', 'T2102', 'CUS-000002'),
+('RF-000003', '2024-09-29 09:00:00', '2024-10-04 13:00:00', '2024-10-06 10:00:00', 'EMP-000003', 'V1103', 'CUS-000003'),
+('RF-000004', '2024-09-29 08:00:00', '2024-10-05 12:00:00', '2024-10-08 09:00:00', 'EMP-000004', 'V2104', 'CUS-000004');
+
