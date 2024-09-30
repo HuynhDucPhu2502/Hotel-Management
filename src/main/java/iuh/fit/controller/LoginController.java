@@ -7,13 +7,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 public class LoginController {
     @FXML
@@ -42,6 +44,7 @@ public class LoginController {
 
     @FXML
     private void initialize() {
+        registerEventEnterKey();
         hiddenPasswordField.textProperty().bindBidirectional(visiblePasswordField.textProperty());
 
         ShowPasswordBtn.setOnAction(event -> {
@@ -50,17 +53,31 @@ public class LoginController {
         });
         signInButton.setOnAction(event -> signIn());
 
-        Image defaultIcon = new Image(getClass().getResourceAsStream("/iuh/fit/icons/show_password_icon.png"));
+        Image defaultIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/show_password_icon.png")));
         showPassButton.setImage(defaultIcon);
     }
 
+    private void registerEventEnterKey() {
+        userNameField.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) signIn();
+        });
+
+        hiddenPasswordField.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) signIn();
+        });
+
+        visiblePasswordField.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) signIn();
+        });
+    }
+
     @FXML
-    public void changeButtonIconForShowPasswordBtn() {
+    private void changeButtonIconForShowPasswordBtn() {
         if (isDefaultIcon) {
-            Image newIcon = new Image(getClass().getResourceAsStream("/iuh/fit/icons/unshow_password_icon.png"));
+            Image newIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/unshow_password_icon.png")));
             showPassButton.setImage(newIcon);
         } else {
-            Image defaultIcon = new Image(getClass().getResourceAsStream("/iuh/fit/icons/show_password_icon.png"));
+            Image defaultIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/show_password_icon.png")));
             showPassButton.setImage(defaultIcon);
         }
 
