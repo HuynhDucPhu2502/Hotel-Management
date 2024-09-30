@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="800.0" prefWidth="227.0" stylesheets="@../styles/MenuStyle.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.MenuController">
+<AnchorPane prefHeight="800.0" prefWidth="230.0" stylesheets="@../styles/MenubarStyle.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.MenuBarController">
    <children>
       <VBox prefHeight="800.0" prefWidth="230.0" styleClass="menu-bar-container">
          <children>

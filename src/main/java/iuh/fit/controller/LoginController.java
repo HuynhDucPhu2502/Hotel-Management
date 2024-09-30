@@ -3,6 +3,7 @@ package iuh.fit.controller;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.models.Account;
 import iuh.fit.utils.ErrorMessages;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -55,7 +57,10 @@ public class LoginController {
 
         Image defaultIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/show_password_icon.png")));
         showPassButton.setImage(defaultIcon);
+
     }
+
+
 
     private void registerEventEnterKey() {
         userNameField.setOnKeyPressed(e -> {
@@ -117,11 +122,21 @@ public class LoginController {
             errorMessage.setText(ErrorMessages.LOGIN_INVALID_ACCOUNT);
         } else {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/Dashboard.fxml"));
-                Scene dashboardScene = new Scene(fxmlLoader.load());
+                System.out.println(account);
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/MainPanel.fxml"));
+                AnchorPane mainPanel = fxmlLoader.load();
 
+                MainController mainController = fxmlLoader.getController();
+
+                mainController.setAccount(account);
+
+                Scene scene = new Scene(mainPanel);
                 Stage currentStage = (Stage) signInButton.getScene().getWindow();
-                currentStage.setScene(dashboardScene);
+                currentStage.setScene(scene);
+                currentStage.setWidth(1200);
+                currentStage.setHeight(800);
+                currentStage.setResizable(true);
+                currentStage.centerOnScreen();
             } catch (Exception e) {
                 e.printStackTrace();
             }
