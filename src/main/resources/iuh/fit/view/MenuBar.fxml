@@ -101,7 +101,7 @@
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0">
                            <children>
-                              <Button fx:id="employeeBtn1" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
+                              <Button fx:id="roomBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -151,7 +151,7 @@
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0">
                            <children>
-                              <Button fx:id="employeeBtn2" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
+                              <Button fx:id="serviceBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -201,7 +201,7 @@
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0">
                            <children>
-                              <Button fx:id="employeeBtn21" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
+                              <Button fx:id="customerBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -251,7 +251,7 @@
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0">
                            <children>
-                              <Button fx:id="employeeBtn211" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
+                              <Button fx:id="accountBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -301,7 +301,7 @@
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0">
                            <children>
-                              <Button fx:id="employeeBtn2111" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
+                              <Button fx:id="statisticsBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
@@ -347,7 +347,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <Button fx:id="employeeBtn21111" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
+                              <Button fx:id="historyBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>

@@ -20,13 +20,13 @@ public class LoginController {
     private TextField userNameField;
 
     @FXML
-    private PasswordField hiddenPasswordField; // ẩn mật khẩu
+    private PasswordField hiddenPasswordField;
 
     @FXML
-    private TextField visiblePasswordField; // hiện mật khẩu
+    private TextField visiblePasswordField;
 
     @FXML
-    private Button ShowPasswordBtn; // checkbox ẩn hiện mật khẩu
+    private Button ShowPasswordBtn;
 
     @FXML
     private Text errorMessage;

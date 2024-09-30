@@ -2,12 +2,12 @@ package iuh.fit.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings(value = "unchecked")
 public class MenuController {
@@ -78,59 +78,62 @@ public class MenuController {
     @FXML
     private Button employeeBtn;
     @FXML
-    private Button employeeBtn1;
+    private Button roomBtn;
     @FXML
-    private Button employeeBtn2;
+    private Button serviceBtn;
     @FXML
-    private Button employeeBtn21;
+    private Button customerBtn;
     @FXML
-    private Button employeeBtn211;
+    private Button accountBtn;
     @FXML
-    private Button employeeBtn2111;
+    private Button statisticsBtn;
     @FXML
-    private Button employeeBtn21111;
+    private Button historyBtn;
 
     @FXML
     private ScrollPane scrollPane;
 
-    private boolean stateEmployee = false;
-
-
+    private final Map<String, Boolean> buttonStates = new HashMap<>();
 
     @FXML
     public void initialize() {
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-        employeeBtn.setOnAction(e -> dropDownMenuEvent(buttonOneContainer, buttonTwoContainer, buttonThreeContainer, arrowUpForEmpBtn));
-        employeeBtn1.setOnAction(e -> dropDownMenuEvent(buttonOneContainer1, buttonTwoContainer1, buttonThreeContainer1, arrowUpForEmpBtn1));
-        employeeBtn2.setOnAction(e -> dropDownMenuEvent(buttonOneContainer2, buttonTwoContainer2, buttonThreeContainer2, arrowUpForEmpBtn2));
-        employeeBtn21.setOnAction(e -> dropDownMenuEvent(buttonOneContainer21, buttonTwoContainer21, buttonThreeContainer21, arrowUpForEmpBtn21));
-        employeeBtn211.setOnAction(e -> dropDownMenuEvent(buttonOneContainer211, buttonTwoContainer211, buttonThreeContainer211, arrowUpForEmpBtn211));
-        employeeBtn2111.setOnAction(e -> dropDownMenuEvent(buttonOneContainer2111, buttonTwoContainer2111, buttonThreeContainer2111, arrowUpForEmpBtn2111));
-        employeeBtn21111.setOnAction(e -> dropDownMenuEvent(buttonOneContainer21111, buttonTwoContainer21111, buttonThreeContainer21111, arrowUpForEmpBtn21111));
+        buttonStates.put("employee", false);
+        buttonStates.put("room", false);
+        buttonStates.put("service", false);
+        buttonStates.put("customer", false);
+        buttonStates.put("account", false);
+        buttonStates.put("statistics", false);
+        buttonStates.put("history", false);
 
+        employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer, buttonTwoContainer, buttonThreeContainer), arrowUpForEmpBtn, "employee"));
+        roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer1, buttonTwoContainer1), arrowUpForEmpBtn1, "room"));
+        serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer2, buttonTwoContainer2, buttonThreeContainer2), arrowUpForEmpBtn2, "service"));
+        customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21), arrowUpForEmpBtn21, "customer"));
+        accountBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer211, buttonTwoContainer211, buttonThreeContainer211), arrowUpForEmpBtn211, "account"));
+        statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer2111, buttonTwoContainer2111, buttonThreeContainer2111), arrowUpForEmpBtn2111, "statistics"));
+        historyBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21111, buttonTwoContainer21111, buttonThreeContainer21111), arrowUpForEmpBtn21111, "history"));
     }
 
-    public void dropDownMenuEvent(HBox btn1, HBox btn2, HBox btn3, ImageView arrow){
-        if (!stateEmployee) {
-            btn1.setVisible(true);
-            btn1.setManaged(true);
-            btn2.setVisible(true);
-            btn2.setManaged(true);
-            btn3.setVisible(true);
-            btn3.setManaged(true);
-        } else {
-            btn1.setVisible(false);
-            btn1.setManaged(false);
-            btn1.setManaged(false);
-            btn2.setVisible(false);
-            btn2.setManaged(false);
-            btn3.setVisible(false);
-            btn3.setManaged(false);
-        }
-        stateEmployee = !stateEmployee;
+    public void dropDownMenuEvent(List<HBox> buttons, ImageView arrow, String stateKey) {
+        Boolean state = buttonStates.get(stateKey);
 
-        arrow.setRotate(!stateEmployee ? 0 : 180); // Rotate arrow based on visibility
+        if (!state) {
+            for (HBox button : buttons) {
+                button.setVisible(true);
+                button.setManaged(true);
+            }
+            arrow.setRotate(180);
+        } else {
+            for (HBox button : buttons) {
+                button.setVisible(false);
+                button.setManaged(false);
+            }
+            arrow.setRotate(0);
+        }
+
+        buttonStates.put(stateKey, !state);
     }
 
 }
