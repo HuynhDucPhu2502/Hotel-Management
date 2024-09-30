@@ -85,10 +85,12 @@ public class HistoryCheckIn {
      * @throws IllegalArgumentException nếu ngày giờ nhận phòng rỗng hoặc không hợp lệ.
      */
     public void setCheckInDate(LocalDateTime checkInDate) {
-        if(checkInDate == null)
+        if(checkInDate == null){
             throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_IVALID_CHECKIN_DATE_ISNULL);
-        if(!checkInDate.isAfter(reservationForm.getApproxCheckInDate()))
+        }
+        if(!checkInDate.isAfter(reservationForm.getApproxCheckInDate())){
             throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_IVALID_CHECKIN_DATE);
+        }
         this.checkInDate = checkInDate;
     }
 
@@ -135,5 +137,14 @@ public class HistoryCheckIn {
     @Override
     public int hashCode() {
         return Objects.hashCode(historyCheckInID);
+    }
+
+    @Override
+    public String toString() {
+        return "HistoryCheckIn{" +
+                "historyCheckInID='" + historyCheckInID + '\'' +
+                ", checkInDate=" + checkInDate +
+                ", reservationForm=" + reservationForm +
+                '}';
     }
 }
