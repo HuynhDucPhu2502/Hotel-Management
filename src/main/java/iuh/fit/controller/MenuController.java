@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SuppressWarnings(value = "unchecked")
 public class MenuController {
     @FXML
     private HBox buttonOneContainer;
