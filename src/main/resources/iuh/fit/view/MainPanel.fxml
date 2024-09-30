@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:controller="iuh.fit.controller.MainController" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+   <fx:include source="MenuBar.fxml" fx:id="menuBar"/>
+   <fx:include source="Topbar.fxml" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="0.0" fx:id="topBar"/>
+</AnchorPane>

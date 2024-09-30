@@ -34,7 +34,6 @@
 .login-panel-widget-button {
     -fx-background-radius: 30;
     -fx-background-color: RGB(70, 130, 180);
-    -fx-text-color: rgb(255, 255, 255);
 }
 
 .login-panel-widget-button:hover {
