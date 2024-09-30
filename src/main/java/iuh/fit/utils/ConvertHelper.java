@@ -80,4 +80,16 @@ public class ConvertHelper {
             default -> throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_ROOM_STATUS);
         };
     }
+
+    public static Date dateConvertertoSQL(LocalDate input) {
+        return Date.valueOf(input);
+    }
+
+    public static Timestamp dateTimeConvertertoSQL(LocalDateTime input) {
+        return Timestamp.valueOf(input);
+    }
+
+    public static Time timeConvertertoSQL(LocalTime input) {
+        return Time.valueOf(input);
+    }
 }

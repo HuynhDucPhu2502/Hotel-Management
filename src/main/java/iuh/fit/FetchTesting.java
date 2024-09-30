@@ -23,7 +23,8 @@ public class FetchTesting {
 //        testServiceCategoryDAO();
 //        PricingDAO.getPricing().forEach(System.out::println);
 //        RoomCategoryDAO.getRoomCategory().forEach(System.out::println);
-        RoomDAO.getRoom().forEach(System.out::println);
+//        RoomDAO.getRoom().forEach(System.out::println);
+            System.out.println(AccountDAO.getDataByID("AC-000001"));;
     }
 
     private static void testServiceCategoryDAO() {
