@@ -1,15 +1,27 @@
 package iuh.fit.controller;
 
+import javafx.animation.KeyFrame;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 public class MenuBarController {
+
+    @FXML
+    private Circle avatar;
+
     @FXML
     private HBox buttonOneContainer;
     @FXML
@@ -96,6 +108,11 @@ public class MenuBarController {
 
     @FXML
     public void initialize() {
+        Image image = new Image(getClass().getResource("/iuh/fit/imgs/764894_github_media_social_square_icon.png").toExternalForm());
+
+        // Đặt hình ảnh vào đối tượng Circle dưới dạng ImagePattern
+        avatar.setFill(new ImagePattern(image));
+
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         buttonStates.put("employee", false);

@@ -2,7 +2,7 @@
 
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:controller="iuh.fit.controller.MainController" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
-   <fx:include source="MenuBar.fxml" fx:id="menuBar"/>
-   <fx:include source="Topbar.fxml" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="0.0" fx:id="topBar"/>
+<AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.MainController">
+   <fx:include fx:id="menuBar" source="MenuBar.fxml" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="62.0" />
+   <fx:include fx:id="topBar" source="Topbar.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
 </AnchorPane>
