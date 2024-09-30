@@ -11,12 +11,5 @@
 .top-bar-signout {
     -fx-font-weight: bold;
     -fx-background-radius: 30;
-    -fx-background-color: rgb(204, 51, 51)
-
-
-
-
-
-
-;
+    -fx-background-color: rgb(204, 51, 51);
 }
