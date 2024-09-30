@@ -108,9 +108,9 @@ public class MenuController {
         buttonStates.put("history", false);
 
         employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer, buttonTwoContainer, buttonThreeContainer), arrowUpForEmpBtn, "employee"));
-        roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer1, buttonTwoContainer1), arrowUpForEmpBtn1, "room"));
+        roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer1, buttonTwoContainer1, buttonThreeContainer1), arrowUpForEmpBtn1, "room"));
         serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer2, buttonTwoContainer2, buttonThreeContainer2), arrowUpForEmpBtn2, "service"));
-        customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21), arrowUpForEmpBtn21, "customer"));
+        customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21, buttonTwoContainer21, buttonThreeContainer21), arrowUpForEmpBtn21, "customer"));
         accountBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer211, buttonTwoContainer211, buttonThreeContainer211), arrowUpForEmpBtn211, "account"));
         statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer2111, buttonTwoContainer2111, buttonThreeContainer2111), arrowUpForEmpBtn2111, "statistics"));
         historyBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21111, buttonTwoContainer21111, buttonThreeContainer21111), arrowUpForEmpBtn21111, "history"));
