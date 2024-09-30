@@ -1,6 +1,6 @@
 package iuh.fit.controller;
 
-import javafx.animation.KeyFrame;
+import iuh.fit.models.Account;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -8,20 +8,26 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
 
 public class MenuBarController {
 
+    private Account account;
+
     @FXML
     private Circle avatar;
+    @FXML
+    private Text employeePositionText;
+    @FXML
+    private Text employeeFullNameText;
 
+    // Employee
+    @FXML
+    private Button employeeBtn;
     @FXML
     private HBox buttonOneContainer;
     @FXML
@@ -31,6 +37,9 @@ public class MenuBarController {
     @FXML
     private ImageView arrowUpForEmpBtn;
 
+    // Room
+    @FXML
+    private Button roomBtn;
     @FXML
     private HBox buttonOneContainer1;
     @FXML
@@ -40,6 +49,9 @@ public class MenuBarController {
     @FXML
     private ImageView arrowUpForEmpBtn1;
 
+    // Service
+    @FXML
+    private Button serviceBtn;
     @FXML
     private HBox buttonOneContainer2;
     @FXML
@@ -49,6 +61,9 @@ public class MenuBarController {
     @FXML
     private ImageView arrowUpForEmpBtn2;
 
+    // Customer
+    @FXML
+    private Button customerBtn;
     @FXML
     private HBox buttonOneContainer21;
     @FXML
@@ -58,6 +73,9 @@ public class MenuBarController {
     @FXML
     private ImageView arrowUpForEmpBtn21;
 
+    // Account
+    @FXML
+    private Button accountBtn;
     @FXML
     private HBox buttonOneContainer211;
     @FXML
@@ -67,6 +85,9 @@ public class MenuBarController {
     @FXML
     private ImageView arrowUpForEmpBtn211;
 
+    // Statistics
+    @FXML
+    private Button statisticsBtn;
     @FXML
     private HBox buttonOneContainer2111;
     @FXML
@@ -76,6 +97,9 @@ public class MenuBarController {
     @FXML
     private ImageView arrowUpForEmpBtn2111;
 
+    // History
+    @FXML
+    private Button historyBtn;
     @FXML
     private HBox buttonOneContainer21111;
     @FXML
@@ -86,20 +110,6 @@ public class MenuBarController {
     private ImageView arrowUpForEmpBtn21111;
 
 
-    @FXML
-    private Button employeeBtn;
-    @FXML
-    private Button roomBtn;
-    @FXML
-    private Button serviceBtn;
-    @FXML
-    private Button customerBtn;
-    @FXML
-    private Button accountBtn;
-    @FXML
-    private Button statisticsBtn;
-    @FXML
-    private Button historyBtn;
 
     @FXML
     private ScrollPane scrollPane;
@@ -109,8 +119,6 @@ public class MenuBarController {
     @FXML
     public void initialize() {
         Image image = new Image(getClass().getResource("/iuh/fit/imgs/764894_github_media_social_square_icon.png").toExternalForm());
-
-        // Đặt hình ảnh vào đối tượng Circle dưới dạng ImagePattern
         avatar.setFill(new ImagePattern(image));
 
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -152,4 +160,10 @@ public class MenuBarController {
         buttonStates.put(stateKey, !state);
     }
 
+    public void setAccount(Account account) {
+        this.account = account;
+
+        employeePositionText.setText(account.getEmployee().getPosition().toString());
+        employeeFullNameText.setText(account.getEmployee().getFullName());
+    }
 }

@@ -19,7 +19,7 @@
       <VBox prefHeight="140.0" prefWidth="230.0" style="-fx-alignment: center; -fx-background-radius: 10;" styleClass="menu-bar-topbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Circle fx:id="avatar" fill="DODGERBLUE" radius="28.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-            <Text fill="#fffbfb" strokeType="OUTSIDE" strokeWidth="0.0" text="Chào buổi chiều">
+            <Text fx:id="employeePositionText" fill="#fffbfb" strokeType="OUTSIDE" strokeWidth="0.0" text="Quản Lý">
                <font>
                   <Font size="16.0" />
                </font>
@@ -27,7 +27,7 @@
                   <Insets top="10.0" />
                </VBox.margin>
             </Text>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Huỳnh Đức Phú">
+            <Text fx:id="employeeFullNameText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Huỳnh Đức Phú">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>

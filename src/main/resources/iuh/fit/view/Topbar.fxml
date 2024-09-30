@@ -12,8 +12,7 @@
          <children>
             <Label fx:id="clockLabel" style="-fx-font-size: 25px; -fx-font-weight: bold" textFill="WHITE" />
             <HBox prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            <HBox prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            <Button mnemonicParsing="false" styleClass="top-bar-signout" text="Đăng Xuất" textFill="#fffefe">
+            <Button fx:id="logoutBtn" mnemonicParsing="false" style="-fx-cursor: HAND;" styleClass="top-bar-signout" text="Đăng Xuất" textFill="#fffefe">
                <padding>
                   <Insets bottom="10.0" left="50.0" right="50.0" top="10.0" />
                </padding>
