@@ -100,7 +100,7 @@ public class ServiceCategoryDAO {
         }
     }
 
-    public static void updateData(String name, ServiceCategory serviceCategory) {
+    public static void updateData(ServiceCategory serviceCategory) {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(

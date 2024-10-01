@@ -1,0 +1,15 @@
+.top-bar-container {
+   -fx-background-color: RGB(70, 130, 180);
+   -fx-alignment: center;
+}
+
+.top-bar-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 20px;
+}
+
+.top-bar-signout {
+    -fx-font-weight: bold;
+    -fx-background-radius: 30;
+    -fx-background-color: rgb(204, 51, 51);
+}

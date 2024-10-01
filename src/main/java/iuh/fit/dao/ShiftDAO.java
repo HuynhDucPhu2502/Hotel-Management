@@ -53,7 +53,7 @@ public class ShiftDAO {
         String SQLQueryStatement = "SELECT shiftID, startTime, endTime, " +
                 "modifiedDate, shiftDaysSchedule " +
                 "FROM Shift " +
-                "WHERE pricingID = ?";
+                "WHERE shiftID = ?";
 
         try (
                 Connection con = DBHelper.getConnection();
@@ -98,7 +98,7 @@ public class ShiftDAO {
             preparedStatement.setTime(3, ConvertHelper.timeConvertertoSQL(shift.getEndTime()));
             preparedStatement.setTimestamp(4, ConvertHelper.dateTimeConvertertoSQL(shift.getUpdatedDate()));
             preparedStatement.setInt(5, shift.getNumberOfHour());
-            preparedStatement.setString(6, shift.getShiftDaysSchedule().toString());
+            preparedStatement.setString(6, ConvertHelper.shiftDaysScheduleConverterToSQL(shift.getShiftDaysSchedule()));
 
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
@@ -136,7 +136,7 @@ public class ShiftDAO {
             preparedStatement.setTime(2, ConvertHelper.timeConvertertoSQL(shift.getEndTime()));
             preparedStatement.setTimestamp(3, ConvertHelper.dateTimeConvertertoSQL(shift.getUpdatedDate()));
             preparedStatement.setInt(4, shift.getNumberOfHour());
-            preparedStatement.setString(5, shift.getShiftDaysSchedule().toString());
+            preparedStatement.setString(5, ConvertHelper.shiftDaysScheduleConverterToSQL(shift.getShiftDaysSchedule()));
             preparedStatement.setString(6, shift.getShiftID());
 
             preparedStatement.executeUpdate();

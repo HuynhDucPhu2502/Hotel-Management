@@ -3,30 +3,34 @@ package iuh.fit.controller;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.models.Account;
 import iuh.fit.utils.ErrorMessages;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.Objects;
 
 public class LoginController {
     @FXML
     private TextField userNameField;
 
     @FXML
-    private PasswordField hiddenPasswordField; // ẩn mật khẩu
+    private PasswordField hiddenPasswordField;
 
     @FXML
-    private TextField visiblePasswordField; // hiện mật khẩu
+    private TextField visiblePasswordField;
 
     @FXML
-    private Button ShowPasswordBtn; // checkbox ẩn hiện mật khẩu
+    private Button ShowPasswordBtn;
 
     @FXML
     private Text errorMessage;
@@ -42,6 +46,7 @@ public class LoginController {
 
     @FXML
     private void initialize() {
+        registerEventEnterKey();
         hiddenPasswordField.textProperty().bindBidirectional(visiblePasswordField.textProperty());
 
         ShowPasswordBtn.setOnAction(event -> {
@@ -50,17 +55,34 @@ public class LoginController {
         });
         signInButton.setOnAction(event -> signIn());
 
-        Image defaultIcon = new Image(getClass().getResourceAsStream("/iuh/fit/icons/show_password_icon.png"));
+        Image defaultIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/show_password_icon.png")));
         showPassButton.setImage(defaultIcon);
+
+    }
+
+
+
+    private void registerEventEnterKey() {
+        userNameField.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) signIn();
+        });
+
+        hiddenPasswordField.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) signIn();
+        });
+
+        visiblePasswordField.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) signIn();
+        });
     }
 
     @FXML
-    public void changeButtonIconForShowPasswordBtn() {
+    private void changeButtonIconForShowPasswordBtn() {
         if (isDefaultIcon) {
-            Image newIcon = new Image(getClass().getResourceAsStream("/iuh/fit/icons/unshow_password_icon.png"));
+            Image newIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/unshow_password_icon.png")));
             showPassButton.setImage(newIcon);
         } else {
-            Image defaultIcon = new Image(getClass().getResourceAsStream("/iuh/fit/icons/show_password_icon.png"));
+            Image defaultIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/show_password_icon.png")));
             showPassButton.setImage(defaultIcon);
         }
 
@@ -100,11 +122,20 @@ public class LoginController {
             errorMessage.setText(ErrorMessages.LOGIN_INVALID_ACCOUNT);
         } else {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/Dashboard.fxml"));
-                Scene dashboardScene = new Scene(fxmlLoader.load());
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/MainPanel.fxml"));
+                AnchorPane mainPanel = fxmlLoader.load();
 
+                MainController mainController = fxmlLoader.getController();
+
+                mainController.setAccount(account);
+
+                Scene scene = new Scene(mainPanel);
                 Stage currentStage = (Stage) signInButton.getScene().getWindow();
-                currentStage.setScene(dashboardScene);
+                currentStage.setScene(scene);
+                currentStage.setWidth(1200);
+                currentStage.setHeight(800);
+                currentStage.setResizable(true);
+                currentStage.centerOnScreen();
             } catch (Exception e) {
                 e.printStackTrace();
             }

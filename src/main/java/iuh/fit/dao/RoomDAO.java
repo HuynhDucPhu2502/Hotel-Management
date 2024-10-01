@@ -53,7 +53,7 @@ public class RoomDAO {
         String SQLQueryStatement = "SELECT a.roomID, a.roomStatus, a.dateOfCreation, a.roomCategoryID, " +
                 "b.roomCategoryName, b.numberOfBed " +
                 "FROM Room a inner join RoomCategory b on a.roomCategoryID = b.roomCategoryID " +
-                "WHERE pricingID = ?";
+                "WHERE roomID = ?";
 
         try (
                 Connection con = DBHelper.getConnection();
@@ -97,7 +97,7 @@ public class RoomDAO {
                 )
         ){
             preparedStatement.setString(1, room.getRoomID());
-            preparedStatement.setString(2, room.getRoomStatus().toString());
+            preparedStatement.setString(2, ConvertHelper.roomStatusConverterToSQL(room.getRoomStatus()));
             preparedStatement.setTimestamp(3, ConvertHelper.dateTimeConvertertoSQL(room.getDateOfCreation()));
             preparedStatement.setString(4, room.getRoomCategory().getRoomCategoryid());
 
@@ -132,7 +132,7 @@ public class RoomDAO {
                                 "WHERE roomID = ? "
                 );
         ){
-            preparedStatement.setString(1, room.getRoomStatus().toString());
+            preparedStatement.setString(1, ConvertHelper.roomStatusConverterToSQL(room.getRoomStatus()));
             preparedStatement.setTimestamp(2, ConvertHelper.dateTimeConvertertoSQL(room.getDateOfCreation()));
             preparedStatement.setString(3, room.getRoomCategory().getRoomCategoryid());
             preparedStatement.setString(4, room.getRoomID());

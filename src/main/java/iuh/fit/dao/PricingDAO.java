@@ -100,7 +100,7 @@ public class PricingDAO {
                 )
         ){
             preparedStatement.setString(1, pricing.getPricingID());
-            preparedStatement.setString(2, pricing.getPriceUnit().toString());
+            preparedStatement.setString(2, ConvertHelper.pricingConverterToSQL(pricing.getPriceUnit()));
             preparedStatement.setDouble(3, pricing.getPrice());
             preparedStatement.setString(4, pricing.getRoomCategory().getRoomCategoryid());
 
@@ -131,11 +131,11 @@ public class PricingDAO {
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
                         "UPDATE Pricing " +
-                                "SET priceUnit, price, roomCategoryID " +
+                                "SET priceUnit = ?, price = ?, roomCategoryID = ? " +
                                 "WHERE pricingID = ? "
                 );
         ){
-            preparedStatement.setString(1, pricing.getPriceUnit().toString());
+            preparedStatement.setString(1, ConvertHelper.pricingConverterToSQL(pricing.getPriceUnit()));
             preparedStatement.setDouble(2, pricing.getPrice());
             preparedStatement.setString(3, pricing.getRoomCategory().getRoomCategoryid());
             preparedStatement.setString(4, pricing.getPricingID());

@@ -105,10 +105,10 @@ public class EmployeeDAO {
             preparedStatement.setString(3, employee.getPhoneNumber());
             preparedStatement.setString(4, employee.getEmail());
             preparedStatement.setString(5, employee.getAddress());
-            preparedStatement.setString(6, employee.getGender().toString());
+            preparedStatement.setString(6, ConvertHelper.genderConverterToSQL(employee.getGender()));
             preparedStatement.setString(7, employee.getIdCardNumber());
             preparedStatement.setDate(8, ConvertHelper.dateConvertertoSQL(employee.getDob()));
-            preparedStatement.setString(9, employee.getPosition().toString());
+            preparedStatement.setString(9, ConvertHelper.positionConverterToSQL(employee.getPosition()));
 
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
@@ -133,10 +133,10 @@ public class EmployeeDAO {
             preparedStatement.setString(2, employee.getPhoneNumber());
             preparedStatement.setString(3, employee.getEmail());
             preparedStatement.setString(4, employee.getAddress());
-            preparedStatement.setString(5, employee.getGender().toString());
+            preparedStatement.setString(5, ConvertHelper.genderConverterToSQL(employee.getGender()));
             preparedStatement.setString(6, employee.getIdCardNumber());
             preparedStatement.setDate(7, ConvertHelper.dateConvertertoSQL(employee.getDob()));
-            preparedStatement.setString(8, employee.getPosition().toString());
+            preparedStatement.setString(8, ConvertHelper.positionConverterToSQL(employee.getPosition()));
             preparedStatement.setString(9, employee.getEmployeeID());
 
             preparedStatement.executeUpdate();

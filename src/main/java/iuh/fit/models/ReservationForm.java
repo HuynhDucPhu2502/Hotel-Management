@@ -238,4 +238,17 @@ public class ReservationForm {
     public int hashCode() {
         return Objects.hash(reservationID);
     }
+
+    @Override
+    public String toString() {
+        return "ReservationForm{" +
+                "reservationID='" + reservationID + '\'' +
+                ", reservationDate=" + reservationDate +
+                ", approxCheckInDate=" + approxCheckInDate +
+                ", approxCheckOutDate=" + approxCheckOutDate +
+                ", employee=" + employee +
+                ", room=" + room +
+                ", customer=" + customer +
+                '}';
+    }
 }

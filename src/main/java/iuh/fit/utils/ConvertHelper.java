@@ -92,4 +92,46 @@ public class ConvertHelper {
     public static Time timeConvertertoSQL(LocalTime input) {
         return Time.valueOf(input);
     }
+
+    public static String genderConverterToSQL(Gender input) {
+        if (!input.toString().matches("(Nữ|Nam)"))
+            throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_GENDER);
+
+        return input.toString().equalsIgnoreCase("Nữ")
+                ? "FEMALE" : "MALE";
+    }
+
+    public static String positionConverterToSQL(Position input) {
+        if (!input.toString().matches("(Quản lý|Lễ tân)"))
+            throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_POSITION);
+
+        return input.toString().equalsIgnoreCase("Quản lý")
+                ? "MANAGER" : "RECEPTIONIST";
+    }
+
+    public static String shiftDaysScheduleConverterToSQL(ShiftDaysSchedule input) {
+        return switch (input.toString().toUpperCase()) {
+            case "2 4 6" -> "MON_WED_FRI";
+            case "3 5 7" -> "TUE_THU_SAT";
+            case "CN" -> "SUNDAY";
+            default -> throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_SHIFT_DAYS_SCHEDULE);
+        };
+    }
+
+    public static String pricingConverterToSQL(PriceUnit input) {
+        if (!input.toString().matches("(Ngày|Giờ)"))
+            throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_PRICE_UNIT);
+
+        return input.toString().equalsIgnoreCase("Ngày")
+                ? "DAY" : "HOUR";
+    }
+
+    public static String roomStatusConverterToSQL(RoomStatus input) {
+        return switch (input.toString()) {
+            case "Phòng trống" -> "AVAILABLE";
+            case "Phòng đang sử dụng" -> "ON_USE";
+            case "Phòng không được sử dụng" -> "UNAVAILABLE";
+            default -> throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_ROOM_STATUS);
+        };
+    }
 }

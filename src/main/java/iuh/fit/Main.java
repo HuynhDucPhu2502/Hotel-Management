@@ -1,5 +1,6 @@
 package iuh.fit;
 
+import iuh.fit.utils.DBHelper;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,22 +18,20 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            // Load the FXML layout
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/LoginPanel.fxml")); // Update with the correct path
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/LoginPanel.fxml"));
             AnchorPane root = loader.load();
 
-            // Set the scene and stage
             Scene scene = new Scene(root);
-            primaryStage.setTitle("Dropdown Menu Example");
+            primaryStage.setTitle("Quản Lý Khách Sạn");
             primaryStage.setScene(scene);
-            primaryStage.setResizable(true); // Optional: prevent resizing
+            primaryStage.setResizable(true);
             primaryStage.show();
         } catch (Exception e) {
-            e.printStackTrace(); // Handle exception appropriately
+            e.printStackTrace();
         }
     }
 
     public static void main(String[] args) {
-        launch(args); // Launch the JavaFX application
+        launch(args);
     }
 }

@@ -55,7 +55,7 @@ public class HotelServiceDAO {
 
         String SQLQueryStatement = "SELECT a.hotelServiceId, a.serviceName, a.description, a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
                 "FROM HotelService a inner join ServiceCategory b on a.serviceCategoryID = b.serviceCategoryID " +
-                "WHERE pricingID = ?";
+                "WHERE hotelServiceId = ?";
 
         try (
                 Connection con = DBHelper.getConnection();

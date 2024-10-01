@@ -17,7 +17,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="logo-panel-banner-title" stylesheets="@../styles/LoginPanelStyle.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.LoginController">
    <children>
-      <VBox prefHeight="400.0" prefWidth="200.0" styleClass="login-panel-banner">
+      <VBox prefHeight="400.0" prefWidth="200.0" styleClass="login-panel-banner" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="100.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -39,7 +39,7 @@
             </Label>
          </children>
       </VBox>
-      <GridPane layoutX="209.0" layoutY="28.0" prefHeight="350.0" prefWidth="400.0">
+      <GridPane layoutX="200.0" prefHeight="378.0" prefWidth="409.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="97.20001220703125" minWidth="10.0" prefWidth="52.8" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="316.8000244140625" minWidth="10.0" prefWidth="300.8000244140625" />

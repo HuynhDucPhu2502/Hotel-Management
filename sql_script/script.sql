@@ -245,10 +245,10 @@ CREATE TABLE Room (
 --Thêm dữ liệu vào bảng Room
 INSERT INTO Room (roomID, roomStatus, dateOfCreation, roomCategoryID)
 VALUES 
-('T1101', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),  -- Phòng Thường với 1 giường ở tầng 1 phòng số 01
-('T2102', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
-('V1103', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
-('V2104', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+('T1101', 'ON_USE', '2024-09-28 10:00:00', 'RC-000001'),  -- Phòng Thường với 1 giường ở tầng 1 phòng số 01
+('T2102', 'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
+('V1103', 'ON_USE', '2024-09-28 10:00:00', 'RC-000003'),
+('V2104', 'ON_USE', '2024-09-28 10:00:00', 'RC-000004'),
 ('T1105', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
 ('T2106', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
 ('V1107', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
@@ -295,3 +295,61 @@ VALUES
 ('V2548', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
 ('T1549', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
 ('T2550', 'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002')
+
+--Tạo bảng ReservationForm
+CREATE TABLE ReservationForm (
+    reservationFormID VARCHAR(10) NOT NULL PRIMARY KEY,         -- Mã đặt phòng duy nhất
+    reservationDate DATETIME NOT NULL,            -- Ngày đặt phòng
+    approxCheckInDate DATETIME NOT NULL,          -- Ngày dự kiến nhận phòng
+    approxCheckOutDate DATETIME NOT NULL,         -- Ngày dự kiến trả phòng
+    employeeID VARCHAR(10) NOT NULL,              -- ID nhân viên liên quan đến đặt phòng
+    roomID VARCHAR(10) NOT NULL,                   -- Mã phòng đặt
+    customerID VARCHAR(10) NOT NULL,               -- ID khách hàng đặt phòng
+    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID),  -- Khóa ngoại liên kết đến bảng Employee
+    FOREIGN KEY (roomID) REFERENCES Room(roomID),              -- Khóa ngoại liên kết đến bảng Room
+    FOREIGN KEY (customerID) REFERENCES Customer(customerID)   -- Khóa ngoại liên kết đến bảng Customer
+);
+
+--Thêm dữ liệu vào bảng ReservationForm
+INSERT INTO ReservationForm (reservationFormID, reservationDate, approxCheckInDate, approxCheckOutDate, employeeID, roomID, customerID)
+VALUES 
+('RF-000001', '2024-09-29 10:00:00', '2024-10-02 14:00:00', '2024-10-05 12:00:00', 'EMP-000001', 'T1101', 'CUS-000001'),
+('RF-000002', '2024-09-29 11:30:00', '2024-10-03 15:00:00', '2024-10-07 11:00:00', 'EMP-000002', 'T2102', 'CUS-000002'),
+('RF-000003', '2024-09-29 09:00:00', '2024-10-04 13:00:00', '2024-10-06 10:00:00', 'EMP-000003', 'V1103', 'CUS-000003'),
+('RF-000004', '2024-09-29 08:00:00', '2024-10-05 12:00:00', '2024-10-08 09:00:00', 'EMP-000004', 'V2104', 'CUS-000004');
+
+go
+
+--Tạo bảng HistoryCheckin
+CREATE TABLE HistoryCheckin (
+    historyCheckInID VARCHAR(10) NOT NULL PRIMARY KEY,        -- Mã lịch sử nhận phòng
+    checkInDate DATETIME NOT NULL,                            -- Ngày giờ nhận phòng
+    reservationFormID VARCHAR(10) NOT NULL,                       -- Khóa ngoại liên kết đến phiếu đặt phòng
+    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID)  -- Thiết lập khóa ngoại
+);
+
+--Thêm dữ liệu vào bảng HistoryCheckin
+INSERT INTO HistoryCheckin (historyCheckInID, checkInDate, reservationFormID)
+VALUES 
+    ('HCI-000001', '2024-10-03 10:00:00', 'RF-000001'),
+    ('HCI-000002', '2024-10-04 09:00:00', 'RF-000002'),
+    ('HCI-000003', '2024-10-05 08:00:00', 'RF-000003'),
+    ('HCI-000004', '2024-10-06 07:00:00', 'RF-000004');
+
+go
+
+--Tạo bảng ShiftAssignment
+CREATE TABLE ShiftAssignment (
+    shiftAssignmentId VARCHAR(10) NOT NULL PRIMARY KEY, -- Đặt kiểu dữ liệu và độ dài tùy theo yêu cầu của bạn
+    description NVARCHAR(50), -- Mô tả có thể dài, sử dụng kiểu TEXT
+    shiftId VARCHAR(15) NOT NULL, -- Khóa ngoại tới bảng Shift
+    employeeId VARCHAR(10) NOT NULL, -- Khóa ngoại tới bảng Employee
+    FOREIGN KEY (shiftId) REFERENCES Shift(shiftId), -- Liên kết tới bảng Shift
+    FOREIGN KEY (employeeId) REFERENCES Employee(employeeId) -- Liên kết tới bảng Employee
+);
+
+--Thêm dữ liệu vào bảng ShiftAssignment
+INSERT INTO ShiftAssignment (shiftAssignmentId, description, shiftId, employeeId) VALUES
+('SA-000001', 'Assigned to morning shift', 'SHIFT-AM-0001', 'EMP-000001'),
+('SA-000002', 'Assigned to night shift', 'SHIFT-PM-0002', 'EMP-000002'),
+('SA-000003', 'Assigned to night shift', 'SHIFT-PM-0003', 'EMP-000003');
