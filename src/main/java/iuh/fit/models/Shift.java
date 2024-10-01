@@ -33,6 +33,8 @@ public class Shift {
      * @param updatedDate  Ngày cập nhật thông tin ca (LocalDateTime).
      * @param shiftDaysSchedule Lịch làm việc theo ca (ShiftDaysSchedule).
      */
+
+
     public Shift(String shiftID, LocalTime startTime, LocalTime endTime, LocalDateTime updatedDate, ShiftDaysSchedule shiftDaysSchedule) {
         setStartTime(startTime);
         setEndTime(endTime);

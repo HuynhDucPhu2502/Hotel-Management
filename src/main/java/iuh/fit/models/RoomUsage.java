@@ -20,6 +20,8 @@ public class RoomUsage {
     // Phí cho chính phòng
     private double roomCharge;
 
+    private HistoryCheckIn historyCheckIn;
+
     /**
      * Kiểm tra xem hai đối tượng RoomUsage có bằng nhau dựa trên roomUsageID hay không.
      *
@@ -50,10 +52,11 @@ public class RoomUsage {
      * @param totalServiceCharge Tổng phí cho các dịch vụ đã sử dụng.
      * @param roomCharge Phí cho chính phòng.
      */
-    public RoomUsage(String roomUsageID, double totalServiceCharge, double roomCharge) {
+    public RoomUsage(String roomUsageID, double totalServiceCharge, double roomCharge, HistoryCheckIn historyCheckIn) {
         setRoomUsageID(roomUsageID); // Thiết lập roomUsageID
         setTotalServiceCharge(totalServiceCharge); // Thiết lập tổng phí dịch vụ
         setRoomCharge(roomCharge); // Thiết lập phí phòng
+        setHistoryCheckIn(historyCheckIn);
     }
 
     /**
@@ -139,6 +142,15 @@ public class RoomUsage {
         if(roomCharge <= 0)
             throw new IllegalArgumentException(ErrorMessages.ROOM_USAGE_INVALID_ROOM_CHARGE);
         this.roomCharge = roomCharge; // Thiết lập phí phòng
+    }
+
+    public HistoryCheckIn getHistoryCheckIn() {
+        return historyCheckIn;
+    }
+
+    public void setHistoryCheckIn(HistoryCheckIn historyCheckIn) {
+        if(historyCheckIn == null) throw new IllegalArgumentException(ErrorMessages.ROOM_USAGE_INVALID_HISTORYCHECKIN_ISNULL);
+        this.historyCheckIn = historyCheckIn;
     }
 
     /**
