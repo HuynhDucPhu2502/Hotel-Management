@@ -337,3 +337,20 @@ VALUES
     ('HCI-000004', '2024-10-06 07:00:00', 'RF-000004');
 
 go
+
+-- Thêm bảng RoomUsage
+CREATE TABLE RoomUsage(
+	roomUsageID VARCHAR(10) NOT NULL PRIMARY KEY,
+	totalServiceCharge FLOAT NOT NULL,
+	roomCharge FLOAT NOT NULL,
+	historyCheckInID VARCHAR(10) NOT NULL, 
+	FOREIGN KEY (historyCheckInID) REFERENCES HistoryCheckin(historyCheckInID)
+);
+GO
+
+-- Thêm dữ liệu vào bảng RoomUsage
+INSERT INTO RoomUsage(roomUsageID, totalServiceCharge, roomCharge, historyCheckInID)
+VALUES 
+	('RU-000001', '1', '1', 'HCI-000001'),
+	('RU-000002', '1', '1', 'HCI-000001')
+GO
