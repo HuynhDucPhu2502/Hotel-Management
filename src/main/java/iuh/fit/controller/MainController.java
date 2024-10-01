@@ -1,5 +1,6 @@
 package iuh.fit.controller;
 
+import iuh.fit.controller.features.bar.MenuController;
 import iuh.fit.models.Account;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +11,6 @@ public class MainController {
 
     @FXML
     private AnchorPane menuBar;
-    private MenuBarController menuBarController;
 
     public void setAccount(Account account) {
         this.account = account;
@@ -21,16 +21,16 @@ public class MainController {
     // Phương thức khởi tạo phần topBar khi đã có account
     private void initializeTopBar() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/Menubar.fxml"));
-            AnchorPane menuBarLayout = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/bar/MenuPanel.fxml"));
+            AnchorPane menuLayout = loader.load();
 
-            menuBarController = loader.getController();
-            if (menuBarController != null) {
-                menuBarController.setAccount(account);
+            MenuController menuController = loader.getController();
+            if (menuController != null) {
+                menuController.setAccount(account);
             }
 
             menuBar.getChildren().clear();
-            menuBar.getChildren().addAll(menuBarLayout.getChildren());
+            menuBar.getChildren().addAll(menuLayout.getChildren());
         } catch (Exception e) {
             e.printStackTrace();
         }

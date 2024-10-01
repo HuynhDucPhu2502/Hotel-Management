@@ -353,3 +353,21 @@ INSERT INTO ShiftAssignment (shiftAssignmentId, description, shiftId, employeeId
 ('SA-000001', 'Assigned to morning shift', 'SHIFT-AM-0001', 'EMP-000001'),
 ('SA-000002', 'Assigned to night shift', 'SHIFT-PM-0002', 'EMP-000002'),
 ('SA-000003', 'Assigned to night shift', 'SHIFT-PM-0003', 'EMP-000003');
+
+-- Thêm bảng RoomUsage
+CREATE TABLE RoomUsage(
+	roomUsageID VARCHAR(10) NOT NULL PRIMARY KEY,
+	totalServiceCharge FLOAT NOT NULL,
+	roomCharge FLOAT NOT NULL,
+	historyCheckInID VARCHAR(10) NOT NULL, 
+	FOREIGN KEY (historyCheckInID) REFERENCES HistoryCheckin(historyCheckInID)
+);
+GO
+
+-- Thêm dữ liệu vào bảng RoomUsage
+INSERT INTO RoomUsage(roomUsageID, totalServiceCharge, roomCharge, historyCheckInID)
+VALUES 
+	('RU-000001', '1', '1', 'HCI-000001'),
+	('RU-000002', '1', '1', 'HCI-000001')
+GO
+

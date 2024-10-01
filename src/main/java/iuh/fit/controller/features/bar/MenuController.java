@@ -1,4 +1,4 @@
-package iuh.fit.controller;
+package iuh.fit.controller.features.bar;
 
 import iuh.fit.models.Account;
 import javafx.fxml.FXML;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MenuBarController {
+public class MenuController {
 
     private Account account;
 
@@ -118,7 +118,7 @@ public class MenuBarController {
 
     @FXML
     public void initialize() {
-        Image image = new Image(getClass().getResource("/iuh/fit/imgs/764894_github_media_social_square_icon.png").toExternalForm());
+        Image image = new Image(getClass().getResource("/iuh/fit/imgs/default_avatar.png").toExternalForm());
         avatar.setFill(new ImagePattern(image));
 
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
