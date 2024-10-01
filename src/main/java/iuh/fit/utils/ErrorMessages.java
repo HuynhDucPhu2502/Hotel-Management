@@ -104,6 +104,7 @@ public class ErrorMessages {
     public static final String ROOM_USAGE_INVALID_ID_FORMAT = "Mã sử dụng phòng phải theo định dạng RU-XXXXXX, với XXXXXX là dãy số";
     public static final String ROOM_USAGE_INVALID_TOTAL_SERVICE_CHARGE = "Tổng giá tiền dịch vụ phải lớn hơn 0";
     public static final String ROOM_USAGE_INVALID_ROOM_CHARGE = "Tiền phòng phải lớn hơn 0";
+    public static final String ROOM_USAGE_INVALID_HISTORYCHECKIN_ISNULL = "Thông tin phiếu nhận phòng không được rỗng!!!";
 
     // invoice
     public static final String INVOICE_INVALID_ID_ISNUL = "Mã hóa đơn không dược rỗng!!!";
