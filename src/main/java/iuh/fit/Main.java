@@ -1,6 +1,5 @@
 package iuh.fit;
 
-import iuh.fit.utils.DBHelper;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,7 +17,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/LoginPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/panels/LoginUI.fxml"));
             AnchorPane root = loader.load();
 
             Scene scene = new Scene(root);

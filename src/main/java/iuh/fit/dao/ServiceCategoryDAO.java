@@ -2,6 +2,7 @@ package iuh.fit.dao;
 
 import iuh.fit.models.ServiceCategory;
 import iuh.fit.utils.DBHelper;
+import iuh.fit.utils.GlobalConstants;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,10 +13,10 @@ import java.util.List;
 
 public class ServiceCategoryDAO {
     public static List<ServiceCategory> getServiceCategory() {
-        ArrayList<ServiceCategory> data = new ArrayList<ServiceCategory>();
+        ArrayList<ServiceCategory> data = new ArrayList<>();
         try (
                 Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ){
             String sql = "SELECT serviceCategoryID, serviceCategoryName " +
                     "FROM ServiceCategory";
@@ -100,14 +101,14 @@ public class ServiceCategoryDAO {
         }
     }
 
-    public static void updateData(String name, ServiceCategory serviceCategory) {
+    public static void updateData(ServiceCategory serviceCategory) {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
                         "UPDATE ServiceCategory " +
                                 "SET serviceCategoryName = ? " +
                                 "WHERE serviceCategoryID = ? "
-                );
+                )
         ){
             preparedStatement.setString(1, serviceCategory.getServiceCategoryName());
             preparedStatement.setString(2, serviceCategory.getServiceCategoryID());
@@ -117,6 +118,60 @@ public class ServiceCategoryDAO {
             System.exit(1);
         }
 
+    }
+
+    public static List<String> getTopThreeCategoryService() {
+        ArrayList<String> data = new ArrayList<>();
+        try (
+                Connection connection = DBHelper.getConnection();
+                Statement statement = connection.createStatement()
+        ){
+            String sql = "SELECT TOP 3 serviceCategoryID " +
+                    "FROM ServiceCategory " +
+                    "ORDER BY serviceCategoryID DESC";
+            ResultSet rs = statement.executeQuery(sql);
+
+
+            while (rs.next()) {
+                data.add(rs.getString(1));
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
+    }
+
+    public static String getNextServiceCategoryID() {
+        String res = "SC-000001";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                Statement statement = connection.createStatement()
+        ){
+            String sql = "SELECT TOP 1 serviceCategoryID " +
+                    "FROM ServiceCategory " +
+                    "ORDER BY serviceCategoryID DESC";
+            ResultSet rs = statement.executeQuery(sql);
+
+            if (rs.next()) {
+                String lastID = rs.getString(1);
+                String nextNumberStr = lastID.substring(3);
+
+                int nextNumber = Integer.parseInt(nextNumberStr);
+                ++nextNumber;
+
+                String formattedNumber = String.format("%06d", nextNumber);
+
+                res =  GlobalConstants.SERVICECATEGORY_PREFIX + "-" + formattedNumber;
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return res;
     }
 
 

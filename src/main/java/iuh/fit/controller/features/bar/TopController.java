@@ -1,23 +1,20 @@
-package iuh.fit.controller;
+package iuh.fit.controller.features.bar;
 
-import iuh.fit.models.Account;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-public class TopBarController {
+public class TopController {
     @FXML
     private Label clockLabel;
     @FXML
@@ -43,7 +40,7 @@ public class TopBarController {
 
     public void logout() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/LoginPanel.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/panels/LoginUI.fxml"));
             AnchorPane loginPane = fxmlLoader.load();
 
             Stage currentStage = (Stage) (logoutBtn.getScene().getWindow());

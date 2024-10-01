@@ -3,7 +3,6 @@ package iuh.fit.controller;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.models.Account;
 import iuh.fit.utils.ErrorMessages;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -122,7 +121,7 @@ public class LoginController {
             errorMessage.setText(ErrorMessages.LOGIN_INVALID_ACCOUNT);
         } else {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/MainPanel.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/panels/MainUI.fxml"));
                 AnchorPane mainPanel = fxmlLoader.load();
 
                 MainController mainController = fxmlLoader.getController();
