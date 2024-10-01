@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="0.0" prefWidth="600.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.components.ServicCategoryItemController">
+   <children>
+      <HBox layoutX="114.0" layoutY="81.0" prefHeight="18.0" prefWidth="600.0" style="-fx-background-color: rgb(135, 162, 255); -fx-background-radius: 30; -fx-alignment: CENTER_LEFT;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Text fx:id="serviceCategoryIDLabel" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="SC-000001">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <HBox prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <Text fx:id="serviceCategoryNameLabel" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Loại Dịch Vụ Ăn Uống">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Text>
+            <HBox prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin></HBox>
+            <HBox prefHeight="70.0" prefWidth="112.0" spacing="10.0" style="-fx-alignment: CENTER;">
+               <children>
+                  <ImageView fitHeight="36.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/update_ic.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="36.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/delete_ic.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets left="30.0" right="30.0" />
+         </padding>
+      </HBox>
+   </children>
+</AnchorPane>
