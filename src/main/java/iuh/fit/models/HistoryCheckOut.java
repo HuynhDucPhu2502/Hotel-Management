@@ -19,20 +19,20 @@ public class HistoryCheckOut {
     // Ngày và giờ khi check-out diễn ra
     private LocalDateTime historyCheckOutDate;
 
-    // Hoá đơn liên quan đến lịch sử check-out
-    private Invoice invoice;
+    // Thông tin phiếu đặt phòng
+    private ReservationForm reservationForm;
 
     /**
      * Constructor đầy đủ cho lớp HistoryCheckOut.
      *
      * @param roomHistoryCheckOutID ID của lịch sử check-out (không được null hoặc rỗng).
      * @param historyCheckOutDate   Thời gian check-out (phải trước thời điểm hiện tại).
-     * @param invoice               Hoá đơn liên quan (không được null).
+     * @param reservationForm   Thông tin phiếu đặt phòng.
      */
-    public HistoryCheckOut(String roomHistoryCheckOutID, LocalDateTime historyCheckOutDate, Invoice invoice) {
+    public HistoryCheckOut(String roomHistoryCheckOutID, LocalDateTime historyCheckOutDate, ReservationForm reservationForm) {
         this.setRoomHistoryCheckOutID(roomHistoryCheckOutID);
         this.setHistoryCheckOutDate(historyCheckOutDate);
-        this.setInvoice(invoice);
+        this.setReservationForm(reservationForm);
     }
 
     /**
@@ -48,6 +48,30 @@ public class HistoryCheckOut {
      * Constructor mặc định không có tham số.
      */
     public HistoryCheckOut() {
+    }
+
+    /**
+     * So sánh hai đối tượng HistoryCheckOut dựa trên roomHistoryCheckOutID.
+     *
+     * @param o Đối tượng cần so sánh.
+     * @return true nếu hai đối tượng có cùng roomHistoryCheckOutID, ngược lại là false.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HistoryCheckOut that = (HistoryCheckOut) o;
+        return Objects.equals(roomHistoryCheckOutID, that.roomHistoryCheckOutID);
+    }
+
+    /**
+     * Tính toán mã băm của đối tượng dựa trên roomHistoryCheckOutID.
+     *
+     * @return Mã băm của đối tượng.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(roomHistoryCheckOutID);
     }
 
     /**
@@ -100,49 +124,13 @@ public class HistoryCheckOut {
         this.historyCheckOutDate = historyCheckOutDate;
     }
 
-    /**
-     * Lấy hoá đơn liên quan đến lịch sử check-out.
-     *
-     * @return Hoá đơn liên quan.
-     */
-    public Invoice getInvoice() {
-        return invoice;
+    public ReservationForm getReservationForm() {
+        return reservationForm;
     }
 
-    /**
-     * Thiết lập hoá đơn liên quan đến lịch sử check-out. Hoá đơn không được null.
-     *
-     * @param invoice Hoá đơn liên quan.
-     * @throws IllegalArgumentException nếu hoá đơn là null.
-     */
-    public void setInvoice(Invoice invoice) {
-        if (invoice == null) {
-            throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKOUT_INVALID_INVOICE_ISNULL);
-        }
-        this.invoice = invoice;
-    }
-
-    /**
-     * So sánh hai đối tượng HistoryCheckOut dựa trên roomHistoryCheckOutID.
-     *
-     * @param o Đối tượng cần so sánh.
-     * @return true nếu hai đối tượng có cùng roomHistoryCheckOutID, ngược lại là false.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        HistoryCheckOut that = (HistoryCheckOut) o;
-        return Objects.equals(roomHistoryCheckOutID, that.roomHistoryCheckOutID);
-    }
-
-    /**
-     * Tính toán mã băm của đối tượng dựa trên roomHistoryCheckOutID.
-     *
-     * @return Mã băm của đối tượng.
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(roomHistoryCheckOutID);
+    public void setReservationForm(ReservationForm reservationForm) {
+        if (reservationForm == null)
+            throw new IllegalArgumentException(ErrorMessages.NULL_RESERVATIONFORM);
+        this.reservationForm = reservationForm;
     }
 }

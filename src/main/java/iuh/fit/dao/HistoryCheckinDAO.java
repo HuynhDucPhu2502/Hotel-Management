@@ -42,8 +42,8 @@ public class HistoryCheckinDAO {
 
                 reservationForm.setReservationID(rs.getString(3));
                 reservationForm.setReservationDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(4)));
-                reservationForm.setApproxCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(5)));
-                reservationForm.setApproxCheckOutDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(6)));
+                reservationForm.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(5)));
+                reservationForm.setCheckOutDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(6)));
 
                 employee.setEmployeeID(rs.getString(7));
                 employee.setFullName(rs.getString(10));
@@ -126,8 +126,8 @@ public class HistoryCheckinDAO {
 
                     reservationForm.setReservationID(rs.getString(3));
                     reservationForm.setReservationDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(4)));
-                    reservationForm.setApproxCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(5)));
-                    reservationForm.setApproxCheckOutDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(6)));
+                    reservationForm.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(5)));
+                    reservationForm.setCheckOutDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(6)));
 
                     employee.setEmployeeID(rs.getString(7));
                     employee.setFullName(rs.getString(10));
