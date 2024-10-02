@@ -201,13 +201,8 @@ public class RegexChecker {
             return false;
         }
 
-        // Kiểm tra khoảng trắng
-        if (input.contains(" ")) {
-            return false;
-        }
-
         // Kiểm tra ký tự đặc biệt
-        if (!input.matches("[a-zA-Z0-9]+")) {
+        if (!input.matches("[a-zA-Z0-9\\s]+")) {
             return false;
         }
         return true;

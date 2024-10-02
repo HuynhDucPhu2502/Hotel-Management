@@ -43,9 +43,10 @@ public class RoomUsageDAO {
 
     public static boolean insertData(RoomUsage roomUsage){
         int n = 0;
-        String SQLStatement = "INSERT INTO RoomUsage(roomUsageID, totalServiceCharge, roomCharge, historyCheckInID)\n" +
-                "VALUES \n" +
-                "\t(?, ?, ?, ?)";
+        String SQLStatement = """
+                INSERT INTO RoomUsage(roomUsageID, totalServiceCharge, roomCharge, historyCheckInID)
+                VALUES\s
+                \t(?, ?, ?, ?)""";
         try(
                 Connection con = DBHelper.getConnection();
                 PreparedStatement preparedStatement = con.prepareStatement(SQLStatement);
@@ -63,7 +64,7 @@ public class RoomUsageDAO {
         return n > 0;
     }
 
-    public static boolean deleteDate(String roomUsageID){
+    public static boolean deleteData(String roomUsageID){
         int n = 0;
 
         String SQLStatement = "DELETE FROM RoomUsage\n" +
@@ -84,9 +85,10 @@ public class RoomUsageDAO {
     public static boolean updateData(RoomUsage newData){
         int n = 0;
 
-        String SQLStatement = "UPDATE RoomUsage\n" +
-                "SET totalServiceCharge = ?, roomCharge = ?\n" +
-                "WHERE roomUsageID = ?";
+        String SQLStatement = """
+                UPDATE RoomUsage
+                SET totalServiceCharge = ?, roomCharge = ?
+                WHERE roomUsageID = ?""";
         try(
                 Connection con = DBHelper.getConnection();
                 PreparedStatement preparedStatement = con.prepareStatement(SQLStatement);
