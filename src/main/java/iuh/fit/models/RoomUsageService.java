@@ -10,6 +10,7 @@ public class RoomUsageService {
     private String roomUsageServiceId;
     private int quantity;
     private HotelService hotelService;
+    private ReservationForm reservationForm;
 
     public RoomUsageService() {
     }
@@ -18,6 +19,20 @@ public class RoomUsageService {
         this.setRoomUsageServiceId(roomUsageServiceId);
         this.setQuantity(quantity);
         this.setHotelService(hotelService);
+        this.setReservationForm(reservationForm);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RoomUsageService that = (RoomUsageService) o;
+        return Objects.equals(roomUsageServiceId, that.roomUsageServiceId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(roomUsageServiceId);
     }
 
     public String getRoomUsageServiceId() {
@@ -50,21 +65,16 @@ public class RoomUsageService {
 
     public void setHotelService(HotelService hotelService) {
         if (hotelService == null)
-            throw new IllegalArgumentException(ErrorMessages.ROOM_USAGE_SERVICE_INVALID_HOTELSERVICE_ISNULL);
+            throw new IllegalArgumentException(ErrorMessages.NULL_HOTELSERVICE);
         this.hotelService = hotelService;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        RoomUsageService that = (RoomUsageService) o;
-        return Objects.equals(roomUsageServiceId, that.roomUsageServiceId);
+    public ReservationForm getReservationForm() {
+        return reservationForm;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(roomUsageServiceId);
+    public void setReservationForm(ReservationForm reservationForm) {
+        this.reservationForm = reservationForm;
     }
 
     @Override

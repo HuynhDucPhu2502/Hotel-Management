@@ -18,6 +18,6 @@ public class GlobalConstants {
     public static final String ROOMUSAGESERVICE_PREFIX = "RUS";
     public static final String RESERVATIONID_PREFIX = "RF";
     public static final String HISTORY_CHEKCIN_ID_PREFIX = "HCI";
-    public static final String ROOMUSAGE_PREFIX = "RU";
+    public static final String ROOM_RESERVATION_DETAIL_PREFIX = "RRD";
     public static final String HISTORY_CHECKOUT_ID_PREFIX = "HCO";
 }

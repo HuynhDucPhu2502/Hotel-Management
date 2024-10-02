@@ -17,8 +17,8 @@ public class ReservationForm {
     // Các trường dữ liệu lưu trữ thông tin của phiếu đặt phòng
     private String reservationID;  // Mã đặt phòng duy nhất
     private LocalDateTime reservationDate;  // Ngày đặt phòng
-    private LocalDateTime approxCheckInDate;  // Ngày dự kiến nhận phòng
-    private LocalDateTime approxCheckOutDate;  // Ngày dự kiến trả phòng
+    private LocalDateTime checkInDate;  // Ngày dự kiến nhận phòng
+    private LocalDateTime checkOutDate;  // Ngày dự kiến trả phòng
     private Employee employee;  // Nhân viên liên quan đến đặt phòng
     private Room room;  // Phòng đặt
     private Customer customer;  // Khách hàng đặt phòng
@@ -28,17 +28,17 @@ public class ReservationForm {
      *
      * @param reservationID       Mã đặt phòng duy nhất.
      * @param reservationDate     Ngày đặt phòng.
-     * @param approxCheckInDate   Ngày dự kiến nhận phòng.
-     * @param approxCheckOutDate  Ngày dự kiến trả phòng.
+     * @param checkInDate   Ngày dự kiến nhận phòng.
+     * @param checkOutDate  Ngày dự kiến trả phòng.
      * @param employee            Nhân viên chịu trách nhiệm cho đặt phòng này.
      * @param room                Phòng đặt.
      * @param customer            Khách hàng đặt phòng.
      */
-    public ReservationForm(String reservationID, LocalDateTime reservationDate, LocalDateTime approxCheckInDate, LocalDateTime approxCheckOutDate, Employee employee, Room room, Customer customer) {
+    public ReservationForm(String reservationID, LocalDateTime reservationDate, LocalDateTime checkInDate, LocalDateTime checkOutDate, Employee employee, Room room, Customer customer) {
         this.setReservationID(reservationID);  // Thiết lập mã đặt phòng với kiểm tra hợp lệ
         this.setReservationDate(reservationDate);  // Thiết lập ngày đặt phòng với kiểm tra hợp lệ
-        this.setApproxCheckInDate(approxCheckInDate);  // Thiết lập ngày dự kiến nhận phòng
-        this.setApproxCheckOutDate(approxCheckOutDate);  // Thiết lập ngày dự kiến trả phòng
+        this.setCheckInDate(checkInDate);  // Thiết lập ngày dự kiến nhận phòng
+        this.setCheckOutDate(checkOutDate);  // Thiết lập ngày dự kiến trả phòng
         this.setEmployee(employee);  // Thiết lập nhân viên
         this.setRoom(room);  // Thiết lập phòng
         this.setCustomer(customer);  // Thiết lập khách hàng
@@ -110,22 +110,22 @@ public class ReservationForm {
      *
      * @return Ngày dự kiến nhận phòng hiện tại.
      */
-    public LocalDateTime getApproxCheckInDate() {
-        return approxCheckInDate;
+    public LocalDateTime getCheckInDate() {
+        return checkInDate;
     }
 
     /**
      * Thiết lập ngày dự kiến nhận phòng với kiểm tra hợp lệ.
      * Ngày dự kiến nhận phòng không được để trống và phải sau ngày đặt phòng.
      *
-     * @param approxCheckInDate Ngày dự kiến nhận phòng mới.
+     * @param checkInDate Ngày dự kiến nhận phòng mới.
      */
-    public void setApproxCheckInDate(LocalDateTime approxCheckInDate) {
-        if (approxCheckInDate == null)
+    public void setCheckInDate(LocalDateTime checkInDate) {
+        if (checkInDate == null)
             throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE_ISNULL);  // Kiểm tra ngày nhận phòng không được null
-        if (!approxCheckInDate.isAfter(this.reservationDate))
+        if (!checkInDate.isAfter(this.reservationDate))
             throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE);  // Kiểm tra ngày nhận phòng phải sau ngày đặt
-        this.approxCheckInDate = approxCheckInDate;
+        this.checkInDate = checkInDate;
     }
 
     /**
@@ -133,22 +133,22 @@ public class ReservationForm {
      *
      * @return Ngày dự kiến trả phòng hiện tại.
      */
-    public LocalDateTime getApproxCheckOutDate() {
-        return approxCheckOutDate;
+    public LocalDateTime getCheckOutDate() {
+        return checkOutDate;
     }
 
     /**
      * Thiết lập ngày dự kiến trả phòng với kiểm tra hợp lệ.
      * Ngày dự kiến trả phòng không được để trống và phải sau ngày dự kiến nhận phòng.
      *
-     * @param approxCheckOutDate Ngày dự kiến trả phòng mới.
+     * @param checkOutDate Ngày dự kiến trả phòng mới.
      */
-    public void setApproxCheckOutDate(LocalDateTime approxCheckOutDate) {
-        if (approxCheckOutDate == null)
+    public void setCheckOutDate(LocalDateTime checkOutDate) {
+        if (checkOutDate == null)
             throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE_ISNULL);  // Kiểm tra ngày trả phòng không được null
-        if (!approxCheckOutDate.isAfter(approxCheckInDate))
+        if (!checkOutDate.isAfter(checkInDate))
             throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE);  // Kiểm tra ngày trả phòng phải sau ngày nhận phòng
-        this.approxCheckOutDate = approxCheckOutDate;
+        this.checkOutDate = checkOutDate;
     }
 
     /**
@@ -168,7 +168,7 @@ public class ReservationForm {
      */
     public void setEmployee(Employee employee) {
         if (employee == null)
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_EMPLOYEE_ISNULL);  // Kiểm tra nhân viên không được null
+            throw new IllegalArgumentException(ErrorMessages.NULL_EMPLOYEE);  // Kiểm tra nhân viên không được null
         this.employee = employee;
     }
 
@@ -189,7 +189,7 @@ public class ReservationForm {
      */
     public void setRoom(Room room) {
         if (room == null)
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_ROOM_ISNULL);  // Kiểm tra phòng không được null
+            throw new IllegalArgumentException(ErrorMessages.NULL_ROOM);  // Kiểm tra phòng không được null
         this.room = room;
     }
 
@@ -210,7 +210,7 @@ public class ReservationForm {
      */
     public void setCustomer(Customer customer) {
         if (customer == null)
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_CUSTOMER_ISNULL);  // Kiểm tra khách hàng không được null
+            throw new IllegalArgumentException(ErrorMessages.NULL_CUSTOMER);  // Kiểm tra khách hàng không được null
         this.customer = customer;
     }
 
@@ -244,8 +244,8 @@ public class ReservationForm {
         return "ReservationForm{" +
                 "reservationID='" + reservationID + '\'' +
                 ", reservationDate=" + reservationDate +
-                ", approxCheckInDate=" + approxCheckInDate +
-                ", approxCheckOutDate=" + approxCheckOutDate +
+                ", approxCheckInDate=" + checkInDate +
+                ", approxCheckOutDate=" + checkOutDate +
                 ", employee=" + employee +
                 ", room=" + room +
                 ", customer=" + customer +

@@ -14,12 +14,14 @@ public class Invoice {
     private String invoiceID;
     // Ngày giờ lập hóa đơn
     private LocalDateTime invoiceDate;
+    // Tổng tiền phòng
+    private double roomCharge;
+    // Tổng tiền dịch vụ;
+    private double servicesCharge;
     // Tổng tiền phải trả
     private double totalDue;
     // Số tiền thực tế phải trả (sau thuế và các khoản khác)
     private double netDue;
-    // Thông tin sử dụng phòng của khách
-    private RoomUsage roomUsage;
     // Thông tin thuế
     private Tax tax;
 
@@ -28,15 +30,13 @@ public class Invoice {
      *
      * @param invoiceID   Mã hóa đơn
      * @param invoiceDate Ngày giờ lập hóa đơn
-     * @param roomUsage   Thông tin sử dụng phòng
      * @param tax         Thông tin thuế
      */
-    public Invoice(String invoiceID, LocalDateTime invoiceDate, RoomUsage roomUsage, Tax tax) {
+    public Invoice(String invoiceID, LocalDateTime invoiceDate, Tax tax) {
         this.setInvoiceID(invoiceID);
         this.setInvoiceDate(invoiceDate);
         this.setTotalDue(calTotalDue());
         this.setNetDue(calNetDue());
-        this.setRoomUsage(roomUsage);
         this.setTax(tax);
     }
 
@@ -143,26 +143,6 @@ public class Invoice {
         this.netDue = netDue;
     }
 
-    /**
-     * Lấy thông tin sử dụng phòng của khách.
-     *
-     * @return Thông tin sử dụng phòng
-     */
-    public RoomUsage getRoomUsage() {
-        return roomUsage;
-    }
-
-    /**
-     * Thiết lập thông tin sử dụng phòng.
-     *
-     * @param roomUsage Thông tin sử dụng phòng
-     * @throws IllegalArgumentException nếu thông tin sử dụng phòng rỗng
-     */
-    public void setRoomUsage(RoomUsage roomUsage) {
-        if (roomUsage == null)
-            throw new IllegalArgumentException(ErrorMessages.INVOICE_INVALID_ROOM_USAGE_ISNULL);
-        this.roomUsage = roomUsage;
-    }
 
     /**
      * Lấy thông tin thuế.
