@@ -88,7 +88,7 @@ public class HistoryCheckIn {
         if(checkInDate == null){
             throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_IVALID_CHECKIN_DATE_ISNULL);
         }
-        if(!checkInDate.isAfter(reservationForm.getApproxCheckInDate())){
+        if(!checkInDate.isAfter(reservationForm.getCheckInDate())){
             throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_IVALID_CHECKIN_DATE);
         }
         this.checkInDate = checkInDate;
@@ -111,7 +111,7 @@ public class HistoryCheckIn {
      */
     public void setReservationForm(ReservationForm reservationForm) {
         if(reservationForm == null)
-            throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_IVALID_RESERVATION);
+            throw new IllegalArgumentException(ErrorMessages.NULL_RESERVATIONFORM);
         this.reservationForm = reservationForm;
     }
 

@@ -1,11 +1,21 @@
 package iuh.fit.utils;
 
 public class ErrorMessages {
-    //Global ErrorMessages
+    // Global
     public static final String INVALID_PHONENUMBER = "Số điện thoại phải có 10 chữ số và chữ số đầu tiên là số 0";
     public static final String INVALID_ADDRESS = "Địa chỉ không được rỗng";
     public static final String INVALID_EMAIL = "Email phải từ 4 đến 30 ký tự và không cứ ký tự đặc biệt";
     public static final String INVALID_CCCD = "CCCD có cấu trúc XYZ. X là chuỗi 3 chữ số, Y là 1 chữ số thuộc khoảng từ 1 đến 3, và Z là chuỗi 8 chữ số.";
+
+    public static final String NULL_ROOMCATEGORY = "Loại phòng không được trống";
+    public static final String NULL_EMPLOYEE = "Nhân viên không được để trống";
+    public static final String NULL_SHIFT = "Ca làm không được để trống";
+    public static final String NULL_SERVICECATEGORY = "Loại dịch vụ không được để trống";
+    public static final String NULL_HOTELSERVICE = "Dịch vụ không được để trống";
+    public static final String NULL_CUSTOMER = "Khách hàng không được để trống";
+    public static final String NULL_ROOM = "Phòng không được để trống";
+    public static final String NULL_RESERVATIONFORM = "Phiếu đặt phòng không được để trống";
+    public static final String NULL_INVOICE = "Hóa đơn không được để trống";
 
     // Employee
     public static final String EMP_INVALID_ID = "Mã nhân viên phải theo định dạng EMP-XXXXXX, với X là ký số";
@@ -20,7 +30,7 @@ public class ErrorMessages {
     // Pricing
     public static final String PRICING_INVALID_PRICE = "Số tiền không được rỗng, phải lớn hơn 0";
     public static final String PRICING_INVALID_ID = "Mã giá phải theo định dạng P-XXXXXX, với X là ký số";
-    public static final String PRICING_INVALID_ROOMCATEGORY_ISNULL = "Loại phòng không được rỗng";
+
     // Room category
     public static final String ROOM_CATEGORY_INVALID_ID_ISNULL = "Mã loại phòng không được rỗng!!!";
     public static final String ROOM_CATEGORY_INVALID_ID_FORMAT = "Mã loại phòng phải theo định dạng RC-XXXXXX, với XXXXXX là dãy số!!!";
@@ -40,14 +50,12 @@ public class ErrorMessages {
     // ShiftAssignment
     public static final String SHIFTASSIGNMENT_INVALID_ID = "Mã phân công ca làm việc phải theo định dạng SA-XXXXXX, với X là ký số";
     public static final String SHIFTASSIGNMENT_INVALID_DESCRIPTION = "Mô tả không được để trống";
-    public static final String SHIFTASSIGNMENT_INVALID_EMPLOYEE_ISNULL = "Nhân viên không được để trống";
-    public static final String SHIFTASSIGNMENT_INVALID_SHIFT_ISNULL = "Ca làm không được để trống";
 
-    //Customer
+    // Customer
     public static final String CUS_INVALID_ID = "Mã khách hàng phải theo định dạng CUS-XXXXXX, với X là ký số";
     public static final String CUS_INVALID_FULLNAME = "Tên Khách hàng phải từ 3 đến 30 ký tự";
 
-    //Tax
+    // Tax
     public static final String TAX_INVALID_TAXNAME = "Tên thuế không được trùng, không rỗng và không chưa khoảng trắng";
     public static final String TAX_INVALID_TAXRATE = "Hệ số thuế phải là số dương";
     public static final String TAX_INVALID_TAXDATEOFCREATION = "Ngày gian thêm thuế phải trước ngày hiện tại";
@@ -58,9 +66,8 @@ public class ErrorMessages {
     public static final String ROOM_INVALID_ROOMSTATUS_ISNULL = "Trạng thái phòng không được rỗng!!!";
     public static final String ROOM_INVALID_ROOMSTATUS_TYPES = "Trạng thái phòng phải là một trong các giá trị AVAILABLE, ON_USE,  UNAVAILABLE!!!";
     public static final String ROOM_INVALID_DATEOFCREATION = "Ngày tạo phải trước ngày giờ hiện tại!!!";
-    public static final String ROOM_INVALID_ROOMCATEGORY_ISNULL = "Loại phòng không được rỗng!!!";
 
-    //ServiceCategory
+    // ServiceCategory
     public static final String SERVICE_CATEGORY_INVALID_ID_ISNULL = "Mã loại dịch vụ không được rỗng!!!";
     public static final String SERVICE_CATEGORY_INVALID_ID_FORMAT = "Mã loại dịch vụ phải theo định dạng SC-XXXXXX, với XXXXXX là dãy số!!!";
     public static final String SERVICE_CATEGORY_INVALID_NAME_ISNULL = "Tên loại dịch vụ không được rỗng!!!";
@@ -71,13 +78,11 @@ public class ErrorMessages {
     public static final String HOTEL_SERVICE_INVALID_NAME_ISNULL = "Tên dịch vụ không được rỗng!!!";
     public static final String HOTEL_SERVICE_DESCRIPTION_ISNULL = "Mô tả dịch vụ không được rỗng!!!";
     public static final String HOTEL_SERVICE_INVALID_PRICE = "Giá dịch vụ không được rỗng, phải lớn hơn 0!!!";
-    public static final String HOTEL_SERVICE_INVALID_SERVICECATEGORY_ISNULL = "Loại dịch vụ không được rỗng!!!";
 
-    //RoomUsageService
+    // RoomUsageService
     public static final String ROOM_USAGE_SERVICE_INVALID_ID_ISNULL = "Mã sử dụng dịch vụ phòng không được rỗng!!!";
     public static final String ROOM_USAGE_SERVICE_INVALID_ID_FORMAT = "Mã sử dụng dịch vụ phòng phải theo định dạng RUS-XXXXXX, với XXXXXX là dãy số!!!";
     public static final String ROOM_USAGE_SERVICE_INVALID_QUANTITY = "Số lượng dịch vụ phải lớn hơn 0!!!";
-    public static final String ROOM_USAGE_SERVICE_INVALID_HOTELSERVICE_ISNULL = "Dịch vụ không được rỗng!!!";
 
     // ReservationForm
     public static final String RESERVATION_FORM_INVALID_ID_ISNULL = "Mã phiếu đặt phòng không được rỗng!!!";
@@ -88,49 +93,39 @@ public class ErrorMessages {
     public static final String RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE = "Ngày nhận phòng dự kiến phải lớn hơn ngày đặt phòng!!!";
     public static final String RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE_ISNULL = "Ngày trả phòng dự kiến không được rỗng!!!";
     public static final String RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE = "Ngày trả phòng dự kiến phải lớn hơn ngày nhận phòng dự kiến!!!";
-    public static final String RESERVATION_FORM_INVALID_EMPLOYEE_ISNULL = "Thông tin nhân viên không được rỗng!!!";
-    public static final String RESERVATION_FORM_INVALID_CUSTOMER_ISNULL = "Thông tin nhân viên không được rỗng!!!";
-    public static final String RESERVATION_FORM_INVALID_ROOM_ISNULL = "Thông phòng không được rỗng!!!";
-
     // HistoryCheckIn
     public static final String HISTORY_CHECKIN_IVALID_ID_ISNULL = "Mã phiếu nhận phòng không được rỗng!!!";
     public static final String HISTORY_CHECKIN_IVALID_ID_FORMAT = "Mã ngày nhận phòng phải theo định dạng HCI-XXXXXX";
     public static final String HISTORY_CHECKIN_IVALID_CHECKIN_DATE_ISNULL = "Ngày nhận phòng không được rỗng!!!";
     public static final String HISTORY_CHECKIN_IVALID_CHECKIN_DATE = "Ngày nhận phòng phải sau ngày nhận phòng dự kiến";
-    public static final String HISTORY_CHECKIN_IVALID_RESERVATION = "Thông tin phiếu đặt phòng không được rỗng!!!";
 
-    //RoomUsage
-    public static final String ROOM_USAGE_INVALID_ID_ISNULL = "Mã sử dụng phòng không được rỗng";
-    public static final String ROOM_USAGE_INVALID_ID_FORMAT = "Mã sử dụng phòng phải theo định dạng RU-XXXXXX, với XXXXXX là dãy số";
-    public static final String ROOM_USAGE_INVALID_TOTAL_SERVICE_CHARGE = "Tổng giá tiền dịch vụ phải lớn hơn 0";
-    public static final String ROOM_USAGE_INVALID_ROOM_CHARGE = "Tiền phòng phải lớn hơn 0";
-    public static final String ROOM_USAGE_INVALID_HISTORYCHECKIN_ISNULL = "Thông tin phiếu nhận phòng không được rỗng!!!";
+    // RoomReservationDetail
+    public static final String ROOM_RESERVATION_DETAIL_INVALID_ID = "Mã chi tiết sử dụng phòng theo mẫu RRD-XXXXXX, với X là ký số";
+    public static final String ROOM_RESERVATION_DETAIL_INVALID_DATECHANGED = "Thời gian thay đổi phòng phải nhỏ hơn hoặc bằng ngày thời gian hiện tại";
 
-    // invoice
+    // Invoice
     public static final String INVOICE_INVALID_ID_ISNUL = "Mã hóa đơn không dược rỗng!!!";
     public static final String INVOICE_INVALID_ID_FORMAT = "Mã hóa đơn phải theo đúng định dạng INV-XXXXXXXXXX-YYYY!!!";
     public static final String INVOICE_INVALID_INVOICE_DATE_ISNULL = "Ngày tạo hóa đơn không được rỗng!!!";
     public static final String INVOICE_INVALID_INVOICE_DATE = "Ngày tạo hóa đơn phải trước ngày hiện tại!!!";
     public static final String INVOICE_INVALID_TOTALDUE= "Tiền trước thuế không được rỗng và phải lớn hơn 0!!!";
     public static final String INVOICE_INVALID_NETDUE= "Tiền sau thuế không được rỗng và phải lớn hơn 0!!!";
-    public static final String INVOICE_INVALID_ROOM_USAGE_ISNULL= "Thông tin sử dụng dịch vụ phòng không được rỗng!!!";
     public static final String INVOICE_INVALID_TAX_ISNULL= "Thông tin thuế không được rỗng!!!";
 
-    // history checkout
+    // HistoryCheckout
     public static final String HISTORY_CHECKOUT_INVALID_ID_ISNULL = "Mã phiếu trả phòng không được rỗng!!!";
     public static final String HISTORY_CHECKOUT_INVALID_ID_FORMAT = "Mã phiếu trả phòng phải theo định dạng HCO-XXXXXX!!!";
     public static final String HISTORY_CHECKOUT_INVALID_CHECKOUT_DATE_ISNULL = "Ngày trả phòng không được rỗng!!!";
     public static final String HISTORY_CHECKOUT_INVALID_CHECKOUT_DATE= "Ngày trả phòng phải trước ngày hiện tại!!!";
-    public static final String HISTORY_CHECKOUT_INVALID_INVOICE_ISNULL= "Thông tin hóa đơn không được rỗng!!!";
-  
     // ConvertHelper
     public static final String CONVERT_HELPER_INVALID_LOCALTIME = "Thời gian phải nằm từ 5:00 đến 23:00";
     public static final String CONVERT_HELPER_INVALID_GENDER = "Giới tính không hợp lệ. Phải nằm trong FEMALE,  MALE";
     public static final String CONVERT_HELPER_INVALID_POSITION = "Chức vụ không hợp lệ. Phải nằm trong RECEPTIONIST, MANAGER";
     public static final String CONVERT_HELPER_INVALID_SHIFT_DAYS_SCHEDULE = "Ngày ca làm việc không hợp lệ. Phải nằm trong MON_WED_FRI, TUE_THU_SAT, SUNDAY";
-    public static final String CONVERT_HELPER_INVALID_ACCOUNT_STATUS= "Ngày ca làm việc không hợp lệ. Phải nằm trong ACTIVE, INACTIVE, LOCKED";
+    public static final String CONVERT_HELPER_INVALID_ACCOUNT_STATUS= "trạng thái tài khoản không hợp lệ. Phải nằm trong ACTIVE, INACTIVE, LOCKED";
     public static final String CONVERT_HELPER_INVALID_PRICE_UNIT = "Đơn vị giá không hợp lệ. Phải nằm trong DAY, HOUR";
     public static final String CONVERT_HELPER_INVALID_ROOM_STATUS = "Trạng thái phòng không hợp lệ. Phải nằm trong AVAILABLE, ON_USE, UNAVAILABLE";
+
     // Login message
     public static final String LOGIN_INVALID_USERNAME = "Tài khoản không được bỏ trống";
     public static final String LOGIN_INVALID_PASSWORD = "Mật khẩu không được để trống";

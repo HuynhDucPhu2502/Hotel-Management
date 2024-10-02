@@ -125,7 +125,7 @@ public class Room {
      */
     public void setRoomCategory(RoomCategory roomCategory) {
         if(roomCategory == null)
-            throw new IllegalArgumentException(ErrorMessages.ROOM_INVALID_ROOMCATEGORY_ISNULL);
+            throw new IllegalArgumentException(ErrorMessages.NULL_ROOMCATEGORY);
         this.roomCategory = roomCategory;
     }
 

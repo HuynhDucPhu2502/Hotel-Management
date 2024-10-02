@@ -64,7 +64,7 @@ public class ShiftAssignment {
 
     public void setEmployee(Employee employee) {
         if (employee == null)
-            throw new IllegalArgumentException(ErrorMessages.SHIFTASSIGNMENT_INVALID_EMPLOYEE_ISNULL);
+            throw new IllegalArgumentException(ErrorMessages.NULL_EMPLOYEE);
         this.employee = employee;
     }
 
@@ -74,7 +74,7 @@ public class ShiftAssignment {
 
     public void setShift(Shift shift) {
         if (shift == null)
-            throw new IllegalArgumentException(ErrorMessages.SHIFTASSIGNMENT_INVALID_SHIFT_ISNULL);
+            throw new IllegalArgumentException(ErrorMessages.NULL_SHIFT);
         this.shift = shift;
     }
 
