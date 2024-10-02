@@ -354,3 +354,28 @@ VALUES
 	('RU-000001', '1', '1', 'HCI-000001'),
 	('RU-000002', '1', '1', 'HCI-000001')
 GO
+
+-- Thêm bảng Tax
+CREATE TABLE Tax(
+	taxName NVARCHAR(250) NOT NULL PRIMARY KEY,
+	taxRate FLOAT NOT NULL,
+	dateOfCreation DATETIME NOT NULL,
+	activate BIT NOT NULL
+);
+GO
+-- Thêm dữ liệu vào bảng Tax
+INSERT INTO Tax
+VALUES
+	(N'Thue 2024', 5.5, '2024-9-03', 0),
+	(N'Thue 2025', 5.5, '2024-9-03', 1)
+GO
+
+select * from Tax
+DELETE FROM Tax
+WHERE taxName = 'Thue 2024'
+UPDATE Tax
+SET taxRate = 2.5, activate = 1
+WHERE taxName = 'Thue 2024'
+
+-- Thêm bảng Invoice
+-- Thêm dữ liệu vào bảng Invoice
