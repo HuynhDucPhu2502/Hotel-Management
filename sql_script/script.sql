@@ -338,6 +338,22 @@ VALUES
 
 go
 
+--Tạo bảng ShiftAssignment
+CREATE TABLE ShiftAssignment (
+    shiftAssignmentId VARCHAR(10) NOT NULL PRIMARY KEY, -- Đặt kiểu dữ liệu và độ dài tùy theo yêu cầu của bạn
+    description NVARCHAR(50), -- Mô tả có thể dài, sử dụng kiểu TEXT
+    shiftId VARCHAR(15) NOT NULL, -- Khóa ngoại tới bảng Shift
+    employeeId VARCHAR(10) NOT NULL, -- Khóa ngoại tới bảng Employee
+    FOREIGN KEY (shiftId) REFERENCES Shift(shiftId), -- Liên kết tới bảng Shift
+    FOREIGN KEY (employeeId) REFERENCES Employee(employeeId) -- Liên kết tới bảng Employee
+);
+
+--Thêm dữ liệu vào bảng ShiftAssignment
+INSERT INTO ShiftAssignment (shiftAssignmentId, description, shiftId, employeeId) VALUES
+('SA-000001', 'Assigned to morning shift', 'SHIFT-AM-0001', 'EMP-000001'),
+('SA-000002', 'Assigned to night shift', 'SHIFT-PM-0002', 'EMP-000002'),
+('SA-000003', 'Assigned to night shift', 'SHIFT-PM-0003', 'EMP-000003');
+
 -- Thêm bảng RoomUsage
 CREATE TABLE RoomUsage(
 	roomUsageID VARCHAR(10) NOT NULL PRIMARY KEY,
