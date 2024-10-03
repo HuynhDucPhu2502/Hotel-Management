@@ -11,22 +11,30 @@ public class MainController {
 
     @FXML
     private AnchorPane menuBar;
+    private MenuController menuController;
+    @FXML
+    private AnchorPane mainPanel;
+
+    @FXML
+    public void initialize() {
+    }
+
 
     public void setAccount(Account account) {
         this.account = account;
-
-        initializeTopBar();
+        initializeMenuBar();
     }
 
-    // Phương thức khởi tạo phần topBar khi đã có account
-    private void initializeTopBar() {
+    private void initializeMenuBar() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/bar/MenuPanel.fxml"));
             AnchorPane menuLayout = loader.load();
 
-            MenuController menuController = loader.getController();
+            menuController = loader.getController();
             if (menuController != null) {
                 menuController.setAccount(account);
+
+                menuController.getServiceCategoryButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/ServiceCategoryPanel.fxml"));
             }
 
             menuBar.getChildren().clear();
@@ -36,7 +44,15 @@ public class MainController {
         }
     }
 
-    @FXML
-    public void initialize() {
+    private void loadPanel(String fxmlPath) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            AnchorPane layout = loader.load();
+
+            mainPanel.getChildren().clear();
+            mainPanel.getChildren().addAll(layout.getChildren());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

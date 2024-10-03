@@ -1,7 +1,6 @@
 package iuh.fit.dao;
 
 import iuh.fit.models.HistoryCheckIn;
-import iuh.fit.models.RoomUsage;
 import iuh.fit.models.Tax;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
