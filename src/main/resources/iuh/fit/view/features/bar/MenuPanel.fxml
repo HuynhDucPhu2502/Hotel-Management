@@ -159,7 +159,7 @@
             
                                              <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Dịch vụ" textFill="WHITE" />
             
-                                             <ImageView fx:id="arrowUpForEmpBtn2" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="45">
+                                             <ImageView fx:id="arrowUpForService" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="45">
                                           <image>
                                              <Image url="@../../../icons/arrow_down.png" />
                                           </image>
@@ -167,25 +167,9 @@
                                     </HBox>
                                  </graphic>
                               </Button>
-                              <HBox fx:id="buttonOneContainer2" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="serviceCategegoryContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </HBox>
-                              <HBox fx:id="buttonTwoContainer2" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </HBox>
-                              <HBox fx:id="buttonThreeContainer2" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
+                                    <Button fx:id="serviceCategoryButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lý loại dịch vụ" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
