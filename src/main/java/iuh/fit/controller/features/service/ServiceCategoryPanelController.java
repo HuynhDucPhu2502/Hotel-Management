@@ -12,16 +12,18 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 import java.util.List;
 
-public class ServiceCategoryController {
+public class ServiceCategoryPanelController {
     @FXML
     private ComboBox<String> serviceCategoryIDCBox;
     @FXML
     private TextField serviceCategoryIDTextField;
     @FXML
     private ListView<ServiceCategory> serviceCategoryListView;
+
 
     public void initialize() {
         setupServiceCategoryIDComboBox();

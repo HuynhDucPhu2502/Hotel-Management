@@ -15,7 +15,6 @@ public class FetchTesting {
         HotelServiceDAO.getHotelService().forEach(System.out::println);
         HistoryCheckinDAO.getHistoryCheckin().forEach(System.out::println);
         RoomDAO.getRoom().forEach(System.out::println);
-        ReservationFormDAO.getReservationForm().forEach(System.out::println);
     }
 
 }

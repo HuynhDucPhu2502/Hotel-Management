@@ -52,14 +52,15 @@ public class MenuController {
     // Service
     @FXML
     private Button serviceBtn;
+
     @FXML
-    private HBox buttonOneContainer2;
+    private HBox serviceCategegoryContainer;
     @FXML
-    private HBox buttonTwoContainer2;
+    private Button serviceCategoryButton;
+
+
     @FXML
-    private HBox buttonThreeContainer2;
-    @FXML
-    private ImageView arrowUpForEmpBtn2;
+    private ImageView arrowUpForService;
 
     // Customer
     @FXML
@@ -133,7 +134,7 @@ public class MenuController {
 
         employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer, buttonTwoContainer, buttonThreeContainer), arrowUpForEmpBtn, "employee"));
         roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer1, buttonTwoContainer1, buttonThreeContainer1), arrowUpForEmpBtn1, "room"));
-        serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer2, buttonTwoContainer2, buttonThreeContainer2), arrowUpForEmpBtn2, "service"));
+        serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategegoryContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21, buttonTwoContainer21, buttonThreeContainer21), arrowUpForEmpBtn21, "customer"));
         accountBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer211, buttonTwoContainer211, buttonThreeContainer211), arrowUpForEmpBtn211, "account"));
         statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer2111, buttonTwoContainer2111, buttonThreeContainer2111), arrowUpForEmpBtn2111, "statistics"));
@@ -166,4 +167,9 @@ public class MenuController {
         employeePositionText.setText(account.getEmployee().getPosition().toString());
         employeeFullNameText.setText(account.getEmployee().getFullName());
     }
+
+    public Button getServiceCategoryButton() {
+        return serviceCategoryButton;
+    }
 }
+
