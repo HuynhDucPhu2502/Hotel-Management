@@ -24,7 +24,6 @@ public class ServiceCategoryPanelController {
     @FXML
     private ListView<ServiceCategory> serviceCategoryListView;
 
-
     public void initialize() {
         setupServiceCategoryIDComboBox();
         setNextServiceCategoryIDToTextField();
