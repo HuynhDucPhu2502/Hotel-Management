@@ -5,5 +5,5 @@
 <AnchorPane prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.MainController">
    <fx:include fx:id="menuBar" source="../features/bar/MenuPanel.fxml" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="70.0" />
    <fx:include source="../features/bar/TopPanel.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-   <fx:include fx:id="mainPanel" source="../features/bar/DashboardPanel.fxml" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="270.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0" />
+   <fx:include fx:id="mainPanel" source="../features/bar/DashboardPanel.fxml" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="263.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0" />
 </AnchorPane>

@@ -17,7 +17,7 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.service.ServiceCategoryPanelController">
    <children>
-      <VBox layoutX="-6.0" prefHeight="522.0" prefWidth="600.0" style="-fx-background-color: RGB(70, 130, 180); -fx-background-radius: 30;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutX="-6.0" prefHeight="522.0" prefWidth="600.0" style="-fx-background-color: RGB(70, 130, 180); -fx-background-radius: 15;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox prefHeight="0.0" prefWidth="579.0" style="-fx-alignment: CENTER;">
                <children>
@@ -28,21 +28,21 @@
                   </Text>
                </children>
             </HBox>
-            <VBox fx:id="upperBox" prefHeight="200.0" prefWidth="898.0" spacing="30.0">
+            <VBox fx:id="upperBox" prefHeight="710.0" prefWidth="550.0" spacing="30.0">
                <children>
                   <HBox prefHeight="0.0" prefWidth="579.0">
                      <children>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="1. Thêm/Cập nhật loại dịch vụ">
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="1. Thêm / chỉnh sửa loại dịch vụ">
                            <font>
                               <Font name="System Bold" size="18.0" />
                            </font>
                         </Text>
                      </children>
                   </HBox>
-                  <GridPane vgap="20.0">
+                  <GridPane prefHeight="41.0" prefWidth="0.0" vgap="20.0">
                     <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="405.199951171875" minWidth="10.0" prefWidth="310.400048828125" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="667.6000366210938" minWidth="10.0" prefWidth="507.99995117187507" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -62,17 +62,17 @@
                               <Font size="16.0" />
                            </font>
                         </Text>
-                        <TextField fx:id="serviceCategoryIDTextField" editable="false" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="1">
+                        <TextField fx:id="serviceCategoryIDTextField" editable="false" prefHeight="26.0" prefWidth="209.0" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="1">
                            <cursor>
                               <Cursor fx:constant="CLOSED_HAND" />
                            </cursor>
                         </TextField>
-                        <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField prefHeight="46.0" prefWidth="275.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                   <HBox prefHeight="0.0" prefWidth="899.0" style="-fx-alignment: CENTER;">
                      <children>
-                        <Button mnemonicParsing="false" style="-fx-background-color: rgb(135, 162, 255);" text="Thêm loại dịch vụ" textFill="WHITE">
+                        <Button mnemonicParsing="false" prefHeight="35.0" prefWidth="193.0" style="-fx-background-color: rgb(135, 162, 255);" text="Thêm loại dịch vụ" textFill="WHITE">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -85,72 +85,65 @@
                         </Button>
                      </children>
                   </HBox>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </VBox>
-            <VBox fx:id="lowerBox" prefHeight="514.0" prefWidth="898.0" spacing="10.0">
-               <children>
-                  <HBox prefHeight="0.0" prefWidth="579.0">
+                  <VBox fx:id="lowerBox" prefHeight="546.0" prefWidth="574.0" spacing="10.0">
                      <children>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="2. Các loại dịch vụ">
+                        <HBox prefHeight="0.0" prefWidth="579.0" />
+                        <GridPane gridLinesVisible="true" prefHeight="59.0" prefWidth="819.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="405.20001220703125" minWidth="10.0" prefWidth="156.80003662109374" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="590.7999877929688" minWidth="10.0" prefWidth="309.59996337890624" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints maxHeight="24.60001220703125" minHeight="8.600012207031249" prefHeight="20.20001220703125" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="50.19998779296875" minHeight="10.0" prefHeight="24.999987792968753" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <VBox.margin>
+                              <Insets left="40.0" right="40.0" />
+                           </VBox.margin>
+                           <children>
+                              <HBox prefHeight="30.0" prefWidth="254.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);">
+                                 <children>
+                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã loại dịch vụ" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="27.0" prefWidth="497.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);" GridPane.columnIndex="1">
+                                 <children>
+                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên loại dịch vụ" />
+                                 </children>
+                              </HBox>
+                              <TextField editable="false" prefHeight="125.0" prefWidth="404.0" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <cursor>
+                                    <Cursor fx:constant="CLOSED_HAND" />
+                                 </cursor>
+                              </TextField>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                                 <children>
+                                    <ComboBox fx:id="serviceCategoryIDCBox" editable="true" prefHeight="34.0" prefWidth="334.0" promptText="Mã loại dịch vụ" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </GridPane>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Danh sách loại dịch vụ">
+                           <VBox.margin>
+                              <Insets left="40.0" />
+                           </VBox.margin>
                            <font>
-                              <Font name="System Bold" size="18.0" />
+                              <Font size="16.0" />
                            </font>
                         </Text>
+                        <ListView fx:id="serviceCategoryListView" prefHeight="329.0" prefWidth="819.0" style="-fx-background-color: RGB(70, 130, 180); -fx-border-color: transparent;">
+                           <VBox.margin>
+                              <Insets left="40.0" right="40.0" />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                           </padding>
+                        </ListView>
                      </children>
-                  </HBox>
-                  <GridPane gridLinesVisible="true">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <VBox.margin>
-                        <Insets left="40.0" right="40.0" />
-                     </VBox.margin>
-                     <children>
-                        <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);">
-                           <children>
-                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã loại dịch vụ" />
-                           </children>
-                        </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);" GridPane.columnIndex="1">
-                           <children>
-                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên loại dịch vụ" />
-                           </children>
-                        </HBox>
-                        <ComboBox fx:id="serviceCategoryIDCBox" editable="true" prefHeight="30.0" prefWidth="888.0" promptText="Nhập mã loại dịch vụ ở đây" style="-fx-background-color: white;" GridPane.rowIndex="1" />
-                        <TextField editable="false" prefHeight="125.0" prefWidth="404.0" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <cursor>
-                              <Cursor fx:constant="CLOSED_HAND" />
-                           </cursor>
-                        </TextField>
-                     </children>
-                  </GridPane>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Danh sách loại dịch vụ">
-                     <VBox.margin>
-                        <Insets left="40.0" />
-                     </VBox.margin>
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <ListView fx:id="serviceCategoryListView" prefHeight="286.0" prefWidth="818.0" style="-fx-background-color: RGB(70, 130, 180); -fx-border-color: transparent;">
-                     <VBox.margin>
-                        <Insets left="40.0" right="40.0" />
-                     </VBox.margin>
-                     <padding>
-                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
-                     </padding>
-                  </ListView>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </VBox>
                </children>
                <opaqueInsets>
                   <Insets />
