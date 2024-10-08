@@ -25,7 +25,7 @@
                <children>
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Quản Lý Loại Dịch Vụ">
                      <font>
-                        <Font name="System Bold" size="24.0" />
+                        <Font name="System Bold" size="32.0" />
                      </font>
                   </Text>
                </children>
@@ -94,7 +94,7 @@
                <content>
                   <VBox fx:id="lowerBox" prefHeight="384.0" prefWidth="898.0" spacing="10.0">
                      <children>
-                        <GridPane gridLinesVisible="true">
+                        <GridPane>
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -109,12 +109,18 @@
                            <children>
                               <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);">
                                  <children>
-                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã loại dịch vụ" />
+                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã loại dịch vụ">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font></Text>
                                  </children>
                               </HBox>
                               <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);" GridPane.columnIndex="1">
                                  <children>
-                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên loại dịch vụ" />
+                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên loại dịch vụ">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font></Text>
                                  </children>
                               </HBox>
                               <ComboBox fx:id="serviceCategoryIDCBox" editable="true" prefHeight="30.0" prefWidth="888.0" promptText="Nhập mã loại dịch vụ ở đây" style="-fx-background-color: white;" GridPane.rowIndex="1" />
@@ -125,7 +131,7 @@
                               </TextField>
                            </children>
                         </GridPane>
-                        <TableView fx:id="serviceCategoryTableView" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../../styles/TableView.css">
+                        <TableView fx:id="serviceCategoryTableView" prefHeight="265.0" prefWidth="789.0" stylesheets="@../../../styles/TableView.css">
                           <columns>
                             <TableColumn fx:id="serviceCategoryIDColumn" prefWidth="220.80002057552338" text="Mã loại dịch vụ" />
                             <TableColumn fx:id="serviceCategoryNameColumn" minWidth="0.0" prefWidth="343.9998474121094" text="Loại dịch vụ" />
@@ -135,7 +141,7 @@
                               <Insets />
                            </opaqueInsets>
                            <VBox.margin>
-                              <Insets left="40.0" right="40.0" top="10.0" />
+                              <Insets left="40.0" right="40.0" top="30.0" />
                            </VBox.margin>
                         </TableView>
                      </children>
