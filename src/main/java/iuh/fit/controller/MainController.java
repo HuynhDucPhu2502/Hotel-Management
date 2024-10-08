@@ -1,6 +1,6 @@
 package iuh.fit.controller;
 
-import iuh.fit.controller.features.bar.MenuController;
+import iuh.fit.controller.features.MenuController;
 import iuh.fit.models.Account;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,14 +27,14 @@ public class MainController {
 
     private void initializeMenuBar() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/bar/MenuPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/MenuPanel.fxml"));
             AnchorPane menuLayout = loader.load();
 
             menuController = loader.getController();
             if (menuController != null) {
                 menuController.setAccount(account);
 
-                menuController.getServiceCategoryButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/ServiceCategoryPanel.fxml"));
+                menuController.getServiceCategoryButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/ServiceCategoryManagerPanel.fxml"));
             }
 
             menuBar.getChildren().clear();

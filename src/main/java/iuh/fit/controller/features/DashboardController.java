@@ -1,4 +1,4 @@
-package iuh.fit.controller.features.bar;
+package iuh.fit.controller.features;
 
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;

@@ -1,0 +1,15 @@
+
+.table-view {
+    -fx-background-color: white;
+}
+
+.table-view .column-header,
+.table-view .column-header .filler {
+    -fx-background-color: rgb(135, 162, 255);
+}
+
+.table-view .column-header-background .label{
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+}
+

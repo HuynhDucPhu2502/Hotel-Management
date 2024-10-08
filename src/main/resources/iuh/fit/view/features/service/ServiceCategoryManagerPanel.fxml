@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="800.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.service.ServiceCategoryManagerController">
+   <children>
+      <VBox alignment="TOP_CENTER" layoutX="-6.0" prefHeight="522.0" prefWidth="600.0" spacing="10.0" style="-fx-background-color: RGB(70, 130, 180);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox prefHeight="0.0" prefWidth="579.0" style="-fx-alignment: CENTER;">
+               <children>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Quản Lý Loại Dịch Vụ">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <TitledPane collapsible="false" prefHeight="237.0" prefWidth="899.0" style="-fx-border-radius: 50; -fx-background-radius: 50;" stylesheets="@../../../styles/TitlePanel.css" text="1. Thêm/Cập nhật loại dịch vụ" textFill="WHITE">
+               <content>
+                  <VBox fx:id="upperBox" prefHeight="198.0" prefWidth="898.0" spacing="30.0">
+                     <children>
+                        <GridPane vgap="20.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <VBox.margin>
+                              <Insets left="40.0" right="40.0" />
+                           </VBox.margin>
+                           <children>
+                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã loại dịch vụ" textAlignment="RIGHT">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="#fffcfc" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên loại dịch vụ" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                              <TextField fx:id="serviceCategoryIDTextField" editable="false" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="1">
+                                 <cursor>
+                                    <Cursor fx:constant="CLOSED_HAND" />
+                                 </cursor>
+                              </TextField>
+                              <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                           </children>
+                        </GridPane>
+                        <HBox prefHeight="0.0" prefWidth="899.0" style="-fx-alignment: CENTER;">
+                           <children>
+                              <Button mnemonicParsing="false" style="-fx-background-color: rgb(135, 162, 255);" text="Thêm loại dịch vụ" textFill="WHITE">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <padding>
+                                    <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+                                 </padding>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </VBox>
+               </content>
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </TitledPane>
+            <TitledPane collapsible="falses" prefHeight="495.0" prefWidth="899.0" stylesheets="@../../../styles/TitlePanel.css" text="2. Danh sách loại dịch vụ" textFill="WHITE">
+               <content>
+                  <VBox fx:id="lowerBox" prefHeight="384.0" prefWidth="898.0" spacing="10.0">
+                     <children>
+                        <GridPane gridLinesVisible="true">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <VBox.margin>
+                              <Insets left="40.0" right="40.0" />
+                           </VBox.margin>
+                           <children>
+                              <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);">
+                                 <children>
+                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã loại dịch vụ" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);" GridPane.columnIndex="1">
+                                 <children>
+                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên loại dịch vụ" />
+                                 </children>
+                              </HBox>
+                              <ComboBox fx:id="serviceCategoryIDCBox" editable="true" prefHeight="30.0" prefWidth="888.0" promptText="Nhập mã loại dịch vụ ở đây" style="-fx-background-color: white;" GridPane.rowIndex="1" />
+                              <TextField editable="false" prefHeight="125.0" prefWidth="404.0" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <cursor>
+                                    <Cursor fx:constant="CLOSED_HAND" />
+                                 </cursor>
+                              </TextField>
+                           </children>
+                        </GridPane>
+                        <TableView fx:id="serviceCategoryTableView" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../../styles/TableView.css">
+                          <columns>
+                            <TableColumn fx:id="serviceCategoryIDColumn" prefWidth="220.80002057552338" text="Mã loại dịch vụ" />
+                            <TableColumn fx:id="serviceCategoryNameColumn" minWidth="0.0" prefWidth="343.9998474121094" text="Loại dịch vụ" />
+                              <TableColumn fx:id="actionColumn" prefWidth="220.80002057552338" text="Thao tác" />
+                          </columns>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets left="40.0" right="40.0" top="10.0" />
+                           </VBox.margin>
+                        </TableView>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </VBox>
+               </content>
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </TitledPane>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

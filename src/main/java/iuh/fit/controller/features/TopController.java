@@ -1,4 +1,4 @@
-package iuh.fit.controller.features.bar;
+package iuh.fit.controller.features;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -40,7 +40,7 @@ public class TopController {
 
     public void logout() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/panels/LoginUI.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/LoginUI.fxml"));
             AnchorPane loginPane = fxmlLoader.load();
 
             Stage currentStage = (Stage) (logoutBtn.getScene().getWindow());
