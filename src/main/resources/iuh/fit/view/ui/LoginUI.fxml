@@ -39,7 +39,7 @@
             </Label>
          </children>
       </VBox>
-      <GridPane layoutX="200.0" prefHeight="378.0" prefWidth="409.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <GridPane focusTraversable="true" layoutX="200.0" prefHeight="378.0" prefWidth="409.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="97.20001220703125" minWidth="10.0" prefWidth="52.8" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="316.8000244140625" minWidth="10.0" prefWidth="300.8000244140625" />

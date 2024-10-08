@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="642.0" prefWidth="241.0" stylesheets="@../../../styles/MenubarStyle.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.bar.MenuController">
+<AnchorPane prefHeight="642.0" prefWidth="241.0" stylesheets="@../../styles/MenubarStyle.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
    <children>
       <VBox prefHeight="140.0" prefWidth="230.0" style="-fx-alignment: center; -fx-background-radius: 10;" styleClass="menu-bar-topbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -53,7 +53,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="14.0" prefWidth="216.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../../icons/employee_icon.png" />
+                                             <Image url="@../../icons/employee_icon.png" />
                                           </image>
                                        </ImageView>
                   
@@ -61,7 +61,7 @@
                   
                                        <ImageView fx:id="arrowUpForEmpBtn" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="20">
                                           <image>
-                                             <Image url="@../../../icons/arrow_down.png" />
+                                             <Image url="@../../icons/arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -103,7 +103,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../../icons/room_icon.png" />
+                                             <Image url="@../../icons/room_icon.png" />
                                           </image>
                                        </ImageView>
             
@@ -111,7 +111,7 @@
             
                                              <ImageView fx:id="arrowUpForEmpBtn1" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="55">
                                           <image>
-                                             <Image url="@../../../icons/arrow_down.png" />
+                                             <Image url="@../../icons/arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -153,7 +153,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../../icons/service_icon.png" />
+                                             <Image url="@../../icons/service_icon.png" />
                                           </image>
                                        </ImageView>
             
@@ -161,7 +161,7 @@
             
                                              <ImageView fx:id="arrowUpForService" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="45">
                                           <image>
-                                             <Image url="@../../../icons/arrow_down.png" />
+                                             <Image url="@../../icons/arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -187,7 +187,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../../icons/customer_icon.png" />
+                                             <Image url="@../../icons/customer_icon.png" />
                                           </image>
                                        </ImageView>
             
@@ -195,7 +195,7 @@
             
                                              <ImageView fx:id="arrowUpForEmpBtn21" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="6">
                                           <image>
-                                             <Image url="@../../../icons/arrow_down.png" />
+                                             <Image url="@../../icons/arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -237,7 +237,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../../icons/account_icon.png" />
+                                             <Image url="@../../icons/account_icon.png" />
                                           </image>
                                        </ImageView>
             
@@ -245,7 +245,7 @@
             
                                              <ImageView fx:id="arrowUpForEmpBtn211" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="24">
                                           <image>
-                                             <Image url="@../../../icons/arrow_down.png" />
+                                             <Image url="@../../icons/arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -287,7 +287,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../../icons/statistics-icon.png" />
+                                             <Image url="@../../icons/statistics-icon.png" />
                                           </image>
                                        </ImageView>
             
@@ -295,7 +295,7 @@
             
                                              <ImageView fx:id="arrowUpForEmpBtn2111" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="28">
                                           <image>
-                                             <Image url="@../../../icons/arrow_down.png" />
+                                             <Image url="@../../icons/arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -333,7 +333,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../../icons/history_icon.png" />
+                                             <Image url="@../../icons/history_icon.png" />
                                           </image>
                                        </ImageView>
             
@@ -341,7 +341,7 @@
             
                                              <ImageView fx:id="arrowUpForEmpBtn21111" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="51">
                                           <image>
-                                             <Image url="@../../../icons/arrow_down.png" />
+                                             <Image url="@../../icons/arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>

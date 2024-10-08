@@ -121,7 +121,7 @@ public class LoginController {
             errorMessage.setText(ErrorMessages.LOGIN_INVALID_ACCOUNT);
         } else {
             try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/panels/MainUI.fxml"));
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/MainUI.fxml"));
                 AnchorPane mainPanel = fxmlLoader.load();
 
                 MainController mainController = fxmlLoader.getController();

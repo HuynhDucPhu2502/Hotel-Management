@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane prefHeight="4.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER" prefHeight="26.0" prefWidth="600.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="134.0" style="-fx-background-color: #FFA500;" text="Cập nhật" textFill="WHITE" />
+            <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="134.0" style="-fx-background-color: #FF0000;" text="Xóa" textFill="#fffbfb" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

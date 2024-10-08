@@ -1,4 +1,4 @@
-package iuh.fit.controller.features.bar;
+package iuh.fit.controller.features;
 
 import iuh.fit.models.Account;
 import javafx.fxml.FXML;
