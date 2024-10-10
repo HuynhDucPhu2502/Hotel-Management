@@ -17,14 +17,14 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="logo-panel-banner-title" stylesheets="@../../styles/LoginPanelStyle.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.LoginController">
    <children>
-      <VBox prefHeight="400.0" prefWidth="200.0" styleClass="login-panel-banner" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox prefHeight="400.0" prefWidth="200.0" spacing="10.0" style="-fx-alignment: center; -fx-background-color: RGB(70, 130, 180);" styleClass="login-panel-banner" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="100.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../icons/hotel_icon.png" />
                </image>
             </ImageView>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-panel-banner-title" text="Chức Phú Gia Tiến" wrappingWidth="180.05859375">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-panel-banner-title" text="Chức Phú Gia Tiến" wrappingWidth="180.05859375">
                <font>
                   <Font name="Arial Bold" size="20.0" />
                </font>
@@ -54,17 +54,17 @@
           <RowConstraints maxHeight="80.0" minHeight="10.0" prefHeight="104.59997558593753" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label alignment="CENTER" prefHeight="38.0" prefWidth="318.0" styleClass="login-panel-widget-title" text="HỆ THỐNG" GridPane.columnIndex="1">
+            <Label alignment="CENTER" prefHeight="38.0" prefWidth="318.0" styleClass="login-panel-widget-title" text="HỆ THỐNG" textFill="STEELBLUE" GridPane.columnIndex="1">
                <font>
                   <Font name="System Bold" size="26.0" />
                </font>
             </Label>
-            <Label alignment="CENTER" contentDisplay="TOP" prefHeight="52.0" prefWidth="302.0" styleClass="login-panel-widget-title" text="QUẢN LÝ KHÁCH SẠN" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <Label alignment="CENTER" contentDisplay="TOP" prefHeight="52.0" prefWidth="302.0" styleClass="login-panel-widget-title" text="QUẢN LÝ KHÁCH SẠN" textFill="STEELBLUE" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font name="System Bold" size="26.0" />
                </font>
             </Label>
-            <Button fx:id="signInButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="302.0" styleClass="login-panel-widget-button" text="Đăng nhập" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="5">
+            <Button fx:id="signInButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="302.0" style="-fx-background-radius: 30; -fx-background-color: RGB(70, 130, 180);" styleClass="login-panel-widget-button" text="Đăng nhập" textAlignment="CENTER" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="5">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>

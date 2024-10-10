@@ -16,7 +16,7 @@
 
 <AnchorPane prefHeight="642.0" prefWidth="241.0" stylesheets="@../../styles/MenubarStyle.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
    <children>
-      <VBox prefHeight="140.0" prefWidth="230.0" style="-fx-alignment: center; -fx-background-radius: 10;" styleClass="menu-bar-topbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox prefHeight="140.0" prefWidth="230.0" style="-fx-alignment: center; -fx-background-radius: 10; -fx-background-color: RGB(70, 130, 180);" styleClass="menu-bar-topbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Circle fx:id="avatar" fill="DODGERBLUE" radius="28.0" stroke="TRANSPARENT" strokeType="INSIDE" />
             <Text fx:id="employeePositionText" fill="#fffbfb" strokeType="OUTSIDE" strokeWidth="0.0" text="Quản Lý">
@@ -93,7 +93,7 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox prefHeight="32.0" prefWidth="200.0">
+                        <VBox prefHeight="32.0" prefWidth="200.0" styleClass="menu-bar-parent">
                            <children>
                               <Button fx:id="roomBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
                                  <cursor>

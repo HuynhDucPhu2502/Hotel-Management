@@ -19,11 +19,11 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.service.ServiceCategoryManagerController">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="-6.0" prefHeight="522.0" prefWidth="600.0" spacing="10.0" style="-fx-background-color: RGB(70, 130, 180);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="TOP_CENTER" layoutX="-6.0" prefHeight="522.0" prefWidth="600.0" spacing="10.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox prefHeight="0.0" prefWidth="579.0" style="-fx-alignment: CENTER;">
                <children>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Quản Lý Loại Dịch Vụ">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quản Lý Loại Dịch Vụ">
                      <font>
                         <Font name="System Bold" size="32.0" />
                      </font>
@@ -47,12 +47,12 @@
                               <Insets left="40.0" right="40.0" />
                            </VBox.margin>
                            <children>
-                              <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã loại dịch vụ" textAlignment="RIGHT">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã loại dịch vụ" textAlignment="RIGHT">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Text>
-                              <Text fill="#fffcfc" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên loại dịch vụ" GridPane.rowIndex="1">
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tên loại dịch vụ" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
