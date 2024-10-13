@@ -51,12 +51,13 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.calendarfx/view -->
+        <!-- https://mvnrepository.com/artifact/com.dlsc.gemsfx/gemsfx -->
         <dependency>
-            <groupId>com.calendarfx</groupId>
-            <artifactId>view</artifactId>
-            <version>11.12.7</version>
+            <groupId>com.dlsc.gemsfx</groupId>
+            <artifactId>gemsfx</artifactId>
+            <version>2.57.0</version>
         </dependency>
+
 
 
         <dependency>

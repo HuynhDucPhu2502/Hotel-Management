@@ -46,11 +46,18 @@ public class RegexChecker {
      * @return true nếu độ dài của chuỗi sau khi loại bỏ khoảng trắng nằm trong khoảng từ minLength đến maxLength, ngược lại trả về false.
      */
     public static boolean isValidName(String input, int minLength, int maxLength) {
-        if (!input.matches("[a-zA-Z0-9 ]+")) {
+
+
+
+        if (!input.matches("[\\p{L} ]+")) {
+            return false; // Không hợp lệ nếu có ký tự số hoặc ký tự đặc biệt
+        }
+
+        if (input.length() < minLength || input.length() > maxLength) {
             return false;
         }
 
-        return input.length() >= minLength && input.length() <= maxLength;
+        return true;
     }
 
     /**

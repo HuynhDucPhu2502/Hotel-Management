@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.dlsc.gemsfx.DialogPane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -19,6 +20,7 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.service.ServiceCategoryManagerController">
    <children>
+      <DialogPane fx:id="dialog" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <VBox alignment="TOP_CENTER" layoutX="-6.0" prefHeight="522.0" prefWidth="600.0" spacing="10.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox prefHeight="0.0" prefWidth="579.0" style="-fx-alignment: CENTER;">
@@ -62,18 +64,26 @@
                                     <Cursor fx:constant="CLOSED_HAND" />
                                  </cursor>
                               </TextField>
-                              <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="serviceCategoryNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
-                        <HBox prefHeight="0.0" prefWidth="899.0" style="-fx-alignment: CENTER;">
+                        <HBox prefHeight="0.0" prefWidth="899.0" spacing="50.0" style="-fx-alignment: CENTER;" stylesheets="@../../../styles/Button.css">
                            <children>
-                              <Button mnemonicParsing="false" style="-fx-background-color: rgb(135, 162, 255);" text="Thêm loại dịch vụ" textFill="WHITE">
+                              <Button fx:id="resetBtn" minWidth="150.0" mnemonicParsing="false" text="Làm mới" textFill="WHITE">
                                  <font>
-                                    <Font size="16.0" />
+                                    <Font name="System Bold" size="16.0" />
                                  </font>
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
+                                 <padding>
+                                    <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+                                 </padding>
+                              </Button>
+                              <Button fx:id="addBtn" minWidth="150.0" mnemonicParsing="false" text="Thêm" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
                                  <padding>
                                     <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
                                  </padding>

@@ -254,7 +254,7 @@ INSERT INTO ServiceCategory (serviceCategoryID, serviceCategoryName)
 VALUES
     ('SC-000001', N'Giải trí'),  
     ('SC-000002', N'Ăn uống'),        
-    ('SC-000003', N'Chăm sóc & sức khỏe'),   
+    ('SC-000003', N'Chăm sóc và sức khỏe'),
     ('SC-000004', N'Vận chuyển');
 GO
 

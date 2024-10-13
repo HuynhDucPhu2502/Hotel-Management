@@ -68,9 +68,9 @@ public class ErrorMessages {
     public static final String ROOM_INVALID_DATEOFCREATION = "Ngày tạo phải trước ngày giờ hiện tại!!!";
 
     // ServiceCategory
-    public static final String SERVICE_CATEGORY_INVALID_ID_ISNULL = "Mã loại dịch vụ không được rỗng!!!";
-    public static final String SERVICE_CATEGORY_INVALID_ID_FORMAT = "Mã loại dịch vụ phải theo định dạng SC-XXXXXX, với XXXXXX là dãy số!!!";
-    public static final String SERVICE_CATEGORY_INVALID_NAME_ISNULL = "Tên loại dịch vụ không được rỗng!!!";
+    public static final String SERVICE_CATEGORY_INVALID_ID_ISNULL = "Mã loại dịch vụ không được rỗng";
+    public static final String SERVICE_CATEGORY_INVALID_ID_FORMAT = "Mã loại dịch vụ phải theo định dạng SC-XXXXXX, với X là số";
+    public static final String SERVICE_CATEGORY_INVALID_NAME = "Tên loại dịch vụ phải từ 3 đến 30 ký tự";
 
     //HotelService
     public static final String HOTEL_SERVICE_INVALID_ID_ISNULL = "Mã dịch vụ không được rỗng!!!";
