@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="642.0" prefWidth="241.0" stylesheets="@../../styles/MenubarStyle.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
+<AnchorPane minWidth="240.0" prefHeight="800.0" prefWidth="240.0" stylesheets="@../../styles/Menubar.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
    <children>
       <VBox prefHeight="140.0" prefWidth="230.0" style="-fx-alignment: center; -fx-background-radius: 10; -fx-background-color: RGB(70, 130, 180);" styleClass="menu-bar-topbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -287,7 +287,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/statistics-icon.png" />
+                                             <Image url="@../../icons/statistics_icon.png" />
                                           </image>
                                        </ImageView>
             

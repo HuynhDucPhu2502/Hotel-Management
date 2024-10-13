@@ -3,6 +3,7 @@ module iuh.fit {
     requires javafx.fxml;
     requires java.sql;
     requires java.desktop;
+    requires com.dlsc.gemsfx;
 
     opens iuh.fit to javafx.fxml;
     opens iuh.fit.controller to javafx.fxml;

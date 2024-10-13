@@ -41,8 +41,9 @@ public class ServiceCategory {
     }
 
     public void setServiceCategoryName(String serviceCategoryName) {
-        if (serviceCategoryName.trim().isEmpty()) {
-            throw new IllegalArgumentException(ErrorMessages.SERVICE_CATEGORY_INVALID_NAME_ISNULL);
+        serviceCategoryName = serviceCategoryName.trim().replaceAll("\\s+", " ");
+        if (!RegexChecker.isValidName(serviceCategoryName, 3, 30)) {
+            throw new IllegalArgumentException(ErrorMessages.SERVICE_CATEGORY_INVALID_NAME);
         }
         this.serviceCategoryName = serviceCategoryName;
     }
