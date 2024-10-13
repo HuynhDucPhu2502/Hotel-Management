@@ -20,7 +20,7 @@
 
 <AnchorPane prefHeight="800.0" prefWidth="920.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.service.ServiceCategoryManagerController">
    <children>
-      <DialogPane fx:id="dialog" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <DialogPane fx:id="dialogPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <VBox alignment="TOP_CENTER" layoutX="-6.0" prefHeight="522.0" prefWidth="600.0" spacing="10.0" style="-fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox prefHeight="0.0" prefWidth="579.0" style="-fx-alignment: CENTER;">
@@ -88,6 +88,14 @@
                                     <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
                                  </padding>
                               </Button>
+                              <Button fx:id="updateBtn" managed="false" minWidth="150.0" mnemonicParsing="false" text="Cập nhật" textFill="WHITE" visible="false">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+                                 </padding>
+                              </Button>
                            </children>
                         </HBox>
                      </children>
@@ -134,7 +142,7 @@
                                  </children>
                               </HBox>
                               <ComboBox fx:id="serviceCategoryIDCBox" editable="true" prefHeight="30.0" prefWidth="888.0" promptText="Nhập mã loại dịch vụ ở đây" style="-fx-background-color: white;" GridPane.rowIndex="1" />
-                              <TextField editable="false" prefHeight="125.0" prefWidth="404.0" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                              <TextField fx:id="serviceCategoryNameSearchField" editable="false" prefHeight="125.0" prefWidth="404.0" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                  <cursor>
                                     <Cursor fx:constant="CLOSED_HAND" />
                                  </cursor>

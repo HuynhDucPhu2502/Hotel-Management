@@ -3,7 +3,8 @@ package iuh.fit.controller.features.service;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.ServiceCategoryDAO;
 import iuh.fit.models.ServiceCategory;
-import iuh.fit.utils.RegexChecker;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,12 +13,18 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
+import javafx.util.Duration;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ServiceCategoryManagerController {
     @FXML
     private ComboBox<String> serviceCategoryIDCBox;
+    @FXML
+    private TextField serviceCategoryNameSearchField;
+
+
     @FXML
     private TextField serviceCategoryIDTextField;
     @FXML
@@ -33,40 +40,50 @@ public class ServiceCategoryManagerController {
     private TableColumn<ServiceCategory, Void> actionColumn;
 
     @FXML
-    private DialogPane dialog;
+    private DialogPane dialogPane;
 
     @FXML
     private Button addBtn;
     @FXML
     private Button resetBtn;
+    @FXML
+    private Button updateBtn;
+
+    private Timeline searchDelayTimeline;
+    private ObservableList<ServiceCategory> items;
 
     public void initialize() {
-        dialog.toFront();
+        dialogPane.toFront();
 
-        setupServiceCategoryIDComboBox();
-        setNextServiceCategoryIDToTextField();
-        setupServiceCategoryTableView();
+        loadData();
+        setupTable();
 
-        resetBtn.setOnAction(e -> handleResetBtn());
-        addBtn.setOnAction(e -> handleAddBtn());
+        resetBtn.setOnAction(e -> handleResetAction());
+        addBtn.setOnAction(e -> handleAddAction());
+        updateBtn.setOnAction(e -> handleUpdateAction());
 
+        searchDelayTimeline = new Timeline(new KeyFrame(Duration.seconds(0.3), event -> handleSearchAction()));
+        searchDelayTimeline.setCycleCount(1);
+
+        serviceCategoryIDCBox.setOnAction(event -> {
+            searchDelayTimeline.stop();
+            searchDelayTimeline.playFromStart();
+        });
     }
 
-    private void setupServiceCategoryIDComboBox() {
-        List<String> data = ServiceCategoryDAO.getTopThreeCategoryService();
 
-        serviceCategoryIDCBox.getItems().setAll(data);
-    }
+    private void loadData() {
+        List<String> Ids = ServiceCategoryDAO.getTopThreeCategoryService();
+        serviceCategoryIDCBox.getItems().setAll(Ids);
 
-    private void setNextServiceCategoryIDToTextField() {
         serviceCategoryIDTextField.setText(ServiceCategoryDAO.getNextServiceCategoryID());
+
+        List<ServiceCategory> serviceCategories = ServiceCategoryDAO.getServiceCategory();
+        items = FXCollections.observableArrayList(serviceCategories);
+        serviceCategoryTableView.setItems(items);
     }
 
-    // setup table
-    private void setupServiceCategoryTableView() {
-        List<ServiceCategory> data = ServiceCategoryDAO.getServiceCategory();
-        ObservableList<ServiceCategory> items = FXCollections.observableArrayList(data);
-
+    private void setupTable() {
         serviceCategoryIDColumn.setCellValueFactory(new PropertyValueFactory<>("serviceCategoryID"));
         serviceCategoryNameColumn.setCellValueFactory(new PropertyValueFactory<>("serviceCategoryName"));
         setupButtonColumn();
@@ -74,6 +91,7 @@ public class ServiceCategoryManagerController {
         serviceCategoryTableView.setItems(items);
         serviceCategoryTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
     }
+
 
     // setup cho cột thao tác
     private void setupButtonColumn() {
@@ -92,12 +110,12 @@ public class ServiceCategoryManagerController {
                         deleteButton.getStyleClass().add("button-delete");
 
                         // Thêm file CSS vào HBox
-                        hBox.getStylesheets().add(getClass().getResource("/iuh/fit/styles/Button.css").toExternalForm());
+                        hBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/Button.css")).toExternalForm());
 
                         // Set hành động cho các button
                         updateButton.setOnAction(event -> {
                             ServiceCategory serviceCategory = getTableView().getItems().get(getIndex());
-                            handleEditAction(serviceCategory);
+                            handleUpdateBtn(serviceCategory);
                         });
 
                         deleteButton.setOnAction(event -> {
@@ -127,39 +145,97 @@ public class ServiceCategoryManagerController {
         actionColumn.setCellFactory(cellFactory);
     }
 
-    private void handleResetBtn() {
+    private void handleResetAction() {
         serviceCategoryNameTextField.setText("");
+
+        serviceCategoryIDTextField.setText(ServiceCategoryDAO.getNextServiceCategoryID());
+
+        addBtn.setManaged(true);
+        addBtn.setVisible(true);
+        updateBtn.setManaged(false);
+        updateBtn.setVisible(false);
     }
 
-    private void handleAddBtn() {
-
+    private void handleAddAction() {
         try {
             String serviceCategoryID = serviceCategoryIDTextField.getText();
             String serviceCategoryName = serviceCategoryNameTextField.getText();
 
-            // Kiểm tra tính hợp lệ của tên dịch vụ
-            if (!RegexChecker.isValidName(serviceCategoryName, 3, 30)) {
-                throw new IllegalArgumentException("Tên loại dịch vụ phải từ 3 đến 30 ký tự và không chứa ký tự đặc biệt.");
-            }
-
-            // Tạo đối tượng serviceCategory nếu dữ liệu hợp lệ
             ServiceCategory serviceCategory = new ServiceCategory(serviceCategoryID, serviceCategoryName);
 
-            // Sau khi xử lý, có thể lưu vào database hoặc thực hiện hành động tiếp theo
+            ServiceCategoryDAO.createData(serviceCategory);
+            handleResetAction();
+            loadData();
 
         } catch (IllegalArgumentException e) {
-
-            dialog.showWarning("LỖI", e.getMessage());
+            dialogPane.showWarning("LỖI", e.getMessage());
         }
     }
 
 
-    private void handleEditAction(ServiceCategory serviceCategory) {
-        System.out.println("Sửa: " + serviceCategory.getServiceCategoryID());
+    private void handleUpdateBtn(ServiceCategory serviceCategory) {
+        serviceCategoryNameTextField.setText(serviceCategory.getServiceCategoryName());
+        serviceCategoryNameTextField.requestFocus();
+        serviceCategoryIDTextField.setText(serviceCategory.getServiceCategoryID());
+
+        addBtn.setManaged(false);
+        addBtn.setVisible(false);
+        updateBtn.setManaged(true);
+        updateBtn.setVisible(true);
+
+    }
+
+    private void handleUpdateAction() {
+        try {
+            String serviceCategoryID = serviceCategoryIDTextField.getText();
+            String serviceCategoryName = serviceCategoryNameTextField.getText();
+
+            ServiceCategory serviceCategory = new ServiceCategory(serviceCategoryID, serviceCategoryName);
+
+            DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn cập nhật loại dịch vụ này?");
+
+            dialog.onClose(buttonType -> {
+                if (buttonType == ButtonType.YES) {
+                    ServiceCategoryDAO.updateData(serviceCategory);
+                    handleResetAction();
+                    loadData();
+                }
+            });
+
+
+        } catch (IllegalArgumentException e) {
+            dialogPane.showWarning("LỖI", e.getMessage());
+        }
     }
 
     private void handleDeleteAction(ServiceCategory serviceCategory) {
-        System.out.println("Xóa: " + serviceCategory.getServiceCategoryID());
+        DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn xóa loại dịch vụ này?");
+
+        dialog.onClose(buttonType -> {
+            if (buttonType == ButtonType.YES) {
+                ServiceCategoryDAO.deleteData(serviceCategory.getServiceCategoryID());
+
+                loadData();
+            }
+        });
     }
+
+    private void handleSearchAction() {
+        String searchText = serviceCategoryIDCBox.getValue();
+        List<ServiceCategory> serviceCategories;
+
+        if (searchText == null || searchText.isEmpty()) {
+            serviceCategories = ServiceCategoryDAO.getServiceCategory();
+        } else {
+            serviceCategories = ServiceCategoryDAO.findDataByContainsId(searchText);
+            if (serviceCategories.size() == 1) {
+                serviceCategoryNameSearchField.setText(serviceCategories.getFirst().getServiceCategoryName());
+            }
+        }
+
+        items.setAll(serviceCategories);
+        serviceCategoryTableView.setItems(items);
+    }
+
 
 }

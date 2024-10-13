@@ -70,7 +70,7 @@ public class ErrorMessages {
     // ServiceCategory
     public static final String SERVICE_CATEGORY_INVALID_ID_ISNULL = "Mã loại dịch vụ không được rỗng";
     public static final String SERVICE_CATEGORY_INVALID_ID_FORMAT = "Mã loại dịch vụ phải theo định dạng SC-XXXXXX, với X là số";
-    public static final String SERVICE_CATEGORY_INVALID_NAME = "Tên loại dịch vụ phải từ 3 đến 30 ký tự";
+    public static final String SERVICE_CATEGORY_INVALID_NAME = "Tên loại dịch vụ phải từ 3 đến 30 ký tự. Không ký tự đặc biệt và ký số";
 
     //HotelService
     public static final String HOTEL_SERVICE_INVALID_ID_ISNULL = "Mã dịch vụ không được rỗng!!!";

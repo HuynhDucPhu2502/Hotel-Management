@@ -71,27 +71,55 @@ public class ServiceCategoryDAO {
     public static void createData(ServiceCategory serviceCategory) {
         try (
                 Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(
+                PreparedStatement insertStatement = connection.prepareStatement(
                         "INSERT INTO ServiceCategory(serviceCategoryID, serviceCategoryName) " +
                                 "VALUES(?, ?)"
+                );
+                PreparedStatement selectSequenceStatement = connection.prepareStatement(
+                        "SELECT nextID FROM GlobalSequence WHERE tableName = ?"
+                );
+                PreparedStatement updateSequenceStatement = connection.prepareStatement(
+                        "UPDATE GlobalSequence SET nextID = ? WHERE tableName = ?"
                 )
-        ){
-            preparedStatement.setString(1, serviceCategory.getServiceCategoryID());
-            preparedStatement.setString(2, serviceCategory.getServiceCategoryName());
+        ) {
+            // Thêm bản ghi mới vào bảng ServiceCategory
+            insertStatement.setString(1, serviceCategory.getServiceCategoryID());
+            insertStatement.setString(2, serviceCategory.getServiceCategoryName());
+            insertStatement.executeUpdate();
 
-            preparedStatement.executeUpdate();
+            // Lấy giá trị nextID hiện tại từ bảng GlobalSequence
+            selectSequenceStatement.setString(1, "ServiceCategory");
+            ResultSet rs = selectSequenceStatement.executeQuery();
+
+            if (rs.next()) {
+                String currentNextID = rs.getString("nextID");
+                String prefix = "SC-";
+
+                // tách phần số và tăng thêm 1
+                int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
+
+                // Định dạng lại phần số, đảm bảo luôn có 6 chữ số
+                String newNextID = prefix + String.format("%06d", nextIDNum);
+
+                // Cập nhật giá trị nextID trong bảng GlobalSequence
+                updateSequenceStatement.setString(1, newNextID);
+                updateSequenceStatement.setString(2, "ServiceCategory");
+                updateSequenceStatement.executeUpdate();
+            }
+
         } catch (Exception exception) {
             exception.printStackTrace();
             System.exit(1);
         }
     }
 
+
     public static void deleteData(String serviceCategoryID) {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                        "DELETE FROM ServiceCategory "
-                                + "WHERE serviceCategoryID = ?"
+                            "DELETE FROM ServiceCategory " +
+                                "WHERE serviceCategoryID = ?"
                 )
         ){
             preparedStatement.setString(1, serviceCategoryID);
@@ -105,7 +133,7 @@ public class ServiceCategoryDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                        "UPDATE ServiceCategory " +
+                            "UPDATE ServiceCategory " +
                                 "SET serviceCategoryName = ? " +
                                 "WHERE serviceCategoryID = ? "
                 )
@@ -118,6 +146,36 @@ public class ServiceCategoryDAO {
             System.exit(1);
         }
 
+    }
+
+    public static List<ServiceCategory> findDataByContainsId(String input) {
+        ArrayList<ServiceCategory> data = new ArrayList<>();
+        try (
+
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "SELECT serviceCategoryID, serviceCategoryName " +
+                                "FROM ServiceCategory " +
+                                "WHERE LOWER(serviceCategoryID) LIKE ?"
+                )
+        ){
+            preparedStatement.setString(1, "%" + input + "%");
+            ResultSet rs = preparedStatement.executeQuery();
+
+
+            while (rs.next()) {
+                ServiceCategory serviceCategory = new ServiceCategory();
+                serviceCategory.setServiceCategoryID(rs.getString(1));
+                serviceCategory.setServiceCategoryName(rs.getString(2));
+
+                data.add(serviceCategory);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
     }
 
     public static List<String> getTopThreeCategoryService() {
@@ -147,24 +205,19 @@ public class ServiceCategoryDAO {
         String res = "SC-000001";
 
         try (
+
                 Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement()
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                            "SELECT nextID " +
+                                "FROM GlobalSequence " +
+                                "WHERE tableName = ?"
+                )
         ){
-            String sql = "SELECT TOP 1 serviceCategoryID " +
-                    "FROM ServiceCategory " +
-                    "ORDER BY serviceCategoryID DESC";
-            ResultSet rs = statement.executeQuery(sql);
+            preparedStatement.setString(1, "ServiceCategory");
+            ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.next()) {
-                String lastID = rs.getString(1);
-                String nextNumberStr = lastID.substring(3);
-
-                int nextNumber = Integer.parseInt(nextNumberStr);
-                ++nextNumber;
-
-                String formattedNumber = String.format("%06d", nextNumber);
-
-                res =  GlobalConstants.SERVICECATEGORY_PREFIX + "-" + formattedNumber;
+                res = rs.getString(1);
             }
         } catch (Exception exception) {
             exception.printStackTrace();
