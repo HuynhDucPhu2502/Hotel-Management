@@ -2,7 +2,6 @@ package iuh.fit.dao;
 
 import iuh.fit.models.ServiceCategory;
 import iuh.fit.utils.DBHelper;
-import iuh.fit.utils.GlobalConstants;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -113,7 +112,6 @@ public class ServiceCategoryDAO {
         }
     }
 
-
     public static void deleteData(String serviceCategoryID) {
         try (
                 Connection connection = DBHelper.getConnection();
@@ -178,7 +176,7 @@ public class ServiceCategoryDAO {
         return data;
     }
 
-    public static List<String> getTopThreeCategoryService() {
+    public static List<String> getTopThreeID() {
         ArrayList<String> data = new ArrayList<>();
         try (
                 Connection connection = DBHelper.getConnection();

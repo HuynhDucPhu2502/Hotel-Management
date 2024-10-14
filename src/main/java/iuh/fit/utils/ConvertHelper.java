@@ -134,4 +134,20 @@ public class ConvertHelper {
             default -> throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_ROOM_STATUS);
         };
     }
+
+    public static double doubleConverter(String numbStr, String errorMessage) {
+        try {
+            return Double.parseDouble(numbStr);
+        } catch (Exception exception) {
+            throw new IllegalArgumentException(errorMessage);
+        }
+    }
+
+    public static int intConverter(String numbStr, String errorMessage) {
+        try {
+            return Integer.parseInt(numbStr);
+        } catch (Exception exception) {
+            throw new IllegalArgumentException(errorMessage);
+        }
+    }
 }

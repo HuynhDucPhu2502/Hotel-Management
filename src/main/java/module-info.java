@@ -4,6 +4,7 @@ module iuh.fit {
     requires java.sql;
     requires java.desktop;
     requires com.dlsc.gemsfx;
+    requires com.dlsc.unitfx;
 
     opens iuh.fit to javafx.fxml;
     opens iuh.fit.controller to javafx.fxml;

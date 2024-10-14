@@ -25,6 +25,7 @@ public class MenuController {
     @FXML
     private Text employeeFullNameText;
 
+//  =====================================================
     // Employee
     @FXML
     private Button employeeBtn;
@@ -37,6 +38,7 @@ public class MenuController {
     @FXML
     private ImageView arrowUpForEmpBtn;
 
+//  =====================================================
     // Room
     @FXML
     private Button roomBtn;
@@ -49,6 +51,7 @@ public class MenuController {
     @FXML
     private ImageView arrowUpForEmpBtn1;
 
+//  =====================================================
     // Service
     @FXML
     private Button serviceBtn;
@@ -58,10 +61,15 @@ public class MenuController {
     @FXML
     private Button serviceCategoryButton;
 
+    @FXML
+    private HBox hotelServiceContainer;
+    @FXML
+    private Button hotelServiceButton;
 
     @FXML
     private ImageView arrowUpForService;
 
+//  =====================================================
     // Customer
     @FXML
     private Button customerBtn;
@@ -74,6 +82,7 @@ public class MenuController {
     @FXML
     private ImageView arrowUpForEmpBtn21;
 
+//  =====================================================
     // Account
     @FXML
     private Button accountBtn;
@@ -86,6 +95,7 @@ public class MenuController {
     @FXML
     private ImageView arrowUpForEmpBtn211;
 
+//  =====================================================
     // Statistics
     @FXML
     private Button statisticsBtn;
@@ -98,6 +108,7 @@ public class MenuController {
     @FXML
     private ImageView arrowUpForEmpBtn2111;
 
+//  =====================================================
     // History
     @FXML
     private Button historyBtn;
@@ -110,6 +121,7 @@ public class MenuController {
     @FXML
     private ImageView arrowUpForEmpBtn21111;
 
+//  =====================================================
 
 
     @FXML
@@ -134,7 +146,7 @@ public class MenuController {
 
         employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer, buttonTwoContainer, buttonThreeContainer), arrowUpForEmpBtn, "employee"));
         roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer1, buttonTwoContainer1, buttonThreeContainer1), arrowUpForEmpBtn1, "room"));
-        serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategegoryContainer), arrowUpForService, "service"));
+        serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategegoryContainer, hotelServiceContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21, buttonTwoContainer21, buttonThreeContainer21), arrowUpForEmpBtn21, "customer"));
         accountBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer211, buttonTwoContainer211, buttonThreeContainer211), arrowUpForEmpBtn211, "account"));
         statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer2111, buttonTwoContainer2111, buttonThreeContainer2111), arrowUpForEmpBtn2111, "statistics"));
@@ -170,6 +182,10 @@ public class MenuController {
 
     public Button getServiceCategoryButton() {
         return serviceCategoryButton;
+    }
+
+    public Button getHotelServiceButton() {
+        return hotelServiceButton;
     }
 }
 

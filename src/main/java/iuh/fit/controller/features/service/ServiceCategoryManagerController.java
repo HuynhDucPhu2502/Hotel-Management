@@ -3,8 +3,6 @@ package iuh.fit.controller.features.service;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.ServiceCategoryDAO;
 import iuh.fit.models.ServiceCategory;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,23 +11,24 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
-import javafx.util.Duration;
 
 import java.util.List;
 import java.util.Objects;
 
 public class ServiceCategoryManagerController {
+    // Search Fields
     @FXML
-    private ComboBox<String> serviceCategoryIDCBox;
+    private ComboBox<String> serviceCategoryIDSearchField;
     @FXML
     private TextField serviceCategoryNameSearchField;
 
-
+    // Input Fields
     @FXML
     private TextField serviceCategoryIDTextField;
     @FXML
     private TextField serviceCategoryNameTextField;
 
+    // Table
     @FXML
     private TableView<ServiceCategory> serviceCategoryTableView;
     @FXML
@@ -39,9 +38,7 @@ public class ServiceCategoryManagerController {
     @FXML
     private TableColumn<ServiceCategory, Void> actionColumn;
 
-    @FXML
-    private DialogPane dialogPane;
-
+    // Buttons
     @FXML
     private Button addBtn;
     @FXML
@@ -49,9 +46,14 @@ public class ServiceCategoryManagerController {
     @FXML
     private Button updateBtn;
 
-    private Timeline searchDelayTimeline;
+    // Dialog
+    @FXML
+    private DialogPane dialogPane;
+
     private ObservableList<ServiceCategory> items;
 
+
+    // Gọi mấy phương thức để gắn sự kiện và dữ liệu cho lúc đầu khởi tạo giao diện
     public void initialize() {
         dialogPane.toFront();
 
@@ -61,40 +63,37 @@ public class ServiceCategoryManagerController {
         resetBtn.setOnAction(e -> handleResetAction());
         addBtn.setOnAction(e -> handleAddAction());
         updateBtn.setOnAction(e -> handleUpdateAction());
+        serviceCategoryIDSearchField.setOnAction(e -> handleSearchAction());
 
-        searchDelayTimeline = new Timeline(new KeyFrame(Duration.seconds(0.3), event -> handleSearchAction()));
-        searchDelayTimeline.setCycleCount(1);
-
-        serviceCategoryIDCBox.setOnAction(event -> {
-            searchDelayTimeline.stop();
-            searchDelayTimeline.playFromStart();
-        });
     }
 
 
+    // Phương thức load dữ liệu lên giao diện
     private void loadData() {
-        List<String> Ids = ServiceCategoryDAO.getTopThreeCategoryService();
-        serviceCategoryIDCBox.getItems().setAll(Ids);
+        List<String> Ids = ServiceCategoryDAO.getTopThreeID();
+        serviceCategoryIDSearchField.getItems().setAll(Ids);
 
         serviceCategoryIDTextField.setText(ServiceCategoryDAO.getNextServiceCategoryID());
 
         List<ServiceCategory> serviceCategories = ServiceCategoryDAO.getServiceCategory();
         items = FXCollections.observableArrayList(serviceCategories);
         serviceCategoryTableView.setItems(items);
+        serviceCategoryTableView.refresh();
     }
 
+    // Phương thức đổ dữ liệu vào bảng
     private void setupTable() {
         serviceCategoryIDColumn.setCellValueFactory(new PropertyValueFactory<>("serviceCategoryID"));
         serviceCategoryNameColumn.setCellValueFactory(new PropertyValueFactory<>("serviceCategoryName"));
-        setupButtonColumn();
+        setupActionColumn();
 
         serviceCategoryTableView.setItems(items);
         serviceCategoryTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
     }
 
-
     // setup cho cột thao tác
-    private void setupButtonColumn() {
+    // THAM KHẢO
+    private void setupActionColumn() {
         Callback<TableColumn<ServiceCategory, Void>, TableCell<ServiceCategory, Void>> cellFactory = new Callback<>() {
             @Override
             public TableCell<ServiceCategory, Void> call(final TableColumn<ServiceCategory, Void> param) {
@@ -135,7 +134,7 @@ public class ServiceCategoryManagerController {
                             setGraphic(null);
                         } else {
 
-                            setGraphic(hBox); // Hiển thị HBox với các button
+                            setGraphic(hBox);
                         }
                     }
                 };
@@ -145,6 +144,7 @@ public class ServiceCategoryManagerController {
         actionColumn.setCellFactory(cellFactory);
     }
 
+    // Chức năng 1: Làm mới
     private void handleResetAction() {
         serviceCategoryNameTextField.setText("");
 
@@ -156,23 +156,37 @@ public class ServiceCategoryManagerController {
         updateBtn.setVisible(false);
     }
 
+    // Chức năng 2: Thêm
     private void handleAddAction() {
         try {
-            String serviceCategoryID = serviceCategoryIDTextField.getText();
-            String serviceCategoryName = serviceCategoryNameTextField.getText();
-
-            ServiceCategory serviceCategory = new ServiceCategory(serviceCategoryID, serviceCategoryName);
+            ServiceCategory serviceCategory = new ServiceCategory(
+                    serviceCategoryIDTextField.getText(),
+                    serviceCategoryNameTextField.getText()
+            );
 
             ServiceCategoryDAO.createData(serviceCategory);
             handleResetAction();
             loadData();
-
         } catch (IllegalArgumentException e) {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
     }
 
+    // Chức năng 3: Xóa
+    private void handleDeleteAction(ServiceCategory serviceCategory) {
+        DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn xóa loại dịch vụ này?");
 
+        dialog.onClose(buttonType -> {
+            if (buttonType == ButtonType.YES) {
+                ServiceCategoryDAO.deleteData(serviceCategory.getServiceCategoryID());
+
+                loadData();
+            }
+        });
+    }
+
+    // Chức năng 4: Cập nhật
+    // 4.1 Xử lý sự kiện khi kích hoạt chức năng cập nhật
     private void handleUpdateBtn(ServiceCategory serviceCategory) {
         serviceCategoryNameTextField.setText(serviceCategory.getServiceCategoryName());
         serviceCategoryNameTextField.requestFocus();
@@ -185,6 +199,7 @@ public class ServiceCategoryManagerController {
 
     }
 
+    // 4.2 Chức năng cập nhật
     private void handleUpdateAction() {
         try {
             String serviceCategoryID = serviceCategoryIDTextField.getText();
@@ -208,20 +223,11 @@ public class ServiceCategoryManagerController {
         }
     }
 
-    private void handleDeleteAction(ServiceCategory serviceCategory) {
-        DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn xóa loại dịch vụ này?");
-
-        dialog.onClose(buttonType -> {
-            if (buttonType == ButtonType.YES) {
-                ServiceCategoryDAO.deleteData(serviceCategory.getServiceCategoryID());
-
-                loadData();
-            }
-        });
-    }
-
+    // Chức năng 5: Tìm kiếm
     private void handleSearchAction() {
-        String searchText = serviceCategoryIDCBox.getValue();
+        serviceCategoryNameSearchField.setText("");
+
+        String searchText = serviceCategoryIDSearchField.getValue();
         List<ServiceCategory> serviceCategories;
 
         if (searchText == null || searchText.isEmpty()) {
@@ -236,6 +242,9 @@ public class ServiceCategoryManagerController {
         items.setAll(serviceCategories);
         serviceCategoryTableView.setItems(items);
     }
+
+
+
 
 
 }

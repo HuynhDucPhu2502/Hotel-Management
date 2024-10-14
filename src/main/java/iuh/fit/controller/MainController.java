@@ -35,6 +35,7 @@ public class MainController {
                 menuController.setAccount(account);
 
                 menuController.getServiceCategoryButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/ServiceCategoryManagerPanel.fxml"));
+                menuController.getHotelServiceButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml"));
             }
 
             menuBar.getChildren().clear();
