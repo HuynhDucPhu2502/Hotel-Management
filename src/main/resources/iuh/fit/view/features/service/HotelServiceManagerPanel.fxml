@@ -138,7 +138,7 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </TitledPane>
-            <TitledPane collapsible="falses" prefHeight="418.0" prefWidth="779.0" stylesheets="@../../../styles/TitlePanel.css" text="2. Danh sách loại dịch vụ" textFill="WHITE">
+            <TitledPane collapsible="falses" prefHeight="418.0" prefWidth="779.0" stylesheets="@../../../styles/TitlePanel.css" text="2. Danh sách dịch vụ" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -238,7 +238,7 @@
                               <TableColumn fx:id="hotelServiceIDColumn" maxWidth="-1.0" minWidth="100.0" prefWidth="100.0" text="Mã dịch vụ" />
                               <TableColumn fx:id="hotelServiceNameColumn" maxWidth="127.20001983642578" minWidth="150.0" prefWidth="127.20001983642578" text="Tên dịch vụ" />
                               <TableColumn fx:id="hotelServicePriceColumn" maxWidth="157.6000518798828" minWidth="100.0" prefWidth="87.20001220703125" text="Giá" />
-                              <TableColumn fx:id="serviceCategoryNameColumn" maxWidth="127.199951171875" minWidth="100.0" prefWidth="110.39996337890625" text="Loại dịch vụ" />
+                              <TableColumn fx:id="serviceCategoryNameColumn" maxWidth="127.199951171875" minWidth="150.0" prefWidth="110.39996337890625" text="Loại dịch vụ" />
                               <TableColumn fx:id="hotelServiceDescriptionColumn" maxWidth="236.79998779296875" minWidth="200.0" prefWidth="200.0" text="Mô tả" />
                               <TableColumn fx:id="actionColumn" maxWidth="167.99998168945308" minWidth="350.0" prefWidth="30.0" text="Thao tác" />
                            </columns>
