@@ -175,6 +175,14 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
+                              <HBox fx:id="hotelServiceContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                                 <children>
+                                    <Button fx:id="hotelServiceButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lý dịch vụ" />
+                                 </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </HBox>
                            </children>
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0">
@@ -325,6 +333,10 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="32.0" prefWidth="200.0">
+                           <children>
                               <Button fx:id="historyBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />

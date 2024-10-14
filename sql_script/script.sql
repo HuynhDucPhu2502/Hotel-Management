@@ -226,7 +226,8 @@ VALUES
     ('Invoice', 'INV-000003'),
     ('HistoryCheckin', 'HCI-000005'),
     ('HistoryCheckOut', 'HCO-000005'),
-    ('RoomReservationDetail', 'RRD-000005');
+    ('RoomReservationDetail', 'RRD-000005'),
+    ('HotelService', 'HS-000008')
 GO
 
 -- Thêm dữ liệu vào bảng Employee
@@ -266,7 +267,7 @@ VALUES
     ('HS-000003', N'Bữa sáng tự chọn', N'Bữa sáng buffet với đa dạng món ăn', 30.00, 'SC-000002'),
     ('HS-000004', N'Thức uống tại phòng', N'Phục vụ thức uống tại phòng', 20.00, 'SC-000002'),
     ('HS-000005', N'Dịch vụ Spa', N'Massage toàn thân và liệu trình chăm sóc da', 120.00, 'SC-000003'),
-    ('HS-000006', N'Chăm sóc trẻ em', N'Sử dụng phòng gym đầy đủ trang thiết bị', 80.00, 'SC-000003'),
+    ('HS-000006', N'Chăm sóc trẻ em', N'Chăm sóc trẻ dưới 10 tuổi', 80.00, 'SC-000003'),
     ('HS-000007', N'Thuê xe', N'Thuê xe di chuyển trong thành phố', 150.00, 'SC-000004');
 GO
 

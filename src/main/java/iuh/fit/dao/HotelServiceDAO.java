@@ -1,10 +1,7 @@
 package iuh.fit.dao;
 
 import iuh.fit.models.HotelService;
-import iuh.fit.models.Pricing;
-import iuh.fit.models.RoomCategory;
 import iuh.fit.models.ServiceCategory;
-import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 
 import java.sql.Connection;
@@ -16,13 +13,15 @@ import java.util.List;
 
 public class HotelServiceDAO {
     public static List<HotelService> getHotelService() {
-        ArrayList<HotelService> data = new ArrayList<HotelService>();
+        ArrayList<HotelService> data = new ArrayList<>();
         try (
                 Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ){
-            String sql = "SELECT a.hotelServiceId, a.serviceName, a.description, a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
-                    "FROM HotelService a inner join ServiceCategory b on a.serviceCategoryID = b.serviceCategoryID";
+            String sql = "SELECT a.hotelServiceId, a.serviceName, a.description, " +
+                    "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
+                    "FROM HotelService a inner join ServiceCategory b " +
+                    "ON a.serviceCategoryID = b.serviceCategoryID";
             ResultSet rs = statement.executeQuery(sql);
 
 
@@ -53,8 +52,10 @@ public class HotelServiceDAO {
 
     public static HotelService getDataByID(String hotelServiceId) {
 
-        String SQLQueryStatement = "SELECT a.hotelServiceId, a.serviceName, a.description, a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
-                "FROM HotelService a inner join ServiceCategory b on a.serviceCategoryID = b.serviceCategoryID " +
+        String SQLQueryStatement = "SELECT a.hotelServiceId, a.serviceName, a.description, " +
+                "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
+                "FROM HotelService a inner join ServiceCategory b " +
+                "ON a.serviceCategoryID = b.serviceCategoryID " +
                 "WHERE hotelServiceId = ?";
 
         try (
@@ -93,18 +94,47 @@ public class HotelServiceDAO {
     public static void createData(HotelService hotelService) {
         try (
                 Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(
-                        "INSERT INTO HotelService(hotelServiceId, serviceName, description, servicePrice, serviceCategoryID) " +
+                PreparedStatement insertStatement = connection.prepareStatement(
+                        "INSERT INTO HotelService(hotelServiceID, serviceName, description, servicePrice, serviceCategoryID) " +
                                 "VALUES(?, ?, ?, ?, ?)"
-                )
-        ){
-            preparedStatement.setString(1, hotelService.getServiceId());
-            preparedStatement.setString(2, hotelService.getServiceName());
-            preparedStatement.setString(3, hotelService.getDescription());
-            preparedStatement.setDouble(4, hotelService.getServicePrice());
-            preparedStatement.setString(5, hotelService.getServiceCategory().getServiceCategoryID());
+                );
 
-            preparedStatement.executeUpdate();
+                // Câu lệnh để lấy giá trị nextID từ bảng GlobalSequence
+                PreparedStatement selectSequenceStatement = connection.prepareStatement(
+                        "SELECT nextID FROM GlobalSequence WHERE tableName = ?"
+                );
+                // Câu lệnh để cập nhật giá trị nextID trong bảng GlobalSequence
+                PreparedStatement updateSequenceStatement = connection.prepareStatement(
+                        "UPDATE GlobalSequence SET nextID = ? WHERE tableName = ?"
+                )
+        ) {
+            insertStatement.setString(1, hotelService.getServiceId());
+            insertStatement.setString(2, hotelService.getServiceName());
+            insertStatement.setString(3, hotelService.getDescription());
+            insertStatement.setDouble(4, hotelService.getServicePrice());
+            insertStatement.setString(5, hotelService.getServiceCategory().getServiceCategoryID());
+            insertStatement.executeUpdate();
+
+            // Lấy giá trị nextID hiện tại từ bảng GlobalSequence cho HotelService
+            selectSequenceStatement.setString(1, "HotelService");
+            ResultSet rs = selectSequenceStatement.executeQuery();
+
+            if (rs.next()) {
+                String currentNextID = rs.getString("nextID");
+                String prefix = "HS-";  // prefix cho HotelService
+
+                // Tách phần số và tăng thêm 1
+                int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
+
+                // Định dạng lại phần số, đảm bảo luôn có 6 chữ số
+                String newNextID = prefix + String.format("%06d", nextIDNum);
+
+                // Cập nhật giá trị nextID trong bảng GlobalSequence
+                updateSequenceStatement.setString(1, newNextID);
+                updateSequenceStatement.setString(2, "HotelService");
+                updateSequenceStatement.executeUpdate();
+            }
+
         } catch (Exception exception) {
             exception.printStackTrace();
             System.exit(1);
@@ -133,7 +163,7 @@ public class HotelServiceDAO {
                         "UPDATE HotelService " +
                                 "SET serviceName = ?, description = ?, servicePrice = ?, serviceCategoryID = ? " +
                                 "WHERE hotelServiceID = ? "
-                );
+                )
         ){
             preparedStatement.setString(1, hotelService.getServiceName());
             preparedStatement.setString(2, hotelService.getDescription());
@@ -148,4 +178,94 @@ public class HotelServiceDAO {
         }
 
     }
+
+    public static List<HotelService> findDataByContainsId(String input) {
+        ArrayList<HotelService> data = new ArrayList<>();
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                            "SELECT a.hotelServiceId, a.serviceName, a.description, " +
+                                "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
+                                "FROM HotelService a inner join ServiceCategory b " +
+                                "ON a.serviceCategoryID = b.serviceCategoryID " +
+                                "WHERE LOWER(hotelServiceID) LIKE ?"
+                )
+        ) {
+            preparedStatement.setString(1, "%" + input + "%");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                HotelService hotelService = new HotelService();
+                ServiceCategory serviceCategory = new ServiceCategory();
+
+                hotelService.setServiceId(rs.getString(1));
+                hotelService.setServiceName(rs.getString(2));
+                hotelService.setDescription(rs.getString(3));
+                hotelService.setServicePrice(rs.getDouble(4));
+
+                serviceCategory.setServiceCategoryID(rs.getString(5));
+                serviceCategory.setServiceCategoryName(rs.getString(6));
+
+                hotelService.setServiceCategory(serviceCategory);
+
+                data.add(hotelService);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
+    }
+
+    public static List<String> getTopThreeID() {
+        ArrayList<String> data = new ArrayList<>();
+        try (
+                Connection connection = DBHelper.getConnection();
+                Statement statement = connection.createStatement()
+        ) {
+            String sql = "SELECT TOP 3 hotelServiceId " +
+                    "FROM HotelService " +
+                    "ORDER BY hotelServiceID DESC";
+            ResultSet rs = statement.executeQuery(sql);
+
+            while (rs.next()) {
+                data.add(rs.getString(1));
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
+    }
+
+
+    public static String getNextHotelServiceID() {
+        String res = "HS-000001";
+
+        try (
+
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "SELECT nextID " +
+                                "FROM GlobalSequence " +
+                                "WHERE tableName = ?"
+                )
+        ){
+            preparedStatement.setString(1, "HotelService");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                res = rs.getString(1);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return res;
+    }
+
+
 }

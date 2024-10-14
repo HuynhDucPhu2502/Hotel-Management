@@ -73,11 +73,12 @@ public class ErrorMessages {
     public static final String SERVICE_CATEGORY_INVALID_NAME = "Tên loại dịch vụ phải từ 3 đến 30 ký tự. Không ký tự đặc biệt và ký số";
 
     //HotelService
-    public static final String HOTEL_SERVICE_INVALID_ID_ISNULL = "Mã dịch vụ không được rỗng!!!";
-    public static final String HOTEL_SERVICE_INVALID_ID_FORMAT = "Mã dịch vụ phải theo định dạng HS-XXXXXX, với XXXXXX là dãy số!!!";
-    public static final String HOTEL_SERVICE_INVALID_NAME_ISNULL = "Tên dịch vụ không được rỗng!!!";
-    public static final String HOTEL_SERVICE_DESCRIPTION_ISNULL = "Mô tả dịch vụ không được rỗng!!!";
-    public static final String HOTEL_SERVICE_INVALID_PRICE = "Giá dịch vụ không được rỗng, phải lớn hơn 0!!!";
+    public static final String HOTEL_SERVICE_INVALID_ID_ISNULL = "Mã dịch vụ không được rỗng";
+    public static final String HOTEL_SERVICE_INVALID_ID_FORMAT = "Mã dịch vụ phải theo định dạng HS-XXXXXX, với X là dãy số";
+    public static final String HOTEL_SERVICE_INVALID_NAME_ISNULL = "Tên dịch vụ không được rỗng";
+    public static final String HOTEL_SERVICE_DESCRIPTION_ISNULL = "Mô tả dịch vụ không được rỗng";
+    public static final String HOTEL_SERVICE_INVALID_FORMAT = "Giá dịch vụ phải là một con số";
+    public static final String HOTEL_SERVICE_INVALID_PRICE = "Giá dịch vụ không được rỗng, phải lớn hơn 0";
 
     // RoomUsageService
     public static final String ROOM_USAGE_SERVICE_INVALID_ID_ISNULL = "Mã sử dụng dịch vụ phòng không được rỗng!!!";
