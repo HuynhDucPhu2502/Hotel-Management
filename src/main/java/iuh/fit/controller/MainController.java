@@ -5,13 +5,13 @@ import iuh.fit.models.Account;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 
 public class MainController {
     private Account account;
 
     @FXML
     private AnchorPane menuBar;
-    private MenuController menuController;
     @FXML
     private AnchorPane mainPanel;
 
@@ -30,7 +30,7 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/MenuPanel.fxml"));
             AnchorPane menuLayout = loader.load();
 
-            menuController = loader.getController();
+            MenuController menuController = loader.getController();
             if (menuController != null) {
                 menuController.setAccount(account);
 
