@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="0.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.TopController">
    <children>
-      <HBox prefHeight="50.0" prefWidth="970.0" style="-fx-background-color: RGB(70, 130, 180); -fx-alignment: center;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox minHeight="50.0" minWidth="800.0" style="-fx-background-color: RGB(70, 130, 180); -fx-alignment: center;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label fx:id="clockLabel" style="-fx-font-size: 25px; -fx-font-weight: bold" textFill="WHITE">
                <font>

@@ -1,3 +1,11 @@
+.button:hover {
+    -fx-background-color: RGB(63, 162, 246);
+}
+
+.button:pressed {
+    -fx-background-color: RGB(70, 130, 180);
+}
+
 .menu-bar-parent {
    -fx-background-color: RGB(70, 130, 180);
    -fx-text-fill: white;
