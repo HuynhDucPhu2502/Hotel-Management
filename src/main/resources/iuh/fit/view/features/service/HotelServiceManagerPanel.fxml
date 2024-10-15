@@ -150,7 +150,7 @@
                            <content>
                               <VBox fx:id="lowerBox" prefHeight="384.0" prefWidth="898.0" spacing="10.0">
                                  <children>
-                                    <GridPane prefHeight="86.0" prefWidth="799.0">
+                                    <GridPane minHeight="90.0">
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
