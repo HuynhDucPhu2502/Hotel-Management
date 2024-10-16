@@ -238,24 +238,21 @@
                                           </TextField>
                                        </children>
                                     </GridPane>
-                                    <TableView fx:id="hotelServiceTableView" prefHeight="240.0" prefWidth="799.0" stylesheets="@../../../styles/TableView.css">
+                                    <TableView fx:id="hotelServiceTableView" prefHeight="240.0" prefWidth="800.0" stylesheets="@../../../styles/TableView.css">
+                                       <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy>
+
                                        <columns>
-                                          <TableColumn fx:id="hotelServiceIDColumn" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Mã dịch vụ" />
-                                          <TableColumn fx:id="hotelServiceNameColumn" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Tên dịch vụ" />
-                                          <TableColumn fx:id="hotelServicePriceColumn" maxWidth="-1.0" minWidth="50.0" prefWidth="-1.0" text="Giá" />
-                                          <TableColumn fx:id="serviceCategoryNameColumn" maxWidth="-1.0" minWidth="100.0" prefWidth="-1.0" text="Loại dịch vụ" />
-                                          <TableColumn fx:id="hotelServiceDescriptionColumn" maxWidth="-1.0" minWidth="150.0" prefWidth="-1.0" text="Mô tả" />
-                                          <TableColumn fx:id="actionColumn" maxWidth="-1.0" minWidth="300.0" prefWidth="-1.0" text="Thao tác" />
+                                          <TableColumn fx:id="hotelServiceIDColumn" minWidth="100.0" text="Mã dịch vụ" />
+                                          <TableColumn fx:id="hotelServiceNameColumn" minWidth="100.0" text="Tên dịch vụ" />
+                                          <TableColumn fx:id="hotelServicePriceColumn" minWidth="100.0" text="Giá" />
+                                          <TableColumn fx:id="serviceCategoryNameColumn" minWidth="100.0" text="Loại dịch vụ" />
+                                          <TableColumn fx:id="hotelServiceDescriptionColumn" minWidth="150.0" text="Mô tả" />
+                                          <TableColumn fx:id="actionColumn" minWidth="300.0" prefWidth="300.0" text="Thao tác" />
                                        </columns>
-                                       <opaqueInsets>
-                                          <Insets />
-                                       </opaqueInsets>
+
                                        <VBox.margin>
                                           <Insets left="40.0" right="40.0" top="30.0" />
                                        </VBox.margin>
-                                       <columnResizePolicy>
-                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                       </columnResizePolicy>
                                     </TableView>
                                  </children>
                                  <opaqueInsets>

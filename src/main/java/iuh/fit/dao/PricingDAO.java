@@ -6,10 +6,7 @@ import iuh.fit.models.RoomCategory;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,11 +102,29 @@ public class PricingDAO {
             preparedStatement.setString(4, pricing.getRoomCategory().getRoomCategoryid());
 
             preparedStatement.executeUpdate();
+        } catch (SQLException sqlException) {
+            String sqlMessage = sqlException.getMessage();
+
+            if (sqlMessage.contains("Mỗi loại phòng chỉ được phép có 2 bản ghi")) {
+                throw new IllegalArgumentException(
+                        "Mỗi loại phòng chỉ được phép có 2 bản ghi trong Pricing (1 DAY và 1 HOUR)"
+                );
+
+            } else if (sqlException.getErrorCode() == 2627) {
+                throw new IllegalArgumentException(
+                        "Mỗi loại phòng chỉ được phép có 1 bản ghi cho mỗi đơn vị thời gian (DAY hoặc HOUR)."
+                );
+
+            } else {
+                sqlException.printStackTrace();
+                System.exit(1);
+            }
         } catch (Exception exception) {
             exception.printStackTrace();
             System.exit(1);
         }
     }
+
 
     public static void deleteData(String pricingID) {
         try (

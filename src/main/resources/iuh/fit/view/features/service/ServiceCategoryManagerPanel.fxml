@@ -36,6 +36,7 @@
                                  </font>
                               </Text>
                            </children>
+
                         </HBox>
                         <TitledPane collapsible="false" style="-fx-border-radius: 50; -fx-background-radius: 50;" stylesheets="@../../../styles/TitlePanel.css" text="1. Thêm/Cập nhật loại dịch vụ" textFill="WHITE">
                            <content>
@@ -160,19 +161,18 @@
                                           </TextField>
                                        </children>
                                     </GridPane>
-                                    <TableView fx:id="serviceCategoryTableView" prefHeight="265.0" prefWidth="789.0" stylesheets="@../../../styles/TableView.css">
-                                      <columns>
-                                        <TableColumn fx:id="serviceCategoryIDColumn" prefWidth="220.80002057552338" text="Mã loại dịch vụ" />
-                                        <TableColumn fx:id="serviceCategoryNameColumn" minWidth="0.0" prefWidth="343.9998474121094" text="Loại dịch vụ" />
-                                          <TableColumn fx:id="actionColumn" prefWidth="220.80002057552338" text="Thao tác" />
-                                      </columns>
-                                       <opaqueInsets>
-                                          <Insets />
-                                       </opaqueInsets>
-                                       <VBox.margin>
-                                          <Insets left="40.0" right="40.0" top="30.0" />
-                                       </VBox.margin>
+                                    <TableView fx:id="serviceCategoryTableView" prefHeight="265.0" prefWidth="500.0" stylesheets="@../../../styles/TableView.css">
+                                       <columnResizePolicy><TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+
+                                       <columns>
+                                          <TableColumn fx:id="serviceCategoryIDColumn" text="Mã loại dịch vụ" prefWidth="250.0" />
+
+                                          <TableColumn fx:id="serviceCategoryNameColumn" text="Loại dịch vụ" prefWidth="300.0" />
+
+                                          <TableColumn fx:id="actionColumn" text="Thao tác" prefWidth="250.0" />
+                                       </columns>
                                     </TableView>
+
                                  </children>
                                  <opaqueInsets>
                                     <Insets />
