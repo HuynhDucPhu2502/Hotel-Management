@@ -178,7 +178,7 @@ public class PricingManagerController {
         pricingIDTextField.setText(PricingDAO.getNextPricingID());
         priceTextField.setText("");
         if (!unitCBox.getItems().isEmpty()) unitCBox.getSelectionModel().selectFirst();
-        if (!roomCategoryCBox.getItems().isEmpty()) roomCategoryCBox.getSelectionModel().selectFirst();;
+        if (!roomCategoryCBox.getItems().isEmpty()) roomCategoryCBox.getSelectionModel().selectFirst();
 
         addBtn.setManaged(true);
         addBtn.setVisible(true);

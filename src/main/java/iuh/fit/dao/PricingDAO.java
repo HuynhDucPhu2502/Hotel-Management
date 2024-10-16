@@ -11,10 +11,10 @@ import java.util.List;
 
 public class PricingDAO {
     public static List<Pricing> getPricing() {
-        ArrayList<Pricing> data = new ArrayList<Pricing>();
+        ArrayList<Pricing> data = new ArrayList<>();
         try (
                 Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ){
             String sql = "SELECT a.pricingID, a.priceUnit, a.price, a.roomCategoryID, " +
                     "b.roomCategoryName, b.numberOfBed " +
