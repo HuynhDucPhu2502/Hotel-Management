@@ -5,7 +5,6 @@ import iuh.fit.models.Account;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
 
 public class MainController {
     private Account account;
@@ -34,8 +33,18 @@ public class MainController {
             if (menuController != null) {
                 menuController.setAccount(account);
 
+
+                // Employee
+                // Room
+                menuController.getPricingManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/PricingManagerPanel.fxml"));
+                // Service
                 menuController.getServiceCategoryButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/ServiceCategoryManagerPanel.fxml"));
                 menuController.getHotelServiceButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml"));
+                // Customer
+                // Account
+                // Statistics
+                // History
+
             }
 
             menuBar.getChildren().clear();

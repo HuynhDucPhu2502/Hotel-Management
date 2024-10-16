@@ -67,7 +67,6 @@ public class ServiceCategoryManagerController {
 
     }
 
-
     // Phương thức load dữ liệu lên giao diện
     private void loadData() {
         List<String> Ids = ServiceCategoryDAO.getTopThreeID();

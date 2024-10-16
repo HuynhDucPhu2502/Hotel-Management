@@ -28,7 +28,8 @@ public class ErrorMessages {
     public static final String ACC_INVALID_PASSWORD = "Mật khẩu phải từ 8 đến 30 ký tự\nCó ít nhất một chữ cái, một chữ số và một kí tự đặc biệt như !@#$%^&*()";
 
     // Pricing
-    public static final String PRICING_INVALID_PRICE = "Số tiền không được rỗng, phải lớn hơn 0";
+    public static final String PRICING_INVALID_PRICE = "Giá loại phòng không được rỗng, phải lớn hơn 0";
+    public static final String PRICING_INVALID_FORMAT = "Giá loại phòng phải là một con số";
     public static final String PRICING_INVALID_ID = "Mã giá phải theo định dạng P-XXXXXX, với X là ký số";
 
     // Room category

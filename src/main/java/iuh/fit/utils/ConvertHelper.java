@@ -46,7 +46,7 @@ public class ConvertHelper {
                 ? Position.MANAGER : Position.RECEPTIONIST;
     }
 
-    public static PriceUnit pricingConverter(String input) {
+    public static PriceUnit priceUnitConverter(String input) {
         if (!input.matches("(DAY|HOUR)"))
             throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_PRICE_UNIT);
 

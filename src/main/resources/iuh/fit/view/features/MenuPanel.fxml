@@ -110,7 +110,7 @@
             
                                              <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Phòng" textFill="WHITE" />
             
-                                             <ImageView fx:id="arrowUpForEmpBtn1" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="55">
+                                             <ImageView fx:id="arrowUpForRoom" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="55">
                                           <image>
                                              <Image url="@../../icons/arrow_down.png" />
                                           </image>
@@ -118,25 +118,9 @@
                                     </HBox>
                                  </graphic>
                               </Button>
-                              <HBox fx:id="buttonOneContainer1" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="pricingManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </HBox>
-                              <HBox fx:id="buttonTwoContainer1" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </HBox>
-                              <HBox fx:id="buttonThreeContainer1" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
+                                    <Button fx:id="pricingManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lý giá loại phòng" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
@@ -168,7 +152,7 @@
                                     </HBox>
                                  </graphic>
                               </Button>
-                              <HBox fx:id="serviceCategegoryContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="serviceCategoryContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
                                  <children>
                                     <Button fx:id="serviceCategoryButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" text="Quản lý loại dịch vụ">
                                        <styleClass>

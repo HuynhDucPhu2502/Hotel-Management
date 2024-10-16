@@ -101,18 +101,13 @@ public class HotelServiceManagerController {
         List<String> Ids = HotelServiceDAO.getTopThreeID();
         hotelServiceIDSearchField.getItems().setAll(Ids);
 
-        LinkedHashMap<String, String> serviceCategoriesMap = new LinkedHashMap<>(ServiceCategoryDAO
-                .getServiceCategory()
+        List<String> comboBoxItems = ServiceCategoryDAO.getServiceCategory()
                 .stream()
-                .collect(Collectors.toMap(
-                        ServiceCategory::getServiceCategoryID,
-                        ServiceCategory::getServiceCategoryName
-                )));
+                .map(serviceCategory -> serviceCategory.getServiceCategoryID()
+                        + " " + serviceCategory.getServiceCategoryName())
+                .collect(Collectors.toList());
 
-        ObservableList<String> comboBoxItems = serviceCategoriesMap.entrySet()
-                .stream()
-                .map(entry -> entry.getKey() + " " + entry.getValue())
-                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        ObservableList<String> observableComboBoxItems = FXCollections.observableArrayList(comboBoxItems);
 
         serviceCategoryCBox.getItems().setAll(comboBoxItems);
 
@@ -138,20 +133,10 @@ public class HotelServiceManagerController {
         setupHotelServiceDescriptionColumn();
         setupActionColumn();
 
-        // Sử dụng chính sách CONSTRAINED_RESIZE_POLICY để tự động điều chỉnh chiều rộng cột
+
         hotelServiceTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-        // Gán tỷ lệ chiều rộng cho các cột bằng nhau
-        hotelServiceIDColumn.prefWidthProperty().bind(hotelServiceTableView.widthProperty().multiply(0.2)); // 20% độ rộng
-        hotelServiceNameColumn.prefWidthProperty().bind(hotelServiceTableView.widthProperty().multiply(0.2)); // 20% độ rộng
-        hotelServicePriceColumn.prefWidthProperty().bind(hotelServiceTableView.widthProperty().multiply(0.2)); // 20% độ rộng
-        serviceCategoryNameColumn.prefWidthProperty().bind(hotelServiceTableView.widthProperty().multiply(0.2)); // 20% độ rộng
-        hotelServiceDescriptionColumn.prefWidthProperty().bind(hotelServiceTableView.widthProperty().multiply(0.2)); // 20% độ rộng
-
-        // Đặt lại items cho bảng
         hotelServiceTableView.setItems(items);
     }
-
 
     // setup cho cột mô tả
     // THAM KHẢO
@@ -246,7 +231,6 @@ public class HotelServiceManagerController {
 
         actionColumn.setCellFactory(cellFactory);
     }
-
 
     // Chức năng 1: Làm mới
     private void handleResetAction() {

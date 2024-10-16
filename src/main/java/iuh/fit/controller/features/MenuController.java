@@ -42,14 +42,14 @@ public class MenuController {
     // Room
     @FXML
     private Button roomBtn;
+
     @FXML
-    private HBox buttonOneContainer1;
+    private HBox pricingManagerContainer;
     @FXML
-    private HBox buttonTwoContainer1;
+    private Button pricingManagerButton;
+
     @FXML
-    private HBox buttonThreeContainer1;
-    @FXML
-    private ImageView arrowUpForEmpBtn1;
+    private ImageView arrowUpForRoom;
 
 //  =====================================================
     // Service
@@ -57,7 +57,7 @@ public class MenuController {
     private Button serviceBtn;
 
     @FXML
-    private HBox serviceCategegoryContainer;
+    private HBox serviceCategoryContainer;
     @FXML
     private Button serviceCategoryButton;
 
@@ -145,8 +145,8 @@ public class MenuController {
         buttonStates.put("history", false);
 
         employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer, buttonTwoContainer, buttonThreeContainer), arrowUpForEmpBtn, "employee"));
-        roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer1, buttonTwoContainer1, buttonThreeContainer1), arrowUpForEmpBtn1, "room"));
-        serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategegoryContainer, hotelServiceContainer), arrowUpForService, "service"));
+        roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer), arrowUpForRoom, "room"));
+        serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryContainer, hotelServiceContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21, buttonTwoContainer21, buttonThreeContainer21), arrowUpForEmpBtn21, "customer"));
         accountBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer211, buttonTwoContainer211, buttonThreeContainer211), arrowUpForEmpBtn211, "account"));
         statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer2111, buttonTwoContainer2111, buttonThreeContainer2111), arrowUpForEmpBtn2111, "statistics"));
@@ -186,6 +186,10 @@ public class MenuController {
 
     public Button getHotelServiceButton() {
         return hotelServiceButton;
+    }
+
+    public Button getPricingManagerButton() {
+        return pricingManagerButton;
     }
 }
 
