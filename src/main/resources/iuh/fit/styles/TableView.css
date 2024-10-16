@@ -13,3 +13,7 @@
     -fx-font-size: 16px;
 }
 
+.scroll-pane > .viewport {
+    -fx-hbar-policy: always;
+}
+

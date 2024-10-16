@@ -81,7 +81,9 @@ CREATE TABLE Pricing (
     priceUnit NVARCHAR(15) NOT NULL CHECK (priceUnit IN ('DAY', 'HOUR')),  
     price MONEY NOT NULL,  
     roomCategoryID NVARCHAR(15) NOT NULL,
-    FOREIGN KEY (roomCategoryID) REFERENCES RoomCategory(roomCategoryID)  
+    FOREIGN KEY (roomCategoryID) REFERENCES RoomCategory(roomCategoryID),
+    
+    CONSTRAINT UQ_roomCategoryID_priceUnit UNIQUE (roomCategoryID, priceUnit)
 );
 GO
 
@@ -395,4 +397,26 @@ VALUES
     ('RRD-000002', '2024-10-03 15:00:00', 'ROOM-000002', 'RF-000002'),
     ('RRD-000003', '2024-10-04 13:00:00', 'ROOM-000003', 'RF-000003'),
     ('RRD-000004', '2024-10-05 12:00:00', 'ROOM-000004', 'RF-000004');
+GO
+
+-- ===================================================================================
+-- 3. TRIGGER 
+-- ===================================================================================
+-- Tạo trigger để giới hạn mỗi roomCategoryID chỉ có 2 bản ghi trong bảng Pricing
+CREATE TRIGGER trg_LimitPricingForRoomCategory
+ON Pricing
+AFTER INSERT, UPDATE
+AS
+BEGIN
+    IF EXISTS (
+        SELECT roomCategoryID
+        FROM Pricing
+        GROUP BY roomCategoryID
+        HAVING COUNT(*) > 2
+    )
+    BEGIN
+        RAISERROR('Mỗi loại phòng chỉ được phép có 2 bản ghi trong Pricing (1 DAY và 1 HOUR)', 16, 1);
+        ROLLBACK TRANSACTION;
+    END
+END;
 GO

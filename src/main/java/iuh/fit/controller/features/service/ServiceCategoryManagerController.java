@@ -94,6 +94,7 @@ public class ServiceCategoryManagerController {
     // setup cho cột thao tác
     // THAM KHẢO
     private void setupActionColumn() {
+        actionColumn.setMinWidth(300);
         Callback<TableColumn<ServiceCategory, Void>, TableCell<ServiceCategory, Void>> cellFactory = new Callback<>() {
             @Override
             public TableCell<ServiceCategory, Void> call(final TableColumn<ServiceCategory, Void> param) {
@@ -122,7 +123,6 @@ public class ServiceCategoryManagerController {
                             handleDeleteAction(serviceCategory);
                         });
 
-                        // Set alignment cho HBox
                         hBox.setAlignment(Pos.CENTER);
                         hBox.getChildren().addAll(updateButton, deleteButton);
                     }
