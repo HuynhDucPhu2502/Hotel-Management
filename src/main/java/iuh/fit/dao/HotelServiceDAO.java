@@ -17,27 +17,32 @@ public class HotelServiceDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement()
-        ){
+        ) {
             String sql = "SELECT a.hotelServiceId, a.serviceName, a.description, " +
                     "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
-                    "FROM HotelService a inner join ServiceCategory b " +
+                    "FROM HotelService a LEFT JOIN ServiceCategory b " +
                     "ON a.serviceCategoryID = b.serviceCategoryID";
             ResultSet rs = statement.executeQuery(sql);
 
-
             while (rs.next()) {
                 HotelService hotelService = new HotelService();
-                ServiceCategory serviceCategory = new ServiceCategory();
 
                 hotelService.setServiceId(rs.getString(1));
                 hotelService.setServiceName(rs.getString(2));
                 hotelService.setDescription(rs.getString(3));
                 hotelService.setServicePrice(rs.getDouble(4));
 
-                serviceCategory.setServiceCategoryID(rs.getString(5));
-                serviceCategory.setServiceCategoryName(rs.getString(6));
+                String serviceCategoryID = rs.getString(5);
+                String serviceCategoryName = rs.getString(6);
 
-                hotelService.setServiceCategory(serviceCategory);
+                if (serviceCategoryID != null) {
+                    ServiceCategory serviceCategory = new ServiceCategory();
+                    serviceCategory.setServiceCategoryID(serviceCategoryID);
+                    serviceCategory.setServiceCategoryName(serviceCategoryName);
+                    hotelService.setServiceCategory(serviceCategory);
+                } else {
+                    hotelService.setServiceCategory(null);
+                }
 
                 data.add(hotelService);
             }
@@ -184,9 +189,9 @@ public class HotelServiceDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                            "SELECT a.hotelServiceId, a.serviceName, a.description, " +
+                        "SELECT a.hotelServiceId, a.serviceName, a.description, " +
                                 "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
-                                "FROM HotelService a inner join ServiceCategory b " +
+                                "FROM HotelService a LEFT JOIN ServiceCategory b " +
                                 "ON a.serviceCategoryID = b.serviceCategoryID " +
                                 "WHERE LOWER(hotelServiceID) LIKE ?"
                 )
@@ -196,17 +201,23 @@ public class HotelServiceDAO {
 
             while (rs.next()) {
                 HotelService hotelService = new HotelService();
-                ServiceCategory serviceCategory = new ServiceCategory();
 
                 hotelService.setServiceId(rs.getString(1));
                 hotelService.setServiceName(rs.getString(2));
                 hotelService.setDescription(rs.getString(3));
                 hotelService.setServicePrice(rs.getDouble(4));
 
-                serviceCategory.setServiceCategoryID(rs.getString(5));
-                serviceCategory.setServiceCategoryName(rs.getString(6));
+                String serviceCategoryID = rs.getString(5);
+                String serviceCategoryName = rs.getString(6);
 
-                hotelService.setServiceCategory(serviceCategory);
+                if (serviceCategoryID != null) {
+                    ServiceCategory serviceCategory = new ServiceCategory();
+                    serviceCategory.setServiceCategoryID(serviceCategoryID);
+                    serviceCategory.setServiceCategoryName(serviceCategoryName);
+                    hotelService.setServiceCategory(serviceCategory);
+                } else {
+                    hotelService.setServiceCategory(null);
+                }
 
                 data.add(hotelService);
             }

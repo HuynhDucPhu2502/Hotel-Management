@@ -13,10 +13,9 @@ import javafx.scene.text.Text;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class MenuController {
-
-    private Account account;
 
     @FXML
     private Circle avatar;
@@ -131,7 +130,7 @@ public class MenuController {
 
     @FXML
     public void initialize() {
-        Image image = new Image(getClass().getResource("/iuh/fit/imgs/default_avatar.png").toExternalForm());
+        Image image = new Image(Objects.requireNonNull(getClass().getResource("/iuh/fit/imgs/default_avatar.png")).toExternalForm());
         avatar.setFill(new ImagePattern(image));
 
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -174,7 +173,6 @@ public class MenuController {
     }
 
     public void setAccount(Account account) {
-        this.account = account;
 
         employeePositionText.setText(account.getEmployee().getPosition().toString());
         employeeFullNameText.setText(account.getEmployee().getFullName());

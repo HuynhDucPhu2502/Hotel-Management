@@ -18,7 +18,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -103,13 +102,15 @@ public class HotelServiceManagerController {
 
         List<String> comboBoxItems = ServiceCategoryDAO.getServiceCategory()
                 .stream()
-                .map(serviceCategory -> serviceCategory.getServiceCategoryID()
-                        + " " + serviceCategory.getServiceCategoryName())
+                .map(serviceCategory -> {
+                    String categoryName = serviceCategory.getServiceCategoryName();
+                    return serviceCategory.getServiceCategoryID() +
+                            " " + (categoryName != null ? categoryName : "KHÔNG CÓ");
+                })
                 .collect(Collectors.toList());
 
         ObservableList<String> observableComboBoxItems = FXCollections.observableArrayList(comboBoxItems);
-
-        serviceCategoryCBox.getItems().setAll(comboBoxItems);
+        serviceCategoryCBox.getItems().setAll(observableComboBoxItems);
 
         if (!serviceCategoryCBox.getItems().isEmpty()) {
             serviceCategoryCBox.getSelectionModel().selectFirst();
@@ -126,15 +127,18 @@ public class HotelServiceManagerController {
         hotelServiceIDColumn.setCellValueFactory(new PropertyValueFactory<>("serviceId"));
         hotelServiceNameColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
         hotelServicePriceColumn.setCellValueFactory(new PropertyValueFactory<>("servicePrice"));
-        serviceCategoryNameColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getServiceCategory().getServiceCategoryName())
-        );
+
+        serviceCategoryNameColumn.setCellValueFactory(data -> {
+            ServiceCategory category = data.getValue().getServiceCategory();
+            String categoryName = (category != null && category.getServiceCategoryName() != null)
+                    ? category.getServiceCategoryName()
+                    : "KHÔNG CÓ";
+            return new SimpleStringProperty(categoryName);
+        });
 
         setupHotelServiceDescriptionColumn();
         setupActionColumn();
 
-
-        hotelServiceTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         hotelServiceTableView.setItems(items);
     }
 
@@ -291,10 +295,13 @@ public class HotelServiceManagerController {
         serviceNameTextField.setText(hotelService.getServiceName());
         servicePriceTextField.setText(String.valueOf(hotelService.getServicePrice()));
 
-        String serviceCategoryDisplay = hotelService.getServiceCategory().getServiceCategoryID()
-                + " " + hotelService.getServiceCategory().getServiceCategoryName();
-
-        serviceCategoryCBox.getSelectionModel().select(serviceCategoryDisplay);
+        if (hotelService.getServiceCategory() != null) {
+            String serviceCategoryDisplay = hotelService.getServiceCategory().getServiceCategoryID()
+                    + " " + hotelService.getServiceCategory().getServiceCategoryName();
+            serviceCategoryCBox.getSelectionModel().select(serviceCategoryDisplay);
+        } else {
+            serviceCategoryCBox.getSelectionModel().clearSelection();
+        }
 
         descriptionTextField.setText(hotelService.getDescription());
         serviceNameTextField.requestFocus();
@@ -308,7 +315,12 @@ public class HotelServiceManagerController {
     // 4.2 Chức năng cập nhật
     private void handleUpdateAction() {
         try {
-            String selectedService = serviceCategoryCBox.getSelectionModel().getSelectedItem();
+            String selectedService;
+
+            if (!serviceCategoryCBox.getSelectionModel().isEmpty())
+                selectedService = serviceCategoryCBox.getSelectionModel().getSelectedItem();
+            else throw new IllegalArgumentException("Loại dịch vụ không được trống");
+
             String serviceCategoryId = selectedService.split(" ")[0];
             ServiceCategory serviceCategory = ServiceCategoryDAO.getDataByID(serviceCategoryId);
 
@@ -353,7 +365,11 @@ public class HotelServiceManagerController {
                 HotelService hotelService = hotelServices.getFirst();
                 hotelSerivceNameSearchField.setText(hotelService.getServiceName());
                 priceSearchField.setText(String.valueOf(hotelService.getServicePrice()));
-                serviceCategoryNameSearchField.setText(hotelService.getServiceCategory().getServiceCategoryName());
+                String serviceCategoryName = (hotelService.getServiceCategory() != null &&
+                        hotelService.getServiceCategory().getServiceCategoryName() != null)
+                        ? hotelService.getServiceCategory().getServiceCategoryName()
+                        : "KHÔNG CÓ";
+                serviceCategoryNameSearchField.setText(serviceCategoryName);
                 descriptionSearchField.setText(hotelService.getDescription());
             }
         }
