@@ -152,9 +152,9 @@
                                     </HBox>
                                  </graphic>
                               </Button>
-                              <HBox fx:id="serviceCategoryContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="serviceCategoryManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
                                  <children>
-                                    <Button fx:id="serviceCategoryButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" text="Quản lý loại dịch vụ">
+                                    <Button fx:id="serviceCategoryManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" text="Quản lý loại dịch vụ">
                                        <styleClass>
                                           <String fx:value="menu-bar-child" />
                                           <String fx:value="button" />
@@ -164,9 +164,17 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="hotelServiceContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="hotelServiceManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
                                  <children>
-                                    <Button fx:id="hotelServiceButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lý dịch vụ" />
+                                    <Button fx:id="hotelServiceManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lý dịch vụ" />
+                                 </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </HBox>
+                              <HBox fx:id="hotelServiceSearchingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                                 <children>
+                                    <Button fx:id="hotelServiceSearchingButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Tìm kiếm dịch vụ" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
