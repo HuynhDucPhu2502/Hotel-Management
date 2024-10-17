@@ -54,15 +54,15 @@ public class HotelServiceManagerController {
     @FXML
     private TableView<HotelService> hotelServiceTableView;
     @FXML
-    private TableColumn<HotelService, String> hotelServiceIDColumn;
+    private TableColumn<HotelService, String> serviceIDColumn;
     @FXML
-    private TableColumn<HotelService, String> hotelServiceNameColumn;
+    private TableColumn<HotelService, String> serviceNameColumn;
     @FXML
-    private TableColumn<HotelService, String> hotelServicePriceColumn;
+    private TableColumn<HotelService, String> priceColumn;
     @FXML
-    private TableColumn<HotelService, String> serviceCategoryNameColumn;
+    private TableColumn<HotelService, String> serviceCategoryColumn;
     @FXML
-    private TableColumn<HotelService, String> hotelServiceDescriptionColumn;
+    private TableColumn<HotelService, String> descriptionColumn;
     @FXML
     private TableColumn<HotelService, Void> actionColumn;
 
@@ -124,11 +124,11 @@ public class HotelServiceManagerController {
 
     // Phương thức đổ dữ liệu vào bảng
     private void setupTable() {
-        hotelServiceIDColumn.setCellValueFactory(new PropertyValueFactory<>("serviceId"));
-        hotelServiceNameColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
-        hotelServicePriceColumn.setCellValueFactory(new PropertyValueFactory<>("servicePrice"));
+        serviceIDColumn.setCellValueFactory(new PropertyValueFactory<>("serviceId"));
+        serviceNameColumn.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("servicePrice"));
 
-        serviceCategoryNameColumn.setCellValueFactory(data -> {
+        serviceCategoryColumn.setCellValueFactory(data -> {
             ServiceCategory category = data.getValue().getServiceCategory();
             String categoryName = (category != null && category.getServiceCategoryName() != null)
                     ? category.getServiceCategoryName()
@@ -145,8 +145,8 @@ public class HotelServiceManagerController {
     // setup cho cột mô tả
     // THAM KHẢO
     private void setupHotelServiceDescriptionColumn() {
-        hotelServiceDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-        hotelServiceDescriptionColumn.setCellFactory(column -> new TableCell<>() {
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        descriptionColumn.setCellFactory(column -> new TableCell<>() {
             private final Text text = new Text();
 
             @Override
@@ -158,7 +158,7 @@ public class HotelServiceManagerController {
                     setStyle(null);
                 } else {
                     text.setText(item);
-                    text.wrappingWidthProperty().bind(hotelServiceDescriptionColumn.widthProperty());
+                    text.wrappingWidthProperty().bind(descriptionColumn.widthProperty());
                     setGraphic(text);
 
                     TableRow<?> currentRow = getTableRow();

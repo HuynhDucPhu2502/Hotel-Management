@@ -128,7 +128,7 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <VBox.margin>
-                                          <Insets left="40.0" right="40.0" />
+                                          <Insets />
                                        </VBox.margin>
                                        <children>
                                           <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);">
@@ -162,14 +162,14 @@
                                        </children>
                                     </GridPane>
                                     <TableView fx:id="serviceCategoryTableView" prefHeight="265.0" prefWidth="500.0" stylesheets="@../../../styles/TableView.css">
-                                       <columnResizePolicy><TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+                                       <columnResizePolicy><TableView fx:constant="UNCONSTRAINED_RESIZE_POLICY" /></columnResizePolicy>
 
                                        <columns>
-                                          <TableColumn fx:id="serviceCategoryIDColumn" text="Mã loại dịch vụ" prefWidth="250.0" />
+                                          <TableColumn fx:id="serviceCategoryIDColumn" prefWidth="250.0" text="Mã loại dịch vụ" />
 
-                                          <TableColumn fx:id="serviceCategoryNameColumn" text="Loại dịch vụ" prefWidth="300.0" />
+                                          <TableColumn fx:id="serviceCategoryNameColumn" prefWidth="300.0" text="Loại dịch vụ" />
 
-                                          <TableColumn fx:id="actionColumn" text="Thao tác" prefWidth="250.0" />
+                                          <TableColumn fx:id="actionColumn" prefWidth="250.0" text="Thao tác" />
                                        </columns>
                                     </TableView>
 

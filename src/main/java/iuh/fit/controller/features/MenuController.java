@@ -56,14 +56,19 @@ public class MenuController {
     private Button serviceBtn;
 
     @FXML
-    private HBox serviceCategoryContainer;
+    private HBox serviceCategoryManagerContainer;
     @FXML
-    private Button serviceCategoryButton;
+    private Button serviceCategoryManagerButton;
 
     @FXML
-    private HBox hotelServiceContainer;
+    private HBox hotelServiceManagerContainer;
     @FXML
-    private Button hotelServiceButton;
+    private Button hotelServiceManagerButton;
+
+    @FXML
+    private HBox hotelServiceSearchingContainer;
+    @FXML
+    private Button hotelServiceSearchingButton;
 
     @FXML
     private ImageView arrowUpForService;
@@ -145,7 +150,7 @@ public class MenuController {
 
         employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer, buttonTwoContainer, buttonThreeContainer), arrowUpForEmpBtn, "employee"));
         roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer), arrowUpForRoom, "room"));
-        serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryContainer, hotelServiceContainer), arrowUpForService, "service"));
+        serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryManagerContainer, hotelServiceManagerContainer, hotelServiceSearchingContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21, buttonTwoContainer21, buttonThreeContainer21), arrowUpForEmpBtn21, "customer"));
         accountBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer211, buttonTwoContainer211, buttonThreeContainer211), arrowUpForEmpBtn211, "account"));
         statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer2111, buttonTwoContainer2111, buttonThreeContainer2111), arrowUpForEmpBtn2111, "statistics"));
@@ -178,16 +183,18 @@ public class MenuController {
         employeeFullNameText.setText(account.getEmployee().getFullName());
     }
 
-    public Button getServiceCategoryButton() {
-        return serviceCategoryButton;
+    public Button getServiceCategoryManagerButton() {
+        return serviceCategoryManagerButton;
     }
 
-    public Button getHotelServiceButton() {
-        return hotelServiceButton;
+    public Button getHotelServiceManagerButton() {
+        return hotelServiceManagerButton;
     }
 
     public Button getPricingManagerButton() {
         return pricingManagerButton;
     }
+
+    public Button getHotelServiceSearchingButton() {return hotelServiceSearchingButton;}
 }
 

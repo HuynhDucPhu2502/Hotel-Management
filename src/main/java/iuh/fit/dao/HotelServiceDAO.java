@@ -69,24 +69,29 @@ public class HotelServiceDAO {
         ) {
 
             preparedStatement.setString(1, hotelServiceId);
+            ResultSet rs = preparedStatement.executeQuery();
 
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                if (rs.next()) {
-                    HotelService hotelService = new HotelService();
+            if (rs.next()) {
+                HotelService hotelService = new HotelService();
+
+                hotelService.setServiceId(rs.getString(1));
+                hotelService.setServiceName(rs.getString(2));
+                hotelService.setDescription(rs.getString(3));
+                hotelService.setServicePrice(rs.getDouble(4));
+
+                String serviceCategoryID = rs.getString(5);
+                String serviceCategoryName = rs.getString(6);
+
+                if (serviceCategoryID != null) {
                     ServiceCategory serviceCategory = new ServiceCategory();
-
-                    hotelService.setServiceId(rs.getString(1));
-                    hotelService.setServiceName(rs.getString(2));
-                    hotelService.setDescription(rs.getString(3));
-                    hotelService.setServicePrice(rs.getDouble(4));
-
-                    serviceCategory.setServiceCategoryID(rs.getString(5));
-                    serviceCategory.setServiceCategoryName(rs.getString(6));
-
+                    serviceCategory.setServiceCategoryID(serviceCategoryID);
+                    serviceCategory.setServiceCategoryName(serviceCategoryName);
                     hotelService.setServiceCategory(serviceCategory);
-
-                    return hotelService;
+                } else {
+                    hotelService.setServiceCategory(null);
                 }
+
+                return hotelService;
             }
 
         } catch (Exception e) {
@@ -251,7 +256,6 @@ public class HotelServiceDAO {
         return data;
     }
 
-
     public static String getNextHotelServiceID() {
         String res = "HS-000001";
 
@@ -277,6 +281,73 @@ public class HotelServiceDAO {
 
         return res;
     }
+
+    public List<HotelService> searchHotelServices(
+            String hotelServiceID, String serviceName,
+            Double minPrice, Double maxPrice, String serviceCategoryID) {
+
+        List<HotelService> data = new ArrayList<>();
+
+        String sql = "SELECT a.hotelServiceID, a.serviceName, a.description, " +
+                "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
+                "FROM HotelService a " +
+                "LEFT JOIN ServiceCategory b ON a.serviceCategoryID = b.serviceCategoryID " +
+                "WHERE (a.hotelServiceID = ? OR ? IS NULL) AND " +
+                "(a.serviceName LIKE ? OR ? IS NULL) AND " +
+                "(a.servicePrice >= ? OR ? IS NULL) AND " +
+                "(a.servicePrice <= ? OR ? IS NULL) AND " +
+                "(a.serviceCategoryID = ? OR ? IS NULL)";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+
+            preparedStatement.setString(1, hotelServiceID);
+            preparedStatement.setString(2, hotelServiceID);
+            preparedStatement.setString(3, "%" + serviceName + "%");
+            preparedStatement.setString(4, serviceName);
+            preparedStatement.setObject(5, minPrice);
+            preparedStatement.setObject(6, minPrice);
+            preparedStatement.setObject(7, maxPrice);
+            preparedStatement.setObject(8, maxPrice);
+            preparedStatement.setString(9, serviceCategoryID);
+            preparedStatement.setString(10, serviceCategoryID);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                HotelService hotelService = new HotelService();
+                hotelService.setServiceId(rs.getString("hotelServiceID"));
+                hotelService.setServiceName(rs.getString("serviceName"));
+                hotelService.setDescription(rs.getString("description"));
+                hotelService.setServicePrice(rs.getDouble("servicePrice"));
+
+                String categoryId = rs.getString("serviceCategoryID");
+                String categoryName = rs.getString("serviceCategoryName");
+
+                if (categoryId != null) {
+                    ServiceCategory category = new ServiceCategory();
+                    category.setServiceCategoryID(categoryId);
+                    category.setServiceCategoryName(categoryName);
+                    hotelService.setServiceCategory(category);
+                } else {
+                    hotelService.setServiceCategory(null);
+                }
+
+                data.add(hotelService);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
+    }
+
+
+
+
 
 
 }
