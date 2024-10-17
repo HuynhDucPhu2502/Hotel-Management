@@ -56,16 +56,22 @@ CREATE TABLE ServiceCategory (
 );
 GO
 
--- Tạo bảng HotelService
+-- Tạo bảng HotelService 
 CREATE TABLE HotelService (
     hotelServiceId NVARCHAR(15) NOT NULL PRIMARY KEY,
     serviceName NVARCHAR(50) NOT NULL,
     description NVARCHAR(255) NOT NULL,
     servicePrice MONEY NOT NULL,
-    serviceCategoryID NVARCHAR(15) NOT NULL,
-    FOREIGN KEY (serviceCategoryID) REFERENCES ServiceCategory(serviceCategoryID)
+    serviceCategoryID NVARCHAR(15) NULL,  -- Cho phép NULL
+
+    CONSTRAINT FK_HotelService_ServiceCategory
+        FOREIGN KEY (serviceCategoryID) 
+        REFERENCES ServiceCategory(serviceCategoryID)
+        ON DELETE SET NULL     
+        ON UPDATE CASCADE      
 );
 GO
+
 
 -- Tạo bảng RoomCategory
 CREATE TABLE RoomCategory (
@@ -420,3 +426,4 @@ BEGIN
     END
 END;
 GO
+

@@ -20,7 +20,7 @@ public class TopController {
     @FXML
     private Button logoutBtn;
 
-    private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     @FXML
     public void initialize() {

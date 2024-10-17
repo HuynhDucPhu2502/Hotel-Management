@@ -80,9 +80,6 @@ public class HotelService {
     }
 
     public void setServiceCategory(ServiceCategory serviceCategory) {
-        if (serviceCategory == null) {
-            throw new IllegalArgumentException(ErrorMessages.NULL_SERVICECATEGORY);
-        }
         this.serviceCategory = serviceCategory;
     }
 
