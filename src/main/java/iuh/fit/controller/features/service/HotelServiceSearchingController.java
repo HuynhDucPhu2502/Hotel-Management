@@ -10,15 +10,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import javafx.util.Callback;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class HotelServiceSearchingController {
@@ -48,8 +44,6 @@ public class HotelServiceSearchingController {
     private TableColumn<HotelService, String> serviceCategoryColumn;
     @FXML
     private TableColumn<HotelService, String> descriptionColumn;
-    @FXML
-    private TableColumn<HotelService, Void> actionColumn;
 
     // Buttons
     @FXML
