@@ -108,7 +108,6 @@ public class HotelServiceSearchingController {
         });
 
         setupHotelServiceDescriptionColumn();
-        setupActionColumn();
 
         hotelServiceTableView.setItems(items);
     }
@@ -159,51 +158,6 @@ public class HotelServiceSearchingController {
         });
     }
 
-    // setup cho cột thao tác
-    // THAM KHẢO
-    private void setupActionColumn() {
-        Callback<TableColumn<HotelService, Void>, TableCell<HotelService, Void>> cellFactory = new Callback<>() {
-            @Override
-            public TableCell<HotelService, Void> call(final TableColumn<HotelService, Void> param) {
-                return new TableCell<>() {
-
-                    private final Button updateButton = new Button("Cập nhật");
-                    private final Button deleteButton = new Button("Xóa");
-                    private final HBox hBox = new HBox(10);
-
-                    {
-                        updateButton.getStyleClass().add("button-update");
-                        deleteButton.getStyleClass().add("button-delete");
-
-                        hBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/Button.css")).toExternalForm());
-
-                        updateButton.setOnAction(event -> {
-                            HotelService hotelService = getTableView().getItems().get(getIndex());
-                        });
-
-                        deleteButton.setOnAction(event -> {
-                            HotelService hotelService = getTableView().getItems().get(getIndex());
-                        });
-
-                        hBox.setAlignment(Pos.CENTER);
-                        hBox.getChildren().addAll(updateButton, deleteButton);
-                    }
-
-                    @Override
-                    protected void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(hBox);
-                        }
-                    }
-                };
-            }
-        };
-
-        actionColumn.setCellFactory(cellFactory);
-    }
 
     private void handleResetAction() {
         serviceIDSearchField.setText("");
