@@ -35,7 +35,6 @@ public class PricingManagerController {
     @FXML
     private TextField roomCategorySearchField;
 
-
     // Input Fields
     @FXML
     private TextField pricingIDTextField;
@@ -96,7 +95,7 @@ public class PricingManagerController {
 
         List<String> comboBoxItems = RoomCategoryDAO.getRoomCategory()
                 .stream()
-                .map(roomCategory -> roomCategory.getRoomCategoryid()
+                .map(roomCategory -> roomCategory.getRoomCategoryID()
                         + " " + roomCategory.getRoomCategoryName())
                 .collect(Collectors.toList());
 
@@ -230,7 +229,7 @@ public class PricingManagerController {
 
         unitCBox.getSelectionModel().select(pricing.getPriceUnit().name());
 
-        String roomCategoryDisplay = pricing.getRoomCategory().getRoomCategoryid() + " " +
+        String roomCategoryDisplay = pricing.getRoomCategory().getRoomCategoryID() + " " +
                 pricing.getRoomCategory().getRoomCategoryName();
         roomCategoryCBox.getSelectionModel().select(roomCategoryDisplay);
 

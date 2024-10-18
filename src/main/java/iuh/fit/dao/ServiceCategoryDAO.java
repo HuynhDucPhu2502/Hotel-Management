@@ -2,6 +2,7 @@ package iuh.fit.dao;
 
 import iuh.fit.models.ServiceCategory;
 import iuh.fit.utils.DBHelper;
+import iuh.fit.utils.GlobalConstants;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -92,7 +93,7 @@ public class ServiceCategoryDAO {
 
             if (rs.next()) {
                 String currentNextID = rs.getString("nextID");
-                String prefix = "SC-";
+                String prefix = GlobalConstants.SERVICECATEGORY_PREFIX + "-";
 
                 // tách phần số và tăng thêm 1
                 int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;

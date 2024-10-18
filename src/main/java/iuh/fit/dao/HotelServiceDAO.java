@@ -3,6 +3,7 @@ package iuh.fit.dao;
 import iuh.fit.models.HotelService;
 import iuh.fit.models.ServiceCategory;
 import iuh.fit.utils.DBHelper;
+import iuh.fit.utils.GlobalConstants;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -131,7 +132,7 @@ public class HotelServiceDAO {
 
             if (rs.next()) {
                 String currentNextID = rs.getString("nextID");
-                String prefix = "HS-";  // prefix cho HotelService
+                String prefix = GlobalConstants.HOTELSERVICE_PREFIX + "-";
 
                 // Tách phần số và tăng thêm 1
                 int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;

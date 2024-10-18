@@ -68,7 +68,7 @@ public class HistoryCheckinDAO {
                 customer.setIdCardNumber(rs.getString(26));
                 customer.setDob(ConvertHelper.LocalDateConverter(rs.getDate(27)));
 
-                roomCategory.setRoomCategoryid(rs.getString(20));
+                roomCategory.setRoomCategoryID(rs.getString(20));
                 roomCategory.setRoomCategoryName(rs.getString(28));
                 roomCategory.setNumberOfBed(rs.getInt(29));
 
@@ -152,7 +152,7 @@ public class HistoryCheckinDAO {
                     customer.setIdCardNumber(rs.getString(26));
                     customer.setDob(ConvertHelper.LocalDateConverter(rs.getDate(27)));
 
-                    roomCategory.setRoomCategoryid(rs.getString(20));
+                    roomCategory.setRoomCategoryID(rs.getString(20));
                     roomCategory.setRoomCategoryName(rs.getString(28));
                     roomCategory.setNumberOfBed(rs.getInt(29));
 

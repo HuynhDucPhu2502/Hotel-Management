@@ -4,6 +4,7 @@ import iuh.fit.models.Pricing;
 import iuh.fit.models.RoomCategory;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
+import iuh.fit.utils.GlobalConstants;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class PricingDAO {
                 pricing.setPriceUnit(ConvertHelper.priceUnitConverter(rs.getString(2)));
                 pricing.setPrice(rs.getDouble(3));
 
-                roomCategory.setRoomCategoryid(rs.getString(4));
+                roomCategory.setRoomCategoryID(rs.getString(4));
                 roomCategory.setRoomCategoryName(rs.getString(5));
                 roomCategory.setNumberOfBed(rs.getInt(6));
 
@@ -70,7 +71,7 @@ public class PricingDAO {
                     pricing.setPriceUnit(ConvertHelper.priceUnitConverter(rs.getString(2)));
                     pricing.setPrice(rs.getDouble(3));
 
-                    roomCategory.setRoomCategoryid(rs.getString(4));
+                    roomCategory.setRoomCategoryID(rs.getString(4));
                     roomCategory.setRoomCategoryName(rs.getString(5));
                     roomCategory.setNumberOfBed(rs.getInt(6));
 
@@ -111,7 +112,7 @@ public class PricingDAO {
             insertStatement.setString(1, pricing.getPricingID());
             insertStatement.setString(2, ConvertHelper.pricingConverterToSQL(pricing.getPriceUnit()));
             insertStatement.setDouble(3, pricing.getPrice());
-            insertStatement.setString(4, pricing.getRoomCategory().getRoomCategoryid());
+            insertStatement.setString(4, pricing.getRoomCategory().getRoomCategoryID());
             insertStatement.executeUpdate();
 
             // Lấy nextID hiện tại cho Pricing từ GlobalSequence
@@ -120,7 +121,7 @@ public class PricingDAO {
 
             if (rs.next()) {
                 String currentNextID = rs.getString("nextID");
-                String prefix = "PR-";  // prefix cho Pricing
+                String prefix = GlobalConstants.PRICING_PREFIX + "-";
 
                 // Tách phần số và tăng thêm 1
                 int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
@@ -134,6 +135,23 @@ public class PricingDAO {
                 updateSequenceStatement.executeUpdate();
             }
 
+        } catch (SQLException sqlException) {
+            String sqlMessage = sqlException.getMessage();
+
+            if (sqlMessage.contains("Mỗi loại phòng chỉ được phép có 2 bản ghi")) {
+                throw new IllegalArgumentException(
+                        "Mỗi loại phòng chỉ được phép có 2 bản ghi trong Pricing (1 DAY và 1 HOUR)"
+                );
+
+            } else if (sqlMessage.contains("Violation of UNIQUE KEY constraint")) {
+                throw new IllegalArgumentException(
+                        "Mỗi loại phòng chỉ được phép có 1 bản ghi cho mỗi đơn vị thời gian (DAY hoặc HOUR)."
+                );
+
+            } else {
+                sqlException.printStackTrace();
+                System.exit(1);
+            }
         } catch (Exception exception) {
             exception.printStackTrace();
             System.exit(1);
@@ -165,7 +183,7 @@ public class PricingDAO {
         ) {
             preparedStatement.setString(1, ConvertHelper.pricingConverterToSQL(pricing.getPriceUnit()));
             preparedStatement.setDouble(2, pricing.getPrice());
-            preparedStatement.setString(3, pricing.getRoomCategory().getRoomCategoryid());
+            preparedStatement.setString(3, pricing.getRoomCategory().getRoomCategoryID());
             preparedStatement.setString(4, pricing.getPricingID());
 
             preparedStatement.executeUpdate();
@@ -217,7 +235,7 @@ public class PricingDAO {
                 pricing.setPriceUnit(ConvertHelper.priceUnitConverter(rs.getString(2)));
                 pricing.setPrice(rs.getDouble(3));
 
-                roomCategory.setRoomCategoryid(rs.getString(4));
+                roomCategory.setRoomCategoryID(rs.getString(4));
                 roomCategory.setRoomCategoryName(rs.getString(5));
                 roomCategory.setNumberOfBed(rs.getInt(6));
 

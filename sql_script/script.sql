@@ -67,11 +67,10 @@ CREATE TABLE HotelService (
     CONSTRAINT FK_HotelService_ServiceCategory
         FOREIGN KEY (serviceCategoryID) 
         REFERENCES ServiceCategory(serviceCategoryID)
-        ON DELETE SET NULL     
-        ON UPDATE CASCADE      
+        ON DELETE SET NULL
+		ON UPDATE CASCADE,
 );
 GO
-
 
 -- Tạo bảng RoomCategory
 CREATE TABLE RoomCategory (
@@ -87,11 +86,16 @@ CREATE TABLE Pricing (
     priceUnit NVARCHAR(15) NOT NULL CHECK (priceUnit IN ('DAY', 'HOUR')),  
     price MONEY NOT NULL,  
     roomCategoryID NVARCHAR(15) NOT NULL,
-    FOREIGN KEY (roomCategoryID) REFERENCES RoomCategory(roomCategoryID),
+    
+    CONSTRAINT FK_Pricing_RoomCategory FOREIGN KEY (roomCategoryID) 
+        REFERENCES RoomCategory(roomCategoryID) 
+        ON DELETE CASCADE 
+        ON UPDATE CASCADE,
     
     CONSTRAINT UQ_roomCategoryID_priceUnit UNIQUE (roomCategoryID, priceUnit)
 );
 GO
+
 
 -- Tạo bảng Room
 CREATE TABLE Room (
@@ -235,7 +239,9 @@ VALUES
     ('HistoryCheckin', 'HCI-000005'),
     ('HistoryCheckOut', 'HCO-000005'),
     ('RoomReservationDetail', 'RRD-000005'),
-    ('HotelService', 'HS-000008')
+    ('HotelService', 'HS-000008'),
+	('Pricing', 'P-000009'),
+	('RoomCategory', 'RC-000005')
 GO
 
 -- Thêm dữ liệu vào bảng Employee
