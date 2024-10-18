@@ -65,7 +65,7 @@ public class ReservationFormDAO {
                 customer.setIdCardNumber(rs.getString(24));
                 customer.setDob(ConvertHelper.LocalDateConverter(rs.getDate(25)));
 
-                roomCategory.setRoomCategoryid(rs.getString(18));
+                roomCategory.setRoomCategoryID(rs.getString(18));
                 roomCategory.setRoomCategoryName(rs.getString(26));
                 roomCategory.setNumberOfBed(rs.getInt(27));
 
@@ -142,7 +142,7 @@ public class ReservationFormDAO {
                     customer.setIdCardNumber(rs.getString(24));
                     customer.setDob(ConvertHelper.LocalDateConverter(rs.getDate(25)));
 
-                    roomCategory.setRoomCategoryid(rs.getString(18));
+                    roomCategory.setRoomCategoryID(rs.getString(18));
                     roomCategory.setRoomCategoryName(rs.getString(26));
                     roomCategory.setNumberOfBed(rs.getInt(27));
 
