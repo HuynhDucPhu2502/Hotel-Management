@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.dlsc.gemsfx.DialogPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane minHeight="753.0" minWidth="930.0" prefHeight="753.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.RoomCategoryManagerController">
+   <children>
+      <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="762.0" prefWidth="930.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <content>
+            <AnchorPane minHeight="-Infinity" minWidth="930.0" prefWidth="930.0">
+               <children>
+                  <DialogPane fx:id="dialogPane" animationDuration="200.0ms" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <TitledPane collapsible="false" style="-fx-border-radius: 50; -fx-background-radius: 50;" stylesheets="@../../../styles/TitlePanel.css" text="Quản lý loại phòng" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <VBox fx:id="upperBox" spacing="30.0">
+                           <children>
+                              <GridPane hgap="20.0" vgap="20.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <VBox.margin>
+                                    <Insets left="40.0" right="40.0" />
+                                 </VBox.margin>
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã loại phòng" textAlignment="RIGHT">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tên loại phòng" textAlignment="RIGHT" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Số lượng giường" textAlignment="RIGHT" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <AnchorPane GridPane.columnIndex="1">
+                                       <children>
+                                          <TextField fx:id="roomCategoryIDTextField" editable="false" style="-fx-background-color: rgb(211, 211, 211);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <cursor>
+                                                <Cursor fx:constant="CLOSED_HAND" />
+                                             </cursor>
+                                          </TextField>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <children>
+                                          <TextField fx:id="roomCategoryNameTextField" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <children>
+                                          <TextField fx:id="numberOfBedTextField" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </GridPane>
+                              <HBox prefHeight="0.0" prefWidth="899.0" spacing="50.0" style="-fx-alignment: CENTER;" stylesheets="@../../../styles/Button.css">
+                                 <children>
+                                    <Button fx:id="resetBtn" minWidth="150.0" mnemonicParsing="false" text="Làm mới" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                       <padding>
+                                          <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+                                       </padding>
+                                    </Button>
+                                    <Button fx:id="addBtn" minWidth="150.0" mnemonicParsing="false" text="Thêm" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+                                       </padding>
+                                    </Button>
+                                    <Button fx:id="updateBtn" managed="false" minWidth="150.0" mnemonicParsing="false" text="Cập nhật" textFill="WHITE" visible="false">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+                                       </padding>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <GridPane minHeight="50.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <VBox.margin>
+                                    <Insets left="40.0" right="40.0" />
+                                 </VBox.margin>
+                                 <children>
+                                    <HBox style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);">
+                                       <children>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã loại phòng">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
+                                    <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);" GridPane.columnIndex="1">
+                                       <children>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên loại phòng">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
+                                    <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);" GridPane.columnIndex="2">
+                                       <children>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Số lượng giường">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
+                                    <AnchorPane GridPane.rowIndex="1">
+                                       <children>
+                                          <ComboBox fx:id="roomCategoryIDSearchField" editable="true" prefHeight="58.0" prefWidth="333.0" promptText="Nhập mã loại phòng ở đây" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <TextField fx:id="roomCategoryNameSearchField" editable="false" prefHeight="125.0" prefWidth="404.0" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </TextField>
+                                    <TextField fx:id="numberOfBedSearchField" editable="false" prefHeight="72.0" prefWidth="160.0" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </TextField>
+                                 </children>
+                              </GridPane>
+                              <TableView fx:id="roomCategoryTableView" prefHeight="327.0" prefWidth="817.0" stylesheets="@../../../styles/TableView.css">
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+
+                                 <columns>
+                                    <TableColumn fx:id="roomCategoryIDColumn" minWidth="100.0" text="Mã loại phòng" />
+                                    <TableColumn fx:id="roomCategoryNameColumn" minWidth="100.0" text="Tên loại phòng" />
+                                    <TableColumn fx:id="numberOfBedColumn" minWidth="100.0" text="Số lượng giường" />
+                                    <TableColumn fx:id="actionColumn" minWidth="300.0" prefWidth="300.0" text="Thao tác" />
+                                 </columns>
+
+                                 <VBox.margin>
+                                    <Insets left="40.0" right="40.0" top="30.0" />
+                                 </VBox.margin>
+                              </TableView>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                        </VBox>
+                     </content>
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </TitledPane>
+               </children>
+            </AnchorPane>
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>
