@@ -4,6 +4,8 @@ import iuh.fit.dao.HotelServiceDAO;
 import iuh.fit.dao.ServiceCategoryDAO;
 import iuh.fit.models.HotelService;
 import iuh.fit.models.ServiceCategory;
+import iuh.fit.utils.ConvertHelper;
+import iuh.fit.utils.ErrorMessages;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,7 +23,18 @@ import java.util.stream.Collectors;
 
 public class HotelServiceSearchingController {
 
-    // Table
+    // Search Field
+    @FXML
+    private TextField serviceIDSearchField;
+    @FXML
+    private TextField serviceNameSearchField;
+    @FXML
+    private TextField priceLowerBoundSearchField;
+    @FXML
+    private TextField priceUpperBoundSearchField;
+    @FXML
+    private ComboBox<String> serviceCategorySearchField;
+
     // Table
     @FXML
     private TableView<HotelService> hotelServiceTableView;
@@ -38,11 +51,20 @@ public class HotelServiceSearchingController {
     @FXML
     private TableColumn<HotelService, Void> actionColumn;
 
+    // Buttons
+    @FXML
+    private Button searchBtn;
+    @FXML
+    private Button resetBtn;
+
     private ObservableList<HotelService> items;
 
     public void initialize() {
         loadData();
         setupTable();
+
+        searchBtn.setOnAction(e -> handleSearchAction());
+        resetBtn.setOnAction(e -> handleResetAction());
     }
 
     // Phương thức load dữ liệu lên giao diện
@@ -51,6 +73,24 @@ public class HotelServiceSearchingController {
         items = FXCollections.observableArrayList(hotelServiceList);
         hotelServiceTableView.setItems(items);
         hotelServiceTableView.refresh();
+
+        List<String> comboBoxItems = ServiceCategoryDAO.getServiceCategory()
+                .stream()
+                .map(serviceCategory -> serviceCategory.getServiceCategoryID() +
+                        " " + serviceCategory.getServiceCategoryName()
+                )
+                .collect(Collectors.toList());
+        comboBoxItems.addFirst("KHÔNG CÓ");
+        comboBoxItems.addFirst("TẤT CẢ");
+
+        ObservableList<String> observableComboBoxItems = FXCollections.observableArrayList(comboBoxItems);
+        serviceCategorySearchField.getItems().setAll(observableComboBoxItems);
+
+        if (!serviceCategorySearchField.getItems().isEmpty()) {
+            serviceCategorySearchField.getSelectionModel().selectFirst();
+        }
+
+
     }
 
     // Phương thức đổ dữ liệu vào bảng
@@ -163,6 +203,46 @@ public class HotelServiceSearchingController {
         };
 
         actionColumn.setCellFactory(cellFactory);
+    }
+
+    private void handleResetAction() {
+        serviceIDSearchField.setText("");
+        serviceNameSearchField.setText("");
+        priceLowerBoundSearchField.setText("");
+        priceUpperBoundSearchField.setText("");
+        serviceCategorySearchField.getSelectionModel().selectFirst();
+
+        loadData();
+    }
+
+    private void handleSearchAction() {
+        try {
+            String serviceID = serviceIDSearchField.getText().isBlank() ? null : serviceIDSearchField.getText().trim();
+            String serviceName = serviceNameSearchField.getText().isBlank() ? null : serviceNameSearchField.getText().trim();
+            Double minPrice = handlePriceInput(priceLowerBoundSearchField.getText());
+            Double maxPrice = handlePriceInput(priceUpperBoundSearchField.getText());
+            String selectedCategory = serviceCategorySearchField.getSelectionModel().getSelectedItem();
+            String categoryID = handleCategoryIDInput(selectedCategory);
+
+            List<HotelService> searchResults = HotelServiceDAO.searchHotelServices(
+                    serviceID, serviceName, minPrice, maxPrice, categoryID);
+            items.setAll(searchResults);
+            hotelServiceTableView.setItems(items);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Double handlePriceInput(String numbStr) {
+        if (numbStr.isBlank()) return null;
+        else return ConvertHelper.doubleConverter(numbStr, ErrorMessages.HOTEL_SERVICE_INVALID_FORMAT);
+    }
+
+    private String handleCategoryIDInput(String selectedCategory) {
+        if (selectedCategory == null) return null;
+        if (selectedCategory.equalsIgnoreCase("TẤT CẢ")) return "ALL";
+        if (selectedCategory.equalsIgnoreCase("KHÔNG CÓ")) return "NULL";
+        return selectedCategory.split(" ")[0];
     }
 
 }

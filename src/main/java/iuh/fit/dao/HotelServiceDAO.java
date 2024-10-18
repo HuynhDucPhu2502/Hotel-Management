@@ -282,9 +282,9 @@ public class HotelServiceDAO {
         return res;
     }
 
-    public List<HotelService> searchHotelServices(
+    public static List<HotelService> searchHotelServices(
             String hotelServiceID, String serviceName,
-            Double minPrice, Double maxPrice, String serviceCategoryID) {
+            Double minPrice, Double maxPrice, String serviceCategory) {
 
         List<HotelService> data = new ArrayList<>();
 
@@ -292,18 +292,18 @@ public class HotelServiceDAO {
                 "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
                 "FROM HotelService a " +
                 "LEFT JOIN ServiceCategory b ON a.serviceCategoryID = b.serviceCategoryID " +
-                "WHERE (a.hotelServiceID = ? OR ? IS NULL) AND " +
+                "WHERE (a.hotelServiceID LIKE ? OR ? IS NULL) AND " +
                 "(a.serviceName LIKE ? OR ? IS NULL) AND " +
                 "(a.servicePrice >= ? OR ? IS NULL) AND " +
                 "(a.servicePrice <= ? OR ? IS NULL) AND " +
-                "(a.serviceCategoryID = ? OR ? IS NULL)";
+                "((? = 'ALL') OR (a.serviceCategoryID = ? OR (? = 'NULL' AND a.serviceCategoryID IS NULL)))";
 
         try (
                 Connection connection = DBHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
-            preparedStatement.setString(1, hotelServiceID);
+            preparedStatement.setString(1, "%" + hotelServiceID + "%");
             preparedStatement.setString(2, hotelServiceID);
             preparedStatement.setString(3, "%" + serviceName + "%");
             preparedStatement.setString(4, serviceName);
@@ -311,8 +311,10 @@ public class HotelServiceDAO {
             preparedStatement.setObject(6, minPrice);
             preparedStatement.setObject(7, maxPrice);
             preparedStatement.setObject(8, maxPrice);
-            preparedStatement.setString(9, serviceCategoryID);
-            preparedStatement.setString(10, serviceCategoryID);
+
+            preparedStatement.setString(9, serviceCategory);
+            preparedStatement.setString(10, serviceCategory);
+            preparedStatement.setString(11, serviceCategory);
 
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {

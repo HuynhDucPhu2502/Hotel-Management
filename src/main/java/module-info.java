@@ -5,6 +5,7 @@ module iuh.fit {
     requires java.desktop;
     requires com.dlsc.gemsfx;
     requires com.dlsc.unitfx;
+    requires org.controlsfx.controls;
 
     opens iuh.fit to javafx.fxml;
     opens iuh.fit.controller to javafx.fxml;
