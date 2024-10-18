@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class RoomCategory {
     // Mã định danh của loại phòng, không được rỗng và phải theo định dạng hợp lệ
-    private String roomCategoryid;
+    private String roomCategoryID;
 
     // Tên của loại phòng, không được rỗng và không vượt quá 30 ký tự
     private String roomCategoryName;
@@ -17,22 +17,22 @@ public class RoomCategory {
     private int numberOfBed;
     /**
      * Constructor đầy đủ cho RoomCategory
-     * @param roomCategoryid Mã loại phòng
+     * @param roomCategoryID Mã loại phòng
      * @param roomCategoryName Tên loại phòng
      * @param numberOfBed Số lượng giường trong loại phòng
      */
-    public RoomCategory(String roomCategoryid, String roomCategoryName, int numberOfBed) {
-        this.setRoomCategoryid(roomCategoryid);
+    public RoomCategory(String roomCategoryID, String roomCategoryName, int numberOfBed) {
+        this.setRoomCategoryID(roomCategoryID);
         this.setRoomCategoryName(roomCategoryName);
         this.setNumberOfBed(numberOfBed);
     }
 
     /**
      * Constructor với chỉ mã loại phòng
-     * @param roomCategoryid Mã loại phòng
+     * @param roomCategoryID Mã loại phòng
      */
-    public RoomCategory(String roomCategoryid) {
-        this.setRoomCategoryid(roomCategoryid);
+    public RoomCategory(String roomCategoryID) {
+        this.setRoomCategoryID(roomCategoryID);
     }
 
     /**
@@ -45,21 +45,21 @@ public class RoomCategory {
      * Lấy mã loại phòng
      * @return roomCategoryid Mã loại phòng
      */
-    public String getRoomCategoryid() {
-        return roomCategoryid;
+    public String getRoomCategoryID() {
+        return roomCategoryID;
     }
 
     /**
      * Thiết lập mã loại phòng và kiểm tra tính hợp lệ
-     * @param roomCategoryid Mã loại phòng
+     * @param roomCategoryID Mã loại phòng
      * @throws IllegalArgumentException nếu mã rỗng hoặc sai định dạng
      */
-    public void setRoomCategoryid(String roomCategoryid) {
-        if(roomCategoryid.isEmpty())
+    public void setRoomCategoryID(String roomCategoryID) {
+        if(roomCategoryID.isEmpty())
             throw new IllegalArgumentException(ErrorMessages.ROOM_CATEGORY_INVALID_ID_ISNULL);
-        else if(!RegexChecker.isValidIDFormat(GlobalConstants.ROOMCATEGORY_PREFIX, roomCategoryid))
+        else if(!RegexChecker.isValidIDFormat(GlobalConstants.ROOMCATEGORY_PREFIX, roomCategoryID))
             throw new IllegalArgumentException(ErrorMessages.ROOM_CATEGORY_INVALID_ID_FORMAT);
-        this.roomCategoryid = roomCategoryid;
+        this.roomCategoryID = roomCategoryID;
     }
 
     /**
@@ -113,7 +113,7 @@ public class RoomCategory {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RoomCategory that = (RoomCategory) o;
-        return Objects.equals(roomCategoryid, that.roomCategoryid);
+        return Objects.equals(roomCategoryID, that.roomCategoryID);
     }
 
     /**
@@ -122,7 +122,7 @@ public class RoomCategory {
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(roomCategoryid);
+        return Objects.hashCode(roomCategoryID);
     }
 
     /**
@@ -132,7 +132,7 @@ public class RoomCategory {
     @Override
     public String toString() {
         return "RoomCategory{" +
-                "roomCategoryid='" + roomCategoryid + '\'' +
+                "roomCategoryid='" + roomCategoryID + '\'' +
                 ", roomCategoryName='" + roomCategoryName + '\'' +
                 ", numberOfBed=" + numberOfBed +
                 '}';

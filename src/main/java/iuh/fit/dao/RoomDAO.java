@@ -32,7 +32,7 @@ public class RoomDAO {
                 room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString(2)));
                 room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp(3)));
 
-                roomCategory.setRoomCategoryid(rs.getString(4));
+                roomCategory.setRoomCategoryID(rs.getString(4));
                 roomCategory.setRoomCategoryName(rs.getString(5));
                 roomCategory.setNumberOfBed(rs.getInt(6));
 
@@ -71,7 +71,7 @@ public class RoomDAO {
                     room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString(2)));
                     room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp(3)));
 
-                    roomCategory.setRoomCategoryid(rs.getString(4));
+                    roomCategory.setRoomCategoryID(rs.getString(4));
                     roomCategory.setRoomCategoryName(rs.getString(5));
                     roomCategory.setNumberOfBed(rs.getInt(6));
 
@@ -99,7 +99,7 @@ public class RoomDAO {
             preparedStatement.setString(1, room.getRoomID());
             preparedStatement.setString(2, ConvertHelper.roomStatusConverterToSQL(room.getRoomStatus()));
             preparedStatement.setTimestamp(3, ConvertHelper.dateTimeConvertertoSQL(room.getDateOfCreation()));
-            preparedStatement.setString(4, room.getRoomCategory().getRoomCategoryid());
+            preparedStatement.setString(4, room.getRoomCategory().getRoomCategoryID());
 
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
@@ -134,7 +134,7 @@ public class RoomDAO {
         ){
             preparedStatement.setString(1, ConvertHelper.roomStatusConverterToSQL(room.getRoomStatus()));
             preparedStatement.setTimestamp(2, ConvertHelper.dateTimeConvertertoSQL(room.getDateOfCreation()));
-            preparedStatement.setString(3, room.getRoomCategory().getRoomCategoryid());
+            preparedStatement.setString(3, room.getRoomCategory().getRoomCategoryID());
             preparedStatement.setString(4, room.getRoomID());
 
             preparedStatement.executeUpdate();
