@@ -44,7 +44,7 @@
                <content>
                   <VBox prefHeight="209.0" prefWidth="230.0" style="-fx-background-radius: 10;">
                      <children>
-                        <VBox prefHeight="32.0" prefWidth="230.0">
+                        <VBox prefHeight="32.0" prefWidth="200.0">
                            <children>
                               <Button fx:id="employeeBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="282.0" styleClass="menu-bar-parent">
                                  <cursor>
@@ -67,6 +67,9 @@
                                        </ImageView>
                                     </HBox>
                                  </graphic>
+                                 <VBox.margin>
+                                    <Insets left="10.0" />
+                                 </VBox.margin>
                               </Button>
                               <HBox fx:id="buttonOneContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
                                  <children>
@@ -93,6 +96,9 @@
                                  </cursor>
                               </HBox>
                            </children>
+                           <VBox.margin>
+                              <Insets left="-5.0" top="5.0" />
+                           </VBox.margin>
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0" styleClass="menu-bar-parent">
                            <children>
@@ -127,6 +133,9 @@
                                  </cursor>
                               </HBox>
                            </children>
+                           <VBox.margin>
+                              <Insets left="5.0" />
+                           </VBox.margin>
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0">
                            <children>
@@ -181,6 +190,9 @@
                                  </cursor>
                               </HBox>
                            </children>
+                           <VBox.margin>
+                              <Insets left="5.0" />
+                           </VBox.margin>
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0">
                            <children>
@@ -231,6 +243,9 @@
                                  </cursor>
                               </HBox>
                            </children>
+                           <VBox.margin>
+                              <Insets left="5.0" />
+                           </VBox.margin>
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0">
                            <children>
@@ -281,6 +296,9 @@
                                  </cursor>
                               </HBox>
                            </children>
+                           <VBox.margin>
+                              <Insets left="5.0" />
+                           </VBox.margin>
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0">
                            <children>
@@ -331,6 +349,9 @@
                                  </cursor>
                               </HBox>
                            </children>
+                           <VBox.margin>
+                              <Insets left="5.0" />
+                           </VBox.margin>
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0">
                            <children>
@@ -381,6 +402,9 @@
                                  </cursor>
                               </HBox>
                            </children>
+                           <VBox.margin>
+                              <Insets left="5.0" />
+                           </VBox.margin>
                         </VBox>
                      </children>
                   </VBox>

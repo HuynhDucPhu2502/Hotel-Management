@@ -1,9 +1,14 @@
 .button:hover {
-    -fx-background-color: RGB(63, 162, 246);
+    -fx-background-color: RGB(58, 150, 228);
+    -fx-background-radius: 10;
 }
 
 .button:pressed {
     -fx-background-color: RGB(70, 130, 180);
+}
+
+.button{
+    -fx-background-radius: 100;
 }
 
 .menu-bar-parent {
