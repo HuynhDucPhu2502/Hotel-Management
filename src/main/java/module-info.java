@@ -12,6 +12,7 @@ module iuh.fit {
     opens iuh.fit.controller.features to javafx.fxml;
     opens iuh.fit.controller.features.service to javafx.fxml;
     opens iuh.fit.controller.features.room to javafx.fxml;
+    opens iuh.fit.controller.features.room.room_items to javafx.fxml;
     opens iuh.fit.models to javafx.base;
 
     exports iuh.fit;

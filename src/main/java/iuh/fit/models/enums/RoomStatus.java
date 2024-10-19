@@ -9,7 +9,8 @@ package iuh.fit.models.enums;
 public enum RoomStatus {
     AVAILABLE("Phòng trống"),
     ON_USE("Phòng đang sử dụng"),
-    UNAVAILABLE("Phòng không được sử dụng");
+    UNAVAILABLE("Phòng không được sử dụng"),
+    OVERDUE("Phòng quá hạn sử dụng");
 
     // Tên hiển thị cho trạng thái phòng
     private final String displayName;
