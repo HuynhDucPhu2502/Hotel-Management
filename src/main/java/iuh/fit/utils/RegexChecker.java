@@ -231,14 +231,16 @@ public class RegexChecker {
     }
 
     /**
-     * Kiểm tra tính hợp lệ của mã phòng theo định dạng nhất định.
+     * Kiểm tra tính hợp lệ của mã phòng theo định dạng:
+     * X: "T" hoặc "V", ZZZZ: Số tầng (4 chữ số), TT: Số thứ tự (01-99)
      *
      * @param roomID Mã phòng cần kiểm tra
-     * @return true nếu roomID hợp lệ theo định dạng "^([TV])[12]\\d{2}$", ngược lại là false
+     * @return true nếu roomID hợp lệ theo định dạng "^([TV])\\d{4}\\d{2}$", ngược lại là false
      */
     public static boolean isValidRoomID(String roomID) {
-        return roomID.matches("^([TV])[12][1-5]\\d{2}$");
+        return roomID.matches("^([TV])\\d{4}\\d{2}$");
     }
+
 
     public static boolean isValidInvoiceID(String invoiceID){
         return invoiceID.matches("^(INV)(\\d{10}-)(\\d{4})$");
