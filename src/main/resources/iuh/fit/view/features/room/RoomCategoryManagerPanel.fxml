@@ -70,7 +70,8 @@
                                     </AnchorPane>
                                     <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="1">
                                        <children>
-                                          <TextField fx:id="roomCategoryNameTextField" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <ComboBox fx:id="roomCategoryRankCBox" layoutX="7.0" layoutY="4.0" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <TextField fx:id="roomCategoryNameTextField" layoutX="147.0" layoutY="1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                        </children>
                                     </AnchorPane>
                                     <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="2">

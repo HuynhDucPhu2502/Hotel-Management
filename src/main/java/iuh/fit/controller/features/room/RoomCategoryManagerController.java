@@ -12,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,6 +28,8 @@ public class RoomCategoryManagerController {
     // Input Fields
     @FXML
     private TextField roomCategoryIDTextField;
+    @FXML
+    private ComboBox<String> roomCategoryRankCBox;
     @FXML
     private TextField roomCategoryNameTextField;
     @FXML
@@ -79,6 +82,11 @@ public class RoomCategoryManagerController {
         items = FXCollections.observableArrayList(roomCategories);
         roomCategoryTableView.setItems(items);
         roomCategoryTableView.refresh();
+
+        List<String> roomRank = List.of("Phòng Thường", "Phòng VIP");
+        roomCategoryRankCBox.getItems().setAll(roomRank);
+        roomCategoryRankCBox.getSelectionModel().selectFirst();
+
     }
 
     // Thiết lập dữ liệu cho bảng
@@ -133,7 +141,11 @@ public class RoomCategoryManagerController {
     // Reset các trường nhập liệu
     private void handleResetAction() {
         roomCategoryIDTextField.setText(RoomCategoryDAO.getNextRoomCategoryID());
+        roomCategoryRankCBox.setDisable(false);
+        roomCategoryRankCBox.getSelectionModel().selectFirst();
+
         roomCategoryNameTextField.setText("");
+        roomCategoryRankCBox.getSelectionModel().clearSelection();
         numberOfBedTextField.setText("");
 
         addBtn.setManaged(true);
@@ -147,7 +159,7 @@ public class RoomCategoryManagerController {
         try {
             RoomCategory roomCategory = new RoomCategory(
                     roomCategoryIDTextField.getText(),
-                    roomCategoryNameTextField.getText(),
+                    roomCategoryRankCBox.getSelectionModel().getSelectedItem() + " " + roomCategoryNameTextField.getText(),
                     Integer.parseInt(numberOfBedTextField.getText())
             );
 
@@ -171,9 +183,16 @@ public class RoomCategoryManagerController {
     }
 
     // Hiển thị thông tin cập nhật
+    // Hiển thị thông tin cập nhật
     private void handleUpdateBtn(RoomCategory roomCategory) {
+        String[] parts = roomCategory.getRoomCategoryName().split(" ", 3);
+        String rankName = parts[0] + " " + parts[1];
+        String roomCategoryName = parts[2];
+
         roomCategoryIDTextField.setText(roomCategory.getRoomCategoryID());
-        roomCategoryNameTextField.setText(roomCategory.getRoomCategoryName());
+        roomCategoryRankCBox.setValue(rankName);
+        roomCategoryRankCBox.setDisable(true);
+        roomCategoryNameTextField.setText(roomCategoryName);
         numberOfBedTextField.setText(String.valueOf(roomCategory.getNumberOfBed()));
 
         addBtn.setManaged(false);
@@ -182,19 +201,27 @@ public class RoomCategoryManagerController {
         updateBtn.setVisible(true);
     }
 
+
+
+
     // Cập nhật loại phòng
     private void handleUpdateAction() {
         try {
             RoomCategory roomCategory = new RoomCategory(
                     roomCategoryIDTextField.getText(),
-                    roomCategoryNameTextField.getText(),
+                    roomCategoryRankCBox.getSelectionModel().getSelectedItem() + " " + roomCategoryNameTextField.getText(),
                     Integer.parseInt(numberOfBedTextField.getText())
             );
 
-            DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn cập nhật loại phòng này?");
+            DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
+                    "XÁC NHẬN",
+                    "Bạn có chắc chắn muốn cập nhật loại phòng này?"
+            );
+
             dialog.onClose(buttonType -> {
                 if (buttonType == ButtonType.YES) {
                     RoomCategoryDAO.updateData(roomCategory);
+
                     handleResetAction();
                     loadData();
                 }
@@ -203,6 +230,7 @@ public class RoomCategoryManagerController {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
     }
+
 
     // Tìm kiếm loại phòng
     private void handleSearchAction() {
