@@ -77,6 +77,7 @@ public class ConvertHelper {
             case "AVAILABLE" -> RoomStatus.AVAILABLE;
             case "ON_USE" -> RoomStatus.ON_USE;
             case "UNAVAILABLE" -> RoomStatus.UNAVAILABLE;
+            case "OVERDUE" -> RoomStatus.OVERDUE;
             default -> throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_ROOM_STATUS);
         };
     }
@@ -131,6 +132,7 @@ public class ConvertHelper {
             case "Phòng trống" -> "AVAILABLE";
             case "Phòng đang sử dụng" -> "ON_USE";
             case "Phòng không được sử dụng" -> "UNAVAILABLE";
+            case "Phòng quá hạn sử dụng" -> "OVERDUE";
             default -> throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_ROOM_STATUS);
         };
     }
