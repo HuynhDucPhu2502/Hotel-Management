@@ -238,7 +238,7 @@ public class RegexChecker {
      * @return true nếu roomID hợp lệ theo định dạng "^([TV])\\d{4}\\d{2}$", ngược lại là false
      */
     public static boolean isValidRoomID(String roomID) {
-        return roomID.matches("^([TV])\\d{4}\\d{2}$");
+        return roomID.matches("^([TV])\\d{4}$");
     }
 
 
