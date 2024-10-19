@@ -80,9 +80,9 @@ public class HotelServiceSearchingController {
         ObservableList<String> observableComboBoxItems = FXCollections.observableArrayList(comboBoxItems);
         serviceCategorySearchField.getItems().setAll(observableComboBoxItems);
 
-        if (!serviceCategorySearchField.getItems().isEmpty()) {
+        if (!serviceCategorySearchField.getItems().isEmpty())
             serviceCategorySearchField.getSelectionModel().selectFirst();
-        }
+
 
 
     }

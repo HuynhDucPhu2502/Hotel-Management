@@ -307,20 +307,21 @@ VALUES
     ('P-000008', N'DAY', 1800000.00, 'RC-000004');
 GO
 
--- Thêm dữ liệu vào bảng Room
+-- Thêm dữ liệu vào bảng Room với mã phòng mới
 INSERT INTO Room (roomID, roomStatus, dateOfCreation, roomCategoryID)
 VALUES 
-    ('ROOM-000001', N'ON_USE', '2024-09-28 10:00:00', 'RC-000001'),
-    ('ROOM-000002', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
-    ('ROOM-000003', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
-    ('ROOM-000004', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
-    ('ROOM-000005', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
-    ('ROOM-000006', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
-    ('ROOM-000007', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
-    ('ROOM-000008', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
-    ('ROOM-000009', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
-    ('ROOM-000010', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002');
+    ('T000101', N'ON_USE', '2024-09-28 10:00:00', 'RC-000001'),
+    ('V000102', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
+    ('T000203', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+    ('V000304', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+    ('T000105', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+    ('V000206', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
+    ('T000307', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+    ('V000408', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+    ('T000109', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+    ('V000210', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002');
 GO
+
 
 -- Thêm dữ liệu vào bảng Shift
 INSERT INTO Shift (shiftID, startTime, endTime, modifiedDate, numberOfHour, shiftDaysSchedule)

@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -144,4 +145,66 @@ public class RoomDAO {
         }
 
     }
+
+    public static List<Room> searchRooms(
+            String roomID, String roomStatus,
+            LocalDateTime lowerBoundDate, LocalDateTime upperBoundDate,
+            String roomCategoryID) {
+
+        List<Room> data = new ArrayList<>();
+
+        String sql = "SELECT a.roomID, a.roomStatus, a.dateOfCreation, a.roomCategoryID, " +
+                "b.roomCategoryName, b.numberOfBed " +
+                "FROM Room a " +
+                "LEFT JOIN RoomCategory b ON a.roomCategoryID = b.roomCategoryID " +
+                "WHERE (a.roomID LIKE ? OR ? IS NULL) " +
+                "AND (a.roomStatus = ? OR ? IS NULL) " +
+                "AND (a.dateOfCreation >= ? OR ? IS NULL) " +
+                "AND (a.dateOfCreation <= ? OR ? IS NULL) " +
+                "AND ((? = 'ALL') OR (a.roomCategoryID = ? OR (? = 'NULL' AND a.roomCategoryID IS NULL)))";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            // Thiết lập các tham số cho PreparedStatement
+            preparedStatement.setString(1, "%" + roomID + "%");
+            preparedStatement.setString(2, roomID);
+            preparedStatement.setString(3, roomStatus);
+            preparedStatement.setString(4, roomStatus);
+            preparedStatement.setObject(5, lowerBoundDate);
+            preparedStatement.setObject(6, lowerBoundDate);
+            preparedStatement.setObject(7, upperBoundDate);
+            preparedStatement.setObject(8, upperBoundDate);
+            preparedStatement.setString(9, roomCategoryID);
+            preparedStatement.setString(10, roomCategoryID);
+            preparedStatement.setString(11, roomCategoryID);
+
+            // Thực hiện truy vấn và lấy kết quả
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Room room = new Room();
+                RoomCategory roomCategory = new RoomCategory();
+
+                room.setRoomID(rs.getString("roomID"));
+                room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString("roomStatus")));
+                room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp("dateOfCreation")));
+
+                roomCategory.setRoomCategoryID(rs.getString("roomCategoryID"));
+                roomCategory.setRoomCategoryName(rs.getString("roomCategoryName"));
+                roomCategory.setNumberOfBed(rs.getInt("numberOfBed"));
+
+                room.setRoomCategory(roomCategory);
+                data.add(room);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
+    }
+
+
 }
