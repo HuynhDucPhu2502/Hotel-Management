@@ -229,19 +229,14 @@ GO
 -- Thêm dữ liệu vào bảng GlobalSequence
 INSERT INTO GlobalSequence(tableName, nextID)
 VALUES
-    ('ServiceCategory', 'SC-000005'),
     ('Employee', 'EMP-000006'),
     ('Account', 'ACC-000006'),
-    ('Room', 'ROOM-000011'),
-    ('ReservationForm', 'RF-000005'),
-    ('ShiftAssignment', 'SA-000004'),
-    ('Invoice', 'INV-000003'),
-    ('HistoryCheckin', 'HCI-000005'),
-    ('HistoryCheckOut', 'HCO-000005'),
-    ('RoomReservationDetail', 'RRD-000005'),
-    ('HotelService', 'HS-000008'),
+	('ServiceCategory', 'SC-000005'),
+	('HotelService', 'HS-000008'),
+	('RoomReservationDetail', 'RRD-000005'),
 	('Pricing', 'P-000009'),
-	('RoomCategory', 'RC-000005')
+	('RoomCategory', 'RC-000005'),
+    ('ShiftAssignment', 'SA-000004')
 GO
 
 -- Thêm dữ liệu vào bảng Employee
@@ -310,16 +305,16 @@ GO
 -- Thêm dữ liệu vào bảng Room với mã phòng mới
 INSERT INTO Room (roomID, roomStatus, dateOfCreation, roomCategoryID)
 VALUES 
-    ('T000101', N'ON_USE', '2024-09-28 10:00:00', 'RC-000001'),
-    ('V000102', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
-    ('T000203', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
-    ('V000304', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
-    ('T000105', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
-    ('V000206', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
-    ('T000307', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
-    ('V000408', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
-    ('T000109', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
-    ('V000210', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002');
+    ('T101', N'ON_USE', '2024-09-28 10:00:00', 'RC-000001'),
+    ('V102', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
+    ('T203', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+    ('V304', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+    ('T105', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+    ('V206', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
+    ('T307', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+    ('V408', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+    ('T109', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+    ('V210', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002');
 GO
 
 
@@ -352,66 +347,6 @@ VALUES
     ('CUS-000004', N'Pham Thi D', '0912345681', 'phamthid@gmail.com', N'321 Duong PQR, Quan 7, TP HCM', N'FEMALE', '001099012546', '1995-12-01'),
     ('CUS-000005', N'Hoang Van E', '0912345682', 'hoangvane@gmail.com', N'987 Duong STU, Quan 10, TP HCM', N'MALE', '001099012764', '1991-11-20');
 GO
-
--- Thêm dữ liệu vào bảng ReservationForm
-INSERT INTO ReservationForm (reservationFormID, reservationDate, approxCheckInDate, approxCheckOutDate, employeeID, roomID, customerID)
-VALUES 
-    ('RF-000001', '2024-09-29 10:00:00', '2024-10-02 14:00:00', '2024-10-05 12:00:00', 'EMP-000001', 'ROOM-000001', 'CUS-000001'),
-    ('RF-000002', '2024-09-29 11:30:00', '2024-10-03 15:00:00', '2024-10-07 11:00:00', 'EMP-000002', 'ROOM-000002', 'CUS-000002'),
-    ('RF-000003', '2024-09-29 09:00:00', '2024-10-04 13:00:00', '2024-10-06 10:00:00', 'EMP-000003', 'ROOM-000003', 'CUS-000003'),
-    ('RF-000004', '2024-09-29 08:00:00', '2024-10-05 12:00:00', '2024-10-08 09:00:00', 'EMP-000004', 'ROOM-000004', 'CUS-000004');
-GO
-
--- Thêm dữ liệu vào bảng RoomUsageService
-INSERT INTO RoomUsageService (roomUsageServiceId, quantity, hotelServiceId, reservationFormID)
-VALUES 
-    ('RUS-000001', 2, 'HS-000001', 'RF-000001'),  
-    ('RUS-000002', 1, 'HS-000002', 'RF-000002'),  
-    ('RUS-000003', 3, 'HS-000003', 'RF-000003'),  
-    ('RUS-000004', 1, 'HS-000004', 'RF-000004');
-GO
-
--- Thêm dữ liệu vào bảng Tax
-INSERT INTO Tax (taxID, taxName, taxRate, dateOfCreation, activate)
-VALUES
-    ('TAX-0001', N'VAT', 10.0, '2024-10-01', 1),
-    ('TAX-0002', N'Thuế dịch vụ', 5.0, '2024-10-01', 1);
-GO
-
--- Thêm dữ liệu vào bảng Invoice
-INSERT INTO Invoice (invoiceID, invoiceDate, roomCharge, servicesCharge, totalDue, netDue, taxID, reservationFormID)
-VALUES
-    ('INV-0001', '2024-10-05 12:00:00', 800000, 150000, 950000, 1045000, 'TAX-0001', 'RF-000001'),
-    ('INV-0002', '2024-10-07 13:00:00', 850000, 200000, 1050000, 1155000, 'TAX-0002', 'RF-000002');
-GO
-
--- Thêm dữ liệu vào bảng HistoryCheckin
-INSERT INTO HistoryCheckin (historyCheckInID, checkInDate, reservationFormID)
-VALUES 
-    ('HCI-000001', '2024-10-02 14:00:00', 'RF-000001'),
-    ('HCI-000002', '2024-10-03 15:00:00', 'RF-000002'),
-    ('HCI-000003', '2024-10-04 13:00:00', 'RF-000003'),
-    ('HCI-000004', '2024-10-05 12:00:00', 'RF-000004');
-GO
-
--- Thêm dữ liệu vào bảng HistoryCheckOut
-INSERT INTO HistoryCheckOut (historyCheckOutID, checkOutDate, reservationFormID)
-VALUES 
-    ('HCO-000001', '2024-10-05 11:00:00', 'RF-000001'),
-    ('HCO-000002', '2024-10-06 10:00:00', 'RF-000002'),
-    ('HCO-000003', '2024-10-07 09:00:00', 'RF-000003'),
-    ('HCO-000004', '2024-10-08 08:00:00', 'RF-000004');
-GO
-
--- Thêm dữ liệu vào bảng RoomReservationDetail
-INSERT INTO RoomReservationDetail (roomReservationDetailID, dateChanged, roomID, reservationFormID)
-VALUES 
-    ('RRD-000001', '2024-10-02 14:00:00', 'ROOM-000001', 'RF-000001'),
-    ('RRD-000002', '2024-10-03 15:00:00', 'ROOM-000002', 'RF-000002'),
-    ('RRD-000003', '2024-10-04 13:00:00', 'ROOM-000003', 'RF-000003'),
-    ('RRD-000004', '2024-10-05 12:00:00', 'ROOM-000004', 'RF-000004');
-GO
-
 -- ===================================================================================
 -- 3. TRIGGER 
 -- ===================================================================================
