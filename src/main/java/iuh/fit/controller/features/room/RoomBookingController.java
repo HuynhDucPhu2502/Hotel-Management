@@ -1,6 +1,8 @@
 package iuh.fit.controller.features.room;
 
+import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.room_items.RoomAvailableController;
+import iuh.fit.controller.features.room.room_items.RoomOnUseController;
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.models.Room;
@@ -36,22 +38,33 @@ public class RoomBookingController {
     @FXML
     private Button overDueBtn;
 
+    // Rooms List
     private List<Room> rooms;
 
+    // Main Controller
+    private MainController mainController;
+
     public void initialize() {
+    }
+
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
         loadData();
         setupEventHandlers();
     }
 
     private void loadData() {
         rooms = RoomDAO.getRoom();
+        rooms = rooms.stream()
+                .sorted(Comparator.comparing(Room::getRoomNumer))
+                .toList();
 
         List<String> roomCategories = RoomCategoryDAO.getRoomCategory()
                 .stream()
                 .map(roomCategory -> roomCategory.getRoomCategoryID() +
                         " " + roomCategory.getRoomCategoryName())
                 .collect(Collectors.toList());
-        roomCategories.add(0, "TẤT CẢ");
+        roomCategories.addFirst("TẤT CẢ");
         roomCategoryCBox.getItems().setAll(roomCategories);
 
         if (!roomCategoryCBox.getItems().isEmpty())
@@ -74,15 +87,39 @@ public class RoomBookingController {
 
         try {
             for (Room room : rooms) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                        "/iuh/fit/view/features/room/room_items/RoomAvailableItem.fxml"));
+                FXMLLoader loader;
 
-                Pane roomItem = loader.load();
+                switch (room.getRoomStatus()) {
+                    case AVAILABLE -> {
+                        loader = new FXMLLoader(getClass().getResource(
+                                "/iuh/fit/view/features/room/room_items/RoomAvailableItem.fxml"));
+                        Pane roomItem = loader.load();
 
-                RoomAvailableController controller = loader.getController();
-                controller.setRoom(room);
+                        RoomAvailableController controller = loader.getController();
+                        controller.setRoom(room);
+                        controller.setMainController(mainController);
 
-                roomGridPane.add(roomItem, col, row);
+                        roomGridPane.add(roomItem, col, row);
+                    }
+                    case ON_USE -> {
+                        loader = new FXMLLoader(getClass().getResource(
+                                "/iuh/fit/view/features/room/room_items/RoomOnUseItem.fxml"));
+                        Pane roomItem = loader.load();
+
+                        RoomOnUseController controller = loader.getController();
+                        controller.setRoom(room);
+
+                        roomGridPane.add(roomItem, col, row);
+                    }
+                    case OVERDUE -> {
+                        loader = new FXMLLoader(getClass().getResource(
+                                "/iuh/fit/view/features/room/room_items/RoomOverDueItem.fxml"));
+                        Pane roomItem = loader.load();
+                        roomGridPane.add(roomItem, col, row);
+                    }
+                    default -> throw new IllegalStateException("Unexpected value: " + room.getRoomStatus());
+                }
+
 
                 col++;
                 if (col == 3) {
@@ -124,6 +161,5 @@ public class RoomBookingController {
         roomCategoryCBox.setOnAction(e -> handleSearch());
         roomFloorNumberCBox.setOnAction(e -> handleSearch());
     }
-
 
 }

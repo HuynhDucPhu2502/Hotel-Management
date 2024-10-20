@@ -1,6 +1,7 @@
 package iuh.fit.controller;
 
 import iuh.fit.controller.features.MenuController;
+import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.models.Account;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -47,6 +48,9 @@ public class MainController {
                 menuController.getHotelServiceSearchingButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/HotelServiceSearchingPanel.fxml"));
 
                 // Customer
+                menuController.getCustomerManagerButton().setOnAction(e -> {
+                    loadPanel("/iuh/fit/view/features/customer/CustomerManagerPanel.fxml");
+                });
                 // Account
                 // Statistics
                 // History
@@ -60,15 +64,24 @@ public class MainController {
         }
     }
 
-    private void loadPanel(String fxmlPath) {
+    public void loadPanel(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             AnchorPane layout = loader.load();
+
+            if (fxmlPath.contains("RoomBookingPanel")) {
+                RoomBookingController roomBookingController = loader.getController();
+                roomBookingController.setMainController(this);
+            }
 
             mainPanel.getChildren().clear();
             mainPanel.getChildren().addAll(layout.getChildren());
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public AnchorPane getMainPanel() {
+        return mainPanel;
     }
 }

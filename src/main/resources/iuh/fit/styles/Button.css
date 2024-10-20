@@ -38,3 +38,9 @@
 .button-delete:pressed {
     -fx-background-color: RGB(150, 0, 0);
 }
+
+.button-view {
+    -fx-background-color: RGB(70, 130, 180); /* Xanh dương nhạt */
+    -fx-text-fill: white; /* Màu chữ trắng */
+    -fx-min-width: 100px;
+}
