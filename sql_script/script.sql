@@ -137,23 +137,24 @@ CREATE TABLE Customer (
     email NVARCHAR(50) NOT NULL,
     address NVARCHAR(100) NOT NULL,
     gender NVARCHAR(6) NOT NULL CHECK (gender IN ('MALE', 'FEMALE')),
-    idCardNumber NVARCHAR(12) NOT NULL,
+    idCardNumber NVARCHAR(12) NOT NULL UNIQUE,
     dob DATE NOT NULL
 );
 GO
+
 
 -- Tạo bảng ReservationForm
 CREATE TABLE ReservationForm (
     reservationFormID NVARCHAR(15) NOT NULL PRIMARY KEY,        
     reservationDate DATETIME NOT NULL,            
-    approxCheckInDate DATETIME NOT NULL,          
-    approxCheckOutDate DATETIME NOT NULL,         
-    employeeID NVARCHAR(15) NOT NULL,              
-    roomID NVARCHAR(15) NOT NULL,                   
-    customerID NVARCHAR(15) NOT NULL,               
-    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID),  
-    FOREIGN KEY (roomID) REFERENCES Room(roomID),              
-    FOREIGN KEY (customerID) REFERENCES Customer(customerID)   
+    checkInDate DATETIME NOT NULL,
+    checkOutDate DATETIME NOT NULL,
+    employeeID NVARCHAR(15),
+    roomID NVARCHAR(15),
+    customerID NVARCHAR(15),
+    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID) ON DELETE SET NULL,
+    FOREIGN KEY (roomID) REFERENCES Room(roomID) ON DELETE SET NULL,
+    FOREIGN KEY (customerID) REFERENCES Customer(customerID) ON DELETE SET NULL
 );
 GO
 
