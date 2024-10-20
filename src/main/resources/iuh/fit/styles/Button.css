@@ -40,7 +40,22 @@
 }
 
 .button-view {
-    -fx-background-color: RGB(70, 130, 180); /* Xanh dương nhạt */
-    -fx-text-fill: white; /* Màu chữ trắng */
+    -fx-background-color: RGB(70, 130, 180);
+    -fx-text-fill: white;
     -fx-min-width: 100px;
+}
+
+
+.button-view:hover {
+    -fx-background-color: RGB(100, 149, 237);
+}
+
+.button-view:pressed {
+    -fx-background-color: RGB(65, 105, 225);
+}
+
+.text-field, .text-area {
+    -fx-opacity: 1.0;
+    -fx-text-fill: black;
+    -fx-background-color: white;
 }
