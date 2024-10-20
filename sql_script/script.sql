@@ -10,8 +10,8 @@ USE HotelDatabase;
 GO
 
 -- Xóa cơ sở dữ liệu
---USE master
---DROP DATABASE HotelDatabase
+USE master
+DROP DATABASE HotelDatabase
 
 -- ===================================================================================
 -- 1. TẠO BẢNG
