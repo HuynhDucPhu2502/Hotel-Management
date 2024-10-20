@@ -12,8 +12,10 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.*?>
 
 <AnchorPane minHeight="600.0" minWidth="240.0" stylesheets="@../../styles/Menubar.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
    <children>
@@ -124,41 +126,94 @@
                                     </HBox>
                                  </graphic>
                               </Button>
-                              <HBox fx:id="pricingManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="pricingManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
                                  <children>
-                                    <Button fx:id="pricingManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lý giá loại phòng" />
+
+                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                          <MoveTo x="10" y="40" />
+                                          <LineTo x="10" y="55" />
+                                       </elements>
+                                    </Path>
+
+                                    <Button fx:id="pricingManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Quản lý giá loại phòng" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="roomCategoryManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="roomCategoryManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
                                  <children>
-                                    <Button fx:id="roomCategoryManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lý loại phòng" />
+
+                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                          <MoveTo x="10" y="40" />
+                                          <LineTo x="10" y="55" />
+                                       </elements>
+                                    </Path>
+
+                                    <Button fx:id="roomCategoryManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Quản lý loại phòng" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="roomManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="roomManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
                                  <children>
-                                    <Button fx:id="roomManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lý phòng" />
+
+                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                          <MoveTo x="10" y="40" />
+                                          <LineTo x="10" y="55" />
+                                       </elements>
+                                    </Path>
+
+                                    <Button fx:id="roomManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Quản lý phòng" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="roomBookingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="roomBookingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
                                  <children>
-                                    <Button fx:id="roomBookingButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Đặt Phòng" />
+
+                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                          <MoveTo x="10" y="40" />
+                                          <LineTo x="10" y="55" />
+                                       </elements>
+                                    </Path>
+
+                                    <Button fx:id="roomBookingButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Đặt Phòng" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="roomSearchingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="roomSearchingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
                                  <children>
-                                    <Button fx:id="roomSearchingButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Tìm kiếm phòng" />
+
+                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                       </elements>
+                                    </Path>
+
+                                    <Button fx:id="roomSearchingButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Tìm kiếm phòng" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
@@ -193,9 +248,20 @@
                                     </HBox>
                                  </graphic>
                               </Button>
-                              <HBox fx:id="serviceCategoryManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="serviceCategoryManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
                                  <children>
-                                    <Button fx:id="serviceCategoryManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" text="Quản lý loại dịch vụ">
+
+                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                          <MoveTo x="10" y="40" />
+                                          <LineTo x="10" y="55" />
+                                       </elements>
+                                    </Path>
+
+                                    <Button fx:id="serviceCategoryManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" text="Quản lý loại dịch vụ">
                                        <styleClass>
                                           <String fx:value="menu-bar-child" />
                                           <String fx:value="button" />
@@ -205,17 +271,37 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="hotelServiceManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="hotelServiceManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
                                  <children>
-                                    <Button fx:id="hotelServiceManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lý dịch vụ" />
+
+                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                          <MoveTo x="10" y="40" />
+                                          <LineTo x="10" y="55" />
+                                       </elements>
+                                    </Path>
+
+                                    <Button fx:id="hotelServiceManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Quản lý dịch vụ" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="hotelServiceSearchingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="hotelServiceSearchingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
                                  <children>
-                                    <Button fx:id="hotelServiceSearchingButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Tìm kiếm dịch vụ" />
+
+                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                       </elements>
+                                    </Path>
+
+                                    <Button fx:id="hotelServiceSearchingButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Tìm kiếm dịch vụ" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
