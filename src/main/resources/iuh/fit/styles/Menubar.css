@@ -40,3 +40,20 @@
 .scrollPane > .viewport {
     -fx-background-color: transparent;
 }
+
+.scrollPane .scroll-bar:vertical {
+    -fx-pref-width: 10; /* Chiều rộng của thanh cuộn */
+}
+
+.scrollPane .scroll-bar:vertical .thumb {
+    -fx-background-radius: 5; /* Bo góc cho phần kéo */
+}
+
+.scrollPane .scroll-bar:horizontal {
+    -fx-pref-height: 10; /* Chiều cao của thanh cuộn ngang */
+}
+
+.scrollPane .scroll-bar:horizontal .thumb {
+    -fx-background-radius: 5; /* Bo góc cho phần kéo */
+}
+

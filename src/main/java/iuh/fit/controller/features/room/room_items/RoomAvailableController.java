@@ -23,6 +23,7 @@ public class RoomAvailableController {
     private Room room;
 
     public void setRoom(Room room) {
+        roomCategoryNameLabel.setText(room.getRoomCategory().getRoomCategoryName());
         roomNumberText.setText(room.getRoomNumer());
     }
 

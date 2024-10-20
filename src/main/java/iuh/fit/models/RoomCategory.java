@@ -131,10 +131,6 @@ public class RoomCategory {
      */
     @Override
     public String toString() {
-        return "RoomCategory{" +
-                "roomCategoryid='" + roomCategoryID + '\'' +
-                ", roomCategoryName='" + roomCategoryName + '\'' +
-                ", numberOfBed=" + numberOfBed +
-                '}';
+        return roomCategoryID + ' ' + roomCategoryName;
     }
 }

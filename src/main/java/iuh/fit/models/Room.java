@@ -79,8 +79,13 @@ public class Room {
         return String.valueOf(roomID.charAt(2));
     }
 
-    public String getRoomNumer() {
+    public String getRoomNumber() {
         return roomID.substring(2);
+    }
+
+    //Thêm phương thức lấy mã phòng từ class Phòng, phục vụ cho RoomManagerController load số giường vào tableView thông qua PropertyValueFactory
+    public int getNumberOfBed() {
+        return roomCategory != null ? roomCategory.getNumberOfBed() : 0; // Handle null case
     }
 
     @Override
