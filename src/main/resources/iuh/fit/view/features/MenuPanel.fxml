@@ -11,11 +11,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.LineTo?>
+<?import javafx.scene.shape.MoveTo?>
+<?import javafx.scene.shape.Path?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.shape.*?>
 
-<AnchorPane minHeight="600.0" minWidth="240.0" stylesheets="@../../styles/Menubar.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
+<AnchorPane minHeight="600.0" minWidth="240.0" stylesheets="@../../styles/Menubar.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
    <children>
       <VBox minHeight="140.0" style="-fx-alignment: center; -fx-background-radius: 10; -fx-background-color: RGB(70, 130, 180);" styleClass="menu-bar-topbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -124,10 +127,10 @@
                                     </HBox>
                                  </graphic>
                               </Button>
-                              <HBox fx:id="pricingManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
+                              <HBox fx:id="pricingManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
                                  <children>
 
-                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
                                        <elements>
                                           <MoveTo x="10" y="25" />
                                           <LineTo x="10" y="40" />
@@ -143,10 +146,10 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="roomCategoryManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
+                              <HBox fx:id="roomCategoryManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
                                  <children>
 
-                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
                                        <elements>
                                           <MoveTo x="10" y="25" />
                                           <LineTo x="10" y="40" />
@@ -162,10 +165,10 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="roomManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
+                              <HBox fx:id="roomManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
                                  <children>
 
-                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
                                        <elements>
                                           <MoveTo x="10" y="25" />
                                           <LineTo x="10" y="40" />
@@ -181,10 +184,10 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="roomBookingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
+                              <HBox fx:id="roomBookingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
                                  <children>
 
-                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
                                        <elements>
                                           <MoveTo x="10" y="25" />
                                           <LineTo x="10" y="40" />
@@ -200,10 +203,10 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="roomSearchingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
+                              <HBox fx:id="roomSearchingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
                                  <children>
 
-                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
                                        <elements>
                                           <MoveTo x="10" y="25" />
                                           <LineTo x="10" y="40" />
@@ -246,10 +249,10 @@
                                     </HBox>
                                  </graphic>
                               </Button>
-                              <HBox fx:id="serviceCategoryManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
+                              <HBox fx:id="serviceCategoryManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
                                  <children>
 
-                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
                                        <elements>
                                           <MoveTo x="10" y="25" />
                                           <LineTo x="10" y="40" />
@@ -269,10 +272,10 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="hotelServiceManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
+                              <HBox fx:id="hotelServiceManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
                                  <children>
 
-                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
                                        <elements>
                                           <MoveTo x="10" y="25" />
                                           <LineTo x="10" y="40" />
@@ -288,10 +291,10 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="hotelServiceSearchingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false" style="-fx-padding: 0 0 0 20;">
+                              <HBox fx:id="hotelServiceSearchingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
                                  <children>
 
-                                    <Path stroke="WHITE" strokeWidth="1" fill="transparent">
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
                                        <elements>
                                           <MoveTo x="10" y="25" />
                                           <LineTo x="10" y="40" />
@@ -326,7 +329,7 @@
             
                                              <Label prefHeight="110.0" prefWidth="110.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Khách hàng" textFill="WHITE" />
             
-                                             <ImageView fx:id="arrowUpForEmpBtn21" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="6">
+                                             <ImageView fx:id="arrowUpForCustomer" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="6">
                                           <image>
                                              <Image url="@../../icons/arrow_down.png" />
                                           </image>
@@ -337,22 +340,6 @@
                               <HBox fx:id="customerManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
                                  <children>
                                     <Button fx:id="customerManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lí khách hàng" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </HBox>
-                              <HBox fx:id="buttonTwoContainer21" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </HBox>
-                              <HBox fx:id="buttonThreeContainer21" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
