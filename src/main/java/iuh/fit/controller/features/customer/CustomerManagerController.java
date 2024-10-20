@@ -2,12 +2,8 @@ package iuh.fit.controller.features.customer;
 
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.CustomerDAO;
-import iuh.fit.dao.PricingDAO;
-import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.models.Customer;
-import iuh.fit.models.Pricing;
 import iuh.fit.models.enums.Gender;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,8 +14,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -81,8 +77,6 @@ public class CustomerManagerController implements Initializable {
     @FXML
     private Button addBtn;
     @FXML
-    private Button resetBtn;
-    @FXML
     private Button updateBtn;
 
     // group
@@ -93,9 +87,6 @@ public class CustomerManagerController implements Initializable {
     @FXML
     private DialogPane dialogPane;
 
-
-    @FXML
-    private VBox upperBox;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -129,6 +120,77 @@ public class CustomerManagerController implements Initializable {
         setupActionColumn();
     }
 
+    private void setupActionColumn() {
+        Callback<TableColumn<Customer, Void>, TableCell<Customer, Void>> cellFactory = param -> new TableCell<>() {
+            private final Button updateButton = new Button("Cập nhật");
+            private final Button deleteButton = new Button("Xóa");
+            private final Button showInfoButton = new Button("Thông tin");
+            private final HBox hBox = new HBox(10);
+            {
+                // Thêm class CSS cho các button
+                updateButton.getStyleClass().add("button-update");
+                deleteButton.getStyleClass().add("button-delete");
+                showInfoButton.getStyleClass().add("button-view");
+
+                // Thêm file CSS vào HBox
+                hBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/Button.css")).toExternalForm());
+
+                // Set hành động cho các button
+                updateButton.setOnAction(event -> {
+                    Customer customer = getTableView().getItems().get(getIndex());
+                    handleUpdateBtn(customer);
+                });
+
+                deleteButton.setOnAction(event -> {
+                    Customer customer = getTableView().getItems().get(getIndex());
+                    handleDeleteAction(customer);
+                });
+
+                showInfoButton.setOnAction(e -> {
+                    Customer customer = getTableView().getItems().get(getIndex());
+                    try {
+                        handleShowCustomerInformation(customer);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
+
+                hBox.setAlignment(Pos.CENTER);
+                hBox.getChildren().addAll(updateButton, deleteButton, showInfoButton);
+            }
+
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(hBox);
+                }
+            }
+        };
+
+        actionColumn.setCellFactory(cellFactory);
+    }
+
+    private void handleShowCustomerInformation(Customer customer) throws IOException {
+        String source = "/iuh/fit/view/features/customer/CustomerInformationView.fxml";
+
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
+        AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
+
+        CustomerInformationViewController customerInformationViewController = loader.getController();
+        customerInformationViewController.setCustomer(customer);
+
+        Scene scene = new Scene(layout);
+
+        Stage stage = new Stage();
+        stage.setTitle("Thông tin khách hàng");
+        stage.setScene(scene);
+        stage.show();
+    }
+
     public void resetField() {
         customerNameTextField.setText("");
         customerPhoneNumberTextField.setText("");
@@ -156,13 +218,12 @@ public class CustomerManagerController implements Initializable {
         }
         String CCCD = customerCCCDTextField.getText();
         LocalDate dob = customerDOBDatePicker.getValue();
+        System.out.println(CCCD);
 
         return new Customer(id, name, phone, email, address, gender, CCCD, dob);
     }
 
     public void addCus(ActionEvent event) {
-
-
         try{
             Customer customer = createCustomer();
             CustomerDAO.createData(customer);
@@ -178,86 +239,6 @@ public class CustomerManagerController implements Initializable {
         }
     }
 
-    private void setupActionColumn() {
-        Callback<TableColumn<Customer, Void>, TableCell<Customer, Void>> cellFactory = param -> new TableCell<>() {
-            private final Button updateButton = new Button("Cập nhật");
-            private final Button deleteButton = new Button("Xóa");
-            private final Button showInforButton = new Button("Thông tin");
-            private final HBox hBox = new HBox(10);
-            {
-                // Thêm class CSS cho các button
-                updateButton.getStyleClass().add("button-update");
-                deleteButton.getStyleClass().add("button-delete");
-                showInforButton.getStyleClass().add("button-view");
-
-                // Thêm file CSS vào HBox
-                hBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/Button.css")).toExternalForm());
-
-                // Set hành động cho các button
-                updateButton.setOnAction(event -> {
-                    Customer customer = getTableView().getItems().get(getIndex());
-                    handleUpdateBtn(customer);
-                });
-
-                deleteButton.setOnAction(event -> {
-                    Customer customer = getTableView().getItems().get(getIndex());
-                    handleDeleteAction(customer);
-                });
-
-                showInforButton.setOnAction(e -> {
-                    Customer customer = getTableView().getItems().get(getIndex());
-                    try {
-                        showInfor(customer);
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                });
-
-                hBox.setAlignment(Pos.CENTER);
-                hBox.getChildren().addAll(updateButton, deleteButton, showInforButton);
-            }
-
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(hBox);
-                }
-            }
-        };
-
-        actionColumn.setCellFactory(cellFactory);
-    }
-
-    private void showInfor(Customer customer) throws IOException {
-        String source = "/iuh/fit/view/features/customer/InformationView.fxml";
-        FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
-        Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(String.valueOf(getClass().getResource("/iuh/fit/styles/TextFieldCustomerInfor.css")));
-        Stage stage = new Stage();
-        stage.setTitle("Thông tin khách hàng");
-        stage.setScene(scene);
-        loadInforToStage(fxmlLoader, customer);
-        stage.show();
-    }
-
-    private void loadInforToStage(FXMLLoader fxmlLoader, Customer customer) {
-        InformationView_Controller controller = fxmlLoader.getController();
-
-        controller.getCustomerIDTextField().setText(customer.getCustomerID());
-        controller.getCustomerNameTextField().setText(customer.getFullName());
-        controller.getCustomerPhoneNumberTextField().setText(customer.getPhoneNumber());
-        controller.getCustomerEmailTextField().setText(customer.getEmail());
-        controller.getAddressTextAria().setText(customer.getAddress());
-        if(customer.getGender().equals(Gender.MALE))
-            controller.getRadMale().setSelected(true);
-        controller.getRadFemale().setSelected(true);
-        controller.getCustomerCCCDTextField().setText(customer.getIdCardNumber());
-        controller.getCustomerDOBDatePicker().setValue(customer.getDob());
-    }
 
     private void handleDeleteAction(Customer customer) {
         DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn xóa?");
