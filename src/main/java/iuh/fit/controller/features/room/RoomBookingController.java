@@ -114,7 +114,7 @@ public class RoomBookingController {
         }
 
         filteredRooms = filteredRooms.stream()
-                .sorted(Comparator.comparing(Room::getRoomNumer))
+                .sorted(Comparator.comparing(Room::getRoomNumber))
                 .collect(Collectors.toList());
 
         displayFilteredRooms(filteredRooms);
