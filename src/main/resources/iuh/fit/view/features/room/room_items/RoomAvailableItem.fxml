@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -9,11 +10,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="150.0" maxWidth="370.0" minHeight="150.0" minWidth="370.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.room_items.RoomAvailableController">
+<AnchorPane fx:id="container" minHeight="150.0" minWidth="380.0" onMouseClicked="#handleRoomClick" styleClass="box-Available" stylesheets="@../../../../styles/RoomItem.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.room_items.RoomAvailableController">
    <children>
       <BorderPane minWidth="150.0" prefWidth="150.0" style="-fx-background-color: rgb(114, 191, 120);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <Text fx:id="roomNumberTextField" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="101" BorderPane.alignment="CENTER">
+            <Text fx:id="roomNumberText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="101" BorderPane.alignment="CENTER">
                <font>
                   <Font name="System Bold" size="32.0" />
                </font>
@@ -57,4 +58,7 @@
          </bottom>
       </BorderPane>
    </children>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
 </AnchorPane>

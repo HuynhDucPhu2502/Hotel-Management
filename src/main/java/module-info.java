@@ -16,7 +16,8 @@ module iuh.fit {
     opens iuh.fit.models to javafx.base;
 
     exports iuh.fit;
-    exports iuh.fit.controller.features.service;
-    exports iuh.fit.controller.features.room;
+    exports iuh.fit.controller;
     exports iuh.fit.controller.features;
+    exports iuh.fit.controller.features.room;
+    exports iuh.fit.controller.features.service;
 }
