@@ -24,6 +24,12 @@ CREATE TABLE GlobalSequence (
 );
 GO
 
+-- Tạo bảng Value count
+create table ValueCount(
+	vName nvarchar(50) primary key,
+	vCount int
+);
+
 -- Tạo bảng Employee
 CREATE TABLE Employee (
     employeeID NVARCHAR(15) NOT NULL PRIMARY KEY, 
@@ -348,6 +354,66 @@ VALUES
     ('CUS-000004', N'Pham Thi D', '0912345681', 'phamthid@gmail.com', N'321 Duong PQR, Quan 7, TP HCM', N'FEMALE', '001099012546', '1995-12-01'),
     ('CUS-000005', N'Hoang Van E', '0912345682', 'hoangvane@gmail.com', N'987 Duong STU, Quan 10, TP HCM', N'MALE', '001099012764', '1991-11-20');
 GO
+
+-- Thêm dữ liệu vào bảng ReservationForm
+INSERT INTO ReservationForm (reservationFormID, reservationDate, approxCheckInDate, approxCheckOutDate, employeeID, roomID, customerID)
+VALUES 
+    ('RF-000001', '2024-09-29 10:00:00', '2024-10-02 14:00:00', '2024-10-05 12:00:00', 'EMP-000001', 'ROOM-000001', 'CUS-000001'),
+    ('RF-000002', '2024-09-29 11:30:00', '2024-10-03 15:00:00', '2024-10-07 11:00:00', 'EMP-000002', 'ROOM-000002', 'CUS-000002'),
+    ('RF-000003', '2024-09-29 09:00:00', '2024-10-04 13:00:00', '2024-10-06 10:00:00', 'EMP-000003', 'ROOM-000003', 'CUS-000003'),
+    ('RF-000004', '2024-09-29 08:00:00', '2024-10-05 12:00:00', '2024-10-08 09:00:00', 'EMP-000004', 'ROOM-000004', 'CUS-000004');
+GO
+
+-- Thêm dữ liệu vào bảng RoomUsageService
+INSERT INTO RoomUsageService (roomUsageServiceId, quantity, hotelServiceId, reservationFormID)
+VALUES 
+    ('RUS-000001', 2, 'HS-000001', 'RF-000001'),  
+    ('RUS-000002', 1, 'HS-000002', 'RF-000002'),  
+    ('RUS-000003', 3, 'HS-000003', 'RF-000003'),  
+    ('RUS-000004', 1, 'HS-000004', 'RF-000004');
+GO
+
+-- Thêm dữ liệu vào bảng Tax
+INSERT INTO Tax (taxID, taxName, taxRate, dateOfCreation, activate)
+VALUES
+    ('TAX-0001', N'VAT', 10.0, '2024-10-01', 1),
+    ('TAX-0002', N'Thuế dịch vụ', 5.0, '2024-10-01', 1);
+GO
+
+-- Thêm dữ liệu vào bảng Invoice
+INSERT INTO Invoice (invoiceID, invoiceDate, roomCharge, servicesCharge, totalDue, netDue, taxID, reservationFormID)
+VALUES
+    ('INV-0001', '2024-10-05 12:00:00', 800000, 150000, 950000, 1045000, 'TAX-0001', 'RF-000001'),
+    ('INV-0002', '2024-10-07 13:00:00', 850000, 200000, 1050000, 1155000, 'TAX-0002', 'RF-000002');
+GO
+
+-- Thêm dữ liệu vào bảng HistoryCheckin
+INSERT INTO HistoryCheckin (historyCheckInID, checkInDate, reservationFormID)
+VALUES 
+    ('HCI-000001', '2024-10-02 14:00:00', 'RF-000001'),
+    ('HCI-000002', '2024-10-03 15:00:00', 'RF-000002'),
+    ('HCI-000003', '2024-10-04 13:00:00', 'RF-000003'),
+    ('HCI-000004', '2024-10-05 12:00:00', 'RF-000004');
+GO
+
+-- Thêm dữ liệu vào bảng HistoryCheckOut
+INSERT INTO HistoryCheckOut (historyCheckOutID, checkOutDate, reservationFormID)
+VALUES 
+    ('HCO-000001', '2024-10-05 11:00:00', 'RF-000001'),
+    ('HCO-000002', '2024-10-06 10:00:00', 'RF-000002'),
+    ('HCO-000003', '2024-10-07 09:00:00', 'RF-000003'),
+    ('HCO-000004', '2024-10-08 08:00:00', 'RF-000004');
+GO
+
+-- Thêm dữ liệu vào bảng RoomReservationDetail
+INSERT INTO RoomReservationDetail (roomReservationDetailID, dateChanged, roomID, reservationFormID)
+VALUES 
+    ('RRD-000001', '2024-10-02 14:00:00', 'ROOM-000001', 'RF-000001'),
+    ('RRD-000002', '2024-10-03 15:00:00', 'ROOM-000002', 'RF-000002'),
+    ('RRD-000003', '2024-10-04 13:00:00', 'ROOM-000003', 'RF-000003'),
+    ('RRD-000004', '2024-10-05 12:00:00', 'ROOM-000004', 'RF-000004');
+GO
+
 -- ===================================================================================
 -- 3. TRIGGER 
 -- ===================================================================================
@@ -369,4 +435,5 @@ BEGIN
     END
 END;
 GO
+
 

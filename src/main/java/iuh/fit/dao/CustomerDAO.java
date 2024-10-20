@@ -1,8 +1,6 @@
 package iuh.fit.dao;
 
 import iuh.fit.models.Customer;
-import iuh.fit.models.Employee;
-import iuh.fit.models.ServiceCategory;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 
@@ -44,6 +42,41 @@ public class CustomerDAO {
 
         return data;
     }
+
+    public static int getValueCount() {
+        int count = 0;
+        String sql = "SELECT vCount FROM ValueCount WHERE vName = ?"; // Thêm khoảng trắng
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+        ) {
+            statement.setString(1, "Customer");
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) { // Kiểm tra xem có bản ghi nào không
+                count = rs.getInt("vCount"); // Sử dụng tên cột thay vì chỉ số
+            }
+        } catch (Exception exception) {
+            throw new IllegalArgumentException(exception.getMessage());
+        }
+        return count;
+    }
+
+    public static void setValueCount(int valueCount) {
+        int n = 0;
+        String sql = "UPDATE ValueCount SET vCount = ? WHERE vName = ?"; // Thêm khoảng trắng
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+        ) {
+            statement.setInt(1, valueCount);
+            statement.setString(2, "Customer");
+            statement.executeUpdate();
+        } catch (Exception exception) {
+            throw new IllegalArgumentException(exception.getMessage());
+        }
+    }
+
 
     public static Customer getDataByID(String customerID) {
 
@@ -95,7 +128,7 @@ public class CustomerDAO {
             preparedStatement.setString(3, customer.getPhoneNumber());
             preparedStatement.setString(4, customer.getEmail());
             preparedStatement.setString(5, customer.getAddress());
-            preparedStatement.setString(6, customer.getGender().toString());
+            preparedStatement.setString(6, customer.getGender().name());
             preparedStatement.setString(7, customer.getIdCardNumber());
             preparedStatement.setDate(8, ConvertHelper.dateConvertertoSQL(customer.getDob()));
 
@@ -126,7 +159,7 @@ public class CustomerDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                        "UPDATE ServiceCategory " +
+                        "UPDATE Customer " +
                                 "SET fullName = ?, phoneNumber = ?, " +
                                 "email = ?, address = ?, gender = ?, " +
                                 "idCardNumber = ?, dob = ?" +
@@ -137,7 +170,7 @@ public class CustomerDAO {
             preparedStatement.setString(2, customer.getPhoneNumber());
             preparedStatement.setString(3, customer.getEmail());
             preparedStatement.setString(4, customer.getAddress());
-            preparedStatement.setString(5, customer.getGender().toString());
+            preparedStatement.setString(5, customer.getGender().name());
             preparedStatement.setString(6, customer.getIdCardNumber());
             preparedStatement.setDate(7, ConvertHelper.dateConvertertoSQL(customer.getDob()));
             preparedStatement.setString(8, customer.getCustomerID());
@@ -148,5 +181,21 @@ public class CustomerDAO {
             System.exit(1);
         }
 
+    }
+
+    public static String getNextCustomerID() {
+        String sql = "SELECT nextID FROM GlobalSequence WHERE tableName = 'Customer'";
+        try (
+                Connection connection = DBHelper.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(sql)
+        ) {
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "RC-000001";
     }
 }
