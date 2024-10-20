@@ -143,23 +143,24 @@ CREATE TABLE Customer (
     email NVARCHAR(50) NOT NULL,
     address NVARCHAR(100) NOT NULL,
     gender NVARCHAR(6) NOT NULL CHECK (gender IN ('MALE', 'FEMALE')),
-    idCardNumber NVARCHAR(12) NOT NULL,
+    idCardNumber NVARCHAR(12) NOT NULL UNIQUE,
     dob DATE NOT NULL
 );
 GO
+
 
 -- Tạo bảng ReservationForm
 CREATE TABLE ReservationForm (
     reservationFormID NVARCHAR(15) NOT NULL PRIMARY KEY,        
     reservationDate DATETIME NOT NULL,            
-    approxCheckInDate DATETIME NOT NULL,          
-    approxCheckOutDate DATETIME NOT NULL,         
-    employeeID NVARCHAR(15) NOT NULL,              
-    roomID NVARCHAR(15) NOT NULL,                   
-    customerID NVARCHAR(15) NOT NULL,               
-    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID),  
-    FOREIGN KEY (roomID) REFERENCES Room(roomID),              
-    FOREIGN KEY (customerID) REFERENCES Customer(customerID)   
+    checkInDate DATETIME NOT NULL,
+    checkOutDate DATETIME NOT NULL,
+    employeeID NVARCHAR(15),
+    roomID NVARCHAR(15),
+    customerID NVARCHAR(15),
+    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID) ON DELETE SET NULL,
+    FOREIGN KEY (roomID) REFERENCES Room(roomID) ON DELETE SET NULL,
+    FOREIGN KEY (customerID) REFERENCES Customer(customerID) ON DELETE SET NULL
 );
 GO
 
@@ -235,19 +236,14 @@ GO
 -- Thêm dữ liệu vào bảng GlobalSequence
 INSERT INTO GlobalSequence(tableName, nextID)
 VALUES
-    ('ServiceCategory', 'SC-000005'),
     ('Employee', 'EMP-000006'),
     ('Account', 'ACC-000006'),
-    ('Room', 'ROOM-000011'),
-    ('ReservationForm', 'RF-000005'),
-    ('ShiftAssignment', 'SA-000004'),
-    ('Invoice', 'INV-000003'),
-    ('HistoryCheckin', 'HCI-000005'),
-    ('HistoryCheckOut', 'HCO-000005'),
-    ('RoomReservationDetail', 'RRD-000005'),
-    ('HotelService', 'HS-000008'),
+	('ServiceCategory', 'SC-000005'),
+	('HotelService', 'HS-000008'),
+	('RoomReservationDetail', 'RRD-000005'),
 	('Pricing', 'P-000009'),
-	('RoomCategory', 'RC-000005')
+	('RoomCategory', 'RC-000005'),
+    ('ShiftAssignment', 'SA-000004')
 GO
 
 -- Thêm dữ liệu vào bảng Employee
@@ -316,16 +312,16 @@ GO
 -- Thêm dữ liệu vào bảng Room với mã phòng mới
 INSERT INTO Room (roomID, roomStatus, dateOfCreation, roomCategoryID)
 VALUES 
-    ('T000101', N'ON_USE', '2024-09-28 10:00:00', 'RC-000001'),
-    ('V000102', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
-    ('T000203', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
-    ('V000304', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
-    ('T000105', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
-    ('V000206', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
-    ('T000307', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
-    ('V000408', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
-    ('T000109', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
-    ('V000210', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002');
+    ('T1101', N'ON_USE', '2024-09-28 10:00:00', 'RC-000001'),
+    ('V2102', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
+    ('T2203', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+    ('V2304', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+    ('T2105', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+    ('V2206', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
+    ('T2307', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+    ('V2408', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+    ('T1109', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+    ('V1210', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002');
 GO
 
 
@@ -417,8 +413,6 @@ VALUES
     ('RRD-000003', '2024-10-04 13:00:00', 'ROOM-000003', 'RF-000003'),
     ('RRD-000004', '2024-10-05 12:00:00', 'ROOM-000004', 'RF-000004');
 GO
-
-
 
 -- ===================================================================================
 -- 3. TRIGGER 

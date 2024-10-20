@@ -52,9 +52,19 @@ public class MenuController {
     private Button roomCategoryManagerButton;
 
     @FXML
+    private HBox roomManagerContainer;
+    @FXML
+    private Button roomManagerButton;
+
+    @FXML
     private HBox roomSearchingContainer;
     @FXML
     private Button roomSearchingButton;
+
+    @FXML
+    private HBox roomBookingContainer;
+    @FXML
+    private Button roomBookingButton;
 
     @FXML
     private ImageView arrowUpForRoom;
@@ -160,7 +170,7 @@ public class MenuController {
         buttonStates.put("history", false);
 
         employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer, buttonTwoContainer, buttonThreeContainer), arrowUpForEmpBtn, "employee"));
-        roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer, roomCategoryManagerContainer, roomSearchingContainer), arrowUpForRoom, "room"));
+        roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer, roomCategoryManagerContainer, roomManagerContainer, roomSearchingContainer, roomBookingContainer), arrowUpForRoom, "room"));
         serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryManagerContainer, hotelServiceManagerContainer, hotelServiceSearchingContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer, buttonTwoContainer21, buttonThreeContainer21), arrowUpForEmpBtn21, "customer"));
         accountBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer211, buttonTwoContainer211, buttonThreeContainer211), arrowUpForEmpBtn211, "account"));
@@ -214,10 +224,20 @@ public class MenuController {
         return roomCategoryManagerButton;
     }
 
+    public Button getRoomManagerButton(){
+        return roomManagerButton;
+    };
+
     public Button getRoomSearchingButton() {
         return roomSearchingButton;
     }
 
+
     public Button getCustomerManagerButton(){ return customerManagerButton; }
+
+    public Button getRoomBookingButton() {
+        return roomBookingButton;
+    }
+
 }
 

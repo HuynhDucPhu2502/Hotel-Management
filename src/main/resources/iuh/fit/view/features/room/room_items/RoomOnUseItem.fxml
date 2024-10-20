@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:controller="iuh.fit.controller.features.room.room_items.RoomOnUseController" minHeight="150.0" minWidth="380.0" styleClass="box-OnUse" stylesheets="@../../../../styles/RoomItem.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <BorderPane minWidth="150.0" prefWidth="150.0" style="-fx-background-color: rgb(55, 175, 225);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <Text fx:id="roomNumberText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="102" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="32.0" />
+               </font>
+            </Text>
+         </center>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <bottom>
+            <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../../../../icons/ic_onuse.png" />
+               </image>
+            </ImageView>
+         </bottom>
+         <top>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Phòng" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+         </top>
+      </BorderPane>
+      <BorderPane layoutX="150.39999389648438" style="-fx-background-color: rgb(76, 201, 254);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <top>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày trả phòng 10/19/2024" textAlignment="CENTER" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+         </top>
+         <center>
+            <Label text="Huỳnh Đức Phú" textFill="WHITE" textOverrun="LEADING_WORD_ELLIPSIS" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+         </center>
+         <bottom>
+            <Label fx:id="roomCategoryNameLabel" text="Phòng Thường giường đơn" textFill="WHITE" textOverrun="LEADING_WORD_ELLIPSIS" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+         </bottom>
+      </BorderPane>
+   </children>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
+</AnchorPane>
