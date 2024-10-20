@@ -14,10 +14,10 @@ import java.util.List;
 
 public class RoomDAO {
     public static List<Room> getRoom() {
-        ArrayList<Room> data = new ArrayList<Room>();
+        ArrayList<Room> data = new ArrayList<>();
         try (
                 Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ){
             String sql = "SELECT a.roomID, a.roomStatus, a.dateOfCreation, a.roomCategoryID, " +
                     "b.roomCategoryName, b.numberOfBed " +
@@ -131,7 +131,7 @@ public class RoomDAO {
                         "UPDATE Room " +
                                 "SET roomStatus = ?, dateOfCreation = ?, roomCategoryID = ? " +
                                 "WHERE roomID = ? "
-                );
+                )
         ){
             preparedStatement.setString(1, ConvertHelper.roomStatusConverterToSQL(room.getRoomStatus()));
             preparedStatement.setTimestamp(2, ConvertHelper.dateTimeConvertertoSQL(room.getDateOfCreation()));
