@@ -15,7 +15,7 @@ public class RoomAvailableController {
     private Room room;
 
     public void setRoom(Room room) {
-        roomNumberTextField.setText(room.getRoomNumer());
+        roomNumberTextField.setText(room.getRoomNumber());
         roomCategoryNameLabel.setText(room.getRoomCategory().getRoomCategoryName());
     }
 }
