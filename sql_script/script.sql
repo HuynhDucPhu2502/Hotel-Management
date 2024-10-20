@@ -24,6 +24,12 @@ CREATE TABLE GlobalSequence (
 );
 GO
 
+-- Tạo bảng Value count
+create table ValueCount(
+	vName nvarchar(50) primary key,
+	vCount int
+);
+
 -- Tạo bảng Employee
 CREATE TABLE Employee (
     employeeID NVARCHAR(15) NOT NULL PRIMARY KEY, 
@@ -412,6 +418,8 @@ VALUES
     ('RRD-000004', '2024-10-05 12:00:00', 'ROOM-000004', 'RF-000004');
 GO
 
+
+
 -- ===================================================================================
 -- 3. TRIGGER 
 -- ===================================================================================
@@ -433,4 +441,5 @@ BEGIN
     END
 END;
 GO
+
 
