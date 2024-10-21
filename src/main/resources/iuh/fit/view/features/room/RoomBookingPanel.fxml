@@ -17,7 +17,7 @@
 
 <AnchorPane minHeight="1000.0" minWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.RoomBookingController">
    <children>
-      <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="1000.0" minWidth="1200.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="1000.0" minWidth="1200.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" stylesheets="@../../../styles/Button.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
             <AnchorPane>
                <children>
@@ -72,10 +72,10 @@
                                     </VBox>
                                     <HBox alignment="CENTER_LEFT" minWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="600.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                          <Button fx:id="allBtn" minWidth="130.0" mnemonicParsing="false" style="-fx-background-color: rgb(255,222,173);" text="Tổng(207)" textFill="WHITE" />
-                                          <Button fx:id="availableBtn" minWidth="130.0" mnemonicParsing="false" style="-fx-background-color: rgb(114, 191, 120);" text="Trống(69)" textFill="WHITE" />
-                                          <Button fx:id="onUseBtn" minWidth="130.0" mnemonicParsing="false" style="-fx-background-color: rgb(55, 175, 225);" text="Đang sử dụng(69)" textFill="WHITE" />
-                                          <Button fx:id="overDueBtn" minWidth="130.0" mnemonicParsing="false" style="-fx-background-color: rgb(198, 46, 46);" text="Quá hạn(69)" textFill="WHITE" />
+                                          <Button fx:id="allBtn" minWidth="130.0" mnemonicParsing="false" styleClass="button-All" text="Tổng(207)" textFill="WHITE" />
+                                          <Button fx:id="availableBtn" minWidth="130.0" mnemonicParsing="false" styleClass="button-Available" text="Trống(69)" textFill="WHITE" />
+                                          <Button fx:id="onUseBtn" minWidth="130.0" mnemonicParsing="false" styleClass="button-OnUse" text="Đang sử dụng(69)" textFill="WHITE" />
+                                          <Button fx:id="overDueBtn" minWidth="130.0" mnemonicParsing="false" styleClass="button-OverDue" text="Quá hạn(69)" textFill="WHITE" />
                                        </children>
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

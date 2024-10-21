@@ -117,7 +117,6 @@ public class EmployeeDAO {
         }
     }
 
-
     public static void updateData(Employee employee) {
         try (
                 Connection connection = DBHelper.getConnection();
@@ -146,4 +145,45 @@ public class EmployeeDAO {
         }
 
     }
+
+    public static Employee getEmployeeByAccountID(String accountID) {
+        String sql = "SELECT e.employeeID, e.fullName, e.phoneNumber, e.email, e.address, " +
+                "e.gender, e.idCardNumber, e.dob, e.position " +
+                "FROM Employee e " +
+                "JOIN Account a ON e.employeeID = a.employeeID " +
+                "WHERE a.accountID = ?";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            preparedStatement.setString(1, accountID);
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    Employee employee = new Employee();
+
+                    employee.setEmployeeID(rs.getString(1));
+                    employee.setFullName(rs.getString(2));
+                    employee.setPhoneNumber(rs.getString(3));
+                    employee.setEmail(rs.getString(4));
+                    employee.setAddress(rs.getString(5));
+                    employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
+                    employee.setIdCardNumber(rs.getString(7));
+                    employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(8)));
+                    employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
+
+                    return employee;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+
 }
