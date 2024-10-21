@@ -15,7 +15,7 @@ public class RoomOnUseController {
     private Room room;
 
     public void setRoom(Room room) {
-        roomNumberText.setText(room.getRoomNumer());
+        roomNumberText.setText(room.getRoomNumber());
         roomCategoryNameLabel.setText(room.getRoomCategory().getRoomCategoryName());
     }
 }

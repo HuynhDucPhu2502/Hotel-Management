@@ -56,7 +56,7 @@ public class RoomBookingController {
     private void loadData() {
         rooms = RoomDAO.getRoom();
         rooms = rooms.stream()
-                .sorted(Comparator.comparing(Room::getRoomNumer))
+                .sorted(Comparator.comparing(Room::getRoomNumber))
                 .toList();
 
         List<String> roomCategories = RoomCategoryDAO.getRoomCategory()
