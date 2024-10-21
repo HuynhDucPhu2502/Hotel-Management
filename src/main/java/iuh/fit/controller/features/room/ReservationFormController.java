@@ -1,5 +1,6 @@
 package iuh.fit.controller.features.room;
 
+import com.dlsc.gemsfx.TimePicker;
 import com.dlsc.gemsfx.daterange.DateRange;
 import com.dlsc.gemsfx.daterange.DateRangePicker;
 import iuh.fit.controller.MainController;
@@ -13,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -30,9 +32,14 @@ public class ReservationFormController {
     @FXML
     private DateRangePicker bookDateRangePicker;
     @FXML
+    private TimePicker checkInTimePicker;
+    @FXML
     private TextField checkInDateTextField;
     @FXML
+    private TimePicker checkOutTimePicker;
+    @FXML
     private TextField checkOutDateTextField;
+
     // 2. Thông tin khách hàng
     // 3. Thông tin nhân viên
     @FXML
@@ -49,7 +56,6 @@ public class ReservationFormController {
             DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.forLanguageTag("vi-VN"));
 
     public void initialize() {
-
     }
 
     public void setupContext(MainController mainController, Employee employee, Room room) {
@@ -57,8 +63,8 @@ public class ReservationFormController {
         this.employee = employee;
         this.room = room;
 
-
         backBtn.setOnAction(e -> handleBackBtn());
+
         setupBookDateRangePicker();
         setupRoomInformation();
         setupEmployeeInformation();
@@ -67,23 +73,35 @@ public class ReservationFormController {
     private void setupBookDateRangePicker() {
         ObjectProperty<DateRange> selectedRangeProperty = bookDateRangePicker.valueProperty();
 
+        // Bind ngày và giờ check-in vào TextField
         checkInDateTextField.textProperty().bind(
-                Bindings.createStringBinding(
-                        () -> selectedRangeProperty.get() != null
-                                ? dateTimeFormatter.format(selectedRangeProperty.get().getStartDate())
-                                : "",
-                        selectedRangeProperty
-                )
+                Bindings.createStringBinding(() -> {
+                    DateRange range = bookDateRangePicker.getValue();
+                    LocalTime checkInTime = checkInTimePicker.getTime();
+                    if (range != null && checkInTime != null) {
+                        return formatDateTime(range.getStartDate(), checkInTime);
+                    }
+                    return "";
+                }, selectedRangeProperty, checkInTimePicker.timeProperty())
         );
 
+        // Bind ngày và giờ check-out vào TextField
         checkOutDateTextField.textProperty().bind(
-                Bindings.createStringBinding(
-                        () -> selectedRangeProperty.get() != null
-                                ? dateTimeFormatter.format(selectedRangeProperty.get().getEndDate())
-                                : "",
-                        selectedRangeProperty
-                )
+                Bindings.createStringBinding(() -> {
+                    DateRange range = bookDateRangePicker.getValue();
+                    LocalTime checkOutTime = checkOutTimePicker.getTime();
+                    if (range != null && checkOutTime != null) {
+                        return formatDateTime(range.getEndDate(), checkOutTime);
+                    }
+                    return "";
+                }, selectedRangeProperty, checkOutTimePicker.timeProperty())
         );
+    }
+
+
+
+    private String formatDateTime(java.time.LocalDate date, java.time.LocalTime time) {
+        return dateTimeFormatter.format(date) + " " + time.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
     private void setupRoomInformation() {
