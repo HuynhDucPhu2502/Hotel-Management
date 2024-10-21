@@ -1,3 +1,7 @@
+/* ========================================================== */
+/* Default Button */
+/* ========================================================== */
+
 .button  {
     -fx-background-color: RGB(135, 162, 255)
 }
@@ -9,6 +13,10 @@
 .button:pressed   {
     -fx-background-color: RGB(70, 130, 180);
 }
+
+/* ========================================================== */
+/* Action Button */
+/* ========================================================== */
 
 .button-update {
     -fx-background-color: RGB(120, 180, 120);
@@ -28,7 +36,6 @@
     -fx-background-color: RGB(200, 120, 120);
     -fx-text-fill: white;
     -fx-min-width: 100px;
-
 }
 
 .button-delete:hover {
@@ -40,7 +47,129 @@
 }
 
 .button-view {
-    -fx-background-color: RGB(70, 130, 180); /* Xanh dương nhạt */
-    -fx-text-fill: white; /* Màu chữ trắng */
+    -fx-background-color: RGB(70, 130, 180);
+    -fx-text-fill: white;
     -fx-min-width: 100px;
 }
+
+
+.button-view:hover {
+    -fx-background-color: RGB(100, 149, 237);
+}
+
+.button-view:pressed {
+    -fx-background-color: RGB(65, 105, 225);
+}
+
+.text-field, .text-area {
+    -fx-opacity: 1.0;
+    -fx-text-fill: black;
+    -fx-background-color: white;
+}
+
+/* ========================================================== */
+/* Filter Button */
+/* ========================================================== */
+
+/* All Button */
+.button-All {
+    -fx-background-color: rgb(211, 211, 211); /* lightgray */
+    -fx-border-color: transparent;
+    -fx-border-width: 3px;
+    -fx-border-radius: 5px;
+    -fx-text-fill: white;
+    -fx-padding: 5px 10px;
+}
+
+.button-All-selected {
+    -fx-border-color: rgb(0, 0, 0); /* black */
+    -fx-border-width: 3px;
+    -fx-background-color: rgb(169, 169, 169); /* darkgray */
+    -fx-cursor: hand;
+}
+
+.button-All:hover {
+    -fx-background-color: rgb(128, 128, 128); /* gray */
+}
+
+.button-All:pressed {
+    -fx-background-color: rgb(105, 105, 105); /* dimgray */
+}
+
+/* Available Button */
+.button-Available {
+    -fx-background-color: rgb(160, 214, 131);
+    -fx-border-color: transparent;
+    -fx-border-width: 3px;
+    -fx-border-radius: 5px;
+    -fx-text-fill: white;
+    -fx-padding: 5px 10px;
+}
+
+.button-Available-selected {
+    -fx-border-color: rgb(114, 191, 120);
+    -fx-border-width: 3px;
+    -fx-background-color: rgb(160, 214, 131);
+    -fx-cursor: hand;
+}
+
+.button-Available:hover {
+    -fx-background-color: rgb(144, 200, 120);
+}
+
+.button-Available:pressed {
+    -fx-background-color: rgb(130, 180, 110);
+}
+
+/* OverDue Button */
+.button-OverDue {
+    -fx-background-color: rgb(249, 84, 84);
+    -fx-border-color: transparent;
+    -fx-border-width: 3px;
+    -fx-border-radius: 5px;
+    -fx-text-fill: white;
+    -fx-padding: 5px 10px;
+}
+
+.button-OverDue-selected {
+    -fx-border-color: rgb(198, 46, 46);
+    -fx-border-width: 3px;
+    -fx-background-color: rgb(249, 84, 84);
+    -fx-cursor: hand;
+}
+
+.button-OverDue:hover {
+    -fx-background-color: rgb(235, 75, 75);
+}
+
+.button-OverDue:pressed {
+    -fx-background-color: rgb(215, 65, 65);
+}
+
+/* OnUse Button */
+.button-OnUse {
+    -fx-background-color: rgb(76, 201, 254);
+    -fx-border-color: transparent;
+    -fx-border-width: 3px;
+    -fx-border-radius: 5px;
+    -fx-text-fill: white;
+    -fx-padding: 5px 10px;
+}
+
+.button-OnUse-selected {
+    -fx-border-color: rgb(55, 175, 225);
+    -fx-border-width: 3px;
+    -fx-background-color: rgb(76, 201, 254);
+    -fx-cursor: hand;
+}
+
+.button-OnUse:hover {
+    -fx-background-color: rgb(65, 180, 240);
+}
+
+.button-OnUse:pressed {
+    -fx-background-color: rgb(55, 160, 220);
+}
+
+
+

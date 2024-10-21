@@ -2,37 +2,29 @@ package iuh.fit.controller.features.customer;
 
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.CustomerDAO;
-import iuh.fit.dao.PricingDAO;
-import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.models.Customer;
-import iuh.fit.models.Pricing;
 import iuh.fit.models.enums.Gender;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
-public class CustomerManagerController implements Initializable {
+public class CustomerManagerController {
 
-    // input field
+    // Input Fields
     @FXML
     private TextField customerAddressTextField;
     @FXML
@@ -48,12 +40,13 @@ public class CustomerManagerController implements Initializable {
     @FXML
     private TextField customerPhoneNumberTextField;
     @FXML
+    private ToggleGroup genderToggleGroup;
+    @FXML
     private RadioButton radFemale;
-
     @FXML
     private RadioButton radMale;
 
-    // search field
+    // Search Fields
     @FXML
     private TextField customerNameSearchField;
     @FXML
@@ -63,9 +56,10 @@ public class CustomerManagerController implements Initializable {
     @FXML
     private ComboBox<?> roomCategoryIDSearchField;
 
-    // table
+    // Table
     @FXML
-    private TableColumn<Customer, Void> actionColumn;
+    private TableView<Customer> customerTableView;
+
     @FXML
     private TableColumn<Customer, Gender> customerGenderColumn;
     @FXML
@@ -75,120 +69,68 @@ public class CustomerManagerController implements Initializable {
     @FXML
     private TableColumn<Customer, String> customerPhoneColumn;
     @FXML
-    private TableView<Customer> customerTableView;
+    private TableColumn<Customer, Void> actionColumn;
 
-    // button
+    // Buttons
     @FXML
     private Button addBtn;
     @FXML
-    private Button resetBtn;
-    @FXML
     private Button updateBtn;
 
-    // group
-    @FXML
-    private ToggleGroup gender;
-
-    // dialogs
+    // Dialog
     @FXML
     private DialogPane dialogPane;
 
+    // Gọi mấy phương thức để gắn sự kiện và dữ liệu cho lúc đầu khởi tạo giao diện
+    public void initialize() {
+        dialogPane.toFront();
 
-    @FXML
-    private VBox upperBox;
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
         // vì cái biến count của customer khi chạy lại nó sẽ thành 0,
         // nên cần gáng lại số lượng hiện tại của nhân viên
         Customer.setCount(CustomerDAO.getValueCount());
-        loadNextid();
-        dialogPane.toFront();
-        loadDataToTable();
+        loadData();
     }
 
-    // load next id to textID field
-    private void loadNextid(){
-        // tai cusid len cusid textfield
+    // Phương thức load dữ liệu lên giao diện
+    private void loadData() {
+        loadNextID();
+        setupTable();
+    }
+
+
+    private void loadNextID() {
         int count = Customer.getCount();
         String cusID = String.format("CUS-%06d", count);
         customerIDTextField.setText(cusID);
-
     }
 
-    private void loadDataToTable(){
+    // Phương thức đổ dữ liệu vào bảng
+    private void setupTable() {
         List<Customer> list = CustomerDAO.getCustomer();
         ObservableList<Customer> customers = FXCollections.observableList(list);
 
-        customerIDColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("customerID"));
-        customerNameColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("fullName"));
-        customerGenderColumn.setCellValueFactory(new PropertyValueFactory<Customer, Gender>("gender"));
-        customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<Customer, String>("phoneNumber"));
+        customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+        customerGenderColumn.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        customerPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
 
         customerTableView.setItems(customers);
         setupActionColumn();
     }
 
-    public void resetField() {
-        customerNameTextField.setText("");
-        customerPhoneNumberTextField.setText("");
-        customerEmailTextField.setText("");
-        customerAddressTextField.setText("");
-        Toggle rad =  gender.getSelectedToggle();
-        if(rad != null)
-            rad.setSelected(false);
-        customerCCCDTextField.setText("");
-        customerDOBDatePicker.setValue(null);
-        customerNameTextField.requestFocus();
-    }
-
-    private Customer createCustomer() {
-        String id = customerIDTextField.getText();
-        String name = customerNameTextField.getText();
-        String phone = customerPhoneNumberTextField.getText();
-        String email = customerEmailTextField.getText();
-        String address = customerAddressTextField.getText();
-        RadioButton rad =  (RadioButton) gender.getSelectedToggle();
-        Gender gender = null;
-        if(rad != null){
-            String value = rad.getText();
-            gender = value.equals(Gender.MALE.toString()) ? Gender.MALE : Gender.FEMALE;
-        }
-        String CCCD = customerCCCDTextField.getText();
-        LocalDate dob = customerDOBDatePicker.getValue();
-
-        return new Customer(id, name, phone, email, address, gender, CCCD, dob);
-    }
-
-    public void addCus(ActionEvent event) {
-
-
-        try{
-            Customer customer = createCustomer();
-            CustomerDAO.createData(customer);
-            int valueCount = Customer.getCount();
-            Customer.setCount(++valueCount);
-            CustomerDAO.setValueCount(valueCount);
-            loadNextid();
-            loadDataToTable();
-            resetField();
-            dialogPane.showInformation("Thành công", "Đã thêm khách hàng thành công");
-        }catch (Exception e){
-            dialogPane.showWarning("LỖI", e.getMessage());
-        }
-    }
-
+    // setup cho cột thao tác
+    // THAM KHẢO
     private void setupActionColumn() {
         Callback<TableColumn<Customer, Void>, TableCell<Customer, Void>> cellFactory = param -> new TableCell<>() {
             private final Button updateButton = new Button("Cập nhật");
             private final Button deleteButton = new Button("Xóa");
-            private final Button showInforButton = new Button("Thông tin");
+            private final Button showInfoButton = new Button("Thông tin");
             private final HBox hBox = new HBox(10);
             {
                 // Thêm class CSS cho các button
                 updateButton.getStyleClass().add("button-update");
                 deleteButton.getStyleClass().add("button-delete");
-                showInforButton.getStyleClass().add("button-view");
+                showInfoButton.getStyleClass().add("button-view");
 
                 // Thêm file CSS vào HBox
                 hBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/Button.css")).toExternalForm());
@@ -204,17 +146,17 @@ public class CustomerManagerController implements Initializable {
                     handleDeleteAction(customer);
                 });
 
-                showInforButton.setOnAction(e -> {
+                showInfoButton.setOnAction(e -> {
                     Customer customer = getTableView().getItems().get(getIndex());
                     try {
-                        showInfor(customer);
+                        handleShowCustomerInformation(customer);
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
                 });
 
                 hBox.setAlignment(Pos.CENTER);
-                hBox.getChildren().addAll(updateButton, deleteButton, showInforButton);
+                hBox.getChildren().addAll(updateButton, deleteButton, showInfoButton);
             }
 
 
@@ -232,45 +174,53 @@ public class CustomerManagerController implements Initializable {
         actionColumn.setCellFactory(cellFactory);
     }
 
-    private void showInfor(Customer customer) throws IOException {
-        String source = "/iuh/fit/view/features/customer/InformationView.fxml";
-        FXMLLoader fxmlLoader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
-        Scene scene = new Scene(fxmlLoader.load());
-        scene.getStylesheets().add(String.valueOf(getClass().getResource("/iuh/fit/styles/TextFieldCustomerInfor.css")));
-        Stage stage = new Stage();
-        stage.setTitle("Thông tin khách hàng");
-        stage.setScene(scene);
-        loadInforToStage(fxmlLoader, customer);
-        stage.show();
+    // Chức năng 1: Làm mới
+    public void handleResetAction() {
+        customerNameTextField.setText("");
+        customerPhoneNumberTextField.setText("");
+        customerEmailTextField.setText("");
+        customerAddressTextField.setText("");
+        Toggle rad =  genderToggleGroup.getSelectedToggle();
+        if(rad != null)
+            rad.setSelected(false);
+        customerCCCDTextField.setText("");
+        customerDOBDatePicker.setValue(null);
+        customerNameTextField.requestFocus();
+        loadNextID();
     }
 
-    private void loadInforToStage(FXMLLoader fxmlLoader, Customer customer) {
-        InformationView_Controller controller = fxmlLoader.getController();
-
-        controller.getCustomerIDTextField().setText(customer.getCustomerID());
-        controller.getCustomerNameTextField().setText(customer.getFullName());
-        controller.getCustomerPhoneNumberTextField().setText(customer.getPhoneNumber());
-        controller.getCustomerEmailTextField().setText(customer.getEmail());
-        controller.getAddressTextAria().setText(customer.getAddress());
-        if(customer.getGender().equals(Gender.MALE))
-            controller.getRadMale().setSelected(true);
-        controller.getRadFemale().setSelected(true);
-        controller.getCustomerCCCDTextField().setText(customer.getIdCardNumber());
-        controller.getCustomerDOBDatePicker().setValue(customer.getDob());
+    // Chức năng 2: Thêm
+    public void handleAddAction() {
+        try{
+            Customer customer = createCustomer();
+            CustomerDAO.createData(customer);
+            int valueCount = Customer.getCount();
+            Customer.setCount(++valueCount);
+            CustomerDAO.setValueCount(valueCount);
+            loadNextID();
+            setupTable();
+            handleResetAction();
+            dialogPane.showInformation("Thành công", "Đã thêm khách hàng thành công");
+        }catch (Exception e){
+            dialogPane.showWarning("LỖI", e.getMessage());
+        }
     }
 
+    // Chức năng 3: Xóa
     private void handleDeleteAction(Customer customer) {
         DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn xóa?");
 
         dialog.onClose(buttonType -> {
             if (buttonType == ButtonType.YES) {
                 CustomerDAO.deleteData(customer.getCustomerID());
-                resetField();
-                loadDataToTable();
+                handleResetAction();
+                setupTable();
             }
         });
     }
 
+    // Chức năng 4: Cập nhật
+    // 4.1 Xử lý sự kiện khi kích hoạt chức năng cập nhật
     private void handleUpdateBtn(Customer customer) {
         customerIDTextField.setText(customer.getCustomerID());
         customerNameTextField.setText(customer.getFullName());
@@ -292,15 +242,16 @@ public class CustomerManagerController implements Initializable {
         updateBtn.setVisible(true);
     }
 
-    public void updateCustomer(ActionEvent event) {
+    // 4.2 Chức năng cập nhật
+    public void handleUpdateAction() {
         Customer newInfor = createCustomer();
         DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn cập nhật?");
 
         dialog.onClose(buttonType -> {
             if (buttonType == ButtonType.YES) {
                 CustomerDAO.updateData(newInfor);
-                resetField();
-                loadDataToTable();
+                handleResetAction();
+                setupTable();
             }
         });
 
@@ -308,5 +259,44 @@ public class CustomerManagerController implements Initializable {
         updateBtn.setVisible(false);
         addBtn.setManaged(true);
         addBtn.setVisible(true);
+    }
+
+    // Chức năng 5: Tìm kiếm
+
+    // Chức năng 6: Xem thông tin khách hàng
+    private void handleShowCustomerInformation(Customer customer) throws IOException {
+        String source = "/iuh/fit/view/features/customer/CustomerInformationView.fxml";
+
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
+        AnchorPane layout = loader.load();
+
+        CustomerInformationViewController customerInformationViewController = loader.getController();
+        customerInformationViewController.setCustomer(customer);
+
+        Scene scene = new Scene(layout);
+
+        Stage stage = new Stage();
+        stage.setTitle("Thông Tin " + customer.getCustomerID());
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private Customer createCustomer() {
+        String id = customerIDTextField.getText();
+        String name = customerNameTextField.getText();
+        String phone = customerPhoneNumberTextField.getText();
+        String email = customerEmailTextField.getText();
+        String address = customerAddressTextField.getText();
+        RadioButton rad =  (RadioButton) genderToggleGroup.getSelectedToggle();
+        Gender gender = null;
+        if(rad != null){
+            String value = rad.getText();
+            gender = value.equals(Gender.MALE.toString()) ? Gender.MALE : Gender.FEMALE;
+        }
+        String CCCD = customerCCCDTextField.getText();
+        LocalDate dob = customerDOBDatePicker.getValue();
+        System.out.println(CCCD);
+
+        return new Customer(id, name, phone, email, address, gender, CCCD, dob);
     }
 }

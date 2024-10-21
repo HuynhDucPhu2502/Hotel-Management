@@ -22,7 +22,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="753.0" minWidth="930.0" prefHeight="753.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.customer.CustomerManagerController">
+<AnchorPane minHeight="753.0" minWidth="930.0" prefHeight="753.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.customer.CustomerManagerController">
    <children>
       <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="762.0" prefWidth="930.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
@@ -113,9 +113,9 @@
                                        <children>
                                           <RadioButton fx:id="radMale" layoutX="14.0" layoutY="6.0" mnemonicParsing="false" text="Nam" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <toggleGroup>
-                                                <ToggleGroup fx:id="gender" />
+                                                <ToggleGroup fx:id="genderToggleGroup" />
                                              </toggleGroup></RadioButton>
-                                          <RadioButton fx:id="radFemale" layoutX="95.0" layoutY="11.0" mnemonicParsing="false" text="Nữ" toggleGroup="$gender" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <RadioButton fx:id="radFemale" layoutX="95.0" layoutY="11.0" mnemonicParsing="false" text="Nữ" toggleGroup="$genderToggleGroup" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                        </children>
                                     </AnchorPane>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Số CCCD" GridPane.rowIndex="3">
@@ -142,7 +142,7 @@
                               </GridPane>
                               <HBox prefHeight="0.0" prefWidth="899.0" spacing="50.0" style="-fx-alignment: CENTER;" stylesheets="@../../../styles/Button.css">
                                  <children>
-                                    <Button fx:id="resetBtn" minWidth="150.0" mnemonicParsing="false" onAction="#resetField" text="Làm mới" textFill="WHITE">
+                                    <Button fx:id="resetBtn" minWidth="150.0" mnemonicParsing="false" onAction="#handleResetAction" text="Làm mới" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font>
@@ -153,7 +153,7 @@
                                           <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
                                        </padding>
                                     </Button>
-                                    <Button fx:id="addBtn" minWidth="150.0" mnemonicParsing="false" onAction="#addCus" text="Thêm" textFill="WHITE">
+                                    <Button fx:id="addBtn" minWidth="150.0" mnemonicParsing="false" onAction="#handleAddAction" text="Thêm" textFill="WHITE">
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font>
@@ -161,7 +161,7 @@
                                           <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
                                        </padding>
                                     </Button>
-                                    <Button fx:id="updateBtn" managed="false" minWidth="150.0" mnemonicParsing="false" onAction="#updateCustomer" text="Cập nhật" textFill="WHITE" visible="false">
+                                    <Button fx:id="updateBtn" managed="false" minWidth="150.0" mnemonicParsing="false" onAction="#handleUpdateAction" text="Cập nhật" textFill="WHITE" visible="false">
                                        <font>
                                           <Font name="System Bold" size="16.0" />
                                        </font>

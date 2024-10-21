@@ -21,10 +21,14 @@ module iuh.fit {
     exports iuh.fit.controller.features.service;
     exports iuh.fit.controller.features.room;
     exports iuh.fit.controller.features.customer;
-
     exports iuh.fit.controller;
+    exports iuh.fit.models;
+    exports iuh.fit.models.enums;
 
+<<<<<<< HEAD
     exports iuh.fit.controller.features;
 //    exports iuh.fit.controller.features.room;
 //    exports iuh.fit.controller.features.service;
+=======
+>>>>>>> 2574fbf6d0f106eca36c18cec6bf9666b30bfe81
 }
