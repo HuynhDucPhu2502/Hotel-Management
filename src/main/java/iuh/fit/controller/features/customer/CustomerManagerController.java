@@ -187,6 +187,7 @@ public class CustomerManagerController {
         customerDOBDatePicker.setValue(null);
         customerNameTextField.requestFocus();
         loadNextID();
+        switchButton(false, true);
     }
 
     // Chức năng 2: Thêm
@@ -235,11 +236,7 @@ public class CustomerManagerController {
         radFemale.setSelected(true);
         customerCCCDTextField.setText(customer.getIdCardNumber());
         customerDOBDatePicker.setValue(customer.getDob());
-
-        addBtn.setManaged(false);
-        addBtn.setVisible(false);
-        updateBtn.setManaged(true);
-        updateBtn.setVisible(true);
+        switchButton(true, false);
     }
 
     // 4.2 Chức năng cập nhật
@@ -255,10 +252,7 @@ public class CustomerManagerController {
             }
         });
 
-        updateBtn.setManaged(false);
-        updateBtn.setVisible(false);
-        addBtn.setManaged(true);
-        addBtn.setVisible(true);
+        switchButton(false, true);
     }
 
     // Chức năng 5: Tìm kiếm
@@ -298,5 +292,12 @@ public class CustomerManagerController {
         System.out.println(CCCD);
 
         return new Customer(id, name, phone, email, address, gender, CCCD, dob);
+    }
+
+    private void switchButton(boolean updateButton, boolean addButton){
+        updateBtn.setManaged(updateButton);
+        updateBtn.setVisible(updateButton);
+        addBtn.setManaged(addButton);
+        addBtn.setVisible(addButton);
     }
 }
