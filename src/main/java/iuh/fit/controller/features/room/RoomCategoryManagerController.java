@@ -138,7 +138,7 @@ public class RoomCategoryManagerController {
         actionColumn.setCellFactory(cellFactory);
     }
 
-    // Reset các trường nhập liệu
+    // Chức năng 1: Làm mới
     private void handleResetAction() {
         roomCategoryIDTextField.setText(RoomCategoryDAO.getNextRoomCategoryID());
         roomCategoryRankCBox.setDisable(false);
@@ -154,7 +154,7 @@ public class RoomCategoryManagerController {
         updateBtn.setVisible(false);
     }
 
-    // Thêm loại phòng mới
+    // Chức năng 2: Thêm
     private void handleAddAction() {
         try {
             RoomCategory roomCategory = new RoomCategory(
@@ -171,7 +171,7 @@ public class RoomCategoryManagerController {
         }
     }
 
-    // Xóa loại phòng
+    // Chức năng 3: Xóa
     private void handleDeleteAction(RoomCategory roomCategory) {
         DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn xóa loại phòng này? Bạn sẽ mất thông tin bên GIÁ PHÒNG");
         dialog.onClose(buttonType -> {
@@ -182,8 +182,8 @@ public class RoomCategoryManagerController {
         });
     }
 
-    // Hiển thị thông tin cập nhật
-    // Hiển thị thông tin cập nhật
+    // Chức năng 4: Cập nhật
+    // 4.1 Xử lý sự kiện khi kích hoạt chức năng cập nhật
     private void handleUpdateBtn(RoomCategory roomCategory) {
         String[] parts = roomCategory.getRoomCategoryName().split(" ", 3);
         String rankName = parts[0] + " " + parts[1];
@@ -201,10 +201,7 @@ public class RoomCategoryManagerController {
         updateBtn.setVisible(true);
     }
 
-
-
-
-    // Cập nhật loại phòng
+    // 4.2 Chức năng cập nhật
     private void handleUpdateAction() {
         try {
             RoomCategory roomCategory = new RoomCategory(
@@ -231,8 +228,7 @@ public class RoomCategoryManagerController {
         }
     }
 
-
-    // Tìm kiếm loại phòng
+    // Chức năng 5: Tìm kiếm
     private void handleSearchAction() {
         roomCategoryNameSearchField.setText("");
         numberOfBedSearchField.setText("");

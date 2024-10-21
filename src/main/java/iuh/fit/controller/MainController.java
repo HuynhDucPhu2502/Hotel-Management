@@ -2,7 +2,9 @@ package iuh.fit.controller;
 
 import iuh.fit.controller.features.MenuController;
 import iuh.fit.controller.features.room.RoomBookingController;
+import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Account;
+import iuh.fit.models.Employee;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
@@ -47,11 +49,8 @@ public class MainController {
                 menuController.getServiceCategoryManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/ServiceCategoryManagerPanel.fxml"));
                 menuController.getHotelServiceManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml"));
                 menuController.getHotelServiceSearchingButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/HotelServiceSearchingPanel.fxml"));
-
                 // Customer
-                menuController.getCustomerManagerButton().setOnAction(e -> {
-                    loadPanel("/iuh/fit/view/features/customer/CustomerManagerPanel.fxml");
-                });
+                menuController.getCustomerManagerButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/customer/CustomerManagerPanel.fxml"));
                 // Account
                 // Statistics
                 // History
@@ -72,7 +71,10 @@ public class MainController {
 
             if (fxmlPath.contains("RoomBookingPanel")) {
                 RoomBookingController roomBookingController = loader.getController();
-                roomBookingController.setMainController(this);
+
+                Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
+
+                roomBookingController.setupContext(this, employee);
             }
 
             mainPanel.getChildren().clear();

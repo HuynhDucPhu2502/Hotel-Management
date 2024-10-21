@@ -5,7 +5,9 @@ import iuh.fit.controller.features.room.room_items.RoomAvailableController;
 import iuh.fit.controller.features.room.room_items.RoomOnUseController;
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomDAO;
+import iuh.fit.models.Employee;
 import iuh.fit.models.Room;
+import iuh.fit.models.enums.RoomStatus;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -22,13 +24,11 @@ public class RoomBookingController {
     @FXML
     private GridPane roomGridPane;
 
-    // Combo Boxes
     @FXML
     private ComboBox<String> roomCategoryCBox;
     @FXML
     private ComboBox<String> roomFloorNumberCBox;
 
-    // Buttons
     @FXML
     private Button allBtn;
     @FXML
@@ -38,88 +38,87 @@ public class RoomBookingController {
     @FXML
     private Button overDueBtn;
 
-    // Rooms List
     private List<Room> rooms;
-
-    // Main Controller
     private MainController mainController;
+    private Employee employee;
+
+    private Button activeButton; // Lưu lại nút đang được nhấn
+    private RoomStatus selectedStatus = null; // Trạng thái được chọn (mặc định null cho allBtn)
 
     public void initialize() {
+        activeButton = allBtn; // Đặt mặc định là allBtn
+        setActiveButtonStyle(allBtn);
     }
 
-    public void setMainController(MainController mainController) {
+    public void setupContext(MainController mainController, Employee employeee) {
         this.mainController = mainController;
+        this.employee = employeee;
         loadData();
         setupEventHandlers();
     }
 
     private void loadData() {
-        rooms = RoomDAO.getRoom();
-        rooms = rooms.stream()
+        rooms = RoomDAO.getRoom().stream()
                 .sorted(Comparator.comparing(Room::getRoomNumber))
                 .toList();
 
-        List<String> roomCategories = RoomCategoryDAO.getRoomCategory()
-                .stream()
-                .map(roomCategory -> roomCategory.getRoomCategoryID() +
-                        " " + roomCategory.getRoomCategoryName())
-                .collect(Collectors.toList());
-        roomCategories.addFirst("TẤT CẢ");
-        roomCategoryCBox.getItems().setAll(roomCategories);
+        roomCategoryCBox.getItems().setAll(getRoomCategories());
+        roomCategoryCBox.getSelectionModel().selectFirst();
 
-        if (!roomCategoryCBox.getItems().isEmpty())
-            roomCategoryCBox.getSelectionModel().selectFirst();
-
-        List<String> floorNumbers = List.of(
-                "TẤT CẢ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
-        );
-        roomFloorNumberCBox.getItems().setAll(floorNumbers);
+        roomFloorNumberCBox.getItems().setAll(getFloorNumbers());
         roomFloorNumberCBox.getSelectionModel().selectFirst();
 
         displayFilteredRooms(rooms);
     }
 
+    private List<String> getRoomCategories() {
+        List<String> roomCategoryList = RoomCategoryDAO.getRoomCategory().stream()
+                .map(rc -> rc.getRoomCategoryID() + " " + rc.getRoomCategoryName())
+                .collect(Collectors.toList());
+        roomCategoryList.addFirst("TẤT CẢ");
+        return roomCategoryList;
+    }
+
+    private List<String> getFloorNumbers() {
+        return List.of("TẤT CẢ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+    }
+
     private void displayFilteredRooms(List<Room> rooms) {
         roomGridPane.getChildren().clear();
 
-        int row = 0;
-        int col = 0;
+        int row = 0, col = 0;
 
         try {
             for (Room room : rooms) {
                 FXMLLoader loader;
+                Pane roomItem;
 
                 switch (room.getRoomStatus()) {
                     case AVAILABLE -> {
                         loader = new FXMLLoader(getClass().getResource(
                                 "/iuh/fit/view/features/room/room_items/RoomAvailableItem.fxml"));
-                        Pane roomItem = loader.load();
+                        roomItem = loader.load();
 
                         RoomAvailableController controller = loader.getController();
-                        controller.setRoom(room);
-                        controller.setMainController(mainController);
-
-                        roomGridPane.add(roomItem, col, row);
+                        controller.setupContext(mainController, employee, room);
                     }
                     case ON_USE -> {
                         loader = new FXMLLoader(getClass().getResource(
                                 "/iuh/fit/view/features/room/room_items/RoomOnUseItem.fxml"));
-                        Pane roomItem = loader.load();
+                        roomItem = loader.load();
 
                         RoomOnUseController controller = loader.getController();
                         controller.setRoom(room);
-
-                        roomGridPane.add(roomItem, col, row);
                     }
                     case OVERDUE -> {
                         loader = new FXMLLoader(getClass().getResource(
                                 "/iuh/fit/view/features/room/room_items/RoomOverDueItem.fxml"));
-                        Pane roomItem = loader.load();
-                        roomGridPane.add(roomItem, col, row);
+                        roomItem = loader.load();
                     }
                     default -> throw new IllegalStateException("Unexpected value: " + room.getRoomStatus());
                 }
 
+                roomGridPane.add(roomItem, col, row);
 
                 col++;
                 if (col == 3) {
@@ -150,6 +149,12 @@ public class RoomBookingController {
                     .collect(Collectors.toList());
         }
 
+        if (selectedStatus != null) {
+            filteredRooms = filteredRooms.stream()
+                    .filter(room -> room.getRoomStatus() == selectedStatus)
+                    .collect(Collectors.toList());
+        }
+
         filteredRooms = filteredRooms.stream()
                 .sorted(Comparator.comparing(Room::getRoomNumber))
                 .collect(Collectors.toList());
@@ -157,9 +162,51 @@ public class RoomBookingController {
         displayFilteredRooms(filteredRooms);
     }
 
-    public void setupEventHandlers() {
+    private void setupEventHandlers() {
+        setupButtonAction(allBtn, null); // Hiển thị tất cả
+        setupButtonAction(availableBtn, RoomStatus.AVAILABLE);
+        setupButtonAction(onUseBtn, RoomStatus.ON_USE);
+        setupButtonAction(overDueBtn, RoomStatus.OVERDUE);
+
         roomCategoryCBox.setOnAction(e -> handleSearch());
         roomFloorNumberCBox.setOnAction(e -> handleSearch());
+    }
+
+    private void setupButtonAction(Button button, RoomStatus status) {
+        button.setOnAction(e -> {
+            if (activeButton == button) {
+                resetButtonStyle(button);
+                activeButton = allBtn;
+                setActiveButtonStyle(allBtn);
+                selectedStatus = null;
+            } else {
+                if (activeButton != null) resetButtonStyle(activeButton);
+                setActiveButtonStyle(button);
+                activeButton = button;
+                selectedStatus = status;
+            }
+            handleSearch();
+        });
+    }
+
+    private void setActiveButtonStyle(Button button) {
+        switch (button.getId()) {
+            case "allBtn" -> button.getStyleClass().add("button-All-selected");
+            case "availableBtn" -> button.getStyleClass().add("button-Available-selected");
+            case "onUseBtn" -> button.getStyleClass().add("button-OnUse-selected");
+            case "overDueBtn" -> button.getStyleClass().add("button-OverDue-selected");
+            default -> throw new IllegalArgumentException("Không tìm thấy button ID");
+        }
+    }
+
+    private void resetButtonStyle(Button button) {
+        switch (button.getId()) {
+            case "allBtn" -> button.getStyleClass().remove("button-All-selected");
+            case "availableBtn" -> button.getStyleClass().remove("button-Available-selected");
+            case "onUseBtn" -> button.getStyleClass().remove("button-OnUse-selected");
+            case "overDueBtn" -> button.getStyleClass().remove("button-OverDue-selected");
+            default -> throw new IllegalArgumentException("Không tìm thấy button ID");
+        }
     }
 
 }

@@ -203,82 +203,41 @@ public class RoomDAO {
         return data;
     }
 
-    public static String createRoomID(int floorNumb, RoomCategory roomCategory) {
-        String sql = "SELECT roomID\n" +
-                "FROM Room\n" +
-                "WHERE SUBSTRING(roomID, 3, 1) = ?";
-
-        String newRoomID = null;
+    public static String roomIDGenerate(int floorNumb, RoomCategory roomCategory) {
+        String sql = "SELECT roomID FROM Room WHERE SUBSTRING(roomID, 3, 1) = ?";
+        String newRoomID;
         int maxIDNumb = 0;
-
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)
         ) {
-            String floorNumbStr = String.valueOf(floorNumb);
-            preparedStatement.setString(1, floorNumbStr);
+            preparedStatement.setString(1, String.valueOf(floorNumb));
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    String roomID = rs.getString(1);
+                    int roomOrdNumb = Integer.parseInt(roomID.substring(roomID.length() - 2));
 
-                if(rs.next()) {
-                    // Khởi tạo các giá trị cần lưu
-                    maxIDNumb = 0;
-                    String roomIDLast = null;
-
-                    // Duyệt qua tất cả các bản ghi
-                    do {
-                        roomIDLast = rs.getString(1);
-                        int roomOrdNumb = Integer.valueOf(roomIDLast.substring(roomIDLast.length() - 2));
-
-                        // Cập nhật giá trị maxIDNumb nếu tìm thấy giá trị lớn hơn
-                        if(roomOrdNumb > maxIDNumb) {
-                            maxIDNumb = roomOrdNumb;
-                        }
-                    } while(rs.next());
-
-                    // Sau khi kết thúc vòng lặp, thực hiện các kiểm tra
-                    if (maxIDNumb != 0) {
-                        if (roomIDLast.substring(roomIDLast.length() - 2).equalsIgnoreCase("99")) {
-                            throw new IllegalArgumentException("Số phòng trong 1 tầng đã đạt tới giới hạn 99 phòng\nVui lòng không tạo thêm");
-                        } else {
-                            int nextIDNumb = maxIDNumb + 1;
-
-                            String roomCategoryChar;
-                            if(roomCategory.getRoomCategoryName().contains("Phòng Thường")) {
-                                roomCategoryChar = "T";
-                            } else {
-                                roomCategoryChar = "V";
-                            }
-
-                            String numbOfBedStr = String.valueOf(roomCategory.getNumberOfBed());
-
-                            newRoomID = roomCategoryChar + numbOfBedStr + floorNumbStr + String.format("%02d", nextIDNumb);
-                        }
-                    }
-                } else {
-                    // Xử lý trường hợp ResultSet trống
-                    String nextIDNumb = "01";
-
-                    String roomCategoryChar;
-                    if(roomCategory.getRoomCategoryName().contains("Phòng Thường")) {
-                        roomCategoryChar = "T";
-                    } else {
-                        roomCategoryChar = "V";
-                    }
-
-                    String numbOfBedStr = String.valueOf(roomCategory.getNumberOfBed());
-
-                    newRoomID = roomCategoryChar + numbOfBedStr + floorNumbStr + nextIDNumb;
+                    maxIDNumb = Math.max(maxIDNumb, roomOrdNumb);
                 }
 
-            }
+                if (maxIDNumb >= 99) {
+                    throw new IllegalArgumentException("Số phòng trong 1 tầng đã đạt giới hạn 99 phòng. Không thể tạo thêm phòng mới.");
+                }
 
+                int nextIDNumb = maxIDNumb + 1;
+                String roomCategoryChar = roomCategory.getRoomCategoryName().contains("Phòng Thường") ? "T" : "V";
+                String numbOfBedStr = String.valueOf(roomCategory.getNumberOfBed());
+                String floorNumbStr = String.valueOf(floorNumb);
+
+                newRoomID = String.format("%s%s%s%02d", roomCategoryChar, numbOfBedStr, floorNumbStr, nextIDNumb);
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Lỗi truy vấn cơ sở dữ liệu", e);
         }
 
-        System.out.println(newRoomID);
         return newRoomID;
     }
+
 
 }
