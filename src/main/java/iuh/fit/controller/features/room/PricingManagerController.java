@@ -274,7 +274,7 @@ public class PricingManagerController {
         }
     }
 
-    // 5. Chức năng Tìm kiếm
+    // Chức năng 5: Tìm kiếm
     private void handleSearchAction() {
         priceSearchField.setText("");
         unitSearchField.setText("");
