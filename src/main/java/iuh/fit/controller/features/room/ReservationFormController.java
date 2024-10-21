@@ -3,6 +3,8 @@ package iuh.fit.controller.features.room;
 import com.dlsc.gemsfx.daterange.DateRange;
 import com.dlsc.gemsfx.daterange.DateRangePicker;
 import iuh.fit.controller.MainController;
+import iuh.fit.models.Employee;
+import iuh.fit.models.Room;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
@@ -20,15 +22,28 @@ public class ReservationFormController {
     private Button backBtn;
 
     // Input Fields
+    // 1. Thông tin phòng
+    @FXML
+    private TextField roomNumberTextField;
+    @FXML
+    private TextField roomCategoryTextField;
     @FXML
     private DateRangePicker bookDateRangePicker;
     @FXML
     private TextField checkInDateTextField;
     @FXML
     private TextField checkOutDateTextField;
+    // 2. Thông tin khách hàng
+    // 3. Thông tin nhân viên
+    @FXML
+    private TextField employeeIDTextField;
+    @FXML
+    private TextField employeeFullNameTextField;
 
-    // Main Controller
+    // Context
     private MainController mainController;
+    private Employee employee;
+    private Room room;
 
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.forLanguageTag("vi-VN"));
@@ -37,12 +52,16 @@ public class ReservationFormController {
 
     }
 
-    public void setMainController(MainController mainController) {
+    public void setupContext(MainController mainController, Employee employee, Room room) {
         this.mainController = mainController;
+        this.employee = employee;
+        this.room = room;
 
 
         backBtn.setOnAction(e -> handleBackBtn());
         setupBookDateRangePicker();
+        setupRoomInformation();
+        setupEmployeeInformation();
     }
 
     private void setupBookDateRangePicker() {
@@ -67,13 +86,23 @@ public class ReservationFormController {
         );
     }
 
+    private void setupRoomInformation() {
+        roomNumberTextField.setText(room.getRoomNumber());
+        roomCategoryTextField.setText(room.getRoomCategory().getRoomCategoryName());
+    }
+
+    private void setupEmployeeInformation() {
+        employeeIDTextField.setText(employee.getEmployeeID());
+        employeeFullNameTextField.setText(employee.getFullName());
+    }
+
     private void handleBackBtn() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setMainController(mainController);
+            roomBookingController.setupContext(mainController, employee);
 
             mainController.getMainPanel().getChildren().clear();
             mainController.getMainPanel().getChildren().addAll(layout.getChildren());
@@ -81,4 +110,6 @@ public class ReservationFormController {
             e.printStackTrace();
         }
     }
+
+
 }

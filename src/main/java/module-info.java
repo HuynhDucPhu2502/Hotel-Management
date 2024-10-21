@@ -22,5 +22,7 @@ module iuh.fit {
     exports iuh.fit.controller.features.room;
     exports iuh.fit.controller.features.customer;
     exports iuh.fit.controller;
+    exports iuh.fit.models;
+    exports iuh.fit.models.enums;
 
 }
