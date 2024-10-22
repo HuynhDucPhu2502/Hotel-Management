@@ -37,6 +37,8 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã nhân viên" textAlignment="RIGHT">
@@ -129,6 +131,36 @@
                      </cursor>
                   </TextField>
                   <TextField fx:id="positionTextField" disable="true" editable="false" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                     <cursor>
+                        <Cursor fx:constant="CLOSED_HAND" />
+                     </cursor>
+                  </TextField>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tài khoản" GridPane.rowIndex="5">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Trạng thái tài khoản" GridPane.rowIndex="6">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <TextField fx:id="usernameTextField" disable="true" editable="false" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                     <cursor>
+                        <Cursor fx:constant="CLOSED_HAND" />
+                     </cursor>
+                  </TextField>
+                  <TextField fx:id="statusTextField" disable="true" editable="false" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                     <cursor>
+                        <Cursor fx:constant="CLOSED_HAND" />
+                     </cursor>
+                  </TextField>
+                  <TextField fx:id="passwordTextField" disable="true" editable="false" focusTraversable="false" GridPane.columnIndex="3" GridPane.rowIndex="5">
                      <cursor>
                         <Cursor fx:constant="CLOSED_HAND" />
                      </cursor>

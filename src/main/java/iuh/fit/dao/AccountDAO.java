@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountDAO {
-    public static List<Account> getEmployees() {
+    public static List<Account> getAccount() {
         ArrayList<Account> data = new ArrayList<Account>();
         try (
                 Connection connection = DBHelper.getConnection();
@@ -224,5 +224,127 @@ public class AccountDAO {
 
     }
 
+    public static String getNextAccountID() {
+        String nextID = "ACC-000001";
+
+        String query = "SELECT nextID FROM GlobalSequence WHERE tableName = ?";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
+            preparedStatement.setString(1, "Account");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                nextID = rs.getString(1);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return nextID;
+    }
+
+    public static Account getAccountByEmployeeID(String employeeID) {
+        String SQLQueryStatement =  "SELECT a.accountID, a.userName, a.password, " +
+                "a.status, b.employeeID, b.fullName, " +
+                "b.phoneNumber, b.email, b.address, " +
+                "b.gender, b.idCardNumber, b.dob, " +
+                "b.position " +
+                "FROM Account a INNER JOIN Employee b " +
+                "ON a.employeeID = b.employeeID " +
+                "WHERE a.employeeID = ?";
+
+        try (
+                Connection con = DBHelper.getConnection();
+                PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement)
+        ) {
+
+            preparedStatement.setString(1, employeeID);
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    Account account = new Account();
+
+                    account.setAccountID(rs.getString(1));
+                    account.setUserName(rs.getString(2));
+                    account.setPassword(rs.getString(3));
+                    account.setAccountStatus(ConvertHelper.accountStatusConverter(rs.getString(4)));
+
+                    Employee employee = new Employee();
+                    employee.setEmployeeID(rs.getString(5));
+                    employee.setFullName(rs.getString(6));
+                    employee.setPhoneNumber(rs.getString(7));
+                    employee.setEmail(rs.getString(8));
+                    employee.setAddress(rs.getString(9));
+                    employee.setGender(ConvertHelper.genderConverter(rs.getString(10)));
+                    employee.setIdCardNumber(rs.getString(11));
+                    employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(12)));
+                    employee.setPosition(ConvertHelper.positionConverter(rs.getString(13)));
+
+                    account.setEmployee(employee);
+
+                    return account;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static List<Account> findDataByContainsId(String input) {
+        ArrayList<Account> data = new ArrayList<>();
+
+        String query = "SELECT a.accountID, a.userName, a.password, " +
+                "a.status, a.employeeID, b.fullName, " +
+                "b.phoneNumber, b.email, b.address, " +
+                "b.gender, b.idCardNumber, b.dob, " +
+                "b.position " +
+                "FROM Account a INNER JOIN Employee b " +
+                "ON a.employeeID = b.employeeID " +
+                "WHERE LOWER(a.employeeID) LIKE ?";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
+            preparedStatement.setString(1, "%" + input.toLowerCase() + "%");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Account account = new Account();
+
+                account.setAccountID(rs.getString(1));
+                account.setUserName(rs.getString(2));
+                account.setPassword(rs.getString(3));
+                account.setAccountStatus(ConvertHelper.accountStatusConverter(rs.getString(4)));
+
+                Employee employee = new Employee();
+                employee.setEmployeeID(rs.getString(5));
+                employee.setFullName(rs.getString(6));
+                employee.setPhoneNumber(rs.getString(7));
+                employee.setEmail(rs.getString(8));
+                employee.setAddress(rs.getString(9));
+                employee.setGender(ConvertHelper.genderConverter(rs.getString(10)));
+                employee.setIdCardNumber(rs.getString(11));
+                employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(12)));
+                employee.setPosition(ConvertHelper.positionConverter(rs.getString(13)));
+
+                account.setEmployee(employee);
+
+                data.add(account);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
+    }
 }
 
