@@ -121,19 +121,21 @@ public class RoomDAO {
         }
     }
 
-    public static void updateData(Room room) {
+    public static void updateData(String oldRoomID, String oldCategory, Room newRoom) {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                        "UPDATE Room " +
-                                "SET roomStatus = ?, dateOfCreation = ?, roomCategoryID = ? " +
-                                "WHERE roomID = ? "
-                )
+                        "UPDATE Room "+
+                                "SET roomID = ?, roomStatus = ?, roomCategoryID = ? "+
+                                "WHERE roomCategoryID = ? AND roomID = ?"
+
+        )
         ){
-            preparedStatement.setString(1, ConvertHelper.roomStatusConverterToSQL(room.getRoomStatus()));
-            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeConvertertoSQL(room.getDateOfCreation()));
-            preparedStatement.setString(3, room.getRoomCategory().getRoomCategoryID());
-            preparedStatement.setString(4, room.getRoomID());
+            preparedStatement.setString(1, newRoom.getRoomID());
+            preparedStatement.setString(2, ConvertHelper.roomStatusConverterToSQL(newRoom.getRoomStatus()));
+            preparedStatement.setString(3, newRoom.getRoomCategory().getRoomCategoryID());
+            preparedStatement.setString(4, oldCategory);
+            preparedStatement.setString(5, oldRoomID);
 
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
@@ -200,6 +202,33 @@ public class RoomDAO {
             System.exit(1);
         }
 
+        return data;
+    }
+
+    public static List<Room> findDataByAnyContainsId(String input) {
+        List<Room> data = new ArrayList<>();
+        String sql = "SELECT roomID, roomStatus, dateOfCreation, roomCategoryID " +
+                "FROM Room " +
+                "WHERE LOWER(roomID) LIKE ?";
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            preparedStatement.setString(1, "%" + input.toLowerCase() + "%");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Room room = new Room(
+                        rs.getString("roomID"),
+                        ConvertHelper.roomStatusConverter(rs.getString("roomStatus")),
+                        ConvertHelper.localDateTimeConverter(rs.getTimestamp("dateOfCreation")),
+                        RoomCategoryDAO.getDataByID(rs.getString("roomCategoryID"))
+                );
+                data.add(room);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return data;
     }
 
