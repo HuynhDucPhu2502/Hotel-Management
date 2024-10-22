@@ -291,7 +291,39 @@ public class PricingDAO {
 
         return nextID;
     }
+  
+    public static boolean checkAllowUpdateOrDelete(String roomCategoryID) {
+        int count = 0;
 
+        String sql = "SELECT roomID " +
+                "FROM Room " +
+                "WHERE roomCategoryID = ? AND (roomStatus = ? OR roomStatus = ?)";
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ){
+            preparedStatement.setString(1, roomCategoryID);
+            preparedStatement.setString(2, "ON_USE");
+            preparedStatement.setString(3, "OVERDUE");
+
+            try(ResultSet rs = preparedStatement.executeQuery()){
+                while (rs.next()) {
+                    count++;
+                }
+
+                if(count > 0){
+                    return false;
+                }
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return true;
+    }
+        
     public static List<Pricing> findDataByCategoryID(String categoryID) {
         ArrayList<Pricing> data = new ArrayList<>();
 
@@ -327,7 +359,6 @@ public class PricingDAO {
             exception.printStackTrace();
             System.exit(1);
         }
-
         return data;
     }
 

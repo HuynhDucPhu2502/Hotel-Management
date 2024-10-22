@@ -4,8 +4,10 @@ import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.PricingDAO;
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.models.Pricing;
+import iuh.fit.models.Room;
 import iuh.fit.models.RoomCategory;
 import iuh.fit.models.enums.PriceUnit;
+import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.ErrorMessages;
 import javafx.application.Platform;
@@ -164,6 +166,14 @@ public class PricingManagerController {
                 if (empty) {
                     setGraphic(null);
                 } else {
+                    Pricing price = getTableView().getItems().get(getIndex());
+                    if (!PricingDAO.checkAllowUpdateOrDelete(price.getRoomCategory().getRoomCategoryID())) {
+                        updateButton.setDisable(true);
+                        deleteButton.setDisable(true);
+                    } else {
+                        updateButton.setDisable(false);
+                        deleteButton.setDisable(false);
+                    }
                     setGraphic(hBox);
                 }
             }
