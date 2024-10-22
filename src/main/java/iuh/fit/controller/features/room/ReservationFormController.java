@@ -7,6 +7,8 @@ import com.dlsc.gemsfx.daterange.DateRangePreset;
 import iuh.fit.controller.MainController;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Room;
+import iuh.fit.utils.CostCalculator;
+import iuh.fit.utils.GlobalConstants;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
@@ -44,6 +46,10 @@ public class ReservationFormController {
     private TimePicker checkOutTimePicker;
     @FXML
     private TextField checkOutDateTextField;
+    @FXML
+    private Label stayLengthLabel;
+    @FXML
+    private Label bookingDepositLabel;
     // 2. Thông tin khách hàng
     // 3. Thông tin nhân viên
     @FXML
@@ -56,13 +62,15 @@ public class ReservationFormController {
     private Employee employee;
     private Room room;
 
+    //
     private LocalDateTime checkInTime;
     private LocalDateTime checkOutTime;
 
     // =========================================================
-    // Khởi tạo và nạp dữ liệu vào giao diện
+    // 1. Khởi tạo và nạp dữ liệu vào giao diện
     // =========================================================
     public void initialize() {
+        setupTimeComponents();
     }
 
     public void setupContext(MainController mainController, Employee employee, Room room) {
@@ -72,13 +80,12 @@ public class ReservationFormController {
 
         backBtn.setOnAction(e -> handleBackBtn());
 
-        setupTimeComponents();
         setupRoomInformation();
         setupEmployeeInformation();
     }
 
     // =========================================================
-    // Xử lý đổi các biến thời gian thành chuỗi ngày + giờ
+    // 2. Xử lý đổi các biến thời gian thành chuỗi ngày + giờ
     // =========================================================
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.forLanguageTag("vi-VN"));
@@ -87,21 +94,33 @@ public class ReservationFormController {
         return dateTimeFormatter.format(date) + " " + time.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
+    private LocalDateTime parseDateTime(String dateTimeString) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.forLanguageTag("vi-VN"));
+            return LocalDateTime.parse(dateTimeString, formatter);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     // =========================================================
-    // Đẩy dữ liệu phòng và nhân viên lên giao diện
+    // 3. Đẩy dữ liệu phòng và nhân viên lên giao diện
     // =========================================================
+    // 3.1 Hiển thị dữ liệu phòng và loại phòng lên giao diện
     private void setupRoomInformation() {
         roomNumberLabel.setText(room.getRoomNumber());
         categoryNameLabel.setText(room.getRoomCategory().getRoomCategoryName());
     }
 
+    // 3.2 Hiển thị nhân viên lên giao diện
     private void setupEmployeeInformation() {
         employeeIDLabel.setText(employee.getEmployeeID());
         employeeFullNameLabel.setText(employee.getFullName());
     }
 
     // =========================================================
-    // Xử lý chức năng nút quay lại
+    // 4. Xử lý chức năng nút quay lại
     // =========================================================
     private void handleBackBtn() {
         try {
@@ -119,8 +138,11 @@ public class ReservationFormController {
     }
 
     // =========================================================
-    // Cài đặt các thành phần giao diện liên quan đến thời gian
+    // 5. Cài đặt các thành phần giao diện liên quan đến thời gian
     // =========================================================
+
+    // 5.1 Cài đặt TimePicker, DateRangePicker và binding Data
+    // vào checkInDateTextField và checkOutDateTextField
     private void setupTimeComponents() {
         checkInTimePicker.setTime(null);
         checkInTimePicker.setStepRateInMinutes(15);
@@ -163,43 +185,75 @@ public class ReservationFormController {
         setupDateTimeListeners();
     }
 
+    // 5.2 Lắng nghe sự kiện thay đổi trên checkInDateTextField,
+    // checkOutDateTextField để kích hoạt sự kiện tính toán ngày
+    // lưu trú và số tiền đặt cọc
     private void setupDateTimeListeners() {
         checkInDateTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.isEmpty()) {
                 checkInTime = parseDateTime(newValue);
-                System.out.println("Check-in time: " + checkInTime);
+                updateStayLengthAndCost();
             }
         });
 
         checkOutDateTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.isEmpty()) {
                 checkOutTime = parseDateTime(newValue);
-                System.out.println("Check-out time: " + checkOutTime);
+                updateStayLengthAndCost();
             }
         });
     }
 
-    private LocalDateTime parseDateTime(String dateTimeString) {
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.forLanguageTag("vi-VN"));
-            return LocalDateTime.parse(dateTimeString, formatter);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
+    // 5.3 Tạo các preset cho DateRangePicker
+    // 5.3.1 Preset 3 ngày
     private DateRangePreset createThreeDaysPreset() {
         return new DateRangePreset("3 Ngày", () -> new DateRange("Chọn Lịch Đặt Phòng", LocalDate.now(), LocalDate.now().plusDays(3)));
     }
 
+    // 5.3.2 Preset 5 ngày
     private DateRangePreset createFiveDaysPreset() {
         return new DateRangePreset("5 Ngày", () -> new DateRange("Chọn Lịch Đặt Phòng", LocalDate.now(), LocalDate.now().plusDays(5)));
     }
 
+    // 5.3.3 Preset 7 ngày
     private DateRangePreset createSevenDaysPreset() {
         return new DateRangePreset("7 Ngày", () -> new DateRange("Chọn Lịch Đặt Phòng", LocalDate.now(), LocalDate.now().plusDays(7)));
     }
+
+    // =========================================================
+    // 6. Tính toán thời gian lưu trú và tiền đặt cọc
+    // =========================================================
+    private void updateStayLengthAndCost() {
+        if (checkInTime != null && checkOutTime != null) {
+            String stayLength = calculateStayLength();
+            stayLengthLabel.setText(stayLength);
+
+            try {
+                double totalCost = CostCalculator.calculateBookingDeposit(room, checkInTime, checkOutTime);
+                bookingDepositLabel.setText(String.format("%.2f VND", totalCost));
+            } catch (IllegalArgumentException e) {
+                bookingDepositLabel.setText(e.getMessage());
+            }
+        } else {
+            stayLengthLabel.setText(GlobalConstants.STAY_LENGTH_EMPTY);
+            bookingDepositLabel.setText(GlobalConstants.BOOKING_DEPOSIT_EMPTY);
+        }
+    }
+
+    private String calculateStayLength() {
+        long hours = java.time.Duration.between(checkInTime, checkOutTime).toHours();
+        double days = hours / 24.0;
+
+        if (hours < 12) {
+            return hours + " giờ";
+        } else {
+            double roundedDays = Math.ceil(days * 2) / 2.0;
+            return roundedDays + " ngày";
+        }
+    }
+
+
+
 
 
 }
