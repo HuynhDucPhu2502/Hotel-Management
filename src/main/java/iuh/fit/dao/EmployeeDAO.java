@@ -1,11 +1,6 @@
 package iuh.fit.dao;
 
-import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
-import iuh.fit.models.Pricing;
-import iuh.fit.models.RoomCategory;
-import iuh.fit.models.enums.Gender;
-import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 
@@ -18,10 +13,10 @@ import java.util.List;
 
 public class EmployeeDAO {
     public static List<Employee> getEmployees() {
-        ArrayList<Employee> data = new ArrayList<Employee>();
+        ArrayList<Employee> data = new ArrayList<>();
         try (
                 Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ){
             String sql = "SELECT employeeID, fullName, phoneNumber, " +
                     "email, address, gender, " +
@@ -40,7 +35,7 @@ public class EmployeeDAO {
                 employee.setAddress(rs.getString(5));
                 employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
                 employee.setIdCardNumber(rs.getString(7));
-                employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(8)));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
                 employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
 
                 data.add(employee);
@@ -78,7 +73,7 @@ public class EmployeeDAO {
                     employee.setAddress(rs.getString(5));
                     employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
                     employee.setIdCardNumber(rs.getString(7));
-                    employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(8)));
+                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
                     employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
 
 
@@ -109,7 +104,7 @@ public class EmployeeDAO {
             preparedStatement.setString(5, employee.getAddress());
             preparedStatement.setString(6, ConvertHelper.genderConverterToSQL(employee.getGender()));
             preparedStatement.setString(7, employee.getIdCardNumber());
-            preparedStatement.setDate(8, ConvertHelper.dateConvertertoSQL(employee.getDob()));
+            preparedStatement.setDate(8, ConvertHelper.dateToSQLConverter(employee.getDob()));
             preparedStatement.setString(9, employee.getPosition().name());
 
             preparedStatement.executeUpdate();
@@ -128,7 +123,7 @@ public class EmployeeDAO {
                                 "address = ?, gender = ?, idCardNumber = ?, " +
                                 "dob = ?, position = ? " +
                                 "WHERE employeeID = ? "
-                );
+                )
         ){
             preparedStatement.setString(1, employee.getFullName());
             preparedStatement.setString(2, employee.getPhoneNumber());
@@ -136,7 +131,7 @@ public class EmployeeDAO {
             preparedStatement.setString(4, employee.getAddress());
             preparedStatement.setString(5, ConvertHelper.genderConverterToSQL(employee.getGender()));
             preparedStatement.setString(6, employee.getIdCardNumber());
-            preparedStatement.setDate(7, ConvertHelper.dateConvertertoSQL(employee.getDob()));
+            preparedStatement.setDate(7, ConvertHelper.dateToSQLConverter(employee.getDob()));
             preparedStatement.setString(8, employee.getPosition().name());
             preparedStatement.setString(9, employee.getEmployeeID());
 
@@ -219,7 +214,7 @@ public class EmployeeDAO {
                 employee.setAddress(rs.getString(5));
                 employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
                 employee.setIdCardNumber(rs.getString(7));
-                employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(8)));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
                 employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
 
                 data.add(employee);
@@ -255,7 +250,7 @@ public class EmployeeDAO {
                     employee.setAddress(rs.getString(5));
                     employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
                     employee.setIdCardNumber(rs.getString(7));
-                    employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(8)));
+                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
                     employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
 
                     return employee;

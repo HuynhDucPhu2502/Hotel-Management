@@ -2,8 +2,6 @@ package iuh.fit.dao;
 
 import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
-import iuh.fit.models.HotelService;
-import iuh.fit.models.ServiceCategory;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 
@@ -47,7 +45,7 @@ public class AccountDAO {
                 employee.setAddress(rs.getString(9));
                 employee.setGender(ConvertHelper.genderConverter(rs.getString(10)));
                 employee.setIdCardNumber(rs.getString(11));
-                employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(12)));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate(12)));
                 employee.setPosition(ConvertHelper.positionConverter(rs.getString(13)));
 
                 account.setEmployee(employee);
@@ -99,7 +97,7 @@ public class AccountDAO {
                     employee.setAddress(rs.getString(9));
                     employee.setGender(ConvertHelper.genderConverter(rs.getString(10)));
                     employee.setIdCardNumber(rs.getString(11));
-                    employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(12)));
+                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate(12)));
                     employee.setPosition(ConvertHelper.positionConverter(rs.getString(13)));
 
                     account.setEmployee(employee);
@@ -150,7 +148,7 @@ public class AccountDAO {
                     employee.setAddress(rs.getString(9));
                     employee.setGender(ConvertHelper.genderConverter(rs.getString(10)));
                     employee.setIdCardNumber(rs.getString(11));
-                    employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(12)));
+                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate(12)));
                     employee.setPosition(ConvertHelper.positionConverter(rs.getString(13)));
 
                     account.setEmployee(employee);

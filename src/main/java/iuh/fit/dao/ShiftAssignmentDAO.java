@@ -51,7 +51,7 @@ public class ShiftAssignmentDAO {
                 employee.setAddress(rs.getString(13));
                 employee.setGender(ConvertHelper.genderConverter(rs.getString(14)));
                 employee.setIdCardNumber(rs.getString(15));
-                employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(16)));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate(16)));
                 employee.setPosition(ConvertHelper.positionConverter(rs.getString(17)));
 
                 shiftAssignment.setShift(shift);
@@ -109,7 +109,7 @@ public class ShiftAssignmentDAO {
                     employee.setAddress(rs.getString(13));
                     employee.setGender(ConvertHelper.genderConverter(rs.getString(14)));
                     employee.setIdCardNumber(rs.getString(15));
-                    employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(16)));
+                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate(16)));
                     employee.setPosition(ConvertHelper.positionConverter(rs.getString(17)));
 
                     shiftAssignment.setShift(shift);
