@@ -119,6 +119,7 @@ public class ErrorMessages {
     public static final String HISTORY_CHECKOUT_INVALID_ID_FORMAT = "Mã phiếu trả phòng phải theo định dạng HCO-XXXXXX!!!";
     public static final String HISTORY_CHECKOUT_INVALID_CHECKOUT_DATE_ISNULL = "Ngày trả phòng không được rỗng!!!";
     public static final String HISTORY_CHECKOUT_INVALID_CHECKOUT_DATE= "Ngày trả phòng phải trước ngày hiện tại!!!";
+
     // ConvertHelper
     public static final String CONVERT_HELPER_INVALID_LOCALTIME = "Thời gian phải nằm từ 5:00 đến 23:00";
     public static final String CONVERT_HELPER_INVALID_GENDER = "Giới tính không hợp lệ. Phải nằm trong FEMALE,  MALE";
@@ -127,6 +128,10 @@ public class ErrorMessages {
     public static final String CONVERT_HELPER_INVALID_ACCOUNT_STATUS= "trạng thái tài khoản không hợp lệ. Phải nằm trong ACTIVE, INACTIVE, LOCKED";
     public static final String CONVERT_HELPER_INVALID_PRICE_UNIT = "Đơn vị giá không hợp lệ. Phải nằm trong DAY, HOUR";
     public static final String CONVERT_HELPER_INVALID_ROOM_STATUS = "Trạng thái phòng không hợp lệ. Phải nằm trong AVAILABLE, ON_USE, UNAVAILABLE";
+
+    // Cost Calculator
+    public static final String PRICING_NOT_FOUND = "Không tìm thấy bản ghi giá cả theo ngày hoặc theo giờ";
+    public static final String ERROR_CHECK_OUT_BEFORE_CHECK_IN = "Thời gian check-out phải sau thời gian check-in";
 
     // Login message
     public static final String LOGIN_INVALID_USERNAME = "Tài khoản không được bỏ trống";

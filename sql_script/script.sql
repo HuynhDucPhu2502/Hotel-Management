@@ -10,8 +10,8 @@ USE HotelDatabase;
 GO
 
 -- Xóa cơ sở dữ liệu
-USE master
-DROP DATABASE HotelDatabase
+--USE master
+--DROP DATABASE HotelDatabase
 
 -- ===================================================================================
 -- 1. TẠO BẢNG
@@ -344,6 +344,8 @@ VALUES
     ('SA-000004', N'Assigned to morning shift', 'SHIFT-AM-0004', 'EMP-000004');
 GO
 
+select * from Customer
+
 -- Thêm dữ liệu vào bảng Customer
 INSERT INTO Customer (customerID, fullName, phoneNumber, email, address, gender, idCardNumber, dob)
 VALUES
@@ -351,7 +353,32 @@ VALUES
     ('CUS-000002', N'Le Thi B', '0912345679', 'lethib@gmail.com', N'456 Duong XYZ, Quan 3, TP HCM', N'FEMALE', '001099012323', '1992-07-22'),
     ('CUS-000003', N'Tran Van C', '0912345680', 'tranvanc@gmail.com', N'789 Duong MNO, Quan 5, TP HCM', N'MALE', '001099012343', '1988-03-30'),
     ('CUS-000004', N'Pham Thi D', '0912345681', 'phamthid@gmail.com', N'321 Duong PQR, Quan 7, TP HCM', N'FEMALE', '001099012546', '1995-12-01'),
-    ('CUS-000005', N'Hoang Van E', '0912345682', 'hoangvane@gmail.com', N'987 Duong STU, Quan 10, TP HCM', N'MALE', '001099012764', '1991-11-20');
+    ('CUS-000005', N'Hoang Van E', '0912345682', 'hoangvane@gmail.com', N'987 Duong STU, Quan 10, TP HCM', N'MALE', '001099012764', '1991-11-20'),
+	('CUS-000006', N'Nguyen Van F', '0912345683', 'nguyenf@gmail.com', N'111 Duong DEF, Quan 1, TP HCM', N'MALE', '001099012765', '1989-04-18'),
+    ('CUS-000007', N'Le Thi G', '0912345684', 'lethig@gmail.com', N'222 Duong GHI, Quan 2, TP HCM', N'FEMALE', '001099012776', '1993-08-29'),
+    ('CUS-000008', N'Tran Van H', '0912345685', 'tranvanh@gmail.com', N'333 Duong JKL, Quan 3, TP HCM', N'MALE', '001099012787', '1985-12-12'),
+    ('CUS-000009', N'Pham Thi I', '0912345686', 'phamthi@gmail.com', N'444 Duong MNO, Quan 4, TP HCM', N'FEMALE', '001099012798', '1990-01-01'),
+    ('CUS-000010', N'Hoang Van J', '0912345687', 'hoangvanj@gmail.com', N'555 Duong PQR, Quan 5, TP HCM', N'MALE', '001099012809', '1987-05-05'),
+    ('CUS-000011', N'Nguyen Van K', '0912345688', 'nguyenk@gmail.com', N'666 Duong STU, Quan 6, TP HCM', N'MALE', '001099012810', '1992-11-11'),
+    ('CUS-000012', N'Le Thi L', '0912345689', 'lethil@gmail.com', N'777 Duong VWX, Quan 7, TP HCM', N'FEMALE', '001099012821', '1994-02-15'),
+    ('CUS-000013', N'Tran Van M', '0912345690', 'tranvanm@gmail.com', N'888 Duong YZA, Quan 8, TP HCM', N'MALE', '001099012832', '1986-09-09'),
+    ('CUS-000014', N'Pham Thi N', '0912345691', 'phamthinh@gmail.com', N'999 Duong BCD, Quan 9, TP HCM', N'FEMALE', '001099012843', '1991-03-03'),
+    ('CUS-000015', N'Hoang Van O', '0912345692', 'hoangvano@gmail.com', N'000 Duong EFG, Quan 10, TP HCM', N'MALE', '001099012854', '1993-07-21'),
+    ('CUS-000016', N'Nguyen Van P', '0912345693', 'nguyenp@gmail.com', N'123 Duong HIJ, Quan 11, TP HCM', N'MALE', '001099012865', '1990-04-04'),
+    ('CUS-000017', N'Le Thi Q', '0912345694', 'lethiq@gmail.com', N'234 Duong KLM, Quan 12, TP HCM', N'FEMALE', '001099012876', '1988-06-06'),
+    ('CUS-000018', N'Tran Van R', '0912345695', 'tranvanr@gmail.com', N'345 Duong NOP, Quan 1, TP HCM', N'MALE', '001099012887', '1995-08-08'),
+    ('CUS-000019', N'Pham Thi S', '0912345696', 'phamthir@gmail.com', N'456 Duong QRS, Quan 2, TP HCM', N'FEMALE', '001099012898', '1994-05-05'),
+    ('CUS-000020', N'Hoang Van T', '0912345697', 'hoangvant@gmail.com', N'567 Duong TUV, Quan 3, TP HCM', N'MALE', '001099012909', '1990-02-02'),
+    ('CUS-000021', N'Nguyen Van U', '0912345698', 'nguyenu@gmail.com', N'678 Duong WXY, Quan 4, TP HCM', N'MALE', '001099012910', '1989-11-11'),
+    ('CUS-000022', N'Le Thi V', '0912345699', 'lethiv@gmail.com', N'789 Duong ZAB, Quan 5, TP HCM', N'FEMALE', '001099012921', '1992-09-09'),
+    ('CUS-000023', N'Tran Van W', '0912345700', 'tranvanw@gmail.com', N'890 Duong CDE, Quan 6, TP HCM', N'MALE', '001099012932', '1993-10-10'),
+    ('CUS-000024', N'Pham Thi X', '0912345701', 'phamthix@gmail.com', N'901 Duong FGHI, Quan 7, TP HCM', N'FEMALE', '001099012943', '1987-12-12'),
+	('CUS-000025', N'Hoang Van Y', '0912345702', 'hoangvany@gmail.com', N'012 Duong JKL, Quan 8, TP HCM', N'MALE', '001099012954', '1988-01-01'),
+    ('CUS-000026', N'Nguyen Van Z', '0912345703', 'nguyenz@gmail.com', N'123 Duong MNO, Quan 9, TP HCM', N'MALE', '001099012965', '1991-04-04'),
+    ('CUS-000027', N'Le Thi AA', '0912345704', 'lethia@gmail.com', N'234 Duong PQR, Quan 10, TP HCM', N'FEMALE', '001099012976', '1990-12-12'),
+    ('CUS-000028', N'Tran Van AB', '0912345705', 'tranvanab@gmail.com', N'345 Duong STU, Quan 1, TP HCM', N'MALE', '001099012987', '1986-07-07'),
+    ('CUS-000029', N'Pham Thi AC', '0912345706', 'phamthiac@gmail.com', N'456 Duong VWX, Quan 2, TP HCM', N'FEMALE', '001099012998', '1994-03-03'),
+    ('CUS-000030', N'Hoang Van AD', '0912345707', 'hoangvanad@gmail.com', N'567 Duong YZA, Quan 3, TP HCM', N'MALE', '001099013000', '1992-06-06');
 GO
 
 -- ===================================================================================

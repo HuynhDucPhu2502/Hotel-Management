@@ -96,7 +96,7 @@ public class RoomDAO {
         ){
             preparedStatement.setString(1, room.getRoomID());
             preparedStatement.setString(2, ConvertHelper.roomStatusConverterToSQL(room.getRoomStatus()));
-            preparedStatement.setTimestamp(3, ConvertHelper.dateTimeConvertertoSQL(room.getDateOfCreation()));
+            preparedStatement.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(room.getDateOfCreation()));
             preparedStatement.setString(4, room.getRoomCategory().getRoomCategoryID());
 
             preparedStatement.executeUpdate();

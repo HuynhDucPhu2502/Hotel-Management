@@ -5,6 +5,9 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -16,9 +19,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="391.0" prefWidth="836.0" style="-fx-background-color: rgb(188, 242, 246);" stylesheets="@../../../styles/Button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.customer.CustomerInformationViewController">
+<AnchorPane prefHeight="684.0" prefWidth="840.0" style="-fx-background-color: #dcdcdc;" stylesheets="@../../../styles/Button.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.customer.CustomerInformationViewController">
    <children>
-      <VBox alignment="TOP_CENTER" layoutX="50.400001525878906" layoutY="25.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="TOP_CENTER" layoutX="50.400001525878906" layoutY="25.0" prefHeight="669.0" prefWidth="840.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label text="THÔNG TIN KHÁCH HÀNG">
                <font>
@@ -131,6 +134,26 @@
                   </AnchorPane>
                </children>
             </GridPane>
+            <ScrollPane prefHeight="262.0" prefWidth="819.0">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="235.0" prefWidth="802.0">
+                     <children>
+                        <TableView layoutY="-2.0" prefHeight="202.0" prefWidth="806.0" stylesheets="@../../../styles/TableView.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                           <columns>
+                            <TableColumn prefWidth="49.60000532865524" text="STT" />
+                            <TableColumn prefWidth="158.39999771118164" text="Mã phiếu đặt phòng" />
+                              <TableColumn prefWidth="124.00007629394531" text="Thời gian đặt" />
+                              <TableColumn prefWidth="161.60003662109375" text="Thời gian trả" />
+                              <TableColumn prefWidth="291.1999572753906" text="Ghi chú" />
+                          </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
          </children>
          <opaqueInsets>
             <Insets />
