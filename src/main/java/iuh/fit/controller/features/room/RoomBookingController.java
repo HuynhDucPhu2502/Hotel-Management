@@ -58,12 +58,8 @@ public class RoomBookingController {
     }
 
     private void loadData() {
-<<<<<<< HEAD
         rooms = RoomDAO.getRoom();
-        rooms = rooms.stream()
-=======
         rooms = RoomDAO.getRoom().stream()
->>>>>>> 2574fbf6d0f106eca36c18cec6bf9666b30bfe81
                 .sorted(Comparator.comparing(Room::getRoomNumber))
                 .toList();
 
