@@ -194,42 +194,42 @@ public class EmployeeDAO {
     }
 
     public static List<Employee> findDataByContainsId(String input) {
-        ArrayList<Employee> data = new ArrayList<>();
+            ArrayList<Employee> data = new ArrayList<>();
 
-        String query = "SELECT employeeID, fullName, phoneNumber, " +
-                "email, address, gender, " +
-                "idCardNumber, dob, position " +
-                "FROM Employee " +
-                "WHERE LOWER(employeeID) LIKE ?";
+            String query = "SELECT employeeID, fullName, phoneNumber, " +
+                    "email, address, gender, " +
+                    "idCardNumber, dob, position " +
+                    "FROM Employee " +
+                    "WHERE LOWER(employeeID) LIKE ?";
 
-        try (
-                Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(query)
-        ) {
-            preparedStatement.setString(1, "%" + input.toLowerCase() + "%");
-            ResultSet rs = preparedStatement.executeQuery();
+            try (
+                    Connection connection = DBHelper.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement(query)
+            ) {
+                preparedStatement.setString(1, "%" + input.toLowerCase() + "%");
+                ResultSet rs = preparedStatement.executeQuery();
 
-            while (rs.next()) {
-                Employee employee = new Employee();
+                while (rs.next()) {
+                    Employee employee = new Employee();
 
-                employee.setEmployeeID(rs.getString(1));
-                employee.setFullName(rs.getString(2));
-                employee.setPhoneNumber(rs.getString(3));
-                employee.setEmail(rs.getString(4));
-                employee.setAddress(rs.getString(5));
-                employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
-                employee.setIdCardNumber(rs.getString(7));
-                employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(8)));
-                employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
+                    employee.setEmployeeID(rs.getString(1));
+                    employee.setFullName(rs.getString(2));
+                    employee.setPhoneNumber(rs.getString(3));
+                    employee.setEmail(rs.getString(4));
+                    employee.setAddress(rs.getString(5));
+                    employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
+                    employee.setIdCardNumber(rs.getString(7));
+                    employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(8)));
+                    employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
 
-                data.add(employee);
+                    data.add(employee);
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                System.exit(1);
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            System.exit(1);
-        }
 
-        return data;
+            return data;
     }
     public static Employee getEmployeeByAccountID(String accountID) {
         String sql = "SELECT e.employeeID, e.fullName, e.phoneNumber, e.email, e.address, " +

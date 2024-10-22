@@ -1,7 +1,9 @@
 package iuh.fit.controller.features.employee;
 
 import com.dlsc.gemsfx.DialogPane;
+import iuh.fit.dao.AccountDAO;
 import iuh.fit.dao.EmployeeDAO;
+import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
 import iuh.fit.models.enums.Gender;
 import iuh.fit.models.enums.Position;
@@ -68,7 +70,7 @@ public class EmployeeManagerController {
     @FXML
     private TableColumn<Employee, String> employeeIDColumn;
     @FXML
-    private TableColumn<Employee, Double> fullNameColumn;
+    private TableColumn<Employee, String> fullNameColumn;
     @FXML
     private TableColumn<Employee, String> phoneNumberColumn;
     @FXML
@@ -149,8 +151,9 @@ public class EmployeeManagerController {
 
                 showInfoButton.setOnAction(e -> {
                     Employee employee = getTableView().getItems().get(getIndex());
+                    Account account = AccountDAO.getAccountByEmployeeID(employee.getEmployeeID());
                     try {
-                        handleShowEmployeeInformation(employee);
+                        handleShowEmployeeInformation(employee, account);
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -301,14 +304,14 @@ public class EmployeeManagerController {
         employeeTableView.setItems(items);
     }
 
-    private void handleShowEmployeeInformation(Employee employee) throws IOException {
+    private void handleShowEmployeeInformation(Employee employee, Account account) throws IOException {
         String source = "/iuh/fit/view/features/employee/EmployeeInformationView.fxml";
 
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
         AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
 
-        EmployeeInformationViewController emmployeeInformationViewController = loader.getController();
-        emmployeeInformationViewController.setEmployee(employee);
+        EmployeeInformationViewController employeeInformationViewController = loader.getController();
+        employeeInformationViewController.setEmployee(employee, account);
 
         Scene scene = new Scene(layout);
 

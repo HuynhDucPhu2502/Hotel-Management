@@ -25,5 +25,4 @@ module iuh.fit {
     exports iuh.fit.controller;
     exports iuh.fit.models;
     exports iuh.fit.models.enums;
-
 }
