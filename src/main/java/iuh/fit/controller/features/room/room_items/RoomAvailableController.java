@@ -22,6 +22,10 @@ public class RoomAvailableController {
     private Employee employee;
     private Room room;
 
+    public void setRoom(Room room) {
+        roomCategoryNameLabel.setText(room.getRoomCategory().getRoomCategoryName());
+        roomNumberText.setText(room.getRoomNumber());
+    }
 
     public void setupContext(MainController mainController, Employee employee, Room room) {
         this.mainController = mainController;

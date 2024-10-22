@@ -30,7 +30,7 @@ public class CustomerDAO {
                 customer.setAddress(rs.getString(5));
                 customer.setGender(ConvertHelper.genderConverter(rs.getString(6)));
                 customer.setIdCardNumber(rs.getString(7));
-                customer.setDob(ConvertHelper.LocalDateConverter(rs.getDate(8)));
+                customer.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
 
                 data.add(customer);
             }
@@ -102,7 +102,7 @@ public class CustomerDAO {
                     customer.setAddress(rs.getString(5));
                     customer.setGender(ConvertHelper.genderConverter(rs.getString(6)));
                     customer.setIdCardNumber(rs.getString(7));
-                    customer.setDob(ConvertHelper.LocalDateConverter(rs.getDate(8)));
+                    customer.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
 
                     return customer;
                 }
@@ -130,7 +130,7 @@ public class CustomerDAO {
             preparedStatement.setString(5, customer.getAddress());
             preparedStatement.setString(6, customer.getGender().name());
             preparedStatement.setString(7, customer.getIdCardNumber());
-            preparedStatement.setDate(8, ConvertHelper.dateConvertertoSQL(customer.getDob()));
+            preparedStatement.setDate(8, ConvertHelper.dateToSQLConverter(customer.getDob()));
 
 
             preparedStatement.executeUpdate();
@@ -172,7 +172,7 @@ public class CustomerDAO {
             preparedStatement.setString(4, customer.getAddress());
             preparedStatement.setString(5, customer.getGender().name());
             preparedStatement.setString(6, customer.getIdCardNumber());
-            preparedStatement.setDate(7, ConvertHelper.dateConvertertoSQL(customer.getDob()));
+            preparedStatement.setDate(7, ConvertHelper.dateToSQLConverter(customer.getDob()));
             preparedStatement.setString(8, customer.getCustomerID());
 
             preparedStatement.executeUpdate();

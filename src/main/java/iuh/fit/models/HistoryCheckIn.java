@@ -64,7 +64,7 @@ public class HistoryCheckIn {
     public void setHistoryCheckInID(String historyCheckInID) {
         if(historyCheckInID.isEmpty())
             throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_IVALID_ID_ISNULL);
-        if(!RegexChecker.isValidIDFormat(GlobalConstants.HISTORY_CHEKCIN_ID_PREFIX, historyCheckInID))
+        if(!RegexChecker.isValidIDFormat(GlobalConstants.HISTORY_CHECKIN_ID_PREFIX, historyCheckInID))
             throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_IVALID_ID_FORMAT);
         this.historyCheckInID = historyCheckInID;
     }

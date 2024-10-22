@@ -2,7 +2,9 @@ package iuh.fit.controller.features.room;
 
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.RoomCategoryDAO;
+import iuh.fit.models.Room;
 import iuh.fit.models.RoomCategory;
+import iuh.fit.models.enums.RoomStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -68,6 +70,7 @@ public class RoomCategoryManagerController {
         resetBtn.setOnAction(e -> handleResetAction());
         addBtn.setOnAction(e -> handleAddAction());
         updateBtn.setOnAction(e -> handleUpdateAction());
+        roomCategoryIDSearchField.setOnKeyReleased(e -> handleSearchAction());
         roomCategoryIDSearchField.setOnAction(e -> handleSearchAction());
     }
 
@@ -131,6 +134,17 @@ public class RoomCategoryManagerController {
                 if (empty) {
                     setGraphic(null);
                 } else {
+
+                    RoomCategory roomCategory = getTableView().getItems().get(getIndex());
+
+                    if (!RoomCategoryDAO.checkAllowUpdateOrDelete(roomCategory.getRoomCategoryID())) {
+                        updateButton.setDisable(true);
+                        deleteButton.setDisable(true);
+                    } else {
+                        updateButton.setDisable(false);
+                        deleteButton.setDisable(false);
+                    }
+
                     setGraphic(hBox);
                 }
             }
@@ -233,7 +247,7 @@ public class RoomCategoryManagerController {
         roomCategoryNameSearchField.setText("");
         numberOfBedSearchField.setText("");
 
-        String searchText = roomCategoryIDSearchField.getValue();
+        String searchText = roomCategoryIDSearchField.getEditor().getText();
         List<RoomCategory> roomCategories;
 
         if (searchText == null || searchText.isEmpty()) {
@@ -241,9 +255,13 @@ public class RoomCategoryManagerController {
         } else {
             roomCategories = RoomCategoryDAO.findDataByContainsId(searchText);
             if (!roomCategories.isEmpty()) {
-                RoomCategory roomCategory = roomCategories.getFirst();
-                roomCategoryNameSearchField.setText(roomCategory.getRoomCategoryName());
-                numberOfBedSearchField.setText(String.valueOf(roomCategory.getNumberOfBed()));
+                if(roomCategories.size() == 1){
+                    roomCategoryNameSearchField.setText(roomCategories.getFirst().getRoomCategoryName());
+                    numberOfBedSearchField.setText(String.valueOf(roomCategories.getFirst().getNumberOfBed()));
+                }
+            }else{
+                roomCategoryNameSearchField.setText("rỗng");
+                numberOfBedSearchField.setText("rỗng");
             }
         }
 

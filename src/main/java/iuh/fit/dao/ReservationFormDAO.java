@@ -49,7 +49,7 @@ public class ReservationFormDAO {
                 employee.setAddress(rs.getString(11));
                 employee.setGender(ConvertHelper.genderConverter(rs.getString(12)));
                 employee.setIdCardNumber(rs.getString(13));
-                employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(14)));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate(14)));
                 employee.setPosition(ConvertHelper.positionConverter(rs.getString(15)));
 
                 room.setRoomID(rs.getString(6));
@@ -63,7 +63,7 @@ public class ReservationFormDAO {
                 customer.setAddress(rs.getString(22));
                 customer.setGender(ConvertHelper.genderConverter(rs.getString(23)));
                 customer.setIdCardNumber(rs.getString(24));
-                customer.setDob(ConvertHelper.LocalDateConverter(rs.getDate(25)));
+                customer.setDob(ConvertHelper.localDateConverter(rs.getDate(25)));
 
                 roomCategory.setRoomCategoryID(rs.getString(18));
                 roomCategory.setRoomCategoryName(rs.getString(26));
@@ -126,7 +126,7 @@ public class ReservationFormDAO {
                     employee.setAddress(rs.getString(11));
                     employee.setGender(ConvertHelper.genderConverter(rs.getString(12)));
                     employee.setIdCardNumber(rs.getString(13));
-                    employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(14)));
+                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate(14)));
                     employee.setPosition(ConvertHelper.positionConverter(rs.getString(15)));
 
                     room.setRoomID(rs.getString(6));
@@ -140,7 +140,7 @@ public class ReservationFormDAO {
                     customer.setAddress(rs.getString(22));
                     customer.setGender(ConvertHelper.genderConverter(rs.getString(23)));
                     customer.setIdCardNumber(rs.getString(24));
-                    customer.setDob(ConvertHelper.LocalDateConverter(rs.getDate(25)));
+                    customer.setDob(ConvertHelper.localDateConverter(rs.getDate(25)));
 
                     roomCategory.setRoomCategoryID(rs.getString(18));
                     roomCategory.setRoomCategoryName(rs.getString(26));
@@ -172,9 +172,9 @@ public class ReservationFormDAO {
                 )
         ){
             preparedStatement.setString(1, reservationForm.getReservationID());
-            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeConvertertoSQL(reservationForm.getReservationDate()));
-            preparedStatement.setTimestamp(3, ConvertHelper.dateTimeConvertertoSQL(reservationForm.getCheckInDate()));
-            preparedStatement.setTimestamp(4, ConvertHelper.dateTimeConvertertoSQL(reservationForm.getCheckOutDate()));
+            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(reservationForm.getReservationDate()));
+            preparedStatement.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckInDate()));
+            preparedStatement.setTimestamp(4, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckOutDate()));
             preparedStatement.setString(5, reservationForm.getEmployee().getEmployeeID());
             preparedStatement.setString(6, reservationForm.getRoom().getRoomID());
             preparedStatement.setString(7, reservationForm.getCustomer().getCustomerID());
@@ -211,9 +211,9 @@ public class ReservationFormDAO {
                                 "WHERE reservationFormID = ? "
                 );
         ){
-            preparedStatement.setTimestamp(1, ConvertHelper.dateTimeConvertertoSQL(reservationForm.getReservationDate()));
-            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeConvertertoSQL(reservationForm.getCheckInDate()));
-            preparedStatement.setTimestamp(3, ConvertHelper.dateTimeConvertertoSQL(reservationForm.getCheckOutDate()));
+            preparedStatement.setTimestamp(1, ConvertHelper.dateTimeToSQLConverter(reservationForm.getReservationDate()));
+            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckInDate()));
+            preparedStatement.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckOutDate()));
             preparedStatement.setString(4, reservationForm.getEmployee().getEmployeeID());
             preparedStatement.setString(5, reservationForm.getRoom().getRoomID());
             preparedStatement.setString(6, reservationForm.getCustomer().getCustomerID());

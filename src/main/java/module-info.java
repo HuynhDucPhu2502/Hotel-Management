@@ -19,6 +19,7 @@ module iuh.fit {
 
     exports iuh.fit;
 
+    exports iuh.fit.controller.features;
     exports iuh.fit.controller.features.service;
     exports iuh.fit.controller.features.room;
     exports iuh.fit.controller.features.customer;
