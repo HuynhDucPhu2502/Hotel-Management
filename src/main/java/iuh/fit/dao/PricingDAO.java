@@ -158,7 +158,6 @@ public class PricingDAO {
         }
     }
 
-
     public static void deleteData(String pricingID) {
         try (
                 Connection connection = DBHelper.getConnection();
@@ -209,7 +208,6 @@ public class PricingDAO {
             System.exit(1);
         }
     }
-
 
     public static List<Pricing> findDataByContainsId(String input) {
         ArrayList<Pricing> data = new ArrayList<>();
@@ -292,6 +290,45 @@ public class PricingDAO {
         }
 
         return nextID;
+    }
+
+    public static List<Pricing> findDataByCategoryID(String categoryID) {
+        ArrayList<Pricing> data = new ArrayList<>();
+
+        String query = "SELECT a.pricingID, a.priceUnit, a.price, a.roomCategoryID, " +
+                "b.roomCategoryName, b.numberOfBed " +
+                "FROM Pricing a INNER JOIN RoomCategory b " +
+                "ON a.roomCategoryID = b.roomCategoryID " +
+                "WHERE  a.roomCategoryID = ?";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
+            preparedStatement.setString(1, categoryID);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Pricing pricing = new Pricing();
+                RoomCategory roomCategory = new RoomCategory();
+
+                pricing.setPricingID(rs.getString(1));
+                pricing.setPriceUnit(ConvertHelper.priceUnitConverter(rs.getString(2)));
+                pricing.setPrice(rs.getDouble(3));
+
+                roomCategory.setRoomCategoryID(rs.getString(4));
+                roomCategory.setRoomCategoryName(rs.getString(5));
+                roomCategory.setNumberOfBed(rs.getInt(6));
+
+                pricing.setRoomCategory(roomCategory);
+                data.add(pricing);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
     }
 
 }
