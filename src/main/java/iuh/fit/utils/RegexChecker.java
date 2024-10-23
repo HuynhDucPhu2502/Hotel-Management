@@ -46,9 +46,6 @@ public class RegexChecker {
      * @return true nếu độ dài của chuỗi sau khi loại bỏ khoảng trắng nằm trong khoảng từ minLength đến maxLength, ngược lại trả về false.
      */
     public static boolean isValidName(String input, int minLength, int maxLength) {
-
-
-
         if (!input.matches("[\\p{L} ]+")) {
             return false; // Không hợp lệ nếu có ký tự số hoặc ký tự đặc biệt
         }
@@ -70,7 +67,7 @@ public class RegexChecker {
      *
      */
     public static boolean isValidPhoneNumber(String input) {
-        return input.matches("^[0]\\d{9}$");
+        return input.matches("^0\\d{9}$");
     }
 
     /**
@@ -97,20 +94,20 @@ public class RegexChecker {
      * - 2 số cuối năm sinh
      * - 6 ký số
      *
-     * @param cccd Chuỗi số CCCD cần kiểm tra.
+     * @param idCardNumber Chuỗi số CCCD cần kiểm tra.
      * @return true nếu CCCD hợp lệ, ngược lại trả về false.
      */
-    public static boolean isValidCCCD(String cccd) {
+    public static boolean isValidIDCardNumber(String idCardNumber) {
         // Regex cơ bản cho định dạng CCCD
         String regex = "^\\d{3}[0-3]\\d{8}$";
 
         // Kiểm tra định dạng tổng quát
-        if (!cccd.matches(regex)) {
+        if (!idCardNumber.matches(regex)) {
             return false;
         }
 
         // Kiểm tra mã thành phố (001 - 096)
-        int cityCode = Integer.parseInt(cccd.substring(0, 3));
+        int cityCode = Integer.parseInt(idCardNumber.substring(0, 3));
         if (cityCode < 1 || cityCode > 96)
             return false;
 
@@ -209,10 +206,7 @@ public class RegexChecker {
         }
 
         // Kiểm tra ký tự đặc biệt
-        if (!input.matches("[a-zA-Z0-9\\s]+")) {
-            return false;
-        }
-        return true;
+        return input.matches("[a-zA-Z0-9\\s]+");
     }
 
     /**
@@ -240,7 +234,6 @@ public class RegexChecker {
     public static boolean isValidRoomID(String roomID) {
         return roomID.matches("^([TV])\\d{4}$");
     }
-
 
     public static boolean isValidInvoiceID(String invoiceID){
         return invoiceID.matches("^(INV)(\\d{10}-)(\\d{4})$");
