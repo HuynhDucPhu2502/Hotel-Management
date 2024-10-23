@@ -37,13 +37,16 @@ public class RoomAvailableController {
     }
 
     @FXML
-    private void handleRoomClick() {
+    private void navigateToReservationFormPanel() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/ReservationFormPanel.fxml"));
             AnchorPane layout = loader.load();
 
             ReservationFormController reservationFormController = loader.getController();
-            reservationFormController.setupContext(mainController, employee, room);
+            reservationFormController.setupContext(
+                    mainController, employee, room,
+                    null, null, null
+            );
 
             mainController.getMainPanel().getChildren().clear();
             mainController.getMainPanel().getChildren().addAll(layout.getChildren());
