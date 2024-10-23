@@ -214,7 +214,7 @@ public class EmployeeDAO {
                     employee.setAddress(rs.getString(5));
                     employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
                     employee.setIdCardNumber(rs.getString(7));
-                    employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(8)));
+                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
                     employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
 
                     data.add(employee);

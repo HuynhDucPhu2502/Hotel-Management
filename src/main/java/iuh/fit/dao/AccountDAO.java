@@ -281,7 +281,7 @@ public class AccountDAO {
                     employee.setAddress(rs.getString(9));
                     employee.setGender(ConvertHelper.genderConverter(rs.getString(10)));
                     employee.setIdCardNumber(rs.getString(11));
-                    employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(12)));
+                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate(12)));
                     employee.setPosition(ConvertHelper.positionConverter(rs.getString(13)));
 
                     account.setEmployee(employee);
@@ -332,7 +332,7 @@ public class AccountDAO {
                 employee.setAddress(rs.getString(9));
                 employee.setGender(ConvertHelper.genderConverter(rs.getString(10)));
                 employee.setIdCardNumber(rs.getString(11));
-                employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(12)));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate(12)));
                 employee.setPosition(ConvertHelper.positionConverter(rs.getString(13)));
 
                 account.setEmployee(employee);
