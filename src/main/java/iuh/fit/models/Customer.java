@@ -132,8 +132,8 @@ public class Customer {
     }
 
     public void setIdCardNumber(String idCardNumber) {
-        if (!RegexChecker.isValidCCCD(idCardNumber))
-            throw new IllegalArgumentException(ErrorMessages.INVALID_CCCD);
+        if (!RegexChecker.isValidIDCardNumber(idCardNumber))
+            throw new IllegalArgumentException(ErrorMessages.INVALID_ID_CARD_NUMBER);
         this.idCardNumber = idCardNumber;
     }
 

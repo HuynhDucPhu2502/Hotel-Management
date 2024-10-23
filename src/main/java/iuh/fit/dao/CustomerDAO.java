@@ -77,7 +77,6 @@ public class CustomerDAO {
         }
     }
 
-
     public static Customer getDataByID(String customerID) {
 
         String SQLQueryStatement = "SELECT customerID, fullName, phoneNumber, email, address, gender, idCardNumber, dob "
@@ -197,5 +196,42 @@ public class CustomerDAO {
             e.printStackTrace();
         }
         return "RC-000001";
+    }
+
+    public static Customer getDataByIDCardNumber(String idCardNumber) {
+
+        String SQLQueryStatement = "SELECT customerID, fullName, phoneNumber, email, address, gender, idCardNumber, dob "
+                + "FROM Customer " +
+                "WHERE idCardNumber = ?";
+
+        try (
+                Connection con = DBHelper.getConnection();
+                PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement);
+        ) {
+
+            preparedStatement.setString(1, idCardNumber);
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    Customer customer = new Customer();
+
+                    customer.setCustomerID(rs.getString(1));
+                    customer.setFullName(rs.getString(2));
+                    customer.setPhoneNumber(rs.getString(3));
+                    customer.setEmail(rs.getString(4));
+                    customer.setAddress(rs.getString(5));
+                    customer.setGender(ConvertHelper.genderConverter(rs.getString(6)));
+                    customer.setIdCardNumber(rs.getString(7));
+                    customer.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
+
+                    return customer;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

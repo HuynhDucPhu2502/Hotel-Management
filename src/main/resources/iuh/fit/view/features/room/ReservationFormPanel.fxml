@@ -23,11 +23,11 @@
 
 <AnchorPane minHeight="1000.0" minWidth="930.0" stylesheets="@../../../styles/Button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.ReservationFormController">
    <children>
+      <DialogPane fx:id="dialogPane" animationDuration="200.0ms" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="1000.0" prefWidth="930.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" stylesheets="@../../../styles/Button.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
             <AnchorPane minHeight="-Infinity" minWidth="930.0" prefWidth="930.0">
                <children>
-                  <DialogPane fx:id="dialogPane" animationDuration="200.0ms" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                   <TitledPane collapsible="false" style="-fx-border-radius: 50; -fx-background-radius: 50;" stylesheets="@../../../styles/TitlePanel.css" text="Tạo đơn đặt phòng" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
                         <VBox fx:id="upperBox" spacing="30.0">
@@ -223,7 +223,7 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
                                  <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CMND" textAlignment="RIGHT">
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Số CCCD" textAlignment="RIGHT">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -238,23 +238,15 @@
                                           <Font size="16.0" />
                                        </font>
                                     </Text>
-                                    <AnchorPane GridPane.columnIndex="1" GridPane.columnSpan="2">
+                                    <AnchorPane GridPane.columnIndex="1" GridPane.columnSpan="3">
                                        <children>
-                                          <TextField layoutX="-62.0" layoutY="13.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <TextField fx:id="customerIDCardNumberTextField" layoutX="-62.0" layoutY="13.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                        </children>
                                     </AnchorPane>
-                                    <AnchorPane style="-fx-background-color: transparent;" GridPane.columnIndex="3">
-                                       <children>
-                                          <Button mnemonicParsing="false" text="Kiểm Tra" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <font>
-                                                <Font name="System Bold" size="16.0" />
-                                             </font>
-                                          </Button>
-                                       </children>
-                                    </AnchorPane>
+                                    <AnchorPane style="-fx-background-color: transparent;" GridPane.columnIndex="3" />
                                     <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="1">
                                        <children>
-                                          <TextField fx:id="pricingIDTextField11" layoutX="8.0" layoutY="1.0" style="-fx-background-color: rgb(211, 211, 211);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <TextField fx:id="customerFullnameTextField" layoutX="8.0" layoutY="1.0" style="-fx-background-color: rgb(211, 211, 211);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <cursor>
                                                 <Cursor fx:constant="CLOSED_HAND" />
                                              </cursor>
@@ -263,7 +255,7 @@
                                     </AnchorPane>
                                     <AnchorPane GridPane.columnIndex="3" GridPane.rowIndex="1">
                                        <children>
-                                          <TextField fx:id="pricingIDTextField111" layoutX="-24.0" layoutY="1.0" style="-fx-background-color: rgb(211, 211, 211);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <TextField fx:id="customerPhoneNumberTextField" layoutX="-24.0" layoutY="1.0" style="-fx-background-color: rgb(211, 211, 211);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <cursor>
                                                 <Cursor fx:constant="CLOSED_HAND" />
                                              </cursor>
