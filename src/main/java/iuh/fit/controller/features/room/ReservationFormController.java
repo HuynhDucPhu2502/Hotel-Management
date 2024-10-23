@@ -38,6 +38,10 @@ public class ReservationFormController {
     // 1.1 Buttons
     @FXML
     private Button backBtn;
+    @FXML
+    private Button bookingRoomNavigate;
+    @FXML
+    private Button createCustomerBtn;
     // 1.2 Input Fields
     // 1.2.1 Fields cho phiếu đặt phòng
     @FXML
@@ -71,6 +75,10 @@ public class ReservationFormController {
     private Label employeeIDLabel;
     @FXML
     private Label employeeFullNameLabel;
+    @FXML
+    private Label employeePositionLabel;
+    @FXML
+    private Label employeePhoneNumberLabel;
 
     // 1.3 Dialog Pane
     @FXML
@@ -95,15 +103,31 @@ public class ReservationFormController {
         setupCustomerIDCardValidation();
     }
 
-    public void setupContext(MainController mainController, Employee employee, Room room) {
+    public void setupContext(
+            MainController mainController, Employee employee, Room room,
+            Customer customer, LocalDateTime checkInTime, LocalDateTime checkOutTime
+    ) {
         this.mainController = mainController;
         this.employee = employee;
         this.room = room;
 
-        backBtn.setOnAction(e -> handleBackBtn());
+        backBtn.setOnAction(e -> navigateToRoomBooking());
+        bookingRoomNavigate.setOnAction(e -> navigateToRoomBooking());
+        createCustomerBtn.setOnAction(e -> navigateToAddCustomer());
 
         setupRoomInformation();
         setupEmployeeInformation();
+
+        if (customer != null) {
+            this.customer = customer;
+            setCustomerInfo();
+        }
+
+        if (checkInTime != null && checkOutTime != null) {
+            this.checkInTime = checkInTime;
+            this.checkOutTime = checkOutTime;
+            setBookingDates(checkInTime, checkOutTime);
+        }
     }
 
     // ==================================================================================================================
@@ -139,12 +163,14 @@ public class ReservationFormController {
     private void setupEmployeeInformation() {
         employeeIDLabel.setText(employee.getEmployeeID());
         employeeFullNameLabel.setText(employee.getFullName());
+        employeePositionLabel.setText(employee.getPosition().toString());
+        employeePhoneNumberLabel.setText(employee.getPhoneNumber());
     }
 
     // ==================================================================================================================
-    // 5. Xử lý chức năng nút quay lại
+    // 5. Xử lý chức năng hiển thị panel khác
     // ==================================================================================================================
-    private void handleBackBtn() {
+    private void navigateToRoomBooking() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
             AnchorPane layout = loader.load();
@@ -158,6 +184,26 @@ public class ReservationFormController {
             e.printStackTrace();
         }
     }
+
+    private void navigateToAddCustomer() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/AddCustomerPanel.fxml"));
+            AnchorPane layout = loader.load();
+
+            AddCustomerController addCustomerController = loader.getController();
+            addCustomerController.setupContext(
+                    mainController, employee, room,
+                    checkInTime, checkOutTime
+            );
+
+            mainController.getMainPanel().getChildren().clear();
+            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     // ==================================================================================================================
     // 6. Cài đặt các thành phần giao diện liên quan đến thời gian
@@ -280,34 +326,55 @@ public class ReservationFormController {
     private void setupCustomerIDCardValidation() {
         customerIDCardNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 12) {
-                Platform.runLater(() -> customerIDCardNumberTextField.setText(oldValue));
-                dialogPane.showError("LỖI", ErrorMessages.ID_CARD_NUMBER_OVER_LIMIT);
-                dialogPane.requestFocus();
+                handleInputExceedsLimit(oldValue);
             } else if (newValue.length() == 12) {
-                if (!RegexChecker.isValidIDCardNumber(newValue)) {
-                    dialogPane.showError("LỖI", ErrorMessages.INVALID_ID_CARD_NUMBER);
-                    dialogPane.requestFocus();
-                } else {
-                    customer = CustomerDAO.getDataByIDCardNumber(newValue);
-                    if (customer == null) {
-                        dialogPane.showError("LỖI", ErrorMessages.CUS_NOT_FOUND);
-                        clearCustomerInfo();
-                    } else {
-                        customerFullnameTextField.setText(customer.getFullName());
-                        customerPhoneNumberTextField.setText(customer.getPhoneNumber());
-                    }
-                }
+                validateIDCardNumber(newValue);
             } else if (customer != null) {
-                customer = null;
                 clearCustomerInfo();
             }
-            System.out.println(customer);
         });
     }
 
+    private void handleInputExceedsLimit(String oldValue) {
+        Platform.runLater(() -> customerIDCardNumberTextField.setText(oldValue));
+        dialogPane.showError("LỖI", ErrorMessages.ID_CARD_NUMBER_OVER_LIMIT);
+    }
+
+    private void validateIDCardNumber(String idCardNumber) {
+        if (!RegexChecker.isValidIDCardNumber(idCardNumber)) {
+            dialogPane.showError("LỖI", ErrorMessages.INVALID_ID_CARD_NUMBER);
+        } else {
+            customer = CustomerDAO.getDataByIDCardNumber(idCardNumber);
+            if (customer == null) {
+                dialogPane.showError("LỖI", ErrorMessages.CUS_NOT_FOUND);
+                clearCustomerInfo();
+            } else {
+                setCustomerInfo();
+            }
+        }
+    }
+
     private void clearCustomerInfo() {
-        customerFullnameTextField.setText("");
-        customerPhoneNumberTextField.setText("");
+        customer = null;
+        customerFullnameTextField.clear();
+        customerPhoneNumberTextField.clear();
         dialogPane.requestFocus();
     }
+
+    private void setCustomerInfo() {
+        customerFullnameTextField.setText(customer.getFullName());
+        customerPhoneNumberTextField.setText(customer.getPhoneNumber());
+    }
+
+    // ==================================================================================================================
+    // 9. Đẩy thời gian lên giao diện nếu checkInDate và checkOutDate không NULL
+    // ==================================================================================================================
+    private void setBookingDates(LocalDateTime checkInDate, LocalDateTime checkOutDate) {
+            bookDateRangePicker.setValue(new DateRange("Chọn Lịch Đặt Phòng",
+                    checkInDate.toLocalDate(), checkOutDate.toLocalDate()));
+
+            checkInTimePicker.setTime(checkInDate.toLocalTime());
+            checkOutTimePicker.setTime(checkOutDate.toLocalTime());
+    }
+
 }
