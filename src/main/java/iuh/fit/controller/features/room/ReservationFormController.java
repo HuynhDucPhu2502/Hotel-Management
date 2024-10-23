@@ -1,14 +1,20 @@
 package iuh.fit.controller.features.room;
 
+import com.dlsc.gemsfx.DialogPane;
 import com.dlsc.gemsfx.TimePicker;
 import com.dlsc.gemsfx.daterange.DateRange;
 import com.dlsc.gemsfx.daterange.DateRangePicker;
 import com.dlsc.gemsfx.daterange.DateRangePreset;
 import iuh.fit.controller.MainController;
+import iuh.fit.dao.CustomerDAO;
+import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Room;
 import iuh.fit.utils.CostCalculator;
+import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.GlobalConstants;
+import iuh.fit.utils.RegexChecker;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
@@ -26,12 +32,14 @@ import java.time.format.FormatStyle;
 import java.util.Locale;
 
 public class ReservationFormController {
-    // Buttons
+    // ==================================================================================================================
+    // 1. Các biến
+    // ==================================================================================================================
+    // 1.1 Buttons
     @FXML
     private Button backBtn;
-
-    // Input Fields
-    // 1. Thông tin phòng
+    // 1.2 Input Fields
+    // 1.2.1 Fields cho phiếu đặt phòng
     @FXML
     private Label roomNumberLabel;
     @FXML
@@ -50,27 +58,41 @@ public class ReservationFormController {
     private Label stayLengthLabel;
     @FXML
     private Label bookingDepositLabel;
-    // 2. Thông tin khách hàng
-    // 3. Thông tin nhân viên
+    // 1.2.2 Fields cho thông tin khách hàng đặt phòng
+    @FXML
+    private TextField customerIDCardNumberTextField;
+    @FXML
+    private TextField customerFullnameTextField;
+    @FXML
+    private TextField customerPhoneNumberTextField;
+
+    // 1.2.3 Fields cho thông tin tiếp tân làm phiếu đặt phòng
     @FXML
     private Label employeeIDLabel;
     @FXML
     private Label employeeFullNameLabel;
 
-    // Context
+    // 1.3 Dialog Pane
+    @FXML
+    private DialogPane dialogPane;
+
+    // 1.4. Context và dữ liệu binding
     private MainController mainController;
     private Employee employee;
     private Room room;
 
-    //
     private LocalDateTime checkInTime;
     private LocalDateTime checkOutTime;
 
-    // =========================================================
-    // 1. Khởi tạo và nạp dữ liệu vào giao diện
-    // =========================================================
+    private Customer customer;
+
+    // ==================================================================================================================
+    // 2. Khởi tạo và nạp dữ liệu vào giao diện
+    // ==================================================================================================================
     public void initialize() {
+        dialogPane.toFront();
         setupTimeComponents();
+        setupCustomerIDCardValidation();
     }
 
     public void setupContext(MainController mainController, Employee employee, Room room) {
@@ -84,9 +106,9 @@ public class ReservationFormController {
         setupEmployeeInformation();
     }
 
-    // =========================================================
-    // 2. Xử lý đổi các biến thời gian thành chuỗi ngày + giờ
-    // =========================================================
+    // ==================================================================================================================
+    // 3. Xử lý đổi các biến thời gian thành chuỗi ngày + giờ
+    // ==================================================================================================================
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.forLanguageTag("vi-VN"));
 
@@ -104,24 +126,24 @@ public class ReservationFormController {
         }
     }
 
-    // =========================================================
-    // 3. Đẩy dữ liệu phòng và nhân viên lên giao diện
-    // =========================================================
-    // 3.1 Hiển thị dữ liệu phòng và loại phòng lên giao diện
+    // ==================================================================================================================
+    // 4. Đẩy dữ liệu phòng và nhân viên lên giao diện
+    // ==================================================================================================================
+    // 4.1 Hiển thị dữ liệu phòng và loại phòng lên giao diện
     private void setupRoomInformation() {
         roomNumberLabel.setText(room.getRoomNumber());
         categoryNameLabel.setText(room.getRoomCategory().getRoomCategoryName());
     }
 
-    // 3.2 Hiển thị nhân viên lên giao diện
+    // 4.2 Hiển thị nhân viên lên giao diện
     private void setupEmployeeInformation() {
         employeeIDLabel.setText(employee.getEmployeeID());
         employeeFullNameLabel.setText(employee.getFullName());
     }
 
-    // =========================================================
-    // 4. Xử lý chức năng nút quay lại
-    // =========================================================
+    // ==================================================================================================================
+    // 5. Xử lý chức năng nút quay lại
+    // ==================================================================================================================
     private void handleBackBtn() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
@@ -137,11 +159,11 @@ public class ReservationFormController {
         }
     }
 
-    // =========================================================
-    // 5. Cài đặt các thành phần giao diện liên quan đến thời gian
-    // =========================================================
+    // ==================================================================================================================
+    // 6. Cài đặt các thành phần giao diện liên quan đến thời gian
+    // ==================================================================================================================
 
-    // 5.1 Cài đặt TimePicker, DateRangePicker và binding Data
+    // 6.1 Cài đặt TimePicker, DateRangePicker và binding Data
     // vào checkInDateTextField và checkOutDateTextField
     private void setupTimeComponents() {
         checkInTimePicker.setTime(null);
@@ -185,7 +207,7 @@ public class ReservationFormController {
         setupDateTimeListeners();
     }
 
-    // 5.2 Lắng nghe sự kiện thay đổi trên checkInDateTextField,
+    // 6.2 Lắng nghe sự kiện thay đổi trên checkInDateTextField,
     // checkOutDateTextField để kích hoạt sự kiện tính toán ngày
     // lưu trú và số tiền đặt cọc
     private void setupDateTimeListeners() {
@@ -204,25 +226,25 @@ public class ReservationFormController {
         });
     }
 
-    // 5.3 Tạo các preset cho DateRangePicker
-    // 5.3.1 Preset 3 ngày
+    // 6.3 Tạo các preset cho DateRangePicker
+    // 6.3.1 Preset 3 ngày
     private DateRangePreset createThreeDaysPreset() {
         return new DateRangePreset("3 Ngày", () -> new DateRange("Chọn Lịch Đặt Phòng", LocalDate.now(), LocalDate.now().plusDays(3)));
     }
 
-    // 5.3.2 Preset 5 ngày
+    // 6.3.2 Preset 5 ngày
     private DateRangePreset createFiveDaysPreset() {
         return new DateRangePreset("5 Ngày", () -> new DateRange("Chọn Lịch Đặt Phòng", LocalDate.now(), LocalDate.now().plusDays(5)));
     }
 
-    // 5.3.3 Preset 7 ngày
+    // 6.3.3 Preset 7 ngày
     private DateRangePreset createSevenDaysPreset() {
         return new DateRangePreset("7 Ngày", () -> new DateRange("Chọn Lịch Đặt Phòng", LocalDate.now(), LocalDate.now().plusDays(7)));
     }
 
-    // =========================================================
-    // 6. Tính toán thời gian lưu trú và tiền đặt cọc
-    // =========================================================
+    // ==================================================================================================================
+    // 7. Tính toán thời gian lưu trú và tiền đặt cọc
+    // ==================================================================================================================
     private void updateStayLengthAndCost() {
         if (checkInTime != null && checkOutTime != null) {
             String stayLength = calculateStayLength();
@@ -252,8 +274,40 @@ public class ReservationFormController {
         }
     }
 
+    // ==================================================================================================================
+    // 8. Cài đặt các thành phần giao diện liên quan đến Khách Hàng
+    // ==================================================================================================================
+    private void setupCustomerIDCardValidation() {
+        customerIDCardNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 12) {
+                Platform.runLater(() -> customerIDCardNumberTextField.setText(oldValue));
+                dialogPane.showError("LỖI", ErrorMessages.ID_CARD_NUMBER_OVER_LIMIT);
+                dialogPane.requestFocus();
+            } else if (newValue.length() == 12) {
+                if (!RegexChecker.isValidIDCardNumber(newValue)) {
+                    dialogPane.showError("LỖI", ErrorMessages.INVALID_ID_CARD_NUMBER);
+                    dialogPane.requestFocus();
+                } else {
+                    customer = CustomerDAO.getDataByIDCardNumber(newValue);
+                    if (customer == null) {
+                        dialogPane.showError("LỖI", ErrorMessages.CUS_NOT_FOUND);
+                        clearCustomerInfo();
+                    } else {
+                        customerFullnameTextField.setText(customer.getFullName());
+                        customerPhoneNumberTextField.setText(customer.getPhoneNumber());
+                    }
+                }
+            } else if (customer != null) {
+                customer = null;
+                clearCustomerInfo();
+            }
+            System.out.println(customer);
+        });
+    }
 
-
-
-
+    private void clearCustomerInfo() {
+        customerFullnameTextField.setText("");
+        customerPhoneNumberTextField.setText("");
+        dialogPane.requestFocus();
+    }
 }

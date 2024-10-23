@@ -5,7 +5,7 @@ public class ErrorMessages {
     public static final String INVALID_PHONENUMBER = "Số điện thoại phải có 10 chữ số và chữ số đầu tiên là số 0";
     public static final String INVALID_ADDRESS = "Địa chỉ không được rỗng";
     public static final String INVALID_EMAIL = "Email phải từ 4 đến 30 ký tự và không cứ ký tự đặc biệt";
-    public static final String INVALID_CCCD = "CCCD có cấu trúc XYZ. X là chuỗi 3 chữ số, Y là 1 chữ số thuộc khoảng từ 1 đến 3, và Z là chuỗi 8 chữ số.";
+    public static final String INVALID_ID_CARD_NUMBER = "CCCD có cấu trúc XYZ. X là chuỗi 3 chữ số, Y là 1 chữ số thuộc khoảng từ 1 đến 3, và Z là chuỗi 8 chữ số.";
 
     public static final String NULL_ROOMCATEGORY = "Loại phòng không được trống";
     public static final String NULL_EMPLOYEE = "Nhân viên không được để trống";
@@ -55,6 +55,7 @@ public class ErrorMessages {
     // Customer
     public static final String CUS_INVALID_ID = "Mã khách hàng phải theo định dạng CUS-XXXXXX, với X là ký số";
     public static final String CUS_INVALID_FULLNAME = "Tên Khách hàng phải từ 3 đến 30 ký tự";
+
 
     // Tax
     public static final String TAX_INVALID_TAXNAME = "Tên thuế không được trùng, không rỗng và không chưa khoảng trắng";
@@ -133,9 +134,13 @@ public class ErrorMessages {
     public static final String PRICING_NOT_FOUND = "Không tìm thấy bản ghi giá cả theo ngày hoặc theo giờ";
     public static final String ERROR_CHECK_OUT_BEFORE_CHECK_IN = "Thời gian check-out phải sau thời gian check-in";
 
-    // Login message
+    // Login
     public static final String LOGIN_INVALID_USERNAME = "Tài khoản không được bỏ trống";
     public static final String LOGIN_INVALID_PASSWORD = "Mật khẩu không được để trống";
     public static final String LOGIN_INVALID_ACCOUNT = "Tài khoản hoặc mật khẩu không hợp lệ";
+
+    // Reservation Form
+    public static final String ID_CARD_NUMBER_OVER_LIMIT = "CCCD không được quá 12 ký tự";
+    public static final String CUS_NOT_FOUND = "Không tìm thấy khách hàng";
 
 }
