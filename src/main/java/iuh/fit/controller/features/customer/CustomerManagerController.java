@@ -1,5 +1,6 @@
 package iuh.fit.controller.features.customer;
 
+import com.dlsc.gemsfx.CalendarPicker;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.CustomerDAO;
 import iuh.fit.models.Customer;
@@ -31,7 +32,7 @@ public class CustomerManagerController {
     @FXML
     private TextField customerIDCardNumberTextField;
     @FXML
-    private DatePicker customerDOBDatePicker;
+    private CalendarPicker customerDOBCalendarPicker;
     @FXML
     private TextField customerEmailTextField;
     @FXML
@@ -192,7 +193,7 @@ public class CustomerManagerController {
         customerAddressTextField.setText("");
         Toggle rad =  genderToggleGroup.getSelectedToggle();
         if (rad != null) rad.setSelected(false);
-        customerDOBDatePicker.setValue(null);
+        customerDOBCalendarPicker.setValue(null);
         customerNameTextField.requestFocus();
 
         switchButton(false, true);
@@ -234,7 +235,7 @@ public class CustomerManagerController {
         customerEmailTextField.setText(customer.getEmail());
         customerAddressTextField.setText(customer.getAddress());
         customerIDCardNumberTextField.setText(customer.getIdCardNumber());
-        customerDOBDatePicker.setValue(customer.getDob());
+        customerDOBCalendarPicker.setValue(customer.getDob());
 
         if (customer.getGender().equals(Gender.MALE)) radMale.setSelected(true);
         else radFemale.setSelected(true);
@@ -331,7 +332,7 @@ public class CustomerManagerController {
         else gender = Gender.FEMALE;
 
         String idCardNumber = customerIDCardNumberTextField.getText();
-        LocalDate dob = customerDOBDatePicker.getValue();
+        LocalDate dob = customerDOBCalendarPicker.getValue();
 
         return new Customer(id, name, phone, email, address, gender, idCardNumber, dob);
     }
