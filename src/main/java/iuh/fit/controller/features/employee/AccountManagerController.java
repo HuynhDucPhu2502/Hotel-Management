@@ -28,7 +28,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class AccountOfEmployeeManagerController {
+public class AccountManagerController {
     // Search Fields
     @FXML
     private ComboBox<String> employeeIDSearchField;
@@ -104,7 +104,7 @@ public class AccountOfEmployeeManagerController {
 
         List<String> comboBoxItems = EmployeeDAO.getEmployees()
                 .stream()
-                .map(employee -> employee.getEmployeeID())
+                .map(Employee::getEmployeeID)
                 .collect(Collectors.toList());
 
         ObservableList<String> observableComboBoxItems = FXCollections.observableArrayList(comboBoxItems);
