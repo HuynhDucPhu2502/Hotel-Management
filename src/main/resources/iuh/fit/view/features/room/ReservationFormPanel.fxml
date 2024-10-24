@@ -29,7 +29,7 @@
          <content>
             <AnchorPane minHeight="-Infinity" minWidth="930.0" prefWidth="930.0">
                <children>
-                  <TitledPane collapsible="false" style="-fx-border-radius: 50; -fx-background-radius: 50;" stylesheets="@../../../styles/TitlePanel.css" text="Tạo đơn đặt phòng" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TitledPane collapsible="false" style="-fx-border-radius: 50; -fx-background-radius: 50;" stylesheets="@../../../styles/TitlePanel.css" text="Quản Lý Đặt Phòng" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
                         <VBox fx:id="upperBox" spacing="30.0">
                            <children>
@@ -81,6 +81,117 @@
                                        </children>
                                     </AnchorPane>
                                  </children>
+                              </HBox>
+                              <HBox alignment="CENTER" spacing="10.0">
+                                 <children>
+                                    <Button minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation-selected">
+                                       <graphic>
+                                          <AnchorPane>
+                                             <children>
+                                                <HBox alignment="CENTER" layoutX="-15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../../icons/ic_create_reservation_form.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER" layoutY="128.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
+                                                   <children>
+                                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tạo phiếu đặt phòng cho phòng này" textAlignment="CENTER" wrappingWidth="170.0">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </graphic>
+                                    </Button>
+                                    <Button minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
+                                       <graphic>
+                                          <AnchorPane>
+                                             <children>
+                                                <HBox alignment="CENTER" layoutX="-15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../../icons/ic_view_reservation_form.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER" layoutY="128.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
+                                                   <children>
+                                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Xem phiếu đặt phòng thuộc phòng này" textAlignment="CENTER" wrappingWidth="170.0">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </graphic>
+                                    </Button>
+                                    <Button minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
+                                       <graphic>
+                                          <AnchorPane>
+                                             <children>
+                                                <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../../icons/ic_add_services.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER" layoutY="128.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
+                                                   <children>
+                                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Gọi Dịch Vụ">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </graphic>
+                                    </Button>
+                                    <Button minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
+                                       <graphic>
+                                          <AnchorPane>
+                                             <children>
+                                                <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../../icons/ic_room_changing.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER" layoutY="128.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
+                                                   <children>
+                                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Chuyển Phòng">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </graphic>
+                                    </Button>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
                               </HBox>
                               <HBox>
                                  <children>

@@ -170,3 +170,36 @@
 .button-OnUse:pressed {
     -fx-background-color: rgb(55, 160, 220);
 }
+
+
+/* ========================================================== */
+/* Reservation Button */
+/* ========================================================== */
+.button-reservation {
+    -fx-background-color: RGB(135, 162, 255);
+    -fx-border-color: transparent;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
+
+.button-reservation:hover {
+    -fx-background-color: RGB(63, 162, 246);
+    -fx-border-color: RGB(0, 123, 255);
+}
+
+.button-reservation:pressed {
+    -fx-background-color: RGB(70, 130, 180);
+}
+
+.button-reservation-selected {
+    -fx-background-color: rgb(253, 139, 81);
+    -fx-border-color: transparent;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+
+}
+
+.button-reservation-selected:hover {
+    -fx-background-color: rgb(253, 139, 81);
+}
+

@@ -57,7 +57,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="14.0" prefWidth="216.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/employee_icon.png" />
+                                             <Image url="@../../icons/ic_employee.png" />
                                           </image>
                                        </ImageView>
                   
@@ -105,7 +105,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/room_icon.png" />
+                                             <Image url="@../../icons/ic_room.png" />
                                           </image>
                                        </ImageView>
             
@@ -227,7 +227,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/service_icon.png" />
+                                             <Image url="@../../icons/ic_service.png" />
                                           </image>
                                        </ImageView>
             
@@ -315,7 +315,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/customer_icon.png" />
+                                             <Image url="@../../icons/ic_customer.png" />
                                           </image>
                                        </ImageView>
             
@@ -352,7 +352,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/account_icon.png" />
+                                             <Image url="@../../icons/ic_account.png" />
                                           </image>
                                        </ImageView>
             
@@ -405,7 +405,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/statistics_icon.png" />
+                                             <Image url="@../../icons/ic_statistics.png" />
                                           </image>
                                        </ImageView>
             
@@ -458,7 +458,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/history_icon.png" />
+                                             <Image url="@../../icons/ic_history.png" />
                                           </image>
                                        </ImageView>
             
