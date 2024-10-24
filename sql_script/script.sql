@@ -24,12 +24,6 @@ CREATE TABLE GlobalSequence (
 );
 GO
 
--- Tạo bảng Value count
-create table ValueCount(
-	vName nvarchar(50) primary key,
-	vCount int
-);
-
 -- Tạo bảng Employee
 CREATE TABLE Employee (
     employeeID NVARCHAR(15) NOT NULL PRIMARY KEY, 
@@ -242,12 +236,13 @@ VALUES
 	('HotelService', 'HS-000008'),
 	('Pricing', 'P-000009'),
 	('RoomCategory', 'RC-000005'),
-    ('ShiftAssignment', 'SA-000004')
+    ('ShiftAssignment', 'SA-000004'),
+	('Customer', 'CUS-000031')
 GO
 
 -- Thêm dữ liệu vào bảng Employee
 INSERT INTO Employee (employeeID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, position)
-VALUES 
+VALUES
     ('EMP-000001', N'Huynh Duc Phu', '0912345678', 'phuhuynh@gmail.com', N'123 Ho Chi Minh', 'MALE', '001099012345', '1985-06-15', 'MANAGER'),
     ('EMP-000002', N'Nguyen Xuan Chuc', '0908765432', 'chucnguyen@yahoo.com', N'456 Hue', 'MALE', '002199012346', '1990-04-22', 'RECEPTIONIST'),
     ('EMP-000003', N'Le Tran Gia Huy', '0987654321', 'huytranle@gmail.com', N'789 Ho Chi Minh', 'MALE', '003299012347', '1992-08-19', 'MANAGER'),
@@ -257,7 +252,7 @@ GO
 
 -- Thêm dữ liệu vào bảng Account
 INSERT INTO Account (accountID, userName, password, status, employeeID)
-VALUES 
+VALUES
     ('ACC-000001', N'huynhducphu', N'test123@', N'ACTIVE', 'EMP-000001'),
     ('ACC-000002', N'nguyenxuanchuc', N'test123@', N'ACTIVE', 'EMP-000002'),
     ('ACC-000003', N'letranle', N'test123@', N'LOCKED', 'EMP-000003'),
@@ -268,8 +263,8 @@ GO
 -- Thêm dữ liệu vào bảng ServiceCategory
 INSERT INTO ServiceCategory (serviceCategoryID, serviceCategoryName)
 VALUES
-    ('SC-000001', N'Giải trí'),  
-    ('SC-000002', N'Ăn uống'),        
+    ('SC-000001', N'Giải trí'),
+    ('SC-000002', N'Ăn uống'),
     ('SC-000003', N'Chăm sóc và sức khỏe'),
     ('SC-000004', N'Vận chuyển');
 GO
@@ -288,7 +283,7 @@ GO
 
 -- Thêm dữ liệu vào bảng RoomCategory
 INSERT INTO RoomCategory (roomCategoryID, roomCategoryName, numberOfBed)
-VALUES 
+VALUES
     ('RC-000001', N'Phòng Thường Giường Đơn', 1),
     ('RC-000002', N'Phòng Thường Giường Đôi', 2),
     ('RC-000003', N'Phòng VIP Giường Đơn', 1),
@@ -297,7 +292,7 @@ GO
 
 -- Thêm dữ liệu vào bảng Pricing
 INSERT INTO Pricing (pricingID, priceUnit, price, roomCategoryID)
-VALUES 
+VALUES
     ('P-000001', N'HOUR', 150000.00, 'RC-000001'),
     ('P-000002', N'DAY', 800000.00, 'RC-000001'),
     ('P-000003', N'HOUR', 200000.00, 'RC-000002'),
@@ -310,7 +305,7 @@ GO
 
 -- Thêm dữ liệu vào bảng Room với mã phòng mới
 INSERT INTO Room (roomID, roomStatus, dateOfCreation, roomCategoryID)
-VALUES 
+VALUES
     ('T1101', N'ON_USE', '2024-09-28 10:00:00', 'RC-000001'),
     ('V2102', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
     ('T1203', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
@@ -343,8 +338,6 @@ VALUES
     ('SA-000003', N'Assigned to night shift', 'SHIFT-PM-0003', 'EMP-000003'),
     ('SA-000004', N'Assigned to morning shift', 'SHIFT-AM-0004', 'EMP-000004');
 GO
-
-select * from Customer
 
 -- Thêm dữ liệu vào bảng Customer
 INSERT INTO Customer (customerID, fullName, phoneNumber, email, address, gender, idCardNumber, dob)
@@ -402,5 +395,3 @@ BEGIN
     END
 END;
 GO
-
-

@@ -56,7 +56,6 @@ public class ErrorMessages {
     public static final String CUS_INVALID_ID = "Mã khách hàng phải theo định dạng CUS-XXXXXX, với X là ký số";
     public static final String CUS_INVALID_FULLNAME = "Tên Khách hàng phải từ 3 đến 30 ký tự";
 
-
     // Tax
     public static final String TAX_INVALID_TAXNAME = "Tên thuế không được trùng, không rỗng và không chưa khoảng trắng";
     public static final String TAX_INVALID_TAXRATE = "Hệ số thuế phải là số dương";
@@ -96,6 +95,7 @@ public class ErrorMessages {
     public static final String RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE = "Ngày nhận phòng dự kiến phải lớn hơn ngày đặt phòng!!!";
     public static final String RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE_ISNULL = "Ngày trả phòng dự kiến không được rỗng!!!";
     public static final String RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE = "Ngày trả phòng dự kiến phải lớn hơn ngày nhận phòng dự kiến!!!";
+
     // HistoryCheckIn
     public static final String HISTORY_CHECKIN_IVALID_ID_ISNULL = "Mã phiếu nhận phòng không được rỗng!!!";
     public static final String HISTORY_CHECKIN_IVALID_ID_FORMAT = "Mã ngày nhận phòng phải theo định dạng HCI-XXXXXX";
@@ -142,5 +142,8 @@ public class ErrorMessages {
     // Reservation Form
     public static final String ID_CARD_NUMBER_OVER_LIMIT = "CCCD không được quá 12 ký tự";
     public static final String CUS_NOT_FOUND = "Không tìm thấy khách hàng";
+
+    // Customer Manager
+    public static final String CUS_GENDER_NOT_SELECTED = "Vui lòng chọn giới tính";
 
 }
