@@ -397,9 +397,21 @@ public class ReservationFormController {
                     customer
             );
             ReservationFormDAO.createData(reservationForm);
+            handleResetAction();
             dialogPane.showInformation("Thành công", "Đã thêm phiếu đặt phòng thành công");
         } catch (Exception e) {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
+    }
+
+    private void handleResetAction() {
+        bookDateRangePicker.setValue(null);
+        checkInTimePicker.setValue(null);
+        checkOutTimePicker.setValue(null);
+        customerIDCardNumberTextField.setText(null);
+
+        customer = null;
+        checkOutTime = null;
+        checkInTime = null;
     }
 }
