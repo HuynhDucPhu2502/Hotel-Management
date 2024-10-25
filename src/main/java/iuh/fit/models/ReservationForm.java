@@ -19,7 +19,11 @@ public class ReservationForm {
     private Customer customer;
     private double roomBookingDeposit;
 
-    public ReservationForm(String reservationID, LocalDateTime reservationDate, LocalDateTime checkInDate, LocalDateTime checkOutDate, Employee employee, Room room, Customer customer) {
+    public ReservationForm(
+            String reservationID, LocalDateTime reservationDate, LocalDateTime checkInDate,
+            LocalDateTime checkOutDate, Employee employee, Room room,
+            Customer customer
+    ) {
         this.setReservationID(reservationID);
         this.setReservationDate(reservationDate);
         this.setEmployee(employee);
@@ -66,12 +70,15 @@ public class ReservationForm {
 
     public void setCheckInDate(LocalDateTime checkInDate) {
         if (checkInDate == null)
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE_ISNULL);  // Kiểm tra ngày nhận phòng không được null
+            throw new IllegalArgumentException(
+                    ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE_ISNULL);
         if (!checkInDate.isAfter(this.reservationDate))
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE);  // Kiểm tra ngày nhận phòng phải sau ngày đặt
+            throw new IllegalArgumentException(
+                    ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE);
         this.checkInDate = checkInDate;
         if (checkOutDate != null && room != null)
-            this.roomBookingDeposit = CostCalculator.calculateBookingDeposit(this.room, this.checkInDate, this.checkOutDate);
+            this.roomBookingDeposit = CostCalculator.calculateBookingDeposit(
+                    this.room, this.checkInDate, this.checkOutDate);
     }
 
     public LocalDateTime getCheckOutDate() {
@@ -80,12 +87,15 @@ public class ReservationForm {
 
     public void setCheckOutDate(LocalDateTime checkOutDate) {
         if (checkOutDate == null)
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE_ISNULL);  // Kiểm tra ngày trả phòng không được null
+            throw new IllegalArgumentException(
+                    ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE_ISNULL);
         if (!checkOutDate.isAfter(checkInDate))
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE);  // Kiểm tra ngày trả phòng phải sau ngày nhận phòng
+            throw new IllegalArgumentException(
+                    ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE);
         this.checkOutDate = checkOutDate;
         if (checkInDate != null && room != null)
-            this.roomBookingDeposit = CostCalculator.calculateBookingDeposit(this.room, this.checkInDate, this.checkOutDate);
+            this.roomBookingDeposit = CostCalculator.calculateBookingDeposit(
+                    this.room, this.checkInDate, this.checkOutDate);
     }
 
     public Employee getEmployee() {
@@ -107,7 +117,8 @@ public class ReservationForm {
             throw new IllegalArgumentException(ErrorMessages.NULL_ROOM);
         this.room = room;
         if (checkInDate != null && checkOutDate != null)
-            this.roomBookingDeposit = CostCalculator.calculateBookingDeposit(this.room, this.checkInDate, this.checkOutDate);
+            this.roomBookingDeposit = CostCalculator.calculateBookingDeposit(
+                    this.room, this.checkInDate, this.checkOutDate);
     }
 
     public Customer getCustomer() {
