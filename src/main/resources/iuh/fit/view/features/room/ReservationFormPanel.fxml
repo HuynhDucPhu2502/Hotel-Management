@@ -22,12 +22,12 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane minHeight="1000.0" minWidth="930.0" stylesheets="@../../../styles/Button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.ReservationFormController">
+<AnchorPane minHeight="1200.0" minWidth="930.0" stylesheets="@../../../styles/Button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.ReservationFormController">
    <children>
       <DialogPane fx:id="dialogPane" animationDuration="200.0ms" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="1000.0" prefWidth="930.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" stylesheets="@../../../styles/Button.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="107.0" prefHeight="1200.0" prefWidth="930.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" stylesheets="@../../../styles/Button.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
-            <AnchorPane minHeight="-Infinity" minWidth="930.0" prefWidth="930.0">
+            <AnchorPane minHeight="-Infinity">
                <children>
                   <TitledPane collapsible="false" style="-fx-border-radius: 50; -fx-background-radius: 50;" stylesheets="@../../../styles/TitlePanel.css" text="Quản Lý Đặt Phòng" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
@@ -545,7 +545,7 @@
                                  <children>
                                     <AnchorPane minWidth="790.0">
                                        <children>
-                                          <Button mnemonicParsing="false" text="TẠO PHIẾU ĐẶT PHÒNG" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <Button fx:id="addBtn" mnemonicParsing="false" text="TẠO PHIẾU ĐẶT PHÒNG" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <font>
                                                 <Font name="System Bold" size="16.0" />
                                              </font>
