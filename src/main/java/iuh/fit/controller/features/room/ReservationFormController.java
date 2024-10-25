@@ -7,8 +7,10 @@ import com.dlsc.gemsfx.daterange.DateRangePicker;
 import com.dlsc.gemsfx.daterange.DateRangePreset;
 import iuh.fit.controller.MainController;
 import iuh.fit.dao.CustomerDAO;
+import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
+import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
 import iuh.fit.utils.CostCalculator;
 import iuh.fit.utils.ErrorMessages;
@@ -42,6 +44,8 @@ public class ReservationFormController {
     private Button bookingRoomNavigate;
     @FXML
     private Button createCustomerBtn;
+    @FXML
+    private Button addBtn;
     // 1.2 Input Fields
     // 1.2.1 Fields cho phiếu đặt phòng
     @FXML
@@ -127,6 +131,8 @@ public class ReservationFormController {
             this.checkOutTime = checkOutTime;
             setBookingDates(checkInTime, checkOutTime);
         }
+
+        addBtn.setOnAction(e -> handleCreateReservationRoom());
     }
 
     // ==================================================================================================================
@@ -376,4 +382,36 @@ public class ReservationFormController {
             checkOutTimePicker.setTime(checkOutDate.toLocalTime());
     }
 
+    // ==================================================================================================================
+    // 10. Đẩy thời gian lên giao diện nếu checkInDate và checkOutDate không NULL
+    // ==================================================================================================================
+    private void handleCreateReservationRoom() {
+        try {
+            ReservationForm reservationForm = new ReservationForm(
+                    ReservationFormDAO.getNextReservationFormID(),
+                    LocalDateTime.now(),
+                    checkInTime,
+                    checkOutTime,
+                    employee,
+                    room,
+                    customer
+            );
+            ReservationFormDAO.createData(reservationForm);
+            handleResetAction();
+            dialogPane.showInformation("Thành công", "Đã thêm phiếu đặt phòng thành công");
+        } catch (Exception e) {
+            dialogPane.showWarning("LỖI", e.getMessage());
+        }
+    }
+
+    private void handleResetAction() {
+        bookDateRangePicker.setValue(null);
+        checkInTimePicker.setValue(null);
+        checkOutTimePicker.setValue(null);
+        customerIDCardNumberTextField.setText(null);
+
+        customer = null;
+        checkOutTime = null;
+        checkInTime = null;
+    }
 }

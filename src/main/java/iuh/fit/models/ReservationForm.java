@@ -26,22 +26,24 @@ public class ReservationForm {
     ) {
         this.setReservationID(reservationID);
         this.setReservationDate(reservationDate);
-        this.setEmployee(employee);
-        this.setRoom(room);
         this.setCheckInDate(checkInDate);
         this.setCheckOutDate(checkOutDate);
+        this.setEmployee(employee);
+        this.setRoom(room);
         this.setCustomer(customer);
+        updateBookingDeposit();
     }
 
     public ReservationForm(String reservationID) {
         this.setReservationID(reservationID);
     }
 
-    public ReservationForm() {
-    }
+    public ReservationForm() {}
 
-    public String getReservationID() {
-        return reservationID;
+    public void setEmployee(Employee employee) {
+        if (employee == null)
+            throw new IllegalArgumentException(ErrorMessages.NULL_EMPLOYEE);
+        this.employee = employee;
     }
 
     public void setReservationID(String reservationID) {
@@ -52,77 +54,10 @@ public class ReservationForm {
         this.reservationID = reservationID;
     }
 
-    public LocalDateTime getReservationDate() {
-        return reservationDate;
-    }
-
     public void setReservationDate(LocalDateTime reservationDate) {
         if (reservationDate == null)
             throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_RESERVATION_DATE_ISNULL);  // Kiểm tra ngày đặt không được null
-        if (!reservationDate.isBefore(LocalDateTime.now()))
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_RESERVATION_DATE);  // Kiểm tra ngày đặt phải trước thời gian hiện tại
         this.reservationDate = reservationDate;
-    }
-
-    public LocalDateTime getCheckInDate() {
-        return checkInDate;
-    }
-
-    public void setCheckInDate(LocalDateTime checkInDate) {
-        if (checkInDate == null)
-            throw new IllegalArgumentException(
-                    ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE_ISNULL);
-        if (!checkInDate.isAfter(this.reservationDate))
-            throw new IllegalArgumentException(
-                    ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE);
-        this.checkInDate = checkInDate;
-        if (checkOutDate != null && room != null)
-            this.roomBookingDeposit = CostCalculator.calculateBookingDeposit(
-                    this.room, this.checkInDate, this.checkOutDate);
-    }
-
-    public LocalDateTime getCheckOutDate() {
-        return checkOutDate;
-    }
-
-    public void setCheckOutDate(LocalDateTime checkOutDate) {
-        if (checkOutDate == null)
-            throw new IllegalArgumentException(
-                    ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE_ISNULL);
-        if (!checkOutDate.isAfter(checkInDate))
-            throw new IllegalArgumentException(
-                    ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE);
-        this.checkOutDate = checkOutDate;
-        if (checkInDate != null && room != null)
-            this.roomBookingDeposit = CostCalculator.calculateBookingDeposit(
-                    this.room, this.checkInDate, this.checkOutDate);
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        if (employee == null)
-            throw new IllegalArgumentException(ErrorMessages.NULL_EMPLOYEE);
-        this.employee = employee;
-    }
-
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        if (room == null)
-            throw new IllegalArgumentException(ErrorMessages.NULL_ROOM);
-        this.room = room;
-        if (checkInDate != null && checkOutDate != null)
-            this.roomBookingDeposit = CostCalculator.calculateBookingDeposit(
-                    this.room, this.checkInDate, this.checkOutDate);
-    }
-
-    public Customer getCustomer() {
-        return customer;
     }
 
     public void setCustomer(Customer customer) {
@@ -131,8 +66,85 @@ public class ReservationForm {
         this.customer = customer;
     }
 
+    public void setRoom(Room room) {
+        if (room == null)
+            throw new IllegalArgumentException(ErrorMessages.NULL_ROOM);
+        this.room = room;
+    }
+
+
+    public void setCheckInDate(LocalDateTime checkInDate) {
+        validateDateNotNull(checkInDate, ErrorMessages.RESERVATION_FORM_INVALID_CHECKIN_DATE_ISNULL);
+        this.checkInDate = checkInDate;
+        validateDateRange();
+    }
+
+    public void setCheckOutDate(LocalDateTime checkOutDate) {
+        validateDateNotNull(checkOutDate, ErrorMessages.RESERVATION_FORM_INVALID_CHECKOUT_DATE_ISNULL);
+        this.checkOutDate = checkOutDate;
+        validateDateRange();
+    }
+
+    private void validateDateNotNull(LocalDateTime date, String errorMessage) {
+        if (date == null) {
+            throw new IllegalArgumentException(errorMessage);
+        }
+    }
+
+    private void validateDateRange() {
+        if (checkInDate != null && checkOutDate != null && checkInDate.isAfter(checkOutDate)) {
+            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_DATE_RANGE);
+        }
+    }
+
+    private void updateBookingDeposit() {
+        if (room != null && checkInDate != null && checkOutDate != null) {
+            this.roomBookingDeposit = CostCalculator.calculateBookingDeposit(room, checkInDate, checkOutDate);
+        }
+    }
+
+    public void setRoomBookingDeposit(double roomBookingDeposit) {
+        if (roomBookingDeposit <= 0)
+            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FROM_INVALID_ROOM_BOOKING_DEPOSIT_AMOUTN);
+        this.roomBookingDeposit = roomBookingDeposit;
+    }
+
+    public String getReservationID() {
+        return reservationID;
+    }
+
+    public LocalDateTime getReservationDate() {
+        return reservationDate;
+    }
+
+    public LocalDateTime getCheckInDate() {
+        return checkInDate;
+    }
+
+    public LocalDateTime getCheckOutDate() {
+        return checkOutDate;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
     public double getRoomBookingDeposit() {
         return roomBookingDeposit;
+    }
+
+
+    @Override
+    public String toString() {
+        return "ReservationForm{}";
     }
 
     @Override
@@ -146,18 +158,5 @@ public class ReservationForm {
     @Override
     public int hashCode() {
         return Objects.hash(reservationID);
-    }
-
-    @Override
-    public String toString() {
-        return "ReservationForm{" +
-                "reservationID='" + reservationID + '\'' +
-                ", reservationDate=" + reservationDate +
-                ", approxCheckInDate=" + checkInDate +
-                ", approxCheckOutDate=" + checkOutDate +
-                ", employee=" + employee +
-                ", room=" + room +
-                ", customer=" + customer +
-                '}';
     }
 }

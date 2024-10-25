@@ -87,14 +87,13 @@ public class ErrorMessages {
     public static final String ROOM_USAGE_SERVICE_INVALID_QUANTITY = "Số lượng dịch vụ phải lớn hơn 0!!!";
 
     // ReservationForm
-    public static final String RESERVATION_FORM_INVALID_ID_ISNULL = "Mã phiếu đặt phòng không được rỗng!!!";
-    public static final String RESERVATION_FORM_INVALID_ID_FORMAT = "Mã phiếu đặt phòng phải theo định dạng RF-XXXXXX!!!";
-    public static final String RESERVATION_FORM_INVALID_RESERVATION_DATE_ISNULL = "Ngày đặt phòng không được rỗng!!!";
-    public static final String RESERVATION_FORM_INVALID_RESERVATION_DATE = "Ngày đặt phòng phải trước thời điểm hiện tại!!!";
-    public static final String RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE_ISNULL = "Ngày nhận phòng dự kiến không được rỗng!!!";
-    public static final String RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE = "Ngày nhận phòng dự kiến phải lớn hơn ngày đặt phòng!!!";
-    public static final String RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE_ISNULL = "Ngày trả phòng dự kiến không được rỗng!!!";
-    public static final String RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE = "Ngày trả phòng dự kiến phải lớn hơn ngày nhận phòng dự kiến!!!";
+    public static final String RESERVATION_FORM_INVALID_ID_ISNULL = "Mã phiếu đặt phòng không được rỗng";
+    public static final String RESERVATION_FORM_INVALID_ID_FORMAT = "Mã phiếu đặt phòng phải theo định dạng RF-XXXXXX";
+    public static final String RESERVATION_FORM_INVALID_RESERVATION_DATE_ISNULL = "Ngày đặt phòng không được rỗng";
+    public static final String RESERVATION_FORM_INVALID_CHECKIN_DATE_ISNULL = "Ngày nhận phòng dự kiến không được rỗng";
+    public static final String RESERVATION_FORM_INVALID_CHECKOUT_DATE_ISNULL = "Ngày trả phòng dự kiến không được rỗng";
+    public static final String RESERVATION_FORM_INVALID_DATE_RANGE = "Thời gian trả phòng phải nhỏ hơn thời gian nhận phòng";
+    public static final String RESERVATION_FROM_INVALID_ROOM_BOOKING_DEPOSIT_AMOUTN = "Tiền đặt cọc phải lớn hơn 0";
 
     // HistoryCheckIn
     public static final String HISTORY_CHECKIN_IVALID_ID_ISNULL = "Mã phiếu nhận phòng không được rỗng!!!";

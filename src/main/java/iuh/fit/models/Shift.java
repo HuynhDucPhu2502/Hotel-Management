@@ -20,20 +20,7 @@ public class Shift {
     private LocalTime endTime;
     private LocalDateTime updatedDate;
     private ShiftDaysSchedule shiftDaysSchedule;
-    private int numberOfHour = 0;
-
-    /**
-     * Constructor đầy đủ của lớp Shift.
-     * Khởi tạo đối tượng với các thông tin về ID ca làm, thời gian bắt đầu, kết thúc, và ngày cập nhật.
-     * Tự động tính số giờ làm việc sau khi khởi tạo.
-     *
-     * @param shiftID      Mã ca làm (String).
-     * @param startTime    Thời gian bắt đầu ca (LocalTime).
-     * @param endTime      Thời gian kết thúc ca (LocalTime).
-     * @param updatedDate  Ngày cập nhật thông tin ca (LocalDateTime).
-     * @param shiftDaysSchedule Lịch làm việc theo ca (ShiftDaysSchedule).
-     */
-
+    private double numberOfHour = 0;
 
     public Shift(String shiftID, LocalTime startTime, LocalTime endTime, LocalDateTime updatedDate, ShiftDaysSchedule shiftDaysSchedule) {
         setStartTime(startTime);
@@ -173,12 +160,6 @@ public class Shift {
         this.updatedDate = updatedDate;
     }
 
-    /**
-     * Tính toán số giờ làm việc dựa trên thời gian bắt đầu và kết thúc.
-     * Nếu số giờ làm việc ít hơn số giờ tối thiểu (6 giờ), sẽ ném ngoại lệ.
-     *
-     * @throws IllegalArgumentException nếu startTime hoặc endTime không hợp lệ, hoặc nếu số giờ nhỏ hơn số giờ tối thiểu.
-     */
     public void calcNumberOfHour() {
         if (startTime == null)
             throw new IllegalArgumentException(ErrorMessages.SHIFT_NULL_STARTTIME);
@@ -203,32 +184,15 @@ public class Shift {
         return shiftDaysSchedule;
     }
 
-    /**
-     * Thiết lập lịch làm việc theo ca (shiftDaysSchedule).
-     *
-     * @param shiftDaysSchedule Lịch làm việc (ShiftDaysSchedule).
-     */
     public void setShiftDaysSchedule(ShiftDaysSchedule shiftDaysSchedule) {
         this.shiftDaysSchedule = shiftDaysSchedule;
     }
 
-    /**
-     * Lấy số giờ làm việc.
-     * Tự động tính toán nếu chưa được tính.
-     *
-     * @return Số giờ làm việc (int).
-     */
-    public int getNumberOfHour() {
+    public double getNumberOfHour() {
         calcNumberOfHour();  // Tính toán số giờ mỗi khi gọi hàm
         return numberOfHour;
     }
 
-    /**
-     * Trả về chuỗi biểu diễn đối tượng Shift, bao gồm các thông tin chi tiết như
-     * shiftID, startTime, endTime, updatedDate, shiftDaysSchedule và numberOfHour.
-     *
-     * @return Chuỗi biểu diễn của đối tượng Shift với các giá trị của các thuộc tính được phân cách bởi dấu ','.
-     */
     @Override
     public String toString() {
         return "Shift{" +

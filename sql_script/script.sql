@@ -113,7 +113,7 @@ CREATE TABLE Shift (
     startTime TIME NOT NULL, 
     endTime TIME NOT NULL, 
     modifiedDate DATETIME NOT NULL, 
-    numberOfHour FLOAT NOT NULL, 
+    numberOfHour DOUBLE NOT NULL,
     shiftDaysSchedule NVARCHAR(20) NOT NULL CHECK (shiftDaysSchedule IN ('MON_WEB_FRI', 'TUE_THU_SAT', 'SUNDAY')) 
 );
 GO
@@ -152,6 +152,7 @@ CREATE TABLE ReservationForm (
     employeeID NVARCHAR(15),
     roomID NVARCHAR(15),
     customerID NVARCHAR(15),
+	roomBookingDeposit FLOAT NOT NULL,
     FOREIGN KEY (employeeID) REFERENCES Employee(employeeID) ON DELETE SET NULL,
     FOREIGN KEY (roomID) REFERENCES Room(roomID) ON DELETE SET NULL,
     FOREIGN KEY (customerID) REFERENCES Customer(customerID) ON DELETE SET NULL
@@ -237,7 +238,8 @@ VALUES
 	('Pricing', 'P-000009'),
 	('RoomCategory', 'RC-000005'),
     ('ShiftAssignment', 'SA-000004'),
-	('Customer', 'CUS-000031')
+	('Customer', 'CUS-000031'),
+	('ReservationForm', 'RF-000001')
 GO
 
 -- Thêm dữ liệu vào bảng Employee
