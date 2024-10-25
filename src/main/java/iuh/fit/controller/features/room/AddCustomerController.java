@@ -1,14 +1,20 @@
 package iuh.fit.controller.features.room;
 
+import com.dlsc.gemsfx.CalendarPicker;
+import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
+import iuh.fit.dao.CustomerDAO;
 import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Room;
+import iuh.fit.models.enums.Gender;
+import iuh.fit.utils.ErrorMessages;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class AddCustomerController {
@@ -19,9 +25,9 @@ public class AddCustomerController {
     @FXML
     private TextField customerAddressTextField;
     @FXML
-    private TextField customerCCCDTextField;
+    private TextField customerIDCardNumberTextField;
     @FXML
-    private DatePicker customerDOBDatePicker;
+    private CalendarPicker customerDOBCalendarPicker;
     @FXML
     private TextField customerEmailTextField;
     @FXML
@@ -32,10 +38,7 @@ public class AddCustomerController {
     private TextField customerPhoneNumberTextField;
     @FXML
     private ToggleGroup genderToggleGroup;
-    @FXML
-    private RadioButton radFemale;
-    @FXML
-    private RadioButton radMale;
+
     // 1.2 Buttons
     @FXML
     private Button addBtn;
@@ -47,7 +50,12 @@ public class AddCustomerController {
     private Button reservationFormNavigate;
     @FXML
     private Button backBtn;
-    // 1.3 Context
+
+    // 1.3 Dialog Pane
+    @FXML
+    private DialogPane dialogPane;
+
+    // 1.5 Context
     private MainController mainController;
     private Employee employee;
     private Room room;
@@ -61,6 +69,12 @@ public class AddCustomerController {
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
     public void initialize() {
+        dialogPane.toFront();
+
+        customerIDTextField.setText(CustomerDAO.getNextCustomerID());
+
+        addBtn.setOnAction(e -> handleAddAction());
+        resetBtn.setOnAction(e -> handleResetAction());
     }
 
     public void setupContext(
@@ -117,4 +131,53 @@ public class AddCustomerController {
             e.printStackTrace();
         }
     }
+    // ==================================================================================================================
+    // 4. Thêm khách hàng
+    // ==================================================================================================================
+    // Chức năng 2: Thêm
+    public void handleAddAction() {
+        try{
+            Customer customer = createCustomer();
+            CustomerDAO.createData(customer);
+            handleResetAction();
+            dialogPane.showInformation("Thành công", "Đã thêm khách hàng thành công");
+            this.customer = customer;
+            navigateToReservationForm();
+        }catch (Exception e){
+            dialogPane.showWarning("LỖI", e.getMessage());
+        }
+    }
+
+    private Customer createCustomer() {
+        String id = customerIDTextField.getText();
+        String name = customerNameTextField.getText();
+        String phone = customerPhoneNumberTextField.getText();
+        String email = customerEmailTextField.getText();
+        String address = customerAddressTextField.getText();
+
+        Gender gender;
+        RadioButton rad =  (RadioButton) genderToggleGroup.getSelectedToggle();
+        if (rad == null) throw new IllegalArgumentException(ErrorMessages.CUS_GENDER_NOT_SELECTED);
+        else if (rad.getText().equalsIgnoreCase("NAM")) gender = Gender.MALE;
+        else gender = Gender.FEMALE;
+
+        String idCardNumber = customerIDCardNumberTextField.getText();
+        LocalDate dob = customerDOBCalendarPicker.getValue();
+
+        return new Customer(id, name, phone, email, address, gender, idCardNumber, dob);
+    }
+
+    public void handleResetAction() {
+        customerIDTextField.setText(CustomerDAO.getNextCustomerID());
+        customerIDCardNumberTextField.setText("");
+        customerNameTextField.setText("");
+        customerPhoneNumberTextField.setText("");
+        customerEmailTextField.setText("");
+        customerAddressTextField.setText("");
+        Toggle rad =  genderToggleGroup.getSelectedToggle();
+        if (rad != null) rad.setSelected(false);
+        customerDOBCalendarPicker.setValue(null);
+        customerNameTextField.requestFocus();
+    }
+
 }
