@@ -119,8 +119,7 @@ public class ReservationFormController {
         setupEmployeeInformation();
 
         if (customer != null) {
-            this.customer = customer;
-            setCustomerInfo();
+            customerIDCardNumberTextField.setText(customer.getIdCardNumber());
         }
 
         if (checkInTime != null && checkOutTime != null) {
