@@ -55,6 +55,10 @@ public class AddCustomerController {
     @FXML
     private DialogPane dialogPane;
 
+    // 1.4
+    @FXML
+    private TitledPane titledPane;
+
     // 1.5 Context
     private MainController mainController;
     private Employee employee;
@@ -84,6 +88,8 @@ public class AddCustomerController {
         this.mainController = mainController;
         this.employee = employee;
         this.room = room;
+
+        titledPane.setText("Quản lý đặt phòng " + room.getRoomNumber());
 
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
