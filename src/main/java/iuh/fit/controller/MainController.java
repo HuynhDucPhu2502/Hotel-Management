@@ -52,6 +52,9 @@ public class MainController {
                 menuController.getCustomerManagerButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/customer/CustomerManagerPanel.fxml"));
                 // Account
                 // Statistics
+                menuController.getRevenueStatisticsButton().setOnAction(e -> {
+                    loadPanel("/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml");
+                });
                 // History
 
             }
