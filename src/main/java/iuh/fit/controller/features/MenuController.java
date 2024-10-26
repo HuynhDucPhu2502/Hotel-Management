@@ -123,13 +123,15 @@ public class MenuController {
     @FXML
     private Button statisticsBtn;
     @FXML
-    private HBox buttonOneContainer2111;
+    private HBox revenueStatisticsContainer;
+    @FXML
+    private Button revenueStatisticsButton;
     @FXML
     private HBox buttonTwoContainer2111;
     @FXML
     private HBox buttonThreeContainer2111;
     @FXML
-    private ImageView arrowUpForEmpBtn2111;
+    private ImageView arrowUpForStatistics;
 
 //  =====================================================
     // History
@@ -172,7 +174,7 @@ public class MenuController {
         serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryManagerContainer, hotelServiceManagerContainer, hotelServiceSearchingContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer), arrowUpForCustomer, "customer"));
         accountBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer211, buttonTwoContainer211, buttonThreeContainer211), arrowUpForEmpBtn211, "account"));
-        statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer2111, buttonTwoContainer2111, buttonThreeContainer2111), arrowUpForEmpBtn2111, "statistics"));
+        statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(revenueStatisticsContainer, buttonTwoContainer2111, buttonThreeContainer2111), arrowUpForStatistics, "statistics"));
         historyBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21111, buttonTwoContainer21111, buttonThreeContainer21111), arrowUpForEmpBtn21111, "history"));
     }
 
@@ -236,6 +238,8 @@ public class MenuController {
     public Button getRoomBookingButton() {
         return roomBookingButton;
     }
+
+    public Button getRevenueStatisticsButton(){return revenueStatisticsButton; }
 
 }
 
