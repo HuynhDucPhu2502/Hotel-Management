@@ -12,7 +12,7 @@ public class Customer {
     // Các thuộc tính của khách hàng
     private static int count = 0;
     private String customerID;              // Mã khách hàng
-    private String fullName;                 // Tên đầy đủ
+    private String cusFullName;                 // Tên đầy đủ
     private String phoneNumber;             // Số điện thoại
     private String email;                   // Địa chỉ email
     private String address;                 // Địa chỉ
@@ -38,7 +38,7 @@ public class Customer {
     // Constructor với tất cả các thuộc tính
     public Customer(String customerID, String fulName, String phoneNumber, String email, String address, Gender gender, String idCardNumber, LocalDate dob) {
         setCustomerID(customerID);
-        setFullName(fulName);
+        setCusFullName(fulName);
         setPhoneNumber(phoneNumber);
         setEmail(email);
         setAddress(address);
@@ -73,15 +73,15 @@ public class Customer {
     }
 
     // Kiểm tra tên hợp lệ
-    public String getFullName() {
-        return fullName;
+    public String getCusFullName() {
+        return cusFullName;
     }
 
-    public void setFullName(String fullName) {
-        fullName = fullName.trim().replaceAll("\\s+", " ");
-        if (!RegexChecker.isValidName(fullName, 3, 30))
+    public void setCusFullName(String cusFullName) {
+        cusFullName = cusFullName.trim().replaceAll("\\s+", " ");
+        if (!RegexChecker.isValidName(cusFullName, 3, 30))
             throw new IllegalArgumentException(ErrorMessages.CUS_INVALID_FULLNAME);
-        this.fullName = fullName;
+        this.cusFullName = cusFullName;
     }
 
     // Kiểm tra số điện thoại hợp lệ
@@ -153,7 +153,7 @@ public class Customer {
     public String toString() {
         return "Customer{" +
                 "customerID='" + customerID + '\'' +
-                ", fulName='" + fullName + '\'' +
+                ", fulName='" + cusFullName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
