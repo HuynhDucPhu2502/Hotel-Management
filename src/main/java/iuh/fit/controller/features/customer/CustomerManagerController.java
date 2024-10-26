@@ -230,7 +230,7 @@ public class CustomerManagerController {
     // 4.1 Xử lý sự kiện khi kích hoạt chức năng cập nhật
     private void handleUpdateBtn(Customer customer) {
         customerIDTextField.setText(customer.getCustomerID());
-        customerNameTextField.setText(customer.getCusFullName());
+        customerNameTextField.setText(customer.getFullName());
         customerPhoneNumberTextField.setText(customer.getPhoneNumber());
         customerEmailTextField.setText(customer.getEmail());
         customerAddressTextField.setText(customer.getAddress());

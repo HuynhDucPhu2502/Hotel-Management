@@ -39,7 +39,7 @@ public class CustomerInformationViewController {
 
     public void setCustomer(Customer customer) {
         customerIDTextField.setText(customer.getCustomerID());
-        customerNameTextField.setText(customer.getCusFullName());
+        customerNameTextField.setText(customer.getFullName());
         customerPhoneNumberTextField.setText(customer.getPhoneNumber());
         customerEmailTextField.setText(customer.getEmail());
         addressTextAria.setText(customer.getAddress());

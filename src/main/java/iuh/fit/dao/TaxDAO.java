@@ -25,7 +25,7 @@ public class TaxDAO {
                 String taxId = resultSet.getString(1);
                 String taxName = resultSet.getString(2);
                 double taxRate = resultSet.getDouble(3);
-                LocalDate dateOfCreation = ConvertHelper.LocalDateConverter(resultSet.getDate(4));
+                LocalDate dateOfCreation = ConvertHelper.localDateConverter(resultSet.getDate(4));
                 boolean activate = resultSet.getBoolean(5);
 
                 Tax tax = new Tax(taxId, taxName, taxRate, dateOfCreation, activate);
@@ -115,7 +115,7 @@ public class TaxDAO {
                 tax.setTaxID(resultSet.getString(1));
                 tax.setTaxName(resultSet.getString(2));
                 tax.setTaxRate(resultSet.getDouble(3));
-                tax.setDateOfCreation(ConvertHelper.LocalDateConverter(resultSet.getDate(4)));
+                tax.setDateOfCreation(ConvertHelper.localDateConverter(resultSet.getDate(4)));
                 tax.setActivate(resultSet.getBoolean(5));
                 return tax;
             }
