@@ -70,6 +70,7 @@ public class ReservationFormDAO {
                 roomCategory.setRoomCategoryID(rs.getString(19));
                 roomCategory.setRoomCategoryName(rs.getString(27));
                 roomCategory.setNumberOfBed(rs.getInt(28));
+              
                 room.setRoomCategory(roomCategory);
 
                 // Customer
@@ -153,6 +154,7 @@ public class ReservationFormDAO {
                     roomCategory.setRoomCategoryID(rs.getString(19));
                     roomCategory.setRoomCategoryName(rs.getString(27));
                     roomCategory.setNumberOfBed(rs.getInt(28));
+
                     room.setRoomCategory(roomCategory);
 
                     // Customer
@@ -224,7 +226,6 @@ public class ReservationFormDAO {
                 updateSequenceStatement.executeUpdate();
             }
 
-            // Thêm phiếu mới
             insertStatement.setString(1, newReservationFormID);
             insertStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(reservationForm.getReservationDate()));
             insertStatement.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckInDate()));

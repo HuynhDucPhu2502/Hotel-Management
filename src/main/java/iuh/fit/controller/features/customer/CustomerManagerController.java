@@ -230,7 +230,7 @@ public class CustomerManagerController {
     // 4.1 Xử lý sự kiện khi kích hoạt chức năng cập nhật
     private void handleUpdateBtn(Customer customer) {
         customerIDTextField.setText(customer.getCustomerID());
-        customerNameTextField.setText(customer.getFullName());
+        customerNameTextField.setText(customer.getCusFullName());
         customerPhoneNumberTextField.setText(customer.getPhoneNumber());
         customerEmailTextField.setText(customer.getEmail());
         customerAddressTextField.setText(customer.getAddress());
@@ -313,7 +313,7 @@ public class CustomerManagerController {
         Scene scene = new Scene(layout);
 
         Stage stage = new Stage();
-        stage.setTitle("Thông Tin " + customer.getCustomerID());
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }

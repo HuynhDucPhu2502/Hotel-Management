@@ -38,6 +38,11 @@ public class ReservationForm {
         this.setReservationID(reservationID);
     }
 
+    public ReservationForm(String reservationID, Customer customer) {
+        this.reservationID = reservationID;
+        this.customer = customer;
+    }
+      
     public ReservationForm() {}
 
     public void setEmployee(Employee employee) {

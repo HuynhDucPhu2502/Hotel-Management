@@ -445,9 +445,9 @@
                                     </HBox>
                                  </graphic>
                               </Button>
-                              <HBox fx:id="buttonOneContainer2111" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="revenueStatisticsContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
+                                    <Button fx:id="revenueStatisticsButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Thống kê doanh thu" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
@@ -490,7 +490,7 @@
             
                                              <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Lịch sử" textFill="WHITE" />
             
-                                             <ImageView fx:id="arrowUpForEmpBtn21111" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="51">
+                                             <ImageView fx:id="arrowUpForStatistics" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="51">
                                           <image>
                                              <Image url="@../../icons/arrow_down.png" />
                                           </image>

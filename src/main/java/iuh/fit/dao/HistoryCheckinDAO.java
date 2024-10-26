@@ -60,7 +60,7 @@ public class HistoryCheckinDAO {
                 room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp(19)));
 
                 customer.setCustomerID(rs.getString(9));
-                customer.setFullName(rs.getString(21));
+                customer.setCusFullName(rs.getString(21));
                 customer.setPhoneNumber(rs.getString(22));
                 customer.setEmail(rs.getString(23));
                 customer.setAddress(rs.getString(24));
@@ -144,7 +144,7 @@ public class HistoryCheckinDAO {
                     room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp(19)));
 
                     customer.setCustomerID(rs.getString(9));
-                    customer.setFullName(rs.getString(21));
+                    customer.setCusFullName(rs.getString(21));
                     customer.setPhoneNumber(rs.getString(22));
                     customer.setEmail(rs.getString(23));
                     customer.setAddress(rs.getString(24));

@@ -1,5 +1,6 @@
 package iuh.fit.models;
 
+import iuh.fit.dao.InvoiceDAO;
 import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.RegexChecker;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.util.Objects;
  * @author Chuc
  */
 public class Tax {
+    private String taxID;
     private String taxName; // Tên thuế
     private double taxRate; // Tỷ lệ thuế
     private LocalDate dateOfCreation; // Ngày tạo thuế
@@ -21,6 +23,14 @@ public class Tax {
      * Khởi tạo một đối tượng Tax mới với các giá trị mặc định.
      */
     public Tax() {
+    }
+
+    public Tax(String taxID, String taxName, double taxRate, LocalDate dateOfCreation, boolean activate) {
+        this.taxID = taxID;
+        this.taxName = taxName;
+        this.taxRate = taxRate;
+        this.dateOfCreation = dateOfCreation;
+        this.activate = activate;
     }
 
     /**
@@ -36,6 +46,23 @@ public class Tax {
         this.setTaxRate(taxRate);
         this.setDateOfCreation(dateOfCreation);
         this.setActivate(activate);
+    }
+
+    public static void main(String[] args) {
+
+        System.out.println(InvoiceDAO.getInvoice());
+    }
+
+    public Tax(String taxID) {
+        this.taxID = taxID;
+    }
+
+    public String getTaxID() {
+        return taxID;
+    }
+
+    public void setTaxID(String taxID) {
+        this.taxID = taxID;
     }
 
     /**
@@ -125,17 +152,24 @@ public class Tax {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Tax tax)) return false;
-        return Objects.equals(taxName, tax.taxName);
+        if (o == null || getClass() != o.getClass()) return false;
+        Tax tax = (Tax) o;
+        return Objects.equals(taxID.toUpperCase(), tax.taxID.toUpperCase());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(taxName);
+        return Objects.hashCode(taxID.toUpperCase());
     }
 
     @Override
     public String toString() {
-        return "Tax{" + "taxName=" + taxName + ", taxRate=" + taxRate + ", dateOfCreation=" + dateOfCreation + ", activate=" + activate + '}';
+        return "Tax{" +
+                "taxID='" + taxID + '\'' +
+                ", taxName='" + taxName + '\'' +
+                ", taxRate=" + taxRate +
+                ", dateOfCreation=" + dateOfCreation +
+                ", activate=" + activate +
+                '}';
     }
 }

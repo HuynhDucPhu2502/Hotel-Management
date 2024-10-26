@@ -25,6 +25,8 @@ public class Invoice {
     // Thông tin thuế
     private Tax tax;
 
+    private ReservationForm reservationForm;
+
     /**
      * Khởi tạo đối tượng `Invoice` với các tham số đầy đủ.
      *
@@ -32,12 +34,16 @@ public class Invoice {
      * @param invoiceDate Ngày giờ lập hóa đơn
      * @param tax         Thông tin thuế
      */
-    public Invoice(String invoiceID, LocalDateTime invoiceDate, Tax tax) {
+    public Invoice(String invoiceID, LocalDateTime invoiceDate, double roomCharge, double servicesCharge,
+            double totalDue, double netDue, Tax tax, ReservationForm reservationForm) {
         this.setInvoiceID(invoiceID);
         this.setInvoiceDate(invoiceDate);
-        this.setTotalDue(calTotalDue());
-        this.setNetDue(calNetDue());
+        this.roomCharge = roomCharge;
+        this.servicesCharge = servicesCharge;
+        this.setTotalDue(totalDue);
+        this.setNetDue(netDue);
         this.setTax(tax);
+        this.reservationForm = reservationForm;
     }
 
     /**
@@ -73,8 +79,8 @@ public class Invoice {
     public void setInvoiceID(String invoiceID) {
         if (invoiceID == null || invoiceID.trim().isBlank())
             throw new IllegalArgumentException(ErrorMessages.INVOICE_INVALID_ID_ISNUL);
-        if (!RegexChecker.isValidInvoiceID(invoiceID))
-            throw new IllegalArgumentException(ErrorMessages.INVOICE_INVALID_ID_FORMAT);
+//        if (!RegexChecker.isValidInvoiceID(invoiceID))
+//            throw new IllegalArgumentException(ErrorMessages.INVOICE_INVALID_ID_FORMAT);
         this.invoiceID = invoiceID;
     }
 
@@ -143,6 +149,29 @@ public class Invoice {
         this.netDue = netDue;
     }
 
+    public double getRoomCharge() {
+        return roomCharge;
+    }
+
+    public void setRoomCharge(double roomCharge) {
+        this.roomCharge = roomCharge;
+    }
+
+    public double getServicesCharge() {
+        return servicesCharge;
+    }
+
+    public void setServicesCharge(double servicesCharge) {
+        this.servicesCharge = servicesCharge;
+    }
+
+    public ReservationForm getReservationForm() {
+        return reservationForm;
+    }
+
+    public void setReservationForm(ReservationForm reservationForm) {
+        this.reservationForm = reservationForm;
+    }
 
     /**
      * Lấy thông tin thuế.
@@ -207,5 +236,19 @@ public class Invoice {
     @Override
     public int hashCode() {
         return Objects.hash(invoiceID);
+    }
+
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "invoiceID='" + invoiceID + '\'' +
+                ", invoiceDate=" + invoiceDate +
+                ", roomCharge=" + roomCharge +
+                ", servicesCharge=" + servicesCharge +
+                ", totalDue=" + totalDue +
+                ", netDue=" + netDue +
+                ", tax=" + tax +
+                ", reservationForm=" + reservationForm +
+                '}';
     }
 }
