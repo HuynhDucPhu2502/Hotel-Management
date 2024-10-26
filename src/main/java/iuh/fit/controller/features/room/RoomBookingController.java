@@ -1,8 +1,8 @@
 package iuh.fit.controller.features.room;
 
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.room.room_items.RoomAvailableController;
-import iuh.fit.controller.features.room.room_items.RoomOnUseController;
+import iuh.fit.controller.features.room.room_items.RoomAvailableItemController;
+import iuh.fit.controller.features.room.room_items.RoomOnUseItemController;
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.models.Employee;
@@ -100,7 +100,7 @@ public class RoomBookingController {
                                 "/iuh/fit/view/features/room/room_items/RoomAvailableItem.fxml"));
                         roomItem = loader.load();
 
-                        RoomAvailableController controller = loader.getController();
+                        RoomAvailableItemController controller = loader.getController();
                         controller.setupContext(mainController, employee, room);
                     }
                     case ON_USE -> {
@@ -108,7 +108,7 @@ public class RoomBookingController {
                                 "/iuh/fit/view/features/room/room_items/RoomOnUseItem.fxml"));
                         roomItem = loader.load();
 
-                        RoomOnUseController controller = loader.getController();
+                        RoomOnUseItemController controller = loader.getController();
                         controller.setRoom(room);
                     }
                     case OVERDUE -> {
