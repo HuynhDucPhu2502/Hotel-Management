@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="600.0" minWidth="240.0" stylesheets="@../../styles/Menubar.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
+<AnchorPane minHeight="600.0" minWidth="240.0" stylesheets="@../../styles/Menubar.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
    <children>
       <VBox minHeight="140.0" style="-fx-alignment: center; -fx-background-radius: 10; -fx-background-color: RGB(70, 130, 180);" styleClass="menu-bar-topbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -47,14 +47,14 @@
                <content>
                   <VBox prefHeight="209.0" prefWidth="230.0" style="-fx-background-radius: 10;">
                      <children>
-                        <VBox prefHeight="32.0" prefWidth="200.0">
+                        <VBox prefHeight="32.0" prefWidth="200.0" styleClass="menu-bar-parent">
                            <children>
-                              <Button fx:id="employeeBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="282.0" styleClass="menu-bar-parent">
+                              <Button fx:id="employeeBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                                  <graphic>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="14.0" prefWidth="216.0" spacing="10">
+                                    <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
                                              <Image url="@../../icons/ic_employee.png" />
@@ -70,21 +70,38 @@
                                        </ImageView>
                                     </HBox>
                                  </graphic>
-                                 <VBox.margin>
-                                    <Insets left="10.0" />
-                                 </VBox.margin>
                               </Button>
-                              <HBox fx:id="employeeManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="employeeManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
                                  <children>
-                                    <Button fx:id="employeeManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lý nhân viên" />
+
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                          <MoveTo x="10" y="40" />
+                                          <LineTo x="10" y="55" />
+                                       </elements>
+                                    </Path>
+
+                                    <Button fx:id="employeeManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Quản lý nhân viên" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="accountOfEmployeeManagerContainer" layoutX="10.0" layoutY="10.0" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="accountOfEmployeeManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
                                  <children>
-                                    <Button fx:id="accountOfEmployeeManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lý tài khoản" />
+
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                       </elements>
+                                    </Path>
+
+                                    <Button fx:id="accountOfEmployeeManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Quản lý tài khoản" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
@@ -92,7 +109,7 @@
                               </HBox>
                            </children>
                            <VBox.margin>
-                              <Insets left="-5.0" top="5.0" />
+                              <Insets left="5.0" />
                            </VBox.margin>
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0" styleClass="menu-bar-parent">
@@ -329,9 +346,18 @@
                                     </HBox>
                                  </graphic>
                               </Button>
-                              <HBox fx:id="customerManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="customerManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
                                  <children>
-                                    <Button fx:id="customerManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lí khách hàng" />
+
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                       </elements>
+                                    </Path>
+
+                                    <Button fx:id="customerManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Quản lí khách hàng" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
