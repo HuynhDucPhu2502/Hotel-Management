@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="600.0" minWidth="240.0" stylesheets="@../../styles/Menubar.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
+<AnchorPane minHeight="600.0" minWidth="240.0" stylesheets="@../../styles/Menubar.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
    <children>
       <VBox minHeight="140.0" style="-fx-alignment: center; -fx-background-radius: 10; -fx-background-color: RGB(70, 130, 180);" styleClass="menu-bar-topbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -57,7 +57,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="14.0" prefWidth="216.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/employee_icon.png" />
+                                             <Image url="@../../icons/ic_employee.png" />
                                           </image>
                                        </ImageView>
                   
@@ -74,25 +74,17 @@
                                     <Insets left="10.0" />
                                  </VBox.margin>
                               </Button>
-                              <HBox fx:id="buttonOneContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="employeeManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
+                                    <Button fx:id="employeeManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lý nhân viên" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="buttonTwoContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                              <HBox fx:id="accountOfEmployeeManagerContainer" layoutX="10.0" layoutY="10.0" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </HBox>
-                              <HBox fx:id="buttonThreeContainer" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
+                                    <Button fx:id="accountOfEmployeeManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Quản lý tài khoản" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
@@ -113,7 +105,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/room_icon.png" />
+                                             <Image url="@../../icons/ic_room.png" />
                                           </image>
                                        </ImageView>
             
@@ -235,7 +227,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/service_icon.png" />
+                                             <Image url="@../../icons/ic_service.png" />
                                           </image>
                                        </ImageView>
             
@@ -323,7 +315,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/customer_icon.png" />
+                                             <Image url="@../../icons/ic_customer.png" />
                                           </image>
                                        </ImageView>
             
@@ -360,7 +352,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/account_icon.png" />
+                                             <Image url="@../../icons/ic_account.png" />
                                           </image>
                                        </ImageView>
             
@@ -413,7 +405,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/statistics_icon.png" />
+                                             <Image url="@../../icons/ic_statistics.png" />
                                           </image>
                                        </ImageView>
             
@@ -466,7 +458,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="37.0" fitWidth="36.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/history_icon.png" />
+                                             <Image url="@../../icons/ic_history.png" />
                                           </image>
                                        </ImageView>
             

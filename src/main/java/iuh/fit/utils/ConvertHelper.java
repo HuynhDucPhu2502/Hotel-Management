@@ -22,7 +22,7 @@ public class ConvertHelper {
         return LocalTime.parse(formattedInput);
     }
 
-    public static LocalDate LocalDateConverter(Date input) {
+    public static LocalDate localDateConverter(Date input) {
         return input.toLocalDate();
     }
 
@@ -82,11 +82,11 @@ public class ConvertHelper {
         };
     }
 
-    public static Date dateConvertertoSQL(LocalDate input) {
+    public static Date dateToSQLConverter(LocalDate input) {
         return Date.valueOf(input);
     }
 
-    public static Timestamp dateTimeConvertertoSQL(LocalDateTime input) {
+    public static Timestamp dateTimeToSQLConverter(LocalDateTime input) {
         return Timestamp.valueOf(input);
     }
 
@@ -100,14 +100,6 @@ public class ConvertHelper {
 
         return input.toString().equalsIgnoreCase("Nữ")
                 ? "FEMALE" : "MALE";
-    }
-
-    public static String positionConverterToSQL(Position input) {
-        if (!input.toString().matches("(Quản lý|Lễ tân)"))
-            throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_POSITION);
-
-        return input.toString().equalsIgnoreCase("Quản lý")
-                ? "MANAGER" : "RECEPTIONIST";
     }
 
     public static String shiftDaysScheduleConverterToSQL(ShiftDaysSchedule input) {
@@ -140,14 +132,6 @@ public class ConvertHelper {
     public static double doubleConverter(String numbStr, String errorMessage) {
         try {
             return Double.parseDouble(numbStr);
-        } catch (Exception exception) {
-            throw new IllegalArgumentException(errorMessage);
-        }
-    }
-
-    public static int intConverter(String numbStr, String errorMessage) {
-        try {
-            return Integer.parseInt(numbStr);
         } catch (Exception exception) {
             throw new IllegalArgumentException(errorMessage);
         }

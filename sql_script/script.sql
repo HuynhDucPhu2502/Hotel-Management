@@ -24,12 +24,6 @@ CREATE TABLE GlobalSequence (
 );
 GO
 
--- Tạo bảng Value count
-create table ValueCount(
-	vName nvarchar(50) primary key,
-	vCount int
-);
-
 -- Tạo bảng Employee
 CREATE TABLE Employee (
     employeeID NVARCHAR(15) NOT NULL PRIMARY KEY, 
@@ -119,7 +113,7 @@ CREATE TABLE Shift (
     startTime TIME NOT NULL, 
     endTime TIME NOT NULL, 
     modifiedDate DATETIME NOT NULL, 
-    numberOfHour FLOAT NOT NULL, 
+    numberOfHour DOUBLE NOT NULL,
     shiftDaysSchedule NVARCHAR(20) NOT NULL CHECK (shiftDaysSchedule IN ('MON_WEB_FRI', 'TUE_THU_SAT', 'SUNDAY')) 
 );
 GO
@@ -158,6 +152,7 @@ CREATE TABLE ReservationForm (
     employeeID NVARCHAR(15),
     roomID NVARCHAR(15),
     customerID NVARCHAR(15),
+	roomBookingDeposit FLOAT NOT NULL,
     FOREIGN KEY (employeeID) REFERENCES Employee(employeeID) ON DELETE SET NULL,
     FOREIGN KEY (roomID) REFERENCES Room(roomID) ON DELETE SET NULL,
     FOREIGN KEY (customerID) REFERENCES Customer(customerID) ON DELETE SET NULL
@@ -242,12 +237,14 @@ VALUES
 	('HotelService', 'HS-000008'),
 	('Pricing', 'P-000009'),
 	('RoomCategory', 'RC-000005'),
-    ('ShiftAssignment', 'SA-000004')
+    ('ShiftAssignment', 'SA-000004'),
+	('Customer', 'CUS-000031'),
+	('ReservationForm', 'RF-000001')
 GO
 
 -- Thêm dữ liệu vào bảng Employee
 INSERT INTO Employee (employeeID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, position)
-VALUES 
+VALUES
     ('EMP-000001', N'Huynh Duc Phu', '0912345678', 'phuhuynh@gmail.com', N'123 Ho Chi Minh', 'MALE', '001099012345', '1985-06-15', 'MANAGER'),
     ('EMP-000002', N'Nguyen Xuan Chuc', '0908765432', 'chucnguyen@yahoo.com', N'456 Hue', 'MALE', '002199012346', '1990-04-22', 'RECEPTIONIST'),
     ('EMP-000003', N'Le Tran Gia Huy', '0987654321', 'huytranle@gmail.com', N'789 Ho Chi Minh', 'MALE', '003299012347', '1992-08-19', 'MANAGER'),
@@ -257,7 +254,7 @@ GO
 
 -- Thêm dữ liệu vào bảng Account
 INSERT INTO Account (accountID, userName, password, status, employeeID)
-VALUES 
+VALUES
     ('ACC-000001', N'huynhducphu', N'test123@', N'ACTIVE', 'EMP-000001'),
     ('ACC-000002', N'nguyenxuanchuc', N'test123@', N'ACTIVE', 'EMP-000002'),
     ('ACC-000003', N'letranle', N'test123@', N'LOCKED', 'EMP-000003'),
@@ -268,8 +265,8 @@ GO
 -- Thêm dữ liệu vào bảng ServiceCategory
 INSERT INTO ServiceCategory (serviceCategoryID, serviceCategoryName)
 VALUES
-    ('SC-000001', N'Giải trí'),  
-    ('SC-000002', N'Ăn uống'),        
+    ('SC-000001', N'Giải trí'),
+    ('SC-000002', N'Ăn uống'),
     ('SC-000003', N'Chăm sóc và sức khỏe'),
     ('SC-000004', N'Vận chuyển');
 GO
@@ -288,7 +285,7 @@ GO
 
 -- Thêm dữ liệu vào bảng RoomCategory
 INSERT INTO RoomCategory (roomCategoryID, roomCategoryName, numberOfBed)
-VALUES 
+VALUES
     ('RC-000001', N'Phòng Thường Giường Đơn', 1),
     ('RC-000002', N'Phòng Thường Giường Đôi', 2),
     ('RC-000003', N'Phòng VIP Giường Đơn', 1),
@@ -297,7 +294,7 @@ GO
 
 -- Thêm dữ liệu vào bảng Pricing
 INSERT INTO Pricing (pricingID, priceUnit, price, roomCategoryID)
-VALUES 
+VALUES
     ('P-000001', N'HOUR', 150000.00, 'RC-000001'),
     ('P-000002', N'DAY', 800000.00, 'RC-000001'),
     ('P-000003', N'HOUR', 200000.00, 'RC-000002'),
@@ -310,17 +307,17 @@ GO
 
 -- Thêm dữ liệu vào bảng Room với mã phòng mới
 INSERT INTO Room (roomID, roomStatus, dateOfCreation, roomCategoryID)
-VALUES 
+VALUES
     ('T1101', N'ON_USE', '2024-09-28 10:00:00', 'RC-000001'),
     ('V2102', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
-    ('T2203', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+    ('T1203', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
     ('V2304', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
-    ('T2105', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+    ('T1105', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
     ('V2206', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
-    ('T2307', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+    ('T1307', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
     ('V2408', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
     ('T1109', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
-    ('V1210', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002');
+    ('V2210', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002');
 GO
 
 
@@ -400,6 +397,7 @@ BEGIN
     END
 END;
 GO
+
 
 -- data for statistics test
 -- Reservations for 2021 (15 reservations)

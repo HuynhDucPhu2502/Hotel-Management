@@ -1,5 +1,6 @@
 package iuh.fit.dao;
 
+import iuh.fit.models.Room;
 import iuh.fit.models.RoomCategory;
 import iuh.fit.utils.DBHelper;
 import iuh.fit.utils.GlobalConstants;
@@ -215,5 +216,37 @@ public class RoomCategoryDAO {
             e.printStackTrace();
         }
         return "RC-000001";
+    }
+
+    public static boolean checkAllowUpdateOrDelete(String roomCategoryID) {
+        int count = 0;
+
+        String sql = "SELECT roomID " +
+                "FROM Room " +
+                "WHERE roomCategoryID = ? AND (roomStatus = ? OR roomStatus = ?)";
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ){
+            preparedStatement.setString(1, roomCategoryID);
+            preparedStatement.setString(2, "ON_USE");
+            preparedStatement.setString(3, "OVERDUE");
+
+            try(ResultSet rs = preparedStatement.executeQuery()){
+                while (rs.next()) {
+                    count++;
+                }
+
+                if(count > 0){
+                    return false;
+                }
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return true;
     }
 }

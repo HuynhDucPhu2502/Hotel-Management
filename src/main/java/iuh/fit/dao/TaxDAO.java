@@ -1,13 +1,11 @@
 package iuh.fit.dao;
 
-import iuh.fit.models.HistoryCheckIn;
 import iuh.fit.models.Tax;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +22,18 @@ public class TaxDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while(resultSet.next()){
+
                 String taxId = resultSet.getString(1);
                 String taxName = resultSet.getString(2);
                 double taxRate = resultSet.getDouble(3);
                 LocalDate dateOfCreation = ConvertHelper.LocalDateConverter(resultSet.getDate(4));
                 boolean activate = resultSet.getBoolean(5);
+
+                String taxName = resultSet.getString(1);
+                double taxRate = resultSet.getDouble(2);
+                LocalDate dateOfCreation = ConvertHelper.localDateConverter(resultSet.getDate(3));
+                boolean activate = resultSet.getBoolean(4);
+
 
                 Tax tax = new Tax(taxId, taxName, taxRate, dateOfCreation, activate);
                 data.add(tax);
