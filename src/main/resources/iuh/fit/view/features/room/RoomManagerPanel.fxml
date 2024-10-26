@@ -179,10 +179,10 @@
                                             </columnResizePolicy>
 
                                             <columns>
-                                                <TableColumn fx:id="roomIDColumn" minWidth="100.0" text="Mã phòng" />
-                                                <TableColumn fx:id="roomStateColumn" minWidth="100.0" text="Tình trạng" />
-                                                <TableColumn fx:id="numberOfBedColumn" minWidth="100.0" text="Số lượng giường" />
-                                                <TableColumn fx:id="actionColumn" minWidth="200.0" prefWidth="-1.0" text="Thao tác" />
+                                                <TableColumn fx:id="roomIDColumn" minWidth="100.0" text="Mã phòng" reorderable="false"/>
+                                                <TableColumn fx:id="roomStateColumn" minWidth="100.0" text="Tình trạng" reorderable="false"/>
+                                                <TableColumn fx:id="numberOfBedColumn" minWidth="100.0" text="Số lượng giường" reorderable="false"/>
+                                                <TableColumn fx:id="actionColumn" minWidth="200.0" prefWidth="-1.0" text="Thao tác" reorderable="false"/>
                                             </columns>
 
                                             <VBox.margin>
