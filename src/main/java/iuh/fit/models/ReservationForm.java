@@ -59,6 +59,11 @@ public class ReservationForm {
     public ReservationForm() {
     }
 
+    public ReservationForm(String reservationID, Customer customer) {
+        this.reservationID = reservationID;
+        this.customer = customer;
+    }
+
     /**
      * Lấy mã đặt phòng.
      *
