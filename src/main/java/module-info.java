@@ -6,6 +6,7 @@ module iuh.fit {
     requires com.dlsc.gemsfx;
     requires com.dlsc.unitfx;
     requires org.controlsfx.controls;
+    requires com.calendarfx.view;
 
     opens iuh.fit to javafx.fxml;
     opens iuh.fit.controller to javafx.fxml;
@@ -13,6 +14,7 @@ module iuh.fit {
     opens iuh.fit.controller.features.service to javafx.fxml;
     opens iuh.fit.controller.features.room to javafx.fxml;
     opens iuh.fit.controller.features.room.room_items to javafx.fxml;
+    opens iuh.fit.controller.features.room.reservation_form_items to javafx.fxml;
     opens iuh.fit.controller.features.employee to javafx.fxml;
     opens iuh.fit.models to javafx.base;
     opens iuh.fit.controller.features.customer to javafx.fxml;

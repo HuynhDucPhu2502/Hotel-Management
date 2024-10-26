@@ -70,8 +70,6 @@
 /* ========================================================== */
 /* Filter Button */
 /* ========================================================== */
-
-/* All Button */
 .button-All {
     -fx-background-color: rgb(211, 211, 211); /* lightgray */
     -fx-border-color: transparent;
@@ -96,7 +94,6 @@
     -fx-background-color: rgb(105, 105, 105); /* dimgray */
 }
 
-/* Available Button */
 .button-Available {
     -fx-background-color: rgb(160, 214, 131);
     -fx-border-color: transparent;

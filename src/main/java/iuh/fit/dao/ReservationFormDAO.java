@@ -3,12 +3,11 @@ package iuh.fit.dao;
 import iuh.fit.models.*;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
+import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.GlobalConstants;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -180,24 +179,35 @@ public class ReservationFormDAO {
     }
 
     public static void createData(ReservationForm reservationForm) {
+        String overlapCheckSQL = "SELECT COUNT(*) FROM ReservationForm " +
+                "WHERE roomID = ? AND " +
+                "(? < checkOutDate AND ? > checkInDate)";
+
         try (
                 Connection connection = DBHelper.getConnection();
 
+                PreparedStatement overlapCheckStmt = connection.prepareStatement(overlapCheckSQL);
                 PreparedStatement insertStatement = connection.prepareStatement(
                         "INSERT INTO ReservationForm(reservationFormID, reservationDate, checkInDate, " +
-                                "checkOutDate, employeeID, roomID, " +
-                                "customerID, roomBookingDeposit) " +
+                                "checkOutDate, employeeID, roomID, customerID, roomBookingDeposit) " +
                                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?)"
                 );
-
                 PreparedStatement selectSequenceStatement = connection.prepareStatement(
                         "SELECT nextID FROM GlobalSequence WHERE tableName = ?"
                 );
-
                 PreparedStatement updateSequenceStatement = connection.prepareStatement(
                         "UPDATE GlobalSequence SET nextID = ? WHERE tableName = ?"
                 )
         ) {
+            overlapCheckStmt.setString(1, reservationForm.getRoom().getRoomID());
+            overlapCheckStmt.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckInDate()));
+            overlapCheckStmt.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckOutDate()));
+
+            ResultSet overlapResult = overlapCheckStmt.executeQuery();
+            if (overlapResult.next() && overlapResult.getInt(1) > 0) {
+                throw new IllegalArgumentException(ErrorMessages.RESERVATION_CHECK_DATE_OVERLAP);
+            }
+
             selectSequenceStatement.setString(1, "ReservationForm");
             ResultSet rs = selectSequenceStatement.executeQuery();
 
@@ -207,7 +217,6 @@ public class ReservationFormDAO {
                 String prefix = GlobalConstants.RESERVATIONID_PREFIX + "-";
 
                 int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
-
                 newReservationFormID = prefix + String.format("%06d", nextIDNum);
 
                 updateSequenceStatement.setString(1, newReservationFormID);
@@ -215,6 +224,7 @@ public class ReservationFormDAO {
                 updateSequenceStatement.executeUpdate();
             }
 
+            // Thêm phiếu mới
             insertStatement.setString(1, newReservationFormID);
             insertStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(reservationForm.getReservationDate()));
             insertStatement.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckInDate()));
@@ -225,8 +235,12 @@ public class ReservationFormDAO {
             insertStatement.setDouble(8, reservationForm.getRoomBookingDeposit());
             insertStatement.executeUpdate();
         } catch (Exception exception) {
-            exception.printStackTrace();
-            System.exit(1);
+            if (exception.getMessage().equalsIgnoreCase(ErrorMessages.RESERVATION_CHECK_DATE_OVERLAP))
+                throw new IllegalArgumentException(ErrorMessages.RESERVATION_CHECK_DATE_OVERLAP);
+            else {
+                exception.printStackTrace();
+                System.exit(1);
+            }
         }
     }
 
@@ -295,4 +309,121 @@ public class ReservationFormDAO {
 
         return nextID;
     }
+
+    public static List<ReservationForm> getReservationFormByRoomID(String roomID) {
+        ArrayList<ReservationForm> data = new ArrayList<>();
+
+        String sql = "SELECT a.reservationFormID, a.reservationDate, a.checkInDate, " +
+                "a.checkOutDate, a.roomBookingDeposit, a.employeeID, " +
+                "a.roomID, a.customerID, b.fullName, " +
+                "b.phoneNumber, b.email, b.address, " +
+                "b.gender, b.idCardNumber, b.dob, " +
+                "b.position, c.roomStatus, c.dateOfCreation,  " +
+                "c.roomCategoryID, d.fullName, d.phoneNumber, " +
+                "d.email, d.address, d.gender, " +
+                "d.idCardNumber, d.dob, e.roomCategoryName, " +
+                "e.numberOfBed " +
+                "FROM ReservationForm a " +
+                "INNER JOIN Employee b ON a.employeeID = b.employeeID " +
+                "INNER JOIN Room c ON a.roomID = c.roomID " +
+                "INNER JOIN Customer d ON a.customerID = d.customerID " +
+                "INNER JOIN RoomCategory e ON c.roomCategoryID = e.roomCategoryID " +
+                "WHERE a.roomID = ? AND a.checkInDate >= ?";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            preparedStatement.setString(1, roomID);
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now().minusHours(2)));
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                ReservationForm reservationForm = new ReservationForm();
+                Employee employee = new Employee();
+                Room room = new Room();
+                Customer customer = new Customer();
+                RoomCategory roomCategory = new RoomCategory();
+
+                // Reservation Form
+                reservationForm.setReservationID(rs.getString(1));
+                reservationForm.setReservationDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(2)));
+                reservationForm.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(3)));
+                reservationForm.setCheckOutDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(4)));
+                reservationForm.setRoomBookingDeposit(rs.getDouble(5));
+
+                // Employee
+                employee.setEmployeeID(rs.getString(6));
+                employee.setFullName(rs.getString(9));
+                employee.setPhoneNumber(rs.getString(10));
+                employee.setEmail(rs.getString(11));
+                employee.setAddress(rs.getString(12));
+                employee.setGender(ConvertHelper.genderConverter(rs.getString(13)));
+                employee.setIdCardNumber(rs.getString(14));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate(15)));
+                employee.setPosition(ConvertHelper.positionConverter(rs.getString(16)));
+
+                // Room
+                room.setRoomID(rs.getString(7));
+                room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString(17)));
+                room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp(18)));
+
+                roomCategory.setRoomCategoryID(rs.getString(19));
+                roomCategory.setRoomCategoryName(rs.getString(27));
+                roomCategory.setNumberOfBed(rs.getInt(28));
+                room.setRoomCategory(roomCategory);
+
+                // Customer
+                customer.setCustomerID(rs.getString(8));
+                customer.setFullName(rs.getString(20));
+                customer.setPhoneNumber(rs.getString(21));
+                customer.setEmail(rs.getString(22));
+                customer.setAddress(rs.getString(23));
+                customer.setGender(ConvertHelper.genderConverter(rs.getString(24)));
+                customer.setIdCardNumber(rs.getString(25));
+                customer.setDob(ConvertHelper.localDateConverter(rs.getDate(26)));
+
+                reservationForm.setEmployee(employee);
+                reservationForm.setRoom(room);
+                reservationForm.setCustomer(customer);
+
+                data.add(reservationForm);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+        return data;
+    }
+
+    public static List<ReservationForm> getUpcomingReservations(String roomID) {
+        List<ReservationForm> reservations = new ArrayList<>();
+
+        String sql = "SELECT reservationFormID, checkInDate, checkOutDate " +
+                "FROM ReservationForm " +
+                "WHERE roomID = ? AND checkInDate >= ? " +
+                "ORDER BY checkInDate";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            preparedStatement.setString(1, roomID);
+            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(LocalDateTime.now()));
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                ReservationForm reservation = new ReservationForm();
+                reservation.setReservationID(rs.getString("reservationFormID"));
+                reservation.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkInDate")));
+                reservation.setCheckOutDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkOutDate")));
+
+                reservations.add(reservation);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return reservations;
+    }
+
 }

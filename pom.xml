@@ -58,6 +58,14 @@
             <version>2.57.0</version>
         </dependency>
 
+a        <!-- https://mvnrepository.com/artifact/com.calendarfx/view -->
+        <dependency>
+            <groupId>com.calendarfx</groupId>
+            <artifactId>view</artifactId>
+            <version>11.12.7</version>
+        </dependency>
+
+
 
 
         <dependency>
