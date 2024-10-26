@@ -21,9 +21,9 @@
 <AnchorPane minHeight="800.0" minWidth="930.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.service.HotelServiceSearchingController">
    <children>
       <DialogPane fx:id="dialogPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="800.0" minWidth="930.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" style="-fx-background-radius: 5; -fx-border-radius: 5;">
+      <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="800.0" minWidth="930.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <content>
-          <AnchorPane minHeight="800.0" minWidth="930.0">
+          <AnchorPane minHeight="750.0" minWidth="930.0">
                <children>
                   <TitledPane animated="false" collapsible="false" stylesheets="@../../../styles/TitlePanel.css" text="Tìm Kiếm Dịch Vụ" textFill="#fff9f9" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <content>
@@ -131,7 +131,7 @@
                                           </Button>
                                        </children>
                                     </HBox>
-                                    <TableView fx:id="hotelServiceTableView" prefHeight="479.0" prefWidth="849.0" stylesheets="@../../../styles/TableView.css">
+                                    <TableView fx:id="hotelServiceTableView" prefHeight="450.0" prefWidth="849.0" stylesheets="@../../../styles/TableView.css">
                                         <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy>
                                         <columns>
                                         <TableColumn fx:id="serviceIDColumn" prefWidth="75.0" text="Mã dịch vụ" />
