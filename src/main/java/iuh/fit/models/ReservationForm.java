@@ -92,6 +92,10 @@ public class ReservationForm {
     }
 
     private void validateDateRange() {
+        if (checkInDate != null && checkInDate.isBefore(LocalDateTime.now()))
+            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_NOT_BEHIND_NOW);
+        if (checkOutDate != null && checkOutDate.isBefore(LocalDateTime.now()))
+            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_NOT_BEHIND_NOW);
         if (checkInDate != null && checkOutDate != null && checkInDate.isAfter(checkOutDate)) {
             throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_DATE_RANGE);
         }
@@ -105,7 +109,7 @@ public class ReservationForm {
 
     public void setRoomBookingDeposit(double roomBookingDeposit) {
         if (roomBookingDeposit <= 0)
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FROM_INVALID_ROOM_BOOKING_DEPOSIT_AMOUTN);
+            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_ROOM_BOOKING_DEPOSIT_AMOUTN);
         this.roomBookingDeposit = roomBookingDeposit;
     }
 
