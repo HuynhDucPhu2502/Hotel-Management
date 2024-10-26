@@ -1,7 +1,5 @@
 package iuh.fit.dao;
 
-import iuh.fit.models.HotelService;
-import iuh.fit.models.ServiceCategory;
 import iuh.fit.models.Shift;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
@@ -96,8 +94,8 @@ public class ShiftDAO {
             preparedStatement.setString(1, shift.getShiftID());
             preparedStatement.setTime(2, ConvertHelper.timeConvertertoSQL(shift.getStartTime()));
             preparedStatement.setTime(3, ConvertHelper.timeConvertertoSQL(shift.getEndTime()));
-            preparedStatement.setTimestamp(4, ConvertHelper.dateTimeConvertertoSQL(shift.getUpdatedDate()));
-            preparedStatement.setInt(5, shift.getNumberOfHour());
+            preparedStatement.setTimestamp(4, ConvertHelper.dateTimeToSQLConverter(shift.getUpdatedDate()));
+            preparedStatement.setDouble(5, shift.getNumberOfHour());
             preparedStatement.setString(6, ConvertHelper.shiftDaysScheduleConverterToSQL(shift.getShiftDaysSchedule()));
 
             preparedStatement.executeUpdate();
@@ -134,8 +132,8 @@ public class ShiftDAO {
         ){
             preparedStatement.setTime(1, ConvertHelper.timeConvertertoSQL(shift.getStartTime()));
             preparedStatement.setTime(2, ConvertHelper.timeConvertertoSQL(shift.getEndTime()));
-            preparedStatement.setTimestamp(3, ConvertHelper.dateTimeConvertertoSQL(shift.getUpdatedDate()));
-            preparedStatement.setInt(4, shift.getNumberOfHour());
+            preparedStatement.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(shift.getUpdatedDate()));
+            preparedStatement.setDouble(4, shift.getNumberOfHour());
             preparedStatement.setString(5, ConvertHelper.shiftDaysScheduleConverterToSQL(shift.getShiftDaysSchedule()));
             preparedStatement.setString(6, shift.getShiftID());
 

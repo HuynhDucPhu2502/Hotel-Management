@@ -36,6 +36,7 @@
                                                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="546.800048828125" minWidth="10.0" prefWidth="546.800048828125" />
                                             </columnConstraints>
                                             <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -44,32 +45,43 @@
                                                 <Insets left="40.0" right="40.0" />
                                             </VBox.margin>
                                             <children>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Loại phòng" textAlignment="RIGHT">
-                                                    <font>
-                                                        <Font size="16.0" />
-                                                    </font>
-                                                </Text>
-                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tình trạng phòng" textAlignment="RIGHT" GridPane.rowIndex="2">
-                                                    <font>
-                                                        <Font size="16.0" />
-                                                    </font>
-                                                </Text>
-                                                <AnchorPane GridPane.columnIndex="1">
-                                                    <children>
-                                          <ComboBox fx:id="roomCategoryComboBox" layoutX="6.0" layoutY="-1.0" prefWidth="250.0" promptText="Chọn loại phòng ở đây" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                    </children>
-                                                </AnchorPane>
-                                                <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                       <children>
-                                          <ComboBox fx:id="roomStateComboBox" layoutX="48.0" layoutY="-8.0" prefWidth="250.0" promptText="Chọn tình trạng" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                       </children>
-                                                </AnchorPane>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tầng" textAlignment="RIGHT" GridPane.rowIndex="1">
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã phòng" textAlignment="RIGHT">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
                                     </Text>
-                                    <TextField fx:id="floorNumbTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <TextField fx:id="roomIDTextField" editable="false" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="1" />
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Loại phòng" textAlignment="RIGHT" GridPane.rowIndex="1">
+                                                    <font>
+                                                        <Font size="16.0" />
+                                                    </font>
+                                                </Text>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tình trạng phòng" textAlignment="RIGHT" GridPane.rowIndex="3">
+                                                    <font>
+                                                        <Font size="16.0" />
+                                                    </font>
+                                                </Text>
+                                                <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                    <children>
+                                          <ComboBox fx:id="roomCategoryComboBox" layoutX="6.0" layoutY="-1.0" prefWidth="250.0" promptText="Chọn loại phòng ở đây" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                    </children>
+                                                </AnchorPane>
+                                                <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                       <children>
+                                          <ComboBox fx:id="roomStateComboBox" layoutX="48.0" layoutY="-8.0" prefWidth="250.0" promptText="Chọn tình trạng" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                                </AnchorPane>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tầng" textAlignment="RIGHT" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="floorNumbTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="RIGHT">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
                                             </children>
                                         </GridPane>
                                         <HBox prefHeight="0.0" prefWidth="899.0" spacing="50.0" style="-fx-alignment: CENTER;" stylesheets="@../../../styles/Button.css">
@@ -167,10 +179,10 @@
                                             </columnResizePolicy>
 
                                             <columns>
-                                                <TableColumn fx:id="roomIDColumn" minWidth="100.0" text="Mã phòng" />
-                                                <TableColumn fx:id="roomStateColumn" minWidth="100.0" text="Tình trạng" />
-                                                <TableColumn fx:id="numberOfBedColumn" minWidth="100.0" text="Số lượng giường" />
-                                                <TableColumn fx:id="actionColumn" minWidth="200.0" prefWidth="-1.0" text="Thao tác" />
+                                                <TableColumn fx:id="roomIDColumn" minWidth="100.0" text="Mã phòng" reorderable="false"/>
+                                                <TableColumn fx:id="roomStateColumn" minWidth="100.0" text="Tình trạng" reorderable="false"/>
+                                                <TableColumn fx:id="numberOfBedColumn" minWidth="100.0" text="Số lượng giường" reorderable="false"/>
+                                                <TableColumn fx:id="actionColumn" minWidth="200.0" prefWidth="-1.0" text="Thao tác" reorderable="false"/>
                                             </columns>
 
                                             <VBox.margin>

@@ -52,7 +52,7 @@ public class HistoryCheckinDAO {
                 employee.setAddress(rs.getString(13));
                 employee.setGender(ConvertHelper.genderConverter(rs.getString(14)));
                 employee.setIdCardNumber(rs.getString(15));
-                employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(16)));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate(16)));
                 employee.setPosition(ConvertHelper.positionConverter(rs.getString(17)));
 
                 room.setRoomID(rs.getString(8));
@@ -66,7 +66,7 @@ public class HistoryCheckinDAO {
                 customer.setAddress(rs.getString(24));
                 customer.setGender(ConvertHelper.genderConverter(rs.getString(25)));
                 customer.setIdCardNumber(rs.getString(26));
-                customer.setDob(ConvertHelper.LocalDateConverter(rs.getDate(27)));
+                customer.setDob(ConvertHelper.localDateConverter(rs.getDate(27)));
 
                 roomCategory.setRoomCategoryID(rs.getString(20));
                 roomCategory.setRoomCategoryName(rs.getString(28));
@@ -136,7 +136,7 @@ public class HistoryCheckinDAO {
                     employee.setAddress(rs.getString(13));
                     employee.setGender(ConvertHelper.genderConverter(rs.getString(14)));
                     employee.setIdCardNumber(rs.getString(15));
-                    employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(16)));
+                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate(16)));
                     employee.setPosition(ConvertHelper.positionConverter(rs.getString(17)));
 
                     room.setRoomID(rs.getString(8));
@@ -150,7 +150,7 @@ public class HistoryCheckinDAO {
                     customer.setAddress(rs.getString(24));
                     customer.setGender(ConvertHelper.genderConverter(rs.getString(25)));
                     customer.setIdCardNumber(rs.getString(26));
-                    customer.setDob(ConvertHelper.LocalDateConverter(rs.getDate(27)));
+                    customer.setDob(ConvertHelper.localDateConverter(rs.getDate(27)));
 
                     roomCategory.setRoomCategoryID(rs.getString(20));
                     roomCategory.setRoomCategoryName(rs.getString(28));
@@ -186,7 +186,7 @@ public class HistoryCheckinDAO {
                 )
         ){
             preparedStatement.setString(1, historyCheckIn.getHistoryCheckInID());
-            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeConvertertoSQL(historyCheckIn.getCheckInDate()));
+            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(historyCheckIn.getCheckInDate()));
             preparedStatement.setString(3, historyCheckIn.getReservationForm().getReservationID());
 
             preparedStatement.executeUpdate();
@@ -220,7 +220,7 @@ public class HistoryCheckinDAO {
                                 "WHERE historyCheckInID = ? "
                 );
         ){
-            preparedStatement.setTimestamp(1, ConvertHelper.dateTimeConvertertoSQL(historyCheckIn.getCheckInDate()));
+            preparedStatement.setTimestamp(1, ConvertHelper.dateTimeToSQLConverter(historyCheckIn.getCheckInDate()));
             preparedStatement.setString(2, historyCheckIn.getReservationForm().getReservationID());
             preparedStatement.setString(3, historyCheckIn.getHistoryCheckInID());
 

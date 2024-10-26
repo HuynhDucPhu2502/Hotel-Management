@@ -1,5 +1,6 @@
 package iuh.fit.models;
 
+import iuh.fit.utils.CostCalculator;
 import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.GlobalConstants;
 import iuh.fit.utils.RegexChecker;
@@ -7,78 +8,49 @@ import iuh.fit.utils.RegexChecker;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-/**
- * Lớp ReservationForm đại diện cho phiếu đặt phòng của khách sạn.
- * Nó chứa thông tin như mã đặt phòng, ngày đặt, ngày dự kiến nhận phòng và trả phòng,
- * cũng như thông tin về nhân viên, phòng, và khách hàng liên quan đến phiếu đặt phòng.
- */
 public class ReservationForm {
 
-    // Các trường dữ liệu lưu trữ thông tin của phiếu đặt phòng
-    private String reservationID;  // Mã đặt phòng duy nhất
-    private LocalDateTime reservationDate;  // Ngày đặt phòng
-    private LocalDateTime checkInDate;  // Ngày dự kiến nhận phòng
-    private LocalDateTime checkOutDate;  // Ngày dự kiến trả phòng
-    private Employee employee;  // Nhân viên liên quan đến đặt phòng
-    private Room room;  // Phòng đặt
-    private Customer customer;  // Khách hàng đặt phòng
+    private String reservationID;
+    private LocalDateTime reservationDate;
+    private LocalDateTime checkInDate;
+    private LocalDateTime checkOutDate;
+    private Employee employee;
+    private Room room;
+    private Customer customer;
+    private double roomBookingDeposit;
 
-    /**
-     * Constructor khởi tạo đầy đủ các trường của ReservationForm.
-     *
-     * @param reservationID       Mã đặt phòng duy nhất.
-     * @param reservationDate     Ngày đặt phòng.
-     * @param checkInDate   Ngày dự kiến nhận phòng.
-     * @param checkOutDate  Ngày dự kiến trả phòng.
-     * @param employee            Nhân viên chịu trách nhiệm cho đặt phòng này.
-     * @param room                Phòng đặt.
-     * @param customer            Khách hàng đặt phòng.
-     */
-    public ReservationForm(String reservationID, LocalDateTime reservationDate, LocalDateTime checkInDate, LocalDateTime checkOutDate, Employee employee, Room room, Customer customer) {
-        this.setReservationID(reservationID);  // Thiết lập mã đặt phòng với kiểm tra hợp lệ
-        this.setReservationDate(reservationDate);  // Thiết lập ngày đặt phòng với kiểm tra hợp lệ
-        this.setCheckInDate(checkInDate);  // Thiết lập ngày dự kiến nhận phòng
-        this.setCheckOutDate(checkOutDate);  // Thiết lập ngày dự kiến trả phòng
-        this.setEmployee(employee);  // Thiết lập nhân viên
-        this.setRoom(room);  // Thiết lập phòng
-        this.setCustomer(customer);  // Thiết lập khách hàng
+    public ReservationForm(
+            String reservationID, LocalDateTime reservationDate, LocalDateTime checkInDate,
+            LocalDateTime checkOutDate, Employee employee, Room room,
+            Customer customer
+    ) {
+        this.setReservationID(reservationID);
+        this.setReservationDate(reservationDate);
+        this.setCheckInDate(checkInDate);
+        this.setCheckOutDate(checkOutDate);
+        this.setEmployee(employee);
+        this.setRoom(room);
+        this.setCustomer(customer);
+        updateBookingDeposit();
     }
 
-    /**
-     * Constructor chỉ khởi tạo mã đặt phòng.
-     *
-     * @param reservationID Mã đặt phòng duy nhất.
-     */
     public ReservationForm(String reservationID) {
-        this.setReservationID(reservationID);  // Thiết lập mã đặt phòng với kiểm tra hợp lệ
-    }
-
-    /**
-     * Constructor không tham số.
-     */
-    public ReservationForm() {
+        this.setReservationID(reservationID);
     }
 
     public ReservationForm(String reservationID, Customer customer) {
         this.reservationID = reservationID;
         this.customer = customer;
     }
+      
+    public ReservationForm() {}
 
-    /**
-     * Lấy mã đặt phòng.
-     *
-     * @return Mã đặt phòng hiện tại.
-     */
-    public String getReservationID() {
-        return reservationID;
+    public void setEmployee(Employee employee) {
+        if (employee == null)
+            throw new IllegalArgumentException(ErrorMessages.NULL_EMPLOYEE);
+        this.employee = employee;
     }
 
-    /**
-     * Thiết lập mã đặt phòng với kiểm tra hợp lệ.
-     * Mã đặt phòng không được để trống và phải tuân thủ định dạng quy định.
-     *
-     * @param reservationID Mã đặt phòng mới.
-     */
     public void setReservationID(String reservationID) {
         if (reservationID.isEmpty())
             throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_ID_ISNULL);  // Kiểm tra mã đặt phòng không được trống
@@ -87,145 +59,103 @@ public class ReservationForm {
         this.reservationID = reservationID;
     }
 
-    /**
-     * Lấy ngày đặt phòng.
-     *
-     * @return Ngày đặt phòng hiện tại.
-     */
+    public void setReservationDate(LocalDateTime reservationDate) {
+        if (reservationDate == null)
+            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_RESERVATION_DATE_ISNULL);  // Kiểm tra ngày đặt không được null
+        this.reservationDate = reservationDate;
+    }
+
+    public void setCustomer(Customer customer) {
+        if (customer == null)
+            throw new IllegalArgumentException(ErrorMessages.NULL_CUSTOMER);
+        this.customer = customer;
+    }
+
+    public void setRoom(Room room) {
+        if (room == null)
+            throw new IllegalArgumentException(ErrorMessages.NULL_ROOM);
+        this.room = room;
+    }
+
+
+    public void setCheckInDate(LocalDateTime checkInDate) {
+        validateDateNotNull(checkInDate, ErrorMessages.RESERVATION_FORM_INVALID_CHECKIN_DATE_ISNULL);
+        this.checkInDate = checkInDate;
+        validateDateRange();
+    }
+
+    public void setCheckOutDate(LocalDateTime checkOutDate) {
+        validateDateNotNull(checkOutDate, ErrorMessages.RESERVATION_FORM_INVALID_CHECKOUT_DATE_ISNULL);
+        this.checkOutDate = checkOutDate;
+        validateDateRange();
+    }
+
+    private void validateDateNotNull(LocalDateTime date, String errorMessage) {
+        if (date == null) {
+            throw new IllegalArgumentException(errorMessage);
+        }
+    }
+
+    private void validateDateRange() {
+        if (checkInDate != null && checkInDate.isBefore(LocalDateTime.now()))
+            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_NOT_BEHIND_NOW);
+        if (checkOutDate != null && checkOutDate.isBefore(LocalDateTime.now()))
+            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_NOT_BEHIND_NOW);
+        if (checkInDate != null && checkOutDate != null && checkInDate.isAfter(checkOutDate)) {
+            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_DATE_RANGE);
+        }
+    }
+
+    private void updateBookingDeposit() {
+        if (room != null && checkInDate != null && checkOutDate != null) {
+            this.roomBookingDeposit = CostCalculator.calculateBookingDeposit(room, checkInDate, checkOutDate);
+        }
+    }
+
+    public void setRoomBookingDeposit(double roomBookingDeposit) {
+        if (roomBookingDeposit <= 0)
+            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_ROOM_BOOKING_DEPOSIT_AMOUTN);
+        this.roomBookingDeposit = roomBookingDeposit;
+    }
+
+    public String getReservationID() {
+        return reservationID;
+    }
+
     public LocalDateTime getReservationDate() {
         return reservationDate;
     }
 
-    /**
-     * Thiết lập ngày đặt phòng với kiểm tra hợp lệ.
-     * Ngày đặt phòng không được để trống và phải trước thời gian hiện tại.
-     *
-     * @param reservationDate Ngày đặt phòng mới.
-     */
-    public void setReservationDate(LocalDateTime reservationDate) {
-        if (reservationDate == null)
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_RESERVATION_DATE_ISNULL);  // Kiểm tra ngày đặt không được null
-        if (!reservationDate.isBefore(LocalDateTime.now()))
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_RESERVATION_DATE);  // Kiểm tra ngày đặt phải trước thời gian hiện tại
-        this.reservationDate = reservationDate;
-    }
-
-    /**
-     * Lấy ngày dự kiến nhận phòng.
-     *
-     * @return Ngày dự kiến nhận phòng hiện tại.
-     */
     public LocalDateTime getCheckInDate() {
         return checkInDate;
     }
 
-    /**
-     * Thiết lập ngày dự kiến nhận phòng với kiểm tra hợp lệ.
-     * Ngày dự kiến nhận phòng không được để trống và phải sau ngày đặt phòng.
-     *
-     * @param checkInDate Ngày dự kiến nhận phòng mới.
-     */
-    public void setCheckInDate(LocalDateTime checkInDate) {
-        if (checkInDate == null)
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE_ISNULL);  // Kiểm tra ngày nhận phòng không được null
-        if (!checkInDate.isAfter(this.reservationDate))
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE);  // Kiểm tra ngày nhận phòng phải sau ngày đặt
-        this.checkInDate = checkInDate;
-    }
-
-    /**
-     * Lấy ngày dự kiến trả phòng.
-     *
-     * @return Ngày dự kiến trả phòng hiện tại.
-     */
     public LocalDateTime getCheckOutDate() {
         return checkOutDate;
     }
 
-    /**
-     * Thiết lập ngày dự kiến trả phòng với kiểm tra hợp lệ.
-     * Ngày dự kiến trả phòng không được để trống và phải sau ngày dự kiến nhận phòng.
-     *
-     * @param checkOutDate Ngày dự kiến trả phòng mới.
-     */
-    public void setCheckOutDate(LocalDateTime checkOutDate) {
-        if (checkOutDate == null)
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE_ISNULL);  // Kiểm tra ngày trả phòng không được null
-        if (!checkOutDate.isAfter(checkInDate))
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE);  // Kiểm tra ngày trả phòng phải sau ngày nhận phòng
-        this.checkOutDate = checkOutDate;
-    }
-
-    /**
-     * Lấy nhân viên phụ trách đặt phòng.
-     *
-     * @return Nhân viên hiện tại.
-     */
     public Employee getEmployee() {
         return employee;
     }
 
-    /**
-     * Thiết lập nhân viên phụ trách đặt phòng với kiểm tra hợp lệ.
-     * Nhân viên không được để trống.
-     *
-     * @param employee Nhân viên mới.
-     */
-    public void setEmployee(Employee employee) {
-        if (employee == null)
-            throw new IllegalArgumentException(ErrorMessages.NULL_EMPLOYEE);  // Kiểm tra nhân viên không được null
-        this.employee = employee;
-    }
-
-    /**
-     * Lấy phòng đặt.
-     *
-     * @return Phòng hiện tại.
-     */
     public Room getRoom() {
         return room;
     }
 
-    /**
-     * Thiết lập phòng đặt với kiểm tra hợp lệ.
-     * Phòng không được để trống.
-     *
-     * @param room Phòng mới.
-     */
-    public void setRoom(Room room) {
-        if (room == null)
-            throw new IllegalArgumentException(ErrorMessages.NULL_ROOM);  // Kiểm tra phòng không được null
-        this.room = room;
-    }
-
-    /**
-     * Lấy khách hàng đặt phòng.
-     *
-     * @return Khách hàng hiện tại.
-     */
     public Customer getCustomer() {
         return customer;
     }
 
-    /**
-     * Thiết lập khách hàng đặt phòng với kiểm tra hợp lệ.
-     * Khách hàng không được để trống.
-     *
-     * @param customer Khách hàng mới.
-     */
-    public void setCustomer(Customer customer) {
-        if (customer == null)
-            throw new IllegalArgumentException(ErrorMessages.NULL_CUSTOMER);  // Kiểm tra khách hàng không được null
-        this.customer = customer;
+    public double getRoomBookingDeposit() {
+        return roomBookingDeposit;
     }
 
-    /**
-     * Phương thức equals để so sánh hai đối tượng ReservationForm.
-     * So sánh dựa trên mã đặt phòng.
-     *
-     * @param o Đối tượng cần so sánh.
-     * @return true nếu hai đối tượng có mã đặt phòng giống nhau, ngược lại false.
-     */
+
+    @Override
+    public String toString() {
+        return "ReservationForm{}";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -234,26 +164,8 @@ public class ReservationForm {
         return Objects.equals(reservationID, that.reservationID);
     }
 
-    /**
-     * Phương thức hashCode dựa trên mã đặt phòng.
-     *
-     * @return Mã băm của đối tượng.
-     */
     @Override
     public int hashCode() {
         return Objects.hash(reservationID);
-    }
-
-    @Override
-    public String toString() {
-        return "ReservationForm{" +
-                "reservationID='" + reservationID + '\'' +
-                ", reservationDate=" + reservationDate +
-                ", approxCheckInDate=" + checkInDate +
-                ", approxCheckOutDate=" + checkOutDate +
-                ", employee=" + employee +
-                ", room=" + room +
-                ", customer=" + customer +
-                '}';
     }
 }

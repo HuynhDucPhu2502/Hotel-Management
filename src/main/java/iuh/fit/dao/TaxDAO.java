@@ -1,13 +1,11 @@
 package iuh.fit.dao;
 
-import iuh.fit.models.HistoryCheckIn;
 import iuh.fit.models.Tax;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 

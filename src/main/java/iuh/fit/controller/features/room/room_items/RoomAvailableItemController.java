@@ -11,7 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 
-public class RoomAvailableController {
+public class RoomAvailableItemController {
     @FXML
     private Text roomNumberText;
     @FXML
@@ -21,7 +21,6 @@ public class RoomAvailableController {
     private MainController mainController;
     private Employee employee;
     private Room room;
-
 
     public void setupContext(MainController mainController, Employee employee, Room room) {
         this.mainController = mainController;
@@ -33,13 +32,16 @@ public class RoomAvailableController {
     }
 
     @FXML
-    private void handleRoomClick() {
+    private void navigateToReservationFormPanel() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/ReservationFormPanel.fxml"));
             AnchorPane layout = loader.load();
 
             ReservationFormController reservationFormController = loader.getController();
-            reservationFormController.setupContext(mainController, employee, room);
+            reservationFormController.setupContext(
+                    mainController, employee, room,
+                    null, null, null
+            );
 
             mainController.getMainPanel().getChildren().clear();
             mainController.getMainPanel().getChildren().addAll(layout.getChildren());

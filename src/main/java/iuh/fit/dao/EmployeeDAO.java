@@ -1,9 +1,6 @@
 package iuh.fit.dao;
 
-import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
-import iuh.fit.models.enums.Gender;
-import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 
@@ -16,10 +13,10 @@ import java.util.List;
 
 public class EmployeeDAO {
     public static List<Employee> getEmployees() {
-        ArrayList<Employee> data = new ArrayList<Employee>();
+        ArrayList<Employee> data = new ArrayList<>();
         try (
                 Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ){
             String sql = "SELECT employeeID, fullName, phoneNumber, " +
                     "email, address, gender, " +
@@ -38,7 +35,7 @@ public class EmployeeDAO {
                 employee.setAddress(rs.getString(5));
                 employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
                 employee.setIdCardNumber(rs.getString(7));
-                employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(8)));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
                 employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
 
                 data.add(employee);
@@ -76,7 +73,7 @@ public class EmployeeDAO {
                     employee.setAddress(rs.getString(5));
                     employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
                     employee.setIdCardNumber(rs.getString(7));
-                    employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(8)));
+                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
                     employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
 
 
@@ -107,8 +104,8 @@ public class EmployeeDAO {
             preparedStatement.setString(5, employee.getAddress());
             preparedStatement.setString(6, ConvertHelper.genderConverterToSQL(employee.getGender()));
             preparedStatement.setString(7, employee.getIdCardNumber());
-            preparedStatement.setDate(8, ConvertHelper.dateConvertertoSQL(employee.getDob()));
-            preparedStatement.setString(9, ConvertHelper.positionConverterToSQL(employee.getPosition()));
+            preparedStatement.setDate(8, ConvertHelper.dateToSQLConverter(employee.getDob()));
+            preparedStatement.setString(9, employee.getPosition().name());
 
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
@@ -126,7 +123,7 @@ public class EmployeeDAO {
                                 "address = ?, gender = ?, idCardNumber = ?, " +
                                 "dob = ?, position = ? " +
                                 "WHERE employeeID = ? "
-                );
+                )
         ){
             preparedStatement.setString(1, employee.getFullName());
             preparedStatement.setString(2, employee.getPhoneNumber());
@@ -134,8 +131,8 @@ public class EmployeeDAO {
             preparedStatement.setString(4, employee.getAddress());
             preparedStatement.setString(5, ConvertHelper.genderConverterToSQL(employee.getGender()));
             preparedStatement.setString(6, employee.getIdCardNumber());
-            preparedStatement.setDate(7, ConvertHelper.dateConvertertoSQL(employee.getDob()));
-            preparedStatement.setString(8, ConvertHelper.positionConverterToSQL(employee.getPosition()));
+            preparedStatement.setDate(7, ConvertHelper.dateToSQLConverter(employee.getDob()));
+            preparedStatement.setString(8, employee.getPosition().name());
             preparedStatement.setString(9, employee.getEmployeeID());
 
             preparedStatement.executeUpdate();
@@ -146,6 +143,89 @@ public class EmployeeDAO {
 
     }
 
+
+    public static String getNextEmployeeID() {
+        String nextID = "EMP-000001";
+
+        String query = "SELECT nextID FROM GlobalSequence WHERE tableName = ?";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
+            preparedStatement.setString(1, "Employee");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                nextID = rs.getString(1);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return nextID;
+    }
+
+    public static List<String> getTopThreeID() {
+        ArrayList<String> data = new ArrayList<>();
+
+        String query = "SELECT TOP 3 employeeID FROM Employee ORDER BY employeeID DESC";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(query)
+        ) {
+            while (rs.next()) {
+                data.add(rs.getString(1));
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
+    }
+
+    public static List<Employee> findDataByContainsId(String input) {
+            ArrayList<Employee> data = new ArrayList<>();
+
+            String query = "SELECT employeeID, fullName, phoneNumber, " +
+                    "email, address, gender, " +
+                    "idCardNumber, dob, position " +
+                    "FROM Employee " +
+                    "WHERE LOWER(employeeID) LIKE ?";
+
+            try (
+                    Connection connection = DBHelper.getConnection();
+                    PreparedStatement preparedStatement = connection.prepareStatement(query)
+            ) {
+                preparedStatement.setString(1, "%" + input.toLowerCase() + "%");
+                ResultSet rs = preparedStatement.executeQuery();
+
+                while (rs.next()) {
+                    Employee employee = new Employee();
+
+                    employee.setEmployeeID(rs.getString(1));
+                    employee.setFullName(rs.getString(2));
+                    employee.setPhoneNumber(rs.getString(3));
+                    employee.setEmail(rs.getString(4));
+                    employee.setAddress(rs.getString(5));
+                    employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
+                    employee.setIdCardNumber(rs.getString(7));
+                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
+                    employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
+
+                    data.add(employee);
+                }
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                System.exit(1);
+            }
+
+            return data;
+    }
     public static Employee getEmployeeByAccountID(String accountID) {
         String sql = "SELECT e.employeeID, e.fullName, e.phoneNumber, e.email, e.address, " +
                 "e.gender, e.idCardNumber, e.dob, e.position " +
@@ -170,7 +250,7 @@ public class EmployeeDAO {
                     employee.setAddress(rs.getString(5));
                     employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
                     employee.setIdCardNumber(rs.getString(7));
-                    employee.setDob(ConvertHelper.LocalDateConverter(rs.getDate(8)));
+                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
                     employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
 
                     return employee;
@@ -183,7 +263,4 @@ public class EmployeeDAO {
 
         return null;
     }
-
-
-
 }

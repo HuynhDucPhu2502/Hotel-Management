@@ -5,7 +5,7 @@ public class ErrorMessages {
     public static final String INVALID_PHONENUMBER = "Số điện thoại phải có 10 chữ số và chữ số đầu tiên là số 0";
     public static final String INVALID_ADDRESS = "Địa chỉ không được rỗng";
     public static final String INVALID_EMAIL = "Email phải từ 4 đến 30 ký tự và không cứ ký tự đặc biệt";
-    public static final String INVALID_CCCD = "CCCD có cấu trúc XYZ. X là chuỗi 3 chữ số, Y là 1 chữ số thuộc khoảng từ 1 đến 3, và Z là chuỗi 8 chữ số.";
+    public static final String INVALID_ID_CARD_NUMBER = "CCCD có cấu trúc XYZ. X là chuỗi 3 chữ số, Y là 1 chữ số thuộc khoảng từ 1 đến 3, và Z là chuỗi 8 chữ số.";
 
     public static final String NULL_ROOMCATEGORY = "Loại phòng không được trống";
     public static final String NULL_EMPLOYEE = "Nhân viên không được để trống";
@@ -87,14 +87,15 @@ public class ErrorMessages {
     public static final String ROOM_USAGE_SERVICE_INVALID_QUANTITY = "Số lượng dịch vụ phải lớn hơn 0!!!";
 
     // ReservationForm
-    public static final String RESERVATION_FORM_INVALID_ID_ISNULL = "Mã phiếu đặt phòng không được rỗng!!!";
-    public static final String RESERVATION_FORM_INVALID_ID_FORMAT = "Mã phiếu đặt phòng phải theo định dạng RF-XXXXXX!!!";
-    public static final String RESERVATION_FORM_INVALID_RESERVATION_DATE_ISNULL = "Ngày đặt phòng không được rỗng!!!";
-    public static final String RESERVATION_FORM_INVALID_RESERVATION_DATE = "Ngày đặt phòng phải trước thời điểm hiện tại!!!";
-    public static final String RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE_ISNULL = "Ngày nhận phòng dự kiến không được rỗng!!!";
-    public static final String RESERVATION_FORM_INVALID_APPROX_CHECKIN_DATE = "Ngày nhận phòng dự kiến phải lớn hơn ngày đặt phòng!!!";
-    public static final String RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE_ISNULL = "Ngày trả phòng dự kiến không được rỗng!!!";
-    public static final String RESERVATION_FORM_INVALID_APPROX_CHECKOUT_DATE = "Ngày trả phòng dự kiến phải lớn hơn ngày nhận phòng dự kiến!!!";
+    public static final String RESERVATION_FORM_INVALID_ID_ISNULL = "Mã phiếu đặt phòng không được rỗng";
+    public static final String RESERVATION_FORM_INVALID_ID_FORMAT = "Mã phiếu đặt phòng phải theo định dạng RF-XXXXXX";
+    public static final String RESERVATION_FORM_INVALID_RESERVATION_DATE_ISNULL = "Ngày đặt phòng không được rỗng";
+    public static final String RESERVATION_FORM_INVALID_CHECKIN_DATE_ISNULL = "Ngày nhận phòng dự kiến không được rỗng";
+    public static final String RESERVATION_FORM_INVALID_CHECKOUT_DATE_ISNULL = "Ngày trả phòng dự kiến không được rỗng";
+    public static final String RESERVATION_FORM_INVALID_DATE_RANGE = "Thời gian trả phòng phải nhỏ hơn thời gian nhận phòng";
+    public static final String RESERVATION_FORM_INVALID_ROOM_BOOKING_DEPOSIT_AMOUTN = "Tiền đặt cọc phải lớn hơn 0";
+    public static final String RESERVATION_FORM_NOT_BEHIND_NOW = "Ngày nhận phòng, trả phòng không được nhỏ hơn ngày hiện tại";
+
     // HistoryCheckIn
     public static final String HISTORY_CHECKIN_IVALID_ID_ISNULL = "Mã phiếu nhận phòng không được rỗng!!!";
     public static final String HISTORY_CHECKIN_IVALID_ID_FORMAT = "Mã ngày nhận phòng phải theo định dạng HCI-XXXXXX";
@@ -119,6 +120,7 @@ public class ErrorMessages {
     public static final String HISTORY_CHECKOUT_INVALID_ID_FORMAT = "Mã phiếu trả phòng phải theo định dạng HCO-XXXXXX!!!";
     public static final String HISTORY_CHECKOUT_INVALID_CHECKOUT_DATE_ISNULL = "Ngày trả phòng không được rỗng!!!";
     public static final String HISTORY_CHECKOUT_INVALID_CHECKOUT_DATE= "Ngày trả phòng phải trước ngày hiện tại!!!";
+
     // ConvertHelper
     public static final String CONVERT_HELPER_INVALID_LOCALTIME = "Thời gian phải nằm từ 5:00 đến 23:00";
     public static final String CONVERT_HELPER_INVALID_GENDER = "Giới tính không hợp lệ. Phải nằm trong FEMALE,  MALE";
@@ -128,9 +130,21 @@ public class ErrorMessages {
     public static final String CONVERT_HELPER_INVALID_PRICE_UNIT = "Đơn vị giá không hợp lệ. Phải nằm trong DAY, HOUR";
     public static final String CONVERT_HELPER_INVALID_ROOM_STATUS = "Trạng thái phòng không hợp lệ. Phải nằm trong AVAILABLE, ON_USE, UNAVAILABLE";
 
-    // Login message
+    // Cost Calculator
+    public static final String PRICING_NOT_FOUND = "Không tìm thấy bản ghi giá cả theo ngày hoặc theo giờ";
+    public static final String ERROR_CHECK_OUT_BEFORE_CHECK_IN = "Thời gian check-out phải sau thời gian check-in";
+
+    // Login
     public static final String LOGIN_INVALID_USERNAME = "Tài khoản không được bỏ trống";
     public static final String LOGIN_INVALID_PASSWORD = "Mật khẩu không được để trống";
     public static final String LOGIN_INVALID_ACCOUNT = "Tài khoản hoặc mật khẩu không hợp lệ";
+
+    // Reservation Form
+    public static final String ID_CARD_NUMBER_OVER_LIMIT = "CCCD không được quá 12 ký tự";
+    public static final String CUS_NOT_FOUND = "Không tìm thấy khách hàng";
+    public static final String RESERVATION_CHECK_DATE_OVERLAP = "Thời gian đặt phòng đã trùng, không thể tạo phiếu mới.";
+
+    // Customer Manager
+    public static final String CUS_GENDER_NOT_SELECTED = "Vui lòng chọn giới tính";
 
 }

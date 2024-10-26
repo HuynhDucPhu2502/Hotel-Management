@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.dlsc.gemsfx.DialogPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane minHeight="753.0" minWidth="930.0" prefHeight="753.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.employee.AccountManagerController">
+    <children>
+        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="762.0" prefWidth="930.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <content>
+                <AnchorPane minHeight="-Infinity" minWidth="930.0" prefWidth="930.0">
+                    <children>
+                        <DialogPane fx:id="dialogPane" animationDuration="200.0ms" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TitledPane collapsible="false" style="-fx-border-radius: 50; -fx-background-radius: 50;" stylesheets="@../../../styles/TitlePanel.css" text="Quản lý tài khoản Nhân Viên" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <content>
+                                <VBox fx:id="upperBox" spacing="30.0">
+                                    <children>
+                                        <GridPane hgap="20.0" vgap="20.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <VBox.margin>
+                                                <Insets left="40.0" right="40.0" />
+                                            </VBox.margin>
+                                            <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã tài khoản" textAlignment="RIGHT">
+                                                    <font>
+                                                        <Font size="16.0" />
+                                                    </font>
+                                                </Text>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã nhân viên" textAlignment="RIGHT" GridPane.rowIndex="1">
+                                                    <font>
+                                                        <Font size="16.0" />
+                                                    </font>
+                                                </Text>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tên nhân viên" textAlignment="RIGHT" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                    <font>
+                                                        <Font size="16.0" />
+                                                    </font>
+                                                </Text>
+                                                <TextField fx:id="accountIDTextField" editable="false" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="1">
+                                                    <cursor>
+                                                        <Cursor fx:constant="CLOSED_HAND" />
+                                                    </cursor>
+                                                </TextField>
+                                                <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                    <children>
+                                                        <ComboBox fx:id="employeeIDCBox" editable="true" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                    </children>
+                                                </AnchorPane>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tài khoản" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Trạng thái tài khoản" GridPane.rowIndex="3">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <TextField fx:id="fullNameTextField" editable="false" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                       <cursor>
+                                          <Cursor fx:constant="CLOSED_HAND" />
+                                       </cursor>
+                                    </TextField>
+                                    <TextField fx:id="usernameTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <TextField fx:id="passwordTextField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                    <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                       <children>
+                                          <ComboBox fx:id="statusCBox" layoutY="2.0" prefHeight="30.0" prefWidth="189.0" />
+                                       </children>
+                                    </AnchorPane>
+                                            </children>
+                                        </GridPane>
+                                        <HBox prefHeight="0.0" prefWidth="899.0" spacing="50.0" style="-fx-alignment: CENTER;" stylesheets="@../../../styles/Button.css">
+                                            <children>
+                                                <Button fx:id="resetBtn" minWidth="150.0" mnemonicParsing="false" text="Làm mới" textFill="WHITE">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0" />
+                                                    </font>
+                                                    <HBox.margin>
+                                                        <Insets />
+                                                    </HBox.margin>
+                                                    <padding>
+                                                        <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+                                                    </padding>
+                                                </Button>
+                                                <Button fx:id="addBtn" minWidth="150.0" mnemonicParsing="false" text="Thêm" textFill="WHITE">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0" />
+                                                    </font>
+                                                    <padding>
+                                                        <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+                                                    </padding>
+                                                </Button>
+                                                <Button fx:id="updateBtn" managed="false" minWidth="150.0" mnemonicParsing="false" text="Cập nhật" textFill="WHITE" visible="false">
+                                                    <font>
+                                                        <Font name="System Bold" size="16.0" />
+                                                    </font>
+                                                    <padding>
+                                                        <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+                                                    </padding>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+                                        <GridPane minHeight="50.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                            <VBox.margin>
+                                                <Insets left="40.0" right="40.0" />
+                                            </VBox.margin>
+                                            <children>
+                                                <HBox style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);">
+                                                    <children>
+                                                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã nhân viên">
+                                                            <font>
+                                                                <Font name="System Bold" size="16.0" />
+                                                            </font>
+                                                        </Text>
+                                                    </children>
+                                                </HBox>
+                                                <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);" GridPane.columnIndex="1">
+                                                    <children>
+                                                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên nhân viên">
+                                                            <font>
+                                                                <Font name="System Bold" size="16.0" />
+                                                            </font>
+                                                        </Text>
+                                                    </children>
+                                                </HBox>
+                                                <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);" GridPane.columnIndex="3">
+                                                    <children>
+                                                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu">
+                                                            <font>
+                                                                <Font name="System Bold" size="16.0" />
+                                                            </font>
+                                                        </Text>
+                                                    </children>
+                                                </HBox>
+                                                <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);" GridPane.columnIndex="4">
+                                                    <children>
+                                                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Trạng thái">
+                                                            <font>
+                                                                <Font name="System Bold" size="16.0" />
+                                                            </font>
+                                                        </Text>
+                                                    </children>
+                                                </HBox>
+                                                <AnchorPane GridPane.rowIndex="1">
+                                                    <children>
+                                                        <ComboBox fx:id="employeeIDSearchField" editable="true" prefHeight="58.0" prefWidth="333.0" promptText="Nhập mã nhân viên ở đây" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                                    </children>
+                                                </AnchorPane>
+                                                <TextField fx:id="fullNameSearchField" editable="false" prefHeight="125.0" prefWidth="404.0" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                    <cursor>
+                                                        <Cursor fx:constant="CLOSED_HAND" />
+                                                    </cursor>
+                                                </TextField>
+                                                <TextField fx:id="passwordSearchField" editable="false" prefHeight="72.0" prefWidth="160.0" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                                    <cursor>
+                                                        <Cursor fx:constant="CLOSED_HAND" />
+                                                    </cursor>
+                                                </TextField>
+                                                <TextField fx:id="statusSearchField" editable="false" prefHeight="125.0" prefWidth="404.0" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                                                    <cursor>
+                                                        <Cursor fx:constant="CLOSED_HAND" />
+                                                    </cursor>
+                                                </TextField>
+                                    <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);" GridPane.columnIndex="2">
+                                       <children>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tài khoản">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
+                                    <TextField fx:id="usernameSearchField" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                            </children>
+                                        </GridPane>
+                                        <TableView fx:id="accountTableView" prefHeight="270.0" prefWidth="817.0" stylesheets="@../../../styles/TableView.css">
+                                            <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                            </columnResizePolicy>
+
+                                            <columns>
+                                                <TableColumn fx:id="employeeIDColumn" minWidth="100.0" text="Mã nhân viên" reorderable="false"/>
+                                                <TableColumn fx:id="usernameColumn" minWidth="100.0" text="Tài khoản" reorderable="false"/>
+                                                <TableColumn fx:id="passwordColumn" minWidth="100.0" text="Mật khẩu" reorderable="false"/>
+                                                <TableColumn fx:id="statusColumn" minWidth="150.0" text="Trạng thái tài khoản" reorderable="false"/>
+                                                <TableColumn fx:id="actionColumn" minWidth="300.0" prefWidth="300.0" text="Thao tác" reorderable="false"/>
+                                            </columns>
+
+                                            <VBox.margin>
+                                                <Insets left="40.0" right="40.0" top="30.0" />
+                                            </VBox.margin>
+                                        </TableView>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets />
+                                    </opaqueInsets>
+                                </VBox>
+                            </content>
+                            <font>
+                                <Font name="System Bold" size="20.0" />
+                            </font>
+                        </TitledPane>
+                    </children>
+                </AnchorPane>
+            </content>
+        </ScrollPane>
+    </children>
+</AnchorPane>

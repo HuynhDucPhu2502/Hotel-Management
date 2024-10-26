@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 
 
-public class RoomOnUseController {
+public class RoomOnUseItemController {
     @FXML
     private Text roomNumberText;
     @FXML

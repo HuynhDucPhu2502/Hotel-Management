@@ -10,7 +10,6 @@ import java.util.Objects;                   // Import class Objects dùng để 
 
 public class Customer {
     // Các thuộc tính của khách hàng
-    private static int count = 0;
     private String customerID;              // Mã khách hàng
     private String cusFullName;                 // Tên đầy đủ
     private String phoneNumber;             // Số điện thoại
@@ -62,14 +61,6 @@ public class Customer {
         if (!RegexChecker.isValidIDFormat(GlobalConstants.CUSTOMER_PREFIX, customerID))
             throw new IllegalArgumentException(ErrorMessages.CUS_INVALID_ID);
         this.customerID = customerID;
-    }
-
-    public static int getCount() {
-        return count;
-    }
-
-    public static void setCount(int count) {
-        Customer.count = count;
     }
 
     // Kiểm tra tên hợp lệ
@@ -132,8 +123,8 @@ public class Customer {
     }
 
     public void setIdCardNumber(String idCardNumber) {
-        if (!RegexChecker.isValidCCCD(idCardNumber))
-            throw new IllegalArgumentException(ErrorMessages.INVALID_CCCD);
+        if (!RegexChecker.isValidIDCardNumber(idCardNumber))
+            throw new IllegalArgumentException(ErrorMessages.INVALID_ID_CARD_NUMBER);
         this.idCardNumber = idCardNumber;
     }
 
