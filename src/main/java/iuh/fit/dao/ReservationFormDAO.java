@@ -18,7 +18,7 @@ public class ReservationFormDAO {
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement();
         ){
-            String sql = "SELECT  a.reservationFormID, a.reservationDate, a.approxCheckInDate, a.approxCheckOutDate, a.employeeID, a.roomID, a.customerID, " +
+            String sql = "SELECT  a.reservationFormID, a.reservationDate, a.checkInDate, a.checkOutDate, a.employeeID, a.roomID, a.customerID, " +
                     "b.fullName, b.phoneNumber, b.email, b.address, b.gender, b.idCardNumber, b.dob, b.position, " +
                     "c.roomStatus, c.dateOfCreation, c.roomCategoryID, " +
                     "d.fullName, d.phoneNumber, d.email, d.address, d.gender, d.idCardNumber, d.dob, " +
@@ -57,7 +57,7 @@ public class ReservationFormDAO {
                 room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp(17)));
 
                 customer.setCustomerID(rs.getString(7));
-                customer.setFullName(rs.getString(19));
+                customer.setCusFullName(rs.getString(19));
                 customer.setPhoneNumber(rs.getString(20));
                 customer.setEmail(rs.getString(21));
                 customer.setAddress(rs.getString(22));
@@ -88,7 +88,7 @@ public class ReservationFormDAO {
 
     public static ReservationForm getDataByID(String reservationFormID) {
 
-        String SQLQueryStatement = "SELECT  a.reservationFormID, a.reservationDate, a.approxCheckInDate, a.approxCheckOutDate, a.employeeID, a.roomID, a.customerID, " +
+        String SQLQueryStatement = "SELECT  a.reservationFormID, a.reservationDate, a.checkInDate, a.checkOutDate, a.employeeID, a.roomID, a.customerID, " +
                 "b.fullName, b.phoneNumber, b.email, b.address, b.gender, b.idCardNumber, b.dob, b.position, " +
                 "c.roomStatus, c.dateOfCreation, c.roomCategoryID, " +
                 "d.fullName, d.phoneNumber, d.email, d.address, d.gender, d.idCardNumber, d.dob, " +
@@ -134,7 +134,7 @@ public class ReservationFormDAO {
                     room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp(17)));
 
                     customer.setCustomerID(rs.getString(7));
-                    customer.setFullName(rs.getString(19));
+                    customer.setCusFullName(rs.getString(19));
                     customer.setPhoneNumber(rs.getString(20));
                     customer.setEmail(rs.getString(21));
                     customer.setAddress(rs.getString(22));
