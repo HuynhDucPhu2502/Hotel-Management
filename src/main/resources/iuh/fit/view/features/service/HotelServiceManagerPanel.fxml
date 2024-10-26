@@ -22,9 +22,9 @@
 
 <AnchorPane minHeight="830.0" minWidth="930.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.service.HotelServiceManagerController">
    <children>
-      <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" style="-fx-background-radius: 5; -fx-border-radius: 5;">
+      <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
-            <AnchorPane minHeight="830.0" minWidth="930.0">
+            <AnchorPane minHeight="750.0" minWidth="930.0">
                <children>
                   <DialogPane fx:id="dialogPane" animationDuration="200.0ms" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                   <TitledPane collapsible="false" stylesheets="@../../../styles/TitlePanel.css" text="Quản lý dịch vụ" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -210,7 +210,7 @@
                                     </TextField>
                                  </children>
                               </GridPane>
-                              <TableView fx:id="hotelServiceTableView" prefHeight="377.0" prefWidth="897.0" stylesheets="@../../../styles/TableView.css">
+                              <TableView fx:id="hotelServiceTableView" prefHeight="300.0" prefWidth="897.0" stylesheets="@../../../styles/TableView.css">
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
