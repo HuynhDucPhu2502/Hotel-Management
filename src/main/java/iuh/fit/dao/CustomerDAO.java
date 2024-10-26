@@ -24,7 +24,7 @@ public class CustomerDAO {
                 Customer customer = new Customer();
 
                 customer.setCustomerID(rs.getString(1));
-                customer.setFullName(rs.getString(2));
+                customer.setCusFullName(rs.getString(2));
                 customer.setPhoneNumber(rs.getString(3));
                 customer.setEmail(rs.getString(4));
                 customer.setAddress(rs.getString(5));
@@ -96,7 +96,7 @@ public class CustomerDAO {
                     Customer customer = new Customer();
 
                     customer.setCustomerID(rs.getString(1));
-                    customer.setFullName(rs.getString(2));
+                    customer.setCusFullName(rs.getString(2));
                     customer.setPhoneNumber(rs.getString(3));
                     customer.setEmail(rs.getString(4));
                     customer.setAddress(rs.getString(5));
@@ -124,7 +124,7 @@ public class CustomerDAO {
                 )
         ){
             preparedStatement.setString(1, customer.getCustomerID());
-            preparedStatement.setString(2, customer.getFullName());
+            preparedStatement.setString(2, customer.getCusFullName());
             preparedStatement.setString(3, customer.getPhoneNumber());
             preparedStatement.setString(4, customer.getEmail());
             preparedStatement.setString(5, customer.getAddress());
@@ -166,7 +166,7 @@ public class CustomerDAO {
                                 "WHERE customerID = ? "
                 );
         ){
-            preparedStatement.setString(1, customer.getFullName());
+            preparedStatement.setString(1, customer.getCusFullName());
             preparedStatement.setString(2, customer.getPhoneNumber());
             preparedStatement.setString(3, customer.getEmail());
             preparedStatement.setString(4, customer.getAddress());
