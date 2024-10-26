@@ -197,11 +197,11 @@
                                  </columnResizePolicy>
 
                                  <columns>
-                                    <TableColumn fx:id="pricingIDColumn" minWidth="100.0" text="Mã giá phòng" />
-                                    <TableColumn fx:id="priceColumn" minWidth="100.0" text="Giá tiền" />
-                                    <TableColumn fx:id="unitColumn" minWidth="100.0" text="Đơn vị" />
-                                    <TableColumn fx:id="roomCategoryColumn" minWidth="150.0" text="Loại phòng" />
-                                    <TableColumn fx:id="actionColumn" minWidth="300.0" prefWidth="300.0" text="Thao tác" />
+                                    <TableColumn fx:id="pricingIDColumn" minWidth="100.0" text="Mã giá phòng" reorderable="false"/>
+                                    <TableColumn fx:id="priceColumn" minWidth="100.0" text="Giá tiền" reorderable="false"/>
+                                    <TableColumn fx:id="unitColumn" minWidth="100.0" text="Đơn vị" reorderable="false"/>
+                                    <TableColumn fx:id="roomCategoryColumn" minWidth="150.0" text="Loại phòng" reorderable="false"/>
+                                    <TableColumn fx:id="actionColumn" minWidth="300.0" prefWidth="300.0" text="Thao tác" reorderable="false"/>
                                  </columns>
 
                                  <VBox.margin>
