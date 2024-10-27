@@ -1,6 +1,7 @@
-﻿-- Tạo cơ sở dữ liệu HotelDatabase
-USE master;
+﻿USE master;
 GO
+
+-- Tạo cơ sở dữ liệu HotelDatabase
 CREATE DATABASE HotelDatabase;
 GO
 
@@ -230,13 +231,13 @@ GO
 -- Thêm dữ liệu vào bảng GlobalSequence
 INSERT INTO GlobalSequence(tableName, nextID)
 VALUES
-	('Employee', 'EMP-000006'),
-	('Account', 'ACC-000006'),
+  ('Employee', 'EMP-000006'),
+  ('Account', 'ACC-000006'),
 	('ServiceCategory', 'SC-000005'),
 	('HotelService', 'HS-000008'),
 	('Pricing', 'P-000009'),
 	('RoomCategory', 'RC-000005'),
-	('ShiftAssignment', 'SA-000004'),
+  ('ShiftAssignment', 'SA-000004'),
 	('Customer', 'CUS-000031'),
 	('ReservationForm', 'RF-000001')
 GO
@@ -348,7 +349,7 @@ VALUES
     ('CUS-000003', N'Tran Van C', '0912345680', 'tranvanc@gmail.com', N'789 Duong MNO, Quan 5, TP HCM', N'MALE', '001099012343', '1988-03-30'),
     ('CUS-000004', N'Pham Thi D', '0912345681', 'phamthid@gmail.com', N'321 Duong PQR, Quan 7, TP HCM', N'FEMALE', '001099012546', '1995-12-01'),
     ('CUS-000005', N'Hoang Van E', '0912345682', 'hoangvane@gmail.com', N'987 Duong STU, Quan 10, TP HCM', N'MALE', '001099012764', '1991-11-20'),
-	('CUS-000006', N'Nguyen Van F', '0912345683', 'nguyenf@gmail.com', N'111 Duong DEF, Quan 1, TP HCM', N'MALE', '001099012765', '1989-04-18'),
+	  ('CUS-000006', N'Nguyen Van F', '0912345683', 'nguyenf@gmail.com', N'111 Duong DEF, Quan 1, TP HCM', N'MALE', '001099012765', '1989-04-18'),
     ('CUS-000007', N'Le Thi G', '0912345684', 'lethig@gmail.com', N'222 Duong GHI, Quan 2, TP HCM', N'FEMALE', '001099012776', '1993-08-29'),
     ('CUS-000008', N'Tran Van H', '0912345685', 'tranvanh@gmail.com', N'333 Duong JKL, Quan 3, TP HCM', N'MALE', '001099012787', '1985-12-12'),
     ('CUS-000009', N'Pham Thi I', '0912345686', 'phamthi@gmail.com', N'444 Duong MNO, Quan 4, TP HCM', N'FEMALE', '001099012798', '1990-01-01'),
@@ -367,7 +368,7 @@ VALUES
     ('CUS-000022', N'Le Thi V', '0912345699', 'lethiv@gmail.com', N'789 Duong ZAB, Quan 5, TP HCM', N'FEMALE', '001099012921', '1992-09-09'),
     ('CUS-000023', N'Tran Van W', '0912345700', 'tranvanw@gmail.com', N'890 Duong CDE, Quan 6, TP HCM', N'MALE', '001099012932', '1993-10-10'),
     ('CUS-000024', N'Pham Thi X', '0912345701', 'phamthix@gmail.com', N'901 Duong FGHI, Quan 7, TP HCM', N'FEMALE', '001099012943', '1987-12-12'),
-	('CUS-000025', N'Hoang Van Y', '0912345702', 'hoangvany@gmail.com', N'012 Duong JKL, Quan 8, TP HCM', N'MALE', '001099012954', '1988-01-01'),
+	  ('CUS-000025', N'Hoang Van Y', '0912345702', 'hoangvany@gmail.com', N'012 Duong JKL, Quan 8, TP HCM', N'MALE', '001099012954', '1988-01-01'),
     ('CUS-000026', N'Nguyen Van Z', '0912345703', 'nguyenz@gmail.com', N'123 Duong MNO, Quan 9, TP HCM', N'MALE', '001099012965', '1991-04-04'),
     ('CUS-000027', N'Le Thi AA', '0912345704', 'lethia@gmail.com', N'234 Duong PQR, Quan 10, TP HCM', N'FEMALE', '001099012976', '1990-12-12'),
     ('CUS-000028', N'Tran Van AB', '0912345705', 'tranvanab@gmail.com', N'345 Duong STU, Quan 1, TP HCM', N'MALE', '001099012987', '1986-07-07'),
@@ -375,7 +376,24 @@ VALUES
     ('CUS-000030', N'Hoang Van AD', '0912345707', 'hoangvanad@gmail.com', N'567 Duong YZA, Quan 3, TP HCM', N'MALE', '001099013000', '1992-06-06');
 GO
 
--- Thêm dữ liệu vào bảng ReservationForm
+SELECT *
+FROM ReservationForm
+
+-- Thêm dữ liệu vào bảng Room với mã phòng mới
+INSERT INTO Room (roomID, roomStatus, dateOfCreation, roomCategoryID)
+VALUES
+    ('T1101', N'ON_USE', '2024-09-28 10:00:00', 'RC-000001'),
+    ('V2102', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
+    ('T1203', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+    ('V2304', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+    ('T1105', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+    ('V2206', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
+    ('T1307', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
+    ('V2408', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
+    ('T1109', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+    ('V2210', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002');
+GO
+	
 INSERT INTO ReservationForm(reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit)
 VALUES
 	('RF-000001', '2021-01-05', '2021-01-06', '2021-01-08', 'EMP-000001', 'T1101', 'CUS-000005', 480000),
@@ -488,8 +506,7 @@ VALUES
     ('RF-000108', '2024-10-15', '2024-10-16', '2024-10-19', 'EMP-000003', 'V2206', 'CUS-000027', 540000),
     ('RF-000109', '2024-10-25', '2024-10-26', '2024-10-28', 'EMP-000004', 'V2304', 'CUS-000024', 540000),
     ('RF-000110', '2024-10-30', '2024-10-31', '2024-11-02', 'EMP-000005', 'V2408', 'CUS-000022', 540000);
-
--- Thêm dữ liệu vào bảng Tax
+--Thêm dữ liệu vào bảng Tax
 INSERT INTO Tax (taxID, taxName, taxRate, dateOfCreation, activate) 
 VALUES 
     ('tax-000001', 'tax1', 0.1, '2024-09-29', 1),
@@ -503,9 +520,8 @@ VALUES
     ('tax-000009', 'tax9', 0.18, '2024-10-07', 0),
     ('tax-000010', 'tax10', 0.09, '2024-10-08', 1),
     ('tax-000011', 'tax11', 0.14, '2024-10-09', 1);
-GO
 
--- Thêm dữ liệu vào bảng Invoice
+--Thêm dữ liệu vào bảng Invoice
 INSERT INTO Invoice(invoiceID, invoiceDate, roomCharge, servicesCharge, totalDue, netDue, taxID, reservationFormID)
 VALUES
     ('INV-0000000001', '2021-01-08', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000001'),
@@ -618,7 +634,11 @@ VALUES
     ('INV-0000000108', '2024-12-30', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000108'),
 	('INV-0000000109', '2024-10-26', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000109'),
 	('INV-0000000110', '2024-10-25', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000110');
-GO
+
+SELECT DISTINCT r.roomID
+FROM Room r
+LEFT JOIN ReservationForm rb ON rb.reservationFormID = r.roomID
+
 
 -- ===================================================================================
 -- 3. TRIGGER 
@@ -636,13 +656,12 @@ BEGIN
         HAVING COUNT(*) > 2
     )
     BEGIN
-        RAISERROR(
-            'Mỗi loại phòng chỉ được phép có 2 bản ghi trong Pricing (1 DAY và 1 HOUR)', 
-            16, 
-            1
-        );
+        RAISERROR('Mỗi loại phòng chỉ được phép có 2 bản ghi trong Pricing (1 DAY và 1 HOUR)', 16, 1);
         ROLLBACK TRANSACTION;
     END
 END;
 GO
 
+
+
+seLect * from ReservationForm
