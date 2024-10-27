@@ -15,12 +15,13 @@ public class InvoiceDisplayOnTable {
     private double tax;
     private double netDue;
 
-    public InvoiceDisplayOnTable(String invoiceID, String cusName, String roomID, String empName, LocalDateTime createDate, double serviceCharge, double roomCharge, double tax, double netDue) {
+    public InvoiceDisplayOnTable(String invoiceID, String cusName, String roomID, String empName, LocalDateTime createDate, double deposit, double serviceCharge, double roomCharge, double tax, double netDue) {
         this.invoiceID = invoiceID;
         this.cusName = cusName;
         this.roomID = roomID;
         this.empName = empName;
         this.createDate = createDate;
+        this.deposit = deposit;
         this.serviceCharge = serviceCharge;
         this.roomCharge = roomCharge;
         this.setTax(tax);
