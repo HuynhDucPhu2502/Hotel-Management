@@ -440,15 +440,27 @@ public class ReservationFormController {
     }
 
     private void handleResetAction() {
-        bookDateRangePicker.setValue(null);
-        checkInTimePicker.setValue(null);
-        checkOutTimePicker.setValue(null);
-        customerIDCardNumberTextField.setText(null);
+        try {
+            System.out.println("Đang reset các giá trị...");
+            bookDateRangePicker.setValue(null);
+            checkInTimePicker.setValue(null);
+            checkOutTimePicker.setValue(null);
+            customerIDCardNumberTextField.setText(null);
+            checkInDateTextField.setText(null);
+            checkOutDateTextField.setText(null);
+            stayLengthLabel.setText("Chưa Đặt Lịch");
+            bookingDepositLabel.setText("0 VND");
 
-        customer = null;
-        checkOutTime = null;
-        checkInTime = null;
+            customer = null;
+            checkOutTime = null;
+            checkInTime = null;
+
+            System.out.println("Reset thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 
     private void openCalendarViewStage() {
         CalendarView calendarView = new CalendarView();

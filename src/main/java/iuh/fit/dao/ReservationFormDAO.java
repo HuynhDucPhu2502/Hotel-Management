@@ -254,8 +254,8 @@ public class ReservationFormDAO {
         } catch (Exception exception) {
             if (exception.getMessage().equalsIgnoreCase(ErrorMessages.RESERVATION_CHECK_DATE_OVERLAP))
                 throw new IllegalArgumentException(ErrorMessages.RESERVATION_CHECK_DATE_OVERLAP);
-            else if (exception.getMessage().contains("ID Card Number đã được sử dụng"))
-                throw new IllegalArgumentException("ID Card Number đã được sử dụng cho một đặt phòng khác trong khoảng thời gian này.");
+            else if (exception.getMessage().contains(ErrorMessages.RESERVATION_ID_CARD_NUMBER_OVERLAP))
+                throw new IllegalArgumentException(ErrorMessages.RESERVATION_ID_CARD_NUMBER_OVERLAP);
             else {
                 exception.printStackTrace();
                 System.exit(1);
