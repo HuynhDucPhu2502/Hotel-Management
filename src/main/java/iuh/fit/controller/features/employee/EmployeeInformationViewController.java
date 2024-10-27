@@ -7,6 +7,7 @@ import iuh.fit.models.enums.Gender;
 import iuh.fit.utils.ConvertHelper;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -40,7 +41,7 @@ public class EmployeeInformationViewController {
     @FXML
     private TextField usernameTextField;
     @FXML
-    private TextField passwordTextField;
+    private PasswordField passwordTextField;
     @FXML
     private TextField statusTextField;
 
