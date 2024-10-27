@@ -455,10 +455,8 @@ public class ReservationFormController {
 
         List<ReservationForm> reservations = ReservationFormDAO.getUpcomingReservations(room.getRoomID());
 
-        // Tạo Calendar cho các mục nhập đặt phòng
         Calendar<String> reservationCalendar = new Calendar<>("Lịch Đặt Phòng");
 
-        // Thêm các mục từ danh sách đặt phòng
         reservations.forEach(reservation -> {
             Entry<String> entry = new Entry<>(reservation.getReservationID());
             entry.changeStartDate(reservation.getCheckInDate().toLocalDate());
@@ -466,14 +464,11 @@ public class ReservationFormController {
             reservationCalendar.addEntry(entry);
         });
 
-        // Thêm Calendar vào CalendarView
         calendarView.getCalendarSources().clear();
         calendarView.getCalendarSources().add(new com.calendarfx.model.CalendarSource("Nguồn") {{
             getCalendars().add(reservationCalendar);
         }});
 
-
-        // Tạo Scene và hiển thị Stage
         Scene scene = new Scene(calendarView, 800, 800);
 
         Stage stage = new Stage();

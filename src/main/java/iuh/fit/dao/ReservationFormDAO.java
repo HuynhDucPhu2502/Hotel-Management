@@ -185,10 +185,16 @@ public class ReservationFormDAO {
                 "WHERE roomID = ? AND " +
                 "(? < checkOutDate AND ? > checkInDate)";
 
+        String overlapIDCardSQL = "SELECT COUNT(*) FROM ReservationForm a " +
+                "INNER JOIN Customer b ON a.customerID = b.customerID " +
+                "WHERE b.idCardNumber = ? AND " +
+                "(? < a.checkOutDate AND ? > a.checkInDate)";
+
         try (
                 Connection connection = DBHelper.getConnection();
 
                 PreparedStatement overlapCheckStmt = connection.prepareStatement(overlapCheckSQL);
+                PreparedStatement overlapIDCardStmt = connection.prepareStatement(overlapIDCardSQL);
                 PreparedStatement insertStatement = connection.prepareStatement(
                         "INSERT INTO ReservationForm(reservationFormID, reservationDate, checkInDate, " +
                                 "checkOutDate, employeeID, roomID, customerID, roomBookingDeposit) " +
@@ -206,9 +212,18 @@ public class ReservationFormDAO {
             overlapCheckStmt.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckOutDate()));
 
             ResultSet overlapResult = overlapCheckStmt.executeQuery();
-            if (overlapResult.next() && overlapResult.getInt(1) > 0) {
+            if (overlapResult.next() && overlapResult.getInt(1) > 0)
                 throw new IllegalArgumentException(ErrorMessages.RESERVATION_CHECK_DATE_OVERLAP);
-            }
+
+
+            overlapIDCardStmt.setString(1, reservationForm.getCustomer().getIdCardNumber());
+            overlapIDCardStmt.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckInDate()));
+            overlapIDCardStmt.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckOutDate()));
+
+            ResultSet overlapIDCardResult = overlapIDCardStmt.executeQuery();
+            if (overlapIDCardResult.next() && overlapIDCardResult.getInt(1) > 0)
+                throw new IllegalArgumentException(ErrorMessages.RESERVATION_ID_CARD_NUMBER_OVERLAP);
+
 
             selectSequenceStatement.setString(1, "ReservationForm");
             ResultSet rs = selectSequenceStatement.executeQuery();
@@ -234,16 +249,20 @@ public class ReservationFormDAO {
             insertStatement.setString(6, reservationForm.getRoom().getRoomID());
             insertStatement.setString(7, reservationForm.getCustomer().getCustomerID());
             insertStatement.setDouble(8, reservationForm.getRoomBookingDeposit());
+
             insertStatement.executeUpdate();
         } catch (Exception exception) {
             if (exception.getMessage().equalsIgnoreCase(ErrorMessages.RESERVATION_CHECK_DATE_OVERLAP))
                 throw new IllegalArgumentException(ErrorMessages.RESERVATION_CHECK_DATE_OVERLAP);
+            else if (exception.getMessage().contains("ID Card Number đã được sử dụng"))
+                throw new IllegalArgumentException("ID Card Number đã được sử dụng cho một đặt phòng khác trong khoảng thời gian này.");
             else {
                 exception.printStackTrace();
                 System.exit(1);
             }
         }
     }
+
 
     public static void deleteData(String reservationFormID) {
         try (
