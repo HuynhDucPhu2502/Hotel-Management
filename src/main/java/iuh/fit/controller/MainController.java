@@ -36,6 +36,8 @@ public class MainController {
             if (menuController != null) {
                 menuController.setAccount(account);
 
+                // Dashboard
+                menuController.getDashBoardBtn().setOnAction(e -> loadPanel("/iuh/fit/view/features/DashboardPanel.fxml"));
 
                 // Employee
                 menuController.getEmployeeManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/employee/EmployeeManagerPanel.fxml"));

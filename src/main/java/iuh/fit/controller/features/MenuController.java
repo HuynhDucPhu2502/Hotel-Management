@@ -24,6 +24,11 @@ public class MenuController {
     private Text employeeFullNameText;
 
 //  =====================================================
+    // dasnhBoardBtn
+    @FXML
+    private Button dashBoardBtn;
+
+//  =====================================================
     // Employee
     @FXML
     private Button employeeBtn;
@@ -109,18 +114,6 @@ public class MenuController {
     @FXML
     private ImageView arrowUpForCustomer;
 
-//  =====================================================
-    // Account
-    @FXML
-    private Button accountBtn;
-    @FXML
-    private HBox buttonOneContainer211;
-    @FXML
-    private HBox buttonTwoContainer211;
-    @FXML
-    private HBox buttonThreeContainer211;
-    @FXML
-    private ImageView arrowUpForEmpBtn211;
 
 //  =====================================================
     // Statistics
@@ -148,10 +141,9 @@ public class MenuController {
     @FXML
     private HBox buttonThreeContainer21111;
     @FXML
-    private ImageView arrowUpForEmpBtn21111;
+    private ImageView arrowUpForHistory;
 
 //  =====================================================
-
 
     @FXML
     private ScrollPane scrollPane;
@@ -169,7 +161,6 @@ public class MenuController {
         buttonStates.put("room", false);
         buttonStates.put("service", false);
         buttonStates.put("customer", false);
-        buttonStates.put("account", false);
         buttonStates.put("statistics", false);
         buttonStates.put("history", false);
 
@@ -177,9 +168,8 @@ public class MenuController {
         roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer, roomCategoryManagerContainer, roomManagerContainer, roomSearchingContainer, roomBookingContainer), arrowUpForRoom, "room"));
         serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryManagerContainer, hotelServiceManagerContainer, hotelServiceSearchingContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer), arrowUpForCustomer, "customer"));
-        accountBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer211, buttonTwoContainer211, buttonThreeContainer211), arrowUpForEmpBtn211, "account"));
         statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(revenueStatisticsContainer, buttonTwoContainer2111, buttonThreeContainer2111), arrowUpForStatistics, "statistics"));
-        historyBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21111, buttonTwoContainer21111, buttonThreeContainer21111), arrowUpForEmpBtn21111, "history"));
+        historyBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21111, buttonTwoContainer21111, buttonThreeContainer21111), arrowUpForHistory, "history"));
     }
 
     public void dropDownMenuEvent(List<HBox> buttons, ImageView arrow, String stateKey) {
@@ -230,12 +220,11 @@ public class MenuController {
 
     public Button getRoomManagerButton(){
         return roomManagerButton;
-    };
+    }
 
     public Button getRoomSearchingButton() {
         return roomSearchingButton;
     }
-
 
     public Button getCustomerManagerButton(){ return customerManagerButton; }
 
@@ -251,6 +240,10 @@ public class MenuController {
 
     public  Button getAccountOfEmployeeManagerButton(){
         return accountOfEmployeeManagerButton;
+    }
+
+    public Button getDashBoardBtn() {
+        return dashBoardBtn;
     }
 }
 
