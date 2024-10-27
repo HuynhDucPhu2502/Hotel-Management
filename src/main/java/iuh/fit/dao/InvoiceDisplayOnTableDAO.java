@@ -36,11 +36,11 @@ public class InvoiceDisplayOnTableDAO {
                 invoiceDisplayOnTable.setRoomID(rs.getString(3));
                 invoiceDisplayOnTable.setEmpName(rs.getString(4));
                 invoiceDisplayOnTable.setCreateDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(5)));
-                invoiceDisplayOnTable.setDeposit(5);
-                invoiceDisplayOnTable.setServiceCharge(rs.getDouble(6));
-                invoiceDisplayOnTable.setRoomCharge(rs.getDouble(7));
-                invoiceDisplayOnTable.setTax(rs.getDouble(8));
-                invoiceDisplayOnTable.setNetDue(rs.getDouble(9));
+                invoiceDisplayOnTable.setDeposit(rs.getDouble(6));
+                invoiceDisplayOnTable.setServiceCharge(rs.getDouble(7));
+                invoiceDisplayOnTable.setRoomCharge(rs.getDouble(8));
+                invoiceDisplayOnTable.setTax(rs.getDouble(9));
+                invoiceDisplayOnTable.setNetDue(rs.getDouble(10));
 
                 data.add(invoiceDisplayOnTable);
             }
