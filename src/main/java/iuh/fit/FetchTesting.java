@@ -24,6 +24,6 @@ public class FetchTesting {
 
 //        System.out.println(InvoiceDAO.getInvoice());
 
-
+        System.out.println(InvoiceDisplayOnTableDAO.getData());
     }
 }
