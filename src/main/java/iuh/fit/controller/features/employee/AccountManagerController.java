@@ -37,7 +37,7 @@ public class AccountManagerController {
     @FXML
     private TextField usernameSearchField;
     @FXML
-    private TextField passwordSearchField;
+    private PasswordField passwordSearchField;
     @FXML
     private TextField statusSearchField;
 

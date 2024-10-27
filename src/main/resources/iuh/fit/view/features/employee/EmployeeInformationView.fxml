@@ -4,6 +4,7 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -160,11 +161,7 @@
                         <Cursor fx:constant="CLOSED_HAND" />
                      </cursor>
                   </TextField>
-                  <TextField fx:id="passwordTextField" disable="true" editable="false" focusTraversable="false" GridPane.columnIndex="3" GridPane.rowIndex="5">
-                     <cursor>
-                        <Cursor fx:constant="CLOSED_HAND" />
-                     </cursor>
-                  </TextField>
+                  <PasswordField fx:id="passwordTextField" GridPane.columnIndex="3" GridPane.rowIndex="5" />
                     </children>
                 </GridPane>
             </children>
