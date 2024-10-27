@@ -22,14 +22,14 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane minHeight="1000.0" minWidth="1124.0" stylesheets="@../../../styles/Button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.ReservationFormController">
+<AnchorPane minHeight="1000.0" minWidth="1124.0" stylesheets="@../../../../styles/Button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.create_reservation_form_controllers.CreateReservationFormController">
    <children>
       <DialogPane fx:id="dialogPane" animationDuration="200.0ms" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="107.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" stylesheets="@../../../styles/Button.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="107.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" stylesheets="@../../../../styles/Button.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
             <AnchorPane>
                <children>
-                  <TitledPane fx:id="titledPane" collapsible="false" style="-fx-border-radius: 50; -fx-background-radius: 50;" stylesheets="@../../../styles/TitlePanel.css" text="Quản lý đặt phòng 309" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TitledPane fx:id="titledPane" collapsible="false" style="-fx-border-radius: 50; -fx-background-radius: 50;" stylesheets="@../../../../styles/TitlePanel.css" text="Quản lý đặt phòng 309" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
                         <VBox fx:id="upperBox" spacing="30.0">
                            <children>
@@ -39,7 +39,7 @@
                                        <graphic>
                                           <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../../../icons/ic_back.png" />
+                                                <Image url="@../../../../icons/ic_back.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -92,7 +92,7 @@
                                                    <children>
                                                       <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@../../../icons/ic_create_reservation_form.png" />
+                                                            <Image url="@../../../../icons/ic_create_reservation_form.png" />
                                                          </image>
                                                       </ImageView>
                                                    </children>
@@ -118,7 +118,7 @@
                                                    <children>
                                                       <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@../../../icons/ic_view_reservation_form.png" />
+                                                            <Image url="@../../../../icons/ic_view_reservation_form.png" />
                                                          </image>
                                                       </ImageView>
                                                    </children>
@@ -144,7 +144,7 @@
                                                    <children>
                                                       <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@../../../icons/ic_add_services.png" />
+                                                            <Image url="@../../../../icons/ic_add_services.png" />
                                                          </image>
                                                       </ImageView>
                                                    </children>
@@ -170,7 +170,7 @@
                                                    <children>
                                                       <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@../../../icons/ic_room_changing.png" />
+                                                            <Image url="@../../../../icons/ic_room_changing.png" />
                                                          </image>
                                                       </ImageView>
                                                    </children>
@@ -192,6 +192,15 @@
                                  <VBox.margin>
                                     <Insets />
                                  </VBox.margin>
+                              </HBox>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="PHIẾU ĐẶT PHÒNG">
+                                       <font>
+                                          <Font name="System Bold" size="24.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
                               </HBox>
                               <HBox>
                                  <children>
@@ -359,7 +368,7 @@
                                        <graphic>
                                           <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../../../icons/ic_check_date_history.png" />
+                                                <Image url="@../../../../icons/ic_check_date_history.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>

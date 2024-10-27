@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:controller="iuh.fit.controller.features.room.room_items.RoomOnUseItemController" minHeight="150.0" minWidth="380.0" styleClass="box-OnUse" stylesheets="@../../../../styles/RoomItem.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:controller="iuh.fit.controller.features.room.create_reservation_form_controllers.RoomOnUseItemController" minHeight="150.0" minWidth="380.0" styleClass="box-OnUse" stylesheets="@../../../../styles/RoomItem.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane minWidth="150.0" prefWidth="150.0" style="-fx-background-color: rgb(55, 175, 225);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>

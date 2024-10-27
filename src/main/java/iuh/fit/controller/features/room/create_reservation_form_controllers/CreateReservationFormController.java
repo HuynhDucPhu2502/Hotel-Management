@@ -1,4 +1,4 @@
-package iuh.fit.controller.features.room;
+package iuh.fit.controller.features.room.create_reservation_form_controllers;
 
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.Entry;
@@ -9,13 +9,15 @@ import com.dlsc.gemsfx.daterange.DateRange;
 import com.dlsc.gemsfx.daterange.DateRangePicker;
 import com.dlsc.gemsfx.daterange.DateRangePreset;
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.room.reservation_list_controllers.ReservationListController;
+import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.dao.CustomerDAO;
 import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
-import iuh.fit.utils.CostCalculator;
+import iuh.fit.utils.Calculator;
 import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.GlobalConstants;
 import iuh.fit.utils.RegexChecker;
@@ -40,7 +42,7 @@ import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Locale;
 
-public class ReservationFormController {
+public class CreateReservationFormController {
     // ==================================================================================================================
     // 1. Các biến
     // ==================================================================================================================
@@ -57,7 +59,7 @@ public class ReservationFormController {
     private Button addBtn;
     @FXML
     private Button reservationCheckDateBtn;
-    // 1.2 Input Fields
+
     // 1.2.1 Fields cho phiếu đặt phòng
     @FXML
     private Label roomNumberLabel;
@@ -103,7 +105,11 @@ public class ReservationFormController {
     @FXML
     private TitledPane titledPane;
 
-    // 1.5 Context và dữ liệu binding
+    // 1.5 Formatter
+    private final DateTimeFormatter dateTimeFormatter =
+            DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.forLanguageTag("vi-VN"));
+
+    // 1.6 Context và dữ liệu binding
     private MainController mainController;
     private Employee employee;
     private Room room;
@@ -132,10 +138,10 @@ public class ReservationFormController {
 
         titledPane.setText("Quản lý đặt phòng " + room.getRoomNumber());
 
-        backBtn.setOnAction(e -> navigateToRoomBooking());
-        bookingRoomNavigate.setOnAction(e -> navigateToRoomBooking());
-        navigateToCreateCustomerBtn.setOnAction(e -> navigateToAddCustomer());
-        navigateToReservationListBtn.setOnAction(e -> navigateToReservationList());
+        backBtn.setOnAction(e -> navigateToRoomBookingPanel());
+        bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
+        navigateToCreateCustomerBtn.setOnAction(e -> navigateToAddCustomerPanel());
+        navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
 
         setupRoomInformation();
         setupEmployeeInformation();
@@ -157,8 +163,6 @@ public class ReservationFormController {
     // ==================================================================================================================
     // 3. Xử lý đổi các biến thời gian thành chuỗi ngày + giờ
     // ==================================================================================================================
-    private final DateTimeFormatter dateTimeFormatter =
-            DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.forLanguageTag("vi-VN"));
 
     private String formatDateTime(java.time.LocalDate date, java.time.LocalTime time) {
         return dateTimeFormatter.format(date) + " " + time.format(DateTimeFormatter.ofPattern("HH:mm"));
@@ -194,7 +198,7 @@ public class ReservationFormController {
     // ==================================================================================================================
     // 5. Xử lý chức năng hiển thị panel khác
     // ==================================================================================================================
-    private void navigateToRoomBooking() {
+    private void navigateToRoomBookingPanel() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
             AnchorPane layout = loader.load();
@@ -209,9 +213,9 @@ public class ReservationFormController {
         }
     }
 
-    private void navigateToAddCustomer() {
+    private void navigateToAddCustomerPanel() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/AddCustomerPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/create_reservation_form_panels/AddCustomerPanel.fxml"));
             AnchorPane layout = loader.load();
 
             AddCustomerController addCustomerController = loader.getController();
@@ -227,9 +231,9 @@ public class ReservationFormController {
         }
     }
 
-    private void navigateToReservationList() {
+    private void navigateToReservationListPanel() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/ReservationList.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/reservation_list_panels/ReservationListPanel.fxml"));
             AnchorPane layout = loader.load();
 
             ReservationListController reservationListController = loader.getController();
@@ -332,11 +336,11 @@ public class ReservationFormController {
     // ==================================================================================================================
     private void updateStayLengthAndCost() {
         if (checkInTime != null && checkOutTime != null) {
-            String stayLength = calculateStayLength();
+            String stayLength = Calculator.calculateStayLength(checkInTime, checkOutTime);
             stayLengthLabel.setText(stayLength);
 
             try {
-                double totalCost = CostCalculator.calculateBookingDeposit(room, checkInTime, checkOutTime);
+                double totalCost = Calculator.calculateBookingDeposit(room, checkInTime, checkOutTime);
                 bookingDepositLabel.setText(String.format("%.2f VND", totalCost));
             } catch (IllegalArgumentException e) {
                 bookingDepositLabel.setText(e.getMessage());
@@ -347,17 +351,6 @@ public class ReservationFormController {
         }
     }
 
-    private String calculateStayLength() {
-        long hours = java.time.Duration.between(checkInTime, checkOutTime).toHours();
-        double days = hours / 24.0;
-
-        if (hours < 12) {
-            return hours + " giờ";
-        } else {
-            double roundedDays = Math.ceil(days * 2) / 2.0;
-            return roundedDays + " ngày";
-        }
-    }
 
     // ==================================================================================================================
     // 8. Cài đặt các thành phần giao diện liên quan đến Khách Hàng
@@ -441,7 +434,6 @@ public class ReservationFormController {
 
     private void handleResetAction() {
         try {
-            System.out.println("Đang reset các giá trị...");
             bookDateRangePicker.setValue(null);
             checkInTimePicker.setValue(null);
             checkOutTimePicker.setValue(null);
@@ -455,13 +447,15 @@ public class ReservationFormController {
             checkOutTime = null;
             checkInTime = null;
 
-            System.out.println("Reset thành công");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
+    // ==================================================================================================================
+    // 11. Chức năng xem lịch phòng
+    // ==================================================================================================================
     private void openCalendarViewStage() {
         CalendarView calendarView = new CalendarView();
 

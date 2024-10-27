@@ -1,8 +1,8 @@
 package iuh.fit.controller.features.room;
 
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.room.room_items.RoomAvailableItemController;
-import iuh.fit.controller.features.room.room_items.RoomOnUseItemController;
+import iuh.fit.controller.features.room.create_reservation_form_controllers.RoomAvailableItemController;
+import iuh.fit.controller.features.room.create_reservation_form_controllers.RoomOnUseItemController;
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.models.Employee;
@@ -97,7 +97,7 @@ public class RoomBookingController {
                 switch (room.getRoomStatus()) {
                     case AVAILABLE -> {
                         loader = new FXMLLoader(getClass().getResource(
-                                "/iuh/fit/view/features/room/room_items/RoomAvailableItem.fxml"));
+                                "/iuh/fit/view/features/room/create_reservation_form_panels/RoomAvailableItem.fxml"));
                         roomItem = loader.load();
 
                         RoomAvailableItemController controller = loader.getController();
@@ -105,7 +105,7 @@ public class RoomBookingController {
                     }
                     case ON_USE -> {
                         loader = new FXMLLoader(getClass().getResource(
-                                "/iuh/fit/view/features/room/room_items/RoomOnUseItem.fxml"));
+                                "/iuh/fit/view/features/room/create_reservation_form_panels/RoomOnUseItem.fxml"));
                         roomItem = loader.load();
 
                         RoomOnUseItemController controller = loader.getController();
@@ -113,7 +113,7 @@ public class RoomBookingController {
                     }
                     case OVERDUE -> {
                         loader = new FXMLLoader(getClass().getResource(
-                                "/iuh/fit/view/features/room/room_items/RoomOverDueItem.fxml"));
+                                "/iuh/fit/view/features/room/create_reservation_form_panels/RoomOverDueItem.fxml"));
                         roomItem = loader.load();
                     }
                     default -> throw new IllegalStateException("Unexpected value: " + room.getRoomStatus());

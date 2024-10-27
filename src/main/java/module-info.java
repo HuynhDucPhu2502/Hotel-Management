@@ -13,8 +13,8 @@ module iuh.fit {
     opens iuh.fit.controller.features to javafx.fxml;
     opens iuh.fit.controller.features.service to javafx.fxml;
     opens iuh.fit.controller.features.room to javafx.fxml;
-    opens iuh.fit.controller.features.room.room_items to javafx.fxml;
-    opens iuh.fit.controller.features.room.reservation_form_items to javafx.fxml;
+    opens iuh.fit.controller.features.room.create_reservation_form_controllers to javafx.fxml;
+    opens iuh.fit.controller.features.room.reservation_list_controllers to javafx.fxml;
     opens iuh.fit.controller.features.employee to javafx.fxml;
     opens iuh.fit.models to javafx.base, javafx.fxml;
     opens iuh.fit.controller.features.customer to javafx.fxml;
@@ -29,4 +29,6 @@ module iuh.fit {
     exports iuh.fit.controller;
     exports iuh.fit.models;
     exports iuh.fit.models.enums;
+    exports iuh.fit.controller.features.room.create_reservation_form_controllers;
+    exports iuh.fit.controller.features.room.reservation_list_controllers;
 }

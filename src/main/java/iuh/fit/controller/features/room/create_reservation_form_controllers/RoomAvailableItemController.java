@@ -1,7 +1,6 @@
-package iuh.fit.controller.features.room.room_items;
+package iuh.fit.controller.features.room.create_reservation_form_controllers;
 
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.room.ReservationFormController;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Room;
 import javafx.fxml.FXML;
@@ -22,6 +21,9 @@ public class RoomAvailableItemController {
     private Employee employee;
     private Room room;
 
+    // ==================================================================================================================
+    // 2. Khởi tạo và nạp dữ liệu vào giao diện
+    // ==================================================================================================================
     public void setupContext(MainController mainController, Employee employee, Room room) {
         this.mainController = mainController;
         this.employee = employee;
@@ -31,14 +33,17 @@ public class RoomAvailableItemController {
         roomNumberText.setText(room.getRoomNumber());
     }
 
+    // ==================================================================================================================
+    // 3.  Xử lý chức năng hiển thị panel khác
+    // ==================================================================================================================
     @FXML
-    private void navigateToReservationFormPanel() {
+    private void navigateToCreateReservationFormPanel() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/ReservationFormPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/create_reservation_form_panels/CreateReservationFormPanel.fxml"));
             AnchorPane layout = loader.load();
 
-            ReservationFormController reservationFormController = loader.getController();
-            reservationFormController.setupContext(
+            CreateReservationFormController createReservationFormController = loader.getController();
+            createReservationFormController.setupContext(
                     mainController, employee, room,
                     null, null, null
             );

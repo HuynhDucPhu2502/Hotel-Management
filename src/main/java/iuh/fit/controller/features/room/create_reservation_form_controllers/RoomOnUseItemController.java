@@ -1,4 +1,4 @@
-package iuh.fit.controller.features.room.room_items;
+package iuh.fit.controller.features.room.create_reservation_form_controllers;
 
 import iuh.fit.models.Room;
 import javafx.fxml.FXML;

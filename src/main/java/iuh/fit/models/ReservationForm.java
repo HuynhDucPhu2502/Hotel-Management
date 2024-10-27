@@ -1,6 +1,6 @@
 package iuh.fit.models;
 
-import iuh.fit.utils.CostCalculator;
+import iuh.fit.utils.Calculator;
 import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.GlobalConstants;
 import iuh.fit.utils.RegexChecker;
@@ -108,7 +108,7 @@ public class ReservationForm {
 
     private void updateBookingDeposit() {
         if (room != null && checkInDate != null && checkOutDate != null) {
-            this.roomBookingDeposit = CostCalculator.calculateBookingDeposit(room, checkInDate, checkOutDate);
+            this.roomBookingDeposit = Calculator.calculateBookingDeposit(room, checkInDate, checkOutDate);
         }
     }
 

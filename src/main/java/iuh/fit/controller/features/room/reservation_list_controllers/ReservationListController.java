@@ -1,8 +1,8 @@
-package iuh.fit.controller.features.room;
+package iuh.fit.controller.features.room.reservation_list_controllers;
 
-import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.room.reservation_form_items.ReservationFormItemController;
+import iuh.fit.controller.features.room.RoomBookingController;
+import iuh.fit.controller.features.room.create_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
@@ -30,19 +30,15 @@ public class ReservationListController {
     @FXML
     private Button navigateToCreateReservationFormBtn;
 
-    // 1.2 Dialog Pane
-    @FXML
-    private DialogPane dialogPane;
-
-    // 1.3 Titled Pane
+    // 1.2 Titled Pane
     @FXML
     private TitledPane titledPane;
 
-    // 1.4 GridPane
+    // 1.3 GridPane
     @FXML
     private GridPane reservationFormGidPane;
 
-    // 1.5 Context
+    // 1.4 Context
     private MainController mainController;
     private Employee employee;
     private Room room;
@@ -63,8 +59,9 @@ public class ReservationListController {
 
         titledPane.setText("Quản lý đặt phòng " + room.getRoomNumber());
 
-        bookingRoomNavigate.setOnAction(e -> navigateToRoomBooking());
-        navigateToCreateReservationFormBtn.setOnAction(e -> navigateToReservationForm());
+        bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
+        navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
+        backBtn.setOnAction(e -> navigateToRoomBookingPanel());
 
         loadData();
         displayFilteredRooms(reservationForms);
@@ -78,7 +75,7 @@ public class ReservationListController {
     // ==================================================================================================================
     // 3.. Xử lý chức năng hiển thị panel khác
     // ==================================================================================================================
-    private void navigateToRoomBooking() {
+    private void navigateToRoomBookingPanel() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
             AnchorPane layout = loader.load();
@@ -93,13 +90,13 @@ public class ReservationListController {
         }
     }
 
-    private void navigateToReservationForm() {
+    private void navigateToCreateReservationFormPanel() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/ReservationFormPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/create_reservation_form_panels/CreateReservationFormPanel.fxml"));
             AnchorPane layout = loader.load();
 
-            ReservationFormController reservationFormController = loader.getController();
-            reservationFormController.setupContext(
+            CreateReservationFormController createReservationFormController = loader.getController();
+            createReservationFormController.setupContext(
                     mainController, employee, room,
                     null,
                     null,
@@ -127,11 +124,11 @@ public class ReservationListController {
                 Pane reservationFormItem;
 
                 loader = new FXMLLoader(getClass().getResource(
-                        "/iuh/fit/view/features/room/reservation_form_items/ReservationFormItem.fxml"));
+                        "/iuh/fit/view/features/room/reservation_list_panels/ReservationFormItem.fxml"));
                 reservationFormItem = loader.load();
 
                 ReservationFormItemController controller = loader.getController();
-                controller.setupContext(mainController, reservationForm);
+                controller.setupContext(mainController, reservationForm, employee);
 
                 reservationFormGidPane.add(reservationFormItem, col, row);
 

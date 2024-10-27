@@ -1,8 +1,9 @@
-package iuh.fit.controller.features.room;
+package iuh.fit.controller.features.room.create_reservation_form_controllers;
 
 import com.dlsc.gemsfx.CalendarPicker;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.dao.CustomerDAO;
 import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
@@ -94,16 +95,16 @@ public class AddCustomerController {
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
 
-        bookingRoomNavigate.setOnAction(e -> navigateToRoomBooking());
-        reservationFormNavigate.setOnAction(e -> navigateToReservationForm());
-        backBtn.setOnAction(e -> navigateToReservationForm());
+        bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
+        reservationFormNavigate.setOnAction(e -> navigateToCreateReservationFormPanel());
+        backBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
 
     }
 
     // ==================================================================================================================
     // 3. Xử lý chức năng hiển thị panel khác
     // ==================================================================================================================
-    private void navigateToRoomBooking() {
+    private void navigateToRoomBookingPanel() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
             AnchorPane layout = loader.load();
@@ -118,13 +119,13 @@ public class AddCustomerController {
         }
     }
 
-    private void navigateToReservationForm() {
+    private void navigateToCreateReservationFormPanel() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/ReservationFormPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/create_reservation_form_panels/CreateReservationFormPanel.fxml"));
             AnchorPane layout = loader.load();
 
-            ReservationFormController reservationFormController = loader.getController();
-            reservationFormController.setupContext(
+            CreateReservationFormController createReservationFormController = loader.getController();
+            createReservationFormController.setupContext(
                     mainController, employee, room,
                     customer,
                     checkInTime,
@@ -148,7 +149,7 @@ public class AddCustomerController {
             handleResetAction();
             dialogPane.showInformation("Thành công", "Đã thêm khách hàng thành công");
             this.customer = customer;
-            navigateToReservationForm();
+            navigateToCreateReservationFormPanel();
         }catch (Exception e){
             dialogPane.showWarning("LỖI", e.getMessage());
         }
