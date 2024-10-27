@@ -65,6 +65,7 @@ public class StatisticalController implements Initializable {
         employeeNameColumn.setCellValueFactory(new PropertyValueFactory<InvoiceDisplayOnTable, String>("empName"));
         invoiceDateColumn.setCellValueFactory(new PropertyValueFactory<InvoiceDisplayOnTable, LocalDateTime>("createDate"));
         depositColumn.setCellValueFactory(new PropertyValueFactory<InvoiceDisplayOnTable, Double>("deposit"));
+        depositColumn.setCellValueFactory(new PropertyValueFactory<InvoiceDisplayOnTable, Double>("deposit"));
         serviceChargeColumn.setCellValueFactory(new PropertyValueFactory<InvoiceDisplayOnTable, Double>("serviceCharge"));
         roomChargeColumn.setCellValueFactory(new PropertyValueFactory<InvoiceDisplayOnTable, Double>("roomCharge"));
         taxColumn.setCellValueFactory(new PropertyValueFactory<InvoiceDisplayOnTable, Double>("tax"));
