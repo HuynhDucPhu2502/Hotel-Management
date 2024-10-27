@@ -159,7 +159,7 @@ public class RoomCategoryManagerController {
         roomCategoryRankCBox.getSelectionModel().selectFirst();
 
         roomCategoryNameTextField.setText("");
-        roomCategoryRankCBox.getSelectionModel().clearSelection();
+        roomCategoryRankCBox.getSelectionModel().selectFirst();
         numberOfBedTextField.setText("");
 
         addBtn.setManaged(true);

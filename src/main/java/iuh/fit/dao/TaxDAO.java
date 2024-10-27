@@ -22,12 +22,13 @@ public class TaxDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while(resultSet.next()){
-                String taxName = resultSet.getString(1);
-                double taxRate = resultSet.getDouble(2);
-                LocalDate dateOfCreation = ConvertHelper.localDateConverter(resultSet.getDate(3));
-                boolean activate = resultSet.getBoolean(4);
+                String taxId = resultSet.getString(1);
+                String taxName = resultSet.getString(2);
+                double taxRate = resultSet.getDouble(3);
+                LocalDate dateOfCreation = ConvertHelper.localDateConverter(resultSet.getDate(4));
+                boolean activate = resultSet.getBoolean(5);
 
-                Tax tax = new Tax(taxName, taxRate, dateOfCreation, activate);
+                Tax tax = new Tax(taxId, taxName, taxRate, dateOfCreation, activate);
                 data.add(tax);
             }
         } catch (SQLException e) {
@@ -40,16 +41,17 @@ public class TaxDAO {
         int n = 0;
         String SQLStatement = "INSERT INTO Tax\n" +
                 "VALUES\n" +
-                "\t(?, ?, ?, ?)";
+                "\t(?, ?, ?, ?, ?)";
         try(
                 Connection con = DBHelper.getConnection();
                 PreparedStatement preparedStatement = con.prepareStatement(SQLStatement);
         )
         {
-            preparedStatement.setString(1, tax.getTaxName());
-            preparedStatement.setDouble(2, tax.getTaxRate());
-            preparedStatement.setDate(3, Date.valueOf(tax.getDateOfCreation()));
-            preparedStatement.setBoolean(4, tax.isActivate());
+            preparedStatement.setString(1, tax.getTaxID());
+            preparedStatement.setString(2, tax.getTaxName());
+            preparedStatement.setDouble(3, tax.getTaxRate());
+            preparedStatement.setDate(4, Date.valueOf(tax.getDateOfCreation()));
+            preparedStatement.setBoolean(5, tax.isActivate());
             n = preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -57,17 +59,17 @@ public class TaxDAO {
         return n > 0;
     }
 
-    public static boolean deleteData(String taxName){
+    public static boolean deleteData(String taxID){
         int n = 0;
 
         String SQLStatement = "DELETE FROM Tax\n" +
-                "WHERE taxName = ?";
+                "WHERE taxID = ?";
         try(
                 Connection con = DBHelper.getConnection();
                 PreparedStatement preparedStatement = con.prepareStatement(SQLStatement);
         )
         {
-            preparedStatement.setString(1, taxName);
+            preparedStatement.setString(1, taxID);
             n = preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -80,16 +82,17 @@ public class TaxDAO {
 
         String SQLStatement = """
                 UPDATE Tax
-                SET taxRate = ?, activate = ?
+                SET taxName = ?, taxRate = ?, activate = ?
                 WHERE taxName = ?""";
         try(
                 Connection con = DBHelper.getConnection();
                 PreparedStatement preparedStatement = con.prepareStatement(SQLStatement);
         )
         {
-            preparedStatement.setDouble(1, newTax.getTaxRate());
-            preparedStatement.setBoolean(2, newTax.isActivate());
-            preparedStatement.setString(3, newTax.getTaxName());
+            preparedStatement.setString(1, newTax.getTaxName());
+            preparedStatement.setDouble(2, newTax.getTaxRate());
+            preparedStatement.setBoolean(3, newTax.isActivate());
+            preparedStatement.setString(4, newTax.getTaxName());
 
             n = preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -98,17 +101,23 @@ public class TaxDAO {
         return n > 0;
     }
 
-    public static Tax getDataByName(String name){
-        String SQLStatement = "";
+    public static Tax getDataByID(String id){
+        String SQLStatement = "select * from Tax where taxID = ? ";
         try(
                 Connection con = DBHelper.getConnection();
                 PreparedStatement preparedStatement = con.prepareStatement(SQLStatement);
         )
         {
-            preparedStatement.setString(1, name);
+            preparedStatement.setString(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
-
+                Tax tax = new Tax();
+                tax.setTaxID(resultSet.getString(1));
+                tax.setTaxName(resultSet.getString(2));
+                tax.setTaxRate(resultSet.getDouble(3));
+                tax.setDateOfCreation(ConvertHelper.localDateConverter(resultSet.getDate(4)));
+                tax.setActivate(resultSet.getBoolean(5));
+                return tax;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

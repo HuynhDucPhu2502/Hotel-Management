@@ -11,7 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 
-public class RoomAvailableController {
+public class RoomAvailableItemController {
     @FXML
     private Text roomNumberText;
     @FXML
@@ -21,11 +21,6 @@ public class RoomAvailableController {
     private MainController mainController;
     private Employee employee;
     private Room room;
-
-    public void setRoom(Room room) {
-        roomCategoryNameLabel.setText(room.getRoomCategory().getRoomCategoryName());
-        roomNumberText.setText(room.getRoomNumber());
-    }
 
     public void setupContext(MainController mainController, Employee employee, Room room) {
         this.mainController = mainController;

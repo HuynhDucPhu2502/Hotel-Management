@@ -1,5 +1,8 @@
 package iuh.fit.controller.features.room;
 
+import com.calendarfx.model.Calendar;
+import com.calendarfx.model.Entry;
+import com.calendarfx.view.CalendarView;
 import com.dlsc.gemsfx.DialogPane;
 import com.dlsc.gemsfx.TimePicker;
 import com.dlsc.gemsfx.daterange.DateRange;
@@ -7,8 +10,10 @@ import com.dlsc.gemsfx.daterange.DateRangePicker;
 import com.dlsc.gemsfx.daterange.DateRangePreset;
 import iuh.fit.controller.MainController;
 import iuh.fit.dao.CustomerDAO;
+import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
+import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
 import iuh.fit.utils.CostCalculator;
 import iuh.fit.utils.ErrorMessages;
@@ -19,16 +24,20 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.List;
 import java.util.Locale;
 
 public class ReservationFormController {
@@ -41,7 +50,13 @@ public class ReservationFormController {
     @FXML
     private Button bookingRoomNavigate;
     @FXML
-    private Button createCustomerBtn;
+    private Button navigateToCreateCustomerBtn;
+    @FXML
+    private Button navigateToReservationListBtn;
+    @FXML
+    private Button addBtn;
+    @FXML
+    private Button reservationCheckDateBtn;
     // 1.2 Input Fields
     // 1.2.1 Fields cho phiếu đặt phòng
     @FXML
@@ -84,7 +99,11 @@ public class ReservationFormController {
     @FXML
     private DialogPane dialogPane;
 
-    // 1.4. Context và dữ liệu binding
+    // 1.4 Titled Pane
+    @FXML
+    private TitledPane titledPane;
+
+    // 1.5 Context và dữ liệu binding
     private MainController mainController;
     private Employee employee;
     private Room room;
@@ -111,16 +130,18 @@ public class ReservationFormController {
         this.employee = employee;
         this.room = room;
 
+        titledPane.setText("Quản lý đặt phòng " + room.getRoomNumber());
+
         backBtn.setOnAction(e -> navigateToRoomBooking());
         bookingRoomNavigate.setOnAction(e -> navigateToRoomBooking());
-        createCustomerBtn.setOnAction(e -> navigateToAddCustomer());
+        navigateToCreateCustomerBtn.setOnAction(e -> navigateToAddCustomer());
+        navigateToReservationListBtn.setOnAction(e -> navigateToReservationList());
 
         setupRoomInformation();
         setupEmployeeInformation();
 
         if (customer != null) {
-            this.customer = customer;
-            setCustomerInfo();
+            customerIDCardNumberTextField.setText(customer.getIdCardNumber());
         }
 
         if (checkInTime != null && checkOutTime != null) {
@@ -128,6 +149,9 @@ public class ReservationFormController {
             this.checkOutTime = checkOutTime;
             setBookingDates(checkInTime, checkOutTime);
         }
+
+        addBtn.setOnAction(e -> handleCreateReservationRoom());
+        reservationCheckDateBtn.setOnAction(e -> openCalendarViewStage());
     }
 
     // ==================================================================================================================
@@ -203,7 +227,22 @@ public class ReservationFormController {
         }
     }
 
+    private void navigateToReservationList() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/ReservationList.fxml"));
+            AnchorPane layout = loader.load();
 
+            ReservationListController reservationListController = loader.getController();
+            reservationListController.setupContext(
+                    mainController, employee, room
+            );
+
+            mainController.getMainPanel().getChildren().clear();
+            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // ==================================================================================================================
     // 6. Cài đặt các thành phần giao diện liên quan đến thời gian
@@ -325,7 +364,8 @@ public class ReservationFormController {
     // ==================================================================================================================
     private void setupCustomerIDCardValidation() {
         customerIDCardNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.length() > 12) {
+            if (newValue == null) clearCustomerInfo();
+            else if (newValue.length() > 12) {
                 handleInputExceedsLimit(oldValue);
             } else if (newValue.length() == 12) {
                 validateIDCardNumber(newValue);
@@ -376,5 +416,79 @@ public class ReservationFormController {
             checkInTimePicker.setTime(checkInDate.toLocalTime());
             checkOutTimePicker.setTime(checkOutDate.toLocalTime());
     }
+
+    // ==================================================================================================================
+    // 10. Đẩy thời gian lên giao diện nếu checkInDate và checkOutDate không NULL
+    // ==================================================================================================================
+    private void handleCreateReservationRoom() {
+        try {
+            ReservationForm reservationForm = new ReservationForm(
+                    ReservationFormDAO.getNextReservationFormID(),
+                    LocalDateTime.now(),
+                    checkInTime,
+                    checkOutTime,
+                    employee,
+                    room,
+                    customer
+            );
+            ReservationFormDAO.createData(reservationForm);
+            handleResetAction();
+            dialogPane.showInformation("Thành công", "Đã thêm phiếu đặt phòng thành công");
+        } catch (Exception e) {
+            dialogPane.showWarning("LỖI", e.getMessage());
+        }
+    }
+
+    private void handleResetAction() {
+        try {
+            System.out.println("Đang reset các giá trị...");
+            bookDateRangePicker.setValue(null);
+            checkInTimePicker.setValue(null);
+            checkOutTimePicker.setValue(null);
+            customerIDCardNumberTextField.setText(null);
+            checkInDateTextField.setText(null);
+            checkOutDateTextField.setText(null);
+            stayLengthLabel.setText("Chưa Đặt Lịch");
+            bookingDepositLabel.setText("0 VND");
+
+            customer = null;
+            checkOutTime = null;
+            checkInTime = null;
+
+            System.out.println("Reset thành công");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void openCalendarViewStage() {
+        CalendarView calendarView = new CalendarView();
+
+        List<ReservationForm> reservations = ReservationFormDAO.getUpcomingReservations(room.getRoomID());
+
+        Calendar<String> reservationCalendar = new Calendar<>("Lịch Đặt Phòng");
+
+        reservations.forEach(reservation -> {
+            Entry<String> entry = new Entry<>(reservation.getReservationID());
+            entry.changeStartDate(reservation.getCheckInDate().toLocalDate());
+            entry.changeEndDate(reservation.getCheckOutDate().toLocalDate());
+            reservationCalendar.addEntry(entry);
+        });
+
+        calendarView.getCalendarSources().clear();
+        calendarView.getCalendarSources().add(new com.calendarfx.model.CalendarSource("Nguồn") {{
+            getCalendars().add(reservationCalendar);
+        }});
+
+        Scene scene = new Scene(calendarView, 800, 800);
+
+        Stage stage = new Stage();
+        stage.setTitle("Lịch đặt phòng " + room.getNumberOfBed());
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
 
 }

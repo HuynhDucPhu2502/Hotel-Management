@@ -313,7 +313,7 @@ public class CustomerManagerController {
         Scene scene = new Scene(layout);
 
         Stage stage = new Stage();
-        stage.setTitle("Thông Tin " + customer.getCustomerID());
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }
