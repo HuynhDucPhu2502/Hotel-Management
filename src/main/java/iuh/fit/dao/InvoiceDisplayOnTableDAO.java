@@ -14,7 +14,7 @@ import java.util.List;
 public class InvoiceDisplayOnTableDAO {
     public static List<InvoiceDisplayOnTable> getData(){
         List<InvoiceDisplayOnTable> data = new ArrayList<>();
-        String SqlQuery = "select i.invoiceID, c.fullName, r.roomID, e.fullName, i.invoiceDate, i.servicesCharge, i.roomCharge, t.taxRate, i.netDue\n" +
+        String SqlQuery = "select i.invoiceID, c.fullName, r.roomID, e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, t.taxRate, i.netDue\n" +
                 "from Invoice i join ReservationForm rs on i.reservationFormID = rs.reservationFormID\n" +
                 "join Customer c on c.customerID = rs.customerID\n" +
                 "join Employee e on e.employeeID = rs.employeeID\n" +
@@ -36,7 +36,7 @@ public class InvoiceDisplayOnTableDAO {
                 invoiceDisplayOnTable.setRoomID(rs.getString(3));
                 invoiceDisplayOnTable.setEmpName(rs.getString(4));
                 invoiceDisplayOnTable.setCreateDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(5)));
-                invoiceDisplayOnTable.setDeposit(0);
+                invoiceDisplayOnTable.setDeposit(5);
                 invoiceDisplayOnTable.setServiceCharge(rs.getDouble(6));
                 invoiceDisplayOnTable.setRoomCharge(rs.getDouble(7));
                 invoiceDisplayOnTable.setTax(rs.getDouble(8));
