@@ -44,6 +44,11 @@ public class MenuController {
     private Button accountOfEmployeeManagerButton;
 
     @FXML
+    private HBox shiftManagerContainer;
+    @FXML
+    private Button shiftManagerButton;
+
+    @FXML
     private ImageView arrowUpForEmpBtn;
 //  =====================================================
     // Room
@@ -164,7 +169,7 @@ public class MenuController {
         buttonStates.put("statistics", false);
         buttonStates.put("history", false);
 
-        employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(employeeManagerContainer, accountOfEmployeeManagerContainer), arrowUpForEmpBtn, "employee"));
+        employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(employeeManagerContainer, accountOfEmployeeManagerContainer, shiftManagerContainer), arrowUpForEmpBtn, "employee"));
         roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer, roomCategoryManagerContainer, roomManagerContainer, roomSearchingContainer, roomBookingContainer), arrowUpForRoom, "room"));
         serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryManagerContainer, hotelServiceManagerContainer, hotelServiceSearchingContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer), arrowUpForCustomer, "customer"));
@@ -240,6 +245,10 @@ public class MenuController {
 
     public  Button getAccountOfEmployeeManagerButton(){
         return accountOfEmployeeManagerButton;
+    }
+
+    public Button getShiftManagerButton(){
+        return shiftManagerButton;
     }
 
     public Button getDashBoardBtn() {
