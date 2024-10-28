@@ -306,13 +306,29 @@ public class EmployeeDAO {
             preparedStatement.setString(10, address);
             preparedStatement.setString(11, "%" + idCardNumber + "%");
             preparedStatement.setString(12, idCardNumber);
-            preparedStatement.setString(13, ConvertHelper.genderConverterToSQL(gender));
-            preparedStatement.setString(14, ConvertHelper.genderConverterToSQL(gender));
-            preparedStatement.setObject(15, dob);
-            preparedStatement.setObject(16, dob);
-            preparedStatement.setString(17, ConvertHelper.positionConverterToSQL(position));
-            preparedStatement.setObject(18, ConvertHelper.positionConverterToSQL(position));
+            if(gender == null){
+                preparedStatement.setObject(13, gender);
+                preparedStatement.setObject(14, gender);
+            }else {
+                preparedStatement.setString(13, ConvertHelper.genderConverterToSQL(gender));
+                preparedStatement.setString(14, ConvertHelper.genderConverterToSQL(gender));
+            }
 
+            if (dob == null){
+                preparedStatement.setObject(15, dob);
+                preparedStatement.setObject(16, dob);
+            } else {
+                preparedStatement.setDate(15, ConvertHelper.dateToSQLConverter(dob));
+                preparedStatement.setDate(16, ConvertHelper.dateToSQLConverter(dob));
+            }
+
+            if (position == null){
+                preparedStatement.setObject(17, position);
+                preparedStatement.setObject(18, position);
+            } else {
+                preparedStatement.setString(17, ConvertHelper.positionConverterToSQL(position));
+                preparedStatement.setObject(18, ConvertHelper.positionConverterToSQL(position));
+            }
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 Employee employee = new Employee();

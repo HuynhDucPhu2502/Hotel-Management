@@ -1,16 +1,9 @@
-package iuh.fit.controller.features.employee;
+package iuh.fit.controller.features.customer;
 
 import com.dlsc.gemsfx.DialogPane;
-import iuh.fit.dao.AccountDAO;
-import iuh.fit.dao.EmployeeDAO;
-import iuh.fit.dao.HotelServiceDAO;
-import iuh.fit.models.Account;
-import iuh.fit.models.Employee;
-import iuh.fit.models.HotelService;
+import iuh.fit.dao.CustomerDAO;
+import iuh.fit.models.Customer;
 import iuh.fit.models.enums.Gender;
-import iuh.fit.models.enums.Position;
-import iuh.fit.utils.ConvertHelper;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,12 +21,11 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
-public class EmployeeSearchingController {
+public class CustomerSearchingPanel {
     // Input Fields
     @FXML
-    private TextField employeeIDTextField;
+    private TextField customerIDTextField;
     @FXML
     private TextField fullNameTextField;
     @FXML
@@ -45,8 +37,6 @@ public class EmployeeSearchingController {
     @FXML
     private TextField cardIDTextField;
     @FXML
-    private ComboBox<String> positionCBox;
-    @FXML
     private DatePicker DOBPicker;
     @FXML
     private RadioButton male;
@@ -57,19 +47,19 @@ public class EmployeeSearchingController {
 
     // Table
     @FXML
-    private TableView<Employee> employeeTableView;
+    private TableView<Customer> customerTableView;
     @FXML
-    private TableColumn<Employee, String> employeeIDColumn;
+    private TableColumn<Customer, String> customerIDColumn;
     @FXML
-    private TableColumn<Employee, String> fullNameColumn;
+    private TableColumn<Customer, String> fullNameColumn;
     @FXML
-    private TableColumn<Employee, String> phoneNumberColumn;
+    private TableColumn<Customer, String> phoneNumberColumn;
     @FXML
-    private TableColumn<Employee, String> cardIDColumn;
+    private TableColumn<Customer, String> cardIDColumn;
     @FXML
-    private TableColumn<Employee, String> positionColumn;
+    private TableColumn<Customer, String> emailColumn;
     @FXML
-    private TableColumn<Employee , Void> actionColumn;
+    private TableColumn<Customer , Void> actionColumn;
 
     // Buttons
     @FXML
@@ -81,7 +71,7 @@ public class EmployeeSearchingController {
     @FXML
     private DialogPane dialogPane;
 
-    private ObservableList<Employee> items;
+    private ObservableList<Customer> items;
 
     public void initialize() {
         loadData();
@@ -91,31 +81,23 @@ public class EmployeeSearchingController {
     }
 
     private void loadData() {
-        positionCBox.getItems().setAll(
-                Stream.of(Position.values()).map(Enum::name).toList()
-        );
-        positionCBox.getItems().addFirst("TẤT CẢ");
-        List<Employee> employeeList = EmployeeDAO.getEmployees();
-        items = FXCollections.observableArrayList(employeeList);
-        employeeTableView.setItems(items);
-        employeeTableView.refresh();
-
-
-        positionCBox.getSelectionModel().selectFirst();
+        List<Customer> customerList = CustomerDAO.getCustomer();
+        items = FXCollections.observableArrayList(customerList);
+        customerTableView.setItems(items);
+        customerTableView.refresh();
     }
 
     private void setupTable() {
-        employeeIDColumn.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
+        customerIDColumn.setCellValueFactory(new PropertyValueFactory<>("customerID"));
         fullNameColumn.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         cardIDColumn.setCellValueFactory(new PropertyValueFactory<>("idCardNumber"));
-        positionColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getPosition().name()));
+        emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         setupActionColumn();
     }
 
     private void setupActionColumn() {
-        Callback<TableColumn<Employee, Void>, TableCell<Employee, Void>> cellFactory = param -> new TableCell<>() {
+        Callback<TableColumn<Customer, Void>, TableCell<Customer, Void>> cellFactory = param -> new TableCell<>() {
             private final Button showInfoButton = new Button("Thông tin");
             private final HBox hBox = new HBox(10);
             {
@@ -126,10 +108,9 @@ public class EmployeeSearchingController {
                 hBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/Button.css")).toExternalForm());
 
                 showInfoButton.setOnAction(e -> {
-                    Employee employee = getTableView().getItems().get(getIndex());
-                    Account account = AccountDAO.getAccountByEmployeeID(employee.getEmployeeID());
+                    Customer customer = getTableView().getItems().get(getIndex());
                     try {
-                        handleShowEmployeeInformation(employee, account);
+                        handleShowCustomerInformation(customer);
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -154,43 +135,40 @@ public class EmployeeSearchingController {
         actionColumn.setCellFactory(cellFactory);
     }
 
-    private void handleShowEmployeeInformation(Employee employee, Account account) throws IOException {
-        String source = "/iuh/fit/view/features/employee/EmployeeInformationView.fxml";
+    private void handleShowCustomerInformation(Customer customer) throws IOException {
+        String source = "/iuh/fit/view/features/customer/CustomerInformationView.fxml";
 
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
         AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
 
-        EmployeeInformationViewController employeeInformationViewController = loader.getController();
-        employeeInformationViewController.setEmployee(employee, account);
+        CustomerInformationViewController customerInformationViewController = loader.getController();
+        customerInformationViewController.setCustomer(customer);
 
         Scene scene = new Scene(layout);
 
         Stage stage = new Stage();
-        stage.setTitle("Thông tin nhân viên");
+        stage.setTitle("Thông tin khách hàng");
         stage.setScene(scene);
         stage.show();
     }
 
     private void handleResetAction() {
-        employeeIDTextField.setText("");
+        customerIDTextField.setText("");
         fullNameTextField.setText("");
         emailTextField.setText("");
         phoneNumberTextField.setText("");
-        positionCBox.getSelectionModel().selectFirst();
         cardIDTextField.setText("");
         male.setSelected(true);
         DOBPicker.setValue(null);
         addressTextField.setText("");
         gender.getSelectedToggle().setSelected(false);
-        positionCBox.getSelectionModel().clearSelection();
-
 
         loadData();
     }
 
     private void handleSearchAction() {
         try {
-            String employeeID = employeeIDTextField.getText().isBlank() ? null : employeeIDTextField.getText().trim();
+            String customerID = customerIDTextField.getText().isBlank() ? null : customerIDColumn.getText().trim();
             String fullName = fullNameColumn.getText().isBlank() ? null : fullNameTextField.getText().trim();
             String phoneNumber = phoneNumberTextField.getText().isBlank() ? null : phoneNumberTextField.getText().trim();
             String email = emailTextField.getText().isBlank() ? null : emailTextField.getText().trim();
@@ -203,17 +181,12 @@ public class EmployeeSearchingController {
             }
             LocalDate dob =  DOBPicker.getValue();
             String cardID = cardIDTextField.getText().isBlank() ? null : cardIDTextField.getText().trim();
-            Position position;
-            if(positionCBox.getSelectionModel().getSelectedItem().equalsIgnoreCase("TẤT CẢ")){
-                position = null;
-            } else{
-               position = ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem());
-            }
-            List<Employee> searchResults = EmployeeDAO.searchEmployee(
-                        employeeID, fullName, phoneNumber, email, address, gder, cardID, dob, position
-                    );
+
+            List<Customer> searchResults = CustomerDAO.searchCustomer(
+                    customerID, fullName, phoneNumber, email, address, gder, cardID, dob
+            );
             items.setAll(searchResults);
-            employeeTableView.setItems(items);
+            customerTableView.setItems(items);
         } catch (Exception e) {
             e.printStackTrace();
         }
