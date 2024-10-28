@@ -263,7 +263,6 @@ public class ReservationFormDAO {
         }
     }
 
-
     public static void deleteData(String reservationFormID) {
         try (
                 Connection connection = DBHelper.getConnection();
@@ -419,31 +418,98 @@ public class ReservationFormDAO {
     public static List<ReservationForm> getUpcomingReservations(String roomID) {
         List<ReservationForm> reservations = new ArrayList<>();
 
-        String sql = "SELECT reservationFormID, checkInDate, checkOutDate " +
-                "FROM ReservationForm " +
-                "WHERE roomID = ? AND checkInDate >= ? " +
-                "ORDER BY checkInDate";
+        String sql =
+                "SELECT a.reservationFormID, a.reservationDate, a.checkInDate, " +
+                        "a.checkOutDate, a.roomBookingDeposit, a.employeeID, " +
+                        "a.roomID, a.customerID, b.fullName, " +
+                        "b.phoneNumber, b.email, b.address, " +
+                        "b.gender, b.idCardNumber, b.dob, " +
+                        "b.position, c.roomStatus, c.dateOfCreation, " +
+                        "c.roomCategoryID, d.fullName, d.phoneNumber, " +
+                        "d.email, d.address, d.gender, " +
+                        "d.idCardNumber, d.dob, e.roomCategoryName, " +
+                        "e.numberOfBed " +
+                        "FROM ReservationForm a " +
+                        "INNER JOIN Employee b ON a.employeeID = b.employeeID " +
+                        "INNER JOIN Room c ON a.roomID = c.roomID " +
+                        "INNER JOIN Customer d ON a.customerID = d.customerID " +
+                        "INNER JOIN RoomCategory e ON c.roomCategoryID = e.roomCategoryID " +
+                        "WHERE a.roomID = ? " +
+                        "AND a.checkInDate >= ? " +
+                        "AND NOT EXISTS ( " +
+                        "    SELECT 1 FROM HistoryCheckin hci " +
+                        "    WHERE hci.reservationFormID = a.reservationFormID " +
+                        ") " +
+                        "ORDER BY a.checkInDate";
 
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setString(1, roomID);
-            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(LocalDateTime.now()));
+            preparedStatement.setTimestamp(2,
+                    ConvertHelper.dateTimeToSQLConverter(LocalDateTime.now().minusHours(2))
+            );
+
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                ReservationForm reservation = new ReservationForm();
-                reservation.setReservationID(rs.getString("reservationFormID"));
-                reservation.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkInDate")));
-                reservation.setCheckOutDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkOutDate")));
+                ReservationForm reservationForm = new ReservationForm();
+                Employee employee = new Employee();
+                Room room = new Room();
+                Customer customer = new Customer();
+                RoomCategory roomCategory = new RoomCategory();
 
-                reservations.add(reservation);
+                // ReservationForm
+                reservationForm.setReservationID(rs.getString(1));
+                reservationForm.setReservationDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(2)));
+                reservationForm.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(3)));
+                reservationForm.setCheckOutDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(4)));
+                reservationForm.setRoomBookingDeposit(rs.getDouble(5));
+
+                // Employee
+                employee.setEmployeeID(rs.getString(6));
+                employee.setFullName(rs.getString(9));
+                employee.setPhoneNumber(rs.getString(10));
+                employee.setEmail(rs.getString(11));
+                employee.setAddress(rs.getString(12));
+                employee.setGender(ConvertHelper.genderConverter(rs.getString(13)));
+                employee.setIdCardNumber(rs.getString(14));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate(15)));
+                employee.setPosition(ConvertHelper.positionConverter(rs.getString(16)));
+
+                // Room
+                room.setRoomID(rs.getString(7));
+                room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString(17)));
+                room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp(18)));
+
+                // Room Category
+                roomCategory.setRoomCategoryID(rs.getString(19));
+                roomCategory.setRoomCategoryName(rs.getString(27));
+                roomCategory.setNumberOfBed(rs.getInt(28));
+                room.setRoomCategory(roomCategory);
+
+                // Customer
+                customer.setCustomerID(rs.getString(8));
+                customer.setFullName(rs.getString(20));
+                customer.setPhoneNumber(rs.getString(21));
+                customer.setEmail(rs.getString(22));
+                customer.setAddress(rs.getString(23));
+                customer.setGender(ConvertHelper.genderConverter(rs.getString(24)));
+                customer.setIdCardNumber(rs.getString(25));
+                customer.setDob(ConvertHelper.localDateConverter(rs.getDate(26)));
+
+                reservationForm.setEmployee(employee);
+                reservationForm.setRoom(room);
+                reservationForm.setCustomer(customer);
+
+                reservations.add(reservationForm);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return reservations;
     }
+
 
 }

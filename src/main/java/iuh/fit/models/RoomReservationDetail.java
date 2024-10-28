@@ -12,12 +12,17 @@ public class RoomReservationDetail {
     private LocalDateTime dateChanged;
     private Room room;
     private ReservationForm reservationForm;
+    private Employee employee;
 
-    public RoomReservationDetail(String roomReservationDetailID, LocalDateTime dateChanged, Room room, ReservationForm reservationForm) {
+    public RoomReservationDetail(
+            String roomReservationDetailID, LocalDateTime dateChanged,
+            Room room, ReservationForm reservationForm,
+            Employee employee) {
         this.setRoomReservationDetailID(roomReservationDetailID);
         this.setDateChanged(dateChanged);
         this.setRoom(room);
         this.setReservationForm(reservationForm);
+        this.setEmployee(employee);
     }
 
     public RoomReservationDetail() {
@@ -25,6 +30,58 @@ public class RoomReservationDetail {
 
     public RoomReservationDetail(String roomReservationDetailID) {
         this.setRoomReservationDetailID(roomReservationDetailID);
+    }
+
+    public void setEmployee(Employee employee) {
+        if (employee == null)
+            throw new IllegalArgumentException(ErrorMessages.NULL_EMPLOYEE);
+        this.employee = employee;
+    }
+
+    public void setRoomReservationDetailID(String roomReservationDetailID) {
+        if (!RegexChecker.isValidIDFormat(GlobalConstants.ROOM_RESERVATION_DETAIL_PREFIX, roomReservationDetailID)) {
+            throw new IllegalArgumentException(ErrorMessages.ROOM_RESERVATION_DETAIL_INVALID_ID);
+        }
+        this.roomReservationDetailID = roomReservationDetailID;
+    }
+
+    public void setDateChanged(LocalDateTime dateChanged) {
+        if (dateChanged == null || dateChanged.isAfter(LocalDateTime.now())) {
+            throw new IllegalArgumentException(ErrorMessages.ROOM_RESERVATION_DETAIL_INVALID_DATECHANGED);
+        }
+        this.dateChanged = dateChanged;
+    }
+
+    public void setRoom(Room room) {
+        if (room == null)
+            throw new IllegalArgumentException(ErrorMessages.NULL_ROOM);
+        this.room = room;
+    }
+
+    public void setReservationForm(ReservationForm reservationForm) {
+        if (reservationForm == null)
+            throw new IllegalArgumentException(ErrorMessages.NULL_RESERVATIONFORM);
+        this.reservationForm = reservationForm;
+    }
+
+    public String getRoomReservationDetailID() {
+        return roomReservationDetailID;
+    }
+
+    public LocalDateTime getDateChanged() {
+        return dateChanged;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public ReservationForm getReservationForm() {
+        return reservationForm;
+    }
+
+    public Employee getEmployee() {
+        return employee;
     }
 
     @Override
@@ -39,42 +96,6 @@ public class RoomReservationDetail {
         return Objects.hashCode(roomReservationDetailID);
     }
 
-    public String getRoomReservationDetailID() {
-        return roomReservationDetailID;
-    }
-
-    public void setRoomReservationDetailID(String roomReservationDetailID) {
-        if (RegexChecker.isValidIDFormat(GlobalConstants.ROOM_RESERVATION_DETAIL_PREFIX, roomReservationDetailID))
-            throw new IllegalArgumentException(ErrorMessages.ROOM_RESERVATION_DETAIL_INVALID_ID);
-        this.roomReservationDetailID = roomReservationDetailID;
-    }
-
-    public LocalDateTime getDateChanged() {
-        return dateChanged;
-    }
-
-    public void setDateChanged(LocalDateTime dateChanged) {
-        if (dateChanged.isAfter(LocalDateTime.now()))
-            throw new IllegalArgumentException(ErrorMessages.ROOM_RESERVATION_DETAIL_INVALID_DATECHANGED);
-        this.dateChanged = dateChanged;
-    }
-
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
-    }
-
-    public ReservationForm getReservationForm() {
-        return reservationForm;
-    }
-
-    public void setReservationForm(ReservationForm reservationForm) {
-        this.reservationForm = reservationForm;
-    }
-
     @Override
     public String toString() {
         return "RoomReservationDetail{" +
@@ -82,6 +103,7 @@ public class RoomReservationDetail {
                 ", dateChanged=" + dateChanged +
                 ", room=" + room +
                 ", reservationForm=" + reservationForm +
+                ", employee=" + employee +
                 '}';
     }
 }

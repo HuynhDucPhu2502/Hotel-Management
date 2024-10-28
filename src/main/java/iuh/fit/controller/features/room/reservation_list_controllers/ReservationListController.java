@@ -68,8 +68,8 @@ public class ReservationListController {
     }
 
     private void loadData() {
-        reservationForms = ReservationFormDAO.getReservationFormByRoomID(room.getRoomID());
-
+        reservationForms = ReservationFormDAO.getUpcomingReservations(room.getRoomID());
+        reservationForms.forEach(System.out::println);
     }
 
     // ==================================================================================================================

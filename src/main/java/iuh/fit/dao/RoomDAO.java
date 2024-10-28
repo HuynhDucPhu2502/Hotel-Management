@@ -1,6 +1,7 @@
 package iuh.fit.dao;
 
 import iuh.fit.models.*;
+import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 
@@ -268,5 +269,26 @@ public class RoomDAO {
         return newRoomID;
     }
 
+    public static void updateRoomStatus(String roomID, RoomStatus newStatus) {
+        String sql = "UPDATE Room SET roomStatus = ? WHERE roomID = ?";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            preparedStatement.setString(1, newStatus.name()); // Sử dụng name() để lấy tên Enum (AVAILABLE, ON_USE, ...)
+            preparedStatement.setString(2, roomID);
+
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new IllegalArgumentException("Không tìm thấy phòng với roomID: " + roomID);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi cập nhật trạng thái phòng", e);
+        }
+    }
 
 }

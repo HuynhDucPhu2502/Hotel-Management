@@ -11,13 +11,17 @@ public class HistoryCheckIn {
     private String historyCheckInID;
     private LocalDateTime checkInDate;
     private ReservationForm reservationForm;
+    private Employee employee;
 
 
-    public HistoryCheckIn(String historyCheckInID, LocalDateTime checkInDate, ReservationForm reservationForm) {
+    public HistoryCheckIn(String historyCheckInID, LocalDateTime checkInDate,
+                          ReservationForm reservationForm, Employee employee) {
         this.setHistoryCheckInID(historyCheckInID);
-        this.setCheckInDate(checkInDate);
         this.setReservationForm(reservationForm);
+        this.setCheckInDate(checkInDate);
+        this.setEmployee(employee);
     }
+
 
     public HistoryCheckIn(String historyCheckInID) {
         this.setHistoryCheckInID(historyCheckInID);
@@ -26,40 +30,50 @@ public class HistoryCheckIn {
     public HistoryCheckIn() {
     }
 
-    public String getHistoryCheckInID() {
-        return historyCheckInID;
+    public void setEmployee(Employee employee) {
+        if (employee == null)
+            throw new IllegalArgumentException(ErrorMessages.NULL_EMPLOYEE);
+        this.employee = employee;
     }
 
     public void setHistoryCheckInID(String historyCheckInID) {
         if(historyCheckInID.isEmpty())
-            throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_IVALID_ID_ISNULL);
+            throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_INVALID_ID_ISNULL);
         if(!RegexChecker.isValidIDFormat(GlobalConstants.HISTORY_CHECKIN_ID_PREFIX, historyCheckInID))
-            throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_IVALID_ID_FORMAT);
+            throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_INVALID_ID_FORMAT);
         this.historyCheckInID = historyCheckInID;
     }
 
-    public LocalDateTime getCheckInDate() {
-        return checkInDate;
-    }
-
     public void setCheckInDate(LocalDateTime checkInDate) {
-        if(checkInDate == null){
-            throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_IVALID_CHECKIN_DATE_ISNULL);
+        if (checkInDate == null) {
+            throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_INVALID_CHECKIN_DATE_ISNULL);
         }
-        if(!checkInDate.isAfter(reservationForm.getCheckInDate())){
-            throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_IVALID_CHECKIN_DATE);
+        if (reservationForm == null || !checkInDate.isAfter(reservationForm.getCheckInDate())) {
+            throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_INVALID_CHECKIN_DATE);
         }
         this.checkInDate = checkInDate;
-    }
-
-    public ReservationForm getReservationForm() {
-        return reservationForm;
     }
 
     public void setReservationForm(ReservationForm reservationForm) {
         if(reservationForm == null)
             throw new IllegalArgumentException(ErrorMessages.NULL_RESERVATIONFORM);
         this.reservationForm = reservationForm;
+    }
+
+    public String getHistoryCheckInID() {
+        return historyCheckInID;
+    }
+
+    public LocalDateTime getCheckInDate() {
+        return checkInDate;
+    }
+
+    public ReservationForm getReservationForm() {
+        return reservationForm;
+    }
+
+    public Employee getEmployee() {
+        return employee;
     }
 
     @Override
