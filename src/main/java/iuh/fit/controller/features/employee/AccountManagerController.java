@@ -19,6 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -37,8 +38,6 @@ public class AccountManagerController {
     @FXML
     private TextField usernameSearchField;
     @FXML
-    private TextField passwordSearchField;
-    @FXML
     private TextField statusSearchField;
 
     // Input Fields
@@ -54,6 +53,12 @@ public class AccountManagerController {
     private PasswordField passwordTextField;
     @FXML
     private ComboBox<String> statusCBox;
+    @FXML
+    private PasswordField newPasswordTextField;
+    @FXML
+    private Text passwordLabel;
+    @FXML
+    private Text newPasswordLabel;
 
     // Table
     @FXML
@@ -63,7 +68,7 @@ public class AccountManagerController {
     @FXML
     private TableColumn<Account, String> usernameColumn;
     @FXML
-    private TableColumn<Account, String> passwordColumn;
+    private TableColumn<Account, String> fullNameColumn;
     @FXML
     private TableColumn<Account, String> statusColumn;
     @FXML
@@ -124,8 +129,9 @@ public class AccountManagerController {
     private void setupTable() {
         employeeIDColumn.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getEmployee().getEmployeeID()));
+        fullNameColumn.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getEmployee().getFullName()));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));
-        passwordColumn.setCellValueFactory(new PropertyValueFactory<>("password"));
         statusColumn.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getAccountStatus().name()));
         setupActionColumn();
@@ -188,12 +194,17 @@ public class AccountManagerController {
 
         usernameTextField.setText(account.getUserName());
 
-        passwordTextField.setText(account.getPassword());
-
         statusCBox.getSelectionModel().select(account.getAccountStatus().name());
 
         employeeIDCBox.setEditable(false);
         employeeIDCBox.setDisable(true);
+        usernameTextField.setEditable(false);
+        usernameTextField.setDisable(true);
+        passwordLabel.setVisible(true);
+        newPasswordLabel.setVisible(true);
+        passwordTextField.setVisible(true);
+        newPasswordTextField.setVisible(true);
+
 
         addBtn.setManaged(false);
         addBtn.setVisible(false);
@@ -221,6 +232,14 @@ public class AccountManagerController {
     private void handleResetAction() {
         employeeIDCBox.setEditable(true);
         employeeIDCBox.setDisable(false);
+        passwordLabel.setVisible(false);
+        newPasswordLabel.setVisible(false);
+        passwordTextField.setText("");
+        newPasswordTextField.setText("");
+        passwordTextField.setVisible(false);
+        newPasswordTextField.setVisible(false);
+        usernameTextField.setEditable(true);
+        usernameTextField.setDisable(false);
         accountIDTextField.setText(AccountDAO.getNextAccountID());
         if (!employeeIDCBox.getItems().isEmpty()) employeeIDCBox.getSelectionModel().select(null);
         fullNameTextField.setText("");
@@ -264,7 +283,6 @@ public class AccountManagerController {
     private void handleSearchAction() {
         fullNameSearchField.setText("");
         usernameSearchField.setText("");
-        passwordSearchField.setText("");
         statusSearchField.setText("");
 
         String searchText = employeeIDSearchField.getValue();
@@ -278,7 +296,6 @@ public class AccountManagerController {
                 Account account = accountList.getFirst();
                 fullNameSearchField.setText(String.valueOf(account.getEmployee().getFullName()));
                 usernameSearchField.setText(account.getUserName());
-                passwordSearchField.setText(account.getPassword());
                 statusSearchField.setText(account.getAccountStatus().name());
             }
         }
@@ -313,7 +330,7 @@ public class AccountManagerController {
                     accountIDTextField.getText(),
                     employee,
                     usernameTextField.getText(),
-                    passwordTextField.getText(),
+                    newPasswordTextField.getText(),
                     ConvertHelper.accountStatusConverter(statusCBox.getSelectionModel().getSelectedItem())
             );
 
@@ -323,8 +340,19 @@ public class AccountManagerController {
             dialog.onClose(buttonType -> {
                 if (buttonType == ButtonType.YES) {
                     try {
+                        String oldPass = AccountDAO.getAccountByEmployeeID(employeeIDCBox.getValue()).getPassword();
+                        String tmpPass = passwordTextField.getText();
+                        String newPass = newPasswordTextField.getText();
+                        if(!oldPass.equals(tmpPass)){
+                            dialogPane.showWarning("LỖI", "Mật khẩu cũ không đúng!");
+                            return;
+                        } else if(tmpPass.equals(newPass)){
+                            dialogPane.showWarning("LỖI", "Mật khẩu cũ và mật khẩu mới phải khác nhau!");
+                            return;
+                        }
                         AccountDAO.updateData(account);
                         Platform.runLater(() -> {
+                            dialogPane.showInformation("Thành công", "Đã đổi mật khẩu thành công");
                             handleResetAction();
                             loadData();
                         });
