@@ -24,11 +24,11 @@ public class Shift {
 
     public Shift(String shiftID, LocalTime startTime, LocalDateTime updatedDate, ShiftDaysSchedule shiftDaysSchedule, int numberOfHour) {
         setStartTime(startTime);
+        setNumberOfHour(numberOfHour);
+        calcEndTime(); // Tính toán số giờ làm việc
         setShiftID(shiftID);
         setUpdatedDate(updatedDate);
         setShiftDaysSchedule(shiftDaysSchedule);
-        setNumberOfHour(numberOfHour);
-        calcEndTime(); // Tính toán số giờ làm việc
     }
 
     /**
@@ -106,9 +106,6 @@ public class Shift {
         if (startTime.isBefore(GlobalConstants.SHIFT_MIN_TIME))
             throw new IllegalArgumentException(ErrorMessages.SHIFT_INVALID_STARTTIME);
 
-        if (endTime != null && startTime.isAfter(endTime))
-            throw new IllegalArgumentException(ErrorMessages.SHIFT_INVALID_STARTTIME);
-
         this.startTime = startTime;
     }
 
@@ -132,13 +129,15 @@ public class Shift {
             throw new IllegalArgumentException(ErrorMessages.SHIFT_NULL_STARTTIME);
 
         if (numberOfHour == 0)
-            throw new IllegalArgumentException(ErrorMessages.SHIFT_NULL_ENDTIME);
+            throw new IllegalArgumentException(ErrorMessages.SHIFT_NULL_WORKHOURS);
 
-        LocalTime endTime = ChronoUnit.DAYS.addTo(startTime, numberOfHour);
+        LocalTime endTime = startTime.plusHours(numberOfHour);
 
-        if (endTime.isBefore(startTime))
-            throw new IllegalArgumentException(ErrorMessages.SHIFT_INVALID_WORKHOURS);
-        if (endTime.isAfter(GlobalConstants.SHIFT_MAX_TIME))
+//        if (endTime.isBefore(startTime))
+//            throw new IllegalArgumentException(ErrorMessages.SHIFT_INVALID_WORKHOURS);
+
+        int maxWorkHours = 23 - startTime.getHour();
+        if(numberOfHour > maxWorkHours)
             throw new IllegalArgumentException(ErrorMessages.SHIFT_INVALID_ENDTIME);
 
         this.endTime = endTime;
