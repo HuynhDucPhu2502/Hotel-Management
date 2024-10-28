@@ -3,11 +3,9 @@ package iuh.fit.dao;
 import iuh.fit.models.*;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
+import iuh.fit.utils.GlobalConstants;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -188,20 +186,61 @@ public class HistoryCheckinDAO {
     }
 
     public static void createData(HistoryCheckIn historyCheckIn) {
-        String sql = "INSERT INTO HistoryCheckin(historyCheckInID, checkInDate, reservationFormID, employeeID) " +
-                "VALUES (?, ?, ?, ?)";
+        String insertSQL =
+                "INSERT INTO HistoryCheckin(historyCheckInID, checkInDate, reservationFormID, employeeID) " +
+                        "VALUES (?, ?, ?, ?)";
+
+        String selectNextIDSQL =
+                "SELECT nextID FROM GlobalSequence WHERE tableName = ?";
+
+        String updateNextIDSQL =
+                "UPDATE GlobalSequence SET nextID = ? WHERE tableName = ?";
 
         try (
                 Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(sql)
-        ) {
-            preparedStatement.setString(1, historyCheckIn.getHistoryCheckInID());
-            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(historyCheckIn.getCheckInDate()));
-            preparedStatement.setString(3, historyCheckIn.getReservationForm().getReservationID());
-            preparedStatement.setString(4, historyCheckIn.getEmployee().getEmployeeID());
 
-            preparedStatement.executeUpdate();
-        } catch (Exception exception) {
+                // Câu lệnh chuẩn bị để thêm dữ liệu vào HistoryCheckIn
+                PreparedStatement insertStatement = connection.prepareStatement(insertSQL);
+
+                // Câu lệnh lấy nextID từ GlobalSequence
+                PreparedStatement selectSequenceStatement = connection.prepareStatement(selectNextIDSQL);
+
+                // Câu lệnh cập nhật nextID trong GlobalSequence
+                PreparedStatement updateSequenceStatement = connection.prepareStatement(updateNextIDSQL)
+        ) {
+            // Lấy nextID hiện tại cho HistoryCheckIn từ GlobalSequence
+            selectSequenceStatement.setString(1, "HistoryCheckIn");
+            ResultSet rs = selectSequenceStatement.executeQuery();
+
+            if (rs.next()) {
+                String currentNextID = rs.getString("nextID");
+                String prefix = GlobalConstants.HISTORY_CHECKIN_ID_PREFIX + "-";
+
+                // Tách phần số và tăng thêm 1
+                int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
+
+                // Định dạng lại phần số với 6 chữ số
+                String newNextID = prefix + String.format("%06d", nextIDNum);
+
+                // Thiết lập giá trị cho câu lệnh INSERT
+                insertStatement.setString(1, currentNextID);
+                insertStatement.setTimestamp(2,
+                        ConvertHelper.dateTimeToSQLConverter(historyCheckIn.getCheckInDate()));
+                insertStatement.setString(3,
+                        historyCheckIn.getReservationForm().getReservationID());
+                insertStatement.setString(4,
+                        historyCheckIn.getEmployee().getEmployeeID());
+
+                // Thực thi câu lệnh INSERT
+                insertStatement.executeUpdate();
+
+                // Cập nhật nextID trong GlobalSequence
+                updateSequenceStatement.setString(1, newNextID);
+                updateSequenceStatement.setString(2, "HistoryCheckIn");
+                updateSequenceStatement.executeUpdate();
+            }
+
+        }  catch (Exception exception) {
             exception.printStackTrace();
             System.exit(1);
         }

@@ -250,7 +250,8 @@ VALUES
 	('RoomCategory', 'RC-000005'),
 	('ShiftAssignment', 'SA-000004'),
 	('Customer', 'CUS-000031'),
-	('ReservationForm', 'RF-000111')
+	('ReservationForm', 'RF-000111'),
+	('HistoryCheckIn', 'EMP-000006');
 GO
 
 -- Thêm dữ liệu vào bảng Employee
