@@ -3,11 +3,10 @@ package iuh.fit.dao;
 import iuh.fit.models.Shift;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
+import iuh.fit.utils.GlobalConstants;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class ShiftDAO {
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement();
         ){
-            String sql = "SELECT shiftID, startTime, endTime, " +
+            String sql = "SELECT shiftID, startTime, numberOfHour, " +
                     "modifiedDate, shiftDaysSchedule " +
                     "FROM Shift";
             ResultSet rs = statement.executeQuery(sql);
@@ -91,6 +90,7 @@ public class ShiftDAO {
                                 "VALUES(?, ?, ?, ?, ?, ?)"
                 )
         ){
+
             preparedStatement.setString(1, shift.getShiftID());
             preparedStatement.setTime(2, ConvertHelper.timeConvertertoSQL(shift.getStartTime()));
             preparedStatement.setTime(3, ConvertHelper.timeConvertertoSQL(shift.getEndTime()));
@@ -143,5 +143,37 @@ public class ShiftDAO {
             System.exit(1);
         }
 
+    }
+
+    public static String shiftIDGenerate(LocalTime endTime){
+        String sql = "SELECT shiftID FROM Shift";
+        String newShiftID;
+        int maxIDNumb = 0;
+        try (
+                Connection connection = DBHelper.getConnection();
+                Statement statement = connection.createStatement();
+        ) {
+            try (ResultSet rs = statement.executeQuery(sql)) {
+                while (rs.next()) {
+                    String shiftID = rs.getString(1);
+                    String shiftIDSubStr = shiftID.substring(shiftID.length()-4);
+                    int shiftOrdNumb = Integer.parseInt(shiftIDSubStr);
+
+                    maxIDNumb = Math.max(maxIDNumb, shiftOrdNumb);
+                }
+
+                if (maxIDNumb >= 9999)
+                    throw new IllegalArgumentException("Số lượng ca làm đã đạt đến giới hạn. Vui lòng không thêm hoặc xóa bớt để tạo thêm");
+
+                int nextIDNumb = maxIDNumb + 1;
+                String timeCode = endTime.getHour() > 12 ? "PM" : "AM";
+
+                newShiftID = String.format("%s%s%04d", GlobalConstants.SHIFT_PREFIX + "-", timeCode + "-", nextIDNumb);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Lỗi truy vấn cơ sở dữ liệu", e);
+        }
+
+        return newShiftID;
     }
 }
