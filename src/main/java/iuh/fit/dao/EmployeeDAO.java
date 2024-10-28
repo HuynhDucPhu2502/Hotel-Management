@@ -148,7 +148,6 @@ public class EmployeeDAO {
 
     }
 
-
     public static String getNextEmployeeID() {
         String nextID = "EMP-000001";
 
@@ -231,6 +230,7 @@ public class EmployeeDAO {
 
             return data;
     }
+
     public static Employee getEmployeeByAccountID(String accountID) {
         String sql = "SELECT e.employeeID, e.fullName, e.phoneNumber, e.email, e.address, " +
                 "e.gender, e.idCardNumber, e.dob, e.position " +
