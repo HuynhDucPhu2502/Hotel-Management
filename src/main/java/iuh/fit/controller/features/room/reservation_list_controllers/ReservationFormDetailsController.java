@@ -1,18 +1,23 @@
 package iuh.fit.controller.features.room.reservation_list_controllers;
 
+import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
-import iuh.fit.models.Customer;
-import iuh.fit.models.Employee;
-import iuh.fit.models.ReservationForm;
-import iuh.fit.models.Room;
+import iuh.fit.dao.HistoryCheckinDAO;
+import iuh.fit.dao.ReservationFormDAO;
+import iuh.fit.dao.RoomDAO;
+import iuh.fit.dao.RoomReservationDetailDAO;
+import iuh.fit.models.*;
+import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.utils.Calculator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -27,6 +32,12 @@ public class ReservationFormDetailsController {
     private Button reservationFormListNavigate;
     @FXML
     private Button bookingRoomNavigate;
+    @FXML
+    private Button reservationFormBtn;
+    @FXML
+    private Button deleteReservationFormBtn;
+    @FXML
+    private Button checkInBtn;
 
     // 1.2 Labels
     @FXML
@@ -64,7 +75,11 @@ public class ReservationFormDetailsController {
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
 
-    // 1.4 Context
+    // 1.4 Dialog Pane
+    @FXML
+    private DialogPane dialogPane;
+
+    // 1.5 Context
     private MainController mainController;
     private ReservationForm reservationForm;
     private Employee employee;
@@ -73,7 +88,7 @@ public class ReservationFormDetailsController {
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
     public void initialize() {
-
+        dialogPane.toFront();
     }
 
     public void setupContext(
@@ -85,8 +100,18 @@ public class ReservationFormDetailsController {
         backBtn.setOnAction(e -> navigateToReservationListPanel());
         reservationFormListNavigate.setOnAction(e -> navigateToReservationListPanel());
         bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
+        deleteReservationFormBtn.setOnAction(e -> handleDeleteAction());
+
+        reservationFormBtn.setText("Phiếu đặt phòng " + reservationForm.getReservationID());
 
         setupReservationForm();
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime checkInTime = reservationForm.getCheckInDate();
+        LocalDateTime checkInTimePlus2Hours = checkInTime.plusHours(2);
+
+        checkInBtn.setDisable(!now.isAfter(checkInTime) || !now.isBefore(checkInTimePlus2Hours));
+        checkInBtn.setOnAction(e -> handleCheckIn());
     }
 
     // ==================================================================================================================
@@ -123,7 +148,6 @@ public class ReservationFormDetailsController {
         employeePhoneNumberLabel.setText(reservationFormEmployee.getPhoneNumber());
     }
 
-
     // ==================================================================================================================
     // 3. Xử lý chức năng hiển thị panel khác
     // ==================================================================================================================
@@ -158,5 +182,71 @@ public class ReservationFormDetailsController {
             e.printStackTrace();
         }
     }
+
+    // ==================================================================================================================
+    // 4. Xử lý chức năng xóa phiếu đặt phòng
+    // ==================================================================================================================
+    private void handleDeleteAction() {
+        try{
+
+            com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
+                    "XÁC NHẬN",
+                    "Bạn có chắc chắn muốn xóa phiếu đặt phòng này?"
+            );
+
+            dialog.onClose(buttonType -> {
+                if (buttonType == ButtonType.YES) {
+                    ReservationFormDAO.deleteData(reservationForm.getReservationID());
+                    navigateToReservationListPanel();
+                }
+            });
+
+        }catch(Exception e){
+            dialogPane.showWarning("LỖI", e.getMessage());
+        }
+    }
+
+    // ==================================================================================================================
+    // 5. Xử lý chức năng CheckIn
+    // ==================================================================================================================
+    private void handleCheckIn() {
+        try {
+            // Lấy thông tin cần thiết từ reservationForm và employee
+            Room room = reservationForm.getRoom();
+            Employee employee = this.employee;
+            LocalDateTime now = LocalDateTime.now();
+
+            // 1. Tạo đối tượng RoomReservationDetail
+            RoomReservationDetail detail = new RoomReservationDetail(
+                    RoomReservationDetailDAO.getNextID(),
+                    now,
+                    room,
+                    reservationForm,
+                    employee
+            );
+
+            // 2. Tạo đối tượng HistoryCheckIn
+            HistoryCheckIn historyCheckIn = new HistoryCheckIn(
+                    HistoryCheckinDAO.getNextID(),
+                    LocalDateTime.now(),
+                    reservationForm,
+                    employee
+            );
+
+            // 3. Thêm dữ liệu vào RoomReservationDetail và HistoryCheckIn
+            RoomReservationDetailDAO.create(detail);
+            HistoryCheckinDAO.createData(historyCheckIn);
+
+            // 4. Cập nhật trạng thái phòng thành "ON_USE"
+            room.setRoomStatus(RoomStatus.ON_USE);
+            RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.ON_USE);
+
+            navigateToReservationListPanel();
+        } catch (Exception e) {
+            dialogPane.showWarning("Lỗi", e.getMessage());
+        }
+    }
+
+
 
 }

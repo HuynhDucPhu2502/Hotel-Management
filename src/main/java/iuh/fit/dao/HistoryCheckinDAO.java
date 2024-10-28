@@ -261,6 +261,29 @@ public class HistoryCheckinDAO {
         }
     }
 
+    public static String getNextID() {
+        String nextID = "HCI-000001";
+
+        String query = "SELECT nextID FROM GlobalSequence WHERE tableName = ?";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ) {
+            preparedStatement.setString(1, "HistoryCheckIn");
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+                nextID = rs.getString(1);
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return nextID;
+    }
+
     public static void updateData(HistoryCheckIn historyCheckIn) {
         String sql = "UPDATE HistoryCheckin " +
                 "SET checkInDate = ?, reservationFormID = ?, employeeID = ? " +

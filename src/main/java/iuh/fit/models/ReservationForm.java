@@ -97,14 +97,24 @@ public class ReservationForm {
     }
 
     private void validateDateRange() {
-        if (checkInDate != null && checkInDate.isBefore(LocalDateTime.now()))
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_NOT_BEHIND_NOW);
-        if (checkOutDate != null && checkOutDate.isBefore(LocalDateTime.now()))
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_NOT_BEHIND_NOW);
+        if (reservationDate == null) {
+            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_RESERVATION_DATE_ISNULL);
+        }
+
+        if (checkInDate != null && checkInDate.isBefore(reservationDate)) {
+            throw new IllegalArgumentException("test 2");
+        }
+
+        if (checkOutDate != null && checkOutDate.isBefore(reservationDate)) {
+            throw new IllegalArgumentException("test 3");
+        }
+
         if (checkInDate != null && checkOutDate != null && checkInDate.isAfter(checkOutDate)) {
             throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_DATE_RANGE);
         }
     }
+
+
 
     private void updateBookingDeposit() {
         if (room != null && checkInDate != null && checkOutDate != null) {
@@ -150,10 +160,18 @@ public class ReservationForm {
         return roomBookingDeposit;
     }
 
-
     @Override
     public String toString() {
-        return "ReservationForm{}";
+        return "ReservationForm{" +
+                "reservationID='" + reservationID + '\'' +
+                ", reservationDate=" + reservationDate +
+                ", checkInDate=" + checkInDate +
+                ", checkOutDate=" + checkOutDate +
+                ", employee=" + employee +
+                ", room=" + room +
+                ", customer=" + customer +
+                ", roomBookingDeposit=" + roomBookingDeposit +
+                '}';
     }
 
     @Override

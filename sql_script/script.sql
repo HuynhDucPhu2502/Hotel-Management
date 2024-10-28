@@ -251,7 +251,8 @@ VALUES
 	('ShiftAssignment', 'SA-000004'),
 	('Customer', 'CUS-000031'),
 	('ReservationForm', 'RF-000111'),
-	('HistoryCheckIn', 'EMP-000006');
+	('HistoryCheckIn', 'HCI-000001'),
+	('RoomReservationDetail', 'RRD-000001');
 GO
 
 -- Thêm dữ liệu vào bảng Employee
@@ -320,16 +321,16 @@ GO
 -- Thêm dữ liệu vào bảng Room với mã phòng mới
 INSERT INTO Room (roomID, roomStatus, dateOfCreation, roomCategoryID)
 VALUES
-    ('T1101', N'ON_USE', '2024-09-28 10:00:00', 'RC-000001'),
-    ('V2102', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
+    ('T1101', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
+    ('V2102', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
     ('T1203', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
     ('V2304', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
     ('T1105', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
-    ('V2206', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002'),
+    ('V2206', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002'),
     ('T1307', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000003'),
     ('V2408', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004'),
     ('T1109', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000001'),
-    ('V2210', N'ON_USE', '2024-09-28 10:00:00', 'RC-000002');
+    ('V2210', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000002');
 GO
 
 
@@ -503,8 +504,8 @@ VALUES
     ('RF-000110', '2024-10-30', '2024-10-31', '2024-11-02', 'EMP-000005', 'V2408', 'CUS-000022', 540000);
 
 -- Thêm dữ liệu vào bảng Tax
-INSERT INTO Tax (taxID, taxName, taxRate, dateOfCreation, activate) 
-VALUES 
+INSERT INTO Tax (taxID, taxName, taxRate, dateOfCreation, activate)
+VALUES
     ('tax-000001', 'tax1', 0.1, '2024-09-29', 1),
     ('tax-000002', 'tax2', 0.15, '2024-09-29', 1),
     ('tax-000003', 'tax3', 0.08, '2024-10-01', 1),
@@ -634,7 +635,7 @@ VALUES
 GO
 
 -- ===================================================================================
--- 3. TRIGGER 
+-- 3. TRIGGER
 -- ===================================================================================
 -- Tạo trigger để giới hạn mỗi roomCategoryID chỉ có 2 bản ghi trong bảng Pricing
 CREATE TRIGGER trg_LimitPricingForRoomCategory
@@ -650,8 +651,8 @@ BEGIN
     )
     BEGIN
         RAISERROR(
-            'Mỗi loại phòng chỉ được phép có 2 bản ghi trong Pricing (1 DAY và 1 HOUR)', 
-            16, 
+            'Mỗi loại phòng chỉ được phép có 2 bản ghi trong Pricing (1 DAY và 1 HOUR)',
+            16,
             1
         );
         ROLLBACK TRANSACTION;

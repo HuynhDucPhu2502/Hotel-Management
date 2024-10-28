@@ -434,23 +434,32 @@ public class CreateReservationFormController {
 
     private void handleResetAction() {
         try {
+            // Unbind các TextField trước khi reset giá trị
+            checkInDateTextField.textProperty().unbind();
+            checkOutDateTextField.textProperty().unbind();
+
+            // Reset giá trị cho các thành phần giao diện
             bookDateRangePicker.setValue(null);
-            checkInTimePicker.setValue(null);
-            checkOutTimePicker.setValue(null);
-            customerIDCardNumberTextField.setText(null);
-            checkInDateTextField.setText(null);
-            checkOutDateTextField.setText(null);
+            checkInTimePicker.setTime(null);
+            checkOutTimePicker.setTime(null);
+            customerIDCardNumberTextField.setText("");
+            checkInDateTextField.setText("");
+            checkOutDateTextField.setText("");
             stayLengthLabel.setText("Chưa Đặt Lịch");
             bookingDepositLabel.setText("0 VND");
 
+            // Xóa các giá trị dữ liệu liên quan
             customer = null;
             checkOutTime = null;
             checkInTime = null;
+
+            setupTimeComponents();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
 
     // ==================================================================================================================

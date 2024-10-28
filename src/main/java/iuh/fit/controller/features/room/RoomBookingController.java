@@ -109,7 +109,7 @@ public class RoomBookingController {
                         roomItem = loader.load();
 
                         RoomOnUseItemController controller = loader.getController();
-                        controller.setRoom(room);
+                        controller.setupContext(mainController, employee, room);
                     }
                     case OVERDUE -> {
                         loader = new FXMLLoader(getClass().getResource(

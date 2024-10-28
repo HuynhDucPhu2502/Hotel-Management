@@ -14,14 +14,14 @@ public class HistoryCheckIn {
     private Employee employee;
 
 
-    public HistoryCheckIn(
-            String historyCheckInID, LocalDateTime checkInDate,
-            ReservationForm reservationForm, Employee employee
-    ) {
+    public HistoryCheckIn(String historyCheckInID, LocalDateTime checkInDate,
+                          ReservationForm reservationForm, Employee employee) {
         this.setHistoryCheckInID(historyCheckInID);
-        this.setCheckInDate(checkInDate);
         this.setReservationForm(reservationForm);
+        this.setCheckInDate(checkInDate);
+        this.setEmployee(employee);
     }
+
 
     public HistoryCheckIn(String historyCheckInID) {
         this.setHistoryCheckInID(historyCheckInID);
@@ -45,10 +45,10 @@ public class HistoryCheckIn {
     }
 
     public void setCheckInDate(LocalDateTime checkInDate) {
-        if(checkInDate == null){
+        if (checkInDate == null) {
             throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_INVALID_CHECKIN_DATE_ISNULL);
         }
-        if(!checkInDate.isAfter(reservationForm.getCheckInDate())){
+        if (reservationForm == null || !checkInDate.isAfter(reservationForm.getCheckInDate())) {
             throw new IllegalArgumentException(ErrorMessages.HISTORY_CHECKIN_INVALID_CHECKIN_DATE);
         }
         this.checkInDate = checkInDate;
