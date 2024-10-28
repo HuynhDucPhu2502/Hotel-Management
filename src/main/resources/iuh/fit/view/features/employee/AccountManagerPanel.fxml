@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="753.0" minWidth="930.0" prefHeight="753.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.employee.AccountManagerController">
+<AnchorPane minHeight="753.0" minWidth="930.0" prefHeight="753.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.employee.AccountManagerController">
     <children>
         <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="762.0" prefWidth="930.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <content>
@@ -78,7 +78,7 @@
                                           <Font size="16.0" />
                                        </font>
                                     </Text>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                    <Text fx:id="passwordLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu cũ" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -99,7 +99,13 @@
                                           <ComboBox fx:id="statusCBox" layoutY="2.0" prefHeight="30.0" prefWidth="189.0" />
                                        </children>
                                     </AnchorPane>
-                                    <PasswordField fx:id="passwordTextField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                    <PasswordField fx:id="passwordTextField" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                    <Text fx:id="newPasswordLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu mới" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <PasswordField fx:id="newPasswordTextField" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                                             </children>
                                         </GridPane>
                                         <HBox prefHeight="0.0" prefWidth="899.0" spacing="50.0" style="-fx-alignment: CENTER;" stylesheets="@../../../styles/Button.css">
@@ -139,7 +145,6 @@
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                             </columnConstraints>
                                             <rowConstraints>
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -169,15 +174,6 @@
                                                 </HBox>
                                                 <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);" GridPane.columnIndex="3">
                                                     <children>
-                                                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu">
-                                                            <font>
-                                                                <Font name="System Bold" size="16.0" />
-                                                            </font>
-                                                        </Text>
-                                                    </children>
-                                                </HBox>
-                                                <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-alignment: CENTER; -fx-background-color: rgb(135, 162, 255);" GridPane.columnIndex="4">
-                                                    <children>
                                                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Trạng thái">
                                                             <font>
                                                                 <Font name="System Bold" size="16.0" />
@@ -195,12 +191,7 @@
                                                         <Cursor fx:constant="CLOSED_HAND" />
                                                     </cursor>
                                                 </TextField>
-                                                <TextField fx:id="passwordSearchField" editable="false" prefHeight="72.0" prefWidth="160.0" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                                                    <cursor>
-                                                        <Cursor fx:constant="CLOSED_HAND" />
-                                                    </cursor>
-                                                </TextField>
-                                                <TextField fx:id="statusSearchField" editable="false" prefHeight="125.0" prefWidth="404.0" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                                                <TextField fx:id="statusSearchField" editable="false" prefHeight="125.0" prefWidth="404.0" style="-fx-background-color: rgb(211, 211, 211);" GridPane.columnIndex="3" GridPane.rowIndex="1">
                                                     <cursor>
                                                         <Cursor fx:constant="CLOSED_HAND" />
                                                     </cursor>
@@ -224,8 +215,8 @@
 
                                             <columns>
                                                 <TableColumn fx:id="employeeIDColumn" minWidth="100.0" text="Mã nhân viên" />
-                                                <TableColumn fx:id="usernameColumn" minWidth="100.0" text="Tên nhân viên" />
-                                                <TableColumn fx:id="passwordColumn" minWidth="100.0" text="Tài khoản" />
+                                                <TableColumn fx:id="fullNameColumn" minWidth="100.0" text="Tên nhân viên" />
+                                                <TableColumn fx:id="usernameColumn" minWidth="100.0" text="Tài khoản" />
                                                 <TableColumn fx:id="statusColumn" minWidth="150.0" text="Trạng thái tài khoản" />
                                                 <TableColumn fx:id="actionColumn" minWidth="300.0" prefWidth="300.0" text="Thao tác" />
                                             </columns>

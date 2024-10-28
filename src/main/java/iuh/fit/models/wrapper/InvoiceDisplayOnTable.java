@@ -1,4 +1,4 @@
-package iuh.fit.models;
+package iuh.fit.models.wrapper;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

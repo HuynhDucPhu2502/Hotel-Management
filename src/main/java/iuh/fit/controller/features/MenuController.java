@@ -44,9 +44,16 @@ public class MenuController {
     private Button accountOfEmployeeManagerButton;
 
     @FXML
+
     private HBox shiftManagerContainer;
     @FXML
     private Button shiftManagerButton;
+
+    @FXML
+    private HBox employeeSearchingContainer;
+    @FXML
+    private Button employeeSearchingButton;
+
 
     @FXML
     private ImageView arrowUpForEmpBtn;
@@ -117,6 +124,11 @@ public class MenuController {
     public Button customerManagerButton;
 
     @FXML
+    private HBox customerSearchingContainer;
+    @FXML
+    public Button customerSearchingButton;
+
+    @FXML
     private ImageView arrowUpForCustomer;
 
 
@@ -169,10 +181,12 @@ public class MenuController {
         buttonStates.put("statistics", false);
         buttonStates.put("history", false);
 
-        employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(employeeManagerContainer, accountOfEmployeeManagerContainer, shiftManagerContainer), arrowUpForEmpBtn, "employee"));
+
+        employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(employeeManagerContainer, accountOfEmployeeManagerContainer, employeeSearchingContainer, shiftManagerContainer), arrowUpForEmpBtn, "employee"));
+
         roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer, roomCategoryManagerContainer, roomManagerContainer, roomSearchingContainer, roomBookingContainer), arrowUpForRoom, "room"));
         serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryManagerContainer, hotelServiceManagerContainer, hotelServiceSearchingContainer), arrowUpForService, "service"));
-        customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer), arrowUpForCustomer, "customer"));
+        customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer, customerSearchingContainer), arrowUpForCustomer, "customer"));
         statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(revenueStatisticsContainer, buttonTwoContainer2111, buttonThreeContainer2111), arrowUpForStatistics, "statistics"));
         historyBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21111, buttonTwoContainer21111, buttonThreeContainer21111), arrowUpForHistory, "history"));
     }
@@ -247,8 +261,16 @@ public class MenuController {
         return accountOfEmployeeManagerButton;
     }
 
+
     public Button getShiftManagerButton(){
         return shiftManagerButton;
+
+    public Button getEmployeeSearchingButton(){
+        return employeeSearchingButton;
+    }
+    public Button getCustomerSearchingButton(){
+        return customerSearchingButton;
+
     }
 
     public Button getDashBoardBtn() {

@@ -1,11 +1,15 @@
 package iuh.fit.dao;
 
 import iuh.fit.models.Customer;
+import iuh.fit.models.Employee;
+import iuh.fit.models.enums.Gender;
+import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 import iuh.fit.utils.GlobalConstants;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -303,5 +307,80 @@ public class CustomerDAO {
         }
 
         return null;
+    }
+
+    public static List<Customer> searchCustomer(
+            String customerID, String fullName, String phoneNumber, String email, String address, Gender gender, String idCardNumber, LocalDate dob
+    ) {
+
+        List<Customer> data = new ArrayList<>();
+
+        String sql = "SELECT customerID, fullName, phoneNumber, " +
+                "email, address, gender, " +
+                "idCardNumber, dob " +
+                "FROM Customer " +
+                "WHERE (customerID like ? or ? is null) and " +
+                "(fullName like ? or ? is null) and " +
+                "(phoneNumber like ? or ? is null) and " +
+                "(email like ? or ? is null) and " +
+                "(address like ? or ? is null) and " +
+                "(idCardNumber like ? or ? is null) and " +
+                "(gender = ? OR ? IS NULL) and " +
+                "(dob = ? OR ? IS NULL)";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+
+            preparedStatement.setString(1, "%" + customerID + "%");
+            preparedStatement.setString(2, customerID);
+            preparedStatement.setString(3, "%" + fullName + "%");
+            preparedStatement.setString(4, fullName);
+            preparedStatement.setString(5, "%" + phoneNumber + "%");
+            preparedStatement.setString(6, phoneNumber);
+            preparedStatement.setString(7, "%" + email + "%");
+            preparedStatement.setString(8, email);
+            preparedStatement.setString(9, "%" + address + "%");
+            preparedStatement.setString(10, address);
+            preparedStatement.setString(11, "%" + idCardNumber + "%");
+            preparedStatement.setString(12, idCardNumber);
+            if(gender == null){
+                preparedStatement.setObject(13, gender);
+                preparedStatement.setObject(14, gender);
+            }else {
+                preparedStatement.setString(13, ConvertHelper.genderConverterToSQL(gender));
+                preparedStatement.setString(14, ConvertHelper.genderConverterToSQL(gender));
+            }
+
+            if (dob == null){
+                preparedStatement.setObject(15, dob);
+                preparedStatement.setObject(16, dob);
+            } else {
+                preparedStatement.setDate(15, ConvertHelper.dateToSQLConverter(dob));
+                preparedStatement.setDate(16, ConvertHelper.dateToSQLConverter(dob));
+            }
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Customer customer = new Customer();
+                customer.setCustomerID(rs.getString("customerID"));
+                customer.setFullName(rs.getString("fullName"));
+                customer.setPhoneNumber(rs.getString("phoneNumber"));
+                customer.setEmail(rs.getString("email"));
+                customer.setAddress(rs.getString("address"));
+                customer.setIdCardNumber(rs.getString("idCardNumber"));
+                customer.setGender(ConvertHelper.genderConverter(rs.getString("gender")));
+                customer.setDob(ConvertHelper.localDateConverter(rs.getDate("dob")));
+
+                data.add(customer);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
     }
 }

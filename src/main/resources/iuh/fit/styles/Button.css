@@ -67,6 +67,20 @@
     -fx-background-color: white;
 }
 
+.button-delete-2 {
+    -fx-background-color: RGB(200, 120, 120);
+    -fx-text-fill: white;
+    -fx-min-width: 200px;
+}
+
+.button-delete-2:hover {
+    -fx-background-color: RGB(255, 0, 0);
+}
+
+.button-delete-2:pressed {
+    -fx-background-color: RGB(150, 0, 0);
+}
+
 /* ========================================================== */
 /* Filter Button */
 /* ========================================================== */

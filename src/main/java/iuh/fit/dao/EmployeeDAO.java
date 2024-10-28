@@ -1,6 +1,10 @@
 package iuh.fit.dao;
 
 import iuh.fit.models.Employee;
+import iuh.fit.models.HotelService;
+import iuh.fit.models.ServiceCategory;
+import iuh.fit.models.enums.Gender;
+import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 
@@ -8,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -262,5 +267,89 @@ public class EmployeeDAO {
         }
 
         return null;
+    }
+
+    public static List<Employee> searchEmployee(
+            String employeeID, String fullName, String phoneNumber, String email, String address, Gender gender, String idCardNumber, LocalDate dob, Position position
+            ) {
+
+        List<Employee> data = new ArrayList<>();
+
+        String sql = "SELECT employeeID, fullName, phoneNumber, " +
+                "email, address, gender, " +
+                "idCardNumber, dob, position " +
+                "FROM Employee " +
+                "WHERE (employeeID like ? or ? is null) and " +
+                "(fullName like ? or ? is null) and " +
+                "(phoneNumber like ? or ? is null) and " +
+                "(email like ? or ? is null) and " +
+                "(address like ? or ? is null) and " +
+                "(idCardNumber like ? or ? is null) and " +
+                "(gender = ? OR ? IS NULL) and " +
+                "(dob = ? OR ? IS NULL) and " +
+                "(position = ? OR ? IS NULL)";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+
+            preparedStatement.setString(1, "%" + employeeID + "%");
+            preparedStatement.setString(2, employeeID);
+            preparedStatement.setString(3, "%" + fullName + "%");
+            preparedStatement.setString(4, fullName);
+            preparedStatement.setString(5, "%" + phoneNumber + "%");
+            preparedStatement.setString(6, phoneNumber);
+            preparedStatement.setString(7, "%" + email + "%");
+            preparedStatement.setString(8, email);
+            preparedStatement.setString(9, "%" + address + "%");
+            preparedStatement.setString(10, address);
+            preparedStatement.setString(11, "%" + idCardNumber + "%");
+            preparedStatement.setString(12, idCardNumber);
+            if(gender == null){
+                preparedStatement.setObject(13, gender);
+                preparedStatement.setObject(14, gender);
+            }else {
+                preparedStatement.setString(13, ConvertHelper.genderConverterToSQL(gender));
+                preparedStatement.setString(14, ConvertHelper.genderConverterToSQL(gender));
+            }
+
+            if (dob == null){
+                preparedStatement.setObject(15, dob);
+                preparedStatement.setObject(16, dob);
+            } else {
+                preparedStatement.setDate(15, ConvertHelper.dateToSQLConverter(dob));
+                preparedStatement.setDate(16, ConvertHelper.dateToSQLConverter(dob));
+            }
+
+            if (position == null){
+                preparedStatement.setObject(17, position);
+                preparedStatement.setObject(18, position);
+            } else {
+                preparedStatement.setString(17, ConvertHelper.positionConverterToSQL(position));
+                preparedStatement.setObject(18, ConvertHelper.positionConverterToSQL(position));
+            }
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Employee employee = new Employee();
+                employee.setEmployeeID(rs.getString("employeeID"));
+                employee.setFullName(rs.getString("fullName"));
+                employee.setPhoneNumber(rs.getString("phoneNumber"));
+                employee.setEmail(rs.getString("email"));
+                employee.setAddress(rs.getString("address"));
+                employee.setIdCardNumber(rs.getString("idCardNumber"));
+                employee.setGender(ConvertHelper.genderConverter(rs.getString("gender")));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate("dob")));
+                employee.setPosition(ConvertHelper.positionConverter(rs.getString("position")));
+
+                data.add(employee);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
     }
 }

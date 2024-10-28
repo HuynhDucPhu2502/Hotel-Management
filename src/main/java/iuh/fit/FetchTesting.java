@@ -1,11 +1,6 @@
 package iuh.fit;
 
-import iuh.fit.dao.InvoiceDAO;
 import iuh.fit.dao.InvoiceDisplayOnTableDAO;
-import iuh.fit.models.InvoiceDisplayOnTable;
-import javafx.fxml.FXML;
-
-import java.time.LocalDateTime;
 
 public class FetchTesting {
     public static void main(String[] args) {

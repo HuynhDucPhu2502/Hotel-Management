@@ -161,7 +161,10 @@
                         <Cursor fx:constant="CLOSED_HAND" />
                      </cursor>
                   </TextField>
-                  <PasswordField fx:id="passwordTextField" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                  <PasswordField fx:id="passwordTextField" disable="true" editable="false" focusTraversable="false" GridPane.columnIndex="3" GridPane.rowIndex="5">
+                     <cursor>
+                        <Cursor fx:constant="CLOSED_HAND" />
+                     </cursor></PasswordField>
                     </children>
                 </GridPane>
             </children>

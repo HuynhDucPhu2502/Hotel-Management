@@ -46,6 +46,14 @@ public class ConvertHelper {
                 ? Position.MANAGER : Position.RECEPTIONIST;
     }
 
+    public static String positionConverterToSQL(Position input) {
+        if (!input.toString().matches("(Lễ Tân|Quản Lý)"))
+            throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_POSITION);
+
+        return input.toString().equalsIgnoreCase("Quản Lý")
+                ? "MANAGER" : "RECEPTIONIST";
+    }
+
     public static PriceUnit priceUnitConverter(String input) {
         if (!input.matches("(DAY|HOUR)"))
             throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_PRICE_UNIT);
