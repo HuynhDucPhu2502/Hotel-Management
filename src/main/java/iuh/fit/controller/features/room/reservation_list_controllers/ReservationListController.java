@@ -10,11 +10,11 @@ import iuh.fit.models.Room;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,7 +39,15 @@ public class ReservationListController {
     @FXML
     private GridPane reservationFormGidPane;
 
-    // 1.4 Context
+    // 1.4 Label
+    @FXML
+    private HBox emptyLabelContainer;
+
+    // 1.5 Contained;
+    @FXML
+    private VBox reservationFormsListContainer;
+
+    // 1.6 Context
     private MainController mainController;
     private Employee employee;
     private Room room;
@@ -73,7 +81,6 @@ public class ReservationListController {
 
     private void loadData() {
         reservationForms = ReservationFormDAO.getUpcomingReservations(room.getRoomID());
-        reservationForms.forEach(System.out::println);
     }
 
     // ==================================================================================================================
@@ -118,32 +125,48 @@ public class ReservationListController {
     // 3. Chức năng hiển thị phiếu đặt phòng
     // ==================================================================================================================
     private void displayFilteredRooms(List<ReservationForm> reservationForms) {
-        reservationFormGidPane.getChildren().clear();
+        if (!reservationForms.isEmpty()) {
+            reservationFormGidPane.getChildren().clear();
 
-        int row = 0, col = 0;
+            int row = 0, col = 0;
 
-        try {
-            for (ReservationForm reservationForm : reservationForms) {
-                FXMLLoader loader;
-                Pane reservationFormItem;
+            try {
+                for (ReservationForm reservationForm : reservationForms) {
+                    FXMLLoader loader;
+                    Pane reservationFormItem;
 
-                loader = new FXMLLoader(getClass().getResource(
-                        "/iuh/fit/view/features/room/reservation_list_panels/ReservationFormItem.fxml"));
-                reservationFormItem = loader.load();
+                    loader = new FXMLLoader(getClass().getResource(
+                            "/iuh/fit/view/features/room/reservation_list_panels/ReservationFormItem.fxml"));
+                    reservationFormItem = loader.load();
 
-                ReservationFormItemController controller = loader.getController();
-                controller.setupContext(mainController, reservationForm, employee, roomWithReservation);
+                    ReservationFormItemController controller = loader.getController();
+                    controller.setupContext(mainController, reservationForm, employee, roomWithReservation);
 
-                reservationFormGidPane.add(reservationFormItem, col, row);
+                    reservationFormGidPane.add(reservationFormItem, col, row);
 
-                col++;
-                if (col == 2) {
-                    col = 0;
-                    row++;
+                    col++;
+                    if (col == 2) {
+                        col = 0;
+                        row++;
+                    }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            reservationFormGidPane.setVisible(false);
+            reservationFormGidPane.setManaged(false);
+
+            if (emptyLabelContainer.getChildren().isEmpty()) {
+                Label emptyLabel = new Label("Không có phiếu đặt phòng nào.");
+                emptyLabel.setStyle("-fx-font-size: 42px; -fx-text-fill: gray;");
+                emptyLabelContainer.getChildren().add(emptyLabel);
+            }
+
+            emptyLabelContainer.setVisible(true);
+            emptyLabelContainer.setManaged(true);
+
+            reservationFormsListContainer.setAlignment(Pos.CENTER);
         }
     }
 

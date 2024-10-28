@@ -5,6 +5,6 @@
 }
 
 .box-reservation-form:hover {
-    -fx-border-color: rgb(203, 96, 64);
+    -fx-border-color: blue;
     -fx-border-width: 3px;
 }
