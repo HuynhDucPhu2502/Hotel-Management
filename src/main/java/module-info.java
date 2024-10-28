@@ -31,4 +31,6 @@ module iuh.fit {
     exports iuh.fit.models.enums;
     exports iuh.fit.controller.features.room.create_reservation_form_controllers;
     exports iuh.fit.controller.features.room.reservation_list_controllers;
+    exports iuh.fit.models.wrapper;
+    opens iuh.fit.models.wrapper to javafx.base, javafx.fxml;
 }

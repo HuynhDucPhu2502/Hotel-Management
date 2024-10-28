@@ -5,12 +5,12 @@ import com.dlsc.gemsfx.daterange.DateRangePicker;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.dao.InvoiceDisplayOnTableDAO;
 import iuh.fit.models.*;
+import iuh.fit.models.wrapper.InvoiceDisplayOnTable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -47,17 +47,22 @@ public class StatisticalController implements Initializable {
     @FXML private ComboBox<String> revenueEmployeeCombobox;
     @FXML private BarChart<String, Double> revenueBarchart;
     private static final String NONE_VALUE_CUSTOMER_NAME = "Chọn nhân viên";
+    private static final String CHART_TITLE = "Thống kê doanh thu";
+    private static final int COMBO_YEAR_CAPACITY = 10;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ObservableList<InvoiceDisplayOnTable> data = getInvoiceDisplayOnTables();
-        loadDataTable(data);
-        loadDataToCusNameCombobox();
+        List<InvoiceDisplayOnTable> invoiceDisplayOnTableData = InvoiceDisplayOnTableDAO.getData();
+        loadDataToTable(invoiceDisplayOnTableData);
+        loadDataToEmployeeNameCombobox();
         loadDataToComboboxOfYear();
     }
 
     // load data to table
-    private void loadDataTable(ObservableList<InvoiceDisplayOnTable> data) {
+    private void loadDataToTable(List<InvoiceDisplayOnTable> invoiceDisplayOnTableData) {
+        // set data to ObservableList
+        ObservableList<InvoiceDisplayOnTable> dataOfTableView = FXCollections.observableArrayList();
+        dataOfTableView.addAll(invoiceDisplayOnTableData);
         // set data on column
         invoiceIDColumn.setCellValueFactory(new PropertyValueFactory<InvoiceDisplayOnTable, String>("invoiceID"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<InvoiceDisplayOnTable, String>("cusName"));
@@ -70,20 +75,20 @@ public class StatisticalController implements Initializable {
         taxColumn.setCellValueFactory(new PropertyValueFactory<InvoiceDisplayOnTable, Double>("tax"));
         netDueColumn.setCellValueFactory(new PropertyValueFactory<InvoiceDisplayOnTable, Double>("netDue"));
         // set data to table
-        revenueTableView.setItems(data);
+        revenueTableView.setItems(dataOfTableView);
     }
 
     // set date to combox of year
     private void loadDataToComboboxOfYear() {
         ObservableList<Integer> years = FXCollections.observableArrayList();
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < COMBO_YEAR_CAPACITY; i++)
             years.add(LocalDate.now().getYear() - i);
         cbbYear.setItems(years);
         cbbYear.setValue(years.getFirst());
     }
 
     // set data to combox of employee name
-    private void loadDataToCusNameCombobox() {
+    private void loadDataToEmployeeNameCombobox() {
         List<Employee> employeeList = EmployeeDAO.getEmployees();
         ObservableList<String> empNames = FXCollections.observableArrayList(NONE_VALUE_CUSTOMER_NAME);
         employeeList.forEach(e -> empNames.add(e.getFullName()));
@@ -91,23 +96,13 @@ public class StatisticalController implements Initializable {
         revenueEmployeeCombobox.setValue(empNames.getFirst());
     }
 
-    private static ObservableList<InvoiceDisplayOnTable> getInvoiceDisplayOnTables() {
-        ObservableList<InvoiceDisplayOnTable> data = FXCollections.observableArrayList();
-        // set data to invoiceDisplay class
-        List<InvoiceDisplayOnTable> invoiceDisplayOnTableList = InvoiceDisplayOnTableDAO.getData();
-        // set data to observable view
-        data.addAll(invoiceDisplayOnTableList);
-        return data;
-    }
-
     // switch between table view and chart view
     @FXML
-    void switchView() {
+    void switchBetweenTableViewAndChartView() {
         if (tableViewRevenueRadioButton.isSelected()) {
             tableView.setVisible(true);
             chartView.setVisible(false);
         }
-        tableView.setVisible(true);
         if (chartViewRevenueRadioButton.isSelected()) {
             chartView.setVisible(true);
             tableView.setVisible(false);
@@ -116,7 +111,7 @@ public class StatisticalController implements Initializable {
 
     // switch between year combobox and daterangepicker
     @FXML
-    void statisticsByYear() {
+    void switchBetweenCBBYearAndDateRangePicker() {
         if (checkBoxStatisticsByYear.isSelected()) {
             cbbYear.setDisable(false);
             dateRangePicker.setDisable(true);
@@ -128,154 +123,160 @@ public class StatisticalController implements Initializable {
 
     // handle statistics event
     @FXML
-    void revenueStatistics() {
+    void revenueStatisticsAction() {
         String empName = revenueEmployeeCombobox.getValue();
         if (checkBoxStatisticsByYear.isSelected()) {
-            int year = cbbYear.getSelectionModel().getSelectedItem();
-            // show data on table
-            filterDataByYear(year, empName);
-            // show data on chart
-            showDataToBarChartByYearOption();
+            showDataToTableViewByYearOption(empName);
+            showDataToChartView(true);
         } else {
-            LocalDateTime startDate = dateRangePicker.getValue().getStartDate().atTime(0, 0, 0);
-            LocalDateTime endDate = dateRangePicker.getValue().getEndDate().atTime(23, 59, 59);
-            // show data on table
-            filterDataByDateRange(startDate, endDate, empName);
-            // show data on chart
-            showDataToBarChartByDateRangeOption();
+            showDataToTableViewByDateRangeOption(empName);
+            showDataToChartView(false);
         }
     }
 
     // filter data by year and employee name and show to table
-    private void filterDataByYear(int year, String empName) {
+    private void showDataToTableViewByYearOption(String empName) {
+        int year = cbbYear.getSelectionModel().getSelectedItem();
         ObservableList<InvoiceDisplayOnTable> filteredData = FXCollections.observableArrayList();
         InvoiceDisplayOnTableDAO.getData().stream()
                 .filter(i -> i.getCreateDate().getYear() == year)
                 .filter(i -> empName.equals(NONE_VALUE_CUSTOMER_NAME) || i.getEmpName().equalsIgnoreCase(empName))
                 .forEach(filteredData::add);
-        loadDataTable(filteredData);
+        loadDataToTable(filteredData);
     }
 
     // filter data by daterange and employee name and show to table
-    private void filterDataByDateRange(LocalDateTime startDate, LocalDateTime endDate, String empName) {
+    private void showDataToTableViewByDateRangeOption(String empName) {
+        LocalDateTime startDate = dateRangePicker.getValue().getStartDate().atTime(0, 0, 0);
+        LocalDateTime endDate = dateRangePicker.getValue().getEndDate().atTime(23, 59, 59);
         ObservableList<InvoiceDisplayOnTable> filteredData = FXCollections.observableArrayList();
         InvoiceDisplayOnTableDAO.getData().stream()
                 .filter(i -> i.getCreateDate().isAfter(startDate) && i.getCreateDate().isBefore(endDate))
                 .filter(i -> empName.equals(NONE_VALUE_CUSTOMER_NAME) || i.getEmpName().equalsIgnoreCase(empName))
                 .forEach(filteredData::add);
-        loadDataTable(filteredData);
+        loadDataToTable(filteredData);
     }
 
-    // Display data on BarChart based on date range option
-    private void showDataToBarChartByDateRangeOption() {
-        revenueBarchart.setTitle("Thống kê doanh thu");
-        revenueBarchart.getData().clear();
-        revenueBarchart.getData().add(getDataByDateRange());
-    }
-
-    private XYChart.Series<String, Double> getDataByDateRange() {
+    private XYChart.Series<String, Double> getDataByDateRange(List<InvoiceDisplayOnTable> invoiceDisplayOnTableData) {
         XYChart.Series<String, Double> data = new XYChart.Series<>();
-        List<InvoiceDisplayOnTable> list = InvoiceDisplayOnTableDAO.getData();
         String empName = revenueEmployeeCombobox.getValue();
         LocalDate startDate = dateRangePicker.getValue().getStartDate();
         LocalDate endDate = dateRangePicker.getValue().getEndDate();
 
         // thong ke cho ngay hien tai
         if(startDate.equals(LocalDate.now())){
-            double netDueAve = list.stream()
-                    .filter(i -> i.getCreateDate().toLocalDate().equals(LocalDate.now()))
-                    .filter(i -> (empName.equalsIgnoreCase(NONE_VALUE_CUSTOMER_NAME) ||
-                            i.getEmpName().equalsIgnoreCase(empName)))
-                    .mapToDouble(InvoiceDisplayOnTable::getNetDue)
-                    .average().orElse(0.0);
-            data.getData().add(new XYChart.Data<>(dateRangePicker.getValue().getStartDate().toString(), netDueAve));
-            loadDataTable(getInvoiceDisplayByDay(empName));
+            statisticsForToday(invoiceDisplayOnTableData, startDate, endDate, empName, data);
         }
         // thong ke cho ngay hom truoc
         else if(startDate.equals(LocalDate.now().minusDays(1))){
-            double netDueAve = list.stream()
-                    .filter(i -> i.getCreateDate().toLocalDate().equals(LocalDate.now().minusDays(1)))
-                    .filter(i -> (empName.equalsIgnoreCase(NONE_VALUE_CUSTOMER_NAME) ||
-                            i.getEmpName().equalsIgnoreCase(empName)))
-                    .mapToDouble(InvoiceDisplayOnTable::getNetDue)
-                    .average().orElse(0.0);
-            data.getData().add(new XYChart.Data<>(dateRangePicker.getValue().getStartDate().toString(), netDueAve));
-            loadDataTable(getInvoiceDisplayByDay(empName));
+            statisticsForYesterday(invoiceDisplayOnTableData, startDate, endDate, empName, data);
         }
         // thong ke cho tuan nay
         else if(startDate.equals(LocalDate.now().with(DayOfWeek.MONDAY))
                 && endDate.equals(LocalDate.now().with(DayOfWeek.SUNDAY))){
-            //show data on table
-            filterDataByDateRange(startDate.atTime(0,0,0),
-                    endDate.atTime(23, 59, 59), empName);
-            ObservableList<InvoiceDisplayOnTable> invoiceOfWeek = FXCollections.observableArrayList();
-            list.stream()
-                    .filter(i -> i.getCreateDate().toLocalDate().isAfter(LocalDate.now().with(DayOfWeek.MONDAY))
-                            && i.getCreateDate().toLocalDate().isBefore(LocalDate.now().with(DayOfWeek.SUNDAY)))
-                    .filter(i -> (empName.equalsIgnoreCase(NONE_VALUE_CUSTOMER_NAME) ||
-                            i.getEmpName().equalsIgnoreCase(empName)))
-                    .forEach(invoiceOfWeek::add);
-            for(InvoiceDisplayOnTable i : invoiceOfWeek){
-                data.getData().add(new XYChart.Data<>(i.getCreateDate().toLocalDate().toString(),
-                        getNetDueAvgOfDay(invoiceOfWeek, i.getCreateDate().toLocalDate())));
-            }
+            statisticsForThisWeek(invoiceDisplayOnTableData, startDate, endDate, empName, data);
         }
         // thong ke cho thang nay
         else if(startDate.equals(LocalDate.now().withDayOfMonth(1))
                 && endDate.equals(LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth()))){
-            //show data on table
-            filterDataByDateRange(startDate.atTime(0,0,0),
-                    endDate.atTime(23, 59, 59), empName);
-            ObservableList<InvoiceDisplayOnTable> invoiceOfMonth = FXCollections.observableArrayList();
-            list.stream()
-                    .filter(i -> i.getCreateDate().toLocalDate().isAfter(LocalDate.now().withDayOfMonth(1))
-                            && i.getCreateDate().toLocalDate().isBefore(LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth())))
-                    .filter(i -> (empName.equalsIgnoreCase(NONE_VALUE_CUSTOMER_NAME) ||
-                            i.getEmpName().equalsIgnoreCase(empName)))
-                    .forEach(invoiceOfMonth::add);
-            for(InvoiceDisplayOnTable i : invoiceOfMonth){
-                data.getData().add(new XYChart.Data<>(i.getCreateDate().toLocalDate().toString(),
-                        getNetDueAvgOfDay(invoiceOfMonth, i.getCreateDate().toLocalDate())));
-            }
+            statisticsForThisMonth(invoiceDisplayOnTableData, startDate, endDate, empName, data);
         }
         // thong ke cho thang truoc
         else if(startDate.equals(LocalDate.now().minusMonths(1).withDayOfMonth(1))
                 && endDate.equals(LocalDate.now().minusMonths(1).withDayOfMonth(LocalDate.now().minusMonths(1).lengthOfMonth()))){
-            //show data on table
-            filterDataByDateRange(startDate.atTime(0,0,0),
-                    endDate.atTime(23, 59, 59), empName);
-            ObservableList<InvoiceDisplayOnTable> invoiceOfMonth = FXCollections.observableArrayList();
-            list.stream()
-                    .filter(i -> i.getCreateDate().toLocalDate().isAfter(LocalDate.now().minusMonths(1).withDayOfMonth(1))
-                            && i.getCreateDate().toLocalDate().isBefore(LocalDate.now().minusMonths(1).withDayOfMonth(LocalDate.now().minusMonths(1).lengthOfMonth())))
-                    .filter(i -> (empName.equalsIgnoreCase(NONE_VALUE_CUSTOMER_NAME) ||
-                            i.getEmpName().equalsIgnoreCase(empName)))
-                    .forEach(invoiceOfMonth::add);
-            for(InvoiceDisplayOnTable i : invoiceOfMonth){
-                data.getData().add(new XYChart.Data<>(i.getCreateDate().toLocalDate().toString(),
-                        getNetDueAvgOfDay(invoiceOfMonth, i.getCreateDate().toLocalDate())));
-            }
+            statisticsForLastMonth(invoiceDisplayOnTableData, startDate, endDate, empName, data);
         }
         // thong ke cho khoang thoi gian cu the
         else{
             //show data on table
-            filterDataByDateRange(
-                    startDate.atTime(0,0,0),
-                    endDate.atTime(23, 59, 59),
-                    empName);
-            ObservableList<InvoiceDisplayOnTable> invoiceOfRange = FXCollections.observableArrayList();
-            list.stream()
-                    .filter(i -> i.getCreateDate().toLocalDate().isAfter(startDate)
-                            && i.getCreateDate().toLocalDate().isBefore(endDate))
-                    .filter(i -> (empName.equalsIgnoreCase(NONE_VALUE_CUSTOMER_NAME) ||
-                            i.getEmpName().equalsIgnoreCase(empName)))
-                    .forEach(invoiceOfRange::add);
-            for(InvoiceDisplayOnTable i : invoiceOfRange){
-                data.getData().add(new XYChart.Data<>(i.getCreateDate().toLocalDate().toString(),
-                        getNetDueAvgOfDay(invoiceOfRange, i.getCreateDate().toLocalDate())));
-            }
+            statisticsForAnyTime(invoiceDisplayOnTableData, startDate, endDate, empName, data);
         }
         return data;
+    }
+
+    private void statisticsForAnyTime(List<InvoiceDisplayOnTable> list, LocalDate startDate, LocalDate endDate, String empName, XYChart.Series<String, Double> data) {
+        showDataToTableViewByDateRangeOption(empName);
+        ObservableList<InvoiceDisplayOnTable> invoiceOfRange = FXCollections.observableArrayList();
+        list.stream()
+                .filter(i -> i.getCreateDate().toLocalDate().isAfter(startDate)
+                        && i.getCreateDate().toLocalDate().isBefore(endDate))
+                .filter(i -> (empName.equalsIgnoreCase(NONE_VALUE_CUSTOMER_NAME) ||
+                        i.getEmpName().equalsIgnoreCase(empName)))
+                .forEach(invoiceOfRange::add);
+        for(InvoiceDisplayOnTable i : invoiceOfRange){
+            data.getData().add(new XYChart.Data<>(i.getCreateDate().toLocalDate().toString(),
+                    getNetDueAvgOfDay(invoiceOfRange, i.getCreateDate().toLocalDate())));
+        }
+    }
+
+    private void statisticsForLastMonth(List<InvoiceDisplayOnTable> list, LocalDate startDate, LocalDate endDate, String empName, XYChart.Series<String, Double> data) {
+        //show data on table
+        showDataToTableViewByDateRangeOption(empName);
+        ObservableList<InvoiceDisplayOnTable> invoiceOfMonth = FXCollections.observableArrayList();
+        list.stream()
+                .filter(i -> i.getCreateDate().toLocalDate().isAfter(LocalDate.now().minusMonths(1).withDayOfMonth(1))
+                        && i.getCreateDate().toLocalDate().isBefore(LocalDate.now().minusMonths(1).withDayOfMonth(LocalDate.now().minusMonths(1).lengthOfMonth())))
+                .filter(i -> (empName.equalsIgnoreCase(NONE_VALUE_CUSTOMER_NAME) ||
+                        i.getEmpName().equalsIgnoreCase(empName)))
+                .forEach(invoiceOfMonth::add);
+        for(InvoiceDisplayOnTable i : invoiceOfMonth){
+            data.getData().add(new XYChart.Data<>(i.getCreateDate().toLocalDate().toString(),
+                    getNetDueAvgOfDay(invoiceOfMonth, i.getCreateDate().toLocalDate())));
+        }
+    }
+
+    private void statisticsForThisMonth(List<InvoiceDisplayOnTable> list, LocalDate startDate, LocalDate endDate, String empName, XYChart.Series<String, Double> data) {
+        //show data on table
+        showDataToTableViewByDateRangeOption(empName);
+        ObservableList<InvoiceDisplayOnTable> invoiceOfMonth = FXCollections.observableArrayList();
+        list.stream()
+                .filter(i -> i.getCreateDate().toLocalDate().isAfter(LocalDate.now().withDayOfMonth(1))
+                        && i.getCreateDate().toLocalDate().isBefore(LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth())))
+                .filter(i -> (empName.equalsIgnoreCase(NONE_VALUE_CUSTOMER_NAME) ||
+                        i.getEmpName().equalsIgnoreCase(empName)))
+                .forEach(invoiceOfMonth::add);
+        for(InvoiceDisplayOnTable i : invoiceOfMonth){
+            data.getData().add(new XYChart.Data<>(i.getCreateDate().toLocalDate().toString(),
+                    getNetDueAvgOfDay(invoiceOfMonth, i.getCreateDate().toLocalDate())));
+        }
+    }
+
+    private void statisticsForThisWeek(List<InvoiceDisplayOnTable> list, LocalDate startDate, LocalDate endDate, String empName, XYChart.Series<String, Double> data) {
+        //show data on table
+        showDataToTableViewByDateRangeOption(empName);
+        ObservableList<InvoiceDisplayOnTable> invoiceOfWeek = FXCollections.observableArrayList();
+        list.stream()
+                .filter(i -> i.getCreateDate().toLocalDate().isAfter(LocalDate.now().with(DayOfWeek.MONDAY))
+                        && i.getCreateDate().toLocalDate().isBefore(LocalDate.now().with(DayOfWeek.SUNDAY)))
+                .filter(i -> (empName.equalsIgnoreCase(NONE_VALUE_CUSTOMER_NAME) ||
+                        i.getEmpName().equalsIgnoreCase(empName)))
+                .forEach(invoiceOfWeek::add);
+        for(InvoiceDisplayOnTable i : invoiceOfWeek){
+            data.getData().add(new XYChart.Data<>(i.getCreateDate().toLocalDate().toString(),
+                    getNetDueAvgOfDay(invoiceOfWeek, i.getCreateDate().toLocalDate())));
+        }
+    }
+
+    private void statisticsForYesterday(List<InvoiceDisplayOnTable> list, LocalDate startDate, LocalDate endDate, String empName, XYChart.Series<String, Double> data) {
+        double netDueAve = list.stream()
+                .filter(i -> i.getCreateDate().toLocalDate().equals(LocalDate.now().minusDays(1)))
+                .filter(i -> (empName.equalsIgnoreCase(NONE_VALUE_CUSTOMER_NAME) ||
+                        i.getEmpName().equalsIgnoreCase(empName)))
+                .mapToDouble(InvoiceDisplayOnTable::getNetDue)
+                .average().orElse(0.0);
+        data.getData().add(new XYChart.Data<>(dateRangePicker.getValue().getStartDate().toString(), netDueAve));
+        loadDataToTable(getInvoiceDisplayByDay(empName));
+    }
+
+    private void statisticsForToday(List<InvoiceDisplayOnTable> list, LocalDate startDate, LocalDate endDate, String empName, XYChart.Series<String, Double> data) {
+        double netDueAve = list.stream()
+                .filter(i -> i.getCreateDate().toLocalDate().equals(LocalDate.now()))
+                .filter(i -> (empName.equalsIgnoreCase(NONE_VALUE_CUSTOMER_NAME) ||
+                        i.getEmpName().equalsIgnoreCase(empName)))
+                .mapToDouble(InvoiceDisplayOnTable::getNetDue)
+                .average().orElse(0.0);
+        data.getData().add(new XYChart.Data<>(dateRangePicker.getValue().getStartDate().toString(), netDueAve));
+        //loadDataTable(getInvoiceDisplayByDay(empName));
     }
 
     private double getNetDueAvgOfDay(ObservableList<InvoiceDisplayOnTable> list, LocalDate date){
@@ -285,20 +286,23 @@ public class StatisticalController implements Initializable {
                 .average().orElse(0.0);
     }
 
-    private void showDataToBarChartByYearOption() {
-        revenueBarchart.setTitle("Thống kê doanh thu");
+    // when flat equal TRUE, that means statistics by YEAR
+    // when flat equal FALSE, that means statistics by DATE RANGE PICKER
+    private void showDataToChartView(boolean flat) {
+        List<InvoiceDisplayOnTable> invoiceDisplayOnTableData = InvoiceDisplayOnTableDAO.getData();
+        revenueBarchart.setTitle(CHART_TITLE);
         revenueBarchart.getData().clear();
-        revenueBarchart.getData().add(getDataByYear());
+        if(flat) revenueBarchart.getData().add(getDataByYear(invoiceDisplayOnTableData));
+        else revenueBarchart.getData().add(getDataByDateRange(invoiceDisplayOnTableData));
     }
 
-    private XYChart.Series<String, Double> getDataByYear(){
+    private XYChart.Series<String, Double> getDataByYear(List<InvoiceDisplayOnTable> invoiceDisplayOnTableData){
         XYChart.Series<String, Double> data = new XYChart.Series<>();
-        List<InvoiceDisplayOnTable> list = InvoiceDisplayOnTableDAO.getData();
         String empName = revenueEmployeeCombobox.getValue();
 
         for (int i = 1; i <= 12; i++) {
             String month = getMonthName(i);
-            double netDueOfMonth = getAvgNetDueOfMonthByYear(list, cbbYear.getValue(), i, empName);
+            double netDueOfMonth = getAvgNetDueOfMonthByYear(invoiceDisplayOnTableData, cbbYear.getValue(), i, empName);
             data.getData().add(new XYChart.Data<>(month, netDueOfMonth));
         }
         return data;
@@ -354,9 +358,15 @@ public class StatisticalController implements Initializable {
 
     @FXML
     void refreshData() {
+        List<InvoiceDisplayOnTable> invoiceDisplayOnTableData = InvoiceDisplayOnTableDAO.getData();
         dateRangePicker.setValue(new DateRange(LocalDate.now()));
-        loadDataTable(FXCollections.observableArrayList(InvoiceDisplayOnTableDAO.getData()));
+        loadDataToTable(FXCollections.observableArrayList(invoiceDisplayOnTableData));
         cbbYear.setValue(LocalDate.now().getYear());
         revenueEmployeeCombobox.setValue(NONE_VALUE_CUSTOMER_NAME);
+        statisticsForToday(invoiceDisplayOnTableData,
+                dateRangePicker.getValue().getStartDate(),
+                dateRangePicker.getValue().getEndDate(),
+                revenueEmployeeCombobox.getValue(),
+                getDataByDateRange(invoiceDisplayOnTableData));
     }
 }
