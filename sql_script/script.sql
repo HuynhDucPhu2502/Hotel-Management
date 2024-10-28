@@ -112,7 +112,7 @@ CREATE TABLE Shift (
     startTime TIME NOT NULL, 
     endTime TIME NOT NULL, 
     modifiedDate DATETIME NOT NULL, 
-    numberOfHour FLOAT NOT NULL,
+    numberOfHour INT NOT NULL,
     shiftDaysSchedule NVARCHAR(20) NOT NULL CHECK (shiftDaysSchedule IN ('MON_WEB_FRI', 'TUE_THU_SAT', 'SUNDAY')) 
 );
 GO
