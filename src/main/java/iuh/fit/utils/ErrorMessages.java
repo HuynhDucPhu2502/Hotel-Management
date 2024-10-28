@@ -97,10 +97,10 @@ public class ErrorMessages {
     public static final String RESERVATION_FORM_NOT_BEHIND_NOW = "Ngày nhận phòng, trả phòng không được nhỏ hơn ngày hiện tại";
 
     // HistoryCheckIn
-    public static final String HISTORY_CHECKIN_IVALID_ID_ISNULL = "Mã phiếu nhận phòng không được rỗng!!!";
-    public static final String HISTORY_CHECKIN_IVALID_ID_FORMAT = "Mã ngày nhận phòng phải theo định dạng HCI-XXXXXX";
-    public static final String HISTORY_CHECKIN_IVALID_CHECKIN_DATE_ISNULL = "Ngày nhận phòng không được rỗng!!!";
-    public static final String HISTORY_CHECKIN_IVALID_CHECKIN_DATE = "Ngày nhận phòng phải sau ngày nhận phòng dự kiến";
+    public static final String HISTORY_CHECKIN_INVALID_ID_ISNULL = "Mã phiếu nhận phòng không được rỗng";
+    public static final String HISTORY_CHECKIN_INVALID_ID_FORMAT = "Mã ngày nhận phòng phải theo định dạng HCI-XXXXXX";
+    public static final String HISTORY_CHECKIN_INVALID_CHECKIN_DATE_ISNULL = "Ngày nhận phòng không được rỗng";
+    public static final String HISTORY_CHECKIN_INVALID_CHECKIN_DATE = "Ngày nhận phòng phải sau ngày nhận phòng dự kiến";
 
     // RoomReservationDetail
     public static final String ROOM_RESERVATION_DETAIL_INVALID_ID = "Mã chi tiết sử dụng phòng theo mẫu RRD-XXXXXX, với X là ký số";
