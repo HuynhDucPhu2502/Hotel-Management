@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="600.0" minWidth="240.0" stylesheets="@../../styles/Menubar.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
+<AnchorPane minHeight="600.0" minWidth="240.0" stylesheets="@../../styles/Menubar.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
    <children>
       <VBox minHeight="140.0" style="-fx-alignment: center; -fx-background-radius: 10; -fx-background-color: RGB(70, 130, 180);" styleClass="menu-bar-topbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -123,6 +123,23 @@
                                     </Path>
 
                                     <Button fx:id="accountOfEmployeeManagerButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Quản lý tài khoản" />
+                                 </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </HBox>
+                              <HBox fx:id="employeeSearchingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
+                                 <children>
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                          <MoveTo x="10" y="40" />
+                                          <LineTo x="10" y="55" />
+                                       </elements>
+                                    </Path>
+                                    <Button fx:id="employeeSearchingButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Tìm kiếm nhân viên" />
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />

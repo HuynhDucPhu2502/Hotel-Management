@@ -7,7 +7,7 @@ package iuh.fit.models.enums;
  */
 public enum Position {
     RECEPTIONIST("Lễ Tân"),
-    MANAGER("Quản lý");
+    MANAGER("Quản Lý");
 
     // Tên hiển thị của vị trí công việc
     private final String displayName;
