@@ -20,15 +20,15 @@ public class Shift {
     private LocalTime endTime;
     private LocalDateTime updatedDate;
     private ShiftDaysSchedule shiftDaysSchedule;
-    private double numberOfHour = 0;
+    private int numberOfHour = 0;
 
-    public Shift(String shiftID, LocalTime startTime, LocalTime endTime, LocalDateTime updatedDate, ShiftDaysSchedule shiftDaysSchedule) {
+    public Shift(String shiftID, LocalTime startTime, LocalDateTime updatedDate, ShiftDaysSchedule shiftDaysSchedule, int numberOfHour) {
         setStartTime(startTime);
-        setEndTime(endTime);
         setShiftID(shiftID);
         setUpdatedDate(updatedDate);
         setShiftDaysSchedule(shiftDaysSchedule);
-        calcNumberOfHour(); // Tính toán số giờ làm việc
+        setNumberOfHour(numberOfHour);
+        calcEndTime(); // Tính toán số giờ làm việc
     }
 
     /**
@@ -125,14 +125,20 @@ public class Shift {
      * Thiết lập thời gian kết thúc ca làm.
      * Thời gian kết thúc phải nằm trong khoảng hợp lệ, không được sau 23h đêm và không được trước thời gian bắt đầu.
      *
-     * @param endTime Thời gian kết thúc ca (LocalTime).
      * @throws IllegalArgumentException nếu thời gian kết thúc không hợp lệ.
      */
-    public void setEndTime(LocalTime endTime) {
-        if (endTime.isAfter(GlobalConstants.SHIFT_MAX_TIME))
-            throw new IllegalArgumentException(ErrorMessages.SHIFT_INVALID_ENDTIME);
+    public void calcEndTime() {
+        if (startTime == null)
+            throw new IllegalArgumentException(ErrorMessages.SHIFT_NULL_STARTTIME);
 
-        if (startTime != null && endTime.isBefore(startTime))
+        if (numberOfHour == 0)
+            throw new IllegalArgumentException(ErrorMessages.SHIFT_NULL_ENDTIME);
+
+        LocalTime endTime = ChronoUnit.DAYS.addTo(startTime, numberOfHour);
+
+        if (endTime.isBefore(startTime))
+            throw new IllegalArgumentException(ErrorMessages.SHIFT_INVALID_WORKHOURS);
+        if (endTime.isAfter(GlobalConstants.SHIFT_MAX_TIME))
             throw new IllegalArgumentException(ErrorMessages.SHIFT_INVALID_ENDTIME);
 
         this.endTime = endTime;
@@ -160,20 +166,6 @@ public class Shift {
         this.updatedDate = updatedDate;
     }
 
-    public void calcNumberOfHour() {
-        if (startTime == null)
-            throw new IllegalArgumentException(ErrorMessages.SHIFT_NULL_STARTTIME);
-
-        if (endTime == null)
-            throw new IllegalArgumentException(ErrorMessages.SHIFT_NULL_ENDTIME);
-
-        int hours = (int) ChronoUnit.HOURS.between(startTime, endTime);
-
-        if (hours < GlobalConstants.SHIFT_MIN_WORK_HOURS)
-            throw new IllegalArgumentException(ErrorMessages.SHIFT_INVALID_WORKHOURS);
-
-        this.numberOfHour = hours;
-    }
 
     /**
      * Lấy lịch làm việc theo ca (shiftDaysSchedule).
@@ -188,8 +180,13 @@ public class Shift {
         this.shiftDaysSchedule = shiftDaysSchedule;
     }
 
+    public void setNumberOfHour(int numberOfHour){
+        if(numberOfHour < GlobalConstants.SHIFT_MIN_WORK_HOURS)
+            throw new IllegalArgumentException(ErrorMessages.SHIFT_INVALID_WORKHOURS);
+        this.numberOfHour = numberOfHour;
+    }
+
     public double getNumberOfHour() {
-        calcNumberOfHour();  // Tính toán số giờ mỗi khi gọi hàm
         return numberOfHour;
     }
 
