@@ -28,8 +28,8 @@ public class ShiftDAO {
                 Shift shift = new Shift();
 
                 shift.setStartTime(ConvertHelper.localTimeConverter(rs.getTime(2)));
-                shift.setEndTime(ConvertHelper.localTimeConverter(rs.getTime(3)));
-                shift.calcNumberOfHour();
+                shift.setNumberOfHour(rs.getInt(3));
+                shift.calcEndTime();
 
                 shift.setShiftID(rs.getString(1));
                 shift.setUpdatedDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(4)));
@@ -48,7 +48,7 @@ public class ShiftDAO {
 
     public static Shift getDataByID(String shiftID) {
 
-        String SQLQueryStatement = "SELECT shiftID, startTime, endTime, " +
+        String SQLQueryStatement = "SELECT shiftID, startTime, numberOfHour, " +
                 "modifiedDate, shiftDaysSchedule " +
                 "FROM Shift " +
                 "WHERE shiftID = ?";
@@ -65,8 +65,8 @@ public class ShiftDAO {
                     Shift shift = new Shift();
 
                     shift.setStartTime(ConvertHelper.localTimeConverter(rs.getTime(2)));
-                    shift.setEndTime(ConvertHelper.localTimeConverter(rs.getTime(3)));
-                    shift.calcNumberOfHour();
+                    shift.setNumberOfHour(rs.getInt(3));
+                    shift.calcEndTime();
 
                     shift.setShiftID(rs.getString(1));
                     shift.setUpdatedDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(4)));
