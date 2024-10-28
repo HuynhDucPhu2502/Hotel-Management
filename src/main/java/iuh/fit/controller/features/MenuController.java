@@ -44,9 +44,16 @@ public class MenuController {
     private Button accountOfEmployeeManagerButton;
 
     @FXML
+
+    private HBox shiftManagerContainer;
+    @FXML
+    private Button shiftManagerButton;
+
+    @FXML
     private HBox employeeSearchingContainer;
     @FXML
     private Button employeeSearchingButton;
+
 
     @FXML
     private ImageView arrowUpForEmpBtn;
@@ -174,7 +181,9 @@ public class MenuController {
         buttonStates.put("statistics", false);
         buttonStates.put("history", false);
 
-        employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(employeeManagerContainer, accountOfEmployeeManagerContainer, employeeSearchingContainer), arrowUpForEmpBtn, "employee"));
+
+        employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(employeeManagerContainer, accountOfEmployeeManagerContainer, employeeSearchingContainer, shiftManagerContainer), arrowUpForEmpBtn, "employee"));
+
         roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer, roomCategoryManagerContainer, roomManagerContainer, roomSearchingContainer, roomBookingContainer), arrowUpForRoom, "room"));
         serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryManagerContainer, hotelServiceManagerContainer, hotelServiceSearchingContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer, customerSearchingContainer), arrowUpForCustomer, "customer"));
@@ -252,11 +261,16 @@ public class MenuController {
         return accountOfEmployeeManagerButton;
     }
 
+
+    public Button getShiftManagerButton(){
+        return shiftManagerButton;
+
     public Button getEmployeeSearchingButton(){
         return employeeSearchingButton;
     }
     public Button getCustomerSearchingButton(){
         return customerSearchingButton;
+
     }
 
     public Button getDashBoardBtn() {

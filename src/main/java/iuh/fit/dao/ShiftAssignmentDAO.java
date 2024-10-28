@@ -37,8 +37,8 @@ public class ShiftAssignmentDAO {
 
 
                 shift.setStartTime(ConvertHelper.localTimeConverter(rs.getTime(5)));
-                shift.setEndTime(ConvertHelper.localTimeConverter(rs.getTime(6)));
-                shift.calcNumberOfHour();
+                shift.setNumberOfHour(rs.getInt(8));
+                shift.calcEndTime();
 
                 shift.setShiftID(rs.getString(3));
                 shift.setUpdatedDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(7)));
@@ -95,8 +95,8 @@ public class ShiftAssignmentDAO {
 
 
                     shift.setStartTime(ConvertHelper.localTimeConverter(rs.getTime(5)));
-                    shift.setEndTime(ConvertHelper.localTimeConverter(rs.getTime(6)));
-                    shift.calcNumberOfHour();
+                    shift.setNumberOfHour(rs.getInt(8));
+                    shift.calcEndTime();
 
                     shift.setShiftID(rs.getString(3));
                     shift.setUpdatedDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(7)));
