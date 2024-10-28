@@ -4,6 +4,7 @@ import iuh.fit.controller.MainController;
 import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
+import iuh.fit.models.wrapper.RoomWithReservation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -36,16 +37,21 @@ public class ReservationFormItemController {
     private MainController mainController;
     private ReservationForm reservationForm;
     private Employee employee;
+    private RoomWithReservation roomWithReservation;
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
     public void setupContext(
-            MainController mainController, ReservationForm reservationForm, Employee employee
+            MainController mainController,
+            ReservationForm reservationForm,
+            Employee employee,
+            RoomWithReservation roomWithReservation
     ) {
         this.mainController = mainController;
         this.reservationForm = reservationForm;
         this.employee = employee;
+        this.roomWithReservation = roomWithReservation;
 
         Customer customer = reservationForm.getCustomer();
         Employee reservationFormEmployee = reservationForm.getEmployee();
@@ -63,12 +69,14 @@ public class ReservationFormItemController {
     @FXML
     private void navigateToReservationFormDetails() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/reservation_list_panels/ReservationFormDetailsPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/iuh/fit/view/features/room/reservation_list_panels/ReservationFormDetailsPanel.fxml")
+            );
             AnchorPane layout = loader.load();
 
             ReservationFormDetailsController reservationFormDetailsController = loader.getController();
             reservationFormDetailsController.setupContext(
-                    mainController, reservationForm, employee
+                    mainController, reservationForm, employee, roomWithReservation
             );
 
             mainController.getMainPanel().getChildren().clear();

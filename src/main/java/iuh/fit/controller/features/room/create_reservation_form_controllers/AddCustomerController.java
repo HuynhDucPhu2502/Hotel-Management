@@ -9,6 +9,7 @@ import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Room;
 import iuh.fit.models.enums.Gender;
+import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.ErrorMessages;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -56,18 +57,16 @@ public class AddCustomerController {
     @FXML
     private DialogPane dialogPane;
 
-    // 1.4
+    // 1.4 TitledPane
     @FXML
     private TitledPane titledPane;
 
     // 1.5 Context
     private MainController mainController;
     private Employee employee;
-    private Room room;
-
+    private RoomWithReservation roomWithReservation;
     private LocalDateTime checkInTime;
     private LocalDateTime checkOutTime;
-
     private Customer customer;
 
     // ==================================================================================================================
@@ -75,7 +74,6 @@ public class AddCustomerController {
     // ==================================================================================================================
     public void initialize() {
         dialogPane.toFront();
-
         customerIDTextField.setText(CustomerDAO.getNextCustomerID());
 
         addBtn.setOnAction(e -> handleAddAction());
@@ -83,22 +81,21 @@ public class AddCustomerController {
     }
 
     public void setupContext(
-            MainController mainController, Employee employee, Room room,
+            MainController mainController, Employee employee, RoomWithReservation roomWithReservation,
             LocalDateTime checkInTime, LocalDateTime checkOutTime
     ) {
         this.mainController = mainController;
         this.employee = employee;
-        this.room = room;
+        this.roomWithReservation = roomWithReservation;
+        Room room = roomWithReservation.getRoom();
 
         titledPane.setText("Quản lý đặt phòng " + room.getRoomNumber());
-
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
 
         bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
         reservationFormNavigate.setOnAction(e -> navigateToCreateReservationFormPanel());
         backBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
-
     }
 
     // ==================================================================================================================
@@ -126,10 +123,7 @@ public class AddCustomerController {
 
             CreateReservationFormController createReservationFormController = loader.getController();
             createReservationFormController.setupContext(
-                    mainController, employee, room,
-                    customer,
-                    checkInTime,
-                    checkOutTime
+                    mainController, employee, roomWithReservation, customer, checkInTime, checkOutTime
             );
 
             mainController.getMainPanel().getChildren().clear();
@@ -138,19 +132,19 @@ public class AddCustomerController {
             e.printStackTrace();
         }
     }
+
     // ==================================================================================================================
     // 4. Thêm khách hàng
     // ==================================================================================================================
-    // Chức năng 2: Thêm
     public void handleAddAction() {
-        try{
+        try {
             Customer customer = createCustomer();
             CustomerDAO.createData(customer);
             handleResetAction();
             dialogPane.showInformation("Thành công", "Đã thêm khách hàng thành công");
             this.customer = customer;
             navigateToCreateReservationFormPanel();
-        }catch (Exception e){
+        } catch (Exception e) {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
     }
@@ -163,10 +157,11 @@ public class AddCustomerController {
         String address = customerAddressTextField.getText();
 
         Gender gender;
-        RadioButton rad =  (RadioButton) genderToggleGroup.getSelectedToggle();
-        if (rad == null) throw new IllegalArgumentException(ErrorMessages.CUS_GENDER_NOT_SELECTED);
-        else if (rad.getText().equalsIgnoreCase("NAM")) gender = Gender.MALE;
-        else gender = Gender.FEMALE;
+        RadioButton selectedGender = (RadioButton) genderToggleGroup.getSelectedToggle();
+        if (selectedGender == null) {
+            throw new IllegalArgumentException(ErrorMessages.CUS_GENDER_NOT_SELECTED);
+        }
+        gender = selectedGender.getText().equalsIgnoreCase("NAM") ? Gender.MALE : Gender.FEMALE;
 
         String idCardNumber = customerIDCardNumberTextField.getText();
         LocalDate dob = customerDOBCalendarPicker.getValue();
@@ -176,15 +171,16 @@ public class AddCustomerController {
 
     public void handleResetAction() {
         customerIDTextField.setText(CustomerDAO.getNextCustomerID());
-        customerIDCardNumberTextField.setText("");
-        customerNameTextField.setText("");
-        customerPhoneNumberTextField.setText("");
-        customerEmailTextField.setText("");
-        customerAddressTextField.setText("");
-        Toggle rad =  genderToggleGroup.getSelectedToggle();
-        if (rad != null) rad.setSelected(false);
+        customerIDCardNumberTextField.clear();
+        customerNameTextField.clear();
+        customerPhoneNumberTextField.clear();
+        customerEmailTextField.clear();
+        customerAddressTextField.clear();
+
+        Toggle selectedToggle = genderToggleGroup.getSelectedToggle();
+        if (selectedToggle != null) selectedToggle.setSelected(false);
+
         customerDOBCalendarPicker.setValue(null);
         customerNameTextField.requestFocus();
     }
-
 }

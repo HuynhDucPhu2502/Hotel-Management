@@ -9,6 +9,7 @@ import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.RoomReservationDetailDAO;
 import iuh.fit.models.*;
 import iuh.fit.models.enums.RoomStatus;
+import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -82,6 +83,7 @@ public class ReservationFormDetailsController {
     // 1.5 Context
     private MainController mainController;
     private ReservationForm reservationForm;
+    private RoomWithReservation roomWithReservation;
     private Employee employee;
 
     // ==================================================================================================================
@@ -92,9 +94,11 @@ public class ReservationFormDetailsController {
     }
 
     public void setupContext(
-            MainController mainController, ReservationForm reservationForm, Employee employee) {
+            MainController mainController, ReservationForm reservationForm,
+            Employee employee, RoomWithReservation roomWithReservation) {
         this.mainController = mainController;
         this.reservationForm = reservationForm;
+        this.roomWithReservation = roomWithReservation;
         this.employee = employee;
 
         backBtn.setOnAction(e -> navigateToReservationListPanel());
@@ -173,7 +177,7 @@ public class ReservationFormDetailsController {
 
             ReservationListController reservationListController = loader.getController();
             reservationListController.setupContext(
-                    mainController, employee, reservationForm.getRoom()
+                    mainController, employee, roomWithReservation
             );
 
             mainController.getMainPanel().getChildren().clear();
@@ -234,7 +238,7 @@ public class ReservationFormDetailsController {
             );
 
             // 3. Thêm dữ liệu vào RoomReservationDetail và HistoryCheckIn
-            RoomReservationDetailDAO.create(detail);
+            RoomReservationDetailDAO.createData(detail);
             HistoryCheckinDAO.createData(historyCheckIn);
 
             // 4. Cập nhật trạng thái phòng thành "ON_USE"

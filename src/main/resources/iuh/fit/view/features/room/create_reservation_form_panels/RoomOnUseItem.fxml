@@ -50,7 +50,7 @@
             </Text>
          </top>
          <center>
-            <Label text="ĐANG SỬ DỤNG" textFill="WHITE" textOverrun="LEADING_WORD_ELLIPSIS" BorderPane.alignment="CENTER">
+            <Label fx:id="customerFullNameLabel" text="ĐANG SỬ DỤNG" textFill="WHITE" textOverrun="LEADING_WORD_ELLIPSIS" BorderPane.alignment="CENTER">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
