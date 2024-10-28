@@ -71,7 +71,7 @@ public class RoomReservationDetailDAO {
         return null;
     }
 
-    public static void create(RoomReservationDetail detail) {
+    public static void createData(RoomReservationDetail detail) {
         String insertSql = """
             INSERT INTO RoomReservationDetail(roomReservationDetailID, dateChanged, roomID, 
                                               reservationFormID, employeeID) 
@@ -117,7 +117,7 @@ public class RoomReservationDetailDAO {
         }
     }
 
-    public static void update(RoomReservationDetail detail) {
+    public static void updateData(RoomReservationDetail detail) {
         String sql = """
                 UPDATE RoomReservationDetail
                 SET dateChanged = ?, roomID = ?, reservationFormID = ?, employeeID = ?
@@ -140,7 +140,7 @@ public class RoomReservationDetailDAO {
         }
     }
 
-    public static void delete(String id) {
+    public static void deleteData(String id) {
         String sql = "DELETE FROM RoomReservationDetail WHERE roomReservationDetailID = ?";
 
         try (

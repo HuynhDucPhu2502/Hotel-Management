@@ -9,14 +9,15 @@ import com.dlsc.gemsfx.daterange.DateRange;
 import com.dlsc.gemsfx.daterange.DateRangePicker;
 import com.dlsc.gemsfx.daterange.DateRangePreset;
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.room.reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.RoomBookingController;
+import iuh.fit.controller.features.room.reservation_list_controllers.ReservationListController;
 import iuh.fit.dao.CustomerDAO;
 import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
+import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
 import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.GlobalConstants;
@@ -46,77 +47,31 @@ public class CreateReservationFormController {
     // ==================================================================================================================
     // 1. Các biến
     // ==================================================================================================================
-    // 1.1 Buttons
-    @FXML
-    private Button backBtn;
-    @FXML
-    private Button bookingRoomNavigate;
-    @FXML
-    private Button navigateToCreateCustomerBtn;
-    @FXML
-    private Button navigateToReservationListBtn;
-    @FXML
-    private Button addBtn;
-    @FXML
-    private Button reservationCheckDateBtn;
+    @FXML private Button backBtn, bookingRoomNavigate, navigateToCreateCustomerBtn;
+    @FXML private Button navigateToReservationListBtn, addBtn, reservationCheckDateBtn;
 
-    // 1.2.1 Fields cho phiếu đặt phòng
-    @FXML
-    private Label roomNumberLabel;
-    @FXML
-    private Label categoryNameLabel;
-    @FXML
-    private DateRangePicker bookDateRangePicker;
-    @FXML
-    private TimePicker checkInTimePicker;
-    @FXML
-    private TextField checkInDateTextField;
-    @FXML
-    private TimePicker checkOutTimePicker;
-    @FXML
-    private TextField checkOutDateTextField;
-    @FXML
-    private Label stayLengthLabel;
-    @FXML
-    private Label bookingDepositLabel;
-    // 1.2.2 Fields cho thông tin khách hàng đặt phòng
-    @FXML
-    private TextField customerIDCardNumberTextField;
-    @FXML
-    private TextField customerFullnameTextField;
-    @FXML
-    private TextField customerPhoneNumberTextField;
+    @FXML private Label roomNumberLabel, categoryNameLabel;
+    @FXML private DateRangePicker bookDateRangePicker;
+    @FXML private TimePicker checkInTimePicker, checkOutTimePicker;
+    @FXML private TextField checkInDateTextField, checkOutDateTextField;
+    @FXML private Label stayLengthLabel, bookingDepositLabel;
 
-    // 1.2.3 Fields cho thông tin tiếp tân làm phiếu đặt phòng
-    @FXML
-    private Label employeeIDLabel;
-    @FXML
-    private Label employeeFullNameLabel;
-    @FXML
-    private Label employeePositionLabel;
-    @FXML
-    private Label employeePhoneNumberLabel;
+    @FXML private TextField customerIDCardNumberTextField, customerFullnameTextField, customerPhoneNumberTextField;
 
-    // 1.3 Dialog Pane
-    @FXML
-    private DialogPane dialogPane;
+    @FXML private Label employeeIDLabel, employeeFullNameLabel, employeePositionLabel, employeePhoneNumberLabel;
 
-    // 1.4 Titled Pane
-    @FXML
-    private TitledPane titledPane;
+    @FXML private DialogPane dialogPane;
+    @FXML private TitledPane titledPane;
 
-    // 1.5 Formatter
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.forLanguageTag("vi-VN"));
 
-    // 1.6 Context và dữ liệu binding
     private MainController mainController;
     private Employee employee;
+    private RoomWithReservation roomWithReservation;
     private Room room;
 
-    private LocalDateTime checkInTime;
-    private LocalDateTime checkOutTime;
-
+    private LocalDateTime checkInTime, checkOutTime;
     private Customer customer;
 
     // ==================================================================================================================
@@ -128,50 +83,48 @@ public class CreateReservationFormController {
         setupCustomerIDCardValidation();
     }
 
-    public void setupContext(
-            MainController mainController, Employee employee, Room room,
-            Customer customer, LocalDateTime checkInTime, LocalDateTime checkOutTime
-    ) {
+    public void setupContext(MainController mainController, Employee employee,
+                             RoomWithReservation roomWithReservation, Customer customer,
+                             LocalDateTime checkInTime, LocalDateTime checkOutTime) {
         this.mainController = mainController;
         this.employee = employee;
-        this.room = room;
+        this.roomWithReservation = roomWithReservation;
+        this.room = roomWithReservation.getRoom();
 
         titledPane.setText("Quản lý đặt phòng " + room.getRoomNumber());
-
-        backBtn.setOnAction(e -> navigateToRoomBookingPanel());
-        bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
-        navigateToCreateCustomerBtn.setOnAction(e -> navigateToAddCustomerPanel());
-        navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
 
         setupRoomInformation();
         setupEmployeeInformation();
 
-        if (customer != null) {
-            customerIDCardNumberTextField.setText(customer.getIdCardNumber());
-        }
-
+        if (customer != null) customerIDCardNumberTextField.setText(customer.getIdCardNumber());
         if (checkInTime != null && checkOutTime != null) {
             this.checkInTime = checkInTime;
             this.checkOutTime = checkOutTime;
             setBookingDates(checkInTime, checkOutTime);
         }
 
+        setupButtonActions();
+    }
+
+    private void setupButtonActions() {
+        backBtn.setOnAction(e -> navigateToRoomBookingPanel());
+        bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
+        navigateToCreateCustomerBtn.setOnAction(e -> navigateToAddCustomerPanel());
+        navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
         addBtn.setOnAction(e -> handleCreateReservationRoom());
         reservationCheckDateBtn.setOnAction(e -> openCalendarViewStage());
     }
 
     // ==================================================================================================================
-    // 3. Xử lý đổi các biến thời gian thành chuỗi ngày + giờ
+    // 3. Xử lý thời gian và ngày tháng
     // ==================================================================================================================
-
-    private String formatDateTime(java.time.LocalDate date, java.time.LocalTime time) {
+    private String formatDateTime(LocalDate date, LocalTime time) {
         return dateTimeFormatter.format(date) + " " + time.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
     private LocalDateTime parseDateTime(String dateTimeString) {
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.forLanguageTag("vi-VN"));
-            return LocalDateTime.parse(dateTimeString, formatter);
+            return LocalDateTime.parse(dateTimeString, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.forLanguageTag("vi-VN")));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -179,15 +132,13 @@ public class CreateReservationFormController {
     }
 
     // ==================================================================================================================
-    // 4. Đẩy dữ liệu phòng và nhân viên lên giao diện
+    // 4. Hiển thị thông tin phòng và nhân viên
     // ==================================================================================================================
-    // 4.1 Hiển thị dữ liệu phòng và loại phòng lên giao diện
     private void setupRoomInformation() {
         roomNumberLabel.setText(room.getRoomNumber());
         categoryNameLabel.setText(room.getRoomCategory().getRoomCategoryName());
     }
 
-    // 4.2 Hiển thị nhân viên lên giao diện
     private void setupEmployeeInformation() {
         employeeIDLabel.setText(employee.getEmployeeID());
         employeeFullNameLabel.setText(employee.getFullName());
@@ -199,50 +150,31 @@ public class CreateReservationFormController {
     // 5. Xử lý chức năng hiển thị panel khác
     // ==================================================================================================================
     private void navigateToRoomBookingPanel() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
-            AnchorPane layout = loader.load();
-
-            RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setupContext(mainController, employee);
-
-            mainController.getMainPanel().getChildren().clear();
-            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadPanel("/iuh/fit/view/features/room/RoomBookingPanel.fxml", RoomBookingController.class);
     }
 
     private void navigateToAddCustomerPanel() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/create_reservation_form_panels/AddCustomerPanel.fxml"));
-            AnchorPane layout = loader.load();
-
-            AddCustomerController addCustomerController = loader.getController();
-            addCustomerController.setupContext(
-                    mainController, employee, room,
-                    checkInTime, checkOutTime
-            );
-
-            mainController.getMainPanel().getChildren().clear();
-            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        loadPanel("/iuh/fit/view/features/room/create_reservation_form_panels/AddCustomerPanel.fxml", AddCustomerController.class);
     }
 
     private void navigateToReservationListPanel() {
+        loadPanel("/iuh/fit/view/features/room/reservation_list_panels/ReservationListPanel.fxml", ReservationListController.class);
+    }
+
+    private <T> void loadPanel(String path, Class<T> controllerClass) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/reservation_list_panels/ReservationListPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             AnchorPane layout = loader.load();
+            T controller = loader.getController();
 
-            ReservationListController reservationListController = loader.getController();
-            reservationListController.setupContext(
-                    mainController, employee, room
-            );
+            if (controller instanceof RoomBookingController rbc)
+                rbc.setupContext(mainController, employee);
+            else if (controller instanceof AddCustomerController acc)
+                acc.setupContext(mainController, employee, roomWithReservation, checkInTime, checkOutTime);
+            else if (controller instanceof  ReservationListController rlc)
+                rlc.setupContext(mainController, employee, roomWithReservation);
 
-            mainController.getMainPanel().getChildren().clear();
-            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+            mainController.getMainPanel().getChildren().setAll(layout.getChildren());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -416,17 +348,11 @@ public class CreateReservationFormController {
     private void handleCreateReservationRoom() {
         try {
             ReservationForm reservationForm = new ReservationForm(
-                    ReservationFormDAO.getNextReservationFormID(),
-                    LocalDateTime.now(),
-                    checkInTime,
-                    checkOutTime,
-                    employee,
-                    room,
-                    customer
-            );
+                    ReservationFormDAO.getNextReservationFormID(), LocalDateTime.now(),
+                    checkInTime, checkOutTime, employee, room, customer);
             ReservationFormDAO.createData(reservationForm);
-            handleResetAction();
             dialogPane.showInformation("Thành công", "Đã thêm phiếu đặt phòng thành công");
+            handleResetAction();
         } catch (Exception e) {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
@@ -467,28 +393,22 @@ public class CreateReservationFormController {
     // ==================================================================================================================
     private void openCalendarViewStage() {
         CalendarView calendarView = new CalendarView();
-
         List<ReservationForm> reservations = ReservationFormDAO.getUpcomingReservations(room.getRoomID());
+        Calendar<String> calendar = new Calendar<>("Lịch Đặt Phòng");
 
-        Calendar<String> reservationCalendar = new Calendar<>("Lịch Đặt Phòng");
-
-        reservations.forEach(reservation -> {
-            Entry<String> entry = new Entry<>(reservation.getReservationID());
-            entry.changeStartDate(reservation.getCheckInDate().toLocalDate());
-            entry.changeEndDate(reservation.getCheckOutDate().toLocalDate());
-            reservationCalendar.addEntry(entry);
+        reservations.forEach(res -> {
+            Entry<String> entry = new Entry<>(res.getReservationID());
+            entry.changeStartDate(res.getCheckInDate().toLocalDate());
+            entry.changeEndDate(res.getCheckOutDate().toLocalDate());
+            calendar.addEntry(entry);
         });
 
-        calendarView.getCalendarSources().clear();
         calendarView.getCalendarSources().add(new com.calendarfx.model.CalendarSource("Nguồn") {{
-            getCalendars().add(reservationCalendar);
+            getCalendars().add(calendar);
         }});
 
-        Scene scene = new Scene(calendarView, 800, 800);
-
         Stage stage = new Stage();
-        stage.setTitle("Lịch đặt phòng " + room.getNumberOfBed());
-        stage.setScene(scene);
+        stage.setScene(new Scene(calendarView, 800, 800));
         stage.show();
     }
 

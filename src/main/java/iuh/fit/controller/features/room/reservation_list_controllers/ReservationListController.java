@@ -7,6 +7,7 @@ import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
+import iuh.fit.models.wrapper.RoomWithReservation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -43,6 +44,7 @@ public class ReservationListController {
     private Employee employee;
     private Room room;
     private List<ReservationForm> reservationForms;
+    private RoomWithReservation roomWithReservation;
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
@@ -51,11 +53,13 @@ public class ReservationListController {
     }
 
     public void setupContext(
-            MainController mainController, Employee employee, Room room
+            MainController mainController, Employee employee,
+            RoomWithReservation roomWithReservation
     ) {
         this.mainController = mainController;
         this.employee = employee;
-        this.room = room;
+        this.roomWithReservation = roomWithReservation;
+        this.room = roomWithReservation.getRoom();
 
         titledPane.setText("Quản lý đặt phòng " + room.getRoomNumber());
 
@@ -97,7 +101,7 @@ public class ReservationListController {
 
             CreateReservationFormController createReservationFormController = loader.getController();
             createReservationFormController.setupContext(
-                    mainController, employee, room,
+                    mainController, employee, roomWithReservation,
                     null,
                     null,
                     null
@@ -128,7 +132,7 @@ public class ReservationListController {
                 reservationFormItem = loader.load();
 
                 ReservationFormItemController controller = loader.getController();
-                controller.setupContext(mainController, reservationForm, employee);
+                controller.setupContext(mainController, reservationForm, employee, roomWithReservation);
 
                 reservationFormGidPane.add(reservationFormItem, col, row);
 
