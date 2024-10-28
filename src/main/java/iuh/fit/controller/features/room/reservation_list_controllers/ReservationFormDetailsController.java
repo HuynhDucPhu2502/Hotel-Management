@@ -62,7 +62,7 @@ public class ReservationFormDetailsController {
 
     // 1.3 Formatter
     private final DateTimeFormatter dateTimeFormatter =
-            DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.forLanguageTag("vi-VN"));
+            DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
 
     // 1.4 Context
     private MainController mainController;
@@ -82,7 +82,7 @@ public class ReservationFormDetailsController {
         this.reservationForm = reservationForm;
         this.employee = employee;
 
-        backBtn.setOnAction(e -> navigateToRoomBookingPanel());
+        backBtn.setOnAction(e -> navigateToReservationListPanel());
         reservationFormListNavigate.setOnAction(e -> navigateToReservationListPanel());
         bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
 
