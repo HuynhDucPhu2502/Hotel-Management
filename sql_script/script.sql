@@ -197,29 +197,41 @@ GO
 -- Tạo bảng HistoryCheckin
 CREATE TABLE HistoryCheckin (
     historyCheckInID NVARCHAR(15) NOT NULL PRIMARY KEY,        
-    checkInDate DATETIME NOT NULL,                            
-    reservationFormID NVARCHAR(15) NOT NULL,                       
-    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID)  
+    checkInDate DATETIME NOT NULL,
+    reservationFormID NVARCHAR(15) NOT NULL,
+    employeeID NVARCHAR(15),  -- Thêm employeeID
+    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID),
+    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 GO
 
 -- Tạo bảng HistoryCheckOut
 CREATE TABLE HistoryCheckOut (
-    historyCheckOutID NVARCHAR(15) NOT NULL PRIMARY KEY,      
-    checkOutDate DATETIME NOT NULL,                         
-    reservationFormID NVARCHAR(15) NOT NULL,                
-    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID) 
+    historyCheckOutID NVARCHAR(15) NOT NULL PRIMARY KEY,
+    checkOutDate DATETIME NOT NULL,
+    reservationFormID NVARCHAR(15) NOT NULL,
+    employeeID NVARCHAR(15),  -- Thêm employeeID
+    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID),
+    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 GO
 
 -- Tạo bảng RoomReservationDetail
 CREATE TABLE RoomReservationDetail (
-    roomReservationDetailID NVARCHAR(15) NOT NULL PRIMARY KEY,   
-    dateChanged DATETIME NOT NULL,  
-    roomID NVARCHAR(15) NOT NULL,    
-    reservationFormID NVARCHAR(15) NOT NULL,  
-    FOREIGN KEY (roomID) REFERENCES Room(roomID),  
-    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID)  
+    roomReservationDetailID NVARCHAR(15) NOT NULL PRIMARY KEY,
+    dateChanged DATETIME NOT NULL,
+    roomID NVARCHAR(15) NOT NULL,
+    reservationFormID NVARCHAR(15) NOT NULL,
+    employeeID NVARCHAR(15),  -- Thêm employeeID
+    FOREIGN KEY (roomID) REFERENCES Room(roomID),
+    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID),
+    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 GO
 
