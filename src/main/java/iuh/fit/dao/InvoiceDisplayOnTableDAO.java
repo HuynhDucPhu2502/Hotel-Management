@@ -1,7 +1,6 @@
 package iuh.fit.dao;
 
-import iuh.fit.models.Invoice;
-import iuh.fit.models.InvoiceDisplayOnTable;
+import iuh.fit.models.wrapper.InvoiceDisplayOnTable;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 
