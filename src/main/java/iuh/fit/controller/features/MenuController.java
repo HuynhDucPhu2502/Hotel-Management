@@ -117,6 +117,11 @@ public class MenuController {
     public Button customerManagerButton;
 
     @FXML
+    private HBox customerSearchingContainer;
+    @FXML
+    public Button customerSearchingButton;
+
+    @FXML
     private ImageView arrowUpForCustomer;
 
 
@@ -172,7 +177,7 @@ public class MenuController {
         employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(employeeManagerContainer, accountOfEmployeeManagerContainer, employeeSearchingContainer), arrowUpForEmpBtn, "employee"));
         roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer, roomCategoryManagerContainer, roomManagerContainer, roomSearchingContainer, roomBookingContainer), arrowUpForRoom, "room"));
         serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryManagerContainer, hotelServiceManagerContainer, hotelServiceSearchingContainer), arrowUpForService, "service"));
-        customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer), arrowUpForCustomer, "customer"));
+        customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer, customerSearchingContainer), arrowUpForCustomer, "customer"));
         statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(revenueStatisticsContainer, buttonTwoContainer2111, buttonThreeContainer2111), arrowUpForStatistics, "statistics"));
         historyBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21111, buttonTwoContainer21111, buttonThreeContainer21111), arrowUpForHistory, "history"));
     }
@@ -249,6 +254,9 @@ public class MenuController {
 
     public Button getEmployeeSearchingButton(){
         return employeeSearchingButton;
+    }
+    public Button getCustomerSearchingButton(){
+        return customerSearchingButton;
     }
 
     public Button getDashBoardBtn() {

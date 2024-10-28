@@ -55,6 +55,7 @@ public class MainController {
                 menuController.getHotelServiceSearchingButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/HotelServiceSearchingPanel.fxml"));
                 // Customer
                 menuController.getCustomerManagerButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/customer/CustomerManagerPanel.fxml"));
+                menuController.getCustomerSearchingButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/customer/CustomerSearchingPanel.fxml"));
                 // Account
                 // Statistics
                 menuController.getRevenueStatisticsButton().setOnAction(e -> {
