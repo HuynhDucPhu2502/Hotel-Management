@@ -261,13 +261,14 @@ public class MenuController {
         return accountOfEmployeeManagerButton;
     }
 
-
-    public Button getShiftManagerButton(){
+    public Button getShiftManagerButton() {
         return shiftManagerButton;
+    }
 
     public Button getEmployeeSearchingButton(){
         return employeeSearchingButton;
     }
+
     public Button getCustomerSearchingButton(){
         return customerSearchingButton;
 
