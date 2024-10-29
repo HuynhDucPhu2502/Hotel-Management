@@ -22,7 +22,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-public class CustomerSearchingPanel {
+public class CustomerSearchingController {
     // Input Fields
     @FXML
     private TextField customerIDTextField;
@@ -168,7 +168,7 @@ public class CustomerSearchingPanel {
 
     private void handleSearchAction() {
         try {
-            String customerID = customerIDTextField.getText().isBlank() ? null : customerIDColumn.getText().trim();
+            String customerID = customerIDTextField.getText().isBlank() ? null : customerIDTextField.getText().trim();
             String fullName = fullNameColumn.getText().isBlank() ? null : fullNameTextField.getText().trim();
             String phoneNumber = phoneNumberTextField.getText().isBlank() ? null : phoneNumberTextField.getText().trim();
             String email = emailTextField.getText().isBlank() ? null : emailTextField.getText().trim();
