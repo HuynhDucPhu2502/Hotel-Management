@@ -1,6 +1,11 @@
 package iuh.fit;
 
+import iuh.fit.controller.features.statistics.StatisticalController;
 import iuh.fit.dao.InvoiceDisplayOnTableDAO;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.Month;
 
 public class FetchTesting {
     public static void main(String[] args) {
@@ -19,6 +24,6 @@ public class FetchTesting {
 
 //        System.out.println(InvoiceDAO.getInvoice());
 
-        System.out.println(InvoiceDisplayOnTableDAO.getData());
+        //System.out.println(InvoiceDisplayOnTableDAO.getData());
     }
 }
