@@ -54,7 +54,7 @@ public class LoginController {
         });
         signInButton.setOnAction(event -> signIn());
 
-        Image defaultIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/ic_show_password.png")));
+        Image defaultIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/login_panel_icons/ic_show_password.png")));
         showPassButton.setImage(defaultIcon);
 
     }
@@ -78,10 +78,10 @@ public class LoginController {
     @FXML
     private void changeButtonIconForShowPasswordBtn() {
         if (isDefaultIcon) {
-            Image newIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/ic_hidden_password.png")));
+            Image newIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/login_panel_icons/ic_hidden_password.png")));
             showPassButton.setImage(newIcon);
         } else {
-            Image defaultIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/ic_show_password.png")));
+            Image defaultIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/login_panel_icons/ic_show_password.png")));
             showPassButton.setImage(defaultIcon);
         }
 

@@ -51,11 +51,12 @@ GO
 -- Tạo bảng ServiceCategory
 CREATE TABLE ServiceCategory (
     serviceCategoryID NVARCHAR(15) NOT NULL PRIMARY KEY,
-    serviceCategoryName NVARCHAR(50) NOT NULL
+    serviceCategoryName NVARCHAR(50) NOT NULL,
+	icon NVARCHAR(255)
 );
 GO
 
--- Tạo bảng HotelService 
+-- Tạo bảng HotelService
 CREATE TABLE HotelService (
     hotelServiceId NVARCHAR(15) NOT NULL PRIMARY KEY,
     serviceName NVARCHAR(50) NOT NULL,
@@ -64,7 +65,7 @@ CREATE TABLE HotelService (
     serviceCategoryID NVARCHAR(15) NULL,  -- Cho phép NULL
 
     CONSTRAINT FK_HotelService_ServiceCategory
-        FOREIGN KEY (serviceCategoryID) 
+        FOREIGN KEY (serviceCategoryID)
         REFERENCES ServiceCategory(serviceCategoryID)
         ON DELETE SET NULL
 		ON UPDATE CASCADE,
@@ -73,24 +74,24 @@ GO
 
 -- Tạo bảng RoomCategory
 CREATE TABLE RoomCategory (
-    roomCategoryID NVARCHAR(15) NOT NULL PRIMARY KEY, 
-    roomCategoryName NVARCHAR(50) NOT NULL, 
+    roomCategoryID NVARCHAR(15) NOT NULL PRIMARY KEY,
+    roomCategoryName NVARCHAR(50) NOT NULL,
     numberOfBed INT NOT NULL
 );
 GO
 
 -- Tạo bảng Pricing
 CREATE TABLE Pricing (
-    pricingID NVARCHAR(15) NOT NULL PRIMARY KEY,  
-    priceUnit NVARCHAR(15) NOT NULL CHECK (priceUnit IN ('DAY', 'HOUR')),  
-    price MONEY NOT NULL,  
+    pricingID NVARCHAR(15) NOT NULL PRIMARY KEY,
+    priceUnit NVARCHAR(15) NOT NULL CHECK (priceUnit IN ('DAY', 'HOUR')),
+    price MONEY NOT NULL,
     roomCategoryID NVARCHAR(15) NOT NULL,
-    
-    CONSTRAINT FK_Pricing_RoomCategory FOREIGN KEY (roomCategoryID) 
-        REFERENCES RoomCategory(roomCategoryID) 
-        ON DELETE CASCADE 
+
+    CONSTRAINT FK_Pricing_RoomCategory FOREIGN KEY (roomCategoryID)
+        REFERENCES RoomCategory(roomCategoryID)
+        ON DELETE CASCADE
         ON UPDATE CASCADE,
-    
+
     CONSTRAINT UQ_roomCategoryID_priceUnit UNIQUE (roomCategoryID, priceUnit)
 );
 GO
@@ -98,32 +99,32 @@ GO
 
 -- Tạo bảng Room
 CREATE TABLE Room (
-    roomID NVARCHAR(15) NOT NULL PRIMARY KEY,  
-    roomStatus NVARCHAR(20) NOT NULL CHECK (roomStatus IN ('AVAILABLE', 'ON_USE', 'UNAVAILABLE')),  
-    dateOfCreation DATETIME NOT NULL,  
-    roomCategoryID NVARCHAR(15) NOT NULL,  
-    FOREIGN KEY (roomCategoryID) REFERENCES RoomCategory(roomCategoryID)  
+    roomID NVARCHAR(15) NOT NULL PRIMARY KEY,
+    roomStatus NVARCHAR(20) NOT NULL CHECK (roomStatus IN ('AVAILABLE', 'ON_USE', 'UNAVAILABLE')),
+    dateOfCreation DATETIME NOT NULL,
+    roomCategoryID NVARCHAR(15) NOT NULL,
+    FOREIGN KEY (roomCategoryID) REFERENCES RoomCategory(roomCategoryID)
 );
 GO
 
 -- Tạo bảng Shift
 CREATE TABLE Shift (
-    shiftID NVARCHAR(15) NOT NULL PRIMARY KEY, 
-    startTime TIME NOT NULL, 
-    endTime TIME NOT NULL, 
-    modifiedDate DATETIME NOT NULL, 
+    shiftID NVARCHAR(15) NOT NULL PRIMARY KEY,
+    startTime TIME NOT NULL,
+    endTime TIME NOT NULL,
+    modifiedDate DATETIME NOT NULL,
     numberOfHour INT NOT NULL,
-    shiftDaysSchedule NVARCHAR(20) NOT NULL CHECK (shiftDaysSchedule IN ('MON_WEB_FRI', 'TUE_THU_SAT', 'SUNDAY')) 
+    shiftDaysSchedule NVARCHAR(20) NOT NULL CHECK (shiftDaysSchedule IN ('MON_WEB_FRI', 'TUE_THU_SAT', 'SUNDAY'))
 );
 GO
 
 -- Tạo bảng ShiftAssignment
 CREATE TABLE ShiftAssignment (
-    shiftAssignmentId NVARCHAR(15) NOT NULL PRIMARY KEY, 
-    description NVARCHAR(50), 
-    shiftId NVARCHAR(15) NOT NULL, 
-    employeeId NVARCHAR(15) NOT NULL, 
-    FOREIGN KEY (shiftId) REFERENCES Shift(shiftID), 
+    shiftAssignmentId NVARCHAR(15) NOT NULL PRIMARY KEY,
+    description NVARCHAR(50),
+    shiftId NVARCHAR(15) NOT NULL,
+    employeeId NVARCHAR(15) NOT NULL,
+    FOREIGN KEY (shiftId) REFERENCES Shift(shiftID),
     FOREIGN KEY (employeeId) REFERENCES Employee(employeeID)
 );
 GO
@@ -144,8 +145,8 @@ GO
 
 -- Tạo bảng ReservationForm
 CREATE TABLE ReservationForm (
-    reservationFormID NVARCHAR(15) NOT NULL PRIMARY KEY,        
-    reservationDate DATETIME NOT NULL,            
+    reservationFormID NVARCHAR(15) NOT NULL PRIMARY KEY,
+    reservationDate DATETIME NOT NULL,
     checkInDate DATETIME NOT NULL,
     checkOutDate DATETIME NOT NULL,
     employeeID NVARCHAR(15),
@@ -160,43 +161,43 @@ GO
 
 -- Tạo bảng RoomUsageService
 CREATE TABLE RoomUsageService (
-    roomUsageServiceId NVARCHAR(15) NOT NULL PRIMARY KEY,  
-    quantity INT NOT NULL,  
-    hotelServiceId NVARCHAR(15) NOT NULL,  
-    reservationFormID NVARCHAR(15) NOT NULL,  
-    FOREIGN KEY (hotelServiceId) REFERENCES HotelService(hotelServiceId),  
-    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID)  
+    roomUsageServiceId NVARCHAR(15) NOT NULL PRIMARY KEY,
+    quantity INT NOT NULL,
+    hotelServiceId NVARCHAR(15) NOT NULL,
+    reservationFormID NVARCHAR(15) NOT NULL,
+    FOREIGN KEY (hotelServiceId) REFERENCES HotelService(hotelServiceId),
+    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID)
 );
 GO
 
 -- Tạo bảng Tax
 CREATE TABLE Tax (
-    taxID NVARCHAR(15) NOT NULL PRIMARY KEY,          
-    taxName NVARCHAR(50) NOT NULL,                  
-    taxRate DECIMAL(5, 2) NOT NULL,                          
-    dateOfCreation DATE NOT NULL,                    
-    activate BIT NOT NULL                             
+    taxID NVARCHAR(15) NOT NULL PRIMARY KEY,
+    taxName NVARCHAR(50) NOT NULL,
+    taxRate DECIMAL(5, 2) NOT NULL,
+    dateOfCreation DATE NOT NULL,
+    activate BIT NOT NULL
 );
 GO
 
 -- Tạo bảng Invoice
 CREATE TABLE Invoice (
-    invoiceID NVARCHAR(15) NOT NULL PRIMARY KEY,        
-    invoiceDate DATETIME NOT NULL,                     
-    roomCharge DECIMAL(18, 2) NOT NULL,                
-    servicesCharge DECIMAL(18, 2) NOT NULL,            
-    totalDue DECIMAL(18, 2) NOT NULL,                  
-    netDue DECIMAL(18, 2) NOT NULL,                    
-    taxID NVARCHAR(15) NOT NULL,                         
-    reservationFormID NVARCHAR(15) NOT NULL,             
-    FOREIGN KEY (taxID) REFERENCES Tax(taxID),          
-    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID) 
+    invoiceID NVARCHAR(15) NOT NULL PRIMARY KEY,
+    invoiceDate DATETIME NOT NULL,
+    roomCharge DECIMAL(18, 2) NOT NULL,
+    servicesCharge DECIMAL(18, 2) NOT NULL,
+    totalDue DECIMAL(18, 2) NOT NULL,
+    netDue DECIMAL(18, 2) NOT NULL,
+    taxID NVARCHAR(15) NOT NULL,
+    reservationFormID NVARCHAR(15) NOT NULL,
+    FOREIGN KEY (taxID) REFERENCES Tax(taxID),
+    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID)
 );
 GO
 
 -- Tạo bảng HistoryCheckin
 CREATE TABLE HistoryCheckin (
-    historyCheckInID NVARCHAR(15) NOT NULL PRIMARY KEY,        
+    historyCheckInID NVARCHAR(15) NOT NULL PRIMARY KEY,
     checkInDate DATETIME NOT NULL,
     reservationFormID NVARCHAR(15) NOT NULL,
     employeeID NVARCHAR(15),  -- Thêm employeeID
@@ -275,13 +276,13 @@ VALUES
     ('ACC-000005', N'vubahai', N'test123@', N'ACTIVE', 'EMP-000005');
 GO
 
--- Thêm dữ liệu vào bảng ServiceCategory
-INSERT INTO ServiceCategory (serviceCategoryID, serviceCategoryName)
+-- Thêm dữ liệu vào bảng ServiceCategory với icon tương ứng
+INSERT INTO ServiceCategory (serviceCategoryID, serviceCategoryName, icon)
 VALUES
-    ('SC-000001', N'Giải trí'),
-    ('SC-000002', N'Ăn uống'),
-    ('SC-000003', N'Chăm sóc và sức khỏe'),
-    ('SC-000004', N'Vận chuyển');
+    ('SC-000001', N'Giải trí', 'karaoke'),
+    ('SC-000002', N'Ăn uống', 'food'),
+    ('SC-000003', N'Chăm sóc và sức khỏe', 'massage'),
+    ('SC-000004', N'Vận chuyển', 'car');
 GO
 
 -- Thêm dữ liệu vào bảng HotelService

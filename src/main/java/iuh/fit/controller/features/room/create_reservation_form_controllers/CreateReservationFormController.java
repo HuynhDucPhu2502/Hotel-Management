@@ -188,9 +188,9 @@ public class CreateReservationFormController {
     // vào checkInDateTextField và checkOutDateTextField
     private void setupTimeComponents() {
         checkInTimePicker.setTime(null);
-        checkInTimePicker.setStepRateInMinutes(15);
+        checkInTimePicker.setStepRateInMinutes(5);
         checkOutTimePicker.setTime(null);
-        checkOutTimePicker.setStepRateInMinutes(15);
+        checkOutTimePicker.setStepRateInMinutes(5);
 
         bookDateRangePicker.setValue(new DateRange("Chọn Lịch Đặt Phòng", LocalDate.now(), LocalDate.now().plusDays(7)));
         bookDateRangePicker.setFormatter(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));

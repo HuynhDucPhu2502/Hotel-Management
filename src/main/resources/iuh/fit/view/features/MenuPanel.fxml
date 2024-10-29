@@ -58,7 +58,7 @@
                                        <children>
                                           <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true">
                                              <image>
-                                                <Image url="@../../icons/ic_dashboard.png" />
+                                                <Image url="@../../icons/menu_icons/ic_dashboard.png" />
                                              </image>
                                           </ImageView>
                                           <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Trang Chủ" textFill="WHITE" />
@@ -78,7 +78,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/ic_employee.png" />
+                                             <Image url="@../../icons/menu_icons/ic_employee.png" />
                                           </image>
                                        </ImageView>
                   
@@ -86,7 +86,7 @@
                   
                                        <ImageView fx:id="arrowUpForEmpBtn" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="20">
                                           <image>
-                                             <Image url="@../../icons/arrow_down.png" />
+                                             <Image url="@../../icons/menu_icons/arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -180,7 +180,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/ic_room.png" />
+                                             <Image url="@../../icons/menu_icons/ic_room.png" />
                                           </image>
                                        </ImageView>
             
@@ -188,7 +188,7 @@
             
                                              <ImageView fx:id="arrowUpForRoom" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="55">
                                           <image>
-                                             <Image url="@../../icons/arrow_down.png" />
+                                             <Image url="@../../icons/menu_icons/arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -302,7 +302,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/ic_service.png" />
+                                             <Image url="@../../icons/menu_icons/ic_service.png" />
                                           </image>
                                        </ImageView>
             
@@ -310,7 +310,7 @@
             
                                              <ImageView fx:id="arrowUpForService" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="45">
                                           <image>
-                                             <Image url="@../../icons/arrow_down.png" />
+                                             <Image url="@../../icons/menu_icons/arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -390,7 +390,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/ic_customer.png" />
+                                             <Image url="@../../icons/menu_icons/ic_customer.png" />
                                           </image>
                                        </ImageView>
             
@@ -398,7 +398,7 @@
             
                                              <ImageView fx:id="arrowUpForCustomer" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="6">
                                           <image>
-                                             <Image url="@../../icons/arrow_down.png" />
+                                             <Image url="@../../icons/menu_icons/arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -451,7 +451,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/ic_statistics.png" />
+                                             <Image url="@../../icons/menu_icons/ic_statistics.png" />
                                           </image>
                                        </ImageView>
             
@@ -459,7 +459,7 @@
             
                                              <ImageView fx:id="arrowUpForStatistics" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="28">
                                           <image>
-                                             <Image url="@../../icons/arrow_down.png" />
+                                             <Image url="@../../icons/menu_icons/arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -504,7 +504,7 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true">
                                           <image>
-                                             <Image url="@../../icons/ic_history.png" />
+                                             <Image url="@../../icons/menu_icons/ic_history.png" />
                                           </image>
                                        </ImageView>
             
@@ -512,7 +512,7 @@
             
                                              <ImageView fx:id="arrowUpForHistory" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="51">
                                           <image>
-                                             <Image url="@../../icons/arrow_down.png" />
+                                             <Image url="@../../icons/menu_icons/arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>

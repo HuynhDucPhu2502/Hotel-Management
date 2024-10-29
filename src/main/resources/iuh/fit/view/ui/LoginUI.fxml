@@ -21,7 +21,7 @@
          <children>
             <ImageView fitHeight="100.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../icons/ic_hotel.png" />
+                  <Image url="@../../icons/login_panel_icons/ic_hotel.png" />
                </image>
             </ImageView>
             <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-panel-banner-title" text="Chức Phú Gia Tiến" wrappingWidth="180.05859375">
@@ -81,7 +81,7 @@
                   <TextField fx:id="userNameField" prefHeight="26.0" promptText="Tên đăng nhập" GridPane.columnIndex="1" />
                   <ImageView fitHeight="28.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/ic_username.png" />
+                        <Image url="@../../icons/login_panel_icons/ic_username.png" />
                      </image>
                   </ImageView>
                </children>
@@ -98,7 +98,7 @@
                <children>
                    <ImageView fitHeight="28.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0">
                        <image>
-                           <Image url="@../../icons/ic_password.png" />
+                           <Image url="@../../icons/login_panel_icons/ic_password.png" />
                        </image>
                    </ImageView>
                   <TextField fx:id="visiblePasswordField" prefHeight="26.0" promptText="Mật khẩu" GridPane.columnIndex="1" />
@@ -106,7 +106,7 @@
                        <graphic>
                            <ImageView fx:id="showPassButton" fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                                <image>
-                                   <Image url="@../../icons/ic_show_password.png" />
+                                   <Image url="@../../icons/login_panel_icons/ic_show_password.png" />
                                </image>
                            </ImageView>
                        </graphic>

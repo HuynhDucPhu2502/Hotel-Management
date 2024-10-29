@@ -18,7 +18,7 @@ public class ServiceCategoryDAO {
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement()
         ){
-            String sql = "SELECT serviceCategoryID, serviceCategoryName " +
+            String sql = "SELECT serviceCategoryID, serviceCategoryName, icon " +
                     "FROM ServiceCategory";
             ResultSet rs = statement.executeQuery(sql);
 
@@ -27,6 +27,7 @@ public class ServiceCategoryDAO {
                 ServiceCategory serviceCategory = new ServiceCategory();
                 serviceCategory.setServiceCategoryID(rs.getString(1));
                 serviceCategory.setServiceCategoryName(rs.getString(2));
+                serviceCategory.setIcon(rs.getString(3));
 
                 data.add(serviceCategory);
             }
@@ -41,7 +42,7 @@ public class ServiceCategoryDAO {
 
     public static ServiceCategory getDataByID(String serviceCategoryID) {
 
-        String SQLQueryStatement = "SELECT serviceCategoryID, serviceCategoryName "
+        String SQLQueryStatement = "SELECT serviceCategoryID, serviceCategoryName, icon "
                 + "FROM ServiceCategory where serviceCategoryID = ?";
 
         try (
@@ -56,6 +57,7 @@ public class ServiceCategoryDAO {
                     ServiceCategory serviceCategory = new ServiceCategory();
                     serviceCategory.setServiceCategoryID(rs.getString(1));
                     serviceCategory.setServiceCategoryName(rs.getString(2));
+                    serviceCategory.setIcon(rs.getString(3));
 
                     return serviceCategory;
                 }
@@ -72,8 +74,8 @@ public class ServiceCategoryDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement insertStatement = connection.prepareStatement(
-                        "INSERT INTO ServiceCategory(serviceCategoryID, serviceCategoryName) " +
-                                "VALUES(?, ?)"
+                        "INSERT INTO ServiceCategory(serviceCategoryID, serviceCategoryName, icon) " +
+                                "VALUES(?, ?, ?)"
                 );
                 PreparedStatement selectSequenceStatement = connection.prepareStatement(
                         "SELECT nextID FROM GlobalSequence WHERE tableName = ?"
@@ -85,6 +87,7 @@ public class ServiceCategoryDAO {
             // Thêm bản ghi mới vào bảng ServiceCategory
             insertStatement.setString(1, serviceCategory.getServiceCategoryID());
             insertStatement.setString(2, serviceCategory.getServiceCategoryName());
+            insertStatement.setString(3, serviceCategory.getIcon());
             insertStatement.executeUpdate();
 
             // Lấy giá trị nextID hiện tại từ bảng GlobalSequence
@@ -133,12 +136,13 @@ public class ServiceCategoryDAO {
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
                             "UPDATE ServiceCategory " +
-                                "SET serviceCategoryName = ? " +
+                                "SET serviceCategoryName = ?, icon = ? " +
                                 "WHERE serviceCategoryID = ? "
                 )
         ){
             preparedStatement.setString(1, serviceCategory.getServiceCategoryName());
-            preparedStatement.setString(2, serviceCategory.getServiceCategoryID());
+            preparedStatement.setString(2, serviceCategory.getIcon());
+            preparedStatement.setString(3, serviceCategory.getServiceCategoryID());
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -153,7 +157,7 @@ public class ServiceCategoryDAO {
 
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                        "SELECT serviceCategoryID, serviceCategoryName " +
+                        "SELECT serviceCategoryID, serviceCategoryName, icon " +
                                 "FROM ServiceCategory " +
                                 "WHERE LOWER(serviceCategoryID) LIKE ?"
                 )
@@ -166,6 +170,7 @@ public class ServiceCategoryDAO {
                 ServiceCategory serviceCategory = new ServiceCategory();
                 serviceCategory.setServiceCategoryID(rs.getString(1));
                 serviceCategory.setServiceCategoryName(rs.getString(2));
+                serviceCategory.setIcon(rs.getString(3));
 
                 data.add(serviceCategory);
             }

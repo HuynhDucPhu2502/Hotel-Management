@@ -9,13 +9,15 @@ import java.util.Objects;
 public class ServiceCategory {
     private String serviceCategoryID;
     private String serviceCategoryName;
+    private String icon;
 
     public ServiceCategory() {
     }
 
-    public ServiceCategory(String serviceCategoryID, String serviceCategoryName) {
-        this.setServiceCategoryID(serviceCategoryID);
-        this.setServiceCategoryName(serviceCategoryName);
+    public ServiceCategory(String serviceCategoryID, String serviceCategoryName, String icon) {
+        this.serviceCategoryID = serviceCategoryID;
+        this.serviceCategoryName = serviceCategoryName;
+        this.icon = icon;
     }
 
     public ServiceCategory(String serviceCategoryID) {
@@ -48,6 +50,14 @@ public class ServiceCategory {
         this.serviceCategoryName = serviceCategoryName;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -66,6 +76,7 @@ public class ServiceCategory {
         return "ServiceCategory{" +
                 "serviceCategoryID='" + serviceCategoryID + '\'' +
                 ", serviceCategoryName='" + serviceCategoryName + '\'' +
+                ", icon='" + icon + '\'' +
                 '}';
     }
 }

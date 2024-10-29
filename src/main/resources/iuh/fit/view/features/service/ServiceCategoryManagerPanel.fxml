@@ -21,7 +21,7 @@
 
 <AnchorPane minHeight="800.0" minWidth="930.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.service.ServiceCategoryManagerController">
    <children>
-      <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" style="-fx-background-radius: 5; -fx-border-radius: 5;">
+      <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-radius: 5; -fx-border-radius: 5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
             <AnchorPane>
                <children>
@@ -30,7 +30,7 @@
                      <content>
                         <VBox fx:id="upperBox" prefHeight="198.0" prefWidth="898.0" spacing="30.0">
                            <children>
-                              <GridPane minHeight="80.0" vgap="20.0">
+                              <GridPane minHeight="140.0" vgap="20.0">
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -38,6 +38,7 @@
                                 <rowConstraints>
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <VBox.margin>
                                     <Insets left="40.0" right="40.0" />
@@ -59,6 +60,16 @@
                                        </cursor>
                                     </TextField>
                                     <TextField fx:id="serviceCategoryNameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <children>
+                                          <ComboBox fx:id="iconSelector" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Biểu tượng" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
                                  </children>
                               </GridPane>
                               <HBox prefHeight="0.0" prefWidth="899.0" spacing="50.0" style="-fx-alignment: CENTER;" stylesheets="@../../../styles/Button.css">
@@ -144,6 +155,7 @@
                                     <TableColumn fx:id="serviceCategoryIDColumn" prefWidth="250.0" text="Mã loại dịch vụ" />
 
                                           <TableColumn fx:id="serviceCategoryNameColumn" prefWidth="300.0" text="Loại dịch vụ" />
+                                    <TableColumn fx:id="iconColumn" prefWidth="300.0" text="Biểu tượng" />
 
                                           <TableColumn fx:id="actionColumn" prefWidth="250.0" text="Thao tác" />
                                  </columns>
