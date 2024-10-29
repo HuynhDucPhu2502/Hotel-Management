@@ -27,4 +27,12 @@ public class RoomWithReservation {
     public void setReservationForm(ReservationForm reservationForm) {
         this.reservationForm = reservationForm;
     }
+
+    @Override
+    public String toString() {
+        return "RoomWithReservation{" +
+                "room=" + room +
+                ", reservationForm=" + reservationForm +
+                '}';
+    }
 }

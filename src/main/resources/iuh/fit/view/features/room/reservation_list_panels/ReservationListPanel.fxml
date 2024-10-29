@@ -188,7 +188,7 @@
                                     </Button>
                                  </children>
                               </HBox>
-                              <VBox fx:id="reservationFormsListContainer" alignment="TOP_CENTER" minHeight="600.0" style="-fx-border-color: black;">
+                              <VBox fx:id="reservationFormsListContainer" alignment="TOP_CENTER" fillWidth="false" minHeight="600.0" style="-fx-border-color: black;">
                                  <children>
                                     <HBox fx:id="emptyLabelContainer" alignment="CENTER" managed="false" minHeight="200.0" minWidth="100.0" visible="false">
                                        <opaqueInsets>

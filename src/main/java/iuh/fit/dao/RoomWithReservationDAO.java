@@ -21,7 +21,8 @@ public class RoomWithReservationDAO {
                    rc.roomCategoryID, rc.roomCategoryName, rc.numberOfBed, 
                    rf.reservationFormID, rf.reservationDate, rf.checkInDate, 
                    rf.checkOutDate, rf.roomBookingDeposit, rf.employeeID, rf.customerID, 
-                   e.fullName AS employeeName, c.fullName AS customerName 
+                   e.fullName AS employeeName, 
+                   c.fullName AS customerName, c.phoneNumber, c.email, c.idCardNumber 
             FROM Room r
             LEFT JOIN RoomCategory rc ON r.roomCategoryID = rc.roomCategoryID
             LEFT JOIN ReservationForm rf ON r.roomID = rf.roomID 
@@ -71,6 +72,9 @@ public class RoomWithReservationDAO {
                     Customer customer = new Customer();
                     customer.setCustomerID(rs.getString("customerID"));
                     customer.setFullName(rs.getString("customerName"));
+                    customer.setPhoneNumber(rs.getString("phoneNumber"));
+                    customer.setEmail(rs.getString("email"));
+                    customer.setIdCardNumber(rs.getString("idCardNumber"));
                     reservationForm.setCustomer(customer);
                 }
 

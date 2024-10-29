@@ -11,6 +11,7 @@ import com.dlsc.gemsfx.daterange.DateRangePreset;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.reservation_list_controllers.ReservationListController;
+import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
 import iuh.fit.dao.CustomerDAO;
 import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.models.Customer;
@@ -49,11 +50,11 @@ public class CreateReservationFormController {
     // 1. Các biến
     // ==================================================================================================================
     @FXML private Button backBtn, bookingRoomNavigate, navigateToCreateCustomerBtn;
-    @FXML private Button navigateToReservationListBtn, addBtn, reservationCheckDateBtn;
+
     @FXML
-    private Button navigateToServiceOrdering;
-    @FXML
-    private Button navigateToRoomChanging;
+    private Button navigateToReservationListBtn, navigateToServiceOrdering, navigateToRoomChanging;
+
+    @FXML private Button addBtn, reservationCheckDateBtn;
 
     @FXML private Label roomNumberLabel, categoryNameLabel;
     @FXML private DateRangePicker bookDateRangePicker;
@@ -117,15 +118,17 @@ public class CreateReservationFormController {
         bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
 
         // Box Navigate Button
-        navigateToCreateCustomerBtn.setOnAction(e -> navigateToAddCustomerPanel());
         navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
 
         if (room.getRoomStatus() == RoomStatus.AVAILABLE) {
             navigateToServiceOrdering.setDisable(true);
             navigateToRoomChanging.setDisable(true);
+        } else {
+            navigateToRoomChanging.setOnAction(e -> navigateToRoomChanging());
         }
 
         // Current Panel Button
+        navigateToCreateCustomerBtn.setOnAction(e -> navigateToAddCustomerPanel());
         addBtn.setOnAction(e -> handleCreateReservationRoom());
         reservationCheckDateBtn.setOnAction(e -> openCalendarViewStage());
     }
@@ -176,6 +179,10 @@ public class CreateReservationFormController {
         loadPanel("/iuh/fit/view/features/room/reservation_list_panels/ReservationListPanel.fxml", ReservationListController.class);
     }
 
+    private void navigateToRoomChanging() {
+        loadPanel("/iuh/fit/view/features/room/changing_room_panels/RoomChangingPanel.fxml", RoomChangingController.class);
+    }
+
     private <T> void loadPanel(String path, Class<T> controllerClass) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
@@ -188,6 +195,9 @@ public class CreateReservationFormController {
                 acc.setupContext(mainController, employee, roomWithReservation, checkInTime, checkOutTime);
             else if (controller instanceof  ReservationListController rlc)
                 rlc.setupContext(mainController, employee, roomWithReservation);
+            else if (controller instanceof RoomChangingController rcc)
+                rcc.setupContext(mainController, employee, roomWithReservation);
+
 
             mainController.getMainPanel().getChildren().setAll(layout.getChildren());
         } catch (Exception e) {

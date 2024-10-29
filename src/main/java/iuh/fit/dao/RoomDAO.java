@@ -291,4 +291,52 @@ public class RoomDAO {
         }
     }
 
+    public static List<Room> getAvailableRoomsUntil(String currentRoomID, LocalDateTime checkOutDate) {
+        String sql = """
+        SELECT r.roomID, r.roomStatus, r.dateOfCreation,
+               rc.roomCategoryID, rc.roomCategoryName, rc.numberOfBed
+        FROM Room r
+        LEFT JOIN RoomCategory rc ON r.roomCategoryID = rc.roomCategoryID
+        LEFT JOIN ReservationForm rf 
+          ON r.roomID = rf.roomID 
+          AND rf.checkInDate <= ? 
+          AND rf.checkOutDate >= GETDATE()
+        WHERE rf.roomID IS NULL 
+          AND r.roomID != ?;
+    """;
+
+        List<Room> availableRooms = new ArrayList<>();
+
+        try (Connection connection = DBHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setTimestamp(1, Timestamp.valueOf(checkOutDate));
+            preparedStatement.setString(2, currentRoomID);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Room room = new Room();
+                room.setRoomID(rs.getString("roomID"));
+                room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString("roomStatus")));
+                room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp("dateOfCreation")));
+
+                RoomCategory roomCategory = new RoomCategory();
+                roomCategory.setRoomCategoryID(rs.getString("roomCategoryID"));
+                roomCategory.setRoomCategoryName(rs.getString("roomCategoryName"));
+                roomCategory.setNumberOfBed(rs.getInt("numberOfBed"));
+
+                room.setRoomCategory(roomCategory);
+                availableRooms.add(room);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return availableRooms;
+    }
+
+
+
+
 }
