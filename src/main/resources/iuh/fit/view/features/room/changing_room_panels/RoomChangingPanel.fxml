@@ -414,6 +414,15 @@
                                     </Button>
                                  </children>
                               </HBox>
+                              <HBox>
+                                 <children>
+                                    <Text fx:id="roomAvailableTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Danh sách phòng trống từ hiện tại đến">
+                                       <font>
+                                          <Font name="System Bold" size="24.0" />
+                                       </font>
+                                    </Text>
+                                 </children>
+                              </HBox>
                               <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="500.0">
                                  <content>
                                     <VBox fx:id="roomListContainer" alignment="TOP_CENTER" fillWidth="false" style="-fx-border-color: black;">

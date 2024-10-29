@@ -5,21 +5,24 @@ import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.create_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.reservation_list_controllers.ReservationListController;
+import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.dao.RoomDAO;
-import iuh.fit.models.Customer;
-import iuh.fit.models.Employee;
-import iuh.fit.models.ReservationForm;
-import iuh.fit.models.Room;
+import iuh.fit.dao.RoomReservationDetailDAO;
+import iuh.fit.models.*;
+import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -47,9 +50,15 @@ public class RoomChangingController {
             cusomerPhoneNumberLabel, customerEmailLabel,
             customerIDCardNumberLabel;
 
+    @FXML
+    private Text roomAvailableTitle;
+
     // 1.3 Formatter
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
+
+    private final DateTimeFormatter roomAvailableTitleDateFormatter =
+            DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm", Locale.forLanguageTag("vi-VN"));
 
     // 1.4 Dialog Pane
     @FXML
@@ -78,7 +87,7 @@ public class RoomChangingController {
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
     public void initialize() {
-
+        dialogPane.toFront();
     }
 
     public void setupContext(MainController mainController, Employee employee,
@@ -88,17 +97,21 @@ public class RoomChangingController {
         this.roomWithReservation = roomWithReservation;
 
         titledPane.setText("Quản lý đặt phòng " + roomWithReservation.getRoom().getRoomNumber());
+        roomAvailableTitle.setText("Danh sách phòng trống từ hiện tại đến ngày " + roomAvailableTitleDateFormatter.format(roomWithReservation.getReservationForm().getCheckOutDate()));
 
         setupReservationForm();
         setupButtonActions();
         loadData();
         displayAvailableRooms(availableRooms);
+
     }
 
     private void loadData() {
         availableRooms = RoomDAO.getAvailableRoomsUntil(
                 roomWithReservation.getRoom().getRoomID(),
+                roomWithReservation.getRoom().getRoomCategory().getRoomCategoryID(),
                 roomWithReservation.getReservationForm().getCheckOutDate()
+
         );
     }
 
@@ -183,7 +196,7 @@ public class RoomChangingController {
         roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
         checkInDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckInDate()));
         checkOutDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
-        stayLengthLabel.setText(Calculator.calculateStayLength(
+        stayLengthLabel.setText(Calculator.calculateStayLengthToString(
                 reservationForm.getCheckInDate(),
                 reservationForm.getCheckOutDate()
         ));
@@ -209,7 +222,7 @@ public class RoomChangingController {
 
                     RoomAvailableChangingController controller = loader.getController();
                     controller.setupContext(room);
-
+                    controller.getChangingBtn().setOnAction(e -> changingRoom(room));
 
                     roomGridPane.add(roomItem, col, row);
 
@@ -238,5 +251,48 @@ public class RoomChangingController {
             roomListContainer.setAlignment(Pos.CENTER);
         }
     }
+
+    private void changingRoom(Room newRoom) {
+        try {
+            System.out.println("test");
+            com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
+                    "XÁC NHẬN",
+                    "Bạn có chắc chắn muốn chuyển phòng?"
+            );
+
+            dialog.onClose(buttonType -> {
+                if (buttonType == ButtonType.YES) {
+                    // 1. Cập nhật trạng thái phòng cũ thành AVAILABLE
+                    RoomDAO.updateRoomStatus(roomWithReservation.getRoom().getRoomID(), RoomStatus.AVAILABLE);
+
+                    // 2. Cập nhật reservationForm với roomID mới
+                    ReservationFormDAO.updateRoomInReservationForm(
+                            roomWithReservation.getReservationForm().getReservationID(),
+                            newRoom.getRoomID()
+                    );
+
+                    // 3. Cập nhật trạng thái phòng mới thành ON_USE
+                    RoomDAO.updateRoomStatus(newRoom.getRoomID(), RoomStatus.ON_USE);
+
+                    // 4. Tạo bản ghi trong RoomReservationDetail để lưu lại lịch sử chuyển phòng
+                    RoomReservationDetail detail = new RoomReservationDetail();
+                    detail.setDateChanged(LocalDateTime.now());
+                    detail.setRoom(newRoom);
+                    detail.setReservationForm(roomWithReservation.getReservationForm());
+                    detail.setEmployee(employee);
+                    RoomReservationDetailDAO.createData(detail);
+
+                    dialogPane.showInformation("Thành Công","Chuyển phòng thành công!");
+                    navigateToRoomBookingPanel();
+                }
+            });
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            dialogPane.showInformation("LỖI",e.getMessage());
+        }
+    }
+
 
 }

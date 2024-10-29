@@ -42,7 +42,7 @@ public class Calculator {
     }
 
     // 3. Tính số ngày lưu trú ra chuỗi
-    public static String calculateStayLength(LocalDateTime checkInTime, LocalDateTime checkOutTime) {
+    public static String calculateStayLengthToString(LocalDateTime checkInTime, LocalDateTime checkOutTime) {
         long hours = java.time.Duration.between(checkInTime, checkOutTime).toHours();
         double days = hours / 24.0;
 
@@ -51,6 +51,18 @@ public class Calculator {
         } else {
             double roundedDays = Math.ceil(days * 2) / 2.0;
             return roundedDays + " ngày";
+        }
+    }
+
+    // 4. Tính số ngày lưu trú ra số
+    public static double calculateStayLengthToDouble(LocalDateTime checkInTime, LocalDateTime checkOutTime) {
+        long hours = java.time.Duration.between(checkInTime, checkOutTime).toHours();
+        double days = hours / 24.0;
+
+        if (hours < 12) {
+            return hours;
+        } else {
+            return Math.ceil(days * 2) / 2.0;
         }
     }
 

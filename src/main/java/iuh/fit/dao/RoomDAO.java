@@ -291,19 +291,19 @@ public class RoomDAO {
         }
     }
 
-    public static List<Room> getAvailableRoomsUntil(String currentRoomID, LocalDateTime checkOutDate) {
+    public static List<Room> getAvailableRoomsUntil(String currentRoomID, String currentRoomCategoryID, LocalDateTime checkOutDate) {
         String sql = """
         SELECT r.roomID, r.roomStatus, r.dateOfCreation,
                rc.roomCategoryID, rc.roomCategoryName, rc.numberOfBed
         FROM Room r
         LEFT JOIN RoomCategory rc ON r.roomCategoryID = rc.roomCategoryID
-        LEFT JOIN ReservationForm rf 
-          ON r.roomID = rf.roomID 
-          AND rf.checkInDate <= ? 
+        LEFT JOIN ReservationForm rf\s
+          ON r.roomID = rf.roomID\s
+          AND rf.checkInDate <= ?\s
           AND rf.checkOutDate >= GETDATE()
-        WHERE rf.roomID IS NULL 
-          AND r.roomID != ?;
-    """;
+        WHERE rf.roomID IS NULL\s
+          AND r.roomID != ? AND rc.roomCategoryID = ?;
+   \s""";
 
         List<Room> availableRooms = new ArrayList<>();
 
@@ -312,6 +312,7 @@ public class RoomDAO {
 
             preparedStatement.setTimestamp(1, Timestamp.valueOf(checkOutDate));
             preparedStatement.setString(2, currentRoomID);
+            preparedStatement.setString(3, currentRoomCategoryID);
 
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -335,6 +336,8 @@ public class RoomDAO {
 
         return availableRooms;
     }
+
+
 
 
 

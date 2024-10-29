@@ -93,9 +93,10 @@ public class ErrorMessages {
     public static final String RESERVATION_FORM_INVALID_RESERVATION_DATE_ISNULL = "Ngày đặt phòng không được rỗng";
     public static final String RESERVATION_FORM_INVALID_CHECKIN_DATE_ISNULL = "Ngày nhận phòng dự kiến không được rỗng";
     public static final String RESERVATION_FORM_INVALID_CHECKOUT_DATE_ISNULL = "Ngày trả phòng dự kiến không được rỗng";
-    public static final String RESERVATION_FORM_INVALID_DATE_RANGE = "Thời gian trả phòng phải nhỏ hơn thời gian nhận phòng";
-    public static final String RESERVATION_FORM_INVALID_ROOM_BOOKING_DEPOSIT_AMOUTN = "Tiền đặt cọc phải lớn hơn 0";
-    public static final String RESERVATION_FORM_NOT_BEHIND_NOW = "Ngày nhận phòng, trả phòng không được nhỏ hơn ngày hiện tại";
+    public static final String RESERVATION_FORM_INVALID_ROOM_BOOKING_DEPOSIT_AMOUNT = "Tiền đặt cọc phải lớn hơn 0";
+    public static final String RESERVATION_FORM_INVALID_CHECKIN_DATE = "Ngày nhận phòng không thể trước ngày đặt phòng.";
+    public static final String RESERVATION_FORM_INVALID_CHECKOUT_DATE = "Ngày trả phòng nhỏ hơn ngày nhận phòng.";
+    public static final String RESERVATION_FORM_STAY_LENGTH_INVALID = "Thời gian lưu trú không phù hợp";
 
     // HistoryCheckIn
     public static final String HISTORY_CHECKIN_INVALID_ID_ISNULL = "Mã phiếu nhận phòng không được rỗng";

@@ -293,7 +293,7 @@ public class CreateReservationFormController {
     // ==================================================================================================================
     private void updateStayLengthAndCost() {
         if (checkInTime != null && checkOutTime != null) {
-            String stayLength = Calculator.calculateStayLength(checkInTime, checkOutTime);
+            String stayLength = Calculator.calculateStayLengthToString(checkInTime, checkOutTime);
             stayLengthLabel.setText(stayLength);
 
             try {
@@ -372,6 +372,13 @@ public class CreateReservationFormController {
     // ==================================================================================================================
     private void handleCreateReservationRoom() {
         try {
+            if (checkInTime == null)
+                throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_CHECKIN_DATE_ISNULL);
+            if (checkOutTime == null)
+                throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_CHECKOUT_DATE_ISNULL);
+            if (Calculator.calculateStayLengthToDouble(checkInTime, checkOutTime) <= 0)
+                throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_STAY_LENGTH_INVALID);
+
             ReservationForm reservationForm = new ReservationForm(
                     ReservationFormDAO.getNextReservationFormID(), LocalDateTime.now(),
                     checkInTime, checkOutTime, employee, room, customer);

@@ -3,10 +3,7 @@ package iuh.fit.controller.features.room.reservation_list_controllers;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
-import iuh.fit.dao.HistoryCheckinDAO;
-import iuh.fit.dao.ReservationFormDAO;
-import iuh.fit.dao.RoomDAO;
-import iuh.fit.dao.RoomReservationDetailDAO;
+import iuh.fit.dao.*;
 import iuh.fit.models.*;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
@@ -108,7 +105,7 @@ public class ReservationFormDetailsController {
         this.employee = employee;
 
         titledPane.setText("Quản lý đặt phòng " + roomWithReservation.getRoom().getRoomNumber());
-
+        System.out.println(reservationForm.getReservationID());
 
         setupReservationForm();
         setupButtonActions();
@@ -144,7 +141,7 @@ public class ReservationFormDetailsController {
         roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
         checkInDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckInDate()));
         checkOutDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
-        stayLengthLabel.setText(Calculator.calculateStayLength(
+        stayLengthLabel.setText(Calculator.calculateStayLengthToString(
                 reservationForm.getCheckInDate(),
                 reservationForm.getCheckOutDate()
         ));
@@ -259,6 +256,10 @@ public class ReservationFormDetailsController {
             room.setRoomStatus(RoomStatus.ON_USE);
             RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.ON_USE);
 
+            navigateToReservationListPanel();
+
+            roomWithReservation = RoomWithReservationDAO
+                    .getRoomWithReservationByID(reservationForm.getReservationID(), room.getRoomID());
             navigateToReservationListPanel();
         } catch (Exception e) {
             dialogPane.showWarning("Lỗi", e.getMessage());
