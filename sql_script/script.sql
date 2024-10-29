@@ -661,3 +661,31 @@ BEGIN
 END;
 GO
 
+-- data for statistics test
+INSERT INTO ReservationForm(reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit)
+VALUES
+	('RF-000111', '2024-10-24', '2021-10-28', '2024-10-28', 'EMP-000001', 'T1101', 'CUS-000005', 480000),
+	('RF-000112', '2024-10-24', '2021-10-28', '2024-10-28', 'EMP-000002', 'T1109', 'CUS-000002', 480000),
+	('RF-000113', '2024-10-24', '2021-10-28', '2024-10-28', 'EMP-000003', 'T1105', 'CUS-000010', 720000),
+	('RF-000114', '2024-10-24', '2021-10-28', '2024-10-28', 'EMP-000004', 'T1203', 'CUS-000015', 720000),
+	('RF-000115', '2024-10-24', '2021-10-28', '2024-10-28', 'EMP-000005', 'T1307', 'CUS-000007', 1440000);
+
+INSERT INTO Invoice(invoiceID, invoiceDate, roomCharge, servicesCharge, totalDue, netDue, taxID, reservationFormID)
+VALUES
+    ('INV-0000000111', '2024-10-28', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000111'),
+    ('INV-0000000112', '2024-10-28', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000112'),
+    ('INV-0000000113', '2024-10-28', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000113'),
+    ('INV-0000000114', '2024-10-28', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000114'),
+    ('INV-0000000115', '2024-10-28', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000115');
+
+INSERT INTO ReservationForm(reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit)
+VALUES
+	('RF-000116', '2024-11-2', '2021-11-2', '2024-11-2', 'EMP-000001', 'T1101', 'CUS-000005', 480000),
+	('RF-000117', '2024-11-2', '2021-11-2', '2024-11-2', 'EMP-000002', 'T1109', 'CUS-000002', 480000),
+	('RF-000118', '2024-11-3', '2021-11-3', '2024-11-3', 'EMP-000003', 'T1105', 'CUS-000010', 720000);
+
+INSERT INTO Invoice(invoiceID, invoiceDate, roomCharge, servicesCharge, totalDue, netDue, taxID, reservationFormID)
+VALUES
+    ('INV-0000000116', '2024-11-2', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000116'),
+    ('INV-0000000117', '2024-11-2', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000117'),
+    ('INV-0000000118', '2024-11-3', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000118');
