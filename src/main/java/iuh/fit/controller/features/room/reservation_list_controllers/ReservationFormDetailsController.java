@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
 
 import java.time.LocalDateTime;
@@ -72,6 +73,7 @@ public class ReservationFormDetailsController {
     @FXML
     private Label employeePhoneNumberLabel;
 
+
     // 1.3 Formatter
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
@@ -80,7 +82,11 @@ public class ReservationFormDetailsController {
     @FXML
     private DialogPane dialogPane;
 
-    // 1.5 Context
+    // 1.5 Titled Pane
+    @FXML
+    private TitledPane titledPane;
+
+    // 1.6 Context
     private MainController mainController;
     private ReservationForm reservationForm;
     private RoomWithReservation roomWithReservation;
@@ -88,7 +94,7 @@ public class ReservationFormDetailsController {
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
-    // ==================================================================================================================
+    // ==========================================s========================================================================
     public void initialize() {
         dialogPane.toFront();
     }
@@ -101,21 +107,29 @@ public class ReservationFormDetailsController {
         this.roomWithReservation = roomWithReservation;
         this.employee = employee;
 
+        titledPane.setText("Quản lý đặt phòng " + roomWithReservation.getRoom().getRoomNumber());
+
+
+        setupReservationForm();
+        setupButtonActions();
+    }
+
+    private void setupButtonActions() {
+        // Label Navigate Button
         backBtn.setOnAction(e -> navigateToReservationListPanel());
         reservationFormListNavigate.setOnAction(e -> navigateToReservationListPanel());
         bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
-        deleteReservationFormBtn.setOnAction(e -> handleDeleteAction());
 
-        reservationFormBtn.setText("Phiếu đặt phòng " + reservationForm.getReservationID());
-
-        setupReservationForm();
-
+        // Current Panel Button
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime checkInTime = reservationForm.getCheckInDate();
         LocalDateTime checkInTimePlus2Hours = checkInTime.plusHours(2);
 
         checkInBtn.setDisable(!now.isAfter(checkInTime) || !now.isBefore(checkInTimePlus2Hours));
         checkInBtn.setOnAction(e -> handleCheckIn());
+        deleteReservationFormBtn.setOnAction(e -> handleDeleteAction());
+
+        reservationFormBtn.setText("Phiếu đặt phòng " + reservationForm.getReservationID());
     }
 
     // ==================================================================================================================

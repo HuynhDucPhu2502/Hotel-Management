@@ -75,9 +75,6 @@ public class AddCustomerController {
     public void initialize() {
         dialogPane.toFront();
         customerIDTextField.setText(CustomerDAO.getNextCustomerID());
-
-        addBtn.setOnAction(e -> handleAddAction());
-        resetBtn.setOnAction(e -> handleResetAction());
     }
 
     public void setupContext(
@@ -90,12 +87,22 @@ public class AddCustomerController {
         Room room = roomWithReservation.getRoom();
 
         titledPane.setText("Quản lý đặt phòng " + room.getRoomNumber());
+
         this.checkInTime = checkInTime;
         this.checkOutTime = checkOutTime;
 
+        setupButtonActions();
+    }
+
+    private void setupButtonActions() {
+        // Label Navigate Button
         bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
         reservationFormNavigate.setOnAction(e -> navigateToCreateReservationFormPanel());
         backBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
+
+        // Current Panel Button
+        addBtn.setOnAction(e -> handleAddAction());
+        resetBtn.setOnAction(e -> handleResetAction());
     }
 
     // ==================================================================================================================

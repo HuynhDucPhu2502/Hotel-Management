@@ -136,7 +136,7 @@
                                           </AnchorPane>
                                        </graphic>
                                     </Button>
-                                    <Button minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
+                                    <Button fx:id="navigateToServiceOrdering" minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
                                        <graphic>
                                           <AnchorPane>
                                              <children>
@@ -162,7 +162,7 @@
                                           </AnchorPane>
                                        </graphic>
                                     </Button>
-                                    <Button minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
+                                    <Button fx:id="navigateToRoomChanging" minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
                                        <graphic>
                                           <AnchorPane>
                                              <children>

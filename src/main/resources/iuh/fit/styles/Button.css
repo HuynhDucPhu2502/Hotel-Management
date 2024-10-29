@@ -214,3 +214,10 @@
     -fx-background-color: rgb(253, 139, 81);
 }
 
+.button-reservation:disabled {
+    -fx-background-color: RGB(200, 200, 200); /* Màu xám nhạt */
+    -fx-border-color: RGB(180, 180, 180);
+    -fx-text-fill: RGB(120, 120, 120); /* Màu chữ xám nhạt */
+    -fx-opacity: 0.6; /* Giảm độ mờ */
+}
+

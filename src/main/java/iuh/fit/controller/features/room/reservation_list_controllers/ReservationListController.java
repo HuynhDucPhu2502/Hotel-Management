@@ -7,6 +7,7 @@ import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
+import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,6 +31,10 @@ public class ReservationListController {
     private Button bookingRoomNavigate;
     @FXML
     private Button navigateToCreateReservationFormBtn;
+    @FXML
+    private Button navigateToServiceOrdering;
+    @FXML
+    private Button navigateToRoomChanging;
 
     // 1.2 Titled Pane
     @FXML
@@ -71,12 +76,28 @@ public class ReservationListController {
 
         titledPane.setText("Quản lý đặt phòng " + room.getRoomNumber());
 
-        bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
         navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
         backBtn.setOnAction(e -> navigateToRoomBookingPanel());
 
         loadData();
         displayFilteredRooms(reservationForms);
+        setupButtonActions();
+    }
+
+    private void setupButtonActions() {
+        // Label Navigate Button
+        navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
+        backBtn.setOnAction(e -> navigateToRoomBookingPanel());
+
+        // Box Navigate Button
+        bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
+
+        if (room.getRoomStatus() == RoomStatus.AVAILABLE) {
+            navigateToServiceOrdering.setDisable(true);
+            navigateToRoomChanging.setDisable(true);
+        }
+
+
     }
 
     private void loadData() {

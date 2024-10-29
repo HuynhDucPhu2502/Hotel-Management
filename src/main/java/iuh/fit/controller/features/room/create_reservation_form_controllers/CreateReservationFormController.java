@@ -17,6 +17,7 @@ import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
+import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
 import iuh.fit.utils.ErrorMessages;
@@ -49,6 +50,10 @@ public class CreateReservationFormController {
     // ==================================================================================================================
     @FXML private Button backBtn, bookingRoomNavigate, navigateToCreateCustomerBtn;
     @FXML private Button navigateToReservationListBtn, addBtn, reservationCheckDateBtn;
+    @FXML
+    private Button navigateToServiceOrdering;
+    @FXML
+    private Button navigateToRoomChanging;
 
     @FXML private Label roomNumberLabel, categoryNameLabel;
     @FXML private DateRangePicker bookDateRangePicker;
@@ -107,10 +112,20 @@ public class CreateReservationFormController {
     }
 
     private void setupButtonActions() {
+        // Label Navigate Button
         backBtn.setOnAction(e -> navigateToRoomBookingPanel());
         bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
+
+        // Box Navigate Button
         navigateToCreateCustomerBtn.setOnAction(e -> navigateToAddCustomerPanel());
         navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
+
+        if (room.getRoomStatus() == RoomStatus.AVAILABLE) {
+            navigateToServiceOrdering.setDisable(true);
+            navigateToRoomChanging.setDisable(true);
+        }
+
+        // Current Panel Button
         addBtn.setOnAction(e -> handleCreateReservationRoom());
         reservationCheckDateBtn.setOnAction(e -> openCalendarViewStage());
     }
