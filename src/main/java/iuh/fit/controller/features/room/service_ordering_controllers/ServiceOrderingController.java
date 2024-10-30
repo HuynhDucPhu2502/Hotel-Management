@@ -1,42 +1,39 @@
-package iuh.fit.controller.features.room.room_changing_controllers;
+package iuh.fit.controller.features.room.service_ordering_controllers;
 
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.create_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.reservation_list_controllers.ReservationListController;
-import iuh.fit.dao.ReservationFormDAO;
-import iuh.fit.dao.RoomDAO;
-import iuh.fit.dao.RoomReservationDetailDAO;
+import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
 import iuh.fit.models.*;
-import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.*;
-import javafx.scene.text.Text;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
-public class RoomChangingController {
+public class ServiceOrderingController {
     // ==================================================================================================================
     // 1. Các biến
     // ==================================================================================================================
     // 1.1 Buttons
-   @FXML
-   private Button backBtn, bookingRoomNavigate;
-   @FXML
-   private Button navigateToCreateReservationFormBtn,
-           navigateToReservationListBtn, navigateToServiceOrderingBtn;
+    @FXML
+    private Button backBtn, bookingRoomNavigate;
+
+    @FXML
+    private Button navigateToCreateReservationFormBtn,
+            navigateToReservationListBtn, navigateToRoomChanging;
 
     // 1.2 Labels
     @FXML
@@ -49,13 +46,9 @@ public class RoomChangingController {
             cusomerPhoneNumberLabel, customerEmailLabel,
             customerIDCardNumberLabel;
 
-    @FXML
-    private Text roomAvailableTitle;
-
     // 1.3 Formatter
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
-
 
     // 1.4 Dialog Pane
     @FXML
@@ -69,16 +62,16 @@ public class RoomChangingController {
     @FXML
     private HBox emptyLabelContainer;
     @FXML
-    private VBox roomListContainer;
+    private VBox serviceListContainer;
     @FXML
-    private GridPane roomGridPane;
+    private GridPane serviceGridPane;
 
     // 1.7 Context
     private MainController mainController;
     private RoomWithReservation roomWithReservation;
     private Employee employee;
 
-    private List<Room> availableRooms;
+    private List<HotelService> hotelServiceList;
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
@@ -94,22 +87,9 @@ public class RoomChangingController {
         this.roomWithReservation = roomWithReservation;
 
         titledPane.setText("Quản lý đặt phòng " + roomWithReservation.getRoom().getRoomNumber());
-        roomAvailableTitle.setText("Danh sách phòng trống từ hiện tại đến ngày " + dateTimeFormatter.format(roomWithReservation.getReservationForm().getCheckOutDate()));
 
         setupReservationForm();
         setupButtonActions();
-        loadData();
-        displayAvailableRooms(availableRooms);
-
-    }
-
-    private void loadData() {
-        availableRooms = RoomDAO.getAvailableRoomsUntil(
-                roomWithReservation.getRoom().getRoomID(),
-                roomWithReservation.getRoom().getRoomCategory().getRoomCategoryID(),
-                roomWithReservation.getReservationForm().getCheckOutDate()
-
-        );
     }
 
     private void setupButtonActions() {
@@ -120,7 +100,7 @@ public class RoomChangingController {
         // Box Navigate Button
         navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
         navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
-        navigateToServiceOrderingBtn.setOnAction(e -> navigateToServiceOrderingPanel());
+        navigateToRoomChanging.setOnAction(e -> navigateToRoomChanging());
 
         // Current Panel Button
     }
@@ -181,9 +161,9 @@ public class RoomChangingController {
         }
     }
 
-    private void navigateToServiceOrderingPanel() {
+    private void navigateToRoomChanging() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/ordering_services_panels/ServiceOrderingPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/changing_room_panels/RoomChangingPanel.fxml"));
             AnchorPane layout = loader.load();
 
             RoomChangingController roomChangingController = loader.getController();
@@ -221,95 +201,5 @@ public class RoomChangingController {
         customerEmailLabel.setText(reservationFormCustomer.getEmail());
         customerIDCardNumberLabel.setText(reservationFormCustomer.getIdCardNumber());
     }
-
-    private void displayAvailableRooms(List<Room> availableRooms) {
-        if (!availableRooms.isEmpty()) {
-            roomGridPane.getChildren().clear();
-
-            int row = 0, col = 0;
-
-            try {
-                for (Room room : availableRooms) {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                            "/iuh/fit/view/features/room/changing_room_panels/RoomAvailableChangingItem.fxml"));
-                    Pane roomItem = loader.load();
-
-                    RoomAvailableChangingController controller = loader.getController();
-                    controller.setupContext(room);
-                    controller.getChangingBtn().setOnAction(e -> handleChangingRoom(room));
-
-                    roomGridPane.add(roomItem, col, row);
-
-                    col++;
-                    if (col == 3) {
-                        col = 0;
-                        row++;
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            roomGridPane.setVisible(false);
-            roomGridPane.setManaged(false);
-
-            if (emptyLabelContainer.getChildren().isEmpty()) {
-                Label emptyLabel = new Label("Không có phòng nào khả dụng.");
-                emptyLabel.setStyle("-fx-font-size: 42px; -fx-text-fill: gray;");
-                emptyLabelContainer.getChildren().add(emptyLabel);
-            }
-
-            emptyLabelContainer.setVisible(true);
-            emptyLabelContainer.setManaged(true);
-
-            roomListContainer.setAlignment(Pos.CENTER);
-        }
-    }
-
-    // ==================================================================================================================
-    // 5.  Xử lý sự kiện thay chuyển phòng
-    // ==================================================================================================================
-    private void handleChangingRoom(Room newRoom) {
-        try {
-            System.out.println("test");
-            com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
-                    "XÁC NHẬN",
-                    "Bạn có chắc chắn muốn chuyển phòng?"
-            );
-
-            dialog.onClose(buttonType -> {
-                if (buttonType == ButtonType.YES) {
-                    // 1. Cập nhật trạng thái phòng cũ thành AVAILABLE
-                    RoomDAO.updateRoomStatus(roomWithReservation.getRoom().getRoomID(), RoomStatus.AVAILABLE);
-
-                    // 2. Cập nhật reservationForm với roomID mới
-                    ReservationFormDAO.updateRoomInReservationForm(
-                            roomWithReservation.getReservationForm().getReservationID(),
-                            newRoom.getRoomID()
-                    );
-
-                    // 3. Cập nhật trạng thái phòng mới thành ON_USE
-                    RoomDAO.updateRoomStatus(newRoom.getRoomID(), RoomStatus.ON_USE);
-
-                    // 4. Tạo bản ghi trong RoomReservationDetail để lưu lại lịch sử chuyển phòng
-                    RoomReservationDetail detail = new RoomReservationDetail();
-                    detail.setDateChanged(LocalDateTime.now());
-                    detail.setRoom(newRoom);
-                    detail.setReservationForm(roomWithReservation.getReservationForm());
-                    detail.setEmployee(employee);
-                    RoomReservationDetailDAO.createData(detail);
-
-                    dialogPane.showInformation("Thành Công","Chuyển phòng thành công!");
-                    navigateToRoomBookingPanel();
-                }
-            });
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            dialogPane.showInformation("LỖI",e.getMessage());
-        }
-    }
-
 
 }

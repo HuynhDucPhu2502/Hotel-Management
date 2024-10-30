@@ -12,6 +12,7 @@ import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
+import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
 import iuh.fit.dao.CustomerDAO;
 import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.models.Customer;
@@ -52,7 +53,8 @@ public class CreateReservationFormController {
     @FXML private Button backBtn, bookingRoomNavigate, navigateToCreateCustomerBtn;
 
     @FXML
-    private Button navigateToReservationListBtn, navigateToServiceOrdering, navigateToRoomChanging;
+    private Button navigateToReservationListBtn, navigateToServiceOrdering,
+            navigateToRoomChanging;
 
     @FXML private Button addBtn, reservationCheckDateBtn;
 
@@ -124,7 +126,8 @@ public class CreateReservationFormController {
             navigateToServiceOrdering.setDisable(true);
             navigateToRoomChanging.setDisable(true);
         } else {
-            navigateToRoomChanging.setOnAction(e -> navigateToRoomChanging());
+            navigateToRoomChanging.setOnAction(e -> navigateToRoomChangingPanel());
+            navigateToServiceOrdering.setOnAction(e -> navigateToServiceOrderingPanel());
         }
 
         // Current Panel Button
@@ -179,8 +182,12 @@ public class CreateReservationFormController {
         loadPanel("/iuh/fit/view/features/room/reservation_list_panels/ReservationListPanel.fxml", ReservationListController.class);
     }
 
-    private void navigateToRoomChanging() {
+    private void navigateToRoomChangingPanel() {
         loadPanel("/iuh/fit/view/features/room/changing_room_panels/RoomChangingPanel.fxml", RoomChangingController.class);
+    }
+
+    private void navigateToServiceOrderingPanel() {
+        loadPanel("/iuh/fit/view/features/room/ordering_services_panels/ServiceOrderingPanel.fxml", RoomChangingController.class);
     }
 
     private <T> void loadPanel(String path, Class<T> controllerClass) {
@@ -197,6 +204,8 @@ public class CreateReservationFormController {
                 rlc.setupContext(mainController, employee, roomWithReservation);
             else if (controller instanceof RoomChangingController rcc)
                 rcc.setupContext(mainController, employee, roomWithReservation);
+            else if (controller instanceof ServiceOrderingController soc)
+                soc.setupContext(mainController, employee, roomWithReservation);
 
 
             mainController.getMainPanel().getChildren().setAll(layout.getChildren());
