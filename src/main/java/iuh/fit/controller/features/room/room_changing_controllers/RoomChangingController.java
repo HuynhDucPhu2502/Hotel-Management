@@ -13,13 +13,14 @@ import iuh.fit.models.*;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
@@ -57,16 +58,27 @@ public class RoomChangingController {
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
 
+   // 1.4 Table View
+   @FXML
+   private TableView<RoomReservationDetail> roomReservationDetailTableView;
+    @FXML
+    private TableColumn<RoomReservationDetail, String> roomReservationDetailID;
+    @FXML
+    private TableColumn<RoomReservationDetail, String> roomReservationDetailDateChanged;
+    @FXML
+    private TableColumn<RoomReservationDetail, String> roomReservationDetailRoomNumber;
+    @FXML
+    private TableColumn<RoomReservationDetail, String> roomReservationEmployeeFullname;
 
-    // 1.4 Dialog Pane
+    // 1.5 Dialog Pane
     @FXML
     private DialogPane dialogPane;
 
-    // 1.5 Titled Pane
+    // 1.6 Titled Pane
     @FXML
     private TitledPane titledPane;
 
-    // 1.6 Container
+    // 1.7 Container
     @FXML
     private HBox emptyLabelContainer;
     @FXML
@@ -74,18 +86,21 @@ public class RoomChangingController {
     @FXML
     private GridPane roomGridPane;
 
-    // 1.7 Context
+    // 1.8 Context
     private MainController mainController;
     private RoomWithReservation roomWithReservation;
     private Employee employee;
 
     private List<Room> availableRooms;
+    private List<RoomReservationDetail> roomReservationDetails;
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
     public void initialize() {
         dialogPane.toFront();
+
+        setupTable();
     }
 
     public void setupContext(MainController mainController, Employee employee,
@@ -101,8 +116,8 @@ public class RoomChangingController {
         setupButtonActions();
         loadData();
         displayAvailableRooms(availableRooms);
-
     }
+
 
     private void loadData() {
         availableRooms = RoomDAO.getAvailableRoomsUntil(
@@ -111,6 +126,14 @@ public class RoomChangingController {
                 roomWithReservation.getReservationForm().getCheckOutDate()
 
         );
+        roomReservationDetails = RoomReservationDetailDAO.getByReservationFormID(
+                roomWithReservation.getReservationForm().getReservationID()
+        );
+
+        ObservableList<RoomReservationDetail> data = FXCollections.observableArrayList(roomReservationDetails);
+
+        roomReservationDetailTableView.setItems(data);
+        roomReservationDetailTableView.refresh();
     }
 
     private void setupButtonActions() {
@@ -266,6 +289,28 @@ public class RoomChangingController {
             roomListContainer.setAlignment(Pos.CENTER);
         }
     }
+
+    private void setupTable() {
+        roomReservationDetailID.setCellValueFactory(new PropertyValueFactory<>("roomReservationDetailID"));
+        roomReservationDetailDateChanged.setCellValueFactory(data -> {
+            LocalDateTime dateChanged = data.getValue().getDateChanged();
+            String formattedDate = dateChanged != null ? dateChanged.format(dateTimeFormatter) : "KHÔNG CÓ";
+            return new SimpleStringProperty(formattedDate);
+        });
+        roomReservationDetailRoomNumber.setCellValueFactory(data -> {
+            Room room = data.getValue().getRoom();
+            String roomNumber = (room != null && room.getRoomNumber() != null) ? room.getRoomNumber() : "KHÔNG CÓ";
+            return new SimpleStringProperty(roomNumber);
+        });
+        roomReservationEmployeeFullname.setCellValueFactory(data -> {
+            Employee employee = data.getValue().getEmployee();
+            String fullName = (employee != null && employee.getFullName() != null) ? employee.getFullName() : "KHÔNG CÓ";
+            return new SimpleStringProperty(fullName);
+        });
+
+    }
+
+
 
     // ==================================================================================================================
     // 5.  Xử lý sự kiện thay chuyển phòng

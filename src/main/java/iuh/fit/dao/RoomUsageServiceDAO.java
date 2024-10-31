@@ -8,44 +8,28 @@ import iuh.fit.utils.DBHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RoomUsageServiceDAO {
-    public static List<RoomUsageService> getRoomUsageService() {
-        ArrayList<RoomUsageService> data = new ArrayList<RoomUsageService>();
-        try (
-                Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement();
-        ){
-            String sql = "SELECT a.roomUsageServiceId, a.quantity, a.hotelServiceId, " +
-                    "b.serviceName, b.description, b.servicePrice, b.serviceCategoryID, " +
-                    "c.serviceCategoryName " +
-                    "FROM RoomUsageService a join HotelService b on a.hotelServiceId = b.hotelServiceId " +
-                    " join ServiceCategory c on b.serviceCategoryID = c.serviceCategoryID";
-            ResultSet rs = statement.executeQuery(sql);
 
+    public static List<RoomUsageService> getRoomUsageServices() {
+        List<RoomUsageService> data = new ArrayList<>();
+        String sql = """
+            SELECT a.roomUsageServiceId, a.quantity, a.unitPrice,
+                   a.hotelServiceId, b.serviceName, b.description,
+                   b.servicePrice, b.serviceCategoryID, c.serviceCategoryName 
+            FROM RoomUsageService a 
+            JOIN HotelService b ON a.hotelServiceId = b.hotelServiceId 
+            JOIN ServiceCategory c ON b.serviceCategoryID = c.serviceCategoryID
+            """;
+
+        try (Connection connection = DBHelper.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet rs = statement.executeQuery()) {
 
             while (rs.next()) {
-                RoomUsageService roomUsageService = new RoomUsageService();
-                HotelService hotelService = new HotelService();
-                ServiceCategory serviceCategory = new ServiceCategory();
-
-                roomUsageService.setRoomUsageServiceId(rs.getString(1));
-                roomUsageService.setQuantity(rs.getInt(2));
-
-                hotelService.setServiceId(rs.getString(3));
-                hotelService.setServiceName(rs.getString(4));
-                hotelService.setDescription(rs.getString(5));
-                hotelService.setServicePrice(rs.getDouble(6));
-
-                serviceCategory.setServiceCategoryID(rs.getString(7));
-                serviceCategory.setServiceCategoryName(rs.getString(8));
-
-                hotelService.setServiceCategory(serviceCategory);
-                roomUsageService.setHotelService(hotelService);
-
+                RoomUsageService roomUsageService = mapResultSetToRoomUsageService(rs);
                 data.add(roomUsageService);
             }
 
@@ -53,68 +37,77 @@ public class RoomUsageServiceDAO {
             exception.printStackTrace();
             System.exit(1);
         }
-
         return data;
     }
 
     public static RoomUsageService getDataByID(String roomUsageServiceId) {
+        String sql = """
+            SELECT a.roomUsageServiceId, a.quantity, a.unitPrice, a.hotelServiceId, 
+                   b.serviceName, b.description, b.servicePrice, b.serviceCategoryID, 
+                   c.serviceCategoryName 
+            FROM RoomUsageService a 
+            JOIN HotelService b ON a.hotelServiceId = b.hotelServiceId 
+            JOIN ServiceCategory c ON b.serviceCategoryID = c.serviceCategoryID 
+            WHERE a.roomUsageServiceId = ?
+            """;
 
-        String SQLQueryStatement = "SELECT a.roomUsageServiceId, a.quantity, a.hotelServiceId, " +
-                "b.serviceName, b.description, b.servicePrice, b.serviceCategoryID, " +
-                "c.serviceCategoryName " +
-                "FROM RoomUsageService a join HotelService b on a.hotelServiceId = b.hotelServiceId " +
-                " join ServiceCategory c on b.serviceCategoryID = c.serviceCategoryID " +
-                "WHERE pricingID = ?";
-
-        try (
-                Connection con = DBHelper.getConnection();
-                PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement)
-        ) {
+        try (Connection con = DBHelper.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(sql)) {
 
             preparedStatement.setString(1, roomUsageServiceId);
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
-                    RoomUsageService roomUsageService = new RoomUsageService();
-                    HotelService hotelService = new HotelService();
-                    ServiceCategory serviceCategory = new ServiceCategory();
-
-                    roomUsageService.setRoomUsageServiceId(rs.getString(1));
-                    roomUsageService.setQuantity(rs.getInt(2));
-
-                    hotelService.setServiceId(rs.getString(3));
-                    hotelService.setServiceName(rs.getString(4));
-                    hotelService.setDescription(rs.getString(5));
-                    hotelService.setServicePrice(rs.getDouble(6));
-
-                    serviceCategory.setServiceCategoryID(rs.getString(7));
-                    serviceCategory.setServiceCategoryName(rs.getString(8));
-
-                    hotelService.setServiceCategory(serviceCategory);
-                    roomUsageService.setHotelService(hotelService);
-
-                    return roomUsageService;
+                    return mapResultSetToRoomUsageService(rs);
                 }
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
+    public static List<RoomUsageService> getByReservationFormID(String reservationFormID) {
+        List<RoomUsageService> data = new ArrayList<>();
+        String sql = """
+            SELECT a.roomUsageServiceId, a.quantity, a.unitPrice, a.hotelServiceId,
+                   b.serviceName, b.description, b.servicePrice, b.serviceCategoryID,
+                   c.serviceCategoryName
+            FROM RoomUsageService a
+            JOIN HotelService b ON a.hotelServiceId = b.hotelServiceId
+            JOIN ServiceCategory c ON b.serviceCategoryID = c.serviceCategoryID
+            WHERE a.reservationFormID = ?
+            """;
+
+        try (Connection con = DBHelper.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, reservationFormID);
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                while (rs.next()) {
+                    RoomUsageService roomUsageService = mapResultSetToRoomUsageService(rs);
+                    data.add(roomUsageService);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
     public static void createData(RoomUsageService roomUsageService) {
-        try (
-                Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(
-                        "INSERT INTO RoomUsageService(roomUsageServiceId, quantity, hotelServiceId) " +
-                                "VALUES(?, ?, ?)"
-                )
-        ){
+        String sql = "INSERT INTO RoomUsageService(roomUsageServiceId, quantity, unitPrice, hotelServiceId, reservationFormID) VALUES(?, ?, ?, ?, ?)";
+        try (Connection connection = DBHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
             preparedStatement.setString(1, roomUsageService.getRoomUsageServiceId());
             preparedStatement.setInt(2, roomUsageService.getQuantity());
-            preparedStatement.setString(3, roomUsageService.getHotelService().getServiceId());
+            preparedStatement.setDouble(3, roomUsageService.getUnitPrice());
+            preparedStatement.setString(4, roomUsageService.getHotelService().getServiceId());
+            preparedStatement.setString(5, roomUsageService.getReservationForm().getReservationID());
 
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
@@ -124,38 +117,56 @@ public class RoomUsageServiceDAO {
     }
 
     public static void deleteData(String roomUsageServiceId) {
-        try (
-                Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(
-                        "DELETE FROM RoomUsageService "
-                                + "WHERE roomUsageServiceId = ?"
-                )
-        ){
+        String sql = "DELETE FROM RoomUsageService WHERE roomUsageServiceId = ?";
+        try (Connection connection = DBHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
             preparedStatement.setString(1, roomUsageServiceId);
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
+            exception.printStackTrace();
             System.exit(1);
         }
     }
 
     public static void updateData(RoomUsageService roomUsageService) {
-        try (
-                Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(
-                        "UPDATE RoomUsageService " +
-                                "SET quantity = ?, hotelServiceId = ? " +
-                                "WHERE roomUsageServiceID = ? "
-                );
-        ){
+        String sql = "UPDATE RoomUsageService SET quantity = ?, unitPrice = ?, hotelServiceId = ? WHERE roomUsageServiceId = ?";
+        try (Connection connection = DBHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
             preparedStatement.setInt(1, roomUsageService.getQuantity());
-            preparedStatement.setString(2, roomUsageService.getHotelService().getServiceId());
-            preparedStatement.setString(3, roomUsageService.getRoomUsageServiceId());
+            preparedStatement.setDouble(2, roomUsageService.getUnitPrice());  // Update unitPrice
+            preparedStatement.setString(3, roomUsageService.getHotelService().getServiceId());
+            preparedStatement.setString(4, roomUsageService.getRoomUsageServiceId());
 
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
             exception.printStackTrace();
             System.exit(1);
         }
+    }
 
+    private static RoomUsageService mapResultSetToRoomUsageService(ResultSet rs) throws Exception {
+        RoomUsageService roomUsageService = new RoomUsageService();
+        HotelService hotelService = new HotelService();
+        ServiceCategory serviceCategory = new ServiceCategory();
+
+        roomUsageService.setRoomUsageServiceId(rs.getString("roomUsageServiceId"));
+        roomUsageService.setQuantity(rs.getInt("quantity"));
+        roomUsageService.setUnitPrice(rs.getDouble("unitPrice"));  // Đơn giá
+
+        hotelService.setServiceId(rs.getString("hotelServiceId"));
+        hotelService.setServiceName(rs.getString("serviceName"));
+        hotelService.setDescription(rs.getString("description"));
+        hotelService.setServicePrice(rs.getDouble("servicePrice"));
+
+        serviceCategory.setServiceCategoryID(rs.getString("serviceCategoryID"));
+        serviceCategory.setServiceCategoryName(rs.getString("serviceCategoryName"));
+
+        hotelService.setServiceCategory(serviceCategory);
+        roomUsageService.setHotelService(hotelService);
+
+
+        return roomUsageService;
     }
 }

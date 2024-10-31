@@ -163,6 +163,8 @@ GO
 CREATE TABLE RoomUsageService (
     roomUsageServiceId NVARCHAR(15) NOT NULL PRIMARY KEY,
     quantity INT NOT NULL,
+    unitPrice DECIMAL(18, 2) NOT NULL,
+    totalPrice AS (quantity * unitPrice) PERSISTED,
     hotelServiceId NVARCHAR(15) NOT NULL,
     reservationFormID NVARCHAR(15) NOT NULL,
     FOREIGN KEY (hotelServiceId) REFERENCES HotelService(hotelServiceId),
@@ -227,7 +229,7 @@ CREATE TABLE RoomReservationDetail (
     dateChanged DATETIME NOT NULL,
     roomID NVARCHAR(15) NOT NULL,
     reservationFormID NVARCHAR(15) NOT NULL,
-    employeeID NVARCHAR(15),  -- Thêm employeeID
+    employeeID NVARCHAR(15),
     FOREIGN KEY (roomID) REFERENCES Room(roomID),
     FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID),
     FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)
