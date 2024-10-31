@@ -1,0 +1,11 @@
+.room-changing-item {
+    -fx-border-color: transparent;
+    -fx-border-width: 3px;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+.room-changing-item:hover {
+    -fx-border-color: green;
+    -fx-border-width: 3px;
+}

@@ -1,0 +1,10 @@
+.service-Item {
+    -fx-border-color: transparent;
+    -fx-border-width: 3px;
+    -fx-border-radius: 5px;
+}
+
+.service-Item:hover {
+    -fx-border-color: rgb(177, 214, 144);
+    -fx-border-width: 3px;
+}

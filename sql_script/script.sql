@@ -294,7 +294,20 @@ VALUES
     ('HS-000004', N'Thức uống tại phòng', N'Phục vụ thức uống tại phòng', 20.00, 'SC-000002'),
     ('HS-000005', N'Dịch vụ Spa', N'Massage toàn thân và liệu trình chăm sóc da', 120.00, 'SC-000003'),
     ('HS-000006', N'Chăm sóc trẻ em', N'Chăm sóc trẻ dưới 10 tuổi', 80.00, 'SC-000003'),
-    ('HS-000007', N'Thuê xe', N'Thuê xe di chuyển trong thành phố', 150.00, 'SC-000004');
+    ('HS-000007', N'Thuê xe', N'Thuê xe di chuyển trong thành phố', 150.00, 'SC-000004'),
+    ('HS-000008', N'Dịch vụ Xông hơi', N'Xông hơi thư giãn cơ thể và tâm trí', 900000, 'SC-000001'),
+    ('HS-000009', N'Phòng Gym', N'Trung tâm thể hình với trang thiết bị hiện đại', 700000, 'SC-000001'),
+    ('HS-000010', N'Trò chơi điện tử', N'Khu vực giải trí với các trò chơi điện tử', 500000, 'SC-000001'),
+    ('HS-000011', N'Buffet tối', N'Thực đơn buffet với đa dạng món ăn', 2000000, 'SC-000002'),
+    ('HS-000012', N'Quầy bar', N'Thưởng thức cocktail và các loại rượu tại quầy', 800000, 'SC-000002'),
+    ('HS-000013', N'Dịch vụ Cà phê', N'Cà phê và đồ uống nóng phục vụ cả ngày', 300000, 'SC-000002'),
+    ('HS-000014', N'Dịch vụ Tóc', N'Tạo kiểu và chăm sóc tóc chuyên nghiệp', 600000, 'SC-000003'),
+    ('HS-000015', N'Tắm trắng', N'Liệu trình tắm trắng da toàn thân', 1500000, 'SC-000003'),
+    ('HS-000016', N'Yoga & Thiền', N'Lớp yoga và thiền hàng ngày', 1000000, 'SC-000003'),
+    ('HS-000017', N'Xe đưa đón sân bay', N'Dịch vụ đưa đón từ sân bay về khách sạn', 1200000, 'SC-000004'),
+    ('HS-000018', N'Thuê xe đạp', N'Thuê xe đạp tham quan quanh thành phố', 400000, 'SC-000004'),
+    ('HS-000019', N'Thuê xe điện', N'Thuê xe điện cho các chuyến đi ngắn', 600000, 'SC-000004'),
+    ('HS-000020', N'Dịch vụ Thư ký', N'Hỗ trợ thư ký và in ấn tài liệu', 1000000, 'SC-000004');
 GO
 
 -- Thêm dữ liệu vào bảng RoomCategory

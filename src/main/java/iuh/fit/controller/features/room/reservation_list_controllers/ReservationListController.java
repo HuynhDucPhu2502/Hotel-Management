@@ -4,6 +4,7 @@ import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.create_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
+import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
 import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
@@ -160,8 +161,8 @@ public class ReservationListController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/ordering_services_panels/ServiceOrderingPanel.fxml"));
             AnchorPane layout = loader.load();
 
-            RoomChangingController roomChangingController = loader.getController();
-            roomChangingController.setupContext(
+            ServiceOrderingController serviceOrderingController = loader.getController();
+            serviceOrderingController.setupContext(
                     mainController, employee, roomWithReservation
             );
 

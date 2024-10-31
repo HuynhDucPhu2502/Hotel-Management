@@ -5,6 +5,7 @@ import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.create_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.reservation_list_controllers.ReservationListController;
+import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
 import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.RoomReservationDetailDAO;
@@ -186,8 +187,8 @@ public class RoomChangingController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/ordering_services_panels/ServiceOrderingPanel.fxml"));
             AnchorPane layout = loader.load();
 
-            RoomChangingController roomChangingController = loader.getController();
-            roomChangingController.setupContext(
+            ServiceOrderingController serviceOrderingController = loader.getController();
+            serviceOrderingController.setupContext(
                     mainController, employee, roomWithReservation
             );
 
@@ -234,7 +235,7 @@ public class RoomChangingController {
                             "/iuh/fit/view/features/room/changing_room_panels/RoomAvailableChangingItem.fxml"));
                     Pane roomItem = loader.load();
 
-                    RoomAvailableChangingController controller = loader.getController();
+                    RoomAvailableChangingItemController controller = loader.getController();
                     controller.setupContext(room);
                     controller.getChangingBtn().setOnAction(e -> handleChangingRoom(room));
 

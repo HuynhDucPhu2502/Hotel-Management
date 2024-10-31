@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="150.0" minWidth="380.0" styleClass="box-OverDue" stylesheets="@../../../../styles/RoomItem.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane minHeight="150.0" minWidth="380.0" styleClass="box-OverDue" stylesheets="@../../../../styles/item_styles/RoomItem.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <BorderPane prefWidth="150.0" style="-fx-background-color: rgb(198, 46, 46);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>

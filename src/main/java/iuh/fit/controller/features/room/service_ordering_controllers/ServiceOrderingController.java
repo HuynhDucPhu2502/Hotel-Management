@@ -6,18 +6,17 @@ import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.create_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
+import iuh.fit.dao.HotelServiceDAO;
 import iuh.fit.models.*;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -90,6 +89,8 @@ public class ServiceOrderingController {
 
         setupReservationForm();
         setupButtonActions();
+        loadData();
+        displayServices(hotelServiceList);
     }
 
     private void setupButtonActions() {
@@ -103,6 +104,10 @@ public class ServiceOrderingController {
         navigateToRoomChanging.setOnAction(e -> navigateToRoomChanging());
 
         // Current Panel Button
+    }
+
+    private void loadData() {
+        hotelServiceList = HotelServiceDAO.getHotelService();
     }
 
     // ==================================================================================================================
@@ -201,5 +206,59 @@ public class ServiceOrderingController {
         customerEmailLabel.setText(reservationFormCustomer.getEmail());
         customerIDCardNumberLabel.setText(reservationFormCustomer.getIdCardNumber());
     }
+
+
+    private void displayServices(List<HotelService> services) {
+        if (!services.isEmpty()) {
+            serviceGridPane.getChildren().clear();
+
+            int row = 0, col = 0;
+
+            try {
+                for (HotelService service : services) {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                            "/iuh/fit/view/features/room/ordering_services_panels/ServiceItem.fxml"));
+                    Pane serviceItem = loader.load();
+
+                    ServiceItemController controller = loader.getController();
+                    controller.setupContext(service);
+                    controller.getAddServiceBtn().setOnAction(e ->
+                            handleAddService(service, controller.getAmountField().getValue())
+                    );
+
+                    serviceGridPane.add(serviceItem, col, row);
+
+                    col++;
+                    if (col == 4) {
+                        col = 0;
+                        row++;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            serviceGridPane.setVisible(false);
+            serviceGridPane.setManaged(false);
+
+            if (emptyLabelContainer.getChildren().isEmpty()) {
+                Label emptyLabel = new Label("Không có dịch vụ nào khả dụng.");
+                emptyLabel.setStyle("-fx-font-size: 42px; -fx-text-fill: gray;");
+                emptyLabelContainer.getChildren().add(emptyLabel);
+            }
+
+            emptyLabelContainer.setVisible(true);
+            emptyLabelContainer.setManaged(true);
+
+            serviceListContainer.setAlignment(Pos.CENTER);
+        }
+    }
+
+    private void handleAddService(HotelService service, int amount) {
+        // Thực hiện logic thêm dịch vụ vào danh sách đặt phòng
+        System.out.println("Đã thêm dịch vụ: " + service.getServiceName() + " với số lượng: " + amount);
+    }
+
+
 
 }
