@@ -3,6 +3,7 @@ package iuh.fit.utils;
 import iuh.fit.dao.PricingDAO;
 import iuh.fit.dao.RoomUsageServiceDAO;
 import iuh.fit.models.Pricing;
+import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
 import iuh.fit.models.RoomUsageService;
 import iuh.fit.models.enums.PriceUnit;
@@ -81,11 +82,13 @@ public class Calculator {
     // 6. Tính tổng chi phí cho phòng và dịch vụ
     // (chưa trừ tiền đặt cọc và cộng thuế)
     public static double calculateTotalCharge(
-            Room room, LocalDateTime checkIn,
-            LocalDateTime checkOut, String reservationFormID
+            ReservationForm reservationForm
     ) {
-        double roomCharge = calculateRoomCharge(room, checkIn, checkOut);
-        double serviceCharge = calculateTotalServiceCharge(reservationFormID);
+        double roomCharge = calculateRoomCharge(reservationForm.getRoom(),
+                reservationForm.getCheckInDate(), reservationForm.getCheckOutDate());
+
+        double serviceCharge = calculateTotalServiceCharge(reservationForm.getReservationID());
+
         return roomCharge + serviceCharge;
     }
 
