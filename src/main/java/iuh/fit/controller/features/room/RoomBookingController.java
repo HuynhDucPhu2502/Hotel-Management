@@ -3,6 +3,7 @@ package iuh.fit.controller.features.room;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.create_reservation_form_controllers.RoomAvailableItemController;
 import iuh.fit.controller.features.room.create_reservation_form_controllers.RoomOnUseItemController;
+import iuh.fit.controller.features.room.create_reservation_form_controllers.RoomOverDueController;
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomWithReservationDAO;
 import iuh.fit.models.Employee;
@@ -132,6 +133,9 @@ public class RoomBookingController {
                 loader = new FXMLLoader(getClass().getResource(
                         "/iuh/fit/view/features/room/create_reservation_form_panels/RoomOverDueItem.fxml"));
                 roomItem = loader.load();
+
+                RoomOverDueController controller = loader.getController();
+                controller.setupContext(mainController, employee, roomWithReservation);
             }
             default -> throw new IllegalStateException("Unexpected value: " + room.getRoomStatus());
         }
