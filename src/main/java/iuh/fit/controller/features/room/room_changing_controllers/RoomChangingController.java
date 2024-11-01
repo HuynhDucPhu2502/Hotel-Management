@@ -3,8 +3,8 @@ package iuh.fit.controller.features.room.room_changing_controllers;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
-import iuh.fit.controller.features.room.create_reservation_form_controllers.CreateReservationFormController;
-import iuh.fit.controller.features.room.reservation_list_controllers.ReservationListController;
+import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
+import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
 import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.dao.RoomDAO;
@@ -169,7 +169,7 @@ public class RoomChangingController {
 
     private void navigateToReservationListPanel() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/reservation_list_panels/ReservationListPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/checking_in_reservation_list_panels/ReservationListPanel.fxml"));
             AnchorPane layout = loader.load();
 
             ReservationListController reservationListController = loader.getController();
@@ -186,7 +186,7 @@ public class RoomChangingController {
 
     private void navigateToCreateReservationFormPanel() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/create_reservation_form_panels/CreateReservationFormPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/creating_reservation_form_panels/CreateReservationFormPanel.fxml"));
             AnchorPane layout = loader.load();
 
             CreateReservationFormController createReservationFormController = loader.getController();

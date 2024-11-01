@@ -401,7 +401,7 @@
                               </VBox>
                               <HBox>
                                  <children>
-                                    <Text fx:id="roomAvailableTitle1" strokeType="OUTSIDE" strokeWidth="0.0" text="Lịch sử sử dụng dịch vụ">
+                                    <Text fx:id="roomAvailableTitle1" strokeType="OUTSIDE" strokeWidth="0.0" text="3. Dịch vụ đã dùng">
                                        <font>
                                           <Font name="System Bold" size="24.0" />
                                        </font>

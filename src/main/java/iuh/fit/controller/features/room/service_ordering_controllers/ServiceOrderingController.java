@@ -3,8 +3,8 @@ package iuh.fit.controller.features.room.service_ordering_controllers;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
-import iuh.fit.controller.features.room.create_reservation_form_controllers.CreateReservationFormController;
-import iuh.fit.controller.features.room.reservation_list_controllers.ReservationListController;
+import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
+import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
 import iuh.fit.dao.HotelServiceDAO;
 import iuh.fit.dao.RoomUsageServiceDAO;
@@ -132,21 +132,6 @@ public class ServiceOrderingController {
         roomUsageServiceTableView.refresh();
     }
 
-    private void setupTable() {
-        roomUsageServiceIDColumn.setCellValueFactory(new PropertyValueFactory<>("roomUsageServiceId"));
-        serviceNameColumn.setCellValueFactory(data -> {
-            HotelService service = data.getValue().getHotelService();
-            String serviceName = (service != null && service.getServiceName() != null) ? service.getServiceName() : "KHÔNG CÓ";
-            return new SimpleStringProperty(serviceName);
-        });
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-        unitPriceColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
-        totalPriceColumn.setCellValueFactory(data -> {
-            double totalPrice = data.getValue().getQuantity() * data.getValue().getUnitPrice();
-            return new SimpleDoubleProperty(totalPrice).asObject();
-        });
-    }
-
     // ==================================================================================================================
     // 3. Xử lý chức năng hiển thị panel khác
     // ==================================================================================================================
@@ -168,7 +153,7 @@ public class ServiceOrderingController {
 
     private void navigateToReservationListPanel() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/reservation_list_panels/ReservationListPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/checking_in_reservation_list_panels/ReservationListPanel.fxml"));
             AnchorPane layout = loader.load();
 
             ReservationListController reservationListController = loader.getController();
@@ -185,7 +170,7 @@ public class ServiceOrderingController {
 
     private void navigateToCreateReservationFormPanel() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/create_reservation_form_panels/CreateReservationFormPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/creating_reservation_form_panels/CreateReservationFormPanel.fxml"));
             AnchorPane layout = loader.load();
 
             CreateReservationFormController createReservationFormController = loader.getController();
@@ -290,6 +275,25 @@ public class ServiceOrderingController {
         }
     }
 
+    private void setupTable() {
+        roomUsageServiceIDColumn.setCellValueFactory(new PropertyValueFactory<>("roomUsageServiceId"));
+        serviceNameColumn.setCellValueFactory(data -> {
+            HotelService service = data.getValue().getHotelService();
+            String serviceName = (service != null && service.getServiceName() != null) ? service.getServiceName() : "KHÔNG CÓ";
+            return new SimpleStringProperty(serviceName);
+        });
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        unitPriceColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        totalPriceColumn.setCellValueFactory(data -> {
+            double totalPrice = data.getValue().getQuantity() * data.getValue().getUnitPrice();
+            return new SimpleDoubleProperty(totalPrice).asObject();
+        });
+    }
+
+
+    // ==================================================================================================================
+    // 5. Xử lý sự kiện thêm dịch vụ
+    // ==================================================================================================================
     private void handleAddService(HotelService service, int amount) {
         com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
                 "XÁC NHẬN",
