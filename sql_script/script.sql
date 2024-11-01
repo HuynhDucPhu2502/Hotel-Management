@@ -62,13 +62,13 @@ CREATE TABLE HotelService (
     serviceName NVARCHAR(50) NOT NULL,
     description NVARCHAR(255) NOT NULL,
     servicePrice MONEY NOT NULL,
-    serviceCategoryID NVARCHAR(15) NULL,  -- Cho phép NULL
+    serviceCategoryID NVARCHAR(15) NULL,
 
     CONSTRAINT FK_HotelService_ServiceCategory
         FOREIGN KEY (serviceCategoryID)
         REFERENCES ServiceCategory(serviceCategoryID)
         ON DELETE SET NULL
-		ON UPDATE CASCADE,
+		ON UPDATE CASCADE
 );
 GO
 
@@ -100,7 +100,7 @@ GO
 -- Tạo bảng Room
 CREATE TABLE Room (
     roomID NVARCHAR(15) NOT NULL PRIMARY KEY,
-    roomStatus NVARCHAR(20) NOT NULL CHECK (roomStatus IN ('AVAILABLE', 'ON_USE', 'UNAVAILABLE')),
+    roomStatus NVARCHAR(20) NOT NULL CHECK (roomStatus IN ('AVAILABLE', 'ON_USE', 'UNAVAILABLE', 'OVERDUE')),
     dateOfCreation DATETIME NOT NULL,
     roomCategoryID NVARCHAR(15) NOT NULL,
     FOREIGN KEY (roomCategoryID) REFERENCES RoomCategory(roomCategoryID)
@@ -253,9 +253,9 @@ VALUES
 	('RoomCategory', 'RC-000005'),
 	('ShiftAssignment', 'SA-000004'),
 	('Customer', 'CUS-000031'),
-	('ReservationForm', 'RF-000111'),
-	('HistoryCheckIn', 'HCI-000001'),
-	('RoomReservationDetail', 'RRD-000001'),
+	('ReservationForm', 'RF-000110'),
+	('HistoryCheckIn', 'HCI-000003'),
+	('RoomReservationDetail', 'RRD-000003'),
 	('RoomUsageService', 'RUS-000001');
 GO
 
@@ -642,6 +642,47 @@ VALUES
     ('INV-0000000104', '2024-12-10', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000104'),
     ('INV-0000000105', '2024-12-15', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000105'),
     ('INV-0000000106', '2024-12-20', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000106');
+GO
+
+--Phiếu 1: đã đặt phòng, có thể checkin nhưng chưa vào
+INSERT INTO ReservationForm (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit)
+VALUES ('RF-000107', GETDATE(), GETDATE(), DATEADD(DAY, 3, GETDATE()), 'EMP-000001', 'T1101', 'CUS-000001', 500000);
+GO
+
+--Phiếu 2: đã checkin, có 1 bảng ghi trong HistoryCheckIn,
+-- 1 bảng ghi RomReservationDetail và cập trạng thái phòng
+INSERT INTO ReservationForm (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit)
+VALUES ('RF-000108', DATEADD(DAY, -2, GETDATE()), DATEADD(DAY, -1, GETDATE()), DATEADD(DAY, 3, GETDATE()), 'EMP-000002', 'T1105', 'CUS-000002', 500000);
+
+INSERT INTO HistoryCheckin (historyCheckInID, checkInDate, reservationFormID, employeeID)
+VALUES ('HCI-000001', DATEADD(DAY, -1, GETDATE()), 'RF-000108', 'EMP-000002');
+
+INSERT INTO RoomReservationDetail (roomReservationDetailID, dateChanged, roomID, reservationFormID, employeeID)
+VALUES
+    ('RRD-000001', DATEADD(DAY, -1, GETDATE()), 'T1105', 'RF-000108', 'EMP-000002');
+
+UPDATE Room
+SET roomStatus = 'ON_USE'
+WHERE roomID = 'T1105';
+GO
+
+
+--Phiếu 3: đã checkin, có 1 bảng trong HistoryCheckIn,
+-- 1 bảng ghi RomReservationDetail và cập trạng thái phòng
+-- đã quá hạn Checkout 1 tiếng trước
+INSERT INTO ReservationForm (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit)
+VALUES ('RF-000109', DATEADD(DAY, -5, GETDATE()), DATEADD(DAY, -4, GETDATE()), DATEADD(HOUR, -1, GETDATE()), 'EMP-000003', 'V2102', 'CUS-000003', 500000);
+
+INSERT INTO HistoryCheckin (historyCheckInID, checkInDate, reservationFormID, employeeID)
+VALUES ('HCI-000002', DATEADD(DAY, -4, GETDATE()), 'RF-000109', 'EMP-000003');
+
+INSERT INTO RoomReservationDetail (roomReservationDetailID, dateChanged, roomID, reservationFormID, employeeID)
+VALUES
+    ('RRD-000002', DATEADD(DAY, -4, GETDATE()), 'V2102', 'RF-000109', 'EMP-000003');
+
+UPDATE Room
+SET roomStatus = 'OVERDUE'
+WHERE roomID = 'V2102';
 GO
 
 -- ===================================================================================
