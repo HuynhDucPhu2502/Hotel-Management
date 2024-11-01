@@ -1,4 +1,4 @@
-package iuh.fit.controller.features.room.reservation_list_controllers;
+package iuh.fit.controller.features.room.checking_in_reservation_list_controllers;
 
 import iuh.fit.controller.MainController;
 import iuh.fit.models.Customer;
@@ -70,7 +70,7 @@ public class ReservationFormItemController {
     private void navigateToReservationFormDetails() {
         try {
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/iuh/fit/view/features/room/reservation_list_panels/ReservationFormDetailsPanel.fxml")
+                    getClass().getResource("/iuh/fit/view/features/room/checking_in_reservation_list_panels/ReservationFormDetailsPanel.fxml")
             );
             AnchorPane layout = loader.load();
 

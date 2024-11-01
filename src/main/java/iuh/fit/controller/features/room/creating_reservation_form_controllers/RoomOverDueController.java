@@ -1,6 +1,7 @@
-package iuh.fit.controller.features.room.create_reservation_form_controllers;
+package iuh.fit.controller.features.room.creating_reservation_form_controllers;
 
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.room.checking_out_controllers.CheckingOutReservationFormController;
 import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
@@ -9,7 +10,9 @@ import iuh.fit.models.wrapper.RoomWithReservation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
@@ -76,9 +79,26 @@ public class RoomOverDueController {
         timeline.play();
     }
 
-    public void stopLateDurationCountdown() {
-        if (timeline != null) {
-            timeline.stop();
+    // ==================================================================================================================
+    // 3. Xử lý chức năng hiển thị panel khác
+    // ==================================================================================================================
+    @FXML
+    private void navigateToCheckingOutReservationForm() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    "/iuh/fit/view/features/room/checking_out_panels/CheckingOutReservationFormPanel.fxml"));
+            AnchorPane layout = loader.load();
+
+            CheckingOutReservationFormController checkingOutReservationFormController = loader.getController();
+            checkingOutReservationFormController.setupContext(
+                    mainController, employee, roomWithReservation
+            );
+
+
+            mainController.getMainPanel().getChildren().clear();
+            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

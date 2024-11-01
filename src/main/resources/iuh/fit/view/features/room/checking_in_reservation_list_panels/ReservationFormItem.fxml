@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="container" minHeight="150.0" minWidth="390.0" onMouseClicked="#navigateToReservationFormDetails" styleClass="box-reservation-form" stylesheets="@../../../../styles/item_styles/ReservationFormItem.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.reservation_list_controllers.ReservationFormItemController">
+<AnchorPane fx:id="container" minHeight="150.0" minWidth="390.0" onMouseClicked="#navigateToReservationFormDetails" styleClass="box-reservation-form" stylesheets="@../../../../styles/item_styles/ReservationFormItem.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationFormItemController">
    <children>
       <BorderPane minWidth="150.0" prefWidth="150.0" style="-fx-background-color: rgb(135, 162, 255);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <padding>

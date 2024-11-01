@@ -1,4 +1,4 @@
-package iuh.fit.controller.features.room.create_reservation_form_controllers;
+package iuh.fit.controller.features.room.creating_reservation_form_controllers;
 
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.Entry;
@@ -10,7 +10,7 @@ import com.dlsc.gemsfx.daterange.DateRangePicker;
 import com.dlsc.gemsfx.daterange.DateRangePreset;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
-import iuh.fit.controller.features.room.reservation_list_controllers.ReservationListController;
+import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
 import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
 import iuh.fit.dao.CustomerDAO;
@@ -175,11 +175,11 @@ public class CreateReservationFormController {
     }
 
     private void navigateToAddCustomerPanel() {
-        loadPanel("/iuh/fit/view/features/room/create_reservation_form_panels/AddCustomerPanel.fxml", AddCustomerController.class);
+        loadPanel("/iuh/fit/view/features/room/creating_reservation_form_panels/AddCustomerPanel.fxml", AddCustomerController.class);
     }
 
     private void navigateToReservationListPanel() {
-        loadPanel("/iuh/fit/view/features/room/reservation_list_panels/ReservationListPanel.fxml", ReservationListController.class);
+        loadPanel("/iuh/fit/view/features/room/checking_in_reservation_list_panels/ReservationListPanel.fxml", ReservationListController.class);
     }
 
     private void navigateToRoomChangingPanel() {

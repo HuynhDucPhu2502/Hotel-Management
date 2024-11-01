@@ -1,4 +1,4 @@
-package iuh.fit.controller.features.room.reservation_list_controllers;
+package iuh.fit.controller.features.room.checking_in_reservation_list_controllers;
 
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
@@ -183,7 +183,7 @@ public class ReservationFormDetailsController {
 
     private void navigateToReservationListPanel() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/reservation_list_panels/ReservationListPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/checking_in_reservation_list_panels/ReservationListPanel.fxml"));
             AnchorPane layout = loader.load();
 
             ReservationListController reservationListController = loader.getController();

@@ -1,4 +1,4 @@
-package iuh.fit.controller.features.room.create_reservation_form_controllers;
+package iuh.fit.controller.features.room.creating_reservation_form_controllers;
 
 import com.dlsc.gemsfx.CalendarPicker;
 import com.dlsc.gemsfx.DialogPane;
@@ -125,7 +125,7 @@ public class AddCustomerController {
 
     private void navigateToCreateReservationFormPanel() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/create_reservation_form_panels/CreateReservationFormPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/creating_reservation_form_panels/CreateReservationFormPanel.fxml"));
             AnchorPane layout = loader.load();
 
             CreateReservationFormController createReservationFormController = loader.getController();
