@@ -59,8 +59,8 @@ public class RoomChangingController {
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
 
    // 1.4 Table View
-   @FXML
-   private TableView<RoomReservationDetail> roomReservationDetailTableView;
+    @FXML
+    private TableView<RoomReservationDetail> roomReservationDetailTableView;
     @FXML
     private TableColumn<RoomReservationDetail, String> roomReservationDetailID;
     @FXML
@@ -92,7 +92,6 @@ public class RoomChangingController {
     private Employee employee;
 
     private List<Room> availableRooms;
-    private List<RoomReservationDetail> roomReservationDetails;
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
@@ -126,7 +125,7 @@ public class RoomChangingController {
                 roomWithReservation.getReservationForm().getCheckOutDate()
 
         );
-        roomReservationDetails = RoomReservationDetailDAO.getByReservationFormID(
+        List<RoomReservationDetail> roomReservationDetails = RoomReservationDetailDAO.getByReservationFormID(
                 roomWithReservation.getReservationForm().getReservationID()
         );
 

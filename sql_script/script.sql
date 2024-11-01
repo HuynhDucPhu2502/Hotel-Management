@@ -255,7 +255,8 @@ VALUES
 	('Customer', 'CUS-000031'),
 	('ReservationForm', 'RF-000111'),
 	('HistoryCheckIn', 'HCI-000001'),
-	('RoomReservationDetail', 'RRD-000001');
+	('RoomReservationDetail', 'RRD-000001'),
+	('RoomUsageService', 'RUS-000001');
 GO
 
 -- Thêm dữ liệu vào bảng Employee

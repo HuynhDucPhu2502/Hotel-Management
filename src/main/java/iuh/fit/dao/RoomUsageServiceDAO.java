@@ -4,10 +4,12 @@ import iuh.fit.models.HotelService;
 import iuh.fit.models.RoomUsageService;
 import iuh.fit.models.ServiceCategory;
 import iuh.fit.utils.DBHelper;
+import iuh.fit.utils.GlobalConstants;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,21 +101,75 @@ public class RoomUsageServiceDAO {
     }
 
     public static void createData(RoomUsageService roomUsageService) {
-        String sql = "INSERT INTO RoomUsageService(roomUsageServiceId, quantity, unitPrice, hotelServiceId, reservationFormID) VALUES(?, ?, ?, ?, ?)";
-        try (Connection connection = DBHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (
+                Connection connection = DBHelper.getConnection();
 
-            preparedStatement.setString(1, roomUsageService.getRoomUsageServiceId());
-            preparedStatement.setInt(2, roomUsageService.getQuantity());
-            preparedStatement.setDouble(3, roomUsageService.getUnitPrice());
-            preparedStatement.setString(4, roomUsageService.getHotelService().getServiceId());
-            preparedStatement.setString(5, roomUsageService.getReservationForm().getReservationID());
+                // Câu lệnh để thêm dữ liệu vào RoomUsageService
+                PreparedStatement insertStatement = connection.prepareStatement(
+                        "INSERT INTO RoomUsageService(" +
+                                "roomUsageServiceId, quantity, unitPrice, hotelServiceId, reservationFormID" +
+                                ") VALUES(?, ?, ?, ?, ?)"
+                );
 
-            preparedStatement.executeUpdate();
+                // Câu lệnh để lấy nextID từ GlobalSequence
+                PreparedStatement selectSequenceStatement = connection.prepareStatement(
+                        "SELECT nextID FROM GlobalSequence WHERE tableName = ?"
+                );
+
+                // Câu lệnh để cập nhật nextID trong GlobalSequence
+                PreparedStatement updateSequenceStatement = connection.prepareStatement(
+                        "UPDATE GlobalSequence SET nextID = ? WHERE tableName = ?"
+                )
+        ) {
+            // Lấy nextID hiện tại cho RoomUsageService từ GlobalSequence
+            selectSequenceStatement.setString(1, "RoomUsageService");
+            ResultSet rs = selectSequenceStatement.executeQuery();
+
+            String newRoomUsageServiceID = "RUS-000001"; // ID mặc định nếu không có trong DB
+            if (rs.next()) {
+                String currentNextID = rs.getString("nextID");
+                String prefix = GlobalConstants.ROOMUSAGESERVICE_PREFIX + "-"; // Tiền tố cho RoomUsageService ID
+
+                // Tách phần số từ nextID và tăng thêm 1
+                int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
+
+                // Định dạng lại phần số, đảm bảo luôn có 6 chữ số
+                newRoomUsageServiceID = prefix + String.format("%06d", nextIDNum);
+
+                // Cập nhật nextID mới trong GlobalSequence
+                updateSequenceStatement.setString(1, currentNextID);
+                updateSequenceStatement.setString(2, "RoomUsageService");
+                updateSequenceStatement.executeUpdate();
+            }
+
+            // Thiết lập các giá trị cho câu lệnh INSERT
+            insertStatement.setString(1, newRoomUsageServiceID);
+            insertStatement.setInt(2, roomUsageService.getQuantity());
+            insertStatement.setDouble(3, roomUsageService.getUnitPrice());
+            insertStatement.setString(4, roomUsageService.getHotelService().getServiceId());
+            insertStatement.setString(5, roomUsageService.getReservationForm().getReservationID());
+
+            insertStatement.executeUpdate();
         } catch (Exception exception) {
             exception.printStackTrace();
             System.exit(1);
         }
+    }
+
+    public static String getNextRoomUsageServiceID() {
+        String sql = "SELECT nextID FROM GlobalSequence WHERE tableName = 'RoomUsageService'";
+        try (
+                Connection connection = DBHelper.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(sql)
+        ) {
+            if (rs.next()) {
+                return rs.getString(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "RUS-000001";
     }
 
     public static void deleteData(String roomUsageServiceId) {

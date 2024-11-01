@@ -7,15 +7,19 @@ import iuh.fit.controller.features.room.create_reservation_form_controllers.Crea
 import iuh.fit.controller.features.room.reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
 import iuh.fit.dao.HotelServiceDAO;
+import iuh.fit.dao.RoomUsageServiceDAO;
 import iuh.fit.models.*;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
 import java.time.format.DateTimeFormatter;
@@ -49,15 +53,29 @@ public class ServiceOrderingController {
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
 
-    // 1.4 Dialog Pane
+    // 1.4 Table
+    @FXML
+    private TableView<RoomUsageService> roomUsageServiceTableView;
+    @FXML
+    private TableColumn<RoomUsageService, String> roomUsageServiceIDColumn;
+    @FXML
+    private TableColumn<RoomUsageService, String> serviceNameColumn;
+    @FXML
+    private TableColumn<RoomUsageService, Integer> quantityColumn;
+    @FXML
+    private TableColumn<RoomUsageService, Double> unitPriceColumn;
+    @FXML
+    private TableColumn<RoomUsageService, Double> totalPriceColumn;
+
+    // 1.5 Dialog Pane
     @FXML
     private DialogPane dialogPane;
 
-    // 1.5 Titled Pane
+    // 1.6 Titled Pane
     @FXML
     private TitledPane titledPane;
 
-    // 1.6 Container
+    // 1.7 Container
     @FXML
     private HBox emptyLabelContainer;
     @FXML
@@ -65,7 +83,7 @@ public class ServiceOrderingController {
     @FXML
     private GridPane serviceGridPane;
 
-    // 1.7 Context
+    // 1.8 Context
     private MainController mainController;
     private RoomWithReservation roomWithReservation;
     private Employee employee;
@@ -77,6 +95,7 @@ public class ServiceOrderingController {
     // ==================================================================================================================
     public void initialize() {
         dialogPane.toFront();
+        setupTable();
     }
 
     public void setupContext(MainController mainController, Employee employee,
@@ -102,12 +121,30 @@ public class ServiceOrderingController {
         navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
         navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
         navigateToRoomChanging.setOnAction(e -> navigateToRoomChanging());
-
-        // Current Panel Button
     }
 
     private void loadData() {
         hotelServiceList = HotelServiceDAO.getHotelService();
+
+        List<RoomUsageService> roomUsageServices = RoomUsageServiceDAO.getByReservationFormID(roomWithReservation.getReservationForm().getReservationID());
+        ObservableList<RoomUsageService> data = FXCollections.observableArrayList(roomUsageServices);
+        roomUsageServiceTableView.setItems(data);
+        roomUsageServiceTableView.refresh();
+    }
+
+    private void setupTable() {
+        roomUsageServiceIDColumn.setCellValueFactory(new PropertyValueFactory<>("roomUsageServiceId"));
+        serviceNameColumn.setCellValueFactory(data -> {
+            HotelService service = data.getValue().getHotelService();
+            String serviceName = (service != null && service.getServiceName() != null) ? service.getServiceName() : "KHÔNG CÓ";
+            return new SimpleStringProperty(serviceName);
+        });
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        unitPriceColumn.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        totalPriceColumn.setCellValueFactory(data -> {
+            double totalPrice = data.getValue().getQuantity() * data.getValue().getUnitPrice();
+            return new SimpleDoubleProperty(totalPrice).asObject();
+        });
     }
 
     // ==================================================================================================================
@@ -207,7 +244,6 @@ public class ServiceOrderingController {
         customerIDCardNumberLabel.setText(reservationFormCustomer.getIdCardNumber());
     }
 
-
     private void displayServices(List<HotelService> services) {
         if (!services.isEmpty()) {
             serviceGridPane.getChildren().clear();
@@ -255,10 +291,32 @@ public class ServiceOrderingController {
     }
 
     private void handleAddService(HotelService service, int amount) {
-        // Thực hiện logic thêm dịch vụ vào danh sách đặt phòng
-        System.out.println("Đã thêm dịch vụ: " + service.getServiceName() + " với số lượng: " + amount);
+        com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
+                "XÁC NHẬN",
+                "Bạn có chắc chắn muốn thêm dịch vụ: " + service.getServiceName() + " với số lượng: " + amount + " không?"
+        );
+
+        dialog.onClose(buttonType -> {
+            if (buttonType == ButtonType.YES) {
+                handleAddServiceToDB(service, amount);
+                dialogPane.showInformation("Thành Công", "Dịch vụ đã được thêm thành công!");
+                loadData(); // Cập nhật bảng sau khi thêm
+            }
+        });
     }
 
+    private void handleAddServiceToDB(HotelService service, int amount) {
+        try {
+            RoomUsageService roomUsageService = new RoomUsageService();
+            roomUsageService.setRoomUsageServiceId(RoomUsageServiceDAO.getNextRoomUsageServiceID());
+            roomUsageService.setQuantity(amount);
+            roomUsageService.setUnitPrice(service.getServicePrice());
+            roomUsageService.setHotelService(service);
+            roomUsageService.setReservationForm(roomWithReservation.getReservationForm());
 
-
+            RoomUsageServiceDAO.createData(roomUsageService);
+        } catch (Exception e) {
+            dialogPane.showInformation("LỖI", e.getMessage());
+        }
+    }
 }
