@@ -1,8 +1,10 @@
 package iuh.fit.utils;
 
 import iuh.fit.dao.PricingDAO;
+import iuh.fit.dao.RoomUsageServiceDAO;
 import iuh.fit.models.Pricing;
 import iuh.fit.models.Room;
+import iuh.fit.models.RoomUsageService;
 import iuh.fit.models.enums.PriceUnit;
 
 import java.time.Duration;
@@ -36,6 +38,7 @@ public class Calculator {
         }
     }
 
+
     // 2. Tính  tiền đặt cọc theo số ngày lưu trú
     public static double calculateBookingDeposit(Room room, LocalDateTime checkIn, LocalDateTime checkOut) {
         return calculateRoomCharge(room, checkIn, checkOut) * 0.1;
@@ -66,7 +69,30 @@ public class Calculator {
         }
     }
 
-    // Hàm phụ
+    // 5. Tính tổng chi phí dịch vụ cho reservationFormID
+    public static double calculateTotalServiceCharge(String reservationFormID) {
+        List<RoomUsageService> services = RoomUsageServiceDAO.getByReservationFormID(reservationFormID);
+
+        return services.stream()
+                .mapToDouble(service -> service.getQuantity() * service.getUnitPrice())
+                .sum();
+    }
+
+    // 6. Tính tổng chi phí cho phòng và dịch vụ
+    // (chưa trừ tiền đặt cọc và cộng thuế)
+    public static double calculateTotalCharge(
+            Room room, LocalDateTime checkIn,
+            LocalDateTime checkOut, String reservationFormID
+    ) {
+        double roomCharge = calculateRoomCharge(room, checkIn, checkOut);
+        double serviceCharge = calculateTotalServiceCharge(reservationFormID);
+        return roomCharge + serviceCharge;
+    }
+
+    // ======================================================================================================
+    // Các hàm phụ
+
+    // Tính số giờ giữa checkin và checkout
     private static double calculateHours(LocalDateTime checkIn, LocalDateTime checkOut) {
         if (checkOut.isBefore(checkIn)) {
             throw new IllegalArgumentException(ErrorMessages.ERROR_CHECK_OUT_BEFORE_CHECK_IN);
@@ -75,8 +101,9 @@ public class Calculator {
         return duration.toHours();
     }
 
-    // Hàm phụ
+    // Làm tròn đến 0.5
     private static double roundToNearestHalfDay(double days) {
         return Math.ceil(days * 2) / 2.0;
     }
+
 }
