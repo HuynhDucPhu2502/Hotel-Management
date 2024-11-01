@@ -15,19 +15,24 @@ public class RoomWithReservationDAO {
         List<RoomWithReservation> data = new ArrayList<>();
 
         String sql = """
-            SELECT r.roomID, r.roomStatus, r.dateOfCreation,\s
-                   rc.roomCategoryID, rc.roomCategoryName, rc.numberOfBed,\s
-                   rf.reservationFormID, rf.reservationDate, rf.checkInDate,\s
-                   rf.checkOutDate, rf.roomBookingDeposit, rf.employeeID, rf.customerID,\s
-                   e.fullName AS employeeName,\s
-                   c.fullName AS customerName, c.phoneNumber, c.email, c.idCardNumber\s
-            FROM Room r
-            LEFT JOIN RoomCategory rc ON r.roomCategoryID = rc.roomCategoryID
-            LEFT JOIN ReservationForm rf ON r.roomID = rf.roomID\s
-            AND GETDATE() BETWEEN rf.checkInDate AND DATEADD(hour, 2, rf.checkOutDate)
-            LEFT JOIN Employee e ON rf.employeeID = e.employeeID
-            LEFT JOIN Customer c ON rf.customerID = c.customerID;
-           \s""";
+        SELECT r.roomID, r.roomStatus, r.dateOfCreation,
+               rc.roomCategoryID, rc.roomCategoryName, rc.numberOfBed,
+               rf.reservationFormID, rf.reservationDate, rf.checkInDate,
+               rf.checkOutDate, rf.roomBookingDeposit, rf.employeeID, rf.customerID,
+               e.fullName AS employeeName,
+               c.fullName AS customerName, c.phoneNumber, c.email, c.idCardNumber
+        FROM Room r
+        LEFT JOIN RoomCategory rc ON r.roomCategoryID = rc.roomCategoryID
+        LEFT JOIN (
+            SELECT rf.*
+            FROM ReservationForm rf
+            LEFT JOIN HistoryCheckOut hco ON rf.reservationFormID = hco.reservationFormID
+            WHERE hco.historyCheckOutID IS NULL
+              AND GETDATE() BETWEEN rf.checkInDate AND DATEADD(hour, 2, rf.checkOutDate)
+        ) AS rf ON r.roomID = rf.roomID
+        LEFT JOIN Employee e ON rf.employeeID = e.employeeID
+        LEFT JOIN Customer c ON rf.customerID = c.customerID;
+        """;
 
         try (
                 Connection connection = DBHelper.getConnection();
@@ -47,7 +52,6 @@ public class RoomWithReservationDAO {
                 roomCategory.setRoomCategoryID(rs.getString("roomCategoryID"));
                 roomCategory.setRoomCategoryName(rs.getString("roomCategoryName"));
                 roomCategory.setNumberOfBed(rs.getInt("numberOfBed"));
-
                 room.setRoomCategory(roomCategory);
 
                 // ReservationForm (if exists)
@@ -97,11 +101,16 @@ public class RoomWithReservationDAO {
                c.fullName AS customerName, c.phoneNumber, c.email, c.idCardNumber
         FROM Room r
         LEFT JOIN RoomCategory rc ON r.roomCategoryID = rc.roomCategoryID
-        LEFT JOIN ReservationForm rf ON r.roomID = rf.roomID
-        AND rf.reservationFormID = ?
+        LEFT JOIN (
+            SELECT rf.*
+            FROM ReservationForm rf
+            LEFT JOIN HistoryCheckOut hco ON rf.reservationFormID = hco.reservationFormID
+            WHERE hco.historyCheckOutID IS NULL
+              AND rf.reservationFormID = ?
+        ) AS rf ON r.roomID = rf.roomID
         LEFT JOIN Employee e ON rf.employeeID = e.employeeID
         LEFT JOIN Customer c ON rf.customerID = c.customerID
-        WHERE r.RoomID = ?
+        WHERE r.roomID = ?
         """;
 
         try (
@@ -158,5 +167,6 @@ public class RoomWithReservationDAO {
         }
         return null;
     }
+
 
 }
