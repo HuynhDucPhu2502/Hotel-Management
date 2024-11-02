@@ -19,32 +19,32 @@ GO
 -- Tạo bảng GlobalSequence
 CREATE TABLE GlobalSequence (
     tableName NVARCHAR(50) PRIMARY KEY, 
-    nextID NVARCHAR(20)                         
+    nextID NVARCHAR(20)
 );
 GO
 
 -- Tạo bảng Employee
 CREATE TABLE Employee (
-    employeeID NVARCHAR(15) NOT NULL PRIMARY KEY, 
-    fullName NVARCHAR(50) NOT NULL, 
-    phoneNumber NVARCHAR(10) NOT NULL, 
-    email NVARCHAR(50) NOT NULL, 
-    address NVARCHAR(100), 
-    gender NVARCHAR(6) NOT NULL CHECK (gender IN ('MALE', 'FEMALE')), 
-    idCardNumber NVARCHAR(12) NOT NULL, 
-    dob DATE NOT NULL, 
-    position NVARCHAR(15) NOT NULL CHECK (position IN ('RECEPTIONIST', 'MANAGER')) 
+    employeeID NVARCHAR(15) NOT NULL PRIMARY KEY,
+    fullName NVARCHAR(50) NOT NULL,
+    phoneNumber NVARCHAR(10) NOT NULL,
+    email NVARCHAR(50) NOT NULL,
+    address NVARCHAR(100),
+    gender NVARCHAR(6) NOT NULL CHECK (gender IN ('MALE', 'FEMALE')),
+    idCardNumber NVARCHAR(12) NOT NULL,
+    dob DATE NOT NULL,
+    position NVARCHAR(15) NOT NULL CHECK (position IN ('RECEPTIONIST', 'MANAGER'))
 );
 GO
 
 -- Tạo bảng Account
 CREATE TABLE Account (
-    accountID NVARCHAR(15) PRIMARY KEY,  
-    userName NVARCHAR(20) NOT NULL,  
-    password NVARCHAR(30) NOT NULL,  
-    status NVARCHAR(10) NOT NULL CHECK (status IN ('ACTIVE', 'INACTIVE', 'LOCKED')),  
-    employeeID NVARCHAR(15) NOT NULL,  
-    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)  
+    accountID NVARCHAR(15) PRIMARY KEY,
+    userName NVARCHAR(20) NOT NULL,
+    password NVARCHAR(30) NOT NULL,
+    status NVARCHAR(10) NOT NULL CHECK (status IN ('ACTIVE', 'INACTIVE', 'LOCKED')),
+    employeeID NVARCHAR(15) NOT NULL,
+    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)
 );
 GO
 
@@ -683,6 +683,14 @@ VALUES
 UPDATE Room
 SET roomStatus = 'OVERDUE'
 WHERE roomID = 'V2102';
+GO
+
+INSERT INTO RoomUsageService (roomUsageServiceID, reservationFormID, hotelServiceId, quantity, unitPrice)
+VALUES
+    ('RUS-000005', 'RF-000109', 'HS-000001', 2, 100000),  -- Dịch vụ Karaoke
+    ('RUS-000006', 'RF-000109', 'HS-000002', 1, 200000),  -- Hồ bơi
+    ('RUS-000007', 'RF-000109', 'HS-000003', 3, 150000),  -- Bữa sáng tự chọn
+    ('RUS-000008', 'RF-000109', 'HS-000004', 1, 50000);   -- Thức uống tại phòng
 GO
 
 -- ===================================================================================

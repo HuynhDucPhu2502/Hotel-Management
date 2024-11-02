@@ -7,6 +7,7 @@ module iuh.fit {
     requires com.dlsc.unitfx;
     requires org.controlsfx.controls;
     requires com.calendarfx.view;
+    requires itextpdf;
 
     opens iuh.fit to javafx.fxml;
 

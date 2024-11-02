@@ -328,6 +328,7 @@
                                     <TableColumn fx:id="reservationFormID" prefWidth="75.0" text="Mã phiếu đặt phòng" />
                                  </columns>
                               </TableView>
+                              <Button fx:id="printBtn" mnemonicParsing="false" text="In" />
                            </children>
                            <opaqueInsets>
                               <Insets />
