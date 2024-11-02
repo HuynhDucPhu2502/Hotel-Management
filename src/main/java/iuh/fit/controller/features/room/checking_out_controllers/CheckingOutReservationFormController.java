@@ -3,10 +3,7 @@ package iuh.fit.controller.features.room.checking_out_controllers;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
-import iuh.fit.dao.HistoryCheckOutDAO;
-import iuh.fit.dao.RoomDAO;
-import iuh.fit.dao.RoomReservationDetailDAO;
-import iuh.fit.dao.RoomUsageServiceDAO;
+import iuh.fit.dao.*;
 import iuh.fit.models.*;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
@@ -121,6 +118,8 @@ public class CheckingOutReservationFormController {
         // Label Navigate Button
         backBtn.setOnAction(e -> navigateToRoomBookingPanel());
         bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
+
+        // Current Panel Button
         checkOutBtn.setOnAction(e -> handleCheckOut());
 
     }
@@ -153,9 +152,11 @@ public class CheckingOutReservationFormController {
         Room reservationFormRoom = roomWithReservation.getRoom();
         Customer reservationFormCustomer = roomWithReservation.getReservationForm().getCustomer();
 
+        LocalDateTime actualCheckInDate = HistoryCheckinDAO.getActualCheckInDate(reservationForm.getReservationID());
+
         roomNumberLabel.setText(reservationFormRoom.getRoomNumber());
         roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
-        checkInDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckInDate()));
+        checkInDateLabel.setText(dateTimeFormatter.format(actualCheckInDate != null ? actualCheckInDate : reservationForm.getCheckInDate()));
         checkOutDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
         stayLengthLabel.setText(Calculator.calculateStayLengthToString(
                 reservationForm.getCheckInDate(),
@@ -213,18 +214,47 @@ public class CheckingOutReservationFormController {
             confirmDialog.onClose(buttonType -> {
                 if (buttonType == ButtonType.YES) {
                     try {
+                        // 1. Tạo mới một bản ghi HistoryCheckOut
                         HistoryCheckOut historyCheckOut = new HistoryCheckOut();
                         historyCheckOut.setHistoryCheckOutID(HistoryCheckOutDAO.getNextID());
                         historyCheckOut.setCheckOutDate(LocalDateTime.now());
                         historyCheckOut.setReservationForm(roomWithReservation.getReservationForm());
                         historyCheckOut.setEmployee(employee);
 
+                        // Lưu thông tin check-out vào DB
                         HistoryCheckOutDAO.createData(historyCheckOut);
 
+                        // 2. Lấy đối tượng Tax mặc định
+                        Tax tax = TaxDAO.getDataByID("tax-000001");
+
+                        // 3. Tạo hóa đơn mới
+                        Invoice invoice = new Invoice();
+                        invoice.setInvoiceID(InvoiceDAO.getNextInvoiceID());
+                        invoice.setInvoiceDate(LocalDateTime.now());
+
+                        // Tính toán các chi phí cho hóa đơn
+                        double roomCharge = Calculator.calculateRoomCharge(roomWithReservation.getRoom(),
+                                roomWithReservation.getReservationForm().getCheckInDate(), roomWithReservation.getReservationForm().getCheckOutDate());
+                        double servicesCharge = Calculator.calculateTotalServiceCharge(roomWithReservation.getReservationForm().getReservationID());
+                        double totalDue = roomCharge * 0.9 + servicesCharge;
+                        double netDue = totalDue * (1 + tax.getTaxRate());
+
+                        invoice.setRoomCharge(roomCharge);
+                        invoice.setServicesCharge(servicesCharge);
+                        invoice.setTotalDue(totalDue);
+                        invoice.setNetDue(netDue);
+                        invoice.setTax(tax);
+                        invoice.setReservationForm(roomWithReservation.getReservationForm());
+
+                        // Lưu hóa đơn vào DB
+                        InvoiceDAO.createData(invoice);
+
+                        // 4. Cập nhật trạng thái phòng về AVAILABLE
                         Room room = roomWithReservation.getRoom();
                         RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.AVAILABLE);
 
-                        dialogPane.showInformation("THÀNH CÔNG", "Check-out thành công!");
+                        // Hiển thị thông báo thành công
+                        dialogPane.showInformation("THÀNH CÔNG", "Check-out và tạo hóa đơn thành công!");
                         navigateToRoomBookingPanel();
 
                     } catch (Exception ex) {
@@ -239,6 +269,7 @@ public class CheckingOutReservationFormController {
             dialogPane.showInformation("LỖI", "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại!");
         }
     }
+
 
 
 
