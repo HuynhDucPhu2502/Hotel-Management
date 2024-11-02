@@ -22,6 +22,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static iuh.fit.utils.GlobalConstants.*;
+
 public class RoomBookingController {
     @FXML
     private GridPane roomGridPane;
@@ -56,6 +58,7 @@ public class RoomBookingController {
         this.mainController = mainController;
         this.employee = employeee;
         loadData();
+        loadDataForBtn();
         setupEventHandlers();
     }
 
@@ -83,6 +86,25 @@ public class RoomBookingController {
         roomFloorNumberCBox.getSelectionModel().selectFirst();
 
         displayFilteredRooms(roomWithReservations);
+    }
+
+    private void loadDataForBtn(){
+        allBtn.setText(ROOM_BOOKING_ALL_BTN + "("+roomWithReservations.size()+")");
+
+        List<RoomWithReservation> availableRoom = roomWithReservations.stream()
+                .filter(r -> r.getRoom().getRoomStatus() == RoomStatus.AVAILABLE)
+                .toList();
+        availableBtn.setText(ROOM_BOOKING_AVAIL_BTN + "("+availableRoom.size()+")");
+
+        List<RoomWithReservation> onUseRoom = roomWithReservations.stream()
+                .filter(r -> r.getRoom().getRoomStatus() == RoomStatus.ON_USE)
+                .toList();
+        onUseBtn.setText(ROOM_BOOKING_ON_USE_BTN + "("+onUseRoom.size()+")");
+
+        List<RoomWithReservation> overDueRoom = roomWithReservations.stream()
+                .filter(r -> r.getRoom().getRoomStatus() == RoomStatus.ON_USE)
+                .toList();
+        overDueBtn.setText(ROOM_BOOKING_OVER_DUE_BTN + "("+overDueRoom.size()+")");
     }
 
     private void displayFilteredRooms(List<RoomWithReservation> roomsWithReservations) {
@@ -171,6 +193,7 @@ public class RoomBookingController {
                 .toList();
 
         displayFilteredRooms(filteredRooms);
+        loadDataForBtn();
     }
 
     private void setupEventHandlers() {
