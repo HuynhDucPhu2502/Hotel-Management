@@ -1,11 +1,8 @@
 package iuh.fit;
 
-import iuh.fit.controller.features.statistics.StatisticalController;
-import iuh.fit.dao.InvoiceDisplayOnTableDAO;
+import iuh.fit.models.enums.Month;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Month;
+import java.time.LocalDateTime;
 
 public class FetchTesting {
     public static void main(String[] args) {
@@ -25,5 +22,8 @@ public class FetchTesting {
 //        System.out.println(InvoiceDAO.getInvoice());
 
         //System.out.println(InvoiceDisplayOnTableDAO.getData());
+
+        String month = LocalDateTime.now().getMonth().toString();
+        System.out.println(Month.valueOf(month).getName());
     }
 }
