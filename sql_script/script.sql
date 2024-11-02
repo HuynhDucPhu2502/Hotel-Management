@@ -19,32 +19,32 @@ GO
 -- Tạo bảng GlobalSequence
 CREATE TABLE GlobalSequence (
     tableName NVARCHAR(50) PRIMARY KEY, 
-    nextID NVARCHAR(20)                         
+    nextID NVARCHAR(20)
 );
 GO
 
 -- Tạo bảng Employee
 CREATE TABLE Employee (
-    employeeID NVARCHAR(15) NOT NULL PRIMARY KEY, 
-    fullName NVARCHAR(50) NOT NULL, 
-    phoneNumber NVARCHAR(10) NOT NULL, 
-    email NVARCHAR(50) NOT NULL, 
-    address NVARCHAR(100), 
-    gender NVARCHAR(6) NOT NULL CHECK (gender IN ('MALE', 'FEMALE')), 
-    idCardNumber NVARCHAR(12) NOT NULL, 
-    dob DATE NOT NULL, 
-    position NVARCHAR(15) NOT NULL CHECK (position IN ('RECEPTIONIST', 'MANAGER')) 
+    employeeID NVARCHAR(15) NOT NULL PRIMARY KEY,
+    fullName NVARCHAR(50) NOT NULL,
+    phoneNumber NVARCHAR(10) NOT NULL,
+    email NVARCHAR(50) NOT NULL,
+    address NVARCHAR(100),
+    gender NVARCHAR(6) NOT NULL CHECK (gender IN ('MALE', 'FEMALE')),
+    idCardNumber NVARCHAR(12) NOT NULL,
+    dob DATE NOT NULL,
+    position NVARCHAR(15) NOT NULL CHECK (position IN ('RECEPTIONIST', 'MANAGER'))
 );
 GO
 
 -- Tạo bảng Account
 CREATE TABLE Account (
-    accountID NVARCHAR(15) PRIMARY KEY,  
-    userName NVARCHAR(20) NOT NULL,  
-    password NVARCHAR(30) NOT NULL,  
-    status NVARCHAR(10) NOT NULL CHECK (status IN ('ACTIVE', 'INACTIVE', 'LOCKED')),  
-    employeeID NVARCHAR(15) NOT NULL,  
-    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)  
+    accountID NVARCHAR(15) PRIMARY KEY,
+    userName NVARCHAR(20) NOT NULL,
+    password NVARCHAR(30) NOT NULL,
+    status NVARCHAR(10) NOT NULL CHECK (status IN ('ACTIVE', 'INACTIVE', 'LOCKED')),
+    employeeID NVARCHAR(15) NOT NULL,
+    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)
 );
 GO
 
@@ -62,13 +62,13 @@ CREATE TABLE HotelService (
     serviceName NVARCHAR(50) NOT NULL,
     description NVARCHAR(255) NOT NULL,
     servicePrice MONEY NOT NULL,
-    serviceCategoryID NVARCHAR(15) NULL,  -- Cho phép NULL
+    serviceCategoryID NVARCHAR(15) NULL,
 
     CONSTRAINT FK_HotelService_ServiceCategory
         FOREIGN KEY (serviceCategoryID)
         REFERENCES ServiceCategory(serviceCategoryID)
         ON DELETE SET NULL
-		ON UPDATE CASCADE,
+		ON UPDATE CASCADE
 );
 GO
 
@@ -100,7 +100,7 @@ GO
 -- Tạo bảng Room
 CREATE TABLE Room (
     roomID NVARCHAR(15) NOT NULL PRIMARY KEY,
-    roomStatus NVARCHAR(20) NOT NULL CHECK (roomStatus IN ('AVAILABLE', 'ON_USE', 'UNAVAILABLE')),
+    roomStatus NVARCHAR(20) NOT NULL CHECK (roomStatus IN ('AVAILABLE', 'ON_USE', 'UNAVAILABLE', 'OVERDUE')),
     dateOfCreation DATETIME NOT NULL,
     roomCategoryID NVARCHAR(15) NOT NULL,
     FOREIGN KEY (roomCategoryID) REFERENCES RoomCategory(roomCategoryID)
@@ -163,6 +163,8 @@ GO
 CREATE TABLE RoomUsageService (
     roomUsageServiceId NVARCHAR(15) NOT NULL PRIMARY KEY,
     quantity INT NOT NULL,
+    unitPrice DECIMAL(18, 2) NOT NULL,
+    totalPrice AS (quantity * unitPrice) PERSISTED,
     hotelServiceId NVARCHAR(15) NOT NULL,
     reservationFormID NVARCHAR(15) NOT NULL,
     FOREIGN KEY (hotelServiceId) REFERENCES HotelService(hotelServiceId),
@@ -227,7 +229,7 @@ CREATE TABLE RoomReservationDetail (
     dateChanged DATETIME NOT NULL,
     roomID NVARCHAR(15) NOT NULL,
     reservationFormID NVARCHAR(15) NOT NULL,
-    employeeID NVARCHAR(15),  -- Thêm employeeID
+    employeeID NVARCHAR(15),
     FOREIGN KEY (roomID) REFERENCES Room(roomID),
     FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID),
     FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)
@@ -251,9 +253,10 @@ VALUES
 	('RoomCategory', 'RC-000005'),
 	('ShiftAssignment', 'SA-000004'),
 	('Customer', 'CUS-000031'),
-	('ReservationForm', 'RF-000111'),
-	('HistoryCheckIn', 'HCI-000001'),
-	('RoomReservationDetail', 'RRD-000001');
+	('ReservationForm', 'RF-000110'),
+	('HistoryCheckIn', 'HCI-000003'),
+	('RoomReservationDetail', 'RRD-000003'),
+	('RoomUsageService', 'RUS-000001');
 GO
 
 -- Thêm dữ liệu vào bảng Employee
@@ -294,7 +297,20 @@ VALUES
     ('HS-000004', N'Thức uống tại phòng', N'Phục vụ thức uống tại phòng', 20.00, 'SC-000002'),
     ('HS-000005', N'Dịch vụ Spa', N'Massage toàn thân và liệu trình chăm sóc da', 120.00, 'SC-000003'),
     ('HS-000006', N'Chăm sóc trẻ em', N'Chăm sóc trẻ dưới 10 tuổi', 80.00, 'SC-000003'),
-    ('HS-000007', N'Thuê xe', N'Thuê xe di chuyển trong thành phố', 150.00, 'SC-000004');
+    ('HS-000007', N'Thuê xe', N'Thuê xe di chuyển trong thành phố', 150.00, 'SC-000004'),
+    ('HS-000008', N'Dịch vụ Xông hơi', N'Xông hơi thư giãn cơ thể và tâm trí', 900000, 'SC-000001'),
+    ('HS-000009', N'Phòng Gym', N'Trung tâm thể hình với trang thiết bị hiện đại', 700000, 'SC-000001'),
+    ('HS-000010', N'Trò chơi điện tử', N'Khu vực giải trí với các trò chơi điện tử', 500000, 'SC-000001'),
+    ('HS-000011', N'Buffet tối', N'Thực đơn buffet với đa dạng món ăn', 2000000, 'SC-000002'),
+    ('HS-000012', N'Quầy bar', N'Thưởng thức cocktail và các loại rượu tại quầy', 800000, 'SC-000002'),
+    ('HS-000013', N'Dịch vụ Cà phê', N'Cà phê và đồ uống nóng phục vụ cả ngày', 300000, 'SC-000002'),
+    ('HS-000014', N'Dịch vụ Tóc', N'Tạo kiểu và chăm sóc tóc chuyên nghiệp', 600000, 'SC-000003'),
+    ('HS-000015', N'Tắm trắng', N'Liệu trình tắm trắng da toàn thân', 1500000, 'SC-000003'),
+    ('HS-000016', N'Yoga & Thiền', N'Lớp yoga và thiền hàng ngày', 1000000, 'SC-000003'),
+    ('HS-000017', N'Xe đưa đón sân bay', N'Dịch vụ đưa đón từ sân bay về khách sạn', 1200000, 'SC-000004'),
+    ('HS-000018', N'Thuê xe đạp', N'Thuê xe đạp tham quan quanh thành phố', 400000, 'SC-000004'),
+    ('HS-000019', N'Thuê xe điện', N'Thuê xe điện cho các chuyến đi ngắn', 600000, 'SC-000004'),
+    ('HS-000020', N'Dịch vụ Thư ký', N'Hỗ trợ thư ký và in ấn tài liệu', 1000000, 'SC-000004');
 GO
 
 -- Thêm dữ liệu vào bảng RoomCategory
@@ -498,11 +514,8 @@ VALUES
     ('RF-000103', '2024-09-15', '2024-09-16', '2024-09-19', 'EMP-000003', 'T1105', 'CUS-000023', 255000),
     ('RF-000104', '2024-09-20', '2024-09-21', '2024-09-24', 'EMP-000004', 'T1203', 'CUS-000022', 255000),
     ('RF-000105', '2024-09-25', '2024-09-26', '2024-09-28', 'EMP-000005', 'T1307', 'CUS-000021', 480000),
-    ('RF-000106', '2024-10-01', '2024-10-02', '2024-10-04', 'EMP-000001', 'V2210', 'CUS-000023', 480000),
-    ('RF-000107', '2024-10-10', '2024-10-11', '2024-10-14', 'EMP-000002', 'V2102', 'CUS-000022', 255000),
-    ('RF-000108', '2024-10-15', '2024-10-16', '2024-10-19', 'EMP-000003', 'V2206', 'CUS-000027', 540000),
-    ('RF-000109', '2024-10-25', '2024-10-26', '2024-10-28', 'EMP-000004', 'V2304', 'CUS-000024', 540000),
-    ('RF-000110', '2024-10-30', '2024-10-31', '2024-11-02', 'EMP-000005', 'V2408', 'CUS-000022', 540000);
+    ('RF-000106', '2024-10-01', '2024-10-02', '2024-10-04', 'EMP-000001', 'V2210', 'CUS-000023', 480000);
+
 
 -- Thêm dữ liệu vào bảng Tax
 INSERT INTO Tax (taxID, taxName, taxRate, dateOfCreation, activate)
@@ -628,11 +641,56 @@ VALUES
     ('INV-0000000103', '2024-12-05', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000103'),
     ('INV-0000000104', '2024-12-10', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000104'),
     ('INV-0000000105', '2024-12-15', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000105'),
-    ('INV-0000000106', '2024-12-20', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000106'),
-    ('INV-0000000107', '2024-12-25', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000107'),
-    ('INV-0000000108', '2024-12-30', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000108'),
-	('INV-0000000109', '2024-10-26', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000109'),
-	('INV-0000000110', '2024-10-25', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000110');
+    ('INV-0000000106', '2024-12-20', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000106');
+GO
+
+--Phiếu 1: đã đặt phòng, có thể checkin nhưng chưa vào
+INSERT INTO ReservationForm (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit)
+VALUES ('RF-000107', GETDATE(), GETDATE(), DATEADD(DAY, 3, GETDATE()), 'EMP-000001', 'T1101', 'CUS-000001', 500000);
+GO
+
+--Phiếu 2: đã checkin, có 1 bảng ghi trong HistoryCheckIn,
+-- 1 bảng ghi RomReservationDetail và cập trạng thái phòng
+INSERT INTO ReservationForm (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit)
+VALUES ('RF-000108', DATEADD(DAY, -2, GETDATE()), DATEADD(DAY, -1, GETDATE()), DATEADD(DAY, 3, GETDATE()), 'EMP-000002', 'T1105', 'CUS-000002', 500000);
+
+INSERT INTO HistoryCheckin (historyCheckInID, checkInDate, reservationFormID, employeeID)
+VALUES ('HCI-000001', DATEADD(DAY, -1, GETDATE()), 'RF-000108', 'EMP-000002');
+
+INSERT INTO RoomReservationDetail (roomReservationDetailID, dateChanged, roomID, reservationFormID, employeeID)
+VALUES
+    ('RRD-000001', DATEADD(DAY, -1, GETDATE()), 'T1105', 'RF-000108', 'EMP-000002');
+
+UPDATE Room
+SET roomStatus = 'ON_USE'
+WHERE roomID = 'T1105';
+GO
+
+
+--Phiếu 3: đã checkin, có 1 bảng trong HistoryCheckIn,
+-- 1 bảng ghi RomReservationDetail và cập trạng thái phòng
+-- đã quá hạn Checkout 1 tiếng trước
+INSERT INTO ReservationForm (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit)
+VALUES ('RF-000109', DATEADD(DAY, -5, GETDATE()), DATEADD(DAY, -4, GETDATE()), DATEADD(HOUR, -1, GETDATE()), 'EMP-000003', 'V2102', 'CUS-000003', 500000);
+
+INSERT INTO HistoryCheckin (historyCheckInID, checkInDate, reservationFormID, employeeID)
+VALUES ('HCI-000002', DATEADD(DAY, -4, GETDATE()), 'RF-000109', 'EMP-000003');
+
+INSERT INTO RoomReservationDetail (roomReservationDetailID, dateChanged, roomID, reservationFormID, employeeID)
+VALUES
+    ('RRD-000002', DATEADD(DAY, -4, GETDATE()), 'V2102', 'RF-000109', 'EMP-000003');
+
+UPDATE Room
+SET roomStatus = 'OVERDUE'
+WHERE roomID = 'V2102';
+GO
+
+INSERT INTO RoomUsageService (roomUsageServiceID, reservationFormID, hotelServiceId, quantity, unitPrice)
+VALUES
+    ('RUS-000005', 'RF-000109', 'HS-000001', 2, 100000),  -- Dịch vụ Karaoke
+    ('RUS-000006', 'RF-000109', 'HS-000002', 1, 200000),  -- Hồ bơi
+    ('RUS-000007', 'RF-000109', 'HS-000003', 3, 150000),  -- Bữa sáng tự chọn
+    ('RUS-000008', 'RF-000109', 'HS-000004', 1, 50000);   -- Thức uống tại phòng
 GO
 
 -- ===================================================================================
@@ -661,31 +719,4 @@ BEGIN
 END;
 GO
 
--- data for statistics test
-INSERT INTO ReservationForm(reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit)
-VALUES
-	('RF-000111', '2024-10-24', '2021-10-28', '2024-10-28', 'EMP-000001', 'T1101', 'CUS-000005', 480000),
-	('RF-000112', '2024-10-24', '2021-10-28', '2024-10-28', 'EMP-000002', 'T1109', 'CUS-000002', 480000),
-	('RF-000113', '2024-10-24', '2021-10-28', '2024-10-28', 'EMP-000003', 'T1105', 'CUS-000010', 720000),
-	('RF-000114', '2024-10-24', '2021-10-28', '2024-10-28', 'EMP-000004', 'T1203', 'CUS-000015', 720000),
-	('RF-000115', '2024-10-24', '2021-10-28', '2024-10-28', 'EMP-000005', 'T1307', 'CUS-000007', 1440000);
 
-INSERT INTO Invoice(invoiceID, invoiceDate, roomCharge, servicesCharge, totalDue, netDue, taxID, reservationFormID)
-VALUES
-    ('INV-0000000111', '2024-10-28', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000111'),
-    ('INV-0000000112', '2024-10-28', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000112'),
-    ('INV-0000000113', '2024-10-28', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000113'),
-    ('INV-0000000114', '2024-10-28', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000114'),
-    ('INV-0000000115', '2024-10-28', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000115');
-
-INSERT INTO ReservationForm(reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit)
-VALUES
-	('RF-000116', '2024-11-2', '2021-11-2', '2024-11-2', 'EMP-000001', 'T1101', 'CUS-000005', 480000),
-	('RF-000117', '2024-11-2', '2021-11-2', '2024-11-2', 'EMP-000002', 'T1109', 'CUS-000002', 480000),
-	('RF-000118', '2024-11-3', '2021-11-3', '2024-11-3', 'EMP-000003', 'T1105', 'CUS-000010', 720000);
-
-INSERT INTO Invoice(invoiceID, invoiceDate, roomCharge, servicesCharge, totalDue, netDue, taxID, reservationFormID)
-VALUES
-    ('INV-0000000116', '2024-11-2', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000116'),
-    ('INV-0000000117', '2024-11-2', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000117'),
-    ('INV-0000000118', '2024-11-3', 10000, 5000, 15000, 13500, 'tax-000001', 'RF-000118');

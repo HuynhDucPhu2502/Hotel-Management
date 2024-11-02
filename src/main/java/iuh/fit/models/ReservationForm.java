@@ -79,21 +79,13 @@ public class ReservationForm {
 
 
     public void setCheckInDate(LocalDateTime checkInDate) {
-        validateDateNotNull(checkInDate, ErrorMessages.RESERVATION_FORM_INVALID_CHECKIN_DATE_ISNULL);
         this.checkInDate = checkInDate;
         validateDateRange();
     }
 
     public void setCheckOutDate(LocalDateTime checkOutDate) {
-        validateDateNotNull(checkOutDate, ErrorMessages.RESERVATION_FORM_INVALID_CHECKOUT_DATE_ISNULL);
         this.checkOutDate = checkOutDate;
         validateDateRange();
-    }
-
-    private void validateDateNotNull(LocalDateTime date, String errorMessage) {
-        if (date == null) {
-            throw new IllegalArgumentException(errorMessage);
-        }
     }
 
     private void validateDateRange() {
@@ -101,18 +93,15 @@ public class ReservationForm {
             throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_RESERVATION_DATE_ISNULL);
         }
 
-        if (checkInDate != null && checkInDate.isBefore(reservationDate)) {
-            throw new IllegalArgumentException("test 2");
+        if (checkInDate != null && reservationDate != null && checkInDate.isBefore(reservationDate)) {
+            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_CHECKIN_DATE);
         }
 
-        if (checkOutDate != null && checkOutDate.isBefore(reservationDate)) {
-            throw new IllegalArgumentException("test 3");
-        }
-
-        if (checkInDate != null && checkOutDate != null && checkInDate.isAfter(checkOutDate)) {
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_DATE_RANGE);
+        if (checkOutDate != null && checkInDate != null && checkOutDate.isBefore(checkInDate)) {
+            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_CHECKOUT_DATE);
         }
     }
+
 
 
 
@@ -124,7 +113,7 @@ public class ReservationForm {
 
     public void setRoomBookingDeposit(double roomBookingDeposit) {
         if (roomBookingDeposit <= 0)
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_ROOM_BOOKING_DEPOSIT_AMOUTN);
+            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_ROOM_BOOKING_DEPOSIT_AMOUNT);
         this.roomBookingDeposit = roomBookingDeposit;
     }
 

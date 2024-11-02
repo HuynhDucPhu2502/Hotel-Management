@@ -20,7 +20,7 @@ public class HotelServiceDAO {
                 Statement statement = connection.createStatement()
         ) {
             String sql = "SELECT a.hotelServiceId, a.serviceName, a.description, " +
-                    "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
+                    "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName, b.icon " +
                     "FROM HotelService a LEFT JOIN ServiceCategory b " +
                     "ON a.serviceCategoryID = b.serviceCategoryID";
             ResultSet rs = statement.executeQuery(sql);
@@ -35,11 +35,13 @@ public class HotelServiceDAO {
 
                 String serviceCategoryID = rs.getString(5);
                 String serviceCategoryName = rs.getString(6);
+                String icon = rs.getString(7);
 
                 if (serviceCategoryID != null) {
                     ServiceCategory serviceCategory = new ServiceCategory();
                     serviceCategory.setServiceCategoryID(serviceCategoryID);
                     serviceCategory.setServiceCategoryName(serviceCategoryName);
+                    serviceCategory.setIcon(icon);
                     hotelService.setServiceCategory(serviceCategory);
                 } else {
                     hotelService.setServiceCategory(null);

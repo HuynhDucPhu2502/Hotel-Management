@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="container" minHeight="150.0" minWidth="390.0" onMouseClicked="#navigateToReservationFormDetails" styleClass="box-reservation-form" stylesheets="@../../../../styles/item_styles/ReservationFormItem.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationFormItemController">
+   <children>
+      <BorderPane minWidth="150.0" prefWidth="150.0" style="-fx-background-color: rgb(135, 162, 255);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <center>
+            <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../../../../icons/ic_view_reservation_form.png" />
+               </image>
+            </ImageView>
+         </center>
+         <top>
+            <Text fill="#fffefe" strokeType="OUTSIDE" strokeWidth="0.0" text="Phiếu Đặt Phòng" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Text>
+         </top>
+      </BorderPane>
+      <BorderPane style="-fx-background-color: rgb(196, 215, 255);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <center>
+            <GridPane BorderPane.alignment="CENTER">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="97.20001220703125" minWidth="10.0" prefWidth="71.60003662109375" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="134.79998779296875" minWidth="10.0" prefWidth="132.39996337890625" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Text fill="#fffdfd" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên KH">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#fffdfd" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên NV" GridPane.rowIndex="2">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#fffdfd" strokeType="OUTSIDE" strokeWidth="0.0" text="Check In" GridPane.rowIndex="3">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#fffdfd" strokeType="OUTSIDE" strokeWidth="0.0" text="Check Out" GridPane.rowIndex="4">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Label fx:id="customerFullNameLabel" text="Huỳnh Đức Phú" GridPane.columnIndex="1" />
+                  <Label fx:id="employeeFullNameLabel" text="Vũ Bá Hải" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label fx:id="checkInDateLabel" text="24-10-2024 12:30" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label fx:id="checkoutDateLabel" text="5-11-2024 12:30" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Text fill="#fffdfd" strokeType="OUTSIDE" strokeWidth="0.0" text="Số CCCD" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
+                  <Label fx:id="customerIDCardNumberLabel" text="012112345678" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+         </center>
+      </BorderPane>
+   </children>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
+</AnchorPane>

@@ -1,7 +1,6 @@
 /* ========================================================== */
 /* Default Button */
 /* ========================================================== */
-
 .button  {
     -fx-background-color: RGB(135, 162, 255)
 }
@@ -17,7 +16,6 @@
 /* ========================================================== */
 /* Action Button */
 /* ========================================================== */
-
 .button-update {
     -fx-background-color: RGB(120, 180, 120);
     -fx-text-fill: white;
@@ -52,7 +50,6 @@
     -fx-min-width: 100px;
 }
 
-
 .button-view:hover {
     -fx-background-color: RGB(100, 149, 237);
 }
@@ -67,25 +64,42 @@
     -fx-background-color: white;
 }
 
-.button-delete-2 {
+/* ========================================================== */
+/* Reservation Form Details Button */
+/* ========================================================== */
+.button-delete-reservation-form {
     -fx-background-color: RGB(200, 120, 120);
     -fx-text-fill: white;
     -fx-min-width: 200px;
 }
 
-.button-delete-2:hover {
+.button-delete-reservation-form:hover {
     -fx-background-color: RGB(255, 0, 0);
 }
 
-.button-delete-2:pressed {
+.button-delete-reservation-form:pressed {
+    -fx-background-color: RGB(150, 0, 0);
+}
+
+.button-check-in {
+    -fx-background-color: rgb(253, 139, 81);
+    -fx-text-fill: white;
+    -fx-min-width: 200px;
+}
+
+.button-check-in:hover {
+    -fx-background-color: rgb(255, 156, 115);
+}
+
+.button-check-in:pressed {
     -fx-background-color: RGB(150, 0, 0);
 }
 
 /* ========================================================== */
-/* Filter Button */
+/* Filter Room Booking Button */
 /* ========================================================== */
 .button-All {
-    -fx-background-color: rgb(211, 211, 211); /* lightgray */
+    -fx-background-color: rgb(211, 211, 211);
     -fx-border-color: transparent;
     -fx-border-width: 3px;
     -fx-border-radius: 5px;
@@ -94,18 +108,18 @@
 }
 
 .button-All-selected {
-    -fx-border-color: rgb(0, 0, 0); /* black */
+    -fx-border-color: rgb(0, 0, 0);
     -fx-border-width: 3px;
-    -fx-background-color: rgb(169, 169, 169); /* darkgray */
+    -fx-background-color: rgb(169, 169, 169);
     -fx-cursor: hand;
 }
 
 .button-All:hover {
-    -fx-background-color: rgb(128, 128, 128); /* gray */
+    -fx-background-color: rgb(128, 128, 128);
 }
 
 .button-All:pressed {
-    -fx-background-color: rgb(105, 105, 105); /* dimgray */
+    -fx-background-color: rgb(105, 105, 105);
 }
 
 .button-Available {
@@ -132,7 +146,6 @@
     -fx-background-color: rgb(130, 180, 110);
 }
 
-/* OverDue Button */
 .button-OverDue {
     -fx-background-color: rgb(249, 84, 84);
     -fx-border-color: transparent;
@@ -157,7 +170,6 @@
     -fx-background-color: rgb(215, 65, 65);
 }
 
-/* OnUse Button */
 .button-OnUse {
     -fx-background-color: rgb(76, 201, 254);
     -fx-border-color: transparent;
@@ -182,9 +194,8 @@
     -fx-background-color: rgb(55, 160, 220);
 }
 
-
 /* ========================================================== */
-/* Reservation Button */
+/* Navigation Btn */
 /* ========================================================== */
 .button-reservation {
     -fx-background-color: RGB(135, 162, 255);
@@ -215,9 +226,10 @@
 }
 
 .button-reservation:disabled {
-    -fx-background-color: RGB(200, 200, 200); /* Màu xám nhạt */
+    -fx-background-color: RGB(200, 200, 200);
     -fx-border-color: RGB(180, 180, 180);
-    -fx-text-fill: RGB(120, 120, 120); /* Màu chữ xám nhạt */
-    -fx-opacity: 0.6; /* Giảm độ mờ */
+    -fx-text-fill: RGB(120, 120, 120);
+    -fx-opacity: 0.6;
 }
+
 

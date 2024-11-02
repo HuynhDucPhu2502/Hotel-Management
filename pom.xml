@@ -29,6 +29,7 @@
             <artifactId>javafx-controls</artifactId>
             <version>22</version>
         </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
@@ -42,6 +43,7 @@
             <version>5.11.0</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -70,6 +72,7 @@
             <version>12.8.1.jre11</version>
         </dependency>
 
+
         <!-- xuat exel-->
         <!-- xuat excel -->
         <dependency>
@@ -97,6 +100,16 @@
             <artifactId>log4j-api</artifactId>
             <version>2.18.0</version> <!-- Hoặc phiên bản mới nhất -->
         </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13.4</version>
+        </dependency>
+
+
 
     </dependencies>
 

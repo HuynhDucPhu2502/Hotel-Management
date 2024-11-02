@@ -1,0 +1,10 @@
+.box-reservation-form {
+    -fx-border-color: transparent;
+    -fx-border-width: 3px;
+    -fx-border-radius: 5px;
+}
+
+.box-reservation-form:hover {
+    -fx-border-color: blue;
+    -fx-border-width: 3px;
+}

@@ -13,7 +13,7 @@ public class RoomReservationDetailDAO {
     public static List<RoomReservationDetail> getAll() {
         List<RoomReservationDetail> data = new ArrayList<>();
         String sql = """
-                SELECT rrd.roomReservationDetailID, rrd.dateChanged, rrd.roomID, 
+                SELECT rrd.roomReservationDetailID, rrd.dateChanged, rrd.roomID,\s
                        rrd.reservationFormID, rrd.employeeID,
                        r.roomStatus, r.dateOfCreation, r.roomCategoryID,
                        rf.reservationDate, rf.checkInDate, rf.checkOutDate,
@@ -22,7 +22,7 @@ public class RoomReservationDetailDAO {
                 INNER JOIN Room r ON rrd.roomID = r.roomID
                 INNER JOIN ReservationForm rf ON rrd.reservationFormID = rf.reservationFormID
                 INNER JOIN Employee e ON rrd.employeeID = e.employeeID
-                """;
+               \s""";
 
         try (
                 Connection connection = DBHelper.getConnection();
@@ -176,6 +176,39 @@ public class RoomReservationDetailDAO {
         }
 
         return nextID;
+    }
+
+    public static List<RoomReservationDetail> getByReservationFormID(String reservationFormID) {
+        List<RoomReservationDetail> data = new ArrayList<>();
+        String sql = """
+            SELECT rrd.roomReservationDetailID, rrd.dateChanged, rrd.roomID, 
+                   rrd.reservationFormID, rrd.employeeID,
+                   r.roomStatus, r.dateOfCreation, r.roomCategoryID,
+                   rf.reservationDate, rf.checkInDate, rf.checkOutDate,
+                   e.fullName, e.phoneNumber, e.email, e.address, e.gender, e.idCardNumber, e.dob, e.position
+            FROM RoomReservationDetail rrd
+            INNER JOIN Room r ON rrd.roomID = r.roomID
+            INNER JOIN ReservationForm rf ON rrd.reservationFormID = rf.reservationFormID
+            INNER JOIN Employee e ON rrd.employeeID = e.employeeID
+            WHERE rrd.reservationFormID = ?
+            """;
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ) {
+            preparedStatement.setString(1, reservationFormID);
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                RoomReservationDetail detail = extractRoomReservationDetailFromResultSet(rs);
+                data.add(detail);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return data;
     }
 
     private static RoomReservationDetail extractRoomReservationDetailFromResultSet(ResultSet rs) throws SQLException {

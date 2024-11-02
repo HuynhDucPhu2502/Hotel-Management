@@ -1,8 +1,9 @@
 package iuh.fit.controller.features.room;
 
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.room.create_reservation_form_controllers.RoomAvailableItemController;
-import iuh.fit.controller.features.room.create_reservation_form_controllers.RoomOnUseItemController;
+import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomAvailableItemController;
+import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOnUseItemController;
+import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOverDueController;
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomWithReservationDAO;
 import iuh.fit.models.Employee;
@@ -20,6 +21,8 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static iuh.fit.utils.GlobalConstants.*;
 
 public class RoomBookingController {
     @FXML
@@ -55,6 +58,7 @@ public class RoomBookingController {
         this.mainController = mainController;
         this.employee = employeee;
         loadData();
+        loadDataForBtn();
         setupEventHandlers();
     }
 
@@ -82,6 +86,25 @@ public class RoomBookingController {
         roomFloorNumberCBox.getSelectionModel().selectFirst();
 
         displayFilteredRooms(roomWithReservations);
+    }
+
+    private void loadDataForBtn(){
+        allBtn.setText(ROOM_BOOKING_ALL_BTN + "("+roomWithReservations.size()+")");
+
+        List<RoomWithReservation> availableRoom = roomWithReservations.stream()
+                .filter(r -> r.getRoom().getRoomStatus() == RoomStatus.AVAILABLE)
+                .toList();
+        availableBtn.setText(ROOM_BOOKING_AVAIL_BTN + "("+availableRoom.size()+")");
+
+        List<RoomWithReservation> onUseRoom = roomWithReservations.stream()
+                .filter(r -> r.getRoom().getRoomStatus() == RoomStatus.ON_USE)
+                .toList();
+        onUseBtn.setText(ROOM_BOOKING_ON_USE_BTN + "("+onUseRoom.size()+")");
+
+        List<RoomWithReservation> overDueRoom = roomWithReservations.stream()
+                .filter(r -> r.getRoom().getRoomStatus() == RoomStatus.ON_USE)
+                .toList();
+        overDueBtn.setText(ROOM_BOOKING_OVER_DUE_BTN + "("+overDueRoom.size()+")");
     }
 
     private void displayFilteredRooms(List<RoomWithReservation> roomsWithReservations) {
@@ -114,7 +137,7 @@ public class RoomBookingController {
         switch (room.getRoomStatus()) {
             case AVAILABLE -> {
                 loader = new FXMLLoader(getClass().getResource(
-                        "/iuh/fit/view/features/room/create_reservation_form_panels/RoomAvailableItem.fxml"));
+                        "/iuh/fit/view/features/room/creating_reservation_form_panels/RoomAvailableItem.fxml"));
                 roomItem = loader.load();
 
                 RoomAvailableItemController controller = loader.getController();
@@ -122,7 +145,7 @@ public class RoomBookingController {
             }
             case ON_USE -> {
                 loader = new FXMLLoader(getClass().getResource(
-                        "/iuh/fit/view/features/room/create_reservation_form_panels/RoomOnUseItem.fxml"));
+                        "/iuh/fit/view/features/room/creating_reservation_form_panels/RoomOnUseItem.fxml"));
                 roomItem = loader.load();
 
                 RoomOnUseItemController controller = loader.getController();
@@ -130,8 +153,11 @@ public class RoomBookingController {
             }
             case OVERDUE -> {
                 loader = new FXMLLoader(getClass().getResource(
-                        "/iuh/fit/view/features/room/create_reservation_form_panels/RoomOverDueItem.fxml"));
+                        "/iuh/fit/view/features/room/creating_reservation_form_panels/RoomOverDueItem.fxml"));
                 roomItem = loader.load();
+
+                RoomOverDueController controller = loader.getController();
+                controller.setupContext(mainController, employee, roomWithReservation);
             }
             default -> throw new IllegalStateException("Unexpected value: " + room.getRoomStatus());
         }
@@ -167,6 +193,7 @@ public class RoomBookingController {
                 .toList();
 
         displayFilteredRooms(filteredRooms);
+        loadDataForBtn();
     }
 
     private void setupEventHandlers() {

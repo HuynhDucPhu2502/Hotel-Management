@@ -7,8 +7,12 @@ module iuh.fit {
     requires com.dlsc.unitfx;
     requires org.controlsfx.controls;
     requires com.calendarfx.view;
+
     requires org.apache.poi.poi;
     requires org.apache.poi.ooxml;
+
+    requires itextpdf;
+
 
     opens iuh.fit to javafx.fxml;
 
@@ -16,9 +20,11 @@ module iuh.fit {
     opens iuh.fit.controller.features to javafx.fxml;
     opens iuh.fit.controller.features.service to javafx.fxml;
     opens iuh.fit.controller.features.room to javafx.fxml;
-    opens iuh.fit.controller.features.room.create_reservation_form_controllers to javafx.fxml;
-    opens iuh.fit.controller.features.room.reservation_list_controllers to javafx.fxml;
+    opens iuh.fit.controller.features.room.creating_reservation_form_controllers to javafx.fxml;
+    opens iuh.fit.controller.features.room.checking_in_reservation_list_controllers to javafx.fxml;
+    opens iuh.fit.controller.features.room.checking_out_controllers to javafx.fxml;
     opens iuh.fit.controller.features.room.room_changing_controllers to javafx.fxml;
+    opens iuh.fit.controller.features.room.service_ordering_controllers to javafx.fxml;
     opens iuh.fit.controller.features.employee to javafx.fxml;
     opens iuh.fit.controller.features.customer to javafx.fxml;
     opens iuh.fit.controller.features.statistics to javafx.fxml;
@@ -32,8 +38,9 @@ module iuh.fit {
     exports iuh.fit.controller.features;
     exports iuh.fit.controller.features.service;
     exports iuh.fit.controller.features.room;
-    exports iuh.fit.controller.features.room.create_reservation_form_controllers;
-    exports iuh.fit.controller.features.room.reservation_list_controllers;
+    exports iuh.fit.controller.features.room.creating_reservation_form_controllers;
+    exports iuh.fit.controller.features.room.checking_in_reservation_list_controllers;
+    exports iuh.fit.controller.features.room.checking_out_controllers;
     exports iuh.fit.controller.features.room.room_changing_controllers;
     exports iuh.fit.controller.features.customer;
     exports iuh.fit.controller.features.statistics;
