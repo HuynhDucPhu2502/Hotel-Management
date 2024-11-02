@@ -255,8 +255,10 @@ VALUES
 	('Customer', 'CUS-000031'),
 	('ReservationForm', 'RF-000110'),
 	('HistoryCheckIn', 'HCI-000003'),
+	('HistoryCheckOut', 'HCO-000001'),
 	('RoomReservationDetail', 'RRD-000003'),
 	('RoomUsageService', 'RUS-000001');
+
 GO
 
 -- Thêm dữ liệu vào bảng Employee
@@ -687,10 +689,10 @@ GO
 
 INSERT INTO RoomUsageService (roomUsageServiceID, reservationFormID, hotelServiceId, quantity, unitPrice)
 VALUES
-    ('RUS-000005', 'RF-000109', 'HS-000001', 2, 100000),  -- Dịch vụ Karaoke
-    ('RUS-000006', 'RF-000109', 'HS-000002', 1, 200000),  -- Hồ bơi
-    ('RUS-000007', 'RF-000109', 'HS-000003', 3, 150000),  -- Bữa sáng tự chọn
-    ('RUS-000008', 'RF-000109', 'HS-000004', 1, 50000);   -- Thức uống tại phòng
+    ('RUS-000005', 'RF-000109', 'HS-000001', 2, 100000),
+    ('RUS-000006', 'RF-000109', 'HS-000002', 1, 200000),
+    ('RUS-000007', 'RF-000109', 'HS-000003', 3, 150000),
+    ('RUS-000008', 'RF-000109', 'HS-000004', 1, 50000);
 GO
 
 -- ===================================================================================

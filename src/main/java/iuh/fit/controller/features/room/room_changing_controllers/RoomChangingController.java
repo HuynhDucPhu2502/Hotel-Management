@@ -6,6 +6,7 @@ import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
+import iuh.fit.dao.HistoryCheckinDAO;
 import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.RoomReservationDetailDAO;
@@ -230,9 +231,11 @@ public class RoomChangingController {
         Room reservationFormRoom = roomWithReservation.getRoom();
         Customer reservationFormCustomer = roomWithReservation.getReservationForm().getCustomer();
 
+        LocalDateTime actualCheckInDate = HistoryCheckinDAO.getActualCheckInDate(reservationForm.getReservationID());
+
         roomNumberLabel.setText(reservationFormRoom.getRoomNumber());
         roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
-        checkInDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckInDate()));
+        checkInDateLabel.setText(dateTimeFormatter.format(actualCheckInDate != null ? actualCheckInDate : reservationForm.getCheckInDate()));
         checkOutDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
         stayLengthLabel.setText(Calculator.calculateStayLengthToString(
                 reservationForm.getCheckInDate(),
