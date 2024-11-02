@@ -4,7 +4,7 @@ import com.dlsc.gemsfx.daterange.DateRange;
 import com.dlsc.gemsfx.daterange.DateRangePicker;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.dao.InvoiceDisplayOnTableDAO;
-import iuh.fit.models.*;
+import iuh.fit.models.Employee;
 import iuh.fit.models.enums.ExportExcelCategory;
 import iuh.fit.models.wrapper.InvoiceDisplayOnTable;
 import iuh.fit.utils.ExportFileHelper;
@@ -26,9 +26,12 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class StatisticalController implements Initializable {
+public class StatisticsRevenueTabController implements Initializable {
 
     // Variables for revenue statistics view components
     @FXML private TableView<InvoiceDisplayOnTable> revenueTableView;
