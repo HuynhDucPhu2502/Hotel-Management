@@ -6,6 +6,7 @@ import iuh.fit.utils.DBHelper;
 import iuh.fit.utils.GlobalConstants;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -303,5 +304,27 @@ public class HistoryCheckinDAO {
             exception.printStackTrace();
             System.exit(1);
         }
+    }
+
+    public static LocalDateTime getActualCheckInDate(String reservationFormID) {
+        String sql =
+                """
+                SELECT checkInDate FROM HistoryCheckin
+                WHERE reservationFormID = ? \s
+               \s""";
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            preparedStatement.setString(1, reservationFormID);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    return ConvertHelper.localDateTimeConverter(rs.getTimestamp(1));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

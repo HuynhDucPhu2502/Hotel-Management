@@ -6,6 +6,7 @@ import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
+import iuh.fit.dao.HistoryCheckinDAO;
 import iuh.fit.dao.HotelServiceDAO;
 import iuh.fit.dao.RoomUsageServiceDAO;
 import iuh.fit.models.*;
@@ -22,6 +23,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -214,9 +216,11 @@ public class ServiceOrderingController {
         Room reservationFormRoom = roomWithReservation.getRoom();
         Customer reservationFormCustomer = roomWithReservation.getReservationForm().getCustomer();
 
+        LocalDateTime actualCheckInDate = HistoryCheckinDAO.getActualCheckInDate(reservationForm.getReservationID());
+
         roomNumberLabel.setText(reservationFormRoom.getRoomNumber());
         roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
-        checkInDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckInDate()));
+        checkInDateLabel.setText(dateTimeFormatter.format(actualCheckInDate != null ? actualCheckInDate : reservationForm.getCheckInDate()));
         checkOutDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
         stayLengthLabel.setText(Calculator.calculateStayLengthToString(
                 reservationForm.getCheckInDate(),
