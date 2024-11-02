@@ -7,6 +7,8 @@ module iuh.fit {
     requires com.dlsc.unitfx;
     requires org.controlsfx.controls;
     requires com.calendarfx.view;
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
 
     opens iuh.fit to javafx.fxml;
 
