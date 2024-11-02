@@ -321,7 +321,6 @@ public class ServiceOrderingController {
             roomUsageService.setUnitPrice(service.getServicePrice());
             roomUsageService.setHotelService(service);
             roomUsageService.setReservationForm(roomWithReservation.getReservationForm());
-
             RoomUsageServiceDAO.createData(roomUsageService);
         } catch (Exception e) {
             dialogPane.showInformation("LỖI", e.getMessage());

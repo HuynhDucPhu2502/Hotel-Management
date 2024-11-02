@@ -253,12 +253,12 @@ VALUES
 	('RoomCategory', 'RC-000005'),
 	('ShiftAssignment', 'SA-000004'),
 	('Customer', 'CUS-000031'),
-	('ReservationForm', 'RF-000110'),
-	('HistoryCheckIn', 'HCI-000003'),
+	('ReservationForm', 'RF-000111'),
+	('HistoryCheckIn', 'HCI-000004'),
 	('HistoryCheckOut', 'HCO-000001'),
-	('RoomReservationDetail', 'RRD-000003'),
-	('RoomUsageService', 'RUS-000001');
-
+	('RoomReservationDetail', 'RRD-000004'),
+	('RoomUsageService', 'RUS-000005'),
+	('Invoice', 'INV-000001');
 GO
 
 -- Thêm dữ liệu vào bảng Employee
@@ -689,10 +689,27 @@ GO
 
 INSERT INTO RoomUsageService (roomUsageServiceID, reservationFormID, hotelServiceId, quantity, unitPrice)
 VALUES
-    ('RUS-000005', 'RF-000109', 'HS-000001', 2, 100000),
-    ('RUS-000006', 'RF-000109', 'HS-000002', 1, 200000),
-    ('RUS-000007', 'RF-000109', 'HS-000003', 3, 150000),
-    ('RUS-000008', 'RF-000109', 'HS-000004', 1, 50000);
+    ('RUS-000001', 'RF-000109', 'HS-000001', 2, 100000),
+    ('RUS-000002', 'RF-000109', 'HS-000002', 1, 200000),
+    ('RUS-000003', 'RF-000109', 'HS-000003', 3, 150000),
+    ('RUS-000004', 'RF-000109', 'HS-000004', 1, 50000);
+GO
+
+-- Phiếu 4: đã checkin và gần tới giờ checkout (trong 5 phút nữa)
+INSERT INTO ReservationForm (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit)
+VALUES ('RF-000110', DATEADD(DAY, -1, GETDATE()), DATEADD(HOUR, -23, GETDATE()), DATEADD(MINUTE, 5, GETDATE()), 'EMP-000004', 'V2206', 'CUS-000004', 500000);
+
+INSERT INTO HistoryCheckin (historyCheckInID, checkInDate, reservationFormID, employeeID)
+VALUES ('HCI-000003', DATEADD(HOUR, -23, GETDATE()), 'RF-000110', 'EMP-000004');
+
+INSERT INTO RoomReservationDetail (roomReservationDetailID, dateChanged, roomID, reservationFormID, employeeID)
+VALUES
+    ('RRD-000003', DATEADD(HOUR, -23, GETDATE()), 'V2206', 'RF-000110', 'EMP-000004');
+
+-- Cập nhật trạng thái phòng
+UPDATE Room
+SET roomStatus = 'ON_USE'
+WHERE roomID = 'V2206';
 GO
 
 -- ===================================================================================

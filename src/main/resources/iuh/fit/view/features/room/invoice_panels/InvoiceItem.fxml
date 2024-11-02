@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="container" minHeight="150.0" minWidth="380.0" onMouseClicked="#navigateToInvoiceDetailsPanel" styleClass="box-Available" stylesheets="@../../../../styles/item_styles/RoomItem.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.invoice_controllers.InvoiceItemController">
+   <children>
+      <BorderPane minWidth="150.0" prefWidth="150.0" style="-fx-background-color: rgb(123, 201, 255);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <Text fx:id="invoiceIDText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="INV-000001" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Text>
+         </center>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <top>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Hóa Đơn" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+         </top>
+      </BorderPane>
+      <BorderPane style="-fx-background-color: rgb(133, 118, 255);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <Text fx:id="customerNameLabel" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Huỳnh Đức Phú" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Text>
+         </center>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <bottom>
+            <Label fx:id="invoiceDateLabel" text="Ngày lập: 2/11/2024" textAlignment="CENTER" textFill="WHITE" textOverrun="LEADING_WORD_ELLIPSIS" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+         </bottom>
+         <top>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Khách Hàng" BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+         </top>
+      </BorderPane>
+   </children>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
+</AnchorPane>
