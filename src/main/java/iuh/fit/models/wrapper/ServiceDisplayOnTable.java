@@ -7,18 +7,18 @@ public class ServiceDisplayOnTable {
     private String serviceId;
     private String serviceName;
     private String serviceCategory;
-    private String employee;
-    private LocalDateTime exportDate;
+    private String employeeName;
+    private LocalDateTime dateAdded;
     private int quantity;
     private double unitPrice;
     private double totalMoney;
 
-    public ServiceDisplayOnTable(String serviceId, String serviceName, String serviceCategory, String employee, LocalDateTime exportDate, int quantity, double price, double totalMoney) {
+    public ServiceDisplayOnTable(String serviceId, String serviceName, String serviceCategory, String employee, LocalDateTime dateAdded, int quantity, double price, double totalMoney) {
         this.serviceId = serviceId;
         this.serviceName = serviceName;
         this.serviceCategory = serviceCategory;
-        this.employee = employee;
-        this.exportDate = exportDate;
+        this.employeeName = employee;
+        this.dateAdded = dateAdded;
         this.quantity = quantity;
         this.unitPrice = price;
         this.totalMoney = totalMoney;
@@ -55,20 +55,20 @@ public class ServiceDisplayOnTable {
         this.serviceCategory = serviceCategory;
     }
 
-    public String getEmployee() {
-        return employee;
+    public String getEmployeeName() {
+        return employeeName;
     }
 
-    public void setEmployee(String employee) {
-        this.employee = employee;
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
     }
 
-    public LocalDateTime getExportDate() {
-        return exportDate;
+    public LocalDateTime getDateAdded() {
+        return dateAdded;
     }
 
-    public void setExportDate(LocalDateTime exportDate) {
-        this.exportDate = exportDate;
+    public void setDateAdded(LocalDateTime dateAdded) {
+        this.dateAdded = dateAdded;
     }
 
     public int getQuantity() {
@@ -114,8 +114,8 @@ public class ServiceDisplayOnTable {
                 "serviceId='" + serviceId + '\'' +
                 ", serviceName='" + serviceName + '\'' +
                 ", serviceCategory='" + serviceCategory + '\'' +
-                ", employee='" + employee + '\'' +
-                ", exportDate=" + exportDate +
+                ", employee='" + employeeName + '\'' +
+                ", exportDate=" + dateAdded +
                 ", quantity=" + quantity +
                 ", price=" + unitPrice +
                 ", totalMoney=" + totalMoney +
