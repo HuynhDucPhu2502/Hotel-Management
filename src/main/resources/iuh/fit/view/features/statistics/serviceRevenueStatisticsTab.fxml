@@ -19,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.statistics.StatisticsRevenueTabController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="565.0" prefWidth="1251.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.statistics.ServiceRevenueStatisticsTabController">
 <children>
     <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <children>
@@ -30,14 +30,15 @@
                             <Font size="20.0" />
                         </font>
                     </Text>
-                    <DateRangePicker fx:id="dateRangePicker" prefHeight="32.0" prefWidth="254.0" />
-                    <ComboBox fx:id="revenueEmployeeCombobox" prefHeight="30.0" prefWidth="244.0" promptText="Chọn nhân viên">
+                    <DateRangePicker prefHeight="32.0" prefWidth="254.0" />
+                    <ComboBox prefWidth="150.0" promptText="Loại dịch vụ">
                         <HBox.margin>
                             <Insets left="80.0" />
                         </HBox.margin>
                     </ComboBox>
-                    <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#refreshData" prefHeight="30.0" prefWidth="75.0" text="Tải lại" />
-                    <Button fx:id="exportExelFileButton" mnemonicParsing="false" onAction="#exportExcelFile" text="Xuất Excel" />
+                    <ComboBox prefWidth="150.0" promptText="Nhân viên" />
+                    <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Tải lại" />
+                    <Button mnemonicParsing="false" text="Xuất Excel" />
                 </children>
                 <VBox.margin>
                     <Insets top="10.0" />
@@ -50,17 +51,17 @@
                             <Font size="20.0" />
                         </font>
                     </Text>
-                    <CheckBox fx:id="checkBoxStatisticsByYear" mnemonicParsing="false" onAction="#switchBetweenCBBYearAndDateRangePicker">
+                    <CheckBox mnemonicParsing="false">
                         <HBox.margin>
                             <Insets left="20.0" top="4.0" />
                         </HBox.margin>
                     </CheckBox>
-                    <ComboBox fx:id="cbbYear" disable="true" prefHeight="30.0" prefWidth="98.0" promptText="Năm">
+                    <ComboBox disable="true" prefHeight="30.0" prefWidth="98.0" promptText="2024">
                         <HBox.margin>
                             <Insets left="35.0" />
                         </HBox.margin>
                     </ComboBox>
-                    <Button fx:id="revenueStatisticsButton" mnemonicParsing="false" onAction="#revenueStatisticsAction" prefHeight="30.0" prefWidth="103.0" text="Thống kê">
+                    <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="103.0" text="Thống kê">
                         <HBox.margin>
                             <Insets left="50.0" />
                         </HBox.margin>
@@ -77,15 +78,15 @@
                             <Font size="14.0" />
                         </font>
                     </Text>
-                    <RadioButton fx:id="tableViewRevenueRadioButton" mnemonicParsing="false" onAction="#switchBetweenTableViewAndChartView" selected="true" text="Bảng dữ liệu">
+                    <RadioButton mnemonicParsing="false" selected="true" text="Bảng dữ liệu">
                         <HBox.margin>
                             <Insets left="24.0" />
                         </HBox.margin>
                         <toggleGroup>
-                            <ToggleGroup fx:id="dataView1" />
+                            <ToggleGroup fx:id="dataView2" />
                         </toggleGroup>
                     </RadioButton>
-                    <RadioButton fx:id="chartViewRevenueRadioButton" mnemonicParsing="false" onAction="#switchBetweenTableViewAndChartView" text="Biểu đồ" toggleGroup="$dataView1" />
+                    <RadioButton mnemonicParsing="false" text="Biểu đồ" toggleGroup="$dataView2" />
                 </children>
                 <VBox.margin>
                     <Insets top="10.0" />
@@ -96,22 +97,20 @@
                     <Insets />
                 </VBox.margin>
                 <children>
-                    <AnchorPane fx:id="tableView" prefHeight="200.0" prefWidth="200.0">
+                    <AnchorPane fx:id="tableView2" prefHeight="200.0" prefWidth="200.0">
                         <children>
                             <VBox layoutY="8.0" prefHeight="422.0" prefWidth="1240.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <children>
-                                    <TableView fx:id="revenueTableView" prefHeight="505.0" prefWidth="1240.0">
+                                    <TableView fx:id="tableData2" prefHeight="505.0" prefWidth="563.0">
                                         <columns>
-                                            <TableColumn fx:id="invoiceIDColumn" prefWidth="112.80001103878021" text="Mã hóa đơn" />
-                                            <TableColumn fx:id="customerNameColumn" prefWidth="127.19998931884766" text="Khách hàng" />
-                                            <TableColumn fx:id="roomIDColumn" minWidth="0.0" prefWidth="120.00007629394531" text="Mã phòng" />
-                                            <TableColumn fx:id="employeeNameColumn" prefWidth="137.5999755859375" text="Nhân viên" />
-                                            <TableColumn fx:id="invoiceDateColumn" prefWidth="110.39993286132812" text="Ngày lập" />
-                                            <TableColumn fx:id="depositColumn" prefWidth="114.39996337890625" text="Tiền cọc" />
-                                            <TableColumn fx:id="serviceChargeColumn" prefWidth="124.0" text="Dịch vụ" />
-                                            <TableColumn fx:id="roomChargeColumn" prefWidth="122.39996337890625" text="Tiền phòng" />
-                                            <TableColumn fx:id="taxColumn" prefWidth="113.599853515625" text="Thuế" />
-                                            <TableColumn fx:id="netDueColumn" prefWidth="166.4000244140625" text="Tổng tiền" />
+                                            <TableColumn prefWidth="138.40002137422562" text="Mã dịch vụ" />
+                                    <TableColumn prefWidth="172.0000762939453" text="Tên dịch vụ" />
+                                    <TableColumn prefWidth="159.19998168945312" text="Loại dịch vụ" />
+                                            <TableColumn prefWidth="164.0" text="Nhân viên" />
+                                            <TableColumn minWidth="0.0" prefWidth="164.79998779296875" text="Ngày xuất" />
+                                            <TableColumn prefWidth="152.0" text="Số lượng" />
+                                            <TableColumn minWidth="0.0" prefWidth="145.60003662109375" text="Đơn giá" />
+                                            <TableColumn maxWidth="235.0" prefWidth="148.7999267578125" text="Tổng tiền" />
                                         </columns>
                                         <VBox.margin>
                                             <Insets top="10.0" />
@@ -121,9 +120,9 @@
                             </VBox>
                         </children>
                     </AnchorPane>
-                    <AnchorPane fx:id="chartView" prefHeight="200.0" prefWidth="200.0" visible="false">
+                    <AnchorPane fx:id="chartView2" prefHeight="200.0" prefWidth="200.0" visible="false">
                         <children>
-                            <BarChart fx:id="revenueBarchart" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <BarChart AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <xAxis>
                                     <CategoryAxis side="BOTTOM" />
                                 </xAxis>
@@ -132,34 +131,27 @@
                                 </yAxis>
                             </BarChart>
                         </children>
-                        <StackPane.margin>
-                            <Insets top="10.0" />
-                        </StackPane.margin>
                     </AnchorPane>
                 </children>
             </StackPane>
             <HBox prefHeight="100.0" prefWidth="200.0">
-                <children>
-                    <AnchorPane prefHeight="28.0" prefWidth="1250.0">
-                        <children>
-                            <Text layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng số hóa đơn :" AnchorPane.bottomAnchor="5.800000000000001" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1217.888671875" AnchorPane.topAnchor="6.0" />
-                            <Text fx:id="numOfInvoiceText" layoutX="101.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
-                            <Text layoutX="987.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng doanh thu : " />
-                            <Text fx:id="totalMoneyText" layoutX="1081.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
-                        </children>
-                        <HBox.margin>
-                            <Insets />
-                        </HBox.margin>
-                    </AnchorPane>
-                </children>
-                <VBox.margin>
-                    <Insets />
-                </VBox.margin>
+               <children>
+                  <AnchorPane prefHeight="28.0" prefWidth="1250.0">
+                     <children>
+                        <Text layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng số hóa đơn :" AnchorPane.bottomAnchor="5.800000000000001" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1217.888671875" AnchorPane.topAnchor="6.0" />
+                        <Text fx:id="numOfInvoiceText" layoutX="101.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                        <Text layoutX="987.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng doanh thu : " />
+                        <Text fx:id="totalMoneyText" layoutX="1081.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </AnchorPane>
+               </children>
             </HBox>
         </children>
     </VBox>
 </children>
 <padding>
     <Insets top="10.0" />
-</padding>
-</AnchorPane>
+</padding></AnchorPane>
