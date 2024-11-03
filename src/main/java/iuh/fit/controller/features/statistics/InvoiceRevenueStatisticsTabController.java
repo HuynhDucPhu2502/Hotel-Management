@@ -380,6 +380,8 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
         employeeNameCombobox.setValue(NONE_VALUE_EMPLOYEE_NAME);
         setNumOfInvoice(String.valueOf(getNumOfInvoice(FXCollections.observableArrayList(invoiceDisplayOnTableData))));
         setTotalMoney(String.valueOf(caculateTotalMoney(FXCollections.observableArrayList(invoiceDisplayOnTableData))));
+        showTableViewRadioButton.setSelected(true);
+        switchBetweenTableViewAndChartView();
     }
 
     @FXML
