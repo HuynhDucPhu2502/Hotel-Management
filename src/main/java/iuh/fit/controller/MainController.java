@@ -1,7 +1,11 @@
 package iuh.fit.controller;
 
 import iuh.fit.controller.features.MenuController;
+
+import iuh.fit.controller.features.employee.ShiftManagerController;
+
 import iuh.fit.controller.features.room.InvoiceManagerController;
+
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Account;
@@ -94,6 +98,13 @@ public class MainController {
                 Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
 
                 invoiceManagerController.setupContext(this, employee);
+            }
+            if (fxmlPath.contains("ShiftManagerPanel")) {
+                ShiftManagerController shiftManagerController = loader.getController();
+
+                Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
+
+                shiftManagerController.setupContext(employee);
             }
 
             mainPanel.getChildren().clear();

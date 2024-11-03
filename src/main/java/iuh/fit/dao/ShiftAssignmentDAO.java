@@ -163,6 +163,23 @@ public class ShiftAssignmentDAO {
         }
     }
 
+    public static void deleteShiftWithShiftID(String shiftID) {
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "DELETE FROM ShiftAssignment "
+                                + "WHERE shiftID = ?"
+                )
+        ){
+            preparedStatement.setString(1, shiftID);
+            preparedStatement.executeUpdate();
+
+            ShiftDAO.deleteData(shiftID);
+        } catch (Exception exception) {
+            System.exit(1);
+        }
+    }
+
 
     public static void updateData(ShiftAssignment shiftAssignment) {
         try (
@@ -178,6 +195,52 @@ public class ShiftAssignmentDAO {
             preparedStatement.setString(2, shiftAssignment.getShift().getShiftID());
             preparedStatement.setString(3, shiftAssignment.getEmployee().getEmployeeID());
             preparedStatement.setString(4, shiftAssignment.getShiftAssignmentId());
+
+            preparedStatement.executeUpdate();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+    }
+
+    public static void updateShiftIDForAllEmployee(String oldID, Shift shift){
+
+    }
+
+    public static void updateShiftAssignmentWithoutID(Shift oldShift, Shift newShift) {
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "UPDATE ShiftAssignment " +
+                                "SET shiftId = ? " +
+                                "WHERE shiftId = ? "
+                );
+        ){
+
+            preparedStatement.setString(1, newShift.getShiftID());
+            preparedStatement.setString(2, oldShift.getShiftID());
+
+            preparedStatement.executeUpdate();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+    }
+
+    public static void updateShiftAssignmentWithID(String oldShiftID, Shift newShift) {
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "UPDATE ShiftAssignment " +
+                                "SET shiftId = ? " +
+                                "WHERE shiftId = ? "
+                );
+        ){
+
+            preparedStatement.setString(1, newShift.getShiftID());
+            preparedStatement.setString(2, oldShiftID);
 
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
