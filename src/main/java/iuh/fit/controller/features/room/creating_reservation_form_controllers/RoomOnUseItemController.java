@@ -88,7 +88,10 @@ public class RoomOnUseItemController {
 
             RoomBookingController roomBookingController = loader.getController();
             roomBookingController.setupContext(mainController, employee);
-            roomBookingController.getDialogPane().showInformation("LỖI", "Phòng này đã qua hạn Checkout");
+            roomBookingController.getDialogPane().showInformation(
+                    "Không thể thực hiện thao tác",
+                    "Phòng này đã quá hạn Checkout. Bạn phải Checkout mới có thể thực hiện chức năng khác."
+            );
 
 
             mainController.getMainPanel().getChildren().clear();
