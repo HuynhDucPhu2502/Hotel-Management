@@ -30,13 +30,13 @@
                             <Font size="20.0" />
                         </font>
                     </Text>
-                    <DateRangePicker prefHeight="32.0" prefWidth="254.0" />
-                    <ComboBox prefWidth="150.0" promptText="Loại phòng">
+                    <DateRangePicker fx:id="roomTabDateRangePicker" prefHeight="32.0" prefWidth="254.0" />
+                    <ComboBox fx:id="roomCategoryNameCombobox" prefWidth="150.0" promptText="Loại phòng">
                         <HBox.margin>
                             <Insets left="80.0" />
                         </HBox.margin>
                     </ComboBox>
-                    <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Tải lại" />
+                    <Button fx:id="refreshData" mnemonicParsing="false" onAction="#refreshData" prefHeight="30.0" prefWidth="75.0" text="Tải lại" />
                     <Button mnemonicParsing="false" text="Xuất Excel" />
                 </children>
                 <VBox.margin>
@@ -50,17 +50,17 @@
                             <Font size="20.0" />
                         </font>
                     </Text>
-                    <CheckBox mnemonicParsing="false">
+                    <CheckBox fx:id="filterByYearCheckBox" mnemonicParsing="false" onAction="#switchBetweenCBBYearAndDateRangePicker">
                         <HBox.margin>
                             <Insets left="20.0" top="4.0" />
                         </HBox.margin>
                     </CheckBox>
-                    <ComboBox disable="true" prefHeight="30.0" prefWidth="98.0" promptText="2024">
+                    <ComboBox fx:id="yearsCombobox" disable="true" prefHeight="30.0" prefWidth="98.0" promptText="2024">
                         <HBox.margin>
                             <Insets left="35.0" />
                         </HBox.margin>
                     </ComboBox>
-                    <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="103.0" text="Thống kê">
+                    <Button mnemonicParsing="false" onAction="#revenueStatisticsAction" prefHeight="30.0" prefWidth="103.0" text="Thống kê">
                         <HBox.margin>
                             <Insets left="50.0" />
                         </HBox.margin>
@@ -77,15 +77,15 @@
                             <Font size="14.0" />
                         </font>
                     </Text>
-                    <RadioButton mnemonicParsing="false" selected="true" text="Bảng dữ liệu">
+                    <RadioButton fx:id="showTableViewRadioButton" mnemonicParsing="false" onAction="#switchBetweenTableViewAndChartView" selected="true" text="Bảng dữ liệu">
                         <HBox.margin>
                             <Insets left="24.0" />
                         </HBox.margin>
-                        <toggleGroup>
-                            <ToggleGroup fx:id="dataView" />
-                        </toggleGroup>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="showDataViewToggleGroup" />
+                     </toggleGroup>
                     </RadioButton>
-                    <RadioButton mnemonicParsing="false" text="Biểu đồ" toggleGroup="$dataView" />
+                    <RadioButton fx:id="showChartDataRadioButton" mnemonicParsing="false" onAction="#switchBetweenTableViewAndChartView" text="Biểu đồ" toggleGroup="$showDataViewToggleGroup" />
                 </children>
                 <VBox.margin>
                     <Insets top="10.0" />
@@ -96,18 +96,19 @@
                     <Insets />
                 </VBox.margin>
                 <children>
-                    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                    <AnchorPane fx:id="tableViewAnchorPane" prefHeight="200.0" prefWidth="200.0">
                         <children>
                             <VBox layoutY="8.0" prefHeight="422.0" prefWidth="1240.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <children>
-                                    <TableView prefHeight="458.0" prefWidth="1246.0">
+                                    <TableView fx:id="roomDataTableView" prefHeight="458.0" prefWidth="1246.0">
                                         <columns>
-                                            <TableColumn prefWidth="112.80001103878021" text="Mã phòng" />
-                                            <TableColumn prefWidth="217.60004425048828" text="Loại phòng" />
-                                            <TableColumn minWidth="0.0" prefWidth="226.40005493164062" text="Số lượng người" />
-                                            <TableColumn prefWidth="223.20001220703125" text="Ngày CheckIn" />
-                                            <TableColumn prefWidth="223.199951171875" text="Ngày CheckOut" />
-                                            <TableColumn prefWidth="236.79986572265625" text="Tổng tiền" />
+                                            <TableColumn fx:id="roomIDColumn" prefWidth="98.39999085664749" text="Mã phòng" />
+                                            <TableColumn fx:id="roomCategoryColumn" prefWidth="165.59999084472656" text="Loại phòng" />
+                                            <TableColumn fx:id="numOfPeopleColumn" minWidth="0.0" prefWidth="173.5999755859375" text="Số lượng người" />
+                                    <TableColumn fx:id="bookingDateColumn" minWidth="0.0" prefWidth="180.00006103515625" text="Ngày đặt" />
+                                            <TableColumn fx:id="checkInDateColumn" prefWidth="198.4000244140625" text="Ngày CheckIn" />
+                                            <TableColumn fx:id="checkOutDateColumn" prefWidth="200.0" text="Ngày CheckOut" />
+                                            <TableColumn fx:id="totalMoneyColumn" prefWidth="231.2000732421875" text="Tổng tiền" />
                                         </columns>
                                         <VBox.margin>
                                             <Insets top="10.0" />
@@ -117,9 +118,9 @@
                             </VBox>
                         </children>
                     </AnchorPane>
-                    <AnchorPane prefHeight="200.0" prefWidth="200.0" visible="false">
+                    <AnchorPane fx:id="chartViewAnchorPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                         <children>
-                            <BarChart AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <BarChart fx:id="roomDataBarChart" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <xAxis>
                                     <CategoryAxis side="BOTTOM" />
                                 </xAxis>
@@ -135,9 +136,9 @@
                <children>
                   <AnchorPane prefHeight="54.0" prefWidth="1313.0">
                      <children>
-                        <Text layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng số hóa đơn :" AnchorPane.bottomAnchor="5.800000000000001" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1217.888671875" AnchorPane.topAnchor="6.0" />
+                        <Text fx:id="numOfInvoiceText" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng số hóa đơn :" AnchorPane.bottomAnchor="5.800000000000001" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1217.888671875" AnchorPane.topAnchor="6.0" />
                         <Text fx:id="numOfInvoiceText" layoutX="101.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
-                        <Text layoutX="987.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng doanh thu : " />
+                        <Text fx:id="totalMoneyText" layoutX="987.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng doanh thu : " />
                         <Text fx:id="totalMoneyText" layoutX="1081.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
                      </children>
                      <HBox.margin>
