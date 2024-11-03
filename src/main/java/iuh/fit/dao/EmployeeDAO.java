@@ -7,6 +7,7 @@ import iuh.fit.models.enums.Gender;
 import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
+import iuh.fit.utils.GlobalConstants;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -96,23 +97,65 @@ public class EmployeeDAO {
     public static void createData(Employee employee) {
         try (
                 Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(
+                PreparedStatement insertStatement = connection.prepareStatement(
                         "INSERT INTO Employee(employeeID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, position) " +
                                 "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                );
+                PreparedStatement selectSequenceStatement = connection.prepareStatement(
+                        "SELECT nextID FROM GlobalSequence WHERE tableName = ?"
+                );
+
+                // Câu lệnh để cập nhật nextID trong GlobalSequence
+                PreparedStatement updateSequenceStatement = connection.prepareStatement(
+                        "UPDATE GlobalSequence SET nextID = ? WHERE tableName = ?"
                 )
         ){
+            selectSequenceStatement.setString(1, "Employee");
+            ResultSet rs = selectSequenceStatement.executeQuery();
+            String newEmployeeID = "EMP-000001"; // ID mặc định nếu không có trong DB
 
-            preparedStatement.setString(1, employee.getEmployeeID());
-            preparedStatement.setString(2, employee.getFullName());
-            preparedStatement.setString(3, employee.getPhoneNumber());
-            preparedStatement.setString(4, employee.getEmail());
-            preparedStatement.setString(5, employee.getAddress());
-            preparedStatement.setString(6, ConvertHelper.genderConverterToSQL(employee.getGender()));
-            preparedStatement.setString(7, employee.getIdCardNumber());
-            preparedStatement.setDate(8, ConvertHelper.dateToSQLConverter(employee.getDob()));
-            preparedStatement.setString(9, employee.getPosition().name());
+            if (rs.next()) {
+                String currentNextID = rs.getString("nextID");
+                String prefix = GlobalConstants.EMPLOYEE_PREFIX + "-"; // Tiền tố cho Customer ID
 
-            preparedStatement.executeUpdate();
+                // Tách phần số từ nextID và tăng thêm 1
+                int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
+
+                // Định dạng lại phần số, đảm bảo luôn có 6 chữ số
+                newEmployeeID = prefix + String.format("%06d", nextIDNum);
+
+                // Cập nhật nextID mới trong GlobalSequence
+                updateSequenceStatement.setString(1, newEmployeeID);
+                updateSequenceStatement.setString(2, "Employee");
+                updateSequenceStatement.executeUpdate();
+            }
+
+            insertStatement.setString(1, employee.getEmployeeID());
+            insertStatement.setString(2, employee.getFullName());
+            insertStatement.setString(3, employee.getPhoneNumber());
+            insertStatement.setString(4, employee.getEmail());
+            insertStatement.setString(5, employee.getAddress());
+            insertStatement.setString(6, ConvertHelper.genderConverterToSQL(employee.getGender()));
+            insertStatement.setString(7, employee.getIdCardNumber());
+            insertStatement.setDate(8, ConvertHelper.dateToSQLConverter(employee.getDob()));
+            insertStatement.setString(9, employee.getPosition().name());
+
+            insertStatement.executeUpdate();
+            if (rs.next()) {
+                String currentNextID = rs.getString("nextID");
+                String prefix = GlobalConstants.EMPLOYEE_PREFIX + "-";
+
+                // tách phần số và tăng thêm 1
+                int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
+
+                // Định dạng lại phần số, đảm bảo luôn có 6 chữ số
+                String newNextID = prefix + String.format("%06d", nextIDNum);
+
+                // Cập nhật giá trị nextID trong bảng GlobalSequence
+                updateSequenceStatement.setString(1, newNextID);
+                updateSequenceStatement.setString(2, "Employee");
+                updateSequenceStatement.executeUpdate();
+            }
         } catch (Exception exception) {
             exception.printStackTrace();
             System.exit(1);
@@ -149,26 +192,19 @@ public class EmployeeDAO {
     }
 
     public static String getNextEmployeeID() {
-        String nextID = "EMP-000001";
-
-        String query = "SELECT nextID FROM GlobalSequence WHERE tableName = ?";
-
+        String sql = "SELECT nextID FROM GlobalSequence WHERE tableName = 'Employee'";
         try (
                 Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(query)
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(sql)
         ) {
-            preparedStatement.setString(1, "Employee");
-            ResultSet rs = preparedStatement.executeQuery();
-
             if (rs.next()) {
-                nextID = rs.getString(1);
+                return rs.getString(1);
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            System.exit(1);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        return nextID;
+        return "EMP-000001";
     }
 
     public static List<String> getTopThreeID() {
