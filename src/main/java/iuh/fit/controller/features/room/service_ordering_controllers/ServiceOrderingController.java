@@ -312,6 +312,15 @@ public class ServiceOrderingController {
     // 6. Xử lý sự kiện thêm dịch vụ
     // ==================================================================================================================
     private void handleAddService(HotelService service, int amount) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
+
+        if (now.isAfter(checkOutDate)) {
+            dialogPane.showInformation("LỖI", "Thời gian lưu trú đã kết thúc. Không thể thêm dịch vụ.");
+            navigateToRoomBookingPanel();
+            return;
+        }
+
         com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
                 "XÁC NHẬN",
                 "Bạn có chắc chắn muốn thêm dịch vụ: " + service.getServiceName() + " với số lượng: " + amount + " không?"
@@ -325,6 +334,7 @@ public class ServiceOrderingController {
             }
         });
     }
+
 
     private void handleAddServiceToDB(HotelService service, int amount) {
         try {

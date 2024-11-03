@@ -1,6 +1,7 @@
 package iuh.fit.controller.features.room.creating_reservation_form_controllers;
 
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
@@ -12,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -54,6 +56,14 @@ public class RoomOnUseItemController {
     // ==================================================================================================================
     @FXML
     private void navigateToCreateReservationFormPanel() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
+
+        if (now.isAfter(checkOutDate)) {
+            navigateToRoomBookingPanel();
+            return;
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/iuh/fit/view/features/room/creating_reservation_form_panels/CreateReservationFormPanel.fxml"));
@@ -64,6 +74,23 @@ public class RoomOnUseItemController {
                     mainController, employee, roomWithReservation,
                     null, null, null
             );
+
+            mainController.getMainPanel().getChildren().clear();
+            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void navigateToRoomBookingPanel() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
+            AnchorPane layout = loader.load();
+
+            RoomBookingController roomBookingController = loader.getController();
+            roomBookingController.setupContext(mainController, employee);
+            roomBookingController.getDialogPane().showInformation("LỖI", "Phòng này đã qua hạn Checkout");
+
 
             mainController.getMainPanel().getChildren().clear();
             mainController.getMainPanel().getChildren().addAll(layout.getChildren());

@@ -21,7 +21,6 @@ public class PDFHelper {
         ArrayList<RoomUsageService> roomUsageServices = (ArrayList<RoomUsageService>) RoomUsageServiceDAO
                 .getByReservationFormID(invoice.getReservationForm().getReservationID());
 
-        // Hiển thị hộp thoại để chọn đường dẫn và tên tệp
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Lưu hóa đơn PDF");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
@@ -32,12 +31,10 @@ public class PDFHelper {
             throw new IllegalArgumentException("Bạn đã hủy bỏ quy trình tạo PDF");
         }
 
-        // Tạo tài liệu PDF
         Document document = new Document();
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
         document.open();
 
-        // Load font hỗ trợ UTF-8
         InputStream fontStream = PDFHelper.class.getResourceAsStream("/iuh/fit/fonts/arial-unicode-ms.ttf");
         if (fontStream == null) {
             throw new IOException("Font not found");
@@ -201,6 +198,7 @@ public class PDFHelper {
         document.close();
     }
 
+    // Hàm phụ
     private static PdfPTable getPdfPTable(Invoice invoice, Font titleFont, Font font) {
         PdfPTable infoTable = new PdfPTable(2);
         infoTable.setWidthPercentage(100);

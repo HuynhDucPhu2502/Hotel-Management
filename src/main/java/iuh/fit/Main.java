@@ -14,12 +14,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-//        startRequireLogin(primaryStage);
         startWithoutLogin(primaryStage);
 //        startWithLogin(primaryStage);
-    }
 
-    private void startRequireLogin(Stage primaryStage) {
     }
 
     // Khởi động chương trình không cần đăng nhập
@@ -36,6 +33,7 @@ public class Main extends Application {
 
             primaryStage.setTitle("Quản Lý Khách Sạn");
             primaryStage.setScene(scene);
+            primaryStage.setFullScreen(true);
             primaryStage.setResizable(true);
             primaryStage.show();
         } catch (Exception e) {
@@ -53,6 +51,7 @@ public class Main extends Application {
 
             primaryStage.setTitle("Quản Lý Khách Sạn");
             primaryStage.setScene(scene);
+            primaryStage.setFullScreen(true);
             primaryStage.setResizable(true);
             primaryStage.show();
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package iuh.fit.controller.features.room;
 
+import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomAvailableItemController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOnUseItemController;
@@ -12,6 +13,7 @@ import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
+import iuh.fit.utils.RoomStatusHelper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -32,28 +34,26 @@ public class RoomBookingController {
     private GridPane roomGridPane;
 
     @FXML
-    private ComboBox<String> roomCategoryCBox;
-    @FXML
-    private ComboBox<String> roomFloorNumberCBox;
+    private ComboBox<String> roomCategoryCBox, roomFloorNumberCBox;
 
     @FXML
-    private Button allBtn;
+    private Button allBtn, availableBtn,
+            onUseBtn, overDueBtn;
+
     @FXML
-    private Button availableBtn;
-    @FXML
-    private Button onUseBtn;
-    @FXML
-    private Button overDueBtn;
+    private DialogPane dialogPane;
 
     private List<RoomWithReservation> roomWithReservations;
     private MainController mainController;
     private Employee employee;
 
-    private Button activeButton; // Lưu lại nút đang được nhấn
-    private RoomStatus selectedStatus = null; // Trạng thái được chọn (mặc định null cho allBtn)
+    private Button activeButton;
+    private RoomStatus selectedStatus = null;
+
 
     public void initialize() {
-        activeButton = allBtn; // Đặt mặc định là allBtn
+        dialogPane.toFront();
+        activeButton = allBtn;
         setActiveButtonStyle(allBtn);
     }
 
@@ -138,17 +138,8 @@ public class RoomBookingController {
 
         Room room = roomWithReservation.getRoom();
         ReservationForm reservationForm = roomWithReservation.getReservationForm();
-        if (reservationForm != null) {
-            if (LocalDateTime.now().isAfter(reservationForm.getCheckOutDate())) {
-                RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.OVERDUE);
-                room.setRoomStatus(RoomStatus.OVERDUE);
-                roomWithReservation.setRoom(room);
-            }
-        }
-
-
-
-
+        RoomStatusHelper.updateRoomStatusIfOverdue(room, reservationForm,
+                roomWithReservation, employee);
 
         switch (room.getRoomStatus()) {
             case AVAILABLE -> {
@@ -257,6 +248,10 @@ public class RoomBookingController {
             case "overDueBtn" -> button.getStyleClass().remove("button-OverDue-selected");
             default -> throw new IllegalArgumentException("Không tìm thấy button ID");
         }
+    }
+
+    public DialogPane getDialogPane() {
+        return dialogPane;
     }
 
 }

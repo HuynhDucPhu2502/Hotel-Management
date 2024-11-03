@@ -416,7 +416,7 @@
                                     </Text>
                                     <AnchorPane GridPane.columnIndex="1" GridPane.columnSpan="2">
                                        <children>
-                                          <TextField fx:id="customerIDCardNumberTextField" layoutX="-62.0" layoutY="13.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                          <TextField fx:id="customerIDCardNumberTextField" layoutX="-62.0" layoutY="13.0" style="-fx-border-color: gray; -fx-border-radius: 5; -fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                        </children>
                                     </AnchorPane>
                                     <AnchorPane GridPane.columnIndex="3">

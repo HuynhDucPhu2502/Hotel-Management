@@ -311,7 +311,15 @@ public class RoomChangingController {
     // ==================================================================================================================
     private void handleChangingRoom(Room newRoom) {
         try {
-            System.out.println("test");
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
+
+            if (now.isAfter(checkOutDate)) {
+                dialogPane.showInformation("LỖI", "Thời gian lưu trú đã kết thúc. Không thể chuyển phòng.");
+                navigateToRoomBookingPanel();
+                return;
+            }
+
             com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
                     "XÁC NHẬN",
                     "Bạn có chắc chắn muốn chuyển phòng?"
@@ -344,12 +352,10 @@ public class RoomChangingController {
                 }
             });
 
-
         } catch (Exception e) {
             e.printStackTrace();
-            dialogPane.showInformation("LỖI",e.getMessage());
+            dialogPane.showInformation("LỖI", e.getMessage());
         }
     }
-
 
 }

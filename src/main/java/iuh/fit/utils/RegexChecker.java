@@ -234,8 +234,4 @@ public class RegexChecker {
     public static boolean isValidRoomID(String roomID) {
         return roomID.matches("^([TV])\\d{4}$");
     }
-
-    public static boolean isValidInvoiceID(String invoiceID){
-        return invoiceID.matches("^(INV)(\\d{10}-)(\\d{4})$");
-    }
 }
