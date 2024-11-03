@@ -6,6 +6,7 @@ import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
+import iuh.fit.dao.HistoryCheckinDAO;
 import iuh.fit.dao.HotelServiceDAO;
 import iuh.fit.dao.RoomUsageServiceDAO;
 import iuh.fit.models.*;
@@ -22,6 +23,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -30,7 +32,6 @@ public class ServiceOrderingController {
     // ==================================================================================================================
     // 1. Các biến
     // ==================================================================================================================
-    // 1.1 Buttons
     @FXML
     private Button backBtn, bookingRoomNavigate;
 
@@ -38,7 +39,7 @@ public class ServiceOrderingController {
     private Button navigateToCreateReservationFormBtn,
             navigateToReservationListBtn, navigateToRoomChanging;
 
-    // 1.2 Labels
+
     @FXML
     private Label roomNumberLabel, roomCategoryLabel,
             checkInDateLabel, checkOutDateLabel,
@@ -49,11 +50,11 @@ public class ServiceOrderingController {
             cusomerPhoneNumberLabel, customerEmailLabel,
             customerIDCardNumberLabel;
 
-    // 1.3 Formatter
+
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
 
-    // 1.4 Table
+
     @FXML
     private TableView<RoomUsageService> roomUsageServiceTableView;
     @FXML
@@ -66,16 +67,18 @@ public class ServiceOrderingController {
     private TableColumn<RoomUsageService, Double> unitPriceColumn;
     @FXML
     private TableColumn<RoomUsageService, Double> totalPriceColumn;
+    @FXML
+    private TableColumn<RoomUsageService, String> dateAddedColumn;
+    @FXML
+    private TableColumn<RoomUsageService, String> employeeAddedColumn;
 
-    // 1.5 Dialog Pane
     @FXML
     private DialogPane dialogPane;
 
-    // 1.6 Titled Pane
+
     @FXML
     private TitledPane titledPane;
 
-    // 1.7 Container
     @FXML
     private HBox emptyLabelContainer;
     @FXML
@@ -83,7 +86,6 @@ public class ServiceOrderingController {
     @FXML
     private GridPane serviceGridPane;
 
-    // 1.8 Context
     private MainController mainController;
     private RoomWithReservation roomWithReservation;
     private Employee employee;
@@ -95,7 +97,7 @@ public class ServiceOrderingController {
     // ==================================================================================================================
     public void initialize() {
         dialogPane.toFront();
-        setupTable();
+        setupRoomUsageServiceTableView();
     }
 
     public void setupContext(MainController mainController, Employee employee,
@@ -214,9 +216,11 @@ public class ServiceOrderingController {
         Room reservationFormRoom = roomWithReservation.getRoom();
         Customer reservationFormCustomer = roomWithReservation.getReservationForm().getCustomer();
 
+        LocalDateTime actualCheckInDate = HistoryCheckinDAO.getActualCheckInDate(reservationForm.getReservationID());
+
         roomNumberLabel.setText(reservationFormRoom.getRoomNumber());
         roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
-        checkInDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckInDate()));
+        checkInDateLabel.setText(dateTimeFormatter.format(actualCheckInDate != null ? actualCheckInDate : reservationForm.getCheckInDate()));
         checkOutDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
         stayLengthLabel.setText(Calculator.calculateStayLengthToString(
                 reservationForm.getCheckInDate(),
@@ -275,7 +279,10 @@ public class ServiceOrderingController {
         }
     }
 
-    private void setupTable() {
+    // ==================================================================================================================
+    // 5.  Setup table lịch sử dùng dịch vụ
+    // ==================================================================================================================
+    private void setupRoomUsageServiceTableView() {
         roomUsageServiceIDColumn.setCellValueFactory(new PropertyValueFactory<>("roomUsageServiceId"));
         serviceNameColumn.setCellValueFactory(data -> {
             HotelService service = data.getValue().getHotelService();
@@ -288,13 +295,32 @@ public class ServiceOrderingController {
             double totalPrice = data.getValue().getQuantity() * data.getValue().getUnitPrice();
             return new SimpleDoubleProperty(totalPrice).asObject();
         });
+        dateAddedColumn.setCellValueFactory(data -> {
+            LocalDateTime dateAdded = data.getValue().getDateAdded();
+            String formattedDate = (dateAdded != null) ? dateAdded.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) : "Không có";
+            return new SimpleStringProperty(formattedDate);
+        });
+
+        employeeAddedColumn.setCellValueFactory(data -> {
+            Employee employee = data.getValue().getEmployee();
+            String employeeName = (employee != null && employee.getFullName() != null) ? employee.getFullName() : "Không có";
+            return new SimpleStringProperty(employeeName);
+        });
     }
 
-
     // ==================================================================================================================
-    // 5. Xử lý sự kiện thêm dịch vụ
+    // 6. Xử lý sự kiện thêm dịch vụ
     // ==================================================================================================================
     private void handleAddService(HotelService service, int amount) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
+
+        if (now.isAfter(checkOutDate)) {
+            dialogPane.showInformation("LỖI", "Thời gian lưu trú đã kết thúc. Không thể thêm dịch vụ.");
+            navigateToRoomBookingPanel();
+            return;
+        }
+
         com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
                 "XÁC NHẬN",
                 "Bạn có chắc chắn muốn thêm dịch vụ: " + service.getServiceName() + " với số lượng: " + amount + " không?"
@@ -304,10 +330,11 @@ public class ServiceOrderingController {
             if (buttonType == ButtonType.YES) {
                 handleAddServiceToDB(service, amount);
                 dialogPane.showInformation("Thành Công", "Dịch vụ đã được thêm thành công!");
-                loadData(); // Cập nhật bảng sau khi thêm
+                loadData();
             }
         });
     }
+
 
     private void handleAddServiceToDB(HotelService service, int amount) {
         try {
@@ -317,10 +344,13 @@ public class ServiceOrderingController {
             roomUsageService.setUnitPrice(service.getServicePrice());
             roomUsageService.setHotelService(service);
             roomUsageService.setReservationForm(roomWithReservation.getReservationForm());
+            roomUsageService.setEmployee(employee);
+            roomUsageService.setDateAdded(LocalDateTime.now());
 
             RoomUsageServiceDAO.createData(roomUsageService);
         } catch (Exception e) {
             dialogPane.showInformation("LỖI", e.getMessage());
         }
     }
+
 }

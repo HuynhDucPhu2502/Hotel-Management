@@ -48,11 +48,6 @@ public class Tax {
         this.setActivate(activate);
     }
 
-    public static void main(String[] args) {
-
-        System.out.println(InvoiceDAO.getInvoice());
-    }
-
     public Tax(String taxID) {
         this.taxID = taxID;
     }

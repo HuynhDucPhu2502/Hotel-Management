@@ -14,12 +14,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-//        startRequireLogin(primaryStage);
         startWithoutLogin(primaryStage);
 //        startWithLogin(primaryStage);
-    }
 
-    private void startRequireLogin(Stage primaryStage) {
     }
 
     // Khởi động chương trình không cần đăng nhập

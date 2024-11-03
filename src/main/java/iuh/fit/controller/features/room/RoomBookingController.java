@@ -1,19 +1,24 @@
 package iuh.fit.controller.features.room;
 
+import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomAvailableItemController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOnUseItemController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOverDueController;
+import iuh.fit.controller.features.room.group_booking_controllers.GroupBookingController;
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomWithReservationDAO;
 import iuh.fit.models.Employee;
+import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
+import iuh.fit.utils.RoomStatusHelper;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
@@ -29,28 +34,27 @@ public class RoomBookingController {
     private GridPane roomGridPane;
 
     @FXML
-    private ComboBox<String> roomCategoryCBox;
-    @FXML
-    private ComboBox<String> roomFloorNumberCBox;
+    private ComboBox<String> roomCategoryCBox, roomFloorNumberCBox;
 
     @FXML
-    private Button allBtn;
+    private Button allBtn, availableBtn,
+            onUseBtn, overDueBtn,
+            groupBookingBtn;
+
     @FXML
-    private Button availableBtn;
-    @FXML
-    private Button onUseBtn;
-    @FXML
-    private Button overDueBtn;
+    private DialogPane dialogPane;
 
     private List<RoomWithReservation> roomWithReservations;
     private MainController mainController;
     private Employee employee;
 
-    private Button activeButton; // Lưu lại nút đang được nhấn
-    private RoomStatus selectedStatus = null; // Trạng thái được chọn (mặc định null cho allBtn)
+    private Button activeButton;
+    private RoomStatus selectedStatus = null;
+
 
     public void initialize() {
-        activeButton = allBtn; // Đặt mặc định là allBtn
+        dialogPane.toFront();
+        activeButton = allBtn;
         setActiveButtonStyle(allBtn);
     }
 
@@ -60,6 +64,8 @@ public class RoomBookingController {
         loadData();
         loadDataForBtn();
         setupEventHandlers();
+
+        groupBookingBtn.setOnAction(e -> navigateToGroupBookingPanel());
     }
 
     private List<String> getRoomCategories() {
@@ -75,16 +81,16 @@ public class RoomBookingController {
     }
 
     private void loadData() {
-        roomWithReservations = RoomWithReservationDAO.getRoomWithReservation().stream()
-                .sorted(Comparator.comparing(r -> r.getRoom().getRoomNumber()))
-                .toList();
-
         roomCategoryCBox.getItems().setAll(getRoomCategories());
         roomCategoryCBox.getSelectionModel().selectFirst();
 
         roomFloorNumberCBox.getItems().setAll(getFloorNumbers());
         roomFloorNumberCBox.getSelectionModel().selectFirst();
 
+        RoomStatusHelper.autoCheckoutOverdueRooms(employee);
+        roomWithReservations = RoomWithReservationDAO.getRoomWithReservation().stream()
+                .sorted(Comparator.comparing(r -> r.getRoom().getRoomNumber()))
+                .toList();
         displayFilteredRooms(roomWithReservations);
     }
 
@@ -134,6 +140,10 @@ public class RoomBookingController {
         Pane roomItem;
 
         Room room = roomWithReservation.getRoom();
+        ReservationForm reservationForm = roomWithReservation.getReservationForm();
+        RoomStatusHelper.updateRoomStatusIfOverdue(room, reservationForm,
+                roomWithReservation, employee);
+
         switch (room.getRoomStatus()) {
             case AVAILABLE -> {
                 loader = new FXMLLoader(getClass().getResource(
@@ -241,6 +251,26 @@ public class RoomBookingController {
             case "overDueBtn" -> button.getStyleClass().remove("button-OverDue-selected");
             default -> throw new IllegalArgumentException("Không tìm thấy button ID");
         }
+    }
+
+    private void navigateToGroupBookingPanel() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/group_booking_panels/GroupBookingPanel.fxml"));
+            AnchorPane layout = loader.load();
+
+            GroupBookingController groupBookingController = loader.getController();
+            groupBookingController.setupContext(mainController, employee);
+
+
+            mainController.getMainPanel().getChildren().clear();
+            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public DialogPane getDialogPane() {
+        return dialogPane;
     }
 
 }

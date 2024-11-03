@@ -1,15 +1,11 @@
 package iuh.fit.controller.features.room.checking_out_controllers;
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
-import iuh.fit.dao.RoomReservationDetailDAO;
-import iuh.fit.dao.RoomUsageServiceDAO;
+import iuh.fit.dao.*;
 import iuh.fit.models.*;
+import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -21,17 +17,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 
 public class CheckingOutReservationFormController {
@@ -39,7 +30,7 @@ public class CheckingOutReservationFormController {
     // 1. Các biến
     // ==================================================================================================================
     @FXML
-    private Button backBtn, bookingRoomNavigate, printBtn;
+    private Button backBtn, bookingRoomNavigate, checkOutBtn;
 
     @FXML
     private Label roomNumberLabel, roomCategoryLabel, checkInDateLabel,
@@ -62,6 +53,10 @@ public class CheckingOutReservationFormController {
     private TableColumn<RoomUsageService, Double> unitPriceColumn;
     @FXML
     private TableColumn<RoomUsageService, Double> totalPriceColumn;
+    @FXML
+    private TableColumn<RoomUsageService, String> dateAddedColumn;
+    @FXML
+    private TableColumn<RoomUsageService, String> employeeAddedColumn;
 
     @FXML
     private TableView<RoomReservationDetail> roomReservationDetailTableView;
@@ -77,20 +72,21 @@ public class CheckingOutReservationFormController {
     @FXML
     private TitledPane titledPane;
 
+    @FXML
+    private DialogPane dialogPane;
+
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
 
-    // Context
     private MainController mainController;
     private RoomWithReservation roomWithReservation;
     private Employee employee;
-
-    private List<RoomUsageService> roomUsageServices;
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
     public void initialize() {
+        dialogPane.toFront();
         setupRoomReservationDetailTableView();
         setupRoomUsageServiceTableView();
     }
@@ -116,7 +112,7 @@ public class CheckingOutReservationFormController {
         roomReservationDetailTableView.setItems(roomReservationDetailsData);
         roomReservationDetailTableView.refresh();
 
-        this.roomUsageServices = RoomUsageServiceDAO.getByReservationFormID(roomWithReservation.getReservationForm().getReservationID());
+        List<RoomUsageService> roomUsageServices = RoomUsageServiceDAO.getByReservationFormID(roomWithReservation.getReservationForm().getReservationID());
         ObservableList<RoomUsageService> roomUsageServicesData = FXCollections.observableArrayList(roomUsageServices);
         roomUsageServiceTableView.setItems(roomUsageServicesData);
         roomUsageServiceTableView.refresh();
@@ -127,26 +123,32 @@ public class CheckingOutReservationFormController {
         backBtn.setOnAction(e -> navigateToRoomBookingPanel());
         bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
 
-        // Gắn sự kiện cho nút printBtn để in hóa đơn ra file PDF
-        printBtn.setOnAction(e -> {
-            try {
-                createInvoicePDF();
-                // Thông báo cho người dùng sau khi hóa đơn đã được lưu
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Thông báo");
-                alert.setHeaderText(null);
-                alert.setContentText("Hóa đơn đã được lưu thành công!");
-                alert.showAndWait();
-            } catch (IOException | DocumentException ex) {
-                ex.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Lỗi");
-                alert.setHeaderText(null);
-                alert.setContentText("Không thể lưu hóa đơn. Vui lòng thử lại!");
-                alert.showAndWait();
-            }
-        });
+        // Current Panel Button
+        checkOutBtn.setOnAction(e -> handleCheckOut());
 
+    }
+
+    private void setupReservationForm() {
+        ReservationForm reservationForm = roomWithReservation.getReservationForm();
+
+        Room reservationFormRoom = roomWithReservation.getRoom();
+        Customer reservationFormCustomer = roomWithReservation.getReservationForm().getCustomer();
+
+        LocalDateTime actualCheckInDate = HistoryCheckinDAO.getActualCheckInDate(reservationForm.getReservationID());
+
+        roomNumberLabel.setText(reservationFormRoom.getRoomNumber());
+        roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
+        checkInDateLabel.setText(dateTimeFormatter.format(actualCheckInDate != null ? actualCheckInDate : reservationForm.getCheckInDate()));
+        checkOutDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
+        stayLengthLabel.setText(Calculator.calculateStayLengthToString(
+                reservationForm.getCheckInDate(),
+                reservationForm.getCheckOutDate()
+        ));
+        customerIDLabel.setText(reservationFormCustomer.getCustomerID());
+        customerFullnameLabel.setText(reservationFormCustomer.getFullName());
+        cusomerPhoneNumberLabel.setText(reservationFormCustomer.getPhoneNumber());
+        customerEmailLabel.setText(reservationFormCustomer.getEmail());
+        customerIDCardNumberLabel.setText(reservationFormCustomer.getIdCardNumber());
     }
 
     // ==================================================================================================================
@@ -169,29 +171,8 @@ public class CheckingOutReservationFormController {
     }
 
     // ==================================================================================================================
-    // 4.  Đẩy dữ liệu lên giao diện
+    // 4.  Setup 2 table lịch sử dùng phòng và lịch sử dùng dịch vụ
     // ==================================================================================================================
-    private void setupReservationForm() {
-        ReservationForm reservationForm = roomWithReservation.getReservationForm();
-
-        Room reservationFormRoom = roomWithReservation.getRoom();
-        Customer reservationFormCustomer = roomWithReservation.getReservationForm().getCustomer();
-
-        roomNumberLabel.setText(reservationFormRoom.getRoomNumber());
-        roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
-        checkInDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckInDate()));
-        checkOutDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
-        stayLengthLabel.setText(Calculator.calculateStayLengthToString(
-                reservationForm.getCheckInDate(),
-                reservationForm.getCheckOutDate()
-        ));
-        customerIDLabel.setText(reservationFormCustomer.getCustomerID());
-        customerFullnameLabel.setText(reservationFormCustomer.getFullName());
-        cusomerPhoneNumberLabel.setText(reservationFormCustomer.getPhoneNumber());
-        customerEmailLabel.setText(reservationFormCustomer.getEmail());
-        customerIDCardNumberLabel.setText(reservationFormCustomer.getIdCardNumber());
-    }
-
     private void setupRoomReservationDetailTableView() {
         roomReservationDetailID.setCellValueFactory(new PropertyValueFactory<>("roomReservationDetailID"));
         roomReservationDetailDateChanged.setCellValueFactory(data -> {
@@ -225,203 +206,87 @@ public class CheckingOutReservationFormController {
             double totalPrice = data.getValue().getQuantity() * data.getValue().getUnitPrice();
             return new SimpleDoubleProperty(totalPrice).asObject();
         });
+        dateAddedColumn.setCellValueFactory(data -> {
+            LocalDateTime dateAdded = data.getValue().getDateAdded();
+            String formattedDate = (dateAdded != null) ? dateAdded.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) : "Không có";
+            return new SimpleStringProperty(formattedDate);
+        });
+        employeeAddedColumn.setCellValueFactory(data -> {
+            Employee employee = data.getValue().getEmployee();
+            String employeeName = (employee != null && employee.getFullName() != null) ? employee.getFullName() : "Không có";
+            return new SimpleStringProperty(employeeName);
+        });
     }
 
-    public void createInvoicePDF() throws DocumentException, IOException {
-        // Hiển thị hộp thoại để chọn đường dẫn và tên tệp
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Lưu hóa đơn PDF");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-        fileChooser.setInitialFileName("HoaDon.pdf");
-        File file = fileChooser.showSaveDialog(new Stage());
+    // ==================================================================================================================
+    // 5. Xử lý sự kiện checkout
+    // ==================================================================================================================
+    private void handleCheckOut() {
+        try {
+            com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> confirmDialog = dialogPane.showConfirmation(
+                    "XÁC NHẬN CHECK-OUT",
+                    "Bạn có chắc chắn muốn thực hiện check-out cho phòng này không?"
+            );
 
-        if (file == null) {
-            return;
+            confirmDialog.onClose(buttonType -> {
+                if (buttonType == ButtonType.YES) {
+                    try {
+                        // 1. Tạo mới một bản ghi HistoryCheckOut
+                        HistoryCheckOut historyCheckOut = new HistoryCheckOut();
+                        historyCheckOut.setHistoryCheckOutID(HistoryCheckOutDAO.getNextID());
+                        historyCheckOut.setCheckOutDate(LocalDateTime.now());
+                        historyCheckOut.setReservationForm(roomWithReservation.getReservationForm());
+                        historyCheckOut.setEmployee(employee);
+
+                        // Lưu thông tin check-out vào DB
+                        HistoryCheckOutDAO.createData(historyCheckOut);
+
+                        // 2. Lấy đối tượng Tax mặc định
+                        Tax tax = TaxDAO.getDataByID("tax-000001");
+
+                        // 3. Tạo hóa đơn mới
+                        Invoice invoice = new Invoice();
+                        invoice.setInvoiceID(InvoiceDAO.getNextInvoiceID());
+                        invoice.setInvoiceDate(LocalDateTime.now());
+
+                        // Tính toán các chi phí cho hóa đơn
+                        double roomCharge = Calculator.calculateRoomCharge(roomWithReservation.getRoom(),
+                                roomWithReservation.getReservationForm().getCheckInDate(), roomWithReservation.getReservationForm().getCheckOutDate());
+                        double servicesCharge = Calculator.calculateTotalServiceCharge(roomWithReservation.getReservationForm().getReservationID());
+                        double totalDue = roomCharge * 0.9 + servicesCharge;
+                        double netDue = totalDue * (1 + Objects.requireNonNull(tax).getTaxRate());
+
+                        invoice.setRoomCharge(roomCharge);
+                        invoice.setServicesCharge(servicesCharge);
+                        invoice.setTotalDue(totalDue);
+                        invoice.setNetDue(netDue);
+                        invoice.setTax(tax);
+                        invoice.setReservationForm(roomWithReservation.getReservationForm());
+
+                        // Lưu hóa đơn vào DB
+                        InvoiceDAO.createData(invoice);
+
+                        // 4. Cập nhật trạng thái phòng về AVAILABLE
+                        Room room = roomWithReservation.getRoom();
+                        RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.AVAILABLE);
+
+                        // Hiển thị thông báo thành công
+                        dialogPane.showInformation("THÀNH CÔNG", "Check-out và tạo hóa đơn thành công!");
+                        navigateToRoomBookingPanel();
+
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        dialogPane.showInformation("LỖI", "Đã xảy ra lỗi trong quá trình check-out. Vui lòng thử lại!");
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            dialogPane.showInformation("LỖI", "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại!");
         }
-
-        // Tạo tài liệu PDF
-        Document document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream(file));
-        document.open();
-
-        // Load font hỗ trợ UTF-8
-        InputStream fontStream = getClass().getResourceAsStream("/iuh/fit/fonts/arial-unicode-ms.ttf");
-        if (fontStream == null) {
-            throw new IOException("Font not found");
-        }
-        BaseFont unicodeFont = BaseFont.createFont("arial-unicode-ms.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true, fontStream.readAllBytes(), null);
-
-        Font font = new Font(unicodeFont, 12);
-        Font titleFont = new Font(unicodeFont, 18, Font.BOLD);
-        Font headerFont = new Font(unicodeFont, 12, Font.BOLD, BaseColor.WHITE);
-
-        // Tiêu đề hóa đơn
-        Paragraph title = new Paragraph("Hóa Đơn Thanh Toán Khách Sạn", titleFont);
-        title.setAlignment(Element.ALIGN_CENTER);
-        document.add(title);
-
-        document.add(new Paragraph("\n"));
-
-        // Thông tin khách sạn và khách hàng (ẩn border)
-        PdfPTable infoTable = new PdfPTable(2);
-        infoTable.setWidthPercentage(100);
-        infoTable.setSpacingBefore(10f);
-        infoTable.setSpacingAfter(10f);
-
-        PdfPCell hotelCell = new PdfPCell(new Phrase("Thông tin khách sạn", titleFont));
-        hotelCell.setBorder(PdfPCell.NO_BORDER);
-        infoTable.addCell(hotelCell);
-
-        PdfPCell customerCell = new PdfPCell(new Phrase("Thông tin khách hàng", titleFont));
-        customerCell.setBorder(PdfPCell.NO_BORDER);
-        infoTable.addCell(customerCell);
-
-        hotelCell = new PdfPCell(new Phrase("Tên khách sạn: Luxury Hotel", font));
-        hotelCell.setBorder(PdfPCell.NO_BORDER);
-        infoTable.addCell(hotelCell);
-
-        customerCell = new PdfPCell(new Phrase("Tên khách hàng: " + roomWithReservation.getReservationForm().getCustomer().getFullName(), font));
-        customerCell.setBorder(PdfPCell.NO_BORDER);
-        infoTable.addCell(customerCell);
-
-        hotelCell = new PdfPCell(new Phrase("Địa chỉ: 123 Đường ABC, TP.HCM", font));
-        hotelCell.setBorder(PdfPCell.NO_BORDER);
-        infoTable.addCell(hotelCell);
-
-        customerCell = new PdfPCell(new Phrase("Email: " + roomWithReservation.getReservationForm().getCustomer().getEmail(), font));
-        customerCell.setBorder(PdfPCell.NO_BORDER);
-        infoTable.addCell(customerCell);
-
-        hotelCell = new PdfPCell(new Phrase("Số điện thoại: (84) 123-456-789", font));
-        hotelCell.setBorder(PdfPCell.NO_BORDER);
-        infoTable.addCell(hotelCell);
-
-        customerCell = new PdfPCell(new Phrase("SĐT: " + roomWithReservation.getReservationForm().getCustomer().getPhoneNumber(), font));
-        customerCell.setBorder(PdfPCell.NO_BORDER);
-        infoTable.addCell(customerCell);
-
-        document.add(infoTable);
-        document.add(new Paragraph("\n"));
-
-        // Tiêu đề cho bảng "Dịch vụ đã sử dụng"
-        Paragraph serviceTitle = new Paragraph("Dịch vụ đã sử dụng", titleFont);
-        serviceTitle.setSpacingAfter(10f);  // Thêm khoảng cách dưới tiêu đề
-        document.add(serviceTitle);
-
-        // Bảng dịch vụ đã sử dụng
-        PdfPTable serviceTable = new PdfPTable(4); // 4 cột
-        serviceTable.setWidthPercentage(100);
-        serviceTable.setWidths(new int[]{3, 1, 2, 2});
-
-        // Thêm tiêu đề bảng với màu nền xanh dương
-        PdfPCell headerCell = new PdfPCell(new Phrase("Tên dịch vụ", headerFont));
-        headerCell.setBackgroundColor(BaseColor.BLUE);
-        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        headerCell.setPadding(8f);
-        serviceTable.addCell(headerCell);
-
-        headerCell = new PdfPCell(new Phrase("SL", headerFont));
-        headerCell.setBackgroundColor(BaseColor.BLUE);
-        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        headerCell.setPadding(8f);
-        serviceTable.addCell(headerCell);
-
-        headerCell = new PdfPCell(new Phrase("Đơn giá", headerFont));
-        headerCell.setBackgroundColor(BaseColor.BLUE);
-        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        headerCell.setPadding(8f);
-        serviceTable.addCell(headerCell);
-
-        headerCell = new PdfPCell(new Phrase("Thành tiền", headerFont));
-        headerCell.setBackgroundColor(BaseColor.BLUE);
-        headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        headerCell.setPadding(8f);
-        serviceTable.addCell(headerCell);
-
-        // Nội dung bảng từ danh sách dịch vụ
-        double totalServiceCost = 0;
-        for (RoomUsageService service : roomUsageServices) {
-            String serviceName = service.getHotelService().getServiceName();
-            int quantity = service.getQuantity();
-            double unitPrice = service.getUnitPrice();
-            double serviceTotal = quantity * unitPrice;
-            totalServiceCost += serviceTotal;
-
-            String formattedUnitPrice = String.format("%,.0f VND", unitPrice);
-            String formattedServiceTotal = String.format("%,.0f VND", serviceTotal);
-
-            PdfPCell contentCell = new PdfPCell(new Phrase(serviceName, font));
-            contentCell.setPadding(10f);
-            serviceTable.addCell(contentCell);
-
-            contentCell = new PdfPCell(new Phrase(String.valueOf(quantity), font));
-            contentCell.setPadding(10f);
-            serviceTable.addCell(contentCell);
-
-            contentCell = new PdfPCell(new Phrase(formattedUnitPrice, font));
-            contentCell.setPadding(10f);
-            serviceTable.addCell(contentCell);
-
-            contentCell = new PdfPCell(new Phrase(formattedServiceTotal, font));
-            contentCell.setPadding(10f);
-            serviceTable.addCell(contentCell);
-        }
-
-        document.add(serviceTable);
-        document.add(new Paragraph("\n"));
-
-        // Tổng tiền dịch vụ
-        String formattedTotalServiceCost = String.format("%,.0f VND", totalServiceCost);
-        document.add(new Paragraph("Tổng tiền dịch vụ: " + formattedTotalServiceCost, font));
-
-        document.add(new Paragraph("\n"));
-
-        // Tiêu đề cho bảng "Lịch sử dùng phòng"
-        Paragraph historyTitle = new Paragraph("Lịch sử dùng phòng", titleFont);
-        historyTitle.setSpacingAfter(10f);  // Thêm khoảng cách dưới tiêu đề
-        document.add(historyTitle);
-
-        // Bảng lịch sử dùng phòng
-        PdfPTable historyTable = new PdfPTable(3); // 3 cột cho lịch sử dùng phòng
-        historyTable.setWidthPercentage(100);
-        historyTable.setWidths(new int[]{2, 2, 3});
-
-        // Thêm tiêu đề bảng với màu nền xanh dương
-        PdfPCell historyHeaderCell = new PdfPCell(new Phrase("Ngày thay đổi", headerFont));
-        historyHeaderCell.setBackgroundColor(BaseColor.BLUE);
-        historyHeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        historyHeaderCell.setPadding(8f);
-        historyTable.addCell(historyHeaderCell);
-
-        historyHeaderCell = new PdfPCell(new Phrase("Phòng", headerFont));
-        historyHeaderCell.setBackgroundColor(BaseColor.BLUE);
-        historyHeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        historyHeaderCell.setPadding(8f);
-        historyTable.addCell(historyHeaderCell);
-
-        historyHeaderCell = new PdfPCell(new Phrase("Nhân viên thực hiện", headerFont));
-        historyHeaderCell.setBackgroundColor(BaseColor.BLUE);
-        historyHeaderCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        historyHeaderCell.setPadding(8f);
-        historyTable.addCell(historyHeaderCell);
-
-        // Thêm dữ liệu vào bảng lịch sử dùng phòng
-        for (RoomReservationDetail detail : roomReservationDetailTableView.getItems()) {
-            String dateChanged = dateTimeFormatter.format(detail.getDateChanged());
-            String roomNumber = detail.getRoom().getRoomNumber();
-            String employeeName = detail.getEmployee().getFullName();
-
-            historyTable.addCell(new PdfPCell(new Phrase(dateChanged, font)));
-            historyTable.addCell(new PdfPCell(new Phrase(roomNumber, font)));
-            historyTable.addCell(new PdfPCell(new Phrase(employeeName, font)));
-        }
-
-        document.add(historyTable);
-
-        // Đóng tài liệu
-        document.close();
-        System.out.println("PDF created successfully.");
     }
+
 
 
 

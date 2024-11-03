@@ -7,7 +7,12 @@ module iuh.fit {
     requires com.dlsc.unitfx;
     requires org.controlsfx.controls;
     requires com.calendarfx.view;
+
+    requires org.apache.poi.poi;
+    requires org.apache.poi.ooxml;
+
     requires itextpdf;
+
 
     opens iuh.fit to javafx.fxml;
 
@@ -20,6 +25,8 @@ module iuh.fit {
     opens iuh.fit.controller.features.room.checking_out_controllers to javafx.fxml;
     opens iuh.fit.controller.features.room.room_changing_controllers to javafx.fxml;
     opens iuh.fit.controller.features.room.service_ordering_controllers to javafx.fxml;
+    opens iuh.fit.controller.features.room.invoice_controllers to javafx.fxml;
+    opens iuh.fit.controller.features.room.group_booking_controllers to javafx.fxml;
     opens iuh.fit.controller.features.employee to javafx.fxml;
     opens iuh.fit.controller.features.customer to javafx.fxml;
     opens iuh.fit.controller.features.statistics to javafx.fxml;

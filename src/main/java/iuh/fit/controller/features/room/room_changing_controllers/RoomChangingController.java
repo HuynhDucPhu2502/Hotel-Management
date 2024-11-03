@@ -6,6 +6,7 @@ import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
+import iuh.fit.dao.HistoryCheckinDAO;
 import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.RoomReservationDetailDAO;
@@ -33,14 +34,12 @@ public class RoomChangingController {
     // ==================================================================================================================
     // 1. Các biến
     // ==================================================================================================================
-    // 1.1 Buttons
    @FXML
    private Button backBtn, bookingRoomNavigate;
    @FXML
    private Button navigateToCreateReservationFormBtn,
            navigateToReservationListBtn, navigateToServiceOrderingBtn;
 
-    // 1.2 Labels
     @FXML
     private Label roomNumberLabel, roomCategoryLabel,
             checkInDateLabel, checkOutDateLabel,
@@ -54,11 +53,9 @@ public class RoomChangingController {
     @FXML
     private Text roomAvailableTitle;
 
-    // 1.3 Formatter
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
 
-   // 1.4 Table View
     @FXML
     private TableView<RoomReservationDetail> roomReservationDetailTableView;
     @FXML
@@ -70,15 +67,11 @@ public class RoomChangingController {
     @FXML
     private TableColumn<RoomReservationDetail, String> roomReservationEmployeeFullname;
 
-    // 1.5 Dialog Pane
     @FXML
     private DialogPane dialogPane;
-
-    // 1.6 Titled Pane
     @FXML
     private TitledPane titledPane;
 
-    // 1.7 Container
     @FXML
     private HBox emptyLabelContainer;
     @FXML
@@ -86,7 +79,6 @@ public class RoomChangingController {
     @FXML
     private GridPane roomGridPane;
 
-    // 1.8 Context
     private MainController mainController;
     private RoomWithReservation roomWithReservation;
     private Employee employee;
@@ -99,7 +91,7 @@ public class RoomChangingController {
     public void initialize() {
         dialogPane.toFront();
 
-        setupTable();
+        setupRoomReservationDetailTableView();
     }
 
     public void setupContext(MainController mainController, Employee employee,
@@ -109,7 +101,8 @@ public class RoomChangingController {
         this.roomWithReservation = roomWithReservation;
 
         titledPane.setText("Quản lý đặt phòng " + roomWithReservation.getRoom().getRoomNumber());
-        roomAvailableTitle.setText("Danh sách phòng trống từ hiện tại đến ngày " + dateTimeFormatter.format(roomWithReservation.getReservationForm().getCheckOutDate()));
+        roomAvailableTitle.setText("Danh sách phòng trống từ hiện tại đến ngày " +
+                dateTimeFormatter.format(roomWithReservation.getReservationForm().getCheckOutDate()));
 
         setupReservationForm();
         setupButtonActions();
@@ -145,7 +138,6 @@ public class RoomChangingController {
         navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
         navigateToServiceOrderingBtn.setOnAction(e -> navigateToServiceOrderingPanel());
 
-        // Current Panel Button
     }
 
     // ==================================================================================================================
@@ -230,9 +222,11 @@ public class RoomChangingController {
         Room reservationFormRoom = roomWithReservation.getRoom();
         Customer reservationFormCustomer = roomWithReservation.getReservationForm().getCustomer();
 
+        LocalDateTime actualCheckInDate = HistoryCheckinDAO.getActualCheckInDate(reservationForm.getReservationID());
+
         roomNumberLabel.setText(reservationFormRoom.getRoomNumber());
         roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
-        checkInDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckInDate()));
+        checkInDateLabel.setText(dateTimeFormatter.format(actualCheckInDate != null ? actualCheckInDate : reservationForm.getCheckInDate()));
         checkOutDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
         stayLengthLabel.setText(Calculator.calculateStayLengthToString(
                 reservationForm.getCheckInDate(),
@@ -289,7 +283,10 @@ public class RoomChangingController {
         }
     }
 
-    private void setupTable() {
+    // ==================================================================================================================
+    // 5.  Setup table lịch sử dùng phòng
+    // ==================================================================================================================
+    private void setupRoomReservationDetailTableView() {
         roomReservationDetailID.setCellValueFactory(new PropertyValueFactory<>("roomReservationDetailID"));
         roomReservationDetailDateChanged.setCellValueFactory(data -> {
             LocalDateTime dateChanged = data.getValue().getDateChanged();
@@ -309,14 +306,20 @@ public class RoomChangingController {
 
     }
 
-
-
     // ==================================================================================================================
-    // 5.  Xử lý sự kiện thay chuyển phòng
+    // 6.  Xử lý sự kiện thay chuyển phòng
     // ==================================================================================================================
     private void handleChangingRoom(Room newRoom) {
         try {
-            System.out.println("test");
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
+
+            if (now.isAfter(checkOutDate)) {
+                dialogPane.showInformation("LỖI", "Thời gian lưu trú đã kết thúc. Không thể chuyển phòng.");
+                navigateToRoomBookingPanel();
+                return;
+            }
+
             com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
                     "XÁC NHẬN",
                     "Bạn có chắc chắn muốn chuyển phòng?"
@@ -349,12 +352,10 @@ public class RoomChangingController {
                 }
             });
 
-
         } catch (Exception e) {
             e.printStackTrace();
-            dialogPane.showInformation("LỖI",e.getMessage());
+            dialogPane.showInformation("LỖI", e.getMessage());
         }
     }
-
 
 }

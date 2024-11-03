@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="1800.0" minWidth="1208.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.checking_out_controllers.CheckingOutReservationFormController">
+<AnchorPane minHeight="1500.0" minWidth="1208.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.checking_out_controllers.CheckingOutReservationFormController">
    <children>
       <ScrollPane fitToHeight="true" fitToWidth="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
@@ -122,12 +122,12 @@
                                           <Font size="16.0" />
                                        </font>
                                     </Text>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày nhận phòng" textAlignment="RIGHT" GridPane.rowIndex="1">
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày nhận phòng thực tế " textAlignment="RIGHT" GridPane.rowIndex="1">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
                                     </Text>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày trả phòng" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày trả phòng dự kiến" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -322,13 +322,22 @@
                                  <columns>
                                     <TableColumn fx:id="roomUsageServiceIDColumn" prefWidth="75.0" text="Mã LS sử dụng dịch vụ" />
                                     <TableColumn fx:id="serviceNameColumn" prefWidth="75.0" text="Dịch vụ" />
-                                    <TableColumn fx:id="quantityColumn" prefWidth="75.0" text="Số lượng" />
+                                    <TableColumn fx:id="quantityColumn" prefWidth="40.0" text="Số lượng" />
                                     <TableColumn fx:id="unitPriceColumn" prefWidth="75.0" text="Đơn giá" />
                                     <TableColumn fx:id="totalPriceColumn" prefWidth="75.0" text="Tổng tiền" />
-                                    <TableColumn fx:id="reservationFormID" prefWidth="75.0" text="Mã phiếu đặt phòng" />
+                                    <TableColumn fx:id="dateAddedColumn" prefWidth="50.0" text="Ngày thêm" />
+                                    <TableColumn fx:id="employeeAddedColumn" prefWidth="75.0" text="Nhân viên thực hiện" />
                                  </columns>
                               </TableView>
-                              <Button fx:id="printBtn" mnemonicParsing="false" text="In" />
+                              <HBox alignment="CENTER" spacing="20.0" stylesheets="@../../../../styles/Button.css">
+                                 <children>
+                                    <Button fx:id="checkOutBtn" mnemonicParsing="false" styleClass="button-check-in" text="Check Out và Xuất hóa đơn" textFill="WHITE">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </HBox>
                            </children>
                            <opaqueInsets>
                               <Insets />

@@ -17,23 +17,12 @@ public class ReservationFormItemController {
     // ==================================================================================================================
     // 1. Các biến
     // ==================================================================================================================
-    // 1.1 Label
     @FXML
-    private Label customerFullNameLabel;
-    @FXML
-    private Label customerIDCardNumberLabel;
-    @FXML
-    private Label employeeFullNameLabel;
-    @FXML
-    private Label checkInDateLabel;
-    @FXML
-    private Label checkoutDateLabel;
-
-    // 1.2 Formatter
+    private Label customerFullNameLabel, customerIDCardNumberLabel, employeeFullNameLabel,
+            checkInDateLabel, checkoutDateLabel;
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.forLanguageTag("vi-VN"));
 
-    // 1.3 Context
     private MainController mainController;
     private ReservationForm reservationForm;
     private Employee employee;
