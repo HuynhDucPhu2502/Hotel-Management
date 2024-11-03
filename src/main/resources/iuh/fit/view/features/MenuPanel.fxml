@@ -429,6 +429,8 @@
                                           <MoveTo x="10" y="25" />
                                           <LineTo x="10" y="40" />
                                           <LineTo x="20" y="40" />
+                                          <MoveTo x="10" y="40" />
+                                          <LineTo x="10" y="55" />
                                        </elements>
                                     </Path>
 

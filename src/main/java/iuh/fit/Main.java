@@ -5,8 +5,10 @@ import iuh.fit.dao.AccountDAO;
 import iuh.fit.models.Account;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 @SuppressWarnings("unused")
@@ -31,6 +33,8 @@ public class Main extends Application {
 
             Scene scene = new Scene(root);
 
+            primaryStage.setMaximized(true);
+
             primaryStage.setTitle("Quản Lý Khách Sạn");
             primaryStage.setScene(scene);
             primaryStage.setResizable(true);
@@ -47,6 +51,8 @@ public class Main extends Application {
             AnchorPane root = loader.load();
 
             Scene scene = new Scene(root);
+
+            primaryStage.setMaximized(true);
 
             primaryStage.setTitle("Quản Lý Khách Sạn");
             primaryStage.setScene(scene);
