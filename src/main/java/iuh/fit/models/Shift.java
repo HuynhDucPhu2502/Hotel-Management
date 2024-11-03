@@ -185,19 +185,23 @@ public class Shift {
         this.numberOfHour = numberOfHour;
     }
 
-    public double getNumberOfHour() {
+    public int getNumberOfHour() {
         return numberOfHour;
     }
 
+//    @Override
+//    public String toString() {
+//        return "Shift{" +
+//                "shiftID='" + shiftID + '\'' +
+//                ", startTime=" + startTime +
+//                ", endTime=" + endTime +
+//                ", updatedDate=" + updatedDate +
+//                ", shiftDaysSchedule=" + shiftDaysSchedule +
+//                ", numberOfHour=" + numberOfHour +
+//                '}';
+//    }
     @Override
     public String toString() {
-        return "Shift{" +
-                "shiftID='" + shiftID + '\'' +
-                ", startTime=" + startTime +
-                ", endTime=" + endTime +
-                ", updatedDate=" + updatedDate +
-                ", shiftDaysSchedule=" + shiftDaysSchedule +
-                ", numberOfHour=" + numberOfHour +
-                '}';
+        return shiftID + ": " + startTime + " - " + endTime;
     }
 }
