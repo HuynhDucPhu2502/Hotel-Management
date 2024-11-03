@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -248,6 +249,28 @@ public class HistoryCheckOutDAO {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+    }
+
+    public static LocalDateTime getActualCheckOutDate(String reservationFormID) {
+        String sql =
+                """
+                SELECT checkOutDate FROM HistoryCheckOut
+                WHERE reservationFormID = ? \s
+               \s""";
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            preparedStatement.setString(1, reservationFormID);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    return ConvertHelper.localDateTimeConverter(rs.getTimestamp(1));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

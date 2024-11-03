@@ -259,10 +259,10 @@ VALUES
 	('RoomCategory', 'RC-000005'),
 	('ShiftAssignment', 'SA-000004'),
 	('Customer', 'CUS-000031'),
-	('ReservationForm', 'RF-000111'),
-	('HistoryCheckIn', 'HCI-000004'),
+	('ReservationForm', 'RF-000112'),
+	('HistoryCheckIn', 'HCI-000005'),
 	('HistoryCheckOut', 'HCO-000001'),
-	('RoomReservationDetail', 'RRD-000004'),
+	('RoomReservationDetail', 'RRD-000005'),
 	('RoomUsageService', 'RUS-000005'),
 	('Invoice', 'INV-000001');
 GO
@@ -718,6 +718,24 @@ SET roomStatus = 'ON_USE'
 WHERE roomID = 'V2206';
 GO
 
+-- Phiếu 5: Check-in đã được thực hiện, gần quá 2 tiếng thời gian checkout (còn 3 phút nữa để quá 2 tiếng)
+INSERT INTO ReservationForm (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit)
+VALUES ('RF-000111', DATEADD(DAY, -2, GETDATE()), DATEADD(DAY, -1, GETDATE()), DATEADD(HOUR, -2, DATEADD(MINUTE, 3, GETDATE())), 'EMP-000005', 'V2304', 'CUS-000005', 600000);
+
+-- Thêm thông tin vào HistoryCheckin
+INSERT INTO HistoryCheckin (historyCheckInID, checkInDate, reservationFormID, employeeID)
+VALUES ('HCI-000004', DATEADD(DAY, -1, GETDATE()), 'RF-000111', 'EMP-000005');
+
+-- Thêm vào RoomReservationDetail
+INSERT INTO RoomReservationDetail (roomReservationDetailID, dateChanged, roomID, reservationFormID, employeeID)
+VALUES ('RRD-000004', DATEADD(DAY, -1, GETDATE()), 'V2304', 'RF-000111', 'EMP-000005');
+
+-- Cập nhật trạng thái phòng
+UPDATE Room
+SET roomStatus = 'ON_USE'
+WHERE roomID = 'V2304';
+GO
+
 -- ===================================================================================
 -- 3. TRIGGER
 -- ===================================================================================
@@ -743,13 +761,5 @@ BEGIN
     END
 END;
 GO
-
-
-
-
-
-
-
-
 
 

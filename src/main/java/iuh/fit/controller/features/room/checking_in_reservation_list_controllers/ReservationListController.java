@@ -26,7 +26,6 @@ public class ReservationListController {
     // ==================================================================================================================
     // 1. Các biến
     // ==================================================================================================================
-    // 1.1 Buttons
     @FXML
     private Button backBtn, bookingRoomNavigate;
 
@@ -34,11 +33,9 @@ public class ReservationListController {
     private Button navigateToCreateReservationFormBtn,
             navigateToServiceOrdering, navigateToRoomChanging;
 
-    // 1.2 Titled Pane
     @FXML
     private TitledPane titledPane;
 
-    // 1.3 Container
     @FXML
     private HBox emptyLabelContainer;
     @FXML
@@ -46,7 +43,6 @@ public class ReservationListController {
     @FXML
     private GridPane reservationFormGidPane;
 
-    // 1.4 Context
     private MainController mainController;
     private Employee employee;
     private Room room;

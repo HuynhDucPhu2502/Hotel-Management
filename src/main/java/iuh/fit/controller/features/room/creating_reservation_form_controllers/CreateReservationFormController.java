@@ -190,7 +190,7 @@ public class CreateReservationFormController {
         loadPanel("/iuh/fit/view/features/room/ordering_services_panels/ServiceOrderingPanel.fxml", RoomChangingController.class);
     }
 
-    private <T> void loadPanel(String path, Class<T> controllerClass) {
+    private <T> void loadPanel(String path, Class<T> ignoredControllerClass) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             AnchorPane layout = loader.load();
@@ -405,7 +405,6 @@ public class CreateReservationFormController {
             checkInDateTextField.textProperty().unbind();
             checkOutDateTextField.textProperty().unbind();
 
-            // Reset giá trị cho các thành phần giao diện
             bookDateRangePicker.setValue(null);
             checkInTimePicker.setTime(null);
             checkOutTimePicker.setTime(null);
@@ -415,7 +414,6 @@ public class CreateReservationFormController {
             stayLengthLabel.setText("Chưa Đặt Lịch");
             bookingDepositLabel.setText("0 VND");
 
-            // Xóa các giá trị dữ liệu liên quan
             customer = null;
             checkOutTime = null;
             checkInTime = null;

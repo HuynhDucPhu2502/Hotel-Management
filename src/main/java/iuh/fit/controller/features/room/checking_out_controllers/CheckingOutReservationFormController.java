@@ -78,7 +78,6 @@ public class CheckingOutReservationFormController {
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
 
-    // Context
     private MainController mainController;
     private RoomWithReservation roomWithReservation;
     private Employee employee;
@@ -129,28 +128,6 @@ public class CheckingOutReservationFormController {
 
     }
 
-    // ==================================================================================================================
-    // 3. Xử lý chức năng hiển thị panel khác
-    // ==================================================================================================================
-    private void navigateToRoomBookingPanel() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
-            AnchorPane layout = loader.load();
-
-            RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setupContext(mainController, employee);
-
-
-            mainController.getMainPanel().getChildren().clear();
-            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // ==================================================================================================================
-    // 4.  Đẩy dữ liệu lên giao diện
-    // ==================================================================================================================
     private void setupReservationForm() {
         ReservationForm reservationForm = roomWithReservation.getReservationForm();
 
@@ -174,6 +151,28 @@ public class CheckingOutReservationFormController {
         customerIDCardNumberLabel.setText(reservationFormCustomer.getIdCardNumber());
     }
 
+    // ==================================================================================================================
+    // 3. Xử lý chức năng hiển thị panel khác
+    // ==================================================================================================================
+    private void navigateToRoomBookingPanel() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
+            AnchorPane layout = loader.load();
+
+            RoomBookingController roomBookingController = loader.getController();
+            roomBookingController.setupContext(mainController, employee);
+
+
+            mainController.getMainPanel().getChildren().clear();
+            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ==================================================================================================================
+    // 4.  Setup 2 table lịch sử dùng phòng và lịch sử dùng dịch vụ
+    // ==================================================================================================================
     private void setupRoomReservationDetailTableView() {
         roomReservationDetailID.setCellValueFactory(new PropertyValueFactory<>("roomReservationDetailID"));
         roomReservationDetailDateChanged.setCellValueFactory(data -> {
@@ -219,6 +218,9 @@ public class CheckingOutReservationFormController {
         });
     }
 
+    // ==================================================================================================================
+    // 5. Xử lý sự kiện checkout
+    // ==================================================================================================================
     private void handleCheckOut() {
         try {
             com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> confirmDialog = dialogPane.showConfirmation(
@@ -284,9 +286,6 @@ public class CheckingOutReservationFormController {
             dialogPane.showInformation("LỖI", "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại!");
         }
     }
-
-
-
 
 
 

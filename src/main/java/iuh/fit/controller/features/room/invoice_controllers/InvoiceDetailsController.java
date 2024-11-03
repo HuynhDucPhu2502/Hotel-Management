@@ -4,6 +4,8 @@ import com.dlsc.gemsfx.DialogPane;
 import com.itextpdf.text.DocumentException;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.InvoiceManagerController;
+import iuh.fit.dao.HistoryCheckOutDAO;
+import iuh.fit.dao.HistoryCheckinDAO;
 import iuh.fit.dao.RoomUsageServiceDAO;
 import iuh.fit.models.*;
 import iuh.fit.utils.Calculator;
@@ -111,7 +113,6 @@ public class InvoiceDetailsController {
         exportPDFBtn.setOnAction(e -> {
             try {
                 PDFHelper.createInvoicePDF(invoice);
-                dialogPane.showInformation("Thông báo", "Xuất hóa đơn PDF thành công!");
             } catch (DocumentException | IOException ex) {
                 ex.printStackTrace();
                 dialogPane.showInformation("Lỗi", "Đã xảy ra lỗi trong quá trình xuất PDF. Vui lòng thử lại!");
@@ -122,8 +123,47 @@ public class InvoiceDetailsController {
 
 
     }
+
+    private void setupReservationForm() {
+        ReservationForm reservationForm = invoice.getReservationForm();
+
+        Room reservationFormRoom = reservationForm.getRoom();
+        Customer reservationFormCustomer = reservationForm.getCustomer();
+
+        LocalDateTime actualCheckInDate = HistoryCheckinDAO.getActualCheckInDate(reservationForm.getReservationID());
+        LocalDateTime actualCheckOutDate = HistoryCheckOutDAO.getActualCheckOutDate(reservationForm.getReservationID());
+
+        roomNumberLabel.setText(reservationFormRoom.getRoomNumber());
+        roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
+        checkInDateLabel.setText(dateTimeFormatter.format(actualCheckInDate != null ? actualCheckInDate : reservationForm.getCheckInDate()));
+        checkOutDateLabel.setText(dateTimeFormatter.format(actualCheckOutDate != null ? actualCheckOutDate : reservationForm.getCheckOutDate()));
+        stayLengthLabel.setText(Calculator.calculateStayLengthToString(
+                reservationForm.getCheckInDate(),
+                reservationForm.getCheckOutDate()
+        ));
+        customerIDLabel.setText(reservationFormCustomer.getCustomerID());
+        customerFullnameLabel.setText(reservationFormCustomer.getFullName());
+        cusomerPhoneNumberLabel.setText(reservationFormCustomer.getPhoneNumber());
+        customerEmailLabel.setText(reservationFormCustomer.getEmail());
+        customerIDCardNumberLabel.setText(reservationFormCustomer.getIdCardNumber());
+    }
+
+    private void setupPaymentSummary() {
+        totalServiceChargeText.setText(String.format("%,.0f", invoice.getServicesCharge()));
+        totalRoomChargeText.setText(String.format("%,.0f", invoice.getRoomCharge()));
+        double depositAmount = invoice.getReservationForm().getRoomBookingDeposit();
+        totalRoomDepositeText.setText("-" + String.format("%,.0f", depositAmount));
+        totalDueText.setText(String.format("%,.0f", invoice.getTotalDue()));
+        double taxRate = invoice.getTax().getTaxRate();
+        double taxAmount = invoice.getTotalDue() * taxRate / 100;
+        taxText.setText(String.format("%,.0f", taxAmount));
+        netDueText.setText(String.format("%,.0f", invoice.getNetDue()));
+
+        invoiceTitleText.setText("Thuế " + "(" + taxRate * 100 + "%)");
+    }
+
     // ==================================================================================================================
-    // 3. Xử lý chức năng hiển thị panel khác
+    // 2. Xử lý chức năng hiển thị panel khác
     // ==================================================================================================================
     private void navigateToInvoiceManagerPanel() {
         try {
@@ -142,29 +182,8 @@ public class InvoiceDetailsController {
     }
 
     // ==================================================================================================================
-    // 4.  Đẩy dữ liệu lên giao diện
+    // 3. Setup table lịch sử dùng dịch vụ
     // ==================================================================================================================
-    private void setupReservationForm() {
-        ReservationForm reservationForm = invoice.getReservationForm();
-
-        Room reservationFormRoom = reservationForm.getRoom();
-        Customer reservationFormCustomer = reservationForm.getCustomer();
-
-        roomNumberLabel.setText(reservationFormRoom.getRoomNumber());
-        roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
-        checkInDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckInDate()));
-        checkOutDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
-        stayLengthLabel.setText(Calculator.calculateStayLengthToString(
-                reservationForm.getCheckInDate(),
-                reservationForm.getCheckOutDate()
-        ));
-        customerIDLabel.setText(reservationFormCustomer.getCustomerID());
-        customerFullnameLabel.setText(reservationFormCustomer.getFullName());
-        cusomerPhoneNumberLabel.setText(reservationFormCustomer.getPhoneNumber());
-        customerEmailLabel.setText(reservationFormCustomer.getEmail());
-        customerIDCardNumberLabel.setText(reservationFormCustomer.getIdCardNumber());
-    }
-
     private void setupRoomUsageServiceTableView() {
         roomUsageServiceIDColumn.setCellValueFactory(new PropertyValueFactory<>("roomUsageServiceId"));
         serviceNameColumn.setCellValueFactory(data -> {
@@ -190,21 +209,5 @@ public class InvoiceDetailsController {
             return new SimpleStringProperty(employeeName);
         });
     }
-
-    private void setupPaymentSummary() {
-        totalServiceChargeText.setText(String.format("%,.0f", invoice.getServicesCharge()));
-        totalRoomChargeText.setText(String.format("%,.0f", invoice.getRoomCharge()));
-        double depositAmount = invoice.getReservationForm().getRoomBookingDeposit();
-        totalRoomDepositeText.setText("-" + String.format("%,.0f", depositAmount));
-        totalDueText.setText(String.format("%,.0f", invoice.getTotalDue()));
-        double taxRate = invoice.getTax().getTaxRate();
-        double taxAmount = invoice.getTotalDue() * taxRate / 100;
-        taxText.setText(String.format("%,.0f", taxAmount));
-        netDueText.setText(String.format("%,.0f", invoice.getNetDue()));
-
-        invoiceTitleText.setText("Thuế " + "(" + taxRate * 100 + "%)");
-    }
-
-
 
 }

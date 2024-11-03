@@ -92,6 +92,53 @@ public class RoomWithReservationDAO {
         return null;
     }
 
+    public static List<RoomWithReservation> getRoomOverDueWithLatestReservation() {
+        List<RoomWithReservation> data = new ArrayList<>();
+
+        String sql = """
+            SELECT r.roomID, r.roomStatus, r.dateOfCreation,
+                   rc.roomCategoryID, rc.roomCategoryName, rc.numberOfBed,
+                   rf.reservationFormID, rf.reservationDate, rf.checkInDate,
+                   rf.checkOutDate, rf.roomBookingDeposit, rf.employeeID, rf.customerID,
+                   e.fullName AS employeeName,
+                   c.fullName AS customerName, c.phoneNumber, c.email, c.idCardNumber
+            FROM Room r
+            LEFT JOIN RoomCategory rc ON r.roomCategoryID = rc.roomCategoryID
+            LEFT JOIN (
+                SELECT rf.*
+                FROM ReservationForm rf
+                JOIN (
+                    SELECT roomID, MAX(checkOutDate) AS latestCheckOutDate
+                    FROM ReservationForm
+                    GROUP BY roomID
+                ) AS latestRF ON rf.roomID = latestRF.roomID AND rf.checkOutDate = latestRF.latestCheckOutDate
+                LEFT JOIN HistoryCheckOut hco ON rf.reservationFormID = hco.reservationFormID
+                WHERE hco.historyCheckOutID IS NULL
+                  AND GETDATE() > DATEADD(hour, 2, rf.checkOutDate)
+            ) AS rf ON r.roomID = rf.roomID
+            LEFT JOIN Employee e ON rf.employeeID = e.employeeID
+            LEFT JOIN Customer c ON rf.customerID = c.customerID
+            WHERE r.roomStatus = 'OVERDUE' AND rf.reservationFormID IS NOT NULL;
+            """;
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                ResultSet rs = preparedStatement.executeQuery()
+        ) {
+            while (rs.next()) {
+                RoomWithReservation roomWithReservation = extractData(rs);
+                data.add(roomWithReservation);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return data;
+    }
+
+
+
     private static RoomWithReservation extractData(ResultSet rs) throws SQLException {
         // Room and RoomCategory
         Room room = new Room();

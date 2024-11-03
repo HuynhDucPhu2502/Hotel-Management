@@ -19,7 +19,6 @@ public class RoomAvailableItemController {
     @FXML
     private Label roomCategoryNameLabel;
 
-    // Context
     private MainController mainController;
     private Employee employee;
     private RoomWithReservation roomWithReservation;

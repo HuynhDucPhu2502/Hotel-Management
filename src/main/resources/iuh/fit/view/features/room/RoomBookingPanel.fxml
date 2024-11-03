@@ -83,6 +83,7 @@
                                     </HBox>
                                  </children>
                               </AnchorPane>
+                              <Button fx:id="groupBookingBtn" mnemonicParsing="false" text="Đặt Phòng Theo Đoàn" textFill="WHITE" />
                               <ScrollPane prefHeight="561.0" prefWidth="1326.0">
                                  <content>
                                     <HBox alignment="TOP_CENTER" fillHeight="false" minHeight="800.0" style="-fx-border-color: black;">

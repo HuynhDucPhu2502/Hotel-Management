@@ -26,7 +26,9 @@ public class ServiceItemController {
 
     private HotelService hotelService;
 
-
+    // ==================================================================================================================
+    // 2. Khởi tạo và nạp dữ liệu vào giao diện
+    // ==================================================================================================================
     public void setupContext(HotelService hotelService) {
         this.hotelService = hotelService;
 
@@ -36,7 +38,7 @@ public class ServiceItemController {
     private void loadData() {
         if (hotelService != null) {
             serviceName.setText(hotelService.getServiceName());
-            servicePrice.setText(String.valueOf(hotelService.getServicePrice()) + " VND");
+            servicePrice.setText(hotelService.getServicePrice() + " VND");
             String iconPath = "/iuh/fit/icons/service_icons/ic_" + hotelService.getServiceCategory().getIcon() + ".png";
             Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath)));
             serviceCategoryImg.setImage(image);
@@ -47,6 +49,9 @@ public class ServiceItemController {
 
     }
 
+    // ==================================================================================================================
+    // 3. Hàm getter truyền ra ngoài
+    // ==================================================================================================================
     public Spinner<Integer> getAmountField() {
         return amountField;
     }

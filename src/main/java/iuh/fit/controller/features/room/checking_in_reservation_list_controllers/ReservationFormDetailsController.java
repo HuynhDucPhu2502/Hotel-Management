@@ -24,66 +24,35 @@ public class ReservationFormDetailsController {
     // ==================================================================================================================
     // 1. Các biến
     // ==================================================================================================================
-    // 1.1 Buttons
     @FXML
-    private Button backBtn;
-    @FXML
-    private Button reservationFormListNavigate;
-    @FXML
-    private Button bookingRoomNavigate;
-    @FXML
-    private Button reservationFormBtn;
-    @FXML
-    private Button deleteReservationFormBtn;
-    @FXML
-    private Button checkInBtn;
+    private Button backBtn, reservationFormListNavigate, bookingRoomNavigate,
+            reservationFormBtn;
 
-    // 1.2 Labels
     @FXML
-    private Label roomNumberLabel;
-    @FXML
-    private Label roomCategoryLabel;
-    @FXML
-    private Label checkInDateLabel;
-    @FXML
-    private Label checkOutDateLabel;
-    @FXML
-    private Label stayLengthLabel;
-    @FXML
-    private Label bookingDepositLabel;
-    @FXML
-    private Label customerIDLabel;
-    @FXML
-    private Label customerFullnameLabel;
-    @FXML
-    private Label cusomerPhoneNumberLabel;
-    @FXML
-    private Label customerEmailLabel;
-    @FXML
-    private Label customerIDCardNumberLabel;
-    @FXML
-    private Label employeeFullNameLabel;
-    @FXML
-    private Label employeePositionLabel;
-    @FXML
-    private Label employeeIDLabel;
-    @FXML
-    private Label employeePhoneNumberLabel;
+    private Button deleteReservationFormBtn, checkInBtn;
 
+    @FXML
+    private Label roomNumberLabel, roomCategoryLabel, checkInDateLabel,
+            checkOutDateLabel, stayLengthLabel, bookingDepositLabel;
 
-    // 1.3 Formatter
-    private final DateTimeFormatter dateTimeFormatter =
-            DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
+    @FXML
+    private Label customerIDLabel, customerFullnameLabel, cusomerPhoneNumberLabel,
+            customerEmailLabel, customerIDCardNumberLabel;
 
-    // 1.4 Dialog Pane
+    @FXML
+    private Label employeeFullNameLabel, employeePositionLabel, employeeIDLabel,
+            employeePhoneNumberLabel;
+
     @FXML
     private DialogPane dialogPane;
 
-    // 1.5 Titled Pane
     @FXML
     private TitledPane titledPane;
 
-    // 1.6 Context
+    private final DateTimeFormatter dateTimeFormatter =
+            DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
+
+
     private MainController mainController;
     private ReservationForm reservationForm;
     private RoomWithReservation roomWithReservation;
@@ -130,7 +99,7 @@ public class ReservationFormDetailsController {
     }
 
     // ==================================================================================================================
-    // 2.  Đẩy dữ liệu lên giao diện
+    // 3.  Đẩy dữ liệu lên giao diện
     // ==================================================================================================================
     private void setupReservationForm() {
         Room reservationFormRoom = reservationForm.getRoom();
@@ -164,7 +133,7 @@ public class ReservationFormDetailsController {
     }
 
     // ==================================================================================================================
-    // 3. Xử lý chức năng hiển thị panel khác
+    // 4. Xử lý chức năng hiển thị panel khác
     // ==================================================================================================================
     private void navigateToRoomBookingPanel() {
         try {
@@ -199,7 +168,7 @@ public class ReservationFormDetailsController {
     }
 
     // ==================================================================================================================
-    // 4. Xử lý chức năng xóa phiếu đặt phòng
+    // 5. Xử lý chức năng xóa phiếu đặt phòng
     // ==================================================================================================================
     private void handleDeleteAction() {
         try{
@@ -222,16 +191,14 @@ public class ReservationFormDetailsController {
     }
 
     // ==================================================================================================================
-    // 5. Xử lý chức năng CheckIn
+    // 6. Xử lý chức năng CheckIn
     // ==================================================================================================================
     private void handleCheckIn() {
         try {
-            // Lấy thông tin cần thiết từ reservationForm và employee
             Room room = reservationForm.getRoom();
             Employee employee = this.employee;
             LocalDateTime now = LocalDateTime.now();
 
-            // 1. Tạo đối tượng RoomReservationDetail
             RoomReservationDetail detail = new RoomReservationDetail(
                     RoomReservationDetailDAO.getNextID(),
                     now,
@@ -240,7 +207,6 @@ public class ReservationFormDetailsController {
                     employee
             );
 
-            // 2. Tạo đối tượng HistoryCheckIn
             HistoryCheckIn historyCheckIn = new HistoryCheckIn(
                     HistoryCheckinDAO.getNextID(),
                     LocalDateTime.now(),
@@ -248,11 +214,9 @@ public class ReservationFormDetailsController {
                     employee
             );
 
-            // 3. Thêm dữ liệu vào RoomReservationDetail và HistoryCheckIn
             RoomReservationDetailDAO.createData(detail);
             HistoryCheckinDAO.createData(historyCheckIn);
 
-            // 4. Cập nhật trạng thái phòng thành "ON_USE"
             room.setRoomStatus(RoomStatus.ON_USE);
             RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.ON_USE);
 
@@ -262,10 +226,8 @@ public class ReservationFormDetailsController {
                     .getRoomWithReservationByID(reservationForm.getReservationID(), room.getRoomID());
             navigateToReservationListPanel();
         } catch (Exception e) {
-            dialogPane.showWarning("Lỗi", e.getMessage());
+            dialogPane.showWarning("LỖI", e.getMessage());
         }
     }
-
-
 
 }
