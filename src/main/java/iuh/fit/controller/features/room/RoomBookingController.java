@@ -5,8 +5,8 @@ import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomAvailableItemController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOnUseItemController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOverDueController;
+import iuh.fit.controller.features.room.group_booking_controllers.GroupBookingController;
 import iuh.fit.dao.RoomCategoryDAO;
-import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.RoomWithReservationDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
@@ -18,11 +18,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +38,8 @@ public class RoomBookingController {
 
     @FXML
     private Button allBtn, availableBtn,
-            onUseBtn, overDueBtn;
+            onUseBtn, overDueBtn,
+            groupBookingBtn;
 
     @FXML
     private DialogPane dialogPane;
@@ -63,6 +64,8 @@ public class RoomBookingController {
         loadData();
         loadDataForBtn();
         setupEventHandlers();
+
+        groupBookingBtn.setOnAction(e -> navigateToGroupBookingPanel());
     }
 
     private List<String> getRoomCategories() {
@@ -78,16 +81,16 @@ public class RoomBookingController {
     }
 
     private void loadData() {
-        roomWithReservations = RoomWithReservationDAO.getRoomWithReservation().stream()
-                .sorted(Comparator.comparing(r -> r.getRoom().getRoomNumber()))
-                .toList();
-
         roomCategoryCBox.getItems().setAll(getRoomCategories());
         roomCategoryCBox.getSelectionModel().selectFirst();
 
         roomFloorNumberCBox.getItems().setAll(getFloorNumbers());
         roomFloorNumberCBox.getSelectionModel().selectFirst();
 
+        RoomStatusHelper.autoCheckoutOverdueRooms(employee);
+        roomWithReservations = RoomWithReservationDAO.getRoomWithReservation().stream()
+                .sorted(Comparator.comparing(r -> r.getRoom().getRoomNumber()))
+                .toList();
         displayFilteredRooms(roomWithReservations);
     }
 
@@ -247,6 +250,22 @@ public class RoomBookingController {
             case "onUseBtn" -> button.getStyleClass().remove("button-OnUse-selected");
             case "overDueBtn" -> button.getStyleClass().remove("button-OverDue-selected");
             default -> throw new IllegalArgumentException("Không tìm thấy button ID");
+        }
+    }
+
+    private void navigateToGroupBookingPanel() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/group_booking_panels/GroupBookingPanel.fxml"));
+            AnchorPane layout = loader.load();
+
+            GroupBookingController groupBookingController = loader.getController();
+            groupBookingController.setupContext(mainController, employee);
+
+
+            mainController.getMainPanel().getChildren().clear();
+            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

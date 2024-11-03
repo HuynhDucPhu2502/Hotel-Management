@@ -40,7 +40,6 @@ public class RoomOnUseItemController {
         this.mainController = mainController;
         this.employee = employee;
         this.roomWithReservation = roomWithReservation;
-
         Room room = roomWithReservation.getRoom();
         Customer customer = roomWithReservation.getReservationForm().getCustomer();
         ReservationForm reservationForm = roomWithReservation.getReservationForm();

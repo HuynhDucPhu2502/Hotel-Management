@@ -1,18 +1,25 @@
 package iuh.fit.utils;
 
-import iuh.fit.dao.HistoryCheckOutDAO;
-import iuh.fit.dao.InvoiceDAO;
-import iuh.fit.dao.RoomDAO;
-import iuh.fit.dao.TaxDAO;
+import iuh.fit.dao.*;
 import iuh.fit.models.*;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
 
 public class RoomStatusHelper {
+
+    public static void autoCheckoutOverdueRooms(Employee employee) {
+        List<RoomWithReservation> overdueRooms =
+                RoomWithReservationDAO.getRoomOverDueWithLatestReservation();
+
+        for (RoomWithReservation roomWithReservation : overdueRooms) {
+            autoCheckoutRoom(roomWithReservation.getRoom(), roomWithReservation, employee);
+        }
+    }
 
     public static void updateRoomStatusIfOverdue(Room room, ReservationForm
             reservationForm, RoomWithReservation roomWithReservation, Employee employee) {
@@ -35,8 +42,8 @@ public class RoomStatusHelper {
 
     private static void autoCheckoutRoom(Room room, RoomWithReservation roomWithReservation, Employee employee) {
         handleCheckOut(roomWithReservation, employee);
-        RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.AVAILABLE);
         room.setRoomStatus(RoomStatus.AVAILABLE);
+        RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.AVAILABLE);
     }
 
     private static void handleCheckOut(RoomWithReservation roomWithReservation, Employee employee) {
@@ -55,7 +62,8 @@ public class RoomStatusHelper {
             invoice.setInvoiceID(InvoiceDAO.getNextInvoiceID());
             invoice.setInvoiceDate(LocalDateTime.now());
 
-            double totalCharge = Calculator.calculateTotalCharge(roomWithReservation.getReservationForm());
+            double totalCharge = Calculator.calculateTotalCharge(roomWithReservation.getReservationForm(),
+                    roomWithReservation.getRoom());
             double totalDue = totalCharge * 0.9;
             double netDue = totalDue * (1 + Objects.requireNonNull(tax).getTaxRate());
 
@@ -72,11 +80,12 @@ public class RoomStatusHelper {
 
             InvoiceDAO.createData(invoice);
 
-            RoomDAO.updateRoomStatus(roomWithReservation.getRoom().getRoomID(), RoomStatus.AVAILABLE);
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
 
 }

@@ -33,7 +33,6 @@ public class Main extends Application {
 
             primaryStage.setTitle("Quản Lý Khách Sạn");
             primaryStage.setScene(scene);
-            primaryStage.setFullScreen(true);
             primaryStage.setResizable(true);
             primaryStage.show();
         } catch (Exception e) {
@@ -51,7 +50,6 @@ public class Main extends Application {
 
             primaryStage.setTitle("Quản Lý Khách Sạn");
             primaryStage.setScene(scene);
-            primaryStage.setFullScreen(true);
             primaryStage.setResizable(true);
             primaryStage.show();
         } catch (Exception e) {
