@@ -5,9 +5,8 @@ import iuh.fit.models.enums.ExportExcelCategory;
 import iuh.fit.models.enums.Month;
 import iuh.fit.models.wrapper.InvoiceDisplayOnTable;
 import javafx.collections.ObservableList;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.scene.control.TableView;
+import javafx.stage.FileChooser;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -17,8 +16,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import javax.swing.JFileChooser;
-import java.io.File;
 import java.time.LocalDate;
 
 public class ExportFileHelper {
@@ -72,338 +69,181 @@ public class ExportFileHelper {
         }
     }
 
-    public static void exportExcelFile(TableView<InvoiceDisplayOnTable> tabableView, ExportExcelCategory type, DateRange date, int numOfInvoice, double totalMoney){
-        JFileChooser jFileChooser = new JFileChooser();
-        // Thu muc luu du lieu mac dinh
+    public static void exportExcelFile(TableView<InvoiceDisplayOnTable> tableView, ExportExcelCategory type, boolean forEmployee, DateRange date, int numOfInvoice, double totalMoney){
+        FileChooser fileChooser = new FileChooser();
         File directoryFile = new File(DATA_LOCATED);
-        // Kiem tra xem thu muc ton tai chua, neu chua thi tao
         if (!directoryFile.exists()) directoryFile.mkdirs();
+
+        fileChooser.setTitle("Save Excel File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"),
+                new FileChooser.ExtensionFilter("All Files", "*.*")
+        );
         switch (type){
             case ExportExcelCategory.ALL_OF_YEAR -> {
-                InvoiceDisplayOnTable instance = tabableView.getItems().getFirst();
+                InvoiceDisplayOnTable instance = tableView.getItems().getFirst();
                 String year = String.valueOf(instance.getCreateDate().getYear());
-                File yearFolder = new File(directoryFile.getPath().concat("//").concat(year));
-                if (!yearFolder.exists()) yearFolder.mkdirs();
-                File allOfYearFolder = new File(yearFolder.getPath().concat("//").concat("Cả năm"));
-                if (!allOfYearFolder.exists()) allOfYearFolder.mkdirs();
-                jFileChooser.setCurrentDirectory(allOfYearFolder);
-                jFileChooser.setSelectedFile(new File(year.concat("-TDTK-")
-                        .concat(LocalDate.now().toString()).concat(".xlsx")));
-                int userSelection = jFileChooser.showSaveDialog(null);
-                if(userSelection == JFileChooser.APPROVE_OPTION){
-                    File fileToSave = jFileChooser.getSelectedFile();
-                    if(fileToSave != null){
-                        String filePath = fileToSave.getAbsolutePath();
-                        createExcelFile(tabableView, filePath, numOfInvoice, totalMoney);
-                        openExcelFile(filePath);
-                    }else{
-                        throw new IllegalArgumentException("Errors");
-                    }
-                }else{
-                    System.out.println("nothing");
-                }
 
-            }
-            case ExportExcelCategory.ALL_OF_MONTH -> {
-                InvoiceDisplayOnTable invoiceInstance = tabableView.getItems().getFirst();
-                String year = String.valueOf(invoiceInstance.getCreateDate().getYear());
-                String month = String.valueOf(invoiceInstance.getCreateDate().getMonth());
-                File yearFoler = new File(directoryFile.getPath()
-                        .concat("//")
-                        .concat(year));
-                if(!yearFoler.exists()) yearFoler.mkdirs();
-                File monthFolder = new File(yearFoler.getPath()
-                        .concat("//")
-                        .concat(Month.valueOf(month).getName()));
-                if(!monthFolder.exists()) monthFolder.mkdirs();
-                File allOfMonth = new File(monthFolder.getPath()
-                        .concat("//")
-                        .concat("Cả tháng"));
-                if(!allOfMonth.exists()) allOfMonth.mkdirs();
-                jFileChooser.setCurrentDirectory(allOfMonth);
-                jFileChooser.setSelectedFile(new File(Month.valueOf(month).getName()
-                        .concat("-" + year)
-                        .concat("-TDTK-")
-                        .concat(LocalDate.now().toString())
-                        .concat(".xlsx")));
-                int userSelection = jFileChooser.showSaveDialog(null);
-                if(userSelection == JFileChooser.APPROVE_OPTION){
-                    File fileToSave = jFileChooser.getSelectedFile();
-                    String filePath = fileToSave.getAbsolutePath();
-                    createExcelFile(tabableView, filePath, numOfInvoice, totalMoney);
-                    openExcelFile(filePath);
-                }else{
-                    System.out.println("nothing");
-                }
-            }
-            case ExportExcelCategory.DAY_OF_MONTH -> {
-                InvoiceDisplayOnTable invoiceInstance = tabableView.getItems().getFirst();
-                String year = String.valueOf(invoiceInstance.getCreateDate().getYear());
-                String month = String.valueOf(invoiceInstance.getCreateDate().getMonth());
-                String day = String.valueOf(invoiceInstance.getCreateDate().getDayOfMonth());
-                File yearFolder = new File(directoryFile.getPath()
-                        .concat("//")
-                        .concat(year));
-                if(!yearFolder.exists()) yearFolder.mkdirs();
-                File monthFolder = new File(yearFolder.getPath()
-                        .concat("//")
-                        .concat(Month.valueOf(month).getName()));
-                if(!monthFolder.exists()) monthFolder.mkdirs();
-                File dayFolder = new File(monthFolder.getPath()
-                        .concat("//")
-                        .concat(day)
-                        .concat("-" + invoiceInstance.getCreateDate().getMonthValue() + "-" + year));
-                if(!dayFolder.exists()) dayFolder.mkdirs();
-                jFileChooser.setCurrentDirectory(dayFolder);
-                jFileChooser.setSelectedFile(new File(day.concat("-" + invoiceInstance.getCreateDate().getMonthValue() + "-" + year)
-                        .concat("-TDTK-").concat(LocalDate.now().toString())
-                        .concat(".xlsx")));
-                int userSelection = jFileChooser.showSaveDialog(null);
-                if(userSelection == JFileChooser.APPROVE_OPTION){
-                    File saveFile = jFileChooser.getSelectedFile();
-                    String filePath = saveFile.getAbsolutePath();
-                    createExcelFile(tabableView, filePath, numOfInvoice, totalMoney);
-                    openExcelFile(filePath);
-                }else{
-                    System.out.println("nothing");
-                }
-            }
-            case ExportExcelCategory.MANY_YEAR -> {
-                String fromYear = String.valueOf(date.getStartDate().getYear());
-                String toYear = String.valueOf(date.getEndDate().getYear());
-                File yearFolder = new File(directoryFile.getPath()
-                        .concat("//")
-                        .concat(fromYear + " - " + toYear));
-                if(!yearFolder.exists()) yearFolder.mkdirs();
-                File dateRangeFolder = new File(yearFolder.getPath()
-                        .concat("//")
-                        .concat(date.getStartDate() + " đến " + date.getEndDate()));
-                if(!dateRangeFolder.exists()) dateRangeFolder.mkdirs();
-                jFileChooser.setCurrentDirectory(dateRangeFolder);
-                jFileChooser.setSelectedFile(new File(
-                        date.getStartDate().toString() + " đến " + date.getEndDate().toString()
-                                .concat("-TDTK-").concat(LocalDate.now().toString())
-                                .concat(".xlsx")));
-                int userSelection = jFileChooser.showSaveDialog(null);
-                if(userSelection == JFileChooser.APPROVE_OPTION){
-                    File saveFile = jFileChooser.getSelectedFile();
-                    String filePath = saveFile.getAbsolutePath();
-                    createExcelFile(tabableView, filePath, numOfInvoice, totalMoney);
-                    openExcelFile(filePath);
-                }else{
-                    System.out.println("nothing");
-                }
-            }
-            case ExportExcelCategory.DATE_RANGE -> {
-                InvoiceDisplayOnTable invoiceInstance = tabableView.getItems().getFirst();
-                String year = String.valueOf(invoiceInstance.getCreateDate().getYear());
-                File yearFolder = new File(directoryFile.getPath()
-                        .concat("//")
-                        .concat(year));
-                if(!yearFolder.exists()) yearFolder.mkdirs();
-                File dateRangeFolder = new File(yearFolder.getPath()
-                        .concat("//")
-                        .concat(date.getStartDate().toString() + " đến " + date.getEndDate().toString()));
-                if(!dateRangeFolder.exists()) dateRangeFolder.mkdirs();
-                jFileChooser.setCurrentDirectory(dateRangeFolder);
-                jFileChooser.setSelectedFile(new File(
-                         date.getStartDate().toString() + " đến " + date.getEndDate().toString()
-                        .concat("-TDTK-").concat(LocalDate.now().toString())
-                        .concat(".xlsx")));
-                int userSelection = jFileChooser.showSaveDialog(null);
-                if(userSelection == JFileChooser.APPROVE_OPTION){
-                    File saveFile = jFileChooser.getSelectedFile();
-                    String filePath = saveFile.getAbsolutePath();
-                    createExcelFile(tabableView, filePath, numOfInvoice, totalMoney);
-                    openExcelFile(filePath);
-                }else{
-                    System.out.println("nothing");
-                }
-            }
-            default -> {
-                System.out.println("errors");
-            }
-        }
-    }
-
-    public static void exportExcelFileForEmployee(TableView<InvoiceDisplayOnTable> tabableView, ExportExcelCategory type, boolean forEmployee, DateRange date, int numOfInvoice, double totalMoney){
-        JFileChooser jFileChooser = new JFileChooser();
-        // Thu muc luu du lieu mac dinh
-        File directoryFile = new File(DATA_LOCATED);
-        // Kiem tra xem thu muc ton tai chua, neu chua thi tao
-        if (!directoryFile.exists()) directoryFile.mkdirs();
-        switch (type){
-            case ExportExcelCategory.ALL_OF_YEAR -> {
-                InvoiceDisplayOnTable instance = tabableView.getItems().getFirst();
-                String year = String.valueOf(instance.getCreateDate().getYear());
-                File yearFolder = new File(directoryFile.getPath().concat("//").concat(year));
+                File yearFolder = new File(directoryFile.getPath() + "//" + year);
                 if (!yearFolder.exists()) yearFolder.mkdirs();
-                if(forEmployee){
+
+                File saveFolder;
+                String initialFileName;
+
+                if (!forEmployee) {
                     String employeeName = instance.getEmpName();
-                    File employeeFolder = new File(yearFolder.getPath()
-                            .concat("//")
-                            .concat("Nhân viên"));
-                    if(!employeeFolder.exists()) employeeFolder.mkdirs();
-                    File employeeNameFolder = new File(employeeFolder.getPath()
-                            .concat("//")
-                            .concat(employeeName));
-                    if(!employeeNameFolder.exists()) employeeNameFolder.mkdirs();
-                    File allOfYearFolder = new File(employeeNameFolder.getPath().concat("//").concat("Cả năm"));
-                    if (!allOfYearFolder.exists()) allOfYearFolder.mkdirs();
-                    jFileChooser.setCurrentDirectory(allOfYearFolder);
-                    jFileChooser.setSelectedFile(new File(employeeName + " - " + year.concat("-TDTK-")
-                            .concat(LocalDate.now().toString()).concat(".xlsx")));
-                }else{
-                    File allOfYearFolder = new File(yearFolder.getPath().concat("//").concat("Cả năm"));
-                    if (!allOfYearFolder.exists()) allOfYearFolder.mkdirs();
-                    jFileChooser.setCurrentDirectory(allOfYearFolder);
-                    jFileChooser.setSelectedFile(new File(year.concat("-TDTK-")
-                            .concat(LocalDate.now().toString()).concat(".xlsx")));
-                }
-                int userSelection = jFileChooser.showSaveDialog(null);
-                if(userSelection == JFileChooser.APPROVE_OPTION){
-                    File fileToSave = jFileChooser.getSelectedFile();
-                    if(fileToSave != null){
-                        String filePath = fileToSave.getAbsolutePath();
-                        createExcelFile(tabableView, filePath, numOfInvoice, totalMoney);
-                        openExcelFile(filePath);
-                    }else{
-                        throw new IllegalArgumentException("Errors");
-                    }
-                }else{
-                    System.out.println("nothing");
+                    File employeeFolder = new File(yearFolder.getPath() + "//Nhân viên//" + employeeName);
+                    if (!employeeFolder.exists()) employeeFolder.mkdirs();
+
+                    saveFolder = new File(employeeFolder.getPath() + "//Cả năm");
+                    if (!saveFolder.exists()) saveFolder.mkdirs();
+
+                    initialFileName = employeeName + " - " + year + "-TDTK-" + LocalDate.now();
+                } else {
+                    saveFolder = new File(yearFolder.getPath() + "//Cả năm");
+                    if (!saveFolder.exists()) saveFolder.mkdirs();
+
+                    initialFileName = year + "-TDTK-" + LocalDate.now();
                 }
 
+                fileChooser.setInitialDirectory(saveFolder);
+                fileChooser.setInitialFileName(initialFileName);
+
+                File userSelection = fileChooser.showSaveDialog(null);
+
+                if (userSelection != null) {
+                    String filePath = userSelection.getAbsolutePath();
+                    createExcelFile(tableView, filePath, numOfInvoice, totalMoney);
+                    openExcelFile(filePath);
+                } else {
+                    System.out.println("No file selected.");
+                }
             }
             case ExportExcelCategory.ALL_OF_MONTH -> {
-                InvoiceDisplayOnTable invoiceInstance = tabableView.getItems().getFirst();
+                InvoiceDisplayOnTable invoiceInstance = tableView.getItems().getFirst();
                 String year = String.valueOf(invoiceInstance.getCreateDate().getYear());
-                String month = String.valueOf(invoiceInstance.getCreateDate().getMonth());
-                File yearFolder = new File(directoryFile.getPath()
-                        .concat("//")
-                        .concat(year));
-                if(!yearFolder.exists()) yearFolder.mkdirs();
-                if(forEmployee){
+                String month = invoiceInstance.getCreateDate().getMonth().toString();
+
+                File yearFolder = new File(directoryFile, year);
+                if (!yearFolder.exists()) yearFolder.mkdirs();
+
+                if (!forEmployee) {
                     String employeeName = invoiceInstance.getEmpName();
-                    File employeeFolder = new File(yearFolder.getPath()
-                            .concat("//")
-                            .concat("Nhân viên"));
-                    if(!employeeFolder.exists()) employeeFolder.mkdirs();
-                    File employeeNameFolder = new File(employeeFolder.getPath()
-                            .concat("//")
-                            .concat(employeeName));
-                    if(!employeeNameFolder.exists()) employeeNameFolder.mkdirs();
-                    File monthFolder = new File(employeeNameFolder.getPath()
-                            .concat("//")
-                            .concat(Month.valueOf(month).getName()));
-                    if(!monthFolder.exists()) monthFolder.mkdirs();
-                    jFileChooser.setCurrentDirectory(monthFolder);
-                    jFileChooser.setSelectedFile(new File(employeeName + " - " + Month.valueOf(month).getName().concat("-TDTK-")
-                            .concat(LocalDate.now().toString()).concat(".xlsx")));
-                }else{
-                    File monthFolder = new File(yearFolder.getPath()
-                            .concat("//")
-                            .concat(Month.valueOf(month).getName()));
-                    if(!monthFolder.exists()) monthFolder.mkdirs();
-                    jFileChooser.setCurrentDirectory(monthFolder);
-                    jFileChooser.setSelectedFile(new File(Month.valueOf(month).getName()
-                            .concat("-" + year)
-                            .concat("-TDTK-")
-                            .concat(LocalDate.now().toString())
-                            .concat(".xlsx")));
+                    File employeeFolder = new File(yearFolder, "Nhân viên/" + employeeName + "/" + Month.valueOf(month).getName());
+                    if (!employeeFolder.exists()) employeeFolder.mkdirs();
+
+                    fileChooser.setInitialDirectory(employeeFolder);
+                    fileChooser.setInitialFileName(employeeName + " - " + Month.valueOf(month).getName() + "-TDTK-" + LocalDate.now() + ".xlsx");
+                } else {
+                    File monthFolder = new File(yearFolder, Month.valueOf(month).getName());
+                    if (!monthFolder.exists()) monthFolder.mkdirs();
+
+                    fileChooser.setInitialDirectory(monthFolder);
+                    fileChooser.setInitialFileName(Month.valueOf(month).getName() + "-" + year + "-TDTK-" + LocalDate.now() + ".xlsx");
                 }
-                int userSelection = jFileChooser.showSaveDialog(null);
-                if(userSelection == JFileChooser.APPROVE_OPTION){
-                    File fileToSave = jFileChooser.getSelectedFile();
-                    String filePath = fileToSave.getAbsolutePath();
-                    createExcelFile(tabableView, filePath, numOfInvoice, totalMoney);
+
+                File userSelection = fileChooser.showSaveDialog(null);
+                if (userSelection != null) {
+                    String filePath = userSelection.getAbsolutePath();
+                    createExcelFile(tableView, filePath, numOfInvoice, totalMoney);
                     openExcelFile(filePath);
-                }else{
-                    System.out.println("nothing");
+                } else {
+                    System.out.println("No file selected.");
                 }
             }
             case ExportExcelCategory.DAY_OF_MONTH -> {
-                InvoiceDisplayOnTable invoiceInstance = tabableView.getItems().getFirst();
+                InvoiceDisplayOnTable invoiceInstance = tableView.getItems().getFirst();
                 String year = String.valueOf(invoiceInstance.getCreateDate().getYear());
-                String month = String.valueOf(invoiceInstance.getCreateDate().getMonth());
+                String month = invoiceInstance.getCreateDate().getMonth().toString();
                 String day = String.valueOf(invoiceInstance.getCreateDate().getDayOfMonth());
-                File yearFolder = new File(directoryFile.getPath()
-                        .concat("//")
-                        .concat(year));
-                if(!yearFolder.exists()) yearFolder.mkdirs();
-                File monthFolder = new File(yearFolder.getPath()
-                        .concat("//")
-                        .concat(Month.valueOf(month).getName()));
-                if(!monthFolder.exists()) monthFolder.mkdirs();
-                File dayFolder = new File(monthFolder.getPath()
-                        .concat("//")
-                        .concat(day)
-                        .concat("-" + invoiceInstance.getCreateDate().getMonthValue() + "-" + year));
-                if(!dayFolder.exists()) dayFolder.mkdirs();
-                jFileChooser.setCurrentDirectory(dayFolder);
-                jFileChooser.setSelectedFile(new File(day.concat("-" + invoiceInstance.getCreateDate().getMonthValue() + "-" + year)
-                        .concat("-TDTK-").concat(LocalDate.now().toString())
-                        .concat(".xlsx")));
-                int userSelection = jFileChooser.showSaveDialog(null);
-                if(userSelection == JFileChooser.APPROVE_OPTION){
-                    File saveFile = jFileChooser.getSelectedFile();
-                    String filePath = saveFile.getAbsolutePath();
-                    createExcelFile(tabableView, filePath, numOfInvoice, totalMoney);
+
+                File yearFolder = new File(directoryFile, year);
+                if (!yearFolder.exists()) yearFolder.mkdirs();
+
+                if (!forEmployee) {
+                    String employeeName = invoiceInstance.getEmpName();
+                    File dayFolder = new File(yearFolder, "Nhân viên/" + employeeName + "/" + Month.valueOf(month).getName() + "/Ngay " + day);
+                    if (!dayFolder.exists()) dayFolder.mkdirs();
+
+                    fileChooser.setInitialDirectory(dayFolder);
+                    fileChooser.setInitialFileName(employeeName + " - TDTK-" + LocalDate.now() + ".xlsx");
+                } else {
+                    File dayFolder = new File(yearFolder, Month.valueOf(month).getName() + "/Ngay " + day);
+                    if (!dayFolder.exists()) dayFolder.mkdirs();
+
+                    fileChooser.setInitialDirectory(dayFolder);
+                    fileChooser.setInitialFileName(day + "-" + year + "-TDTK-" + LocalDate.now() + ".xlsx");
+                }
+
+                File userSelection = fileChooser.showSaveDialog(null);
+                if (userSelection != null) {
+                    String filePath = userSelection.getAbsolutePath();
+                    createExcelFile(tableView, filePath, numOfInvoice, totalMoney);
                     openExcelFile(filePath);
-                }else{
-                    System.out.println("nothing");
+                } else {
+                    System.out.println("No file selected.");
                 }
             }
             case ExportExcelCategory.MANY_YEAR -> {
+                InvoiceDisplayOnTable invoiceInstance = tableView.getItems().get(0);
                 String fromYear = String.valueOf(date.getStartDate().getYear());
                 String toYear = String.valueOf(date.getEndDate().getYear());
-                File yearFolder = new File(directoryFile.getPath()
-                        .concat("//")
-                        .concat(fromYear + " - " + toYear));
-                if(!yearFolder.exists()) yearFolder.mkdirs();
-                File dateRangeFolder = new File(yearFolder.getPath()
-                        .concat("//")
-                        .concat(date.getStartDate() + " đến " + date.getEndDate()));
-                if(!dateRangeFolder.exists()) dateRangeFolder.mkdirs();
-                jFileChooser.setCurrentDirectory(dateRangeFolder);
-                jFileChooser.setSelectedFile(new File(
-                        date.getStartDate().toString() + " đến " + date.getEndDate().toString()
-                                .concat("-TDTK-").concat(LocalDate.now().toString())
-                                .concat(".xlsx")));
-                int userSelection = jFileChooser.showSaveDialog(null);
-                if(userSelection == JFileChooser.APPROVE_OPTION){
-                    File saveFile = jFileChooser.getSelectedFile();
-                    String filePath = saveFile.getAbsolutePath();
-                    createExcelFile(tabableView, filePath, numOfInvoice, totalMoney);
+
+                File yearFolder = new File(directoryFile, fromYear + "-" + toYear);
+                if (!yearFolder.exists()) yearFolder.mkdirs();
+
+                if (!forEmployee) {
+                    String employeeName = invoiceInstance.getEmpName();
+                    File dateRangeFolder = new File(yearFolder, "Nhân viên/" + employeeName + "/" + date.getStartDate() + " đến " + date.getEndDate());
+                    if (!dateRangeFolder.exists()) dateRangeFolder.mkdirs();
+
+                    fileChooser.setInitialDirectory(dateRangeFolder);
+                    fileChooser.setInitialFileName(employeeName + " - TDTK-" + LocalDate.now() + ".xlsx");
+                } else {
+                    File dateRangeFolder = new File(yearFolder, date.getStartDate() + " đến " + date.getEndDate());
+                    if (!dateRangeFolder.exists()) dateRangeFolder.mkdirs();
+
+                    fileChooser.setInitialDirectory(dateRangeFolder);
+                    fileChooser.setInitialFileName(date.getStartDate() + " đến " + date.getEndDate() + "-TDTK-" + LocalDate.now() + ".xlsx");
+                }
+
+                File userSelection = fileChooser.showSaveDialog(null);
+                if (userSelection != null) {
+                    String filePath = userSelection.getAbsolutePath();
+                    createExcelFile(tableView, filePath, numOfInvoice, totalMoney);
                     openExcelFile(filePath);
-                }else{
-                    System.out.println("nothing");
+                } else {
+                    System.out.println("No file selected.");
                 }
             }
             case ExportExcelCategory.DATE_RANGE -> {
-                InvoiceDisplayOnTable invoiceInstance = tabableView.getItems().getFirst();
-                String year = String.valueOf(invoiceInstance.getCreateDate().getYear());
-                File yearFolder = new File(directoryFile.getPath()
-                        .concat("//")
-                        .concat(year));
-                if(!yearFolder.exists()) yearFolder.mkdirs();
-                File dateRangeFolder = new File(yearFolder.getPath()
-                        .concat("//")
-                        .concat(date.getStartDate().toString() + " đến " + date.getEndDate().toString()));
-                if(!dateRangeFolder.exists()) dateRangeFolder.mkdirs();
-                jFileChooser.setCurrentDirectory(dateRangeFolder);
-                jFileChooser.setSelectedFile(new File(
-                        date.getStartDate().toString() + " đến " + date.getEndDate().toString()
-                                .concat("-TDTK-").concat(LocalDate.now().toString())
-                                .concat(".xlsx")));
-                int userSelection = jFileChooser.showSaveDialog(null);
-                if(userSelection == JFileChooser.APPROVE_OPTION){
-                    File saveFile = jFileChooser.getSelectedFile();
-                    String filePath = saveFile.getAbsolutePath();
-                    createExcelFile(tabableView, filePath, numOfInvoice, totalMoney);
+                InvoiceDisplayOnTable invoiceInstance = tableView.getItems().get(0);
+                String year = String.valueOf(date.getStartDate().getYear());
+                File yearFolder = new File(directoryFile, year);
+                if (!yearFolder.exists()) yearFolder.mkdirs();
+
+                if (!forEmployee) {
+                    String employeeName = invoiceInstance.getEmpName();
+                    File dateRangeFolder = new File(yearFolder, "Nhân viên/" + employeeName + "/" + date.getStartDate() + " đến " + date.getEndDate());
+                    if (!dateRangeFolder.exists()) dateRangeFolder.mkdirs();
+
+                    fileChooser.setInitialDirectory(dateRangeFolder);
+                    fileChooser.setInitialFileName(employeeName + " - TDTK-" + LocalDate.now() + ".xlsx");
+                } else {
+                    File dateRangeFolder = new File(yearFolder, date.getStartDate() + " đến " + date.getEndDate());
+                    if (!dateRangeFolder.exists()) dateRangeFolder.mkdirs();
+
+                    fileChooser.setInitialDirectory(dateRangeFolder);
+                    fileChooser.setInitialFileName(date.getStartDate() + " đến " + date.getEndDate() + "-TDTK-" + LocalDate.now() + ".xlsx");
+                }
+
+                File userSelection = fileChooser.showSaveDialog(null);
+                if (userSelection != null) {
+                    String filePath = userSelection.getAbsolutePath();
+                    createExcelFile(tableView, filePath, numOfInvoice, totalMoney);
                     openExcelFile(filePath);
-                }else{
-                    System.out.println("nothing");
+                } else {
+                    System.out.println("No file selected.");
                 }
             }
             default -> {
