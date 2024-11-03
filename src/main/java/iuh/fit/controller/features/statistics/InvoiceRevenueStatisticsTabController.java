@@ -10,7 +10,6 @@ import iuh.fit.models.wrapper.InvoiceDisplayOnTable;
 import iuh.fit.utils.ExportFileHelper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
@@ -31,10 +30,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class StatisticsRevenueTabController implements Initializable {
-
+public class InvoiceRevenueStatisticsTabController implements Initializable {
+    public ToggleGroup showDataViewToggleGroup;
     // Variables for revenue statistics view components
-    @FXML private TableView<InvoiceDisplayOnTable> revenueTableView;
+    @FXML private TableView<InvoiceDisplayOnTable> invoiceDataTableView;
     @FXML private TableColumn<InvoiceDisplayOnTable, String> invoiceIDColumn;
     @FXML private TableColumn<InvoiceDisplayOnTable, String> customerNameColumn;
     @FXML private TableColumn<InvoiceDisplayOnTable, String> roomIDColumn;
@@ -45,15 +44,15 @@ public class StatisticsRevenueTabController implements Initializable {
     @FXML private TableColumn<InvoiceDisplayOnTable, Double> roomChargeColumn;
     @FXML private TableColumn<InvoiceDisplayOnTable, Double> taxColumn;
     @FXML private TableColumn<InvoiceDisplayOnTable, Double> netDueColumn;
-    @FXML private ComboBox<Integer> cbbYear;
-    @FXML private RadioButton tableViewRevenueRadioButton;
-    @FXML private RadioButton chartViewRevenueRadioButton;
-    @FXML private AnchorPane chartView;
-    @FXML private AnchorPane tableView;
-    @FXML private CheckBox checkBoxStatisticsByYear;
-    @FXML private DateRangePicker dateRangePicker;
-    @FXML private ComboBox<String> revenueEmployeeCombobox;
-    @FXML private BarChart<String, Double> revenueBarchart;
+    @FXML private ComboBox<Integer> yearsCombobox;
+    @FXML private RadioButton showTableViewRadioButton;
+    @FXML private RadioButton showChartDataRadioButton;
+    @FXML private AnchorPane chartViewAnchorPane;
+    @FXML private AnchorPane tableViewAnchorPane;
+    @FXML private CheckBox filterByYearCheckBox;
+    @FXML private DateRangePicker invoiceTabDateRangePicker;
+    @FXML private ComboBox<String> employeeNameCombobox;
+    @FXML private BarChart<String, Double> invoiceDataBarChart;
     @FXML private Text totalMoneyText;
     @FXML private Text numOfInvoiceText;
     private static final String NONE_VALUE_EMPLOYEE_NAME = "Chọn nhân viên";
@@ -107,7 +106,7 @@ public class StatisticsRevenueTabController implements Initializable {
         taxColumn.setCellValueFactory(new PropertyValueFactory<InvoiceDisplayOnTable, Double>("tax"));
         netDueColumn.setCellValueFactory(new PropertyValueFactory<InvoiceDisplayOnTable, Double>("netDue"));
         // set data to table
-        revenueTableView.setItems(dataOfTableView);
+        invoiceDataTableView.setItems(dataOfTableView);
     }
 
     // set date to combox of year
@@ -115,8 +114,8 @@ public class StatisticsRevenueTabController implements Initializable {
         ObservableList<Integer> years = FXCollections.observableArrayList();
         for (int i = 0; i < COMBO_YEAR_CAPACITY; i++)
             years.add(LocalDate.now().getYear() - i);
-        cbbYear.setItems(years);
-        cbbYear.setValue(years.getFirst());
+        yearsCombobox.setItems(years);
+        yearsCombobox.setValue(years.getFirst());
     }
 
     // set data to combox of employee name
@@ -124,32 +123,32 @@ public class StatisticsRevenueTabController implements Initializable {
         List<Employee> employeeList = EmployeeDAO.getEmployees();
         ObservableList<String> empNames = FXCollections.observableArrayList(NONE_VALUE_EMPLOYEE_NAME);
         employeeList.forEach(e -> empNames.add(e.getFullName()));
-        revenueEmployeeCombobox.setItems(empNames);
-        revenueEmployeeCombobox.setValue(empNames.getFirst());
+        employeeNameCombobox.setItems(empNames);
+        employeeNameCombobox.setValue(empNames.getFirst());
     }
 
     // switch between table view and chart view
     @FXML
     void switchBetweenTableViewAndChartView() {
-        if (tableViewRevenueRadioButton.isSelected()) {
-            tableView.setVisible(true);
-            chartView.setVisible(false);
+        if (showTableViewRadioButton.isSelected()) {
+            tableViewAnchorPane.setVisible(true);
+            chartViewAnchorPane.setVisible(false);
         }
-        if (chartViewRevenueRadioButton.isSelected()) {
-            chartView.setVisible(true);
-            tableView.setVisible(false);
+        if (showChartDataRadioButton.isSelected()) {
+            chartViewAnchorPane.setVisible(true);
+            tableViewAnchorPane.setVisible(false);
         }
     }
 
     // switch between year combobox and daterangepicker
     @FXML
     void switchBetweenCBBYearAndDateRangePicker() {
-        if (checkBoxStatisticsByYear.isSelected()) {
-            cbbYear.setDisable(false);
-            dateRangePicker.setDisable(true);
+        if (filterByYearCheckBox.isSelected()) {
+            yearsCombobox.setDisable(false);
+            invoiceTabDateRangePicker.setDisable(true);
         } else {
-            cbbYear.setDisable(true);
-            dateRangePicker.setDisable(false);
+            yearsCombobox.setDisable(true);
+            invoiceTabDateRangePicker.setDisable(false);
         }
     }
 
@@ -158,8 +157,8 @@ public class StatisticsRevenueTabController implements Initializable {
     void revenueStatisticsAction() {
         ObservableList<InvoiceDisplayOnTable> data;
         List<InvoiceDisplayOnTable> invoiceDisplayOnTableData = InvoiceDisplayOnTableDAO.getData();
-        String empName = revenueEmployeeCombobox.getValue();
-        if (checkBoxStatisticsByYear.isSelected()) {
+        String empName = employeeNameCombobox.getValue();
+        if (filterByYearCheckBox.isSelected()) {
             data = getDataToTableViewByYearOption(invoiceDisplayOnTableData, empName);
             showDataToTableView(data);
             setNumOfInvoice(String.valueOf(getNumOfInvoice(data)));
@@ -176,7 +175,7 @@ public class StatisticsRevenueTabController implements Initializable {
 
     // filter data by year and employee name and show to table
     private ObservableList<InvoiceDisplayOnTable> getDataToTableViewByYearOption(List<InvoiceDisplayOnTable> invoiceDisplayOnTableData, String empName) {
-        int year = cbbYear.getSelectionModel().getSelectedItem();
+        int year = yearsCombobox.getSelectionModel().getSelectedItem();
         ObservableList<InvoiceDisplayOnTable> filteredData = FXCollections.observableArrayList();
         invoiceDisplayOnTableData.stream()
                 .filter(i -> i.getCreateDate().getYear() == year)
@@ -187,8 +186,8 @@ public class StatisticsRevenueTabController implements Initializable {
 
     // filter data by daterange and employee name and show to table
     private ObservableList<InvoiceDisplayOnTable> getDataToTableViewByDateRangeOption(List<InvoiceDisplayOnTable> invoiceDisplayOnTableData, String empName) {
-        LocalDateTime startDate = dateRangePicker.getValue().getStartDate().atTime(0, 0, 0);
-        LocalDateTime endDate = dateRangePicker.getValue().getEndDate().atTime(23, 59, 59);
+        LocalDateTime startDate = invoiceTabDateRangePicker.getValue().getStartDate().atTime(0, 0, 0);
+        LocalDateTime endDate = invoiceTabDateRangePicker.getValue().getEndDate().atTime(23, 59, 59);
         ObservableList<InvoiceDisplayOnTable> filteredData = FXCollections.observableArrayList();
 
         if (startDate.toLocalDate().equals(endDate.toLocalDate())) {
@@ -210,18 +209,21 @@ public class StatisticsRevenueTabController implements Initializable {
     // if flat equal FALSE, that means statistics by DATE RANGE PICKER
     private void showDataToChartView(boolean flat) {
         List<InvoiceDisplayOnTable> invoiceDisplayOnTableData = InvoiceDisplayOnTableDAO.getData();
-        String empName = revenueEmployeeCombobox.getValue();
-        revenueBarchart.setTitle(CHART_TITLE);
-        revenueBarchart.getData().clear();
-        if(flat) revenueBarchart.getData().add(getDataByYear(invoiceDisplayOnTableData, empName));
-        else revenueBarchart.getData().add(getDataByDateRange(invoiceDisplayOnTableData, empName));
+        String empName = employeeNameCombobox.getValue();
+        invoiceDataBarChart.setTitle(CHART_TITLE);
+        invoiceDataBarChart.getData().clear();
+        if(flat) invoiceDataBarChart.getData().add(getDataByYear(invoiceDisplayOnTableData, empName));
+        else invoiceDataBarChart.getData().add(getDataByDateRange(invoiceDisplayOnTableData, empName));
     }
 
     private XYChart.Series<String, Double> getDataByYear(List<InvoiceDisplayOnTable> invoiceDisplayOnTableData, String empName){
         XYChart.Series<String, Double> data = new XYChart.Series<>();
         for (int i = 1; i <= Month.values().length; i++) {
-            String month = getMonthName(i);
-            double netDueOfMonth = getAvgNetDueByMonthOfYear(invoiceDisplayOnTableData, cbbYear.getValue(), i, empName);
+            String month = iuh.fit.models.enums.Month
+                    .valueOf(Arrays.stream(iuh.fit.models.enums.Month.values())
+                            .toList().get(i - 1)
+                            .toString()).getName();
+            double netDueOfMonth = getAvgNetDueByMonthOfYear(invoiceDisplayOnTableData, yearsCombobox.getValue(), i, empName);
             data.getData().add(new XYChart.Data<>(month, netDueOfMonth));
         }
         return data;
@@ -229,8 +231,8 @@ public class StatisticsRevenueTabController implements Initializable {
 
     private XYChart.Series<String, Double> getDataByDateRange(List<InvoiceDisplayOnTable> invoiceDisplayOnTableData, String empName) {
         XYChart.Series<String, Double> data = new XYChart.Series<>();
-        LocalDateTime startDate = dateRangePicker.getValue().getStartDate().atTime(0, 0,0);
-        LocalDateTime endDate = dateRangePicker.getValue().getEndDate().atTime(23, 59,59);
+        LocalDateTime startDate = invoiceTabDateRangePicker.getValue().getStartDate().atTime(0, 0,0);
+        LocalDateTime endDate = invoiceTabDateRangePicker.getValue().getEndDate().atTime(23, 59,59);
         // thong ke cho ngay hien tai
         if(isToday(startDate, endDate)) return getDataForToday(invoiceDisplayOnTableData, empName, data);
         // thong ke cho ngay hom truoc
@@ -252,7 +254,7 @@ public class StatisticsRevenueTabController implements Initializable {
                         i.getEmpName().equalsIgnoreCase(empName)))
                 .mapToDouble(InvoiceDisplayOnTable::getNetDue)
                 .sum();
-        data.getData().add(new XYChart.Data<>(dateRangePicker.getValue().getStartDate().toString(), netDueAve));
+        data.getData().add(new XYChart.Data<>(invoiceTabDateRangePicker.getValue().getStartDate().toString(), netDueAve));
         showDataToTableView(getDataToTableViewByDateRangeOption(invoiceDisplayOnTableData, empName));
         return data;
     }
@@ -264,7 +266,7 @@ public class StatisticsRevenueTabController implements Initializable {
                         i.getEmpName().equalsIgnoreCase(empName)))
                 .mapToDouble(InvoiceDisplayOnTable::getNetDue)
                 .sum();
-        data.getData().add(new XYChart.Data<>(dateRangePicker.getValue().getStartDate().toString(), netDueAve));
+        data.getData().add(new XYChart.Data<>(invoiceTabDateRangePicker.getValue().getStartDate().toString(), netDueAve));
         showDataToTableView(getDataToTableViewByDateRangeOption(invoiceDisplayOnTableData, empName));
         return data;
     }
@@ -331,8 +333,8 @@ public class StatisticsRevenueTabController implements Initializable {
 
     private XYChart.Series<String, Double> getDataForAnyTime(List<InvoiceDisplayOnTable> invoiceDisplayOnTableData, String empName, XYChart.Series<String, Double> data) {
         ObservableList<InvoiceDisplayOnTable> invoiceOfRange = FXCollections.observableArrayList();
-        LocalDateTime startDate = dateRangePicker.getValue().getStartDate().atTime(0, 0,0);
-        LocalDateTime endDate = dateRangePicker.getValue().getEndDate().atTime(23, 59,59);
+        LocalDateTime startDate = invoiceTabDateRangePicker.getValue().getStartDate().atTime(0, 0,0);
+        LocalDateTime endDate = invoiceTabDateRangePicker.getValue().getEndDate().atTime(23, 59,59);
         invoiceDisplayOnTableData.stream()
                 .filter(i -> (i.getCreateDate().isAfter(startDate) || i.getCreateDate().isEqual(startDate))
                         && (i.getCreateDate().isBefore(endDate) || i.getCreateDate().isEqual(endDate)))
@@ -362,24 +364,6 @@ public class StatisticsRevenueTabController implements Initializable {
                 .sum();
     }
 
-    private String getMonthName(int monthIndex) {
-        return switch (monthIndex) {
-            case 1 -> "Tháng 1";
-            case 2 -> "Tháng 2";
-            case 3 -> "Tháng 3";
-            case 4 -> "Tháng 4";
-            case 5 -> "Tháng 5";
-            case 6 -> "Tháng 6";
-            case 7 -> "Tháng 7";
-            case 8 -> "Tháng 8";
-            case 9 -> "Tháng 9";
-            case 10 -> "Tháng 10";
-            case 11 -> "Tháng 11";
-            case 12 -> "Tháng 12";
-            default -> throw new IllegalArgumentException("Invalid month index: " + monthIndex);
-        };
-    }
-
     private void showMessages(String title, String message, Alert.AlertType alertType){
         Alert alert = new Alert(alertType);
         alert.setTitle(title);
@@ -390,58 +374,63 @@ public class StatisticsRevenueTabController implements Initializable {
     @FXML
     void refreshData() {
         List<InvoiceDisplayOnTable> invoiceDisplayOnTableData = InvoiceDisplayOnTableDAO.getData();
-        dateRangePicker.setValue(new DateRange(LocalDate.now()));
+        invoiceTabDateRangePicker.setValue(new DateRange(LocalDate.now()));
         showDataToTableView(FXCollections.observableArrayList(invoiceDisplayOnTableData));
-        cbbYear.setValue(LocalDate.now().getYear());
-        revenueEmployeeCombobox.setValue(NONE_VALUE_EMPLOYEE_NAME);
+        yearsCombobox.setValue(LocalDate.now().getYear());
+        employeeNameCombobox.setValue(NONE_VALUE_EMPLOYEE_NAME);
         setNumOfInvoice(String.valueOf(getNumOfInvoice(FXCollections.observableArrayList(invoiceDisplayOnTableData))));
         setTotalMoney(String.valueOf(caculateTotalMoney(FXCollections.observableArrayList(invoiceDisplayOnTableData))));
+        showTableViewRadioButton.setSelected(true);
+        switchBetweenTableViewAndChartView();
     }
 
     @FXML
-    void exportExcelFile(ActionEvent event) throws IOException {
-        int numOfInvoice = getNumOfInvoice(revenueTableView.getItems());
-        double totalMoney = caculateTotalMoney(revenueTableView.getItems());
-        if(revenueEmployeeCombobox.getValue().equalsIgnoreCase(NONE_VALUE_EMPLOYEE_NAME)){
-            if(checkBoxStatisticsByYear.isSelected()){
-                ExportFileHelper.exportExcelFile(revenueTableView,
-                        ExportExcelCategory.ALL_OF_YEAR,
-                        dateRangePicker.getValue(),
-                        numOfInvoice, totalMoney);
-            } else{
-                LocalDateTime startDate = dateRangePicker.getValue().getStartDate().atTime(0, 0,0);
-                LocalDateTime endDate = dateRangePicker.getValue().getEndDate().atTime(23, 59,59);
-                if(isAMonth(startDate, endDate))
-                    ExportFileHelper.exportExcelFile(revenueTableView, ExportExcelCategory.ALL_OF_MONTH, dateRangePicker.getValue(), numOfInvoice, totalMoney);
-                else if(isADay(startDate, endDate))
-                    ExportFileHelper.exportExcelFile(revenueTableView, ExportExcelCategory.DAY_OF_MONTH, dateRangePicker.getValue(), numOfInvoice, totalMoney);
-                else if(isManyYear(startDate, endDate))
-                    ExportFileHelper.exportExcelFile(revenueTableView, ExportExcelCategory.MANY_YEAR, dateRangePicker.getValue(), numOfInvoice, totalMoney);
-                else ExportFileHelper.exportExcelFile(revenueTableView, ExportExcelCategory.DATE_RANGE, dateRangePicker.getValue(), numOfInvoice, totalMoney);
-            }
-        }else{
-            if(checkBoxStatisticsByYear.isSelected()){
-                ExportFileHelper.exportExcelFileForEmployee(revenueTableView,
-                        ExportExcelCategory.ALL_OF_YEAR,
-                        true,
-                        dateRangePicker.getValue(),
-                        numOfInvoice, totalMoney);
-            } else{
-                LocalDateTime startDate = dateRangePicker.getValue().getStartDate().atTime(0, 0,0);
-                LocalDateTime endDate = dateRangePicker.getValue().getEndDate().atTime(23, 59,59);
-                if(isAMonth(startDate, endDate))
-                    ExportFileHelper.exportExcelFileForEmployee(
-                            revenueTableView,
-                            ExportExcelCategory.ALL_OF_MONTH,
-                            true, dateRangePicker.getValue(), numOfInvoice, totalMoney);
-                else if(isADay(startDate, endDate))
-                    ExportFileHelper.exportExcelFile(revenueTableView, ExportExcelCategory.DAY_OF_MONTH, dateRangePicker.getValue(), numOfInvoice, totalMoney);
-                else if(isManyYear(startDate, endDate))
-                    ExportFileHelper.exportExcelFile(revenueTableView, ExportExcelCategory.MANY_YEAR, dateRangePicker.getValue(), numOfInvoice, totalMoney);
-                else ExportFileHelper.exportExcelFile(revenueTableView, ExportExcelCategory.DATE_RANGE, dateRangePicker.getValue(), numOfInvoice, totalMoney);
-            }
+    void exportExcelFile() throws IOException {
+        boolean forEmployee = employeeNameCombobox.getValue().equalsIgnoreCase(NONE_VALUE_EMPLOYEE_NAME);
+        boolean yearCBBChecked = filterByYearCheckBox.isSelected();
+        int numOfInvoice = getNumOfInvoice(invoiceDataTableView.getItems());
+        double totalMoney = caculateTotalMoney(invoiceDataTableView.getItems());
+        if(yearCBBChecked){
+            ExportFileHelper.exportExcelFile(invoiceDataTableView,
+                    ExportExcelCategory.ALL_OF_YEAR,
+                    forEmployee,
+                    invoiceTabDateRangePicker.getValue(),
+                    numOfInvoice, totalMoney);
+        } else{
+            LocalDateTime startDate = invoiceTabDateRangePicker.getValue().getStartDate().atTime(0, 0,0);
+            LocalDateTime endDate = invoiceTabDateRangePicker.getValue().getEndDate().atTime(23, 59,59);
+            if(isAMonth(startDate, endDate))
+                ExportFileHelper.exportExcelFile(
+                        invoiceDataTableView,
+                        ExportExcelCategory.ALL_OF_MONTH,
+                        forEmployee,
+                        invoiceTabDateRangePicker.getValue(),
+                        numOfInvoice,
+                        totalMoney);
+            else if(isADay(startDate, endDate))
+                ExportFileHelper.exportExcelFile(
+                        invoiceDataTableView,
+                        ExportExcelCategory.DAY_OF_MONTH,
+                        forEmployee,
+                        invoiceTabDateRangePicker.getValue(),
+                        numOfInvoice,
+                        totalMoney);
+            else if(isManyYear(startDate, endDate))
+                ExportFileHelper.exportExcelFile(
+                        invoiceDataTableView,
+                        ExportExcelCategory.MANY_YEAR,
+                        forEmployee,
+                        invoiceTabDateRangePicker.getValue(),
+                        numOfInvoice,
+                        totalMoney);
+            else ExportFileHelper.exportExcelFile(
+                        invoiceDataTableView,
+                        ExportExcelCategory.DATE_RANGE,
+                        forEmployee,
+                        invoiceTabDateRangePicker.getValue(),
+                        numOfInvoice,
+                        totalMoney);
         }
-
     }
 
     private boolean isToday(LocalDateTime startDate, LocalDateTime endDate){
