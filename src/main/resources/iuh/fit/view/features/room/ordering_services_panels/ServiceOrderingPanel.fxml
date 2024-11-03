@@ -219,7 +219,7 @@
                                        </columnConstraints>
                                        <rowConstraints>
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
@@ -233,12 +233,12 @@
                                                 <Font size="16.0" />
                                              </font>
                                           </Text>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày nhận phòng" textAlignment="RIGHT" GridPane.rowIndex="1">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày nhận phòng thực tế" textAlignment="RIGHT" GridPane.rowIndex="1">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
                                           </Text>
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày trả phòng" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày trả phòng dự kiến" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -415,10 +415,11 @@
                                  <columns>
                                     <TableColumn fx:id="roomUsageServiceIDColumn" prefWidth="75.0" text="Mã LS sử dụng dịch vụ" />
                                     <TableColumn fx:id="serviceNameColumn" prefWidth="75.0" text="Dịch vụ" />
-                                    <TableColumn fx:id="quantityColumn" prefWidth="75.0" text="Số lượng" />
+                                    <TableColumn fx:id="quantityColumn" prefWidth="40.0" text="Số lượng" />
                                     <TableColumn fx:id="unitPriceColumn" prefWidth="75.0" text="Đơn giá" />
                                     <TableColumn fx:id="totalPriceColumn" prefWidth="75.0" text="Tổng tiền" />
-                                    <TableColumn fx:id="reservationFormID" prefWidth="75.0" text="Mã phiếu đặt phòng" />
+                                    <TableColumn fx:id="dateAddedColumn" prefWidth="50.0" text="Ngày thêm" />
+                                    <TableColumn fx:id="employeeAddedColumn" prefWidth="75.0" text="Nhân viên thực hiện" />
                                  </columns>
                               </TableView>
                               <HBox>

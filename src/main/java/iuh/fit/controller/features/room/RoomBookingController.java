@@ -5,8 +5,10 @@ import iuh.fit.controller.features.room.creating_reservation_form_controllers.Ro
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOnUseItemController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOverDueController;
 import iuh.fit.dao.RoomCategoryDAO;
+import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.RoomWithReservationDAO;
 import iuh.fit.models.Employee;
+import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
@@ -18,6 +20,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -134,6 +137,19 @@ public class RoomBookingController {
         Pane roomItem;
 
         Room room = roomWithReservation.getRoom();
+        ReservationForm reservationForm = roomWithReservation.getReservationForm();
+        if (reservationForm != null) {
+            if (LocalDateTime.now().isAfter(reservationForm.getCheckOutDate())) {
+                RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.OVERDUE);
+                room.setRoomStatus(RoomStatus.OVERDUE);
+                roomWithReservation.setRoom(room);
+            }
+        }
+
+
+
+
+
         switch (room.getRoomStatus()) {
             case AVAILABLE -> {
                 loader = new FXMLLoader(getClass().getResource(
