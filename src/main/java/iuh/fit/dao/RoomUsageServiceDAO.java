@@ -125,25 +125,25 @@ public class RoomUsageServiceDAO {
             selectSequenceStatement.setString(1, "RoomUsageService");
             ResultSet rs = selectSequenceStatement.executeQuery();
 
-            String newRoomUsageServiceID = "RUS-000001"; // ID mặc định nếu không có trong DB
+            String currentNextID = "RUS-000001"; // ID mặc định nếu không có trong DB
             if (rs.next()) {
-                String currentNextID = rs.getString("nextID");
+                currentNextID = rs.getString("nextID");
                 String prefix = GlobalConstants.ROOMUSAGESERVICE_PREFIX + "-"; // Tiền tố cho RoomUsageService ID
 
                 // Tách phần số từ nextID và tăng thêm 1
                 int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
 
                 // Định dạng lại phần số, đảm bảo luôn có 6 chữ số
-                newRoomUsageServiceID = prefix + String.format("%06d", nextIDNum);
+                String newRoomUsageServiceID = prefix + String.format("%06d", nextIDNum);
 
                 // Cập nhật nextID mới trong GlobalSequence
-                updateSequenceStatement.setString(1, currentNextID);
+                updateSequenceStatement.setString(1, newRoomUsageServiceID);
                 updateSequenceStatement.setString(2, "RoomUsageService");
                 updateSequenceStatement.executeUpdate();
             }
 
             // Thiết lập các giá trị cho câu lệnh INSERT
-            insertStatement.setString(1, newRoomUsageServiceID);
+            insertStatement.setString(1, currentNextID);
             insertStatement.setInt(2, roomUsageService.getQuantity());
             insertStatement.setDouble(3, roomUsageService.getUnitPrice());
             insertStatement.setString(4, roomUsageService.getHotelService().getServiceId());

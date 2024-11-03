@@ -21,6 +21,7 @@ public class GlobalConstants {
     public static final String HISTORY_CHECKIN_ID_PREFIX = "HCI";
     public static final String ROOM_RESERVATION_DETAIL_PREFIX = "RRD";
     public static final String HISTORY_CHECKOUT_ID_PREFIX = "HCO";
+    public static final String INVOICE_ID_PREFIX = "INV";
 
     public static final String STAY_LENGTH_EMPTY = "Chưa Đặt Lịch";
     public static final String BOOKING_DEPOSIT_EMPTY = "0 VND";

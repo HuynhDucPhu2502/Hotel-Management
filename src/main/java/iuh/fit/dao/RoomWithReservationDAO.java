@@ -36,51 +36,11 @@ public class RoomWithReservationDAO {
 
         try (
                 Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                ResultSet rs = preparedStatement.executeQuery()
         ) {
-            ResultSet rs = preparedStatement.executeQuery();
-
             while (rs.next()) {
-                // Room
-                Room room = new Room();
-                RoomCategory roomCategory = new RoomCategory();
-
-                room.setRoomID(rs.getString("roomID"));
-                room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString("roomStatus")));
-                room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp("dateOfCreation")));
-
-                roomCategory.setRoomCategoryID(rs.getString("roomCategoryID"));
-                roomCategory.setRoomCategoryName(rs.getString("roomCategoryName"));
-                roomCategory.setNumberOfBed(rs.getInt("numberOfBed"));
-                room.setRoomCategory(roomCategory);
-
-                // ReservationForm (if exists)
-                ReservationForm reservationForm = null;
-                if (rs.getString("reservationFormID") != null) {
-                    reservationForm = new ReservationForm();
-                    reservationForm.setReservationID(rs.getString("reservationFormID"));
-                    reservationForm.setReservationDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("reservationDate")));
-                    reservationForm.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkInDate")));
-                    reservationForm.setCheckOutDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkOutDate")));
-                    reservationForm.setRoomBookingDeposit(rs.getDouble("roomBookingDeposit"));
-
-                    // Employee
-                    Employee employee = new Employee();
-                    employee.setEmployeeID(rs.getString("employeeID"));
-                    employee.setFullName(rs.getString("employeeName"));
-                    reservationForm.setEmployee(employee);
-
-                    // Customer
-                    Customer customer = new Customer();
-                    customer.setCustomerID(rs.getString("customerID"));
-                    customer.setFullName(rs.getString("customerName"));
-                    customer.setPhoneNumber(rs.getString("phoneNumber"));
-                    customer.setEmail(rs.getString("email"));
-                    customer.setIdCardNumber(rs.getString("idCardNumber"));
-                    reservationForm.setCustomer(customer);
-                }
-
-                RoomWithReservation roomWithReservation = new RoomWithReservation(room, reservationForm);
+                RoomWithReservation roomWithReservation = extractData(rs);
                 data.add(roomWithReservation);
             }
         } catch (Exception e) {
@@ -110,7 +70,7 @@ public class RoomWithReservationDAO {
         ) AS rf ON r.roomID = rf.roomID
         LEFT JOIN Employee e ON rf.employeeID = e.employeeID
         LEFT JOIN Customer c ON rf.customerID = c.customerID
-        WHERE r.roomID = ?
+        WHERE r.roomID = ?;
         """;
 
         try (
@@ -122,43 +82,7 @@ public class RoomWithReservationDAO {
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
-                    // Room
-                    Room room = new Room();
-                    RoomCategory roomCategory = new RoomCategory();
-
-                    room.setRoomID(rs.getString("roomID"));
-                    room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString("roomStatus")));
-                    room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp("dateOfCreation")));
-
-                    roomCategory.setRoomCategoryID(rs.getString("roomCategoryID"));
-                    roomCategory.setRoomCategoryName(rs.getString("roomCategoryName"));
-                    roomCategory.setNumberOfBed(rs.getInt("numberOfBed"));
-                    room.setRoomCategory(roomCategory);
-
-                    // ReservationForm
-                    ReservationForm reservationForm = new ReservationForm();
-                    reservationForm.setReservationID(rs.getString("reservationFormID"));
-                    reservationForm.setReservationDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("reservationDate")));
-                    reservationForm.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkInDate")));
-                    reservationForm.setCheckOutDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkOutDate")));
-                    reservationForm.setRoomBookingDeposit(rs.getDouble("roomBookingDeposit"));
-
-                    // Employee
-                    Employee employee = new Employee();
-                    employee.setEmployeeID(rs.getString("employeeID"));
-                    employee.setFullName(rs.getString("employeeName"));
-                    reservationForm.setEmployee(employee);
-
-                    // Customer
-                    Customer customer = new Customer();
-                    customer.setCustomerID(rs.getString("customerID"));
-                    customer.setFullName(rs.getString("customerName"));
-                    customer.setPhoneNumber(rs.getString("phoneNumber"));
-                    customer.setEmail(rs.getString("email"));
-                    customer.setIdCardNumber(rs.getString("idCardNumber"));
-                    reservationForm.setCustomer(customer);
-
-                    return new RoomWithReservation(room, reservationForm);
+                    return extractData(rs);
                 }
             }
         } catch (Exception e) {
@@ -166,6 +90,49 @@ public class RoomWithReservationDAO {
             System.exit(1);
         }
         return null;
+    }
+
+    private static RoomWithReservation extractData(ResultSet rs) throws SQLException {
+        // Room and RoomCategory
+        Room room = new Room();
+        RoomCategory roomCategory = new RoomCategory();
+
+        room.setRoomID(rs.getString("roomID"));
+        room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString("roomStatus")));
+        room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp("dateOfCreation")));
+
+        roomCategory.setRoomCategoryID(rs.getString("roomCategoryID"));
+        roomCategory.setRoomCategoryName(rs.getString("roomCategoryName"));
+        roomCategory.setNumberOfBed(rs.getInt("numberOfBed"));
+        room.setRoomCategory(roomCategory);
+
+        // ReservationForm
+        ReservationForm reservationForm = null;
+        if (rs.getString("reservationFormID") != null) {
+            reservationForm = new ReservationForm();
+            reservationForm.setReservationID(rs.getString("reservationFormID"));
+            reservationForm.setReservationDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("reservationDate")));
+            reservationForm.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkInDate")));
+            reservationForm.setCheckOutDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkOutDate")));
+            reservationForm.setRoomBookingDeposit(rs.getDouble("roomBookingDeposit"));
+
+            // Employee
+            Employee employee = new Employee();
+            employee.setEmployeeID(rs.getString("employeeID"));
+            employee.setFullName(rs.getString("employeeName"));
+            reservationForm.setEmployee(employee);
+
+            // Customer
+            Customer customer = new Customer();
+            customer.setCustomerID(rs.getString("customerID"));
+            customer.setFullName(rs.getString("customerName"));
+            customer.setPhoneNumber(rs.getString("phoneNumber"));
+            customer.setEmail(rs.getString("email"));
+            customer.setIdCardNumber(rs.getString("idCardNumber"));
+            reservationForm.setCustomer(customer);
+        }
+
+        return new RoomWithReservation(room, reservationForm);
     }
 
 
