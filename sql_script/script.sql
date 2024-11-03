@@ -159,41 +159,37 @@ CREATE TABLE ReservationForm (
 );
 GO
 
+-- Tạo bảng RoomReservationDetail
+CREATE TABLE RoomReservationDetail (
+    roomReservationDetailID NVARCHAR(15) NOT NULL PRIMARY KEY,
+    dateChanged DATETIME NOT NULL,
+    roomID NVARCHAR(15) NOT NULL,
+    reservationFormID NVARCHAR(15) NOT NULL,
+    employeeID NVARCHAR(15),
+    FOREIGN KEY (roomID) REFERENCES Room(roomID),
+    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID),
+    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
+);
+GO
+
 -- Tạo bảng RoomUsageService
 CREATE TABLE RoomUsageService (
     roomUsageServiceId NVARCHAR(15) NOT NULL PRIMARY KEY,
     quantity INT NOT NULL,
     unitPrice DECIMAL(18, 2) NOT NULL,
     totalPrice AS (quantity * unitPrice) PERSISTED,
+    dateAdded DATETIME NOT NULL,
     hotelServiceId NVARCHAR(15) NOT NULL,
     reservationFormID NVARCHAR(15) NOT NULL,
+    employeeID NVARCHAR(15),
+
     FOREIGN KEY (hotelServiceId) REFERENCES HotelService(hotelServiceId),
-    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID)
-);
-GO
-
--- Tạo bảng Tax
-CREATE TABLE Tax (
-    taxID NVARCHAR(15) NOT NULL PRIMARY KEY,
-    taxName NVARCHAR(50) NOT NULL,
-    taxRate DECIMAL(5, 2) NOT NULL,
-    dateOfCreation DATE NOT NULL,
-    activate BIT NOT NULL
-);
-GO
-
--- Tạo bảng Invoice
-CREATE TABLE Invoice (
-    invoiceID NVARCHAR(15) NOT NULL PRIMARY KEY,
-    invoiceDate DATETIME NOT NULL,
-    roomCharge DECIMAL(18, 2) NOT NULL,
-    servicesCharge DECIMAL(18, 2) NOT NULL,
-    totalDue DECIMAL(18, 2) NOT NULL,
-    netDue DECIMAL(18, 2) NOT NULL,
-    taxID NVARCHAR(15) NOT NULL,
-    reservationFormID NVARCHAR(15) NOT NULL,
-    FOREIGN KEY (taxID) REFERENCES Tax(taxID),
-    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID)
+    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID),
+    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
 );
 GO
 
@@ -223,18 +219,28 @@ CREATE TABLE HistoryCheckOut (
 );
 GO
 
--- Tạo bảng RoomReservationDetail
-CREATE TABLE RoomReservationDetail (
-    roomReservationDetailID NVARCHAR(15) NOT NULL PRIMARY KEY,
-    dateChanged DATETIME NOT NULL,
-    roomID NVARCHAR(15) NOT NULL,
+-- Tạo bảng Tax
+CREATE TABLE Tax (
+    taxID NVARCHAR(15) NOT NULL PRIMARY KEY,
+    taxName NVARCHAR(50) NOT NULL,
+    taxRate DECIMAL(5, 2) NOT NULL,
+    dateOfCreation DATE NOT NULL,
+    activate BIT NOT NULL
+);
+GO
+
+-- Tạo bảng Invoice
+CREATE TABLE Invoice (
+    invoiceID NVARCHAR(15) NOT NULL PRIMARY KEY,
+    invoiceDate DATETIME NOT NULL,
+    roomCharge DECIMAL(18, 2) NOT NULL,
+    servicesCharge DECIMAL(18, 2) NOT NULL,
+    totalDue DECIMAL(18, 2) NOT NULL,
+    netDue DECIMAL(18, 2) NOT NULL,
+    taxID NVARCHAR(15) NOT NULL,
     reservationFormID NVARCHAR(15) NOT NULL,
-    employeeID NVARCHAR(15),
-    FOREIGN KEY (roomID) REFERENCES Room(roomID),
-    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID),
-    FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)
-        ON DELETE SET NULL
-        ON UPDATE CASCADE
+    FOREIGN KEY (taxID) REFERENCES Tax(taxID),
+    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID)
 );
 GO
 
@@ -687,12 +693,12 @@ SET roomStatus = 'OVERDUE'
 WHERE roomID = 'V2102';
 GO
 
-INSERT INTO RoomUsageService (roomUsageServiceID, reservationFormID, hotelServiceId, quantity, unitPrice)
+INSERT INTO RoomUsageService (roomUsageServiceID, reservationFormID, hotelServiceId, quantity, unitPrice, dateAdded, employeeID)
 VALUES
-    ('RUS-000001', 'RF-000109', 'HS-000001', 2, 100000),
-    ('RUS-000002', 'RF-000109', 'HS-000002', 1, 200000),
-    ('RUS-000003', 'RF-000109', 'HS-000003', 3, 150000),
-    ('RUS-000004', 'RF-000109', 'HS-000004', 1, 50000);
+    ('RUS-000001', 'RF-000109', 'HS-000001', 2, 100000, GETDATE(), 'EMP-000003'),
+    ('RUS-000002', 'RF-000109', 'HS-000002', 1, 200000, GETDATE(), 'EMP-000003'),
+    ('RUS-000003', 'RF-000109', 'HS-000003', 3, 150000, GETDATE(), 'EMP-000003'),
+    ('RUS-000004', 'RF-000109', 'HS-000004', 1, 50000, GETDATE(), 'EMP-000003');
 GO
 
 -- Phiếu 4: đã checkin và gần tới giờ checkout (trong 5 phút nữa)
