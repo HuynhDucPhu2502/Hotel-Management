@@ -160,28 +160,30 @@ public class PDFHelper {
         // ======================================================================
         // Bảng Dịch Vụ Đã Sử Dụng
         // ======================================================================
-        Paragraph serviceTitle = new Paragraph("Dịch vụ đã sử dụng", titleFont);
-        serviceTitle.setSpacingAfter(5f);
-        document.add(serviceTitle);
+        if (!roomUsageServices.isEmpty()) {
+            Paragraph serviceTitle = new Paragraph("Dịch vụ đã sử dụng", titleFont);
+            serviceTitle.setSpacingAfter(5f);
+            document.add(serviceTitle);
 
-        PdfPTable serviceTable = new PdfPTable(4);
-        serviceTable.setWidthPercentage(100);
-        serviceTable.setWidths(new int[]{3, 1, 2, 2});
+            PdfPTable serviceTable = new PdfPTable(4);
+            serviceTable.setWidthPercentage(100);
+            serviceTable.setWidths(new int[]{3, 1, 2, 2});
 
-        serviceTable.addCell(createBorderedCell("Tên dịch vụ", headerFont, Element.ALIGN_CENTER));
-        serviceTable.addCell(createBorderedCell("SL", headerFont, Element.ALIGN_CENTER));
-        serviceTable.addCell(createBorderedCell("Đơn giá (VND)", headerFont, Element.ALIGN_CENTER));
-        serviceTable.addCell(createBorderedCell("Thành tiền (VND)", headerFont, Element.ALIGN_CENTER));
+            serviceTable.addCell(createBorderedCell("Tên dịch vụ", headerFont, Element.ALIGN_CENTER));
+            serviceTable.addCell(createBorderedCell("SL", headerFont, Element.ALIGN_CENTER));
+            serviceTable.addCell(createBorderedCell("Đơn giá (VND)", headerFont, Element.ALIGN_CENTER));
+            serviceTable.addCell(createBorderedCell("Thành tiền (VND)", headerFont, Element.ALIGN_CENTER));
 
-        for (RoomUsageService service : roomUsageServices) {
-            serviceTable.addCell(createBorderedCell(service.getHotelService().getServiceName(), font, Element.ALIGN_LEFT));
-            serviceTable.addCell(createBorderedCell(String.valueOf(service.getQuantity()), font, Element.ALIGN_CENTER));
-            serviceTable.addCell(createBorderedCell(String.format("%,.0f", service.getUnitPrice()), font, Element.ALIGN_RIGHT));
-            serviceTable.addCell(createBorderedCell(String.format("%,.0f", service.getQuantity() * service.getUnitPrice()), font, Element.ALIGN_RIGHT));
+            for (RoomUsageService service : roomUsageServices) {
+                serviceTable.addCell(createBorderedCell(service.getHotelService().getServiceName(), font, Element.ALIGN_LEFT));
+                serviceTable.addCell(createBorderedCell(String.valueOf(service.getQuantity()), font, Element.ALIGN_CENTER));
+                serviceTable.addCell(createBorderedCell(String.format("%,.0f", service.getUnitPrice()), font, Element.ALIGN_RIGHT));
+                serviceTable.addCell(createBorderedCell(String.format("%,.0f", service.getQuantity() * service.getUnitPrice()), font, Element.ALIGN_RIGHT));
+            }
+
+            document.add(serviceTable);
+            document.add(new Paragraph("\n"));
         }
-
-        document.add(serviceTable);
-        document.add(new Paragraph("\n"));
 
         // ======================================================================
         // Bảng Tổng Tiền
@@ -197,7 +199,6 @@ public class PDFHelper {
         document.add(totalTable);
 
         document.close();
-        System.out.println("PDF created successfully.");
     }
 
     private static PdfPTable getPdfPTable(Invoice invoice, Font titleFont, Font font) {

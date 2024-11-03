@@ -26,7 +26,9 @@ public class ServiceItemController {
 
     private HotelService hotelService;
 
-
+    // ==================================================================================================================
+    // 2. Khởi tạo và nạp dữ liệu vào giao diện
+    // ==================================================================================================================
     public void setupContext(HotelService hotelService) {
         this.hotelService = hotelService;
 
@@ -47,6 +49,9 @@ public class ServiceItemController {
 
     }
 
+    // ==================================================================================================================
+    // 3. Hàm getter truyền ra ngoài
+    // ==================================================================================================================
     public Spinner<Integer> getAmountField() {
         return amountField;
     }

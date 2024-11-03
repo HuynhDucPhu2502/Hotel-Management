@@ -14,10 +14,7 @@ public class RoomAvailableChangingItemController {
     @FXML
     private Button changingBtn;
 
-    private Room room;
-
     public void setupContext(Room room) {
-        this.room = room;
 
         roomNumberText.setText(room.getRoomNumber());
         roomCategoryNameLabel.setText(room.getRoomCategory().getRoomCategoryName());

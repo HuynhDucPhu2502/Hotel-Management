@@ -20,18 +20,13 @@ public class RoomOnUseItemController {
     // 1. Các biến
     // ==================================================================================================================
     @FXML
-    private Text roomNumberText;
+    private Text roomNumberText, checkOutDateText;
     @FXML
-    private Text checkOutDateText;
-    @FXML
-    private Label roomCategoryNameLabel;
-    @FXML
-    private Label customerFullNameLabel;
+    private Label roomCategoryNameLabel, customerFullNameLabel;
 
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
 
-    // Context
     private MainController mainController;
     private Employee employee;
     private RoomWithReservation roomWithReservation;

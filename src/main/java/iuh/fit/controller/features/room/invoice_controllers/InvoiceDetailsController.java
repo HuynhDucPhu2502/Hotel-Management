@@ -111,7 +111,6 @@ public class InvoiceDetailsController {
         exportPDFBtn.setOnAction(e -> {
             try {
                 PDFHelper.createInvoicePDF(invoice);
-                dialogPane.showInformation("Thông báo", "Xuất hóa đơn PDF thành công!");
             } catch (DocumentException | IOException ex) {
                 ex.printStackTrace();
                 dialogPane.showInformation("Lỗi", "Đã xảy ra lỗi trong quá trình xuất PDF. Vui lòng thử lại!");

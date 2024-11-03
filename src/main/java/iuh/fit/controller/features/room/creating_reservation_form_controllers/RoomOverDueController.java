@@ -24,22 +24,13 @@ public class RoomOverDueController {
     // 1. Các biến
     // ==================================================================================================================
     @FXML
-    private Text roomNumberText;
+    private Text roomNumberText, checkOutDateText, lateDuration;
     @FXML
-    private Text checkOutDateText;
-    @FXML
-    private Label roomCategoryNameLabel;
-    @FXML
-    private Label customerFullNameLabel;
-    @FXML
-    private Text lateDuration;
+    private Label roomCategoryNameLabel, customerFullNameLabel;
 
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
 
-    private Timeline timeline;
-
-    // Context
     private MainController mainController;
     private Employee employee;
     private RoomWithReservation roomWithReservation;
@@ -65,7 +56,7 @@ public class RoomOverDueController {
     }
 
     private void startLateDurationCountdown(java.time.LocalDateTime checkOutDate) {
-        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             java.time.LocalDateTime now = java.time.LocalDateTime.now();
             java.time.Duration duration = java.time.Duration.between(checkOutDate, now);
 

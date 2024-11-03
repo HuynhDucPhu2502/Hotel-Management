@@ -23,45 +23,30 @@ public class AddCustomerController {
     // ==================================================================================================================
     // 1. Các biến
     // ==================================================================================================================
-    // 1.1 Input Fields
     @FXML
-    private TextField customerAddressTextField;
-    @FXML
-    private TextField customerIDCardNumberTextField;
+    private TextField customerIDTextField, customerNameTextField,
+            customerPhoneNumberTextField, customerEmailTextField,
+            customerAddressTextField, customerIDCardNumberTextField;
+
     @FXML
     private CalendarPicker customerDOBCalendarPicker;
-    @FXML
-    private TextField customerEmailTextField;
-    @FXML
-    private TextField customerIDTextField;
-    @FXML
-    private TextField customerNameTextField;
-    @FXML
-    private TextField customerPhoneNumberTextField;
+
     @FXML
     private ToggleGroup genderToggleGroup;
 
-    // 1.2 Buttons
     @FXML
-    private Button addBtn;
-    @FXML
-    private Button resetBtn;
-    @FXML
-    private Button bookingRoomNavigate;
-    @FXML
-    private Button reservationFormNavigate;
-    @FXML
-    private Button backBtn;
+    private Button addBtn, resetBtn;
 
-    // 1.3 Dialog Pane
+    @FXML
+    private Button backBtn, bookingRoomNavigate,
+            reservationFormNavigate;
+
     @FXML
     private DialogPane dialogPane;
 
-    // 1.4 TitledPane
     @FXML
     private TitledPane titledPane;
 
-    // 1.5 Context
     private MainController mainController;
     private Employee employee;
     private RoomWithReservation roomWithReservation;
@@ -141,7 +126,7 @@ public class AddCustomerController {
     }
 
     // ==================================================================================================================
-    // 4. Thêm khách hàng
+    // 4. Xử lý sự kiện thêm khách hàng và sự kiện đặt lại nhập liệu
     // ==================================================================================================================
     public void handleAddAction() {
         try {

@@ -17,16 +17,13 @@ public class InvoiceItemController {
     // 1. Các biến
     // ==================================================================================================================
     @FXML
-    private Text invoiceIDText;
-    @FXML
-    private Text customerNameLabel;
+    private Text invoiceIDText, customerNameLabel;
     @FXML
     private Label invoiceDateLabel;
 
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
 
-    // Context
     private MainController mainController;
     private Employee employee;
     private Invoice invoice;
