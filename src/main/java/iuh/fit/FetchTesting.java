@@ -1,5 +1,7 @@
 package iuh.fit;
 
+import iuh.fit.dao.RoomDisplayOnTableDAO;
+import iuh.fit.dao.ServiceDisplayOnTableDAO;
 import iuh.fit.models.enums.Month;
 
 import java.time.LocalDateTime;
@@ -23,7 +25,8 @@ public class FetchTesting {
 //        System.out.println(InvoiceDAO.getInvoice());
 
         //System.out.println(InvoiceDisplayOnTableDAO.getData());
-        String month = Month.valueOf(Arrays.stream(Month.values()).toList().get(0).toString()).getName();
-        System.out.println(month);
+//        String month = Month.valueOf(Arrays.stream(Month.values()).toList().get(0).toString()).getName();
+//        System.out.println(month);
+        System.out.println(RoomDisplayOnTableDAO.getData());
     }
 }
