@@ -1,12 +1,18 @@
 package iuh.fit.controller;
 
+import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.AccountDAO;
+import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Account;
+import iuh.fit.models.Employee;
+import iuh.fit.models.enums.AccountStatus;
+import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ErrorMessages;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -40,11 +46,15 @@ public class LoginController {
     @FXML
     private ImageView showPassButton;
 
+    @FXML
+    private DialogPane dialogPane;
+
     private boolean isDefaultIcon = true;
 
 
     @FXML
     private void initialize() {
+        dialogPane.toFront();
         registerEventEnterKey();
         hiddenPasswordField.textProperty().bindBidirectional(visiblePasswordField.textProperty());
 
@@ -120,23 +130,31 @@ public class LoginController {
         if (account == null) {
             errorMessage.setText(ErrorMessages.LOGIN_INVALID_ACCOUNT);
         } else {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/MainUI.fxml"));
-                AnchorPane mainPanel = fxmlLoader.load();
+            if(account.getAccountStatus().equals(AccountStatus.INACTIVE)||
+                    account.getAccountStatus().equals(AccountStatus.LOCKED)){
+                dialogPane.showInformation("Thông báo", "Tài khoản bị khóa hoặc không có hiệu lực" +
+                        "\nVui lòng báo người quản lý khách sạn để biết thêm thông tin");
 
-                MainController mainController = fxmlLoader.getController();
+            }else{
+                try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/MainUI.fxml"));
+                    AnchorPane mainPanel = fxmlLoader.load();
 
-                mainController.setAccount(account);
+                    MainController mainController = fxmlLoader.getController();
 
-                Scene scene = new Scene(mainPanel);
-                Stage currentStage = (Stage) signInButton.getScene().getWindow();
-                currentStage.setScene(scene);
-                currentStage.setWidth(1200);
-                currentStage.setHeight(800);
-                currentStage.setResizable(true);
-                currentStage.centerOnScreen();
-            } catch (Exception e) {
-                e.printStackTrace();
+                    mainController.setAccount(account);
+
+
+                    Scene scene = new Scene(mainPanel);
+                    Stage currentStage = (Stage) signInButton.getScene().getWindow();
+                    currentStage.setScene(scene);
+                    currentStage.show();
+                    currentStage.setResizable(true);
+                    currentStage.setMaximized(true);
+                    currentStage.centerOnScreen();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
