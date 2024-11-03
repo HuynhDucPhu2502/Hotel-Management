@@ -2,21 +2,31 @@ package iuh.fit.controller.features.employee;
 
 import com.dlsc.gemsfx.DialogPane;
 import com.dlsc.gemsfx.TimePicker;
+import iuh.fit.controller.MainController;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.ShiftDAO;
+import iuh.fit.models.Employee;
 import iuh.fit.models.Room;
 import iuh.fit.models.RoomCategory;
 import iuh.fit.models.Shift;
+import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.enums.ShiftDaysSchedule;
+import iuh.fit.utils.GlobalConstants;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -88,6 +98,7 @@ public class ShiftManagerController {
     @FXML
     private DialogPane dialogPane;
 
+    private Employee employee;
     private ObservableList<Shift> items;
 
     public void initialize() {
@@ -102,13 +113,19 @@ public class ShiftManagerController {
         addBtn.setOnAction(e -> handleAddAction());
         startTimePicker.setOnAction(e->handleCalcEndTime());
         numbOfHourTextField.setOnAction(e->handleCalcEndTime());
-//        updateBtn.setOnAction(e -> handleUpdateAction());
-//        roomIDSearchField.setOnKeyReleased((keyEvent) -> handleSearchAction());
-//        roomIDSearchField.setOnAction(event -> handleSearchAction());
+        updateBtn.setOnAction(e -> handelUpdateShift());
+        shiftIDSearchField.setOnKeyReleased((keyEvent) -> handleSearchAction());
+        shiftIDSearchField.setOnAction(event -> handleSearchAction());
+
+
+    }
+
+    public void setupContext(Employee employeee) {
+        this.employee = employeee;
     }
 
     // Phương thức load dữ liệu lên giao diện
-    private void loadData() {
+    public void loadData() {
         List<Shift> shiftList = ShiftDAO.getShifts();
         List<String> shiftID = shiftList.stream().map(Shift::getShiftID).collect(Collectors.toList());
 
@@ -149,12 +166,20 @@ public class ShiftManagerController {
 
                 updateButton.setOnAction(event -> {
                     Shift shift = getTableView().getItems().get(getIndex());
-//                    handleUpdateBtn(room);
+                    handleUpdateBtn(shift);
                 });
 
                 deleteButton.setOnAction(event -> {
                     Shift shift = getTableView().getItems().get(getIndex());
-//                    handleDeleteAction(room);
+                    if (!ShiftDAO.checkAllowUpdateAndDelete(shift.getShiftID())) {
+                        try {
+                            handelShowDetailData(shift, "delete", null);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        handleDeleteAction(shift);
+                    }
                 });
 
                 hBox.setAlignment(Pos.CENTER);
@@ -167,16 +192,6 @@ public class ShiftManagerController {
                 if (empty) {
                     setGraphic(null);
                 } else {
-                    Shift shift = getTableView().getItems().get(getIndex());
-
-//                    if (room.getRoomStatus() != RoomStatus.AVAILABLE && room.getRoomStatus() != RoomStatus.UNAVAILABLE) {
-//                        updateButton.setDisable(true);
-//                        deleteButton.setDisable(true);
-//                    } else {
-//                        updateButton.setDisable(false);
-//                        deleteButton.setDisable(false);
-//                    }
-
                     setGraphic(hBox);
                 }
             }
@@ -204,7 +219,7 @@ public class ShiftManagerController {
 
     private void handleCalcEndTime(){
         LocalTime endTime = startTimePicker.getTime().plusHours(Integer.valueOf(numbOfHourTextField.getText()));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         String endTimeString = endTime.format(formatter);
         endTimeTextField.setText(endTimeString);
     }
@@ -233,5 +248,136 @@ public class ShiftManagerController {
         } catch (Exception e) {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
+    }
+
+    private void handelShowDetailData(Shift shift, String func, String shiftID) throws IOException {
+        String source = "/iuh/fit/view/features/employee/ShiftDetailForEachEmployeeDialog.fxml";
+
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
+        AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
+
+        ShiftDetailForEachEmployeeDialogController shiftDetailForEachEmployeeDialogController = loader.getController();
+        shiftDetailForEachEmployeeDialogController.setController(this);
+        shiftDetailForEachEmployeeDialogController.getData(shift, func, shiftID);
+
+        Scene scene = new Scene(layout);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Thông tin ca làm");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    private void handleUpdateBtn(Shift shift) {
+        shiftIDTextField.setText(shift.getShiftID());
+        startTimePicker.setTime(shift.getStartTime());
+        numbOfHourTextField.setText(String.valueOf(shift.getNumberOfHour()));
+        endTimeTextField.setText(String.valueOf(shift.getEndTime()));
+        scheduleComboBox.setValue(shift.getShiftDaysSchedule());
+        modifiedDateTextField.setText(String.valueOf(shift.getUpdatedDate()));
+
+        addBtn.setManaged(false);
+        addBtn.setVisible(false);
+        updateBtn.setManaged(true);
+        updateBtn.setVisible(true);
+    }
+
+    private void handelUpdateShift(){
+        if (!ShiftDAO.checkAllowUpdateAndDelete(shiftIDTextField.getText())) {
+            try {
+                handelShowDetailData(null, "update", shiftIDTextField.getText());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            try{
+                Shift newShift = getShiftInfo();
+
+                DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
+                        "XÁC NHẬN",
+                        "Bạn có chắc chắn muốn cập nhật ca làm này?"
+                );
+
+                dialog.onClose(buttonType -> {
+                    if (buttonType == ButtonType.YES) {
+                        ShiftDAO.updateDataWithOldID(getOldShiftID(),newShift);
+
+                        handleResetAction();
+                        loadData();
+                    }
+                });
+            }catch (Exception e){
+                dialogPane.showWarning("LỖI", e.getMessage());
+            }
+        }
+    }
+
+    public String getOldShiftID(){
+        return shiftIDTextField.getText();
+    }
+
+    public Shift getShiftInfo(){
+        String shiftID = shiftIDTextField.getText();
+        LocalTime endTime = startTimePicker.getTime().plusHours(Integer.parseInt(numbOfHourTextField.getText()));
+        String timeCode = endTime.getHour() > 12 ? "PM" : "AM";
+        String nextIDNumb = shiftID.substring(shiftID.length()-4);
+        String newShiftID = String.format("%s%s%s", GlobalConstants.SHIFT_PREFIX + "-", timeCode + "-", nextIDNumb);
+        Shift newShift = new Shift(newShiftID, startTimePicker.getTime(), LocalDateTime.now(), scheduleComboBox.getSelectionModel().getSelectedItem(), Integer.parseInt(numbOfHourTextField.getText()));
+        return newShift;
+    }
+
+    private void handleDeleteAction(Shift shift){
+        try{
+
+            DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
+                    "XÁC NHẬN",
+                    "Bạn có chắc chắn muốn xóa ca làm này?"
+            );
+
+            dialog.onClose(buttonType -> {
+                if (buttonType == ButtonType.YES) {
+                    ShiftDAO.deleteData(shift.getShiftID());
+                    handleResetAction();
+                    loadData();
+                }
+            });
+
+        }catch(Exception e){
+            dialogPane.showWarning("LỖI", e.getMessage());
+        }
+    }
+
+    private void handleSearchAction(){
+        startTimeSearchField.setText("");
+        numbOfHourSearchField.setText("");
+        endTimeSearchField.setText("");
+        scheduleSearchField.setText("");
+
+        String searchText = shiftIDSearchField.getEditor().getText();
+        List<Shift> shift;
+
+        if (searchText == null || searchText.isEmpty()) {
+            shift = ShiftDAO.getShifts();
+        } else {
+            shift = ShiftDAO.findDataByAnyContainsId(searchText);
+            if (!shift.isEmpty()) {
+                if(shift.size()==1){
+                    startTimeSearchField.setText(shift.getFirst().getStartTime().toString());
+                    numbOfHourSearchField.setText(String.valueOf(shift.getFirst().getNumberOfHour()));
+                    endTimeSearchField.setText(shift.getFirst().getEndTime().toString());
+                    scheduleSearchField.setText(shift.getFirst().getShiftDaysSchedule().toString());
+                }
+            }else{
+                startTimeSearchField.setText("rỗng");
+                numbOfHourSearchField.setText("rỗng");
+                endTimeSearchField.setText("rỗng");
+                scheduleSearchField.setText("rỗng");
+            }
+        }
+
+        items.setAll(shift);
+        shiftTableView.setItems(items);
     }
 }
