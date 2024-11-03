@@ -4,6 +4,7 @@ import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.GlobalConstants;
 import iuh.fit.utils.RegexChecker;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class RoomUsageService {
@@ -13,15 +14,20 @@ public class RoomUsageService {
     private double totalPrice;
     private HotelService hotelService;
     private ReservationForm reservationForm;
+    private Employee employee;
+    private LocalDateTime dateAdded;
 
     public RoomUsageService(String roomUsageServiceId, int quantity, double unitPrice,
                             double totalPrice, HotelService hotelService,
-                            ReservationForm reservationForm) {
+                            ReservationForm reservationForm, Employee employee,
+                            LocalDateTime dateAdded) {
         this.setRoomUsageServiceId(roomUsageServiceId);
         this.setQuantity(quantity);
         this.setUnitPrice(unitPrice);
         this.setHotelService(hotelService);
         this.setReservationForm(reservationForm);
+        this.setEmployee(employee);
+        this.setDateAdded(dateAdded);
         this.calculateTotalPrice();
     }
 
@@ -34,6 +40,14 @@ public class RoomUsageService {
         } else {
             this.totalPrice = 0;
         }
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public void setDateAdded(LocalDateTime dateAdded) {
+        this.dateAdded = dateAdded;
     }
 
     public void setRoomUsageServiceId(String roomUsageServiceId) {
@@ -90,6 +104,14 @@ public class RoomUsageService {
 
     public double getUnitPrice() {
         return unitPrice;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public LocalDateTime getDateAdded() {
+        return dateAdded;
     }
 
     @Override
