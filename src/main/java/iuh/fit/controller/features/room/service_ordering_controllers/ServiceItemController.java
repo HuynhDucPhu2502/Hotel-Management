@@ -38,7 +38,7 @@ public class ServiceItemController {
     private void loadData() {
         if (hotelService != null) {
             serviceName.setText(hotelService.getServiceName());
-            servicePrice.setText(String.valueOf(hotelService.getServicePrice()) + " VND");
+            servicePrice.setText(hotelService.getServicePrice() + " VND");
             String iconPath = "/iuh/fit/icons/service_icons/ic_" + hotelService.getServiceCategory().getIcon() + ".png";
             Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath)));
             serviceCategoryImg.setImage(image);
