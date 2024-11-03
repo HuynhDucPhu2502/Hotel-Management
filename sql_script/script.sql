@@ -720,3 +720,10 @@ END;
 GO
 
 
+-- data for service statistics
+select * 
+from ReservationForm r join RoomUsageService rs
+on r.reservationFormID = rs.reservationFormID
+go
+
+
