@@ -68,6 +68,10 @@ public class ServiceOrderingController {
     private TableColumn<RoomUsageService, Double> unitPriceColumn;
     @FXML
     private TableColumn<RoomUsageService, Double> totalPriceColumn;
+    @FXML
+    private TableColumn<RoomUsageService, String> dateAddedColumn;
+    @FXML
+    private TableColumn<RoomUsageService, String> employeeAddedColumn;
 
     // 1.5 Dialog Pane
     @FXML
@@ -292,6 +296,17 @@ public class ServiceOrderingController {
             double totalPrice = data.getValue().getQuantity() * data.getValue().getUnitPrice();
             return new SimpleDoubleProperty(totalPrice).asObject();
         });
+        dateAddedColumn.setCellValueFactory(data -> {
+            LocalDateTime dateAdded = data.getValue().getDateAdded();
+            String formattedDate = (dateAdded != null) ? dateAdded.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) : "Không có";
+            return new SimpleStringProperty(formattedDate);
+        });
+
+        employeeAddedColumn.setCellValueFactory(data -> {
+            Employee employee = data.getValue().getEmployee();
+            String employeeName = (employee != null && employee.getFullName() != null) ? employee.getFullName() : "Không có";
+            return new SimpleStringProperty(employeeName);
+        });
     }
 
 
@@ -308,7 +323,7 @@ public class ServiceOrderingController {
             if (buttonType == ButtonType.YES) {
                 handleAddServiceToDB(service, amount);
                 dialogPane.showInformation("Thành Công", "Dịch vụ đã được thêm thành công!");
-                loadData(); // Cập nhật bảng sau khi thêm
+                loadData();
             }
         });
     }
@@ -321,9 +336,13 @@ public class ServiceOrderingController {
             roomUsageService.setUnitPrice(service.getServicePrice());
             roomUsageService.setHotelService(service);
             roomUsageService.setReservationForm(roomWithReservation.getReservationForm());
+            roomUsageService.setEmployee(employee);
+            roomUsageService.setDateAdded(LocalDateTime.now());
+
             RoomUsageServiceDAO.createData(roomUsageService);
         } catch (Exception e) {
             dialogPane.showInformation("LỖI", e.getMessage());
         }
     }
+
 }

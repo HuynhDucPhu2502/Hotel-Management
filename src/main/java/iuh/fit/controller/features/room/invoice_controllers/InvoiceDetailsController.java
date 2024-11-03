@@ -20,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -54,6 +55,10 @@ public class InvoiceDetailsController {
     private TableColumn<RoomUsageService, Double> unitPriceColumn;
     @FXML
     private TableColumn<RoomUsageService, Double> totalPriceColumn;
+    @FXML
+    private TableColumn<RoomUsageService, String> dateAddedColumn;
+    @FXML
+    private TableColumn<RoomUsageService, String> employeeAddedColumn;
 
     @FXML
     private TitledPane titledPane;
@@ -172,6 +177,17 @@ public class InvoiceDetailsController {
         totalPriceColumn.setCellValueFactory(data -> {
             double totalPrice = data.getValue().getQuantity() * data.getValue().getUnitPrice();
             return new SimpleDoubleProperty(totalPrice).asObject();
+        });
+        dateAddedColumn.setCellValueFactory(data -> {
+            LocalDateTime dateAdded = data.getValue().getDateAdded();
+            String formattedDate = (dateAdded != null) ? dateAdded.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) : "Không có";
+            return new SimpleStringProperty(formattedDate);
+        });
+
+        employeeAddedColumn.setCellValueFactory(data -> {
+            Employee employee = data.getValue().getEmployee();
+            String employeeName = (employee != null && employee.getFullName() != null) ? employee.getFullName() : "Không có";
+            return new SimpleStringProperty(employeeName);
         });
     }
 

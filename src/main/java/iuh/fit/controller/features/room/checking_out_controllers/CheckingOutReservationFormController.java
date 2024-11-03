@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 
 public class CheckingOutReservationFormController {
@@ -52,6 +53,10 @@ public class CheckingOutReservationFormController {
     private TableColumn<RoomUsageService, Double> unitPriceColumn;
     @FXML
     private TableColumn<RoomUsageService, Double> totalPriceColumn;
+    @FXML
+    private TableColumn<RoomUsageService, String> dateAddedColumn;
+    @FXML
+    private TableColumn<RoomUsageService, String> employeeAddedColumn;
 
     @FXML
     private TableView<RoomReservationDetail> roomReservationDetailTableView;
@@ -202,6 +207,16 @@ public class CheckingOutReservationFormController {
             double totalPrice = data.getValue().getQuantity() * data.getValue().getUnitPrice();
             return new SimpleDoubleProperty(totalPrice).asObject();
         });
+        dateAddedColumn.setCellValueFactory(data -> {
+            LocalDateTime dateAdded = data.getValue().getDateAdded();
+            String formattedDate = (dateAdded != null) ? dateAdded.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) : "Không có";
+            return new SimpleStringProperty(formattedDate);
+        });
+        employeeAddedColumn.setCellValueFactory(data -> {
+            Employee employee = data.getValue().getEmployee();
+            String employeeName = (employee != null && employee.getFullName() != null) ? employee.getFullName() : "Không có";
+            return new SimpleStringProperty(employeeName);
+        });
     }
 
     private void handleCheckOut() {
@@ -237,7 +252,7 @@ public class CheckingOutReservationFormController {
                                 roomWithReservation.getReservationForm().getCheckInDate(), roomWithReservation.getReservationForm().getCheckOutDate());
                         double servicesCharge = Calculator.calculateTotalServiceCharge(roomWithReservation.getReservationForm().getReservationID());
                         double totalDue = roomCharge * 0.9 + servicesCharge;
-                        double netDue = totalDue * (1 + tax.getTaxRate());
+                        double netDue = totalDue * (1 + Objects.requireNonNull(tax).getTaxRate());
 
                         invoice.setRoomCharge(roomCharge);
                         invoice.setServicesCharge(servicesCharge);
