@@ -726,4 +726,9 @@ from ReservationForm r join RoomUsageService rs
 on r.reservationFormID = rs.reservationFormID
 go
 
+select * from HotelService
+select * from ServiceCategory
+
+-- data for room statistics
+select * from RoomReservationDetail
 
