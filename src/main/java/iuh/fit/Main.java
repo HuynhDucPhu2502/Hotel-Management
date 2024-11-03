@@ -16,8 +16,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        startWithoutLogin(primaryStage);
-//        startWithLogin(primaryStage);
+//        startWithoutLogin(primaryStage);
+        startWithLogin(primaryStage);
 
     }
 
@@ -52,12 +52,10 @@ public class Main extends Application {
 
             Scene scene = new Scene(root);
 
-            primaryStage.setMaximized(true);
-
             primaryStage.setTitle("Quản Lý Khách Sạn");
             primaryStage.setScene(scene);
-            primaryStage.setResizable(true);
             primaryStage.show();
+            primaryStage.centerOnScreen();
         } catch (Exception e) {
             e.printStackTrace();
         }
