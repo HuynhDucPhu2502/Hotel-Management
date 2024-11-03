@@ -3,6 +3,7 @@ package iuh.fit;
 import iuh.fit.models.enums.Month;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 public class FetchTesting {
     public static void main(String[] args) {
@@ -22,8 +23,7 @@ public class FetchTesting {
 //        System.out.println(InvoiceDAO.getInvoice());
 
         //System.out.println(InvoiceDisplayOnTableDAO.getData());
-
-        String month = LocalDateTime.now().getMonth().toString();
-        System.out.println(Month.valueOf(month).getName());
+        String month = Month.valueOf(Arrays.stream(Month.values()).toList().get(0).toString()).getName();
+        System.out.println(month);
     }
 }
