@@ -13,30 +13,19 @@ import java.util.List;
 public class RoomDAO {
     public static List<Room> getRoom() {
         ArrayList<Room> data = new ArrayList<>();
-        try (
-                Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement()
-        ){
-            String sql = "SELECT a.roomID, a.roomStatus, a.dateOfCreation, a.roomCategoryID, " +
-                    "b.roomCategoryName, b.numberOfBed " +
-                    "FROM Room a inner join RoomCategory b on a.roomCategoryID = b.roomCategoryID";
-            ResultSet rs = statement.executeQuery(sql);
+        String sql = """
+            SELECT a.roomID, a.roomStatus, a.dateOfCreation, a.roomCategoryID,
+                   b.roomCategoryName, b.numberOfBed
+            FROM Room a
+            INNER JOIN RoomCategory b ON a.roomCategoryID = b.roomCategoryID
+        """;
 
+        try (Connection connection = DBHelper.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet rs = statement.executeQuery(sql)) {
 
             while (rs.next()) {
-                Room room = new Room();
-                RoomCategory roomCategory = new RoomCategory();
-
-                room.setRoomID(rs.getString(1));
-                room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString(2)));
-                room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp(3)));
-
-                roomCategory.setRoomCategoryID(rs.getString(4));
-                roomCategory.setRoomCategoryName(rs.getString(5));
-                roomCategory.setNumberOfBed(rs.getInt(6));
-
-                room.setRoomCategory(roomCategory);
-
+                Room room = extractRoomData(rs);
                 data.add(room);
             }
 
@@ -48,38 +37,24 @@ public class RoomDAO {
     }
 
     public static Room getDataByID(String roomID) {
+        String sql = """
+            SELECT a.roomID, a.roomStatus, a.dateOfCreation, a.roomCategoryID,
+                   b.roomCategoryName, b.numberOfBed
+            FROM Room a
+            INNER JOIN RoomCategory b ON a.roomCategoryID = b.roomCategoryID
+            WHERE roomID = ?
+        """;
 
-        String SQLQueryStatement = "SELECT a.roomID, a.roomStatus, a.dateOfCreation, a.roomCategoryID, " +
-                "b.roomCategoryName, b.numberOfBed " +
-                "FROM Room a inner join RoomCategory b on a.roomCategoryID = b.roomCategoryID " +
-                "WHERE roomID = ?";
-
-        try (
-                Connection con = DBHelper.getConnection();
-                PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement)
-        ) {
+        try (Connection connection = DBHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.setString(1, roomID);
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
-                    Room room = new Room();
-                    RoomCategory roomCategory = new RoomCategory();
-
-                    room.setRoomID(rs.getString(1));
-                    room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString(2)));
-                    room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp(3)));
-
-                    roomCategory.setRoomCategoryID(rs.getString(4));
-                    roomCategory.setRoomCategoryName(rs.getString(5));
-                    roomCategory.setNumberOfBed(rs.getInt(6));
-
-                    room.setRoomCategory(roomCategory);
-
-                    return room;
+                    return extractRoomData(rs);
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -337,6 +312,54 @@ public class RoomDAO {
         return availableRooms;
     }
 
+    public static List<Room> getAvailableRoomsInDateRange(LocalDateTime checkInDate, LocalDateTime checkOutDate) {
+        List<Room> availableRooms = new ArrayList<>();
+        String sql = """
+            SELECT r.roomID, r.roomStatus, r.dateOfCreation,
+                   rc.roomCategoryID, rc.roomCategoryName, rc.numberOfBed
+            FROM Room r
+            LEFT JOIN RoomCategory rc ON r.roomCategoryID = rc.roomCategoryID
+            LEFT JOIN ReservationForm rf
+              ON r.roomID = rf.roomID
+              AND (? < rf.checkOutDate AND ? > rf.checkInDate)
+            WHERE rf.roomID IS NULL;
+        """;
+
+        try (Connection connection = DBHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setTimestamp(1, Timestamp.valueOf(checkOutDate));
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(checkInDate));
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                Room room = extractRoomData(rs);
+                availableRooms.add(room);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return availableRooms;
+    }
+
+    private static Room extractRoomData(ResultSet rs) throws SQLException {
+        Room room = new Room();
+        RoomCategory roomCategory = new RoomCategory();
+
+        room.setRoomID(rs.getString("roomID"));
+        room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString("roomStatus")));
+        room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp("dateOfCreation")));
+
+        roomCategory.setRoomCategoryID(rs.getString("roomCategoryID"));
+        roomCategory.setRoomCategoryName(rs.getString("roomCategoryName"));
+        roomCategory.setNumberOfBed(rs.getInt("numberOfBed"));
+
+        room.setRoomCategory(roomCategory);
+
+        return room;
+    }
 
 
 
