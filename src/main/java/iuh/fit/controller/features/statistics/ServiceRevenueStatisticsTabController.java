@@ -8,7 +8,7 @@ import iuh.fit.dao.ServiceDisplayOnTableDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ServiceCategory;
 import iuh.fit.models.wrapper.ServiceDisplayOnTable;
-import iuh.fit.utils.ExportFileHelper;
+import iuh.fit.utils.EditDateRangePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -63,6 +63,7 @@ public class ServiceRevenueStatisticsTabController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        EditDateRangePicker.editDateRangePicker(serviceTabDateRangePicker);
         List<ServiceDisplayOnTable> serviceDisplayOnTableData = ServiceDisplayOnTableDAO.getData();
         loadDataToEmployeeNameCombobox();
         loadDataToCategoryServiceCombobox();

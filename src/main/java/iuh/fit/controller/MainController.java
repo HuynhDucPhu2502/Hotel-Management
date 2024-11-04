@@ -13,9 +13,14 @@ import iuh.fit.models.Employee;
 import iuh.fit.models.enums.Position;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 
-public class MainController {
+import java.net.URL;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+public class MainController implements Initializable {
     private Account account;
 
     @FXML
@@ -23,10 +28,11 @@ public class MainController {
     @FXML
     private AnchorPane mainPanel;
 
-    @FXML
-    public void initialize() {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        Locale locale = new Locale("vi", "VN");
+        Locale.setDefault(locale);
     }
-
 
     public void setAccount(Account account) {
         this.account = account;

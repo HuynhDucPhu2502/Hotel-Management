@@ -7,6 +7,7 @@ import iuh.fit.dao.InvoiceDisplayOnTableDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.enums.ExportExcelCategory;
 import iuh.fit.models.wrapper.InvoiceDisplayOnTable;
+import iuh.fit.utils.EditDateRangePicker;
 import iuh.fit.utils.ExportFileHelper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -61,6 +62,7 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        EditDateRangePicker.editDateRangePicker(invoiceTabDateRangePicker);
         List<InvoiceDisplayOnTable> invoiceDisplayOnTableData = InvoiceDisplayOnTableDAO.getData();
         loadDataToEmployeeNameCombobox();
         loadDataToComboboxOfYear();

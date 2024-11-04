@@ -6,7 +6,7 @@ import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomDisplayOnTableDAO;
 import iuh.fit.models.RoomCategory;
 import iuh.fit.models.wrapper.RoomDisplayOnTable;
-import iuh.fit.utils.ExportFileHelper;
+import iuh.fit.utils.EditDateRangePicker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,7 +18,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -58,6 +57,7 @@ public class RoomRevenueStatisticsTabController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        EditDateRangePicker.editDateRangePicker(roomTabDateRangePicker);
         List<RoomDisplayOnTable> roomDisplayOnTableData = RoomDisplayOnTableDAO.getData();
         loadDataToRoomCategoryNameCombobox();
         loadDataToComboboxOfYear();
