@@ -42,6 +42,7 @@ public class MainController {
             if (menuController != null) {
                 menuController.setAccount(account);
 
+
                 if(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()).getPosition().equals(Position.MANAGER)){
                     // Dashboard
                     menuController.getDashBoardBtn().setOnAction(e -> loadPanel("/iuh/fit/view/features/DashboardPanel.fxml"));
@@ -72,6 +73,9 @@ public class MainController {
                     menuController.getRevenueStatisticsButton().setOnAction(e -> {
                         loadPanel("/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml");
                     });
+                    menuController.getRateUsingRoomButton().setOnAction(e -> {
+                      loadPanel("/iuh/fit/view/features/statistics/RateUsingRoomStatisticsPanel.fxml");
+                });
                     // History
                 }else{
                     // Dashboard
@@ -103,6 +107,9 @@ public class MainController {
                     menuController.getRevenueStatisticsButton().setOnAction(e -> {
                         loadPanel("/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml");
                     });
+                    menuController.getRateUsingRoomButton().setOnAction(e -> {
+                        loadPanel("/iuh/fit/view/features/statistics/RateUsingRoomStatisticsPanel.fxml");
+                });
                     // History
                 }
 
