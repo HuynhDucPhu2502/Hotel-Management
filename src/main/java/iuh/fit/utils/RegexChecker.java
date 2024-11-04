@@ -134,17 +134,6 @@ public class RegexChecker {
         return yearsBetween >= 18;
     }
 
-    /**
-     * Phương thức kiểm tra tính hợp lệ của tên người dùng (username).
-     * Username phải có độ dài trong khoảng cho phép và không chứa khoảng trắng
-     * hoặc ký tự đặc biệt (chỉ cho phép chữ cái và số).
-     *
-     * @param input Tên người dùng cần kiểm tra.
-     * @param minLength Độ dài tối thiểu cho tên người dùng.
-     * @param maxLength Độ dài tối đa cho tên người dùng.
-     * @return true nếu tên người dùng hợp lệ (chỉ chứa chữ cái và số, và độ dài nằm trong khoảng cho phép),
-     *         ngược lại trả về false.
-     */
     public static boolean isValidUsername(String input, int minLength, int maxLength) {
         // Kiểm tra xem chuỗi có chứa khoảng trắng hoặc ký tự đặc biệt không
         // Regex [a-zA-Z0-9]+ chỉ cho phép các ký tự chữ cái và số
@@ -156,31 +145,16 @@ public class RegexChecker {
         return input.length() >= minLength && input.length() <= maxLength;
     }
 
-    /**
-     * Phương thức kiểm tra xem mật khẩu có đúng theo mẫu cho sẵn không.
-     *
-     * @param password Mật khẩu cần kiểm tra (dạng String).
-     * @return true nếu mật khẩu có từ 8 đến 30 ký tự, có ít nhất 1 ký tự, 1 ký ố và 1 ký tự đặc biệt như !@#$%^&*().
-     */
-    public static boolean isValidPassword(String password){
-        String regex = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()])[a-zA-Z\\d!@#$%^&*()]{8,30}$";
+    public static boolean isValidHashPassword(String hashPassword) {
+        String regex = "^[a-fA-F0-9]{64}$";
+        return hashPassword.matches(regex);
+    }
 
+    public static boolean isValidPassword(String password) {
+        String regex = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*()])[a-zA-Z\\d!@#$%^&*()]{8,32}$";
         return password.matches(regex);
     }
 
-    /**
-     * Phương thức kiểm tra mã ca (shiftID) có đúng định dạng hay không.
-     *
-     * Quy tắc mã ca:
-     * - Bắt đầu với chuỗi "SHIFT".
-     * - Sau đó là ký hiệu thời gian "AM" hoặc "PM" tùy thuộc vào thời gian bắt đầu (startTime).
-     * - Kết thúc bằng chuỗi gồm 4 chữ số.
-     * Ví dụ hợp lệ: SHIFT-AM-0001, SHIFT-PM-1234.
-     *
-     * @param input Mã ca (shiftID) cần kiểm tra.
-     * @param endTime Thời gian bắt đầu để xác định mã thời gian là AM hoặc PM.
-     * @return true nếu mã ca hợp lệ theo quy tắc trên, false nếu không.
-     */
     public static boolean isValidShiftID(String input, LocalTime endTime) {
         // Xác định AM hoặc PM dựa trên startTime
         String prefix = "SHIFT";
@@ -191,14 +165,7 @@ public class RegexChecker {
 
         return input.matches(regex);
     }
-  
-    /**
-     * Kiểm tra tính hợp lệ của tên thuế.
-     * 
-     * @param input Tên thuế cần kiểm tra
-     * @return true nếu tên thuế hợp lệ, false nếu không hợp lệ
-     *         (không rỗng, không chứa khoảng trắng và không có ký tự đặc biệt)
-     */
+
     public static boolean isValidTaxName(String input) {
         // Kiểm tra rỗng
         if (input == null || input.trim().isEmpty()) {
@@ -209,13 +176,6 @@ public class RegexChecker {
         return input.matches("[a-zA-Z0-9\\s]+");
     }
 
-    /**
-     * Kiểm tra tính hợp lệ của ngày tạo thuế.
-     *
-     * @param input Ngày tạo thuế cần kiểm tra
-     * @return true nếu ngày tạo thuế nhỏ hơn ngày hiện tại, false nếu không hợp lệ
-     *         (hoặc nếu input là null)
-     */
     public static boolean isValidTaxDateOfCreation(LocalDate input) {
         // Kiểm tra xem input có nhỏ hơn ngày hiện tại không
         if (input == null) {
@@ -224,13 +184,6 @@ public class RegexChecker {
         return input.isBefore(LocalDate.now());
     }
 
-    /**
-     * Kiểm tra tính hợp lệ của mã phòng theo định dạng:
-     * X: "T" hoặc "V", ZZZZ: Số tầng (4 chữ số), TT: Số thứ tự (01-99)
-     *
-     * @param roomID Mã phòng cần kiểm tra
-     * @return true nếu roomID hợp lệ theo định dạng "^([TV])\\d{4}\\d{2}$", ngược lại là false
-     */
     public static boolean isValidRoomID(String roomID) {
         return roomID.matches("^([TV])\\d{4}$");
     }

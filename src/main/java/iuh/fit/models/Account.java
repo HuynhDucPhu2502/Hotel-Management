@@ -145,7 +145,7 @@ public class Account {
      * @throws IllegalArgumentException nếu mật khẩu không hợp lệ.
      */
     public void setPassword(String password) {
-        if(!(RegexChecker.isValidPassword(password)))
+        if(!(RegexChecker.isValidHashPassword(password)))
             throw new IllegalArgumentException(ErrorMessages.ACC_INVALID_PASSWORD);
         this.password = password;
     }

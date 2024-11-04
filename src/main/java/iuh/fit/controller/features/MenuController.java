@@ -154,18 +154,6 @@ public class MenuController {
     @FXML
     private ImageView arrowUpForStatistics;
 
-//  =====================================================
-    // History
-    @FXML
-    private Button historyBtn;
-    @FXML
-    private HBox buttonOneContainer21111;
-    @FXML
-    private HBox buttonTwoContainer21111;
-    @FXML
-    private HBox buttonThreeContainer21111;
-    @FXML
-    private ImageView arrowUpForHistory;
 
 //  =====================================================
 
@@ -194,7 +182,6 @@ public class MenuController {
         serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryManagerContainer, hotelServiceManagerContainer, hotelServiceSearchingContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer, customerSearchingContainer), arrowUpForCustomer, "customer"));
         statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(revenueStatisticsContainer, rateUsingRoomContainer), arrowUpForStatistics, "statistics"));
-        historyBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21111, buttonTwoContainer21111, buttonThreeContainer21111), arrowUpForHistory, "history"));
     }
 
     public void dropDownMenuEvent(List<HBox> buttons, ImageView arrow, String stateKey) {
