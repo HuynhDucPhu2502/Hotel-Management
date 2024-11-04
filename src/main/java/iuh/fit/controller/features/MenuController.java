@@ -146,7 +146,9 @@ public class MenuController {
     @FXML
     private Button revenueStatisticsButton;
     @FXML
-    private HBox buttonTwoContainer2111;
+    private HBox rateUsingRoomContainer;
+    @FXML
+    private Button rateUsingRoomButton;
     @FXML
     private HBox buttonThreeContainer2111;
     @FXML
@@ -191,7 +193,7 @@ public class MenuController {
         roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer, roomCategoryManagerContainer, roomManagerContainer, roomSearchingContainer, roomBookingContainer, invoiceManagerContainer), arrowUpForRoom, "room"));
         serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryManagerContainer, hotelServiceManagerContainer, hotelServiceSearchingContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer, customerSearchingContainer), arrowUpForCustomer, "customer"));
-        statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(revenueStatisticsContainer, buttonTwoContainer2111, buttonThreeContainer2111), arrowUpForStatistics, "statistics"));
+        statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(revenueStatisticsContainer, rateUsingRoomContainer), arrowUpForStatistics, "statistics"));
         historyBtn.setOnAction(e -> dropDownMenuEvent(List.of(buttonOneContainer21111, buttonTwoContainer21111, buttonThreeContainer21111), arrowUpForHistory, "history"));
     }
 
@@ -284,6 +286,10 @@ public class MenuController {
 
     public Button getDashBoardBtn() {
         return dashBoardBtn;
+    }
+
+    public Button getRateUsingRoomButton(){
+        return rateUsingRoomButton;
     }
 }
 

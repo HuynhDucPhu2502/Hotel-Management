@@ -70,6 +70,9 @@ public class MainController {
                 menuController.getRevenueStatisticsButton().setOnAction(e -> {
                     loadPanel("/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml");
                 });
+                menuController.getRateUsingRoomButton().setOnAction(e -> {
+                    loadPanel("/iuh/fit/view/features/statistics/RateUsingRoomStatisticsPanel.fxml");
+                });
                 // History
 
             }
