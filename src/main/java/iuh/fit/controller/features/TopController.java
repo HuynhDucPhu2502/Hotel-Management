@@ -47,9 +47,7 @@ public class TopController {
 
             Scene loginScene = new Scene(loginPane);
             currentStage.setScene(loginScene);
-            currentStage.setWidth(600);
-            currentStage.setHeight(400);
-
+            currentStage.show();
             currentStage.centerOnScreen();
         } catch (Exception e) {
             e.printStackTrace();
