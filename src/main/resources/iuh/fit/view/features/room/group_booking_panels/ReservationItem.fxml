@@ -14,11 +14,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="container" minHeight="250.0" minWidth="810.0" onMouseClicked="#navigateToInvoiceDetailsPanel" styleClass="box-Available" stylesheets="@../../../../styles/item_styles/RoomItem.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.invoice_controllers.InvoiceItemController">
+<AnchorPane fx:id="container" minHeight="250.0" minWidth="810.0" styleClass="box-Available" stylesheets="@../../../../styles/item_styles/RoomItem.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.group_booking_controllers.ReservationItemController">
    <children>
       <BorderPane minWidth="200.0" style="-fx-background-color: rgb(74, 98, 138);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <Text fx:id="invoiceIDText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="101" BorderPane.alignment="CENTER">
+            <Text fx:id="roomNumberText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="101" BorderPane.alignment="CENTER">
                <font>
                   <Font name="System Bold" size="32.0" />
                </font>
@@ -35,7 +35,7 @@
             </Text>
          </top>
          <bottom>
-            <Text fx:id="invoiceIDText1" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Phòng thường giường đơn" BorderPane.alignment="CENTER">
+            <Text fx:id="roomCategoryName" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Phòng thường giường đơn" BorderPane.alignment="CENTER">
                <font>
                   <Font size="14.0" />
                </font>
@@ -66,12 +66,12 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Tên khách hàng" textFill="#fffdfd">
+                  <Label text="CCCD" textFill="#fffdfd">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label text="Mã CCCD" textFill="#fffdfd" GridPane.rowIndex="1">
+                  <Label text="Tên khách hàng" textFill="#fffdfd" GridPane.rowIndex="1">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -81,23 +81,23 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <TextField GridPane.columnIndex="1" />
-                  <TextField editable="false" style="-fx-background-color: rgb(228, 224, 225);" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField editable="false" style="-fx-background-color: rgb(228, 224, 225);" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="customerIDCardNumberTextField" GridPane.columnIndex="1" />
+                  <TextField fx:id="customerFullnameTextField" editable="false" style="-fx-background-color: rgb(228, 224, 225);" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="customerPhoneNumberTextField" editable="false" style="-fx-background-color: rgb(228, 224, 225);" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Label text="Tiền đặt cọc" textFill="#fffdfd" GridPane.rowIndex="3">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <TextField editable="false" style="-fx-background-color: rgb(228, 224, 225);" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="roomBookingDepositTextField" editable="false" style="-fx-background-color: rgb(228, 224, 225);" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
             </GridPane>
          </center>
       </BorderPane>
       <VBox alignment="CENTER" minWidth="200.0" spacing="10.0" style="-fx-background-color: rgb(185, 229, 232);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="600.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button minWidth="150.0" mnemonicParsing="false" stylesheets="@../../../../styles/Button.css" text="Chọn Phòng" textFill="WHITE" />
-            <Button minWidth="150.0" mnemonicParsing="false" stylesheets="@../../../../styles/Button.css" text="Tạo khách hàng" textFill="WHITE" />
+            <Button fx:id="roomSelectBtn" minWidth="150.0" mnemonicParsing="false" stylesheets="@../../../../styles/Button.css" text="Chọn Phòng" textFill="WHITE" />
+            <Button fx:id="deleteReservationFormBtn" minWidth="150.0" mnemonicParsing="false" styleClass="button-delete-reservation-form-2" stylesheets="@../../../../styles/Button.css" text="Xóa Phiếu" textFill="WHITE" />
          </children>
       </VBox>
    </children>
