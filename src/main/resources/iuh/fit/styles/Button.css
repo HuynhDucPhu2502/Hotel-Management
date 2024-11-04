@@ -233,4 +233,34 @@
     -fx-opacity: 0.6;
 }
 
+/* ========================================================== */
+/* Add ReservationForm Btn */
+/* ========================================================== */
+.button-add-reservation {
+    -fx-background-color: rgb(136, 194, 115);
+    -fx-border-color: transparent;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+}
 
+.button-add-reservation:hover {
+    -fx-background-color: rgb(79, 111, 82);
+    -fx-border-color: rgb(65, 176, 110);
+}
+
+.button-add-reservation:pressed {
+    -fx-background-color: RGB(0, 255, 0);
+}
+
+.button-delete-reservation-form-2 {
+    -fx-background-color: RGB(200, 120, 120);
+    -fx-text-fill: white;
+}
+
+.button-delete-reservation-form-2:hover {
+    -fx-background-color: RGB(255, 0, 0);
+}
+
+.button-delete-reservation-form-2:pressed {
+    -fx-background-color: RGB(150, 0, 0);
+}

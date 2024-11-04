@@ -137,23 +137,7 @@ public class CreateReservationFormController {
     }
 
     // ==================================================================================================================
-    // 3. Xử lý thời gian và ngày tháng
-    // ==================================================================================================================
-    private String formatDateTime(LocalDate date, LocalTime time) {
-        return dateTimeFormatter.format(date) + " " + time.format(DateTimeFormatter.ofPattern("HH:mm"));
-    }
-
-    private LocalDateTime parseDateTime(String dateTimeString) {
-        try {
-            return LocalDateTime.parse(dateTimeString, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.forLanguageTag("vi-VN")));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    // ==================================================================================================================
-    // 4. Hiển thị thông tin phòng và nhân viên
+    // 3. Hiển thị thông tin phòng và nhân viên
     // ==================================================================================================================
     private void setupRoomInformation() {
         roomNumberLabel.setText(room.getRoomNumber());
@@ -168,7 +152,7 @@ public class CreateReservationFormController {
     }
 
     // ==================================================================================================================
-    // 5. Xử lý chức năng hiển thị panel khác
+    // 4. Xử lý chức năng hiển thị panel khác
     // ==================================================================================================================
     private void navigateToRoomBookingPanel() {
         loadPanel("/iuh/fit/view/features/room/RoomBookingPanel.fxml", RoomBookingController.class);
@@ -215,11 +199,8 @@ public class CreateReservationFormController {
     }
 
     // ==================================================================================================================
-    // 6. Cài đặt các thành phần giao diện liên quan đến thời gian
+    // 5. Cài đặt các thành phần giao diện liên quan đến thời gian
     // ==================================================================================================================
-
-    // 6.1 Cài đặt TimePicker, DateRangePicker và binding Data
-    // vào checkInDateTextField và checkOutDateTextField
     private void setupTimeComponents() {
         checkInTimePicker.setTime(null);
         checkInTimePicker.setStepRateInMinutes(5);
@@ -262,9 +243,6 @@ public class CreateReservationFormController {
         setupDateTimeListeners();
     }
 
-    // 6.2 Lắng nghe sự kiện thay đổi trên checkInDateTextField,
-    // checkOutDateTextField để kích hoạt sự kiện tính toán ngày
-    // lưu trú và số tiền đặt cọc
     private void setupDateTimeListeners() {
         checkInDateTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.isEmpty()) {
@@ -281,24 +259,33 @@ public class CreateReservationFormController {
         });
     }
 
-    // 6.3 Tạo các preset cho DateRangePicker
-    // 6.3.1 Preset 3 ngày
+    private String formatDateTime(LocalDate date, LocalTime time) {
+        return dateTimeFormatter.format(date) + " " + time.format(DateTimeFormatter.ofPattern("HH:mm"));
+    }
+
+    private LocalDateTime parseDateTime(String dateTimeString) {
+        try {
+            return LocalDateTime.parse(dateTimeString, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm", Locale.forLanguageTag("vi-VN")));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private DateRangePreset createThreeDaysPreset() {
         return new DateRangePreset("3 Ngày", () -> new DateRange("Chọn Lịch Đặt Phòng", LocalDate.now(), LocalDate.now().plusDays(3)));
     }
 
-    // 6.3.2 Preset 5 ngày
     private DateRangePreset createFiveDaysPreset() {
         return new DateRangePreset("5 Ngày", () -> new DateRange("Chọn Lịch Đặt Phòng", LocalDate.now(), LocalDate.now().plusDays(5)));
     }
 
-    // 6.3.3 Preset 7 ngày
     private DateRangePreset createSevenDaysPreset() {
         return new DateRangePreset("7 Ngày", () -> new DateRange("Chọn Lịch Đặt Phòng", LocalDate.now(), LocalDate.now().plusDays(7)));
     }
 
     // ==================================================================================================================
-    // 7. Tính toán thời gian lưu trú và tiền đặt cọc
+    // 6. Tính toán thời gian lưu trú và tiền đặt cọc
     // ==================================================================================================================
     private void updateStayLengthAndCost() {
         if (checkInTime != null && checkOutTime != null) {
@@ -317,9 +304,8 @@ public class CreateReservationFormController {
         }
     }
 
-
     // ==================================================================================================================
-    // 8. Cài đặt các thành phần giao diện liên quan đến Khách Hàng
+    // 7. Cài đặt các thành phần giao diện liên quan đến Khách Hàng
     // ==================================================================================================================
     private void setupCustomerIDCardValidation() {
         customerIDCardNumberTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -366,7 +352,7 @@ public class CreateReservationFormController {
     }
 
     // ==================================================================================================================
-    // 9. Đẩy thời gian lên giao diện nếu checkInDate và checkOutDate không NULL
+    // 7. Đẩy thời gian lên giao diện nếu checkInDate và checkOutDate không NULL
     // ==================================================================================================================
     private void setBookingDates(LocalDateTime checkInDate, LocalDateTime checkOutDate) {
             bookDateRangePicker.setValue(new DateRange("Chọn Lịch Đặt Phòng",
@@ -377,7 +363,7 @@ public class CreateReservationFormController {
     }
 
     // ==================================================================================================================
-    // 10. Đẩy thời gian lên giao diện nếu checkInDate và checkOutDate không NULL
+    // 8. Đẩy thời gian lên giao diện nếu checkInDate và checkOutDate không NULL
     // ==================================================================================================================
     private void handleCreateReservationRoom() {
         try {
@@ -425,10 +411,8 @@ public class CreateReservationFormController {
         }
     }
 
-
-
     // ==================================================================================================================
-    // 11. Chức năng xem lịch phòng
+    // 9. Chức năng xem lịch phòng
     // ==================================================================================================================
     private void openCalendarViewStage() {
         CalendarView calendarView = new CalendarView();
