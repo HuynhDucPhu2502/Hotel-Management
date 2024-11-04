@@ -113,6 +113,14 @@ public class ShiftManagerController {
         addBtn.setOnAction(e -> handleAddAction());
         startTimePicker.setOnAction(e->handleCalcEndTime());
         numbOfHourTextField.setOnAction(e->handleCalcEndTime());
+
+        numbOfHourTextField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) { // Kiểm tra nếu TextField mất focus
+                // Thực hiện hành động khi unfocus
+                handleCalcEndTime();
+            }
+        });
+
         updateBtn.setOnAction(e -> handelUpdateShift());
         shiftIDSearchField.setOnKeyReleased((keyEvent) -> handleSearchAction());
         shiftIDSearchField.setOnAction(event -> handleSearchAction());
@@ -218,10 +226,18 @@ public class ShiftManagerController {
     }
 
     private void handleCalcEndTime(){
-        LocalTime endTime = startTimePicker.getTime().plusHours(Integer.valueOf(numbOfHourTextField.getText()));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        String endTimeString = endTime.format(formatter);
-        endTimeTextField.setText(endTimeString);
+        if(numbOfHourTextField.getText().equalsIgnoreCase("")){
+            dialogPane.showInformation("Thông báo", "Không để trống số giờ làm việc");
+        }else{
+            try{
+                LocalTime endTime = startTimePicker.getTime().plusHours(Integer.valueOf(numbOfHourTextField.getText()));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+                String endTimeString = endTime.format(formatter);
+                endTimeTextField.setText(endTimeString);
+            }catch (Exception e){
+                dialogPane.showWarning("LỖI", e.getMessage());
+            }
+        }
     }
 
     private String handleShiftIDGenerate() {

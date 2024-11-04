@@ -184,22 +184,26 @@ public class RoomManagerController {
 
     // Chức năng 2: Thêm
     private void handleAddAction() {
-        try {
-            String newRoomID = handleRoomIDGenerate();
-            Room room = new Room(
-                    newRoomID,
-                    roomStateComboBox.getSelectionModel().getSelectedItem(),
-                    LocalDateTime.now(),
-                    roomCategoryComboBox.getSelectionModel().getSelectedItem()
-            );
+        if(floorNumbTextField.getText().equalsIgnoreCase("") ){
+            dialogPane.showInformation("Thông báo", "Không để trống số tầng");
+        }else{
+            try {
+                String newRoomID = handleRoomIDGenerate();
+                Room room = new Room(
+                        newRoomID,
+                        roomStateComboBox.getSelectionModel().getSelectedItem(),
+                        LocalDateTime.now(),
+                        roomCategoryComboBox.getSelectionModel().getSelectedItem()
+                );
 
-            RoomDAO.createData(room);
+                RoomDAO.createData(room);
 
-            dialogPane.showInformation("Thông báo", "Phòng mới được tạo thành công với mã phòng: " + newRoomID);
+                dialogPane.showInformation("Thông báo", "Phòng mới được tạo thành công với mã phòng: " + newRoomID);
 
-            loadData();
-        } catch (Exception e) {
-            dialogPane.showWarning("LỖI", e.getMessage());
+                loadData();
+            } catch (Exception e) {
+                dialogPane.showWarning("LỖI", e.getMessage());
+            }
         }
     }
 
