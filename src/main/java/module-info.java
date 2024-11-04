@@ -12,6 +12,7 @@ module iuh.fit {
     requires org.apache.poi.ooxml;
 
     requires itextpdf;
+    requires bcrypt;
 
 
     opens iuh.fit to javafx.fxml;

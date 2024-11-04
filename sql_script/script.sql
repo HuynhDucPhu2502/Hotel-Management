@@ -12,13 +12,24 @@ GO
 --USE master
 --DROP DATABASE HotelDatabase
 
+-- Tạo hàm băm mật khẩu
+CREATE FUNCTION dbo.HashPassword (@password NVARCHAR(30))
+RETURNS NVARCHAR(64)
+AS
+BEGIN
+    DECLARE @hashed NVARCHAR(64)
+    SET @hashed = CONVERT(NVARCHAR(64), HASHBYTES('SHA2_256', @password), 2)
+    RETURN @hashed
+END
+GO
+
 -- ===================================================================================
 -- 1. TẠO BẢNG
 -- ===================================================================================
 
 -- Tạo bảng GlobalSequence
 CREATE TABLE GlobalSequence (
-    tableName NVARCHAR(50) PRIMARY KEY, 
+    tableName NVARCHAR(50) PRIMARY KEY,
     nextID NVARCHAR(20)
 );
 GO
@@ -41,7 +52,7 @@ GO
 CREATE TABLE Account (
     accountID NVARCHAR(15) PRIMARY KEY,
     userName NVARCHAR(20) NOT NULL,
-    password NVARCHAR(30) NOT NULL,
+    password NVARCHAR(64) NOT NULL,
     status NVARCHAR(10) NOT NULL CHECK (status IN ('ACTIVE', 'INACTIVE', 'LOCKED')),
     employeeID NVARCHAR(15) NOT NULL,
     FOREIGN KEY (employeeID) REFERENCES Employee(employeeID)
@@ -277,15 +288,15 @@ VALUES
     ('EMP-000005', N'Vu Ba Hai', '0923456789', 'vubachai@yahoo.com', N'654 Long An', 'MALE', '004399012349', '1995-03-30', 'MANAGER');
 GO
 
--- Thêm dữ liệu vào bảng Account
 INSERT INTO Account (accountID, userName, password, status, employeeID)
 VALUES
-    ('ACC-000001', N'huynhducphu', N'test123@', N'ACTIVE', 'EMP-000001'),
-    ('ACC-000002', N'nguyenxuanchuc', N'test123@', N'ACTIVE', 'EMP-000002'),
-    ('ACC-000003', N'letranle', N'test123@', N'LOCKED', 'EMP-000003'),
-    ('ACC-000004', N'tienphat', N'test123@', N'INACTIVE', 'EMP-000004'),
-    ('ACC-000005', N'vubahai', N'test123@', N'ACTIVE', 'EMP-000005');
+    ('ACC-000001', N'huynhducphu', dbo.HashPassword(N'test123@'), N'ACTIVE', 'EMP-000001'),
+    ('ACC-000002', N'nguyenxuanchuc', dbo.HashPassword(N'test123@'), N'ACTIVE', 'EMP-000002'),
+    ('ACC-000003', N'letranle', dbo.HashPassword(N'test123@'), N'LOCKED', 'EMP-000003'),
+    ('ACC-000004', N'tienphat', dbo.HashPassword(N'test123@'), N'INACTIVE', 'EMP-000004'),
+    ('ACC-000005', N'vubahai', dbo.HashPassword(N'test123@'), N'ACTIVE', 'EMP-000005');
 GO
+
 
 -- Thêm dữ liệu vào bảng ServiceCategory với icon tương ứng
 INSERT INTO ServiceCategory (serviceCategoryID, serviceCategoryName, icon)
@@ -737,7 +748,7 @@ WHERE roomID = 'V2304';
 GO
 
 -- ===================================================================================
--- 3. TRIGGER
+-- 3. TRIGGER - FUNCTION - STORE PROCEDURE
 -- ===================================================================================
 -- Tạo trigger để giới hạn mỗi roomCategoryID chỉ có 2 bản ghi trong bảng Pricing
 CREATE TRIGGER trg_LimitPricingForRoomCategory
@@ -761,5 +772,6 @@ BEGIN
     END
 END;
 GO
+
 
 

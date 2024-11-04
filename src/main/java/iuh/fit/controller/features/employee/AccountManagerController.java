@@ -7,6 +7,8 @@ import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
 import iuh.fit.models.enums.AccountStatus;
 import iuh.fit.utils.ConvertHelper;
+import iuh.fit.utils.PasswordHasher;
+import iuh.fit.utils.RegexChecker;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -258,20 +260,30 @@ public class AccountManagerController {
         try {
             Employee employee = EmployeeDAO.getDataByID(employeeIDCBox.getValue());
 
+            if (!RegexChecker.isValidPassword(passwordTextField.getText())) {
+                dialogPane.showWarning("LỖI", "Mật khẩu không hợp lệ! Phải có ít nhất 8 ký tự, bao gồm chữ, số và ký tự đặc biệt.");
+                return;
+            }
+
+            String hashedPassword = PasswordHasher.hashPassword(passwordTextField.getText());
+
+
             Account account = new Account(
                     accountIDTextField.getText(),
                     employee,
                     usernameTextField.getText(),
-                    passwordTextField.getText(),
+                    hashedPassword,
                     ConvertHelper.accountStatusConverter(statusCBox.getSelectionModel().getSelectedItem())
             );
-            Account account1 = AccountDAO.getAccountByEmployeeID(employeeIDCBox.getValue());
-            if (account1 == null){
+
+            Account existingAccount = AccountDAO.getAccountByEmployeeID(employeeIDCBox.getValue());
+            if (existingAccount == null) {
                 AccountDAO.createData(account);
             } else {
                 dialogPane.showWarning("LỖI", "Nhân viên đã có tài khoản");
                 return;
             }
+
             handleResetAction();
             loadData();
             dialogPane.showInformation("Thành công", "Đã thêm tài khoản thành công");
@@ -314,7 +326,7 @@ public class AccountManagerController {
             employeeList = EmployeeDAO.getEmployees();
         } else {
             employeeList = EmployeeDAO.findDataByContainsId(searchText);
-            if (employeeList.size() >= 1) {
+            if (!employeeList.isEmpty()) {
                 Employee employee = employeeList.getFirst();
                 fullNameTextField.setText(String.valueOf(employee.getFullName()));
                 employeeIDCBox.getSelectionModel().select(employee.getEmployeeID());
@@ -326,11 +338,13 @@ public class AccountManagerController {
         try {
             Employee employee = EmployeeDAO.getDataByID(employeeIDCBox.getValue());
 
+            String hashedNewPassword = PasswordHasher.hashPassword(newPasswordTextField.getText());
+
             Account account = new Account(
                     accountIDTextField.getText(),
                     employee,
                     usernameTextField.getText(),
-                    newPasswordTextField.getText(),
+                    hashedNewPassword,
                     ConvertHelper.accountStatusConverter(statusCBox.getSelectionModel().getSelectedItem())
             );
 
@@ -340,13 +354,19 @@ public class AccountManagerController {
             dialog.onClose(buttonType -> {
                 if (buttonType == ButtonType.YES) {
                     try {
-                        String oldPass = AccountDAO.getAccountByEmployeeID(employeeIDCBox.getValue()).getPassword();
-                        String tmpPass = passwordTextField.getText();
-                        String newPass = newPasswordTextField.getText();
-                        if(!oldPass.equals(tmpPass)){
+                        String oldPass = Objects.requireNonNull(AccountDAO.getAccountByEmployeeID(employeeIDCBox.getValue())).getPassword();
+                        String tmpPass = PasswordHasher.hashPassword(passwordTextField.getText());
+                        String newPass = PasswordHasher.hashPassword(newPasswordTextField.getText());
+
+                        if (!RegexChecker.isValidPassword(newPasswordTextField.getText())) {
+                            dialogPane.showWarning("LỖI", "Mật khẩu mới không hợp lệ! Phải có ít nhất 8 ký tự, bao gồm chữ, số và ký tự đặc biệt.");
+                            return;
+                        }
+
+                        if (!oldPass.equals(tmpPass)) {
                             dialogPane.showWarning("LỖI", "Mật khẩu cũ không đúng!");
                             return;
-                        } else if(tmpPass.equals(newPass)){
+                        } else if (tmpPass.equals(newPass)) {
                             dialogPane.showWarning("LỖI", "Mật khẩu cũ và mật khẩu mới phải khác nhau!");
                             return;
                         }
@@ -365,4 +385,5 @@ public class AccountManagerController {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
     }
+
 }
