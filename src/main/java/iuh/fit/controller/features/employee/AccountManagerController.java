@@ -187,6 +187,7 @@ public class AccountManagerController {
 
     private void handleUpdateBtn(Account account) {
         accountIDTextField.setText(account.getAccountID());
+        passwordLabel.setText("Mật khẩu cũ");
 
         employeeIDCBox.getSelectionModel().select(account.getEmployee().getEmployeeID());
 
@@ -232,11 +233,10 @@ public class AccountManagerController {
     private void handleResetAction() {
         employeeIDCBox.setEditable(true);
         employeeIDCBox.setDisable(false);
-        passwordLabel.setVisible(false);
+        passwordLabel.setText("Mật khẩu");
         newPasswordLabel.setVisible(false);
         passwordTextField.setText("");
         newPasswordTextField.setText("");
-        passwordTextField.setVisible(false);
         newPasswordTextField.setVisible(false);
         usernameTextField.setEditable(true);
         usernameTextField.setDisable(false);

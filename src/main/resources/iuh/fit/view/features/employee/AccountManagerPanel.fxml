@@ -78,7 +78,7 @@
                                           <Font size="16.0" />
                                        </font>
                                     </Text>
-                                    <Text fx:id="passwordLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu cũ" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                    <Text fx:id="passwordLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -99,7 +99,7 @@
                                           <ComboBox fx:id="statusCBox" layoutY="2.0" prefHeight="30.0" prefWidth="189.0" />
                                        </children>
                                     </AnchorPane>
-                                    <PasswordField fx:id="passwordTextField" visible="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                                    <PasswordField fx:id="passwordTextField" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                                     <Text fx:id="newPasswordLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu mới" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="3">
                                        <font>
                                           <Font size="16.0" />
