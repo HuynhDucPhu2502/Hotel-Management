@@ -118,8 +118,9 @@ public class RoomWithReservationDAO {
         ) AS rf ON r.roomID = rf.roomID
         LEFT JOIN Employee e ON rf.employeeID = e.employeeID
         LEFT JOIN Customer c ON rf.customerID = c.customerID
-        WHERE r.roomStatus = 'OVERDUE' AND rf.reservationFormID IS NOT NULL;
-        """;
+        WHERE (r.roomStatus = 'OVERDUE' OR r.roomStatus = 'ON_USE')
+        AND rf.reservationFormID IS NOT NULL
+       """;
 
         try (Connection connection = DBHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
