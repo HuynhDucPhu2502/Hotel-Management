@@ -34,20 +34,10 @@ public class RegexChecker {
         return input.matches(regex);
     }
 
-    /**
-     * Phương thức isValidName kiểm tra xem chuỗi đầu vào có tuân theo quy tắc về độ dài hay không.
-     * <p>
-     * Chuỗi đầu vào sẽ được loại bỏ tất cả các khoảng trắng và kiểm tra xem độ dài của chuỗi
-     * sau khi loại bỏ có nằm trong khoảng độ dài tối thiểu và tối đa được chỉ định không.
-     *
-     * @param input Chuỗi đầu vào cần kiểm tra.
-     * @param minLength Độ dài tối thiểu của chuỗi (sau khi loại bỏ khoảng trắng).
-     * @param maxLength Độ dài tối đa của chuỗi (sau khi loại bỏ khoảng trắng).
-     * @return true nếu độ dài của chuỗi sau khi loại bỏ khoảng trắng nằm trong khoảng từ minLength đến maxLength, ngược lại trả về false.
-     */
+
     public static boolean isValidName(String input, int minLength, int maxLength) {
         if (!input.matches("[\\p{L} ]+")) {
-            return false; // Không hợp lệ nếu có ký tự số hoặc ký tự đặc biệt
+            return false;
         }
 
         if (input.length() < minLength || input.length() > maxLength) {
