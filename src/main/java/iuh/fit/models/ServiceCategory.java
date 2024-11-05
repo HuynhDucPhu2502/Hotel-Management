@@ -15,9 +15,9 @@ public class ServiceCategory {
     }
 
     public ServiceCategory(String serviceCategoryID, String serviceCategoryName, String icon) {
-        this.serviceCategoryID = serviceCategoryID;
-        this.serviceCategoryName = serviceCategoryName;
-        this.icon = icon;
+        this.setServiceCategoryID(serviceCategoryID);
+        this.setServiceCategoryName(serviceCategoryName);
+        this.setIcon(icon);
     }
 
     public ServiceCategory(String serviceCategoryID) {
