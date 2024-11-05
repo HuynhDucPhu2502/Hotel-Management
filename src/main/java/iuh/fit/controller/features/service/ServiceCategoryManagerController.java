@@ -5,6 +5,7 @@ import iuh.fit.dao.ServiceCategoryDAO;
 import iuh.fit.models.ServiceCategory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -20,21 +21,16 @@ import java.util.Objects;
 
 public class ServiceCategoryManagerController {
 
-    // Search Fields
+    @FXML
+    private TextField serviceCategoryIDTextField, serviceCategoryNameTextField;
+    @FXML
+    private ComboBox<Image> iconSelector;
+
     @FXML
     private ComboBox<String> serviceCategoryIDSearchField;
     @FXML
     private TextField serviceCategoryNameSearchField;
 
-    // Input Fields
-    @FXML
-    private TextField serviceCategoryIDTextField;
-    @FXML
-    private TextField serviceCategoryNameTextField;
-    @FXML
-    private ComboBox<Image> iconSelector;
-
-    // Table
     @FXML
     private TableView<ServiceCategory> serviceCategoryTableView;
     @FXML
@@ -46,15 +42,9 @@ public class ServiceCategoryManagerController {
     @FXML
     private TableColumn<ServiceCategory, String> iconColumn;
 
-    // Buttons
     @FXML
-    private Button addBtn;
-    @FXML
-    private Button resetBtn;
-    @FXML
-    private Button updateBtn;
+    private Button addBtn, resetBtn, updateBtn;
 
-    // Dialog
     @FXML
     private DialogPane dialogPane;
 
@@ -74,16 +64,30 @@ public class ServiceCategoryManagerController {
     }
 
     private void loadData() {
-        List<String> Ids = ServiceCategoryDAO.getTopThreeID();
-        serviceCategoryIDSearchField.getItems().setAll(Ids);
+        Task<ObservableList<ServiceCategory>> loadDataTask = new Task<>() {
+            @Override
+            protected ObservableList<ServiceCategory> call() {
+                List<ServiceCategory> serviceCategories = ServiceCategoryDAO.getServiceCategory();
+                return FXCollections.observableArrayList(serviceCategories);
+            }
+        };
 
-        serviceCategoryIDTextField.setText(ServiceCategoryDAO.getNextServiceCategoryID());
+        loadDataTask.setOnSucceeded(e -> {
+            items = loadDataTask.getValue();
+            serviceCategoryTableView.setItems(items);
+            serviceCategoryTableView.refresh();
+            iconSelector.getSelectionModel().selectFirst();
 
-        List<ServiceCategory> serviceCategories = ServiceCategoryDAO.getServiceCategory();
-        items = FXCollections.observableArrayList(serviceCategories);
-        serviceCategoryTableView.setItems(items);
-        serviceCategoryTableView.refresh();
-        iconSelector.getSelectionModel().selectFirst();
+            List<String> Ids = ServiceCategoryDAO.getTopThreeID();
+            serviceCategoryIDSearchField.getItems().setAll(Ids);
+            serviceCategoryIDTextField.setText(ServiceCategoryDAO.getNextServiceCategoryID());
+        });
+
+        loadDataTask.setOnFailed(e -> dialogPane.showWarning("Error", "Failed to load data"));
+
+        Thread loadDataThread = new Thread(loadDataTask);
+        loadDataThread.setDaemon(true);
+        loadDataThread.start();
     }
 
     private void setupTable() {
@@ -164,9 +168,36 @@ public class ServiceCategoryManagerController {
                     iconName
             );
 
-            ServiceCategoryDAO.createData(serviceCategory);
-            handleResetAction();
-            loadData();
+            Task<Void> addTask = new Task<>() {
+                @Override
+                protected Void call() {
+                    ServiceCategoryDAO.createData(serviceCategory);
+                    return null;
+                }
+            };
+
+            addTask.setOnRunning(e -> {
+                addBtn.setDisable(true);
+                updateBtn.setDisable(true);
+            });
+
+            addTask.setOnSucceeded(e -> {
+                addBtn.setDisable(false);
+                updateBtn.setDisable(false);
+                handleResetAction();
+                loadData();
+            });
+
+            addTask.setOnFailed(e -> {
+                addBtn.setDisable(false);
+                updateBtn.setDisable(false);
+                dialogPane.showWarning("LỖI", "Failed to add data.");
+            });
+
+            Thread addThread = new Thread(addTask);
+            addThread.setDaemon(true);
+            addThread.start();
+
         } catch (IllegalArgumentException e) {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
@@ -176,8 +207,34 @@ public class ServiceCategoryManagerController {
         DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn xóa loại dịch vụ này?");
         dialog.onClose(buttonType -> {
             if (buttonType == ButtonType.YES) {
-                ServiceCategoryDAO.deleteData(serviceCategory.getServiceCategoryID());
-                loadData();
+                Task<Void> deleteTask = new Task<>() {
+                    @Override
+                    protected Void call() {
+                        ServiceCategoryDAO.deleteData(serviceCategory.getServiceCategoryID());
+                        return null;
+                    }
+                };
+
+                deleteTask.setOnRunning(e -> {
+                    addBtn.setDisable(true);
+                    updateBtn.setDisable(true);
+                });
+
+                deleteTask.setOnSucceeded(e -> {
+                    addBtn.setDisable(false);
+                    updateBtn.setDisable(false);
+                    loadData();
+                });
+
+                deleteTask.setOnFailed(e -> {
+                    addBtn.setDisable(false);
+                    updateBtn.setDisable(false);
+                    dialogPane.showWarning("LỖI", "Failed to delete data.");
+                });
+
+                Thread deleteThread = new Thread(deleteTask);
+                deleteThread.setDaemon(true);
+                deleteThread.start();
             }
         });
     }
@@ -212,9 +269,35 @@ public class ServiceCategoryManagerController {
             DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn cập nhật loại dịch vụ này?");
             dialog.onClose(buttonType -> {
                 if (buttonType == ButtonType.YES) {
-                    ServiceCategoryDAO.updateData(serviceCategory);
-                    handleResetAction();
-                    loadData();
+                    Task<Void> updateTask = new Task<>() {
+                        @Override
+                        protected Void call() {
+                            ServiceCategoryDAO.updateData(serviceCategory);
+                            return null;
+                        }
+                    };
+
+                    updateTask.setOnRunning(e -> {
+                        addBtn.setDisable(true);
+                        updateBtn.setDisable(true);
+                    });
+
+                    updateTask.setOnSucceeded(e -> {
+                        addBtn.setDisable(false);
+                        updateBtn.setDisable(false);
+                        handleResetAction();
+                        loadData();
+                    });
+
+                    updateTask.setOnFailed(e -> {
+                        addBtn.setDisable(false);
+                        updateBtn.setDisable(false);
+                        dialogPane.showWarning("LỖI", "Failed to update data.");
+                    });
+
+                    Thread updateThread = new Thread(updateTask);
+                    updateThread.setDaemon(true);
+                    updateThread.start();
                 }
             });
 
@@ -225,17 +308,35 @@ public class ServiceCategoryManagerController {
 
     private void handleSearchAction() {
         String searchText = serviceCategoryIDSearchField.getValue();
-        List<ServiceCategory> serviceCategories = searchText == null || searchText.isEmpty()
-                ? ServiceCategoryDAO.getServiceCategory()
-                : ServiceCategoryDAO.findDataByContainsId(searchText);
 
-        items.setAll(serviceCategories);
-        serviceCategoryTableView.setItems(items);
+        Task<ObservableList<ServiceCategory>> searchTask = new Task<>() {
+            @Override
+            protected ObservableList<ServiceCategory> call() {
+                List<ServiceCategory> serviceCategories = searchText == null || searchText.isEmpty()
+                        ? ServiceCategoryDAO.getServiceCategory()
+                        : ServiceCategoryDAO.findDataByContainsId(searchText);
+                return FXCollections.observableArrayList(serviceCategories);
+            }
+        };
 
-        if (serviceCategories.size() == 1) {
-            ServiceCategory serviceCategory =  serviceCategories.getFirst();
-            serviceCategoryNameSearchField.setText(serviceCategory.getServiceCategoryName());
-        }
+        searchTask.setOnSucceeded(e -> {
+            items = searchTask.getValue();
+            serviceCategoryTableView.setItems(items);
+            serviceCategoryTableView.refresh();
+
+            if (items.size() == 1) {
+                ServiceCategory serviceCategory = items.getFirst();
+                serviceCategoryNameSearchField.setText(serviceCategory.getServiceCategoryName());
+            } else {
+                serviceCategoryNameSearchField.setText(null);
+            }
+        });
+
+        searchTask.setOnFailed(e -> dialogPane.showWarning("Error", "Failed to search data"));
+
+        Thread searchThread = new Thread(searchTask);
+        searchThread.setDaemon(true);
+        searchThread.start();
     }
 
     private void setupIconSelector() {
