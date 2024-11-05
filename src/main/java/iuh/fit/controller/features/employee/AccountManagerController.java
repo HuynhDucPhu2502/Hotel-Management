@@ -7,7 +7,7 @@ import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
 import iuh.fit.models.enums.AccountStatus;
 import iuh.fit.utils.ConvertHelper;
-import iuh.fit.utils.PasswordHasher;
+import iuh.fit.utils.PasswordHashing;
 import iuh.fit.utils.RegexChecker;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -219,7 +219,7 @@ public class AccountManagerController {
         String source = "/iuh/fit/view/features/employee/EmployeeInformationView.fxml";
 
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
-        AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
+        AnchorPane layout = loader.load();
 
         EmployeeInformationViewController employeeInformationViewController = loader.getController();
         employeeInformationViewController.setEmployee(employee, account);
@@ -265,7 +265,7 @@ public class AccountManagerController {
                 return;
             }
 
-            String hashedPassword = PasswordHasher.hashPassword(passwordTextField.getText());
+            String hashedPassword = PasswordHashing.hashPassword(passwordTextField.getText());
 
 
             Account account = new Account(
@@ -338,7 +338,7 @@ public class AccountManagerController {
         try {
             Employee employee = EmployeeDAO.getDataByID(employeeIDCBox.getValue());
 
-            String hashedNewPassword = PasswordHasher.hashPassword(newPasswordTextField.getText());
+            String hashedNewPassword = PasswordHashing.hashPassword(newPasswordTextField.getText());
 
             Account account = new Account(
                     accountIDTextField.getText(),
@@ -355,8 +355,8 @@ public class AccountManagerController {
                 if (buttonType == ButtonType.YES) {
                     try {
                         String oldPass = Objects.requireNonNull(AccountDAO.getAccountByEmployeeID(employeeIDCBox.getValue())).getPassword();
-                        String tmpPass = PasswordHasher.hashPassword(passwordTextField.getText());
-                        String newPass = PasswordHasher.hashPassword(newPasswordTextField.getText());
+                        String tmpPass = PasswordHashing.hashPassword(passwordTextField.getText());
+                        String newPass = PasswordHashing.hashPassword(newPasswordTextField.getText());
 
                         if (!RegexChecker.isValidPassword(newPasswordTextField.getText())) {
                             dialogPane.showWarning("LỖI", "Mật khẩu mới không hợp lệ! Phải có ít nhất 8 ký tự, bao gồm chữ, số và ký tự đặc biệt.");

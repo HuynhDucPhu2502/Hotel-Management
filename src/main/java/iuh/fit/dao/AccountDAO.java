@@ -1,11 +1,10 @@
 package iuh.fit.dao;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
-import iuh.fit.utils.PasswordHasher;
+import iuh.fit.utils.PasswordHashing;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -54,7 +53,7 @@ public class AccountDAO {
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
                     String hashedPassword = rs.getString(3);
-                    String inputHashedPassword = PasswordHasher.hashPassword(password);
+                    String inputHashedPassword = PasswordHashing.hashPassword(password);
 
                     if (hashedPassword.equals(inputHashedPassword)) {
                         return extractData(rs);

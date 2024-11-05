@@ -7,9 +7,11 @@ import iuh.fit.models.HotelService;
 import iuh.fit.models.ServiceCategory;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.ErrorMessages;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -95,29 +97,40 @@ public class HotelServiceManagerController {
 
     // Phương thức load dữ liệu lên giao diện
     private void loadData() {
-        serviceIDTextField.setText(HotelServiceDAO.getNextHotelServiceID());
+        Task<Void> loadDataTask = new Task<>() {
+            @Override
+            protected Void call() {
+                List<HotelService> hotelServiceList = HotelServiceDAO.getHotelService();
+                items = FXCollections.observableArrayList(hotelServiceList);
 
-        List<String> Ids = HotelServiceDAO.getTopThreeID();
-        hotelServiceIDSearchField.getItems().setAll(Ids);
+                List<String> comboBoxItems = ServiceCategoryDAO.getServiceCategory()
+                        .stream()
+                        .map(serviceCategory -> serviceCategory.getServiceCategoryID() + " " + serviceCategory.getServiceCategoryName())
+                        .collect(Collectors.toList());
+                Platform.runLater(() -> {
+                    serviceCategoryCBox.getItems().setAll(comboBoxItems);
+                    if (!serviceCategoryCBox.getItems().isEmpty()) {
+                        serviceCategoryCBox.getSelectionModel().selectFirst();
+                    }
+                    hotelServiceTableView.setItems(items);
+                    hotelServiceTableView.refresh();
 
-        List<String> comboBoxItems = ServiceCategoryDAO.getServiceCategory()
-                .stream()
-                .map(serviceCategory -> serviceCategory.getServiceCategoryID() +
-                        " " + serviceCategory.getServiceCategoryName()
-                )
-                .collect(Collectors.toList());
+                    List<String> Ids = HotelServiceDAO.getTopThreeID();
+                    hotelServiceIDSearchField.getItems().setAll(Ids);
+                    serviceIDTextField.setText(HotelServiceDAO.getNextHotelServiceID());
+                });
+                return null;
+            }
+        };
 
-        ObservableList<String> observableComboBoxItems = FXCollections.observableArrayList(comboBoxItems);
-        serviceCategoryCBox.getItems().setAll(observableComboBoxItems);
+        loadDataTask.setOnRunning(e -> setButtonsDisabled(true));
+        loadDataTask.setOnSucceeded(e -> setButtonsDisabled(false));
+        loadDataTask.setOnFailed(e -> {
+            setButtonsDisabled(false);
+            dialogPane.showWarning("LỖI", "Failed to load data.");
+        });
 
-        if (!serviceCategoryCBox.getItems().isEmpty()) {
-            serviceCategoryCBox.getSelectionModel().selectFirst();
-        }
-
-        List<HotelService> hotelServiceList = HotelServiceDAO.getHotelService();
-        items = FXCollections.observableArrayList(hotelServiceList);
-        hotelServiceTableView.setItems(items);
-        hotelServiceTableView.refresh();
+        new Thread(loadDataTask).start();
     }
 
     // Phương thức đổ dữ liệu vào bảng
@@ -265,9 +278,25 @@ public class HotelServiceManagerController {
                     serviceCategory
             );
 
-            HotelServiceDAO.createData(hotelService);
-            handleResetAction();
-            loadData();
+            Task<Void> addTask = new Task<>() {
+                @Override
+                protected Void call() {
+                    HotelServiceDAO.createData(hotelService);
+                    return null;
+                }
+            };
+
+            addTask.setOnRunning(e -> setButtonsDisabled(true));
+            addTask.setOnSucceeded(e -> Platform.runLater(() -> {
+                handleResetAction();
+                loadData();
+            }));
+            addTask.setOnFailed(e -> {
+                setButtonsDisabled(false);
+                dialogPane.showWarning("LỖI", "Failed to add data.");
+            });
+
+            new Thread(addTask).start();
         } catch (Exception e) {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
@@ -276,12 +305,27 @@ public class HotelServiceManagerController {
     // Chức năng 3: Xóa
     private void handleDeleteAction(HotelService hotelService) {
         DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn xóa dịch vụ này?");
-
         dialog.onClose(buttonType -> {
             if (buttonType == ButtonType.YES) {
-                HotelServiceDAO.deleteData(hotelService.getServiceId());
-                handleResetAction();
-                loadData();
+                Task<Void> deleteTask = new Task<>() {
+                    @Override
+                    protected Void call() {
+                        HotelServiceDAO.deleteData(hotelService.getServiceId());
+                        return null;
+                    }
+                };
+
+                deleteTask.setOnRunning(e -> setButtonsDisabled(true));
+                deleteTask.setOnSucceeded(e -> Platform.runLater(() -> {
+                    handleResetAction();
+                    loadData();
+                }));
+                deleteTask.setOnFailed(e -> {
+                    setButtonsDisabled(false);
+                    dialogPane.showWarning("LỖI", "Failed to delete data.");
+                });
+
+                new Thread(deleteTask).start();
             }
         });
     }
@@ -313,15 +357,10 @@ public class HotelServiceManagerController {
     // 4.2 Chức năng cập nhật
     private void handleUpdateAction() {
         try {
-            String selectedService;
-
-            if (!serviceCategoryCBox.getSelectionModel().isEmpty())
-                selectedService = serviceCategoryCBox.getSelectionModel().getSelectedItem();
-            else throw new IllegalArgumentException("Loại dịch vụ không được trống");
-
+            String selectedService = serviceCategoryCBox.getSelectionModel().getSelectedItem();
             String serviceCategoryId = selectedService.split(" ")[0];
             ServiceCategory serviceCategory = ServiceCategoryDAO.getDataByID(serviceCategoryId);
-
+            System.out.println(serviceCategory);
             HotelService hotelService = new HotelService(
                     serviceIDTextField.getText(),
                     serviceNameTextField.getText(),
@@ -331,12 +370,29 @@ public class HotelServiceManagerController {
             );
 
             DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn cập nhật dịch vụ này?");
-
             dialog.onClose(buttonType -> {
                 if (buttonType == ButtonType.YES) {
-                    HotelServiceDAO.updateData(hotelService);
-                    handleResetAction();
-                    loadData();
+                    Task<Void> updateTask = new Task<>() {
+                        @Override
+                        protected Void call() {
+                            HotelServiceDAO.updateData(hotelService);
+                            return null;
+                        }
+                    };
+
+                    updateTask.setOnRunning(e -> setButtonsDisabled(true));
+                    updateTask.setOnSucceeded(e -> Platform.runLater(() -> {
+                        loadData();
+                        handleResetAction();
+                        toggleAddUpdateButtons();
+                        setButtonsDisabled(false);
+                    }));
+                    updateTask.setOnFailed(e -> {
+                        setButtonsDisabled(false);
+                        System.exit(1);
+                    });
+
+                    new Thread(updateTask).start();
                 }
             });
         } catch (Exception e) {
@@ -346,35 +402,59 @@ public class HotelServiceManagerController {
 
     // Chức năng 5: Tìm kiếm
     private void handleSearchAction() {
-        hotelSerivceNameSearchField.setText("");
-        priceSearchField.setText("");
-        serviceCategoryNameSearchField.setText("");
-        descriptionSearchField.setText("");
-
         String searchText = hotelServiceIDSearchField.getValue();
-        List<HotelService> hotelServices;
 
-        if (searchText == null || searchText.isEmpty()) {
-            hotelServices = HotelServiceDAO.getHotelService();
-        } else {
-            hotelServices = HotelServiceDAO.findDataByContainsId(searchText);
+        Task<ObservableList<HotelService>> searchTask = new Task<>() {
+            @Override
+            protected ObservableList<HotelService> call() {
+                List<HotelService> hotelServices = (searchText == null || searchText.isEmpty())
+                        ? HotelServiceDAO.getHotelService()
+                        : HotelServiceDAO.findDataByContainsId(searchText);
+                return FXCollections.observableArrayList(hotelServices);
+            }
+        };
 
-            if (hotelServices.size() == 1) {
-                HotelService hotelService = hotelServices.getFirst();
+        searchTask.setOnSucceeded(e -> Platform.runLater(() -> {
+            items = searchTask.getValue();
+            hotelServiceTableView.setItems(items);
+            hotelServiceTableView.refresh();
+
+            // Nếu chỉ tìm thấy một kết quả, điền thông tin vào các trường tìm kiếm tương ứng
+            if (items.size() == 1) {
+                HotelService hotelService = items.getFirst();
                 hotelSerivceNameSearchField.setText(hotelService.getServiceName());
                 priceSearchField.setText(String.valueOf(hotelService.getServicePrice()));
-                String serviceCategoryName = (hotelService.getServiceCategory() != null &&
-                        hotelService.getServiceCategory().getServiceCategoryName() != null)
+                serviceCategoryNameSearchField.setText(hotelService.getServiceCategory() != null
                         ? hotelService.getServiceCategory().getServiceCategoryName()
-                        : "KHÔNG CÓ";
-                serviceCategoryNameSearchField.setText(serviceCategoryName);
+                        : "KHÔNG CÓ");
                 descriptionSearchField.setText(hotelService.getDescription());
+            } else {
+                hotelSerivceNameSearchField.clear();
+                priceSearchField.clear();
+                serviceCategoryNameSearchField.clear();
+                descriptionSearchField.clear();
             }
-        }
+        }));
 
-        // Cập nhật lại bảng với dữ liệu đã tìm kiếm
-        items.setAll(hotelServices);
-        hotelServiceTableView.setItems(items);
+        searchTask.setOnFailed(e -> dialogPane.showWarning("LỖI", "Failed to search data"));
+
+        Thread searchThread = new Thread(searchTask);
+        searchThread.setDaemon(true);
+        searchThread.start();
+    }
+
+
+    private void setButtonsDisabled(boolean disable) {
+        addBtn.setDisable(disable);
+        updateBtn.setDisable(disable);
+        resetBtn.setDisable(disable);
+    }
+
+    private void toggleAddUpdateButtons() {
+        addBtn.setVisible(true);
+        updateBtn.setVisible(false);
+        addBtn.setManaged(true);
+        updateBtn.setManaged(false);
     }
 
 
