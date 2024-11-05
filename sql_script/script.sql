@@ -265,7 +265,7 @@ VALUES
 	('Employee', 'EMP-000006'),
 	('Account', 'ACC-000006'),
 	('ServiceCategory', 'SC-000005'),
-	('HotelService', 'HS-000008'),
+	('HotelService', 'HS-000021'),
 	('Pricing', 'P-000009'),
 	('RoomCategory', 'RC-000005'),
 	('ShiftAssignment', 'SA-000004'),
@@ -772,6 +772,5 @@ BEGIN
     END
 END;
 GO
-
 
 
