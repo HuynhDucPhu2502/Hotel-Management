@@ -42,18 +42,31 @@
 }
 
 .scrollPane .scroll-bar:vertical {
-    -fx-pref-width: 10; /* Chiều rộng của thanh cuộn */
+    -fx-pref-width: 10;
 }
 
 .scrollPane .scroll-bar:vertical .thumb {
-    -fx-background-radius: 5; /* Bo góc cho phần kéo */
+    -fx-background-radius: 5;
 }
 
 .scrollPane .scroll-bar:horizontal {
-    -fx-pref-height: 10; /* Chiều cao của thanh cuộn ngang */
+    -fx-pref-height: 10;
 }
 
 .scrollPane .scroll-bar:horizontal .thumb {
-    -fx-background-radius: 5; /* Bo góc cho phần kéo */
+    -fx-background-radius: 5;
 }
 
+.menu-bar-topbar {
+    -fx-background-color: RGB(70, 130, 180);
+    -fx-alignment: center;
+    -fx-background-radius: 10;
+    -fx-border-color: transparent;
+    -fx-border-radius: 3;
+    -fx-border-width: 10px;
+}
+
+.menu-bar-topbar:hover {
+    -fx-border-color: RGB(58, 150, 228);
+
+}
