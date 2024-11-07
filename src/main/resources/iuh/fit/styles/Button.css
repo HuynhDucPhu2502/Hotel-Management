@@ -58,13 +58,6 @@
     -fx-background-color: RGB(65, 105, 225);
 }
 
-.text-field, .text-area {
-    -fx-opacity: 1.0;
-    -fx-text-fill: black;
-    -fx-background-color: rgb(226, 218, 214);
-}
-
-
 /* ========================================================== */
 /* Reservation Form Details Button */
 /* ========================================================== */

@@ -16,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -318,6 +319,11 @@ public class CustomerManagerController {
         Stage stage = new Stage();
         stage.setResizable(false);
         stage.setScene(scene);
+
+        String iconPath = "/iuh/fit/icons/menu_icons/ic_customer.png"; // Đường dẫn đến icon
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath))));
+        stage.setTitle("Thông tin khách hàng");
+
         stage.show();
     }
 
