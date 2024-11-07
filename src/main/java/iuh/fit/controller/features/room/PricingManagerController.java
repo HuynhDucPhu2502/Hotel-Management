@@ -78,6 +78,7 @@ public class PricingManagerController {
     // Gọi mấy phương thức để gắn sự kiện và dữ liệu cho lúc đầu khởi tạo giao diện
     public void initialize() {
         dialogPane.toFront();
+        pricingTableView.setFixedCellSize(40);
 
         loadData();
         setupTable();

@@ -22,16 +22,16 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="830.0" minWidth="930.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.employee.EmployeeManagerController">
+<AnchorPane minHeight="754.0" minWidth="930.0" prefHeight="754.0" prefWidth="930.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.employee.EmployeeManagerController">
     <children>
-        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="762.0" prefWidth="930.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <content>
-                <AnchorPane minHeight="-Infinity" minWidth="930.0" prefWidth="930.0">
+                <AnchorPane minHeight="-Infinity" minWidth="930.0" prefHeight="735.0" prefWidth="930.0">
                     <children>
                         <DialogPane fx:id="dialogPane" animationDuration="200.0ms" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                        <TitledPane collapsible="false" stylesheets="@../../../styles/TitlePanel.css" text="Quản lý nhân viên" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TitledPane collapsible="false" prefHeight="772.0" prefWidth="930.0" stylesheets="@../../../styles/TitlePanel.css" text="Quản lý nhân viên" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                             <content>
-                                <VBox fx:id="upperBox" spacing="30.0">
+                                <VBox fx:id="upperBox" prefHeight="721.0" prefWidth="929.0" spacing="30.0">
                                     <children>
                                         <GridPane hgap="20.0" vgap="10.0">
                                             <columnConstraints>
@@ -242,7 +242,7 @@
                                                 </TextField>
                                             </children>
                                         </GridPane>
-                                        <TableView fx:id="employeeTableView" prefHeight="320.0" prefWidth="897.0" stylesheets="@../../../styles/TableView.css">
+                                        <TableView fx:id="employeeTableView" prefHeight="311.0" prefWidth="897.0" stylesheets="@../../../styles/TableView.css">
                                             <columnResizePolicy>
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                             </columnResizePolicy>

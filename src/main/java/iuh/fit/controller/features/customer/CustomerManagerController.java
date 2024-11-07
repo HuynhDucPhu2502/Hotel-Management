@@ -90,6 +90,7 @@ public class CustomerManagerController {
     // Gọi mấy phương thức để gắn sự kiện và dữ liệu cho lúc đầu khởi tạo giao diện
     public void initialize() {
         dialogPane.toFront();
+        customerTableView.setFixedCellSize(40);
 
         loadData();
         setupTable();

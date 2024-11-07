@@ -86,6 +86,7 @@ public class EmployeeSearchingController {
     public void initialize() {
         loadData();
         setupTable();
+        employeeTableView.setFixedCellSize(40);
         searchBtn.setOnAction(e -> handleSearchAction());
         resetBtn.setOnAction(e -> handleResetAction());
     }

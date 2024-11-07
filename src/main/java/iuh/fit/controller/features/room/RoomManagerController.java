@@ -72,6 +72,7 @@ public class RoomManagerController {
     // Gọi mấy phương thức để gắn sự kiện và dữ liệu cho lúc đầu khởi tạo giao diện
     public void initialize() {
         dialogPane.toFront();
+        roomTableView.setFixedCellSize(40);
 
         loadData();
         setupTable();
@@ -292,7 +293,7 @@ public class RoomManagerController {
 
     private void handleDeleteAction(Room room){
         try{
-
+            System.out.println(room.getRoomID());
             DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
                     "XÁC NHẬN",
                     "Bạn có chắc chắn muốn xóa phòng này?"
