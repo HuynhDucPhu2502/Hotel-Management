@@ -92,6 +92,7 @@ public class AccountManagerController {
 
     public void initialize() {
         dialogPane.toFront();
+        accountTableView.setFixedCellSize(40);
 
         loadData();
         setupTable();

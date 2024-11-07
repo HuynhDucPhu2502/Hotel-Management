@@ -56,6 +56,7 @@ public class RoomSearchingController {
     public void initialize() {
         loadData();
         setupTable();
+        roomTableView.setFixedCellSize(25);
 
         searchBtn.setOnAction(e -> handleSearchAction());
         resetBtn.setOnAction(e -> handleResetAction());
