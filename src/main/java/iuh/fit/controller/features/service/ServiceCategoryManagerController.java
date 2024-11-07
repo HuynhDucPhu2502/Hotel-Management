@@ -53,6 +53,8 @@ public class ServiceCategoryManagerController {
 
     public void initialize() {
         dialogPane.toFront();
+        serviceCategoryTableView.setFixedCellSize(40);
+
         loadData();
         setupTable();
 

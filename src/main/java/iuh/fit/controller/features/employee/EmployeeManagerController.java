@@ -95,6 +95,8 @@ public class EmployeeManagerController {
     public void initialize() {
         dialogPane.toFront();
 
+        employeeTableView.setFixedCellSize(40);
+
         loadData();
         setupTable();
 

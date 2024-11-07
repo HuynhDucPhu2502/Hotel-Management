@@ -67,6 +67,8 @@ public class RoomCategoryManagerController {
         loadData();
         setupTable();
 
+        roomCategoryTableView.setFixedCellSize(40);
+
         resetBtn.setOnAction(e -> handleResetAction());
         addBtn.setOnAction(e -> handleAddAction());
         updateBtn.setOnAction(e -> handleUpdateAction());

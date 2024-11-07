@@ -61,6 +61,7 @@ public class CustomerSearchingController {
     public void initialize() {
         loadData();
         setupTable();
+        customerTableView.setFixedCellSize(40);
         searchBtn.setOnAction(e -> handleSearchAction());
         resetBtn.setOnAction(e -> handleResetAction());
     }

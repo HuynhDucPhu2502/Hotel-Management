@@ -93,6 +93,7 @@ public class RoomDAO {
             preparedStatement.setString(1, roomID);
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
+            exception.printStackTrace();
             System.exit(1);
         }
     }

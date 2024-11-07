@@ -108,6 +108,7 @@ public class ShiftManagerController {
 
         loadData();
         setupTable();
+        shiftTableView.setFixedCellSize(40);
 
         resetBtn.setOnAction(e -> handleResetAction());
         addBtn.setOnAction(e -> handleAddAction());
