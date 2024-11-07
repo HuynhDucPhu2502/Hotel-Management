@@ -91,12 +91,21 @@ public class MenuController {
     private Button roomBookingButton;
 
     @FXML
+    private ImageView arrowUpForRoom;
+
+//  =====================================================
+    // Invoice
+    @FXML
+    private Button invoiceBtn;
+
+    @FXML
     private HBox invoiceManagerContainer;
     @FXML
     private Button invoiceManagerBtn;
 
     @FXML
-    private ImageView arrowUpForRoom;
+    private ImageView arrowUpForInvoice;
+
 
 //  =====================================================
     // Service
@@ -176,10 +185,11 @@ public class MenuController {
         buttonStates.put("customer", false);
         buttonStates.put("statistics", false);
         buttonStates.put("history", false);
-
+        buttonStates.put("invoice", false);
 
         employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(employeeManagerContainer, accountOfEmployeeManagerContainer, employeeSearchingContainer, shiftManagerContainer), arrowUpForEmpBtn, "employee"));
-        roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer, roomCategoryManagerContainer, roomManagerContainer, roomSearchingContainer, roomBookingContainer, invoiceManagerContainer), arrowUpForRoom, "room"));
+        roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer, roomCategoryManagerContainer, roomManagerContainer, roomSearchingContainer, roomBookingContainer), arrowUpForRoom, "room"));
+        invoiceBtn.setOnAction(e -> dropDownMenuEvent(List.of(invoiceManagerContainer), arrowUpForInvoice, "invoice"));
         serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryManagerContainer, hotelServiceManagerContainer, hotelServiceSearchingContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer, customerSearchingContainer), arrowUpForCustomer, "customer"));
         statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(revenueStatisticsContainer, rateUsingRoomContainer), arrowUpForStatistics, "statistics"));
