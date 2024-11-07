@@ -6,8 +6,10 @@ import iuh.fit.dao.CustomerDAO;
 import iuh.fit.models.Customer;
 import iuh.fit.models.enums.Gender;
 import iuh.fit.utils.ErrorMessages;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -50,11 +52,8 @@ public class CustomerManagerController {
 
     // Search Fields
     @FXML
-    private TextField customerNameSearchField;
-    @FXML
-    private TextField customerGenderSearchField;
-    @FXML
-    private TextField customerPhoneSearchField;
+    private TextField customerNameSearchField, customerGenderSearchField,
+            customerPhoneSearchField;
     @FXML
     private ComboBox<String> customerIDSearchField;
 
@@ -75,11 +74,7 @@ public class CustomerManagerController {
 
     // Buttons
     @FXML
-    private Button addBtn;
-    @FXML
-    private Button updateBtn;
-    @FXML
-    private Button resetBtn;
+    private Button addBtn, updateBtn, resetBtn;
 
     // Dialog
     @FXML
@@ -102,14 +97,23 @@ public class CustomerManagerController {
 
     // Phương thức load dữ liệu lên giao diện
     private void loadData() {
-        List<Customer> customerList = CustomerDAO.getCustomer();
-        items = FXCollections.observableArrayList(customerList);
-        customerTableView.setItems(items);
-        customerTableView.refresh();
+        Task<Void> loadDataTask = new Task<>() {
+            @Override
+            protected Void call() {
+                List<Customer> customerList = CustomerDAO.getCustomer();
+                items = FXCollections.observableArrayList(customerList);
 
-        customerIDTextField.setText(CustomerDAO.getNextCustomerID());
-        List<String> Ids = CustomerDAO.getTopThreeID();
-        customerIDSearchField.getItems().setAll(Ids);
+                Platform.runLater(() -> {
+                    customerTableView.setItems(items);
+                    customerTableView.refresh();
+                    customerIDTextField.setText(CustomerDAO.getNextCustomerID());
+                    customerIDSearchField.getItems().setAll(CustomerDAO.getTopThreeID());
+                });
+                return null;
+            }
+        };
+
+        new Thread(loadDataTask).start();
     }
 
 
@@ -268,35 +272,33 @@ public class CustomerManagerController {
 
     // Chức năng 5: Tìm kiếm
     private void handleSearchAction() {
-        // Xóa các trường tìm kiếm trước đó
-        customerNameSearchField.setText("");
-        customerPhoneSearchField.setText("");
-        customerGenderSearchField.setText("");
+        customerNameSearchField.clear();
+        customerPhoneSearchField.clear();
+        customerGenderSearchField.clear();
 
-        // Lấy giá trị tìm kiếm từ ComboBox
         String searchText = customerIDSearchField.getValue();
-        List<Customer> customers;
+        Task<ObservableList<Customer>> searchTask = new Task<>() {
+            @Override
+            protected ObservableList<Customer> call() {
+                List<Customer> customers = (searchText == null || searchText.isEmpty())
+                        ? CustomerDAO.getCustomer()
+                        : CustomerDAO.findDataByContainsId(searchText);
+                return FXCollections.observableArrayList(customers);
+            }
+        };
 
-        if (searchText == null || searchText.isEmpty()) {
-            // Lấy toàn bộ danh sách khách hàng nếu không có input
-            customers = CustomerDAO.getCustomer();
-        } else {
-            // Tìm kiếm khách hàng theo ID
-            customers = CustomerDAO.findDataByContainsId(searchText);
-
-            if (customers.size() == 1) {
-                // Nếu chỉ có 1 khách hàng được tìm thấy, điền dữ liệu vào các trường
-                Customer customer = customers.getFirst();
+        searchTask.setOnSucceeded(e -> {
+            items = searchTask.getValue();
+            customerTableView.setItems(items);
+            if (items.size() == 1) {
+                Customer customer = items.getFirst();
                 customerNameSearchField.setText(customer.getFullName());
                 customerPhoneSearchField.setText(customer.getPhoneNumber());
-                String gender = customer.getGender() != null ? customer.getGender().name() : "KHÔNG XÁC ĐỊNH";
-                customerGenderSearchField.setText(gender);
+                customerGenderSearchField.setText(customer.getGender().name());
             }
-        }
+        });
 
-        // Cập nhật lại bảng với dữ liệu đã tìm kiếm
-        items.setAll(customers);
-        customerTableView.setItems(items);
+        new Thread(searchTask).start();
     }
 
 
