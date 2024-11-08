@@ -153,15 +153,6 @@ public class EmployeeDAO {
                 updateSequenceStatement.setString(2, "Employee");
                 updateSequenceStatement.executeUpdate();
             }
-        } catch (SQLException sqlException) {
-            String sqlMessage = sqlException.getMessage();
-
-            if (sqlMessage.contains("Violation of UNIQUE KEY constraint")) {
-                throw new IllegalArgumentException("ID Card Number đã tồn tại trong hệ thống.");
-            } else {
-                sqlException.printStackTrace();
-                System.exit(1);
-            }
         } catch (Exception exception) {
             exception.printStackTrace();
             System.exit(1);

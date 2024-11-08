@@ -1,9 +1,7 @@
 package iuh.fit.controller.features.employee;
 
 import com.dlsc.gemsfx.DialogPane;
-import iuh.fit.dao.AccountDAO;
 import iuh.fit.dao.EmployeeDAO;
-import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
 import iuh.fit.models.enums.Gender;
 import iuh.fit.models.enums.Position;
@@ -95,32 +93,22 @@ public class EmployeeManagerController {
         Task<Void> loadDataTask = new Task<>() {
             @Override
             protected Void call() {
-                // Tải dữ liệu vị trí và ID nhân viên
+                // Tải danh sách vị trí
                 Platform.runLater(() -> {
-                    positionCBox.getItems().setAll(Stream.of(Position.values()).map(Enum::name).toList());
+                    positionCBox.getItems().setAll(
+                            Stream.of(Position.values())
+                                    .map(position -> switch (position.name()) {
+                                        case "MANAGER" -> "QUẢN LÝ";
+                                        case "RECEPTIONIST" -> "LỄ TÂN";
+                                        default -> position.name();
+                                    })
+                                    .toList()
+                    );
                     positionCBox.getSelectionModel().selectFirst();
                 });
-        positionCBox.getItems().setAll(
-                Stream.of(Position.values())
-                        .map(Enum::name)
-                        .map(position -> {
-                            switch (position) {
-                                case "MANAGER" -> {
-                                    return "QUẢN LÝ";
-                                }
-                                case "RECEPTIONIST" -> {
-                                    return "LỄ TÂN";
-                                }
-                                default -> {
-                                    return position;
-                                }
-                            }
-                        })
-                        .toList()
-        );
-        positionCBox.getSelectionModel().selectFirst();
 
-        employeeIDTextField.setText(EmployeeDAO.getNextEmployeeID());
+                // Thiết lập ID nhân viên tiếp theo
+                Platform.runLater(() -> employeeIDTextField.setText(EmployeeDAO.getNextEmployeeID()));
 
                 List<String> Ids = EmployeeDAO.getTopThreeID();
                 Platform.runLater(() -> employeeIDSearchField.getItems().setAll(Ids));
@@ -132,7 +120,6 @@ public class EmployeeManagerController {
                 Platform.runLater(() -> {
                     employeeTableView.setItems(items);
                     employeeTableView.refresh();
-                    employeeIDTextField.setText(EmployeeDAO.getNextEmployeeID());
                 });
 
                 return null;
@@ -264,10 +251,10 @@ public class EmployeeManagerController {
         phoneNumberTextField.setText(employee.getPhoneNumber());
         addressTextField.setText(employee.getAddress());
         cardIDTextFiled.setText(employee.getIdCardNumber());
-        positionCBox.getSelectionModel().select(employee.getPosition().name().equalsIgnoreCase("MANAGER")?"QUẢN LÝ":"LỄ TÂN");
+        positionCBox.getSelectionModel().select(employee.getPosition().name());
 
         dobPicker.setValue(employee.getDob());
-        if(employee.getGender().equals(Gender.MALE))
+        if (employee.getGender().equals(Gender.MALE))
             radMale.setSelected(true);
         else
             radFemale.setSelected(true);
@@ -338,18 +325,20 @@ public class EmployeeManagerController {
 
         searchTask.setOnSucceeded(e -> {
             ObservableList<Employee> employeeList = searchTask.getValue();
-            items.setAll(employeeList);
-            employeeTableView.setItems(items);
+            Platform.runLater(() -> {
+                items.setAll(employeeList);
+                employeeTableView.setItems(items);
 
-            if (employeeList.size() == 1) {
-                Employee employee = employeeList.getFirst();
-                fullNameSearchField.setText(employee.getFullName());
-                phoneNumberSearchField.setText(employee.getPhoneNumber());
-                positionSearchField.setText(employee.getPosition().name().equalsIgnoreCase("MANAGER")?"QUẢN LÝ":"LỄ TÂN");
-            }
+                if (employeeList.size() == 1) {
+                    Employee employee = employeeList.get(0);
+                    fullNameSearchField.setText(employee.getFullName());
+                    phoneNumberSearchField.setText(employee.getPhoneNumber());
+                    positionSearchField.setText(employee.getPosition().name().equalsIgnoreCase("MANAGER") ? "QUẢN LÝ" : "LỄ TÂN");
+                }
+            });
         });
 
-        searchTask.setOnFailed(e -> dialogPane.showWarning("LỖI", "Lỗi khi tìm kiếm dữ liệu"));
+        searchTask.setOnFailed(e -> Platform.runLater(() -> dialogPane.showWarning("LỖI", "Lỗi khi tìm kiếm dữ liệu")));
 
         new Thread(searchTask).start();
     }
