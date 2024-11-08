@@ -1,5 +1,6 @@
 package iuh.fit.models;
 
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.RegexChecker;
@@ -17,11 +18,14 @@ public class Room {
 
     private RoomCategory roomCategory;
 
-    public Room(String roomID, RoomStatus roomStatus, LocalDateTime dateOfCreation, RoomCategory roomCategory) {
+    private ObjectStatus objectStatus;
+
+    public Room(String roomID, RoomStatus roomStatus, LocalDateTime dateOfCreation, RoomCategory roomCategory, ObjectStatus objectStatus) {
         this.setRoomID(roomID);
         this.setRoomStatus(roomStatus);
         this.setDateOfCreation(dateOfCreation);
         this.setRoomCategory(roomCategory);
+        this.setObjectStatus(objectStatus);
     }
 
     public Room(String roomID) {
@@ -86,6 +90,14 @@ public class Room {
     //Thêm phương thức lấy mã phòng từ class Phòng, phục vụ cho RoomManagerController load số giường vào tableView thông qua PropertyValueFactory
     public int getNumberOfBed() {
         return roomCategory != null ? roomCategory.getNumberOfBed() : 0; // Handle null case
+    }
+
+    public ObjectStatus getObjectStatus() {
+        return objectStatus;
+    }
+
+    public void setObjectStatus(ObjectStatus objectStatus) {
+        this.objectStatus = objectStatus;
     }
 
     @Override
