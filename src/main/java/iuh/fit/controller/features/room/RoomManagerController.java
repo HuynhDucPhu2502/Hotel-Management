@@ -5,6 +5,7 @@ import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.models.Room;
 import iuh.fit.models.RoomCategory;
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.enums.RoomStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -194,7 +195,8 @@ public class RoomManagerController {
                         newRoomID,
                         roomStateComboBox.getSelectionModel().getSelectedItem(),
                         LocalDateTime.now(),
-                        roomCategoryComboBox.getSelectionModel().getSelectedItem()
+                        roomCategoryComboBox.getSelectionModel().getSelectedItem(),
+                        ObjectStatus.ACTIVATE
                 );
 
                 RoomDAO.createData(room);
@@ -270,7 +272,8 @@ public class RoomManagerController {
                     newRoomIDWithNewCategory,
                     roomStatus,
                     LocalDateTime.now(),
-                    roomCategoryComboBox.getSelectionModel().getSelectedItem());
+                    roomCategoryComboBox.getSelectionModel().getSelectedItem(),
+                    ObjectStatus.ACTIVATE);
 
             DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
                     "XÁC NHẬN",

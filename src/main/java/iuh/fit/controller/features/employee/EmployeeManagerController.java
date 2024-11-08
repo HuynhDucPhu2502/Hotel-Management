@@ -3,10 +3,13 @@ package iuh.fit.controller.features.employee;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Employee;
+import iuh.fit.models.enums.AccountStatus;
 import iuh.fit.models.enums.Gender;
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 
+import iuh.fit.utils.PasswordHashing;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -209,7 +212,11 @@ public class EmployeeManagerController {
         dobPicker.setValue(null);
         radMale.setSelected(true);
 
-        fullNameTextField.requestFocus();
+        fullNameSearchField.setText("");
+        phoneNumberSearchField.setText("");
+        positionSearchField.setText("");
+        employeeIDSearchField.getSelectionModel().select(null);
+
         addBtn.setManaged(true);
         addBtn.setVisible(true);
         updateBtn.setManaged(false);
@@ -227,13 +234,16 @@ public class EmployeeManagerController {
                     cardIDTextFiled.getText(),
                     ((RadioButton) gender.getSelectedToggle()).getText().equals(Gender.MALE.toString()) ? Gender.MALE : Gender.FEMALE,
                     dobPicker.getValue(),
-                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem().equals("QUẢN LÝ") ? "MANAGER" : "RECEPTIONIST")
+                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem().equals("QUẢN LÝ") ? "MANAGER" : "RECEPTIONIST"),
+                    ObjectStatus.ACTIVATE
             );
 
             EmployeeDAO.createData(employee);
+            Account account = new Account(AccountDAO.getNextAccountID(), employee, this.removePrefix(employee.getEmployeeID()), PasswordHashing.hashPassword("test123@"), AccountStatus.ACTIVE);
+            AccountDAO.createData(account);
             handleResetAction();
             loadData();
-            dialogPane.showInformation("Thông báo", "Thêm nhân viên thành công");
+            dialogPane.showInformation("Thông báo", "Thêm nhân viên thành công\nTài khoản: " + this.removePrefix(employee.getEmployeeID()) + "\nMật khẩu: " + "test123@");
         } catch (IllegalArgumentException e) {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
@@ -277,7 +287,8 @@ public class EmployeeManagerController {
                     cardIDTextFiled.getText(),
                     ((RadioButton) gender.getSelectedToggle()).getText().equals(Gender.MALE.toString()) ? Gender.MALE : Gender.FEMALE,
                     dobPicker.getValue(),
-                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem().equals("QUẢN LÝ") ? "MANAGER" : "RECEPTIONIST")
+                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem().equals("QUẢN LÝ") ? "MANAGER" : "RECEPTIONIST"),
+                    ObjectStatus.ACTIVATE
             );
 
             com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN",
@@ -364,6 +375,11 @@ public class EmployeeManagerController {
 
         stage.show();
     }
+    public String removePrefix(String input) {
+        if (input != null && input.startsWith("EMP-")) {
+            return input.substring(4);
+        }
+        return input;
 
     private void setButtonsDisabled(boolean disabled) {
         resetBtn.setDisable(disabled);

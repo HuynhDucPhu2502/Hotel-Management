@@ -1,6 +1,7 @@
 package iuh.fit.models;
 
 import iuh.fit.models.enums.Gender;
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.GlobalConstants;
@@ -32,6 +33,8 @@ public class Employee {
     // Vị trí của nhân viên trong công ty
     private Position position;
 
+    private ObjectStatus objectStatus;
+
     /**
      * Hàm khởi tạo đầy đủ cho lớp Employee.
      *
@@ -45,7 +48,7 @@ public class Employee {
      * @param dob Ngày sinh của nhân viên.
      * @param position Vị trí của nhân viên trong công ty.
      */
-    public Employee(String employeeID, String fullName, String phoneNumber, String email, String address, String idCardNumber, Gender gender, LocalDate dob, Position position) {
+    public Employee(String employeeID, String fullName, String phoneNumber, String email, String address, String idCardNumber, Gender gender, LocalDate dob, Position position, ObjectStatus objectStatus) {
         setEmployeeID(employeeID);
         setFullName(fullName);
         setPhoneNumber(phoneNumber);
@@ -55,6 +58,7 @@ public class Employee {
         setGender(gender);
         setDob(dob);
         setPosition(position);
+        setObjectStatus(objectStatus);
     }
 
     /**
@@ -271,6 +275,14 @@ public class Employee {
      */
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public ObjectStatus getObjectStatus() {
+        return objectStatus;
+    }
+
+    public void setObjectStatus(ObjectStatus objectStatus) {
+        this.objectStatus = objectStatus;
     }
 
     @Override
