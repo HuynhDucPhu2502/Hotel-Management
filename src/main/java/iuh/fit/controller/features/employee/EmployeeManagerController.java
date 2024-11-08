@@ -5,10 +5,12 @@ import iuh.fit.dao.AccountDAO;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
+import iuh.fit.models.enums.AccountStatus;
 import iuh.fit.models.enums.Gender;
 import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 
+import iuh.fit.utils.PasswordHashing;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -213,6 +215,11 @@ public class EmployeeManagerController {
         DOBPicker.setValue(null);
         radMale.setSelected(true);
 
+        fullNameSearchField.setText("");
+        phoneNumberSearchField.setText("");
+        positionSearchField.setText("");
+        employeeIDSearchField.getSelectionModel().select(null);
+
         addBtn.setManaged(true);
         addBtn.setVisible(true);
         updateBtn.setManaged(false);
@@ -232,9 +239,11 @@ public class EmployeeManagerController {
                     DOBPicker.getValue(),
                     ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem().equalsIgnoreCase("QUẢN LÝ") ? "MANAGER" : "RECEPTIONIST"));
             EmployeeDAO.createData(employee);
+            Account account = new Account(AccountDAO.getNextAccountID(), employee, this.removePrefix(employee.getEmployeeID()), PasswordHashing.hashPassword("test123@"), AccountStatus.ACTIVE);
+            AccountDAO.createData(account);
             handleResetAction();
             loadData();
-            dialogPane.showInformation("Thông báo", "Thêm nhân viên thành công");
+            dialogPane.showInformation("Thông báo", "Thêm nhân viên thành công\nTài khoản: " + this.removePrefix(employee.getEmployeeID()) + "\nMật khẩu: " + "test123@");
         } catch (IllegalArgumentException e) {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
@@ -340,5 +349,12 @@ public class EmployeeManagerController {
         stage.setTitle("Thông tin nhân viên");
         stage.setScene(scene);
         stage.show();
+    }
+
+    public String removePrefix(String input) {
+        if (input != null && input.startsWith("EMP-")) {
+            return input.substring(4);
+        }
+        return input;
     }
 }
