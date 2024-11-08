@@ -163,7 +163,7 @@ public class AccountManagerController {
                 showInfoButton.setOnAction(e -> {
                     Account account = getTableView().getItems().get(getIndex());
                     try {
-                        handleShowAccountInformation(account.getEmployee(), account);
+                        handleShowAccountInformation(account.getEmployee());
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -216,14 +216,14 @@ public class AccountManagerController {
         updateBtn.setVisible(true);
     }
 
-    private void handleShowAccountInformation(Employee employee ,Account account) throws IOException {
+    private void handleShowAccountInformation(Employee employee) throws IOException {
         String source = "/iuh/fit/view/features/employee/EmployeeInformationView.fxml";
 
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
         AnchorPane layout = loader.load();
 
         EmployeeInformationViewController employeeInformationViewController = loader.getController();
-        employeeInformationViewController.setEmployee(employee, account);
+        employeeInformationViewController.setEmployee(employee);
 
         Scene scene = new Scene(layout);
 
@@ -323,9 +323,7 @@ public class AccountManagerController {
         String searchText = employeeIDCBox.getValue();
         List<Employee> employeeList;
 
-        if (searchText == null || searchText.isEmpty()) {
-            employeeList = EmployeeDAO.getEmployees();
-        } else {
+        if (searchText != null && !searchText.isEmpty()) {
             employeeList = EmployeeDAO.findDataByContainsId(searchText);
             if (!employeeList.isEmpty()) {
                 Employee employee = employeeList.getFirst();
