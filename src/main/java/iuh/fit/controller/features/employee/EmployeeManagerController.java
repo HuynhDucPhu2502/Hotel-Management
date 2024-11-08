@@ -107,13 +107,10 @@ public class EmployeeManagerController {
                     positionCBox.getSelectionModel().selectFirst();
                 });
 
-                // Thiết lập ID nhân viên tiếp theo
                 Platform.runLater(() -> employeeIDTextField.setText(EmployeeDAO.getNextEmployeeID()));
-
                 List<String> Ids = EmployeeDAO.getTopThreeID();
                 Platform.runLater(() -> employeeIDSearchField.getItems().setAll(Ids));
 
-                // Tải danh sách nhân viên
                 List<Employee> employeeList = EmployeeDAO.getEmployees();
                 items = FXCollections.observableArrayList(employeeList);
 
@@ -230,7 +227,7 @@ public class EmployeeManagerController {
                     cardIDTextFiled.getText(),
                     ((RadioButton) gender.getSelectedToggle()).getText().equals(Gender.MALE.toString()) ? Gender.MALE : Gender.FEMALE,
                     dobPicker.getValue(),
-                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem())
+                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem().equals("QUẢN LÝ") ? "MANAGER" : "RECEPTIONIST")
             );
 
             EmployeeDAO.createData(employee);
@@ -251,13 +248,16 @@ public class EmployeeManagerController {
         phoneNumberTextField.setText(employee.getPhoneNumber());
         addressTextField.setText(employee.getAddress());
         cardIDTextFiled.setText(employee.getIdCardNumber());
-        positionCBox.getSelectionModel().select(employee.getPosition().name());
+
+        // Ánh xạ giá trị position tiếng Anh thành tiếng Việt
+        positionCBox.getSelectionModel().select(employee.getPosition().name().equalsIgnoreCase("MANAGER") ? "QUẢN LÝ" : "LỄ TÂN");
 
         dobPicker.setValue(employee.getDob());
-        if (employee.getGender().equals(Gender.MALE))
+        if (employee.getGender().equals(Gender.MALE)) {
             radMale.setSelected(true);
-        else
+        } else {
             radFemale.setSelected(true);
+        }
 
         addBtn.setManaged(false);
         addBtn.setVisible(false);
@@ -277,7 +277,7 @@ public class EmployeeManagerController {
                     cardIDTextFiled.getText(),
                     ((RadioButton) gender.getSelectedToggle()).getText().equals(Gender.MALE.toString()) ? Gender.MALE : Gender.FEMALE,
                     dobPicker.getValue(),
-                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem())
+                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem().equals("QUẢN LÝ") ? "MANAGER" : "RECEPTIONIST")
             );
 
             com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN",
@@ -330,7 +330,7 @@ public class EmployeeManagerController {
                 employeeTableView.setItems(items);
 
                 if (employeeList.size() == 1) {
-                    Employee employee = employeeList.get(0);
+                    Employee employee = employeeList.getFirst();
                     fullNameSearchField.setText(employee.getFullName());
                     phoneNumberSearchField.setText(employee.getPhoneNumber());
                     positionSearchField.setText(employee.getPosition().name().equalsIgnoreCase("MANAGER") ? "QUẢN LÝ" : "LỄ TÂN");
@@ -342,7 +342,6 @@ public class EmployeeManagerController {
 
         new Thread(searchTask).start();
     }
-
 
     private void handleShowEmployeeInformation(Employee employee) throws IOException {
         String source = "/iuh/fit/view/features/employee/EmployeeInformationView.fxml";
