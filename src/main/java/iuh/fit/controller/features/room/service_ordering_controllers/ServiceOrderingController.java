@@ -10,10 +10,12 @@ import iuh.fit.dao.*;
 import iuh.fit.models.*;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -112,7 +114,6 @@ public class ServiceOrderingController {
         setupReservationForm();
         setupButtonActions();
         loadData();
-        displayServices(hotelServiceList);
     }
 
     private void setupButtonActions() {
@@ -129,20 +130,49 @@ public class ServiceOrderingController {
     }
 
     private void loadData() {
-        hotelServiceList = HotelServiceDAO.getHotelService();
+        Task<Void> loadDataTask = new Task<>() {
+            @Override
+            protected Void call() {
+                hotelServiceList = HotelServiceDAO.getHotelService();
 
+                loadTable();
+
+                // Tải tên danh mục dịch vụ
+                ArrayList<String> categoryNames = (ArrayList<String>) ServiceCategoryDAO.getServiceCategoryNames();
+                categoryNames.addFirst("TẤT CẢ");
+
+                Platform.runLater(() -> {
+                    serviceCategoryCBox.getItems().setAll(categoryNames);
+                    serviceCategoryCBox.getSelectionModel().selectFirst();
+                });
+
+                // Sau khi tải dữ liệu xong, gọi hàm lọc dịch vụ
+                Platform.runLater(() -> filterServicesByCategory());
+
+                return null;
+            }
+        };
+
+        loadDataTask.setOnFailed(e -> {
+            dialogPane.showWarning("LỖI", "Lỗi khi tải dữ liệu");
+            loadDataTask.getException().printStackTrace();
+        });
+
+        loadDataTask.setOnSucceeded(e -> displayServices(hotelServiceList));
+
+        new Thread(loadDataTask).start();
+    }
+
+    private void loadTable() {
         List<RoomUsageService> roomUsageServices = RoomUsageServiceDAO.getByReservationFormID(roomWithReservation.getReservationForm().getReservationID());
         ObservableList<RoomUsageService> data = FXCollections.observableArrayList(roomUsageServices);
-        roomUsageServiceTableView.setItems(data);
-        roomUsageServiceTableView.refresh();
 
-        ArrayList<String> categoryNames = (ArrayList<String>) ServiceCategoryDAO.getServiceCategoryNames();
-        categoryNames.addFirst("TẤT CẢ");
-        serviceCategoryCBox.getItems().addAll(categoryNames);
-        serviceCategoryCBox.getSelectionModel().selectFirst();
-
-        filterServicesByCategory();
+        Platform.runLater(() -> {
+            roomUsageServiceTableView.setItems(data);
+            roomUsageServiceTableView.refresh();
+        });
     }
+
 
     // ==================================================================================================================
     // 3. Xử lý chức năng hiển thị panel khác
@@ -254,7 +284,7 @@ public class ServiceOrderingController {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource(
                             "/iuh/fit/view/features/room/ordering_services_panels/ServiceItem.fxml"));
                     Pane serviceItem = loader.load();
-
+                    System.out.println(service.getServiceCategory().getServiceCategoryName());
                     ServiceItemController controller = loader.getController();
                     controller.setupContext(service);
                     controller.getAddServiceBtn().setOnAction(e ->
@@ -269,6 +299,11 @@ public class ServiceOrderingController {
                         row++;
                     }
                 }
+
+                serviceGridPane.setVisible(true);
+                serviceGridPane.setManaged(true);
+                emptyLabelContainer.setVisible(false);
+                emptyLabelContainer.setManaged(false);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -340,7 +375,7 @@ public class ServiceOrderingController {
             if (buttonType == ButtonType.YES) {
                 handleAddServiceToDB(service, amount, amountField);
                 dialogPane.showInformation("Thành Công", "Dịch vụ đã được thêm thành công!");
-                loadData();
+                loadTable();
             }
         });
     }
@@ -364,20 +399,29 @@ public class ServiceOrderingController {
         }
     }
 
+    // ==================================================================================================================
+    // 7. Chức năng tìm kiếm
+    // ==================================================================================================================
     private void filterServicesByCategory() {
-        String selectedCategory = serviceCategoryCBox.getSelectionModel().getSelectedItem();
+        Task<List<HotelService>> filterTask = new Task<>() {
+            @Override
+            protected List<HotelService> call() {
+                String selectedCategory = serviceCategoryCBox.getSelectionModel().getSelectedItem();
+                if ("TẤT CẢ".equals(selectedCategory)) {
+                    return hotelServiceList;
+                } else {
+                    return hotelServiceList.stream()
+                            .filter(service -> service.getServiceCategory().getServiceCategoryName().equalsIgnoreCase(selectedCategory))
+                            .toList();
+                }
+            }
+        };
 
-        List<HotelService> filteredServices;
-        if ("TẤT CẢ".equals(selectedCategory)) {
-            filteredServices = hotelServiceList;
-        } else {
-            filteredServices = hotelServiceList.stream()
-                    .filter(service -> service.getServiceCategory().getServiceCategoryName().equalsIgnoreCase(selectedCategory))
-                    .toList();
-        }
+        filterTask.setOnSucceeded(e -> displayServices(filterTask.getValue()));
+        filterTask.setOnFailed(e -> dialogPane.showWarning("LỖI", "Lỗi khi lọc dịch vụ"));
 
-        // Hiển thị danh sách dịch vụ sau khi lọc
-        displayServices(filteredServices);
+        new Thread(filterTask).start();
     }
+
 
 }

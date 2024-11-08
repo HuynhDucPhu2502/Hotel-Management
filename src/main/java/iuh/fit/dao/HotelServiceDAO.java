@@ -23,7 +23,7 @@ public class HotelServiceDAO {
                     "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName, b.icon " +
                     "FROM HotelService a LEFT JOIN ServiceCategory b " +
                     "ON a.serviceCategoryID = b.serviceCategoryID " +
-                    "WHERE a.isActivate = 'ACTIVATE'";
+                    "WHERE a.isActivate = 'ACTIVATE' AND b.serviceCategoryID IS NOT NULL";
             ResultSet rs = statement.executeQuery(sql);
 
             while (rs.next()) {

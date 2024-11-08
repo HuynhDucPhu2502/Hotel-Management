@@ -1,6 +1,5 @@
 package iuh.fit.dao;
 
-import iuh.fit.models.Room;
 import iuh.fit.models.RoomCategory;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;

@@ -246,7 +246,7 @@ public class ServiceCategoryDAO {
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement()
         ){
-            String sql = "SELECT serviceCategoryName from ServiceCategory";
+            String sql = "SELECT serviceCategoryName from ServiceCategory WHERE isActivate = 'ACTIVATE'";
             ResultSet rs = statement.executeQuery(sql);
 
 
