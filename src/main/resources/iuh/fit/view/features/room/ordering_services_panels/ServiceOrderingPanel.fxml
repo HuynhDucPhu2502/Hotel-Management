@@ -4,6 +4,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -429,6 +430,16 @@
                                           <Font name="System Bold" size="24.0" />
                                        </font>
                                     </Text>
+                                 </children>
+                              </HBox>
+                              <HBox spacing="30.0">
+                                 <children>
+                                    <Label text="Loại dịch vụ">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox fx:id="serviceCategoryCBox" prefWidth="150.0" />
                                  </children>
                               </HBox>
                               <AnchorPane>
