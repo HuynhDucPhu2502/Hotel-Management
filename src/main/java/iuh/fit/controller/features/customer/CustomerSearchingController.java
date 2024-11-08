@@ -1,17 +1,19 @@
 package iuh.fit.controller.features.customer;
 
-import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.CustomerDAO;
 import iuh.fit.models.Customer;
 import iuh.fit.models.enums.Gender;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -25,23 +27,13 @@ import java.util.Objects;
 public class CustomerSearchingController {
     // Input Fields
     @FXML
-    private TextField customerIDTextField;
-    @FXML
-    private TextField fullNameTextField;
-    @FXML
-    private TextField phoneNumberTextField;
-    @FXML
-    private TextField emailTextField;
-    @FXML
-    private TextField addressTextField;
-    @FXML
-    private TextField cardIDTextField;
+    private TextField customerIDTextField, fullNameTextField,
+            emailTextField, phoneNumberTextField,
+            addressTextField, cardIDTextField;
     @FXML
     private DatePicker DOBPicker;
     @FXML
     private RadioButton male;
-    @FXML
-    private RadioButton female;
     @FXML
     private ToggleGroup gender;
 
@@ -63,13 +55,7 @@ public class CustomerSearchingController {
 
     // Buttons
     @FXML
-    private Button resetBtn;
-    @FXML
-    private Button searchBtn;
-
-    // Dialog
-    @FXML
-    private DialogPane dialogPane;
+    private Button resetBtn, searchBtn;
 
     private ObservableList<Customer> items;
 
@@ -82,10 +68,20 @@ public class CustomerSearchingController {
     }
 
     private void loadData() {
-        List<Customer> customerList = CustomerDAO.getCustomer();
-        items = FXCollections.observableArrayList(customerList);
-        customerTableView.setItems(items);
-        customerTableView.refresh();
+        Task<Void> loadDataTask = new Task<>() {
+            @Override
+            protected Void call() {
+                List<Customer> customerList = CustomerDAO.getCustomer();
+                items = FXCollections.observableArrayList(customerList);
+                Platform.runLater(() -> {
+                    customerTableView.setItems(items);
+                    customerTableView.refresh();
+                });
+                return null;
+            }
+        };
+
+        new Thread(loadDataTask).start();
     }
 
     private void setupTable() {
@@ -150,6 +146,11 @@ public class CustomerSearchingController {
         Stage stage = new Stage();
         stage.setTitle("Thông tin khách hàng");
         stage.setScene(scene);
+
+        String iconPath = "/iuh/fit/icons/menu_icons/ic_customer.png"; // Đường dẫn đến icon
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath))));
+        stage.setTitle("Thông tin khách hàng");
+
         stage.show();
     }
 
@@ -168,28 +169,31 @@ public class CustomerSearchingController {
     }
 
     private void handleSearchAction() {
-        try {
-            String customerID = customerIDTextField.getText().isBlank() ? null : customerIDTextField.getText().trim();
-            String fullName = fullNameColumn.getText().isBlank() ? null : fullNameTextField.getText().trim();
-            String phoneNumber = phoneNumberTextField.getText().isBlank() ? null : phoneNumberTextField.getText().trim();
-            String email = emailTextField.getText().isBlank() ? null : emailTextField.getText().trim();
-            String address = addressTextField.getText().isBlank() ? null : addressTextField.getText().trim();
-            Gender gder;
-            if (gender.getSelectedToggle() == null){
-                gder = null;
-            } else {
-                gder = ((RadioButton) gender.getSelectedToggle()).getText().equals(Gender.MALE.toString()) ? Gender.MALE : Gender.FEMALE;
-            }
-            LocalDate dob =  DOBPicker.getValue();
-            String cardID = cardIDTextField.getText().isBlank() ? null : cardIDTextField.getText().trim();
+        Task<ObservableList<Customer>> searchTask = new Task<>() {
+            @Override
+            protected ObservableList<Customer> call() {
+                String customerID = customerIDTextField.getText().isBlank() ? null : customerIDTextField.getText().trim();
+                String fullName = fullNameTextField.getText().isBlank() ? null : fullNameTextField.getText().trim();
+                String phoneNumber = phoneNumberTextField.getText().isBlank() ? null : phoneNumberTextField.getText().trim();
+                String email = emailTextField.getText().isBlank() ? null : emailTextField.getText().trim();
+                String address = addressTextField.getText().isBlank() ? null : addressTextField.getText().trim();
+                Gender selectedGender = (gender.getSelectedToggle() == null) ? null
+                        : ((RadioButton) gender.getSelectedToggle()).getText().equals(Gender.MALE.toString()) ? Gender.MALE : Gender.FEMALE;
+                LocalDate dob = DOBPicker.getValue();
+                String cardID = cardIDTextField.getText().isBlank() ? null : cardIDTextField.getText().trim();
 
-            List<Customer> searchResults = CustomerDAO.searchCustomer(
-                    customerID, fullName, phoneNumber, email, address, gder, cardID, dob
-            );
-            items.setAll(searchResults);
+                List<Customer> searchResults = CustomerDAO.searchCustomer(
+                        customerID, fullName, phoneNumber, email, address, selectedGender, cardID, dob
+                );
+                return FXCollections.observableArrayList(searchResults);
+            }
+        };
+
+        searchTask.setOnSucceeded(e -> {
+            items = searchTask.getValue();
             customerTableView.setItems(items);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        });
+
+        new Thread(searchTask).start();
     }
 }

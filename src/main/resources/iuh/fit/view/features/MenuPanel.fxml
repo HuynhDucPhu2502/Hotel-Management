@@ -277,23 +277,6 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
-                              <HBox fx:id="invoiceManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
-                                 <children>
-                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
-                                       <elements>
-                                          <MoveTo x="10" y="25" />
-                                          <LineTo x="10" y="40" />
-                                          <LineTo x="20" y="40" />
-                                          <MoveTo x="10" y="40" />
-                                          <LineTo x="10" y="55" />
-                                       </elements>
-                                    </Path>
-                                    <Button fx:id="invoiceManagerBtn" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Quản lý hóa đơn" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </HBox>
                               <HBox fx:id="roomSearchingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
                                  <children>
 
@@ -315,6 +298,49 @@
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
+                        </VBox>
+                        <VBox prefHeight="32.0" prefWidth="293.0">
+                           <children>
+                              <Button fx:id="invoiceBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="230.0" styleClass="menu-bar-parent">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <graphic>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
+                                       <children>
+                                          <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true">
+                                             <image>
+                                                <Image url="@../../icons/menu_icons/ic_menu.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Hóa đơn" textFill="WHITE" />
+                                          <ImageView fx:id="arrowUpForInvoice" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="28">
+                                             <image>
+                                                <Image url="@../../icons/menu_icons/arrow_down.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </Button>
+                              <HBox fx:id="invoiceManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
+                                 <children>
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                          <MoveTo x="10" y="40" />
+                                          <LineTo x="10" y="55" />
+                                       </elements>
+                                    </Path>
+                                    <Button fx:id="invoiceManagerBtn" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Quản lý hóa đơn" />
+                                 </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </HBox>
+                           </children>
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0">
                            <children>
