@@ -74,9 +74,10 @@ public class PasswordChangingController {
             dialogPane.showWarning("Lỗi", "Mật khẩu xác nhận không khớp với mật khẩu mới.");
             return;
         }
-
+        System.out.println(newPassword);
         String hashedNewPassword = PasswordHashing.hashPassword(newPassword);
         account.setPassword(hashedNewPassword);
+        System.out.println(hashedNewPassword);
 
         try {
             AccountDAO.updateData(account);
