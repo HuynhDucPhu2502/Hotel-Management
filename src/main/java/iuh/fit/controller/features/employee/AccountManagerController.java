@@ -106,7 +106,24 @@ public class AccountManagerController {
 
     private void loadData() {
         statusCBox.getItems().setAll(
-                Stream.of(AccountStatus.values()).map(Enum::name).toList()
+                Stream.of(AccountStatus.values()).map(Enum::name)
+                        .map(position -> {
+                        switch (position) {
+                            case "ACTIVE" -> {
+                                return "ĐANG HOẠT ĐỘNG";
+                            }
+                            case "INACTIVE" -> {
+                                return "KHÔNG HOẠT ĐỘNG";
+                            }
+                            case "LOCKED" -> {
+                                return "BỊ KHÓA";
+                            }
+                            default -> {
+                                return position;
+                            }
+                    }
+                })
+                        .toList()
         );
         statusCBox.getSelectionModel().selectFirst();
 
@@ -135,8 +152,15 @@ public class AccountManagerController {
         fullNameColumn.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getEmployee().getFullName()));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));
-        statusColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getAccountStatus().name()));
+        statusColumn.setCellValueFactory(data -> {
+            String status = switch (data.getValue().getAccountStatus().name()) {
+                case "ACTIVE" -> "ĐANG HOẠT ĐỘNG";
+                case "INACTIVE" -> "KHÔNG HOẠT ĐỘNG";
+                case "LOCKED" -> "BỊ KHÓA";
+                default -> data.getValue().getAccountStatus().name(); // Giữ nguyên nếu không nằm trong các trạng thái trên
+            };
+            return new SimpleStringProperty(status);
+        });
         setupActionColumn();
     }
 
@@ -244,7 +268,7 @@ public class AccountManagerController {
         usernameTextField.setEditable(true);
         usernameTextField.setDisable(false);
         accountIDTextField.setText(AccountDAO.getNextAccountID());
-        if (!employeeIDCBox.getItems().isEmpty()) employeeIDCBox.getSelectionModel().select(null);
+        employeeIDCBox.getSelectionModel().select("");
         fullNameTextField.setText("");
         usernameTextField.setText("");
         passwordTextField.setText("");
@@ -259,6 +283,10 @@ public class AccountManagerController {
 
     private void handleAddAction() {
         try {
+            if(employeeIDCBox.getSelectionModel().getSelectedItem() == null){
+                dialogPane.showWarning("LỖI", "Phải chọn nhân viên chưa có tài khoản để tạo tài khoản");
+                return;
+            }
             Employee employee = EmployeeDAO.getDataByID(employeeIDCBox.getValue());
 
             if (!RegexChecker.isValidPassword(passwordTextField.getText())) {
@@ -268,23 +296,27 @@ public class AccountManagerController {
 
             String hashedPassword = PasswordHashing.hashPassword(passwordTextField.getText());
 
-
+            String status = switch (statusCBox.getSelectionModel().getSelectedItem()) {
+                case "ĐANG HOẠT ĐỘNG" -> "ACTIVE";
+                case "KHÔNG HOẠT ĐỘNG" -> "INACTIVE";
+                case "BỊ KHÓA" -> "LOCKED";
+                default -> statusCBox.getSelectionModel().getSelectedItem();
+            };
             Account account = new Account(
                     accountIDTextField.getText(),
                     employee,
                     usernameTextField.getText(),
                     hashedPassword,
-                    ConvertHelper.accountStatusConverter(statusCBox.getSelectionModel().getSelectedItem())
+                    ConvertHelper.accountStatusConverter(status)
             );
 
-            Account existingAccount = AccountDAO.getAccountByEmployeeID(employeeIDCBox.getValue());
-            if (existingAccount == null) {
+            Account acc = AccountDAO.getAccountByEmployeeID(employeeIDCBox.getValue());
+            if(acc == null){
                 AccountDAO.createData(account);
             } else {
-                dialogPane.showWarning("LỖI", "Nhân viên đã có tài khoản");
+                dialogPane.showInformation("Thành công", "Nhân viên đã có tài khoản");
                 return;
             }
-
             handleResetAction();
             loadData();
             dialogPane.showInformation("Thành công", "Đã thêm tài khoản thành công");
@@ -309,7 +341,15 @@ public class AccountManagerController {
                 Account account = accountList.getFirst();
                 fullNameSearchField.setText(String.valueOf(account.getEmployee().getFullName()));
                 usernameSearchField.setText(account.getUserName());
-                statusSearchField.setText(account.getAccountStatus().name());
+
+                String status = switch (account.getAccountStatus().name()) {
+                    case "ACTIVE" -> "ĐANG HOẠT ĐỘNG";
+                    case "INACTIVE" -> "KHÔNG HOẠT ĐỘNG";
+                    case "LOCKED" -> "BỊ KHÓA";
+                    default -> account.getAccountStatus().name();
+                };
+
+                statusSearchField.setText(status);
             }
         }
 
@@ -339,12 +379,19 @@ public class AccountManagerController {
 
             String hashedNewPassword = PasswordHashing.hashPassword(newPasswordTextField.getText());
 
+            String status = switch (statusCBox.getSelectionModel().getSelectedItem()) {
+                case "ĐANG HOẠT ĐỘNG" -> "ACTIVE";
+                case "KHÔNG HOẠT ĐỘNG" -> "INACTIVE";
+                case "BỊ KHÓA" -> "LOCKED";
+                default -> statusCBox.getSelectionModel().getSelectedItem();
+            };
+
             Account account = new Account(
                     accountIDTextField.getText(),
                     employee,
                     usernameTextField.getText(),
                     hashedNewPassword,
-                    ConvertHelper.accountStatusConverter(statusCBox.getSelectionModel().getSelectedItem())
+                    ConvertHelper.accountStatusConverter(status)
             );
 
             com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN",

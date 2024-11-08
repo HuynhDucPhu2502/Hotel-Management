@@ -1,7 +1,9 @@
 package iuh.fit.controller.features.employee;
 
 import com.dlsc.gemsfx.DialogPane;
+import iuh.fit.dao.AccountDAO;
 import iuh.fit.dao.EmployeeDAO;
+import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
 import iuh.fit.models.enums.Gender;
 import iuh.fit.models.enums.Position;
@@ -98,6 +100,27 @@ public class EmployeeManagerController {
                     positionCBox.getItems().setAll(Stream.of(Position.values()).map(Enum::name).toList());
                     positionCBox.getSelectionModel().selectFirst();
                 });
+        positionCBox.getItems().setAll(
+                Stream.of(Position.values())
+                        .map(Enum::name)
+                        .map(position -> {
+                            switch (position) {
+                                case "MANAGER" -> {
+                                    return "QUẢN LÝ";
+                                }
+                                case "RECEPTIONIST" -> {
+                                    return "LỄ TÂN";
+                                }
+                                default -> {
+                                    return position;
+                                }
+                            }
+                        })
+                        .toList()
+        );
+        positionCBox.getSelectionModel().selectFirst();
+
+        employeeIDTextField.setText(EmployeeDAO.getNextEmployeeID());
 
                 List<String> Ids = EmployeeDAO.getTopThreeID();
                 Platform.runLater(() -> employeeIDSearchField.getItems().setAll(Ids));
@@ -130,8 +153,16 @@ public class EmployeeManagerController {
         employeeIDColumn.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
         fullNameColumn.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        positionColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getPosition().name()));
+        positionColumn.setCellValueFactory(data -> {
+            String position = data.getValue().getPosition().name();
+            return new SimpleStringProperty(
+                    switch (position) {
+                        case "MANAGER" -> "QUẢN LÝ";
+                        case "RECEPTIONIST" -> "LỄ TÂN";
+                        default -> position;
+                    }
+            );
+        });
         setupActionColumn();
     }
 
@@ -218,6 +249,7 @@ public class EmployeeManagerController {
             EmployeeDAO.createData(employee);
             handleResetAction();
             loadData();
+            dialogPane.showInformation("Thông báo", "Thêm nhân viên thành công");
         } catch (IllegalArgumentException e) {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
@@ -232,7 +264,7 @@ public class EmployeeManagerController {
         phoneNumberTextField.setText(employee.getPhoneNumber());
         addressTextField.setText(employee.getAddress());
         cardIDTextFiled.setText(employee.getIdCardNumber());
-        positionCBox.getSelectionModel().select(employee.getPosition().name());
+        positionCBox.getSelectionModel().select(employee.getPosition().name().equalsIgnoreCase("MANAGER")?"QUẢN LÝ":"LỄ TÂN");
 
         dobPicker.setValue(employee.getDob());
         if(employee.getGender().equals(Gender.MALE))
@@ -268,6 +300,7 @@ public class EmployeeManagerController {
                 if (buttonType == ButtonType.YES) {
                     try {
                         EmployeeDAO.updateData(employee);
+                        dialogPane.showInformation("Thông báo", "Cập nhật thông tin nhân viên thành công");
                         Platform.runLater(() -> {
                             handleResetAction();
                             loadData();
@@ -312,7 +345,7 @@ public class EmployeeManagerController {
                 Employee employee = employeeList.getFirst();
                 fullNameSearchField.setText(employee.getFullName());
                 phoneNumberSearchField.setText(employee.getPhoneNumber());
-                positionSearchField.setText(employee.getPosition().name());
+                positionSearchField.setText(employee.getPosition().name().equalsIgnoreCase("MANAGER")?"QUẢN LÝ":"LỄ TÂN");
             }
         });
 
