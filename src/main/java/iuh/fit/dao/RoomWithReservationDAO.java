@@ -31,7 +31,8 @@ public class RoomWithReservationDAO {
               AND GETDATE() BETWEEN rf.checkInDate AND DATEADD(hour, 2, rf.checkOutDate)
         ) AS rf ON r.roomID = rf.roomID
         LEFT JOIN Employee e ON rf.employeeID = e.employeeID
-        LEFT JOIN Customer c ON rf.customerID = c.customerID;
+        LEFT JOIN Customer c ON rf.customerID = c.customerID
+        WHERE r.isActivate = 'ACTIVATE' AND rc.isActivate = 'ACTIVATE'
         """;
 
         try (
@@ -70,7 +71,7 @@ public class RoomWithReservationDAO {
         ) AS rf ON r.roomID = rf.roomID
         LEFT JOIN Employee e ON rf.employeeID = e.employeeID
         LEFT JOIN Customer c ON rf.customerID = c.customerID
-        WHERE r.roomID = ?;
+        WHERE r.roomID = ? AND r.isActivate = 'ACTIVATE' AND rc.isActivate = 'ACTIVATE' AND e.isActivate = 'ACTIVATE' AND c.isActivate = 'ACTIVATE'
         """;
 
         try (
@@ -118,9 +119,10 @@ public class RoomWithReservationDAO {
         ) AS rf ON r.roomID = rf.roomID
         LEFT JOIN Employee e ON rf.employeeID = e.employeeID
         LEFT JOIN Customer c ON rf.customerID = c.customerID
-        WHERE (r.roomStatus = 'OVERDUE' OR r.roomStatus = 'ON_USE')
-        AND rf.reservationFormID IS NOT NULL
-       """;
+        WHERE (r.roomStatus = 'OVERDUE' OR r.roomStatus = 'ON_USE')\s
+        AND rf.reservationFormID IS NOT NULL AND r.isActivate = 'ACTIVATE' AND rc.isActivate = 'ACTIVATE'
+        AND e.isActivate = 'ACTIVATE' AND c.isActivate = 'ACTIVATE'
+      \s""";
 
         try (Connection connection = DBHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);

@@ -22,6 +22,7 @@ public class RoomReservationDetailDAO {
                 INNER JOIN Room r ON rrd.roomID = r.roomID
                 INNER JOIN ReservationForm rf ON rrd.reservationFormID = rf.reservationFormID
                 INNER JOIN Employee e ON rrd.employeeID = e.employeeID
+                WHERE r.isActivate = 'ACTIVATE' AND e.isActivate = 'ACTIVATE'
                \s""";
 
         try (
@@ -52,6 +53,7 @@ public class RoomReservationDetailDAO {
                 INNER JOIN ReservationForm rf ON rrd.reservationFormID = rf.reservationFormID
                 INNER JOIN Employee e ON rrd.employeeID = e.employeeID
                 WHERE rrd.roomReservationDetailID = ?
+                AND r.isActivate = 'ACTIVATE' AND e.isActivate = 'ACTIVATE'
                 """;
 
         try (
@@ -191,6 +193,7 @@ public class RoomReservationDetailDAO {
             INNER JOIN ReservationForm rf ON rrd.reservationFormID = rf.reservationFormID
             INNER JOIN Employee e ON rrd.employeeID = e.employeeID
             WHERE rrd.reservationFormID = ?
+            AND r.isActivate = 'ACTIVATE' AND e.isActivate = 'ACTIVATE'
             """;
 
         try (

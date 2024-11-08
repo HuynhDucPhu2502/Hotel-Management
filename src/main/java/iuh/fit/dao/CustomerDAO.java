@@ -20,8 +20,9 @@ public class CustomerDAO {
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement();
         ){
-            String sql = "SELECT customerID, fullName, phoneNumber, email, address, gender, idCardNumber, dob " +
-                    "FROM Customer";
+            String sql = "SELECT customerID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, isActivate " +
+                    "FROM Customer " +
+                    "WHERE isActivate = 'ACTIVATE'";
             ResultSet rs = statement.executeQuery(sql);
 
 
@@ -52,7 +53,7 @@ public class CustomerDAO {
 
         String SQLQueryStatement = "SELECT customerID, fullName, phoneNumber, email, address, gender, idCardNumber, dob "
                 + "FROM Customer " +
-                "WHERE customerID = ?";
+                "WHERE customerID = ? AND isActivate = 'ACTIVATE'";
 
         try (
                 Connection con = DBHelper.getConnection();
@@ -94,9 +95,9 @@ public class CustomerDAO {
                         "INSERT INTO Customer(" +
                                 "customerID, fullName, phoneNumber, " +
                                 "email, address, gender, " +
-                                "idCardNumber, dob" +
+                                "idCardNumber, dob, isActivate" +
                                 ") " +
-                                "VALUES(?, ?, ?, ?, ?, ?, ?, ?)"
+                                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVATE')"
                 );
 
                 // Câu lệnh để lấy nextID từ GlobalSequence
@@ -160,7 +161,8 @@ public class CustomerDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                        "DELETE FROM Customer "
+                        "UPDATE Customer " +
+                                "SET isActivate = 'DEACTIVATE' "
                                 + "WHERE customerID = ?"
                 )
         ){
@@ -204,9 +206,9 @@ public class CustomerDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                        "SELECT customerID, fullName, phoneNumber, email, address, gender, idCardNumber, dob " +
+                        "SELECT customerID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, isActivate " +
                                 "FROM Customer " +
-                                "WHERE LOWER(customerID) LIKE ?"
+                                "WHERE LOWER(customerID) LIKE ? AND isActivate = 'ACTIVATE'"
                 )
         ) {
             preparedStatement.setString(1, "%" + input.toLowerCase() + "%");
@@ -242,6 +244,7 @@ public class CustomerDAO {
         ) {
             String sql = "SELECT TOP 3 customerID " +
                     "FROM Customer " +
+                    "WHERE isActivate = 'ACTIVATE' " +
                     "ORDER BY customerID DESC";
             ResultSet rs = statement.executeQuery(sql);
 
@@ -317,7 +320,7 @@ public class CustomerDAO {
 
         String sql = "SELECT customerID, fullName, phoneNumber, " +
                 "email, address, gender, " +
-                "idCardNumber, dob " +
+                "idCardNumber, dob, isActivate " +
                 "FROM Customer " +
                 "WHERE (customerID like ? or ? is null) and " +
                 "(fullName like ? or ? is null) and " +
@@ -326,7 +329,7 @@ public class CustomerDAO {
                 "(address like ? or ? is null) and " +
                 "(idCardNumber like ? or ? is null) and " +
                 "(gender = ? OR ? IS NULL) and " +
-                "(dob = ? OR ? IS NULL)";
+                "(dob = ? OR ? IS NULL) and isActivate = 'ACTIVATE'";
 
         try (
                 Connection connection = DBHelper.getConnection();

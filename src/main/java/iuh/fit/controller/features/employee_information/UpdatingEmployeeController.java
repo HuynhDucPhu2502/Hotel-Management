@@ -6,6 +6,7 @@ import iuh.fit.controller.MainController;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.enums.Gender;
+import iuh.fit.models.enums.ObjectStatus;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -87,7 +88,8 @@ public class UpdatingEmployeeController {
                     employee.getIdCardNumber(),
                     radMale.isSelected() ? Gender.MALE : Gender.FEMALE,
                     employeeDOBCalendarPicker.getValue(),
-                    employee.getPosition()
+                    employee.getPosition(),
+                    ObjectStatus.ACTIVATE
             );
 
 

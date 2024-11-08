@@ -105,7 +105,7 @@ public class PricingDAO {
 
                 // Câu lệnh để cập nhật giá trị nextID trong GlobalSequence
                 PreparedStatement updateSequenceStatement = connection.prepareStatement(
-                        "UPDATE GlobalSequence SExT nextID = ? WHERE tableName = ?"
+                        "UPDATE GlobalSequence SET nextID = ? WHERE tableName = ?"
                 )
         ) {
             // Thiết lập các giá trị cho câu lệnh INSERT

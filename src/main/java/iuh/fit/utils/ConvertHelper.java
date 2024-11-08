@@ -38,6 +38,14 @@ public class ConvertHelper {
                 ? Gender.FEMALE : Gender.MALE;
     }
 
+    public static ObjectStatus objectStatusConverter(String input) {
+        if (!input.matches("(ACTIVATE|DEACTIVATE)"))
+            throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_OBJECT_STATUS);
+
+        return input.equalsIgnoreCase("ACTIVATE")
+                ? ObjectStatus.ACTIVATE : ObjectStatus.DEACTIVATE;
+    }
+
     public static Position positionConverter(String input) {
         if (!input.matches("(MANAGER|RECEPTIONIST)"))
             throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_POSITION);
@@ -108,6 +116,14 @@ public class ConvertHelper {
 
         return input.toString().equalsIgnoreCase("Nữ")
                 ? "FEMALE" : "MALE";
+    }
+
+    public static String objectStatusConverterToSQL(ObjectStatus input) {
+        if (!input.toString().matches("(Tồn tại|Không tồn tại)"))
+            throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_OBJECT_STATUS);
+
+        return input.toString().equalsIgnoreCase("Tồn tại")
+                ? "ACTIVATE" : "DEACTIVATE";
     }
 
     public static String shiftDaysScheduleConverterToSQL(ShiftDaysSchedule input) {

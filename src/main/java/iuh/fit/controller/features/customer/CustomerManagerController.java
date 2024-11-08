@@ -5,6 +5,7 @@ import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.CustomerDAO;
 import iuh.fit.models.Customer;
 import iuh.fit.models.enums.Gender;
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.utils.ErrorMessages;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -335,7 +336,7 @@ public class CustomerManagerController {
         String idCardNumber = customerIDCardNumberTextField.getText();
         LocalDate dob = customerDOBCalendarPicker.getValue();
 
-        return new Customer(id, name, phone, email, address, gender, idCardNumber, dob);
+        return new Customer(id, name, phone, email, address, gender, idCardNumber, dob, ObjectStatus.ACTIVATE);
     }
 
     private void switchButton(boolean updateButton, boolean addButton){

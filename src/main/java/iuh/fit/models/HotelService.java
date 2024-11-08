@@ -1,5 +1,6 @@
 package iuh.fit.models;
 
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.GlobalConstants;
 import iuh.fit.utils.RegexChecker;
@@ -12,16 +13,18 @@ public class HotelService {
     private String description;
     private double servicePrice;
     private ServiceCategory serviceCategory;
+    private ObjectStatus objectStatus;
 
     public HotelService() {
     }
 
-    public HotelService(String serviceId, String serviceName, double servicePrice, String description, ServiceCategory serviceCategory) {
+    public HotelService(String serviceId, String serviceName, double servicePrice, String description, ServiceCategory serviceCategory, ObjectStatus objectStatus) {
         this.setServiceId(serviceId);
         this.setServiceName(serviceName);
         this.setServicePrice(servicePrice);
         this.setDescription(description);
         this.setServiceCategory(serviceCategory);
+        this.setObjectStatus(objectStatus);
     }
 
     public HotelService(String serviceId) {
@@ -81,6 +84,14 @@ public class HotelService {
 
     public void setServiceCategory(ServiceCategory serviceCategory) {
         this.serviceCategory = serviceCategory;
+    }
+
+    public ObjectStatus getObjectStatus() {
+        return objectStatus;
+    }
+
+    public void setObjectStatus(ObjectStatus objectStatus) {
+        this.objectStatus = objectStatus;
     }
 
     @Override

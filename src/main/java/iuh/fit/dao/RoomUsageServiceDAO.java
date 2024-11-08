@@ -26,6 +26,7 @@ public class RoomUsageServiceDAO {
             JOIN HotelService b ON a.hotelServiceId = b.hotelServiceId\s
             JOIN ServiceCategory c ON b.serviceCategoryID = c.serviceCategoryID
             LEFT JOIN Employee e ON a.employeeID = e.employeeID
+            WHERE b.isActivate = 'ACTIVATE' AND c.isActivate = 'ACTIVATE' AND e.isActivate = 'ACTIVATE'
            \s""";
 
             try (Connection connection = DBHelper.getConnection();
@@ -53,6 +54,7 @@ public class RoomUsageServiceDAO {
             JOIN ServiceCategory c ON b.serviceCategoryID = c.serviceCategoryID\s
             LEFT JOIN Employee e ON a.employeeID = e.employeeID
             WHERE a.roomUsageServiceId = ?
+            AND b.isActivate = 'ACTIVATE' AND c.isActivate = 'ACTIVATE' AND e.isActivate = 'ACTIVATE'
            \s""";
 
             try (Connection con = DBHelper.getConnection();
@@ -83,6 +85,7 @@ public class RoomUsageServiceDAO {
             JOIN ServiceCategory c ON b.serviceCategoryID = c.serviceCategoryID
             LEFT JOIN Employee e ON a.employeeID = e.employeeID
             WHERE a.reservationFormID = ?
+            AND b.isActivate = 'ACTIVATE' AND c.isActivate = 'ACTIVATE' AND e.isActivate = 'ACTIVATE'
             """;
 
             try (Connection con = DBHelper.getConnection();

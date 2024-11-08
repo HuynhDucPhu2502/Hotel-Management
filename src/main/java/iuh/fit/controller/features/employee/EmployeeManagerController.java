@@ -6,6 +6,7 @@ import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
 import iuh.fit.models.enums.Gender;
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 
@@ -210,7 +211,8 @@ public class EmployeeManagerController {
                     cardIDTextFiled.getText(),
                     ((RadioButton) gender.getSelectedToggle()).getText().equals(Gender.MALE.toString()) ? Gender.MALE : Gender.FEMALE,
                     DOBPicker.getValue(),
-                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem())
+                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem()),
+                    ObjectStatus.ACTIVATE
             );
 
             EmployeeDAO.createData(employee);
@@ -256,7 +258,8 @@ public class EmployeeManagerController {
                     cardIDTextFiled.getText(),
                     ((RadioButton) gender.getSelectedToggle()).getText().equals(Gender.MALE.toString()) ? Gender.MALE : Gender.FEMALE,
                     DOBPicker.getValue(),
-                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem())
+                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem()),
+                    ObjectStatus.ACTIVATE
             );
 
             com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN",

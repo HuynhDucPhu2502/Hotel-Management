@@ -4,6 +4,7 @@ import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.models.Room;
 import iuh.fit.models.RoomCategory;
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.enums.RoomStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -176,7 +177,8 @@ public class RoomCategoryManagerController {
             RoomCategory roomCategory = new RoomCategory(
                     roomCategoryIDTextField.getText(),
                     roomCategoryRankCBox.getSelectionModel().getSelectedItem() + " " + roomCategoryNameTextField.getText(),
-                    Integer.parseInt(numberOfBedTextField.getText())
+                    Integer.parseInt(numberOfBedTextField.getText()),
+                    ObjectStatus.ACTIVATE
             );
 
             RoomCategoryDAO.createData(roomCategory);
@@ -223,7 +225,8 @@ public class RoomCategoryManagerController {
             RoomCategory roomCategory = new RoomCategory(
                     roomCategoryIDTextField.getText(),
                     roomCategoryRankCBox.getSelectionModel().getSelectedItem() + " " + roomCategoryNameTextField.getText(),
-                    Integer.parseInt(numberOfBedTextField.getText())
+                    Integer.parseInt(numberOfBedTextField.getText()),
+                    ObjectStatus.ACTIVATE
             );
 
             DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(

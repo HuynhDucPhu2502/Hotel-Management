@@ -9,6 +9,7 @@ import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Room;
 import iuh.fit.models.enums.Gender;
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.ErrorMessages;
 import javafx.fxml.FXML;
@@ -158,7 +159,7 @@ public class AddCustomerController {
         String idCardNumber = customerIDCardNumberTextField.getText();
         LocalDate dob = customerDOBCalendarPicker.getValue();
 
-        return new Customer(id, name, phone, email, address, gender, idCardNumber, dob);
+        return new Customer(id, name, phone, email, address, gender, idCardNumber, dob, ObjectStatus.ACTIVATE);
     }
 
     public void handleResetAction() {
