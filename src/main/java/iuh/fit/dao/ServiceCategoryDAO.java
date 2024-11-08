@@ -231,5 +231,27 @@ public class ServiceCategoryDAO {
         return res;
     }
 
+    public static List<String> getServiceCategoryNames() {
+        ArrayList<String> data = new ArrayList<>();
+        try (
+                Connection connection = DBHelper.getConnection();
+                Statement statement = connection.createStatement()
+        ){
+            String sql = "SELECT serviceCategoryName from ServiceCategory";
+            ResultSet rs = statement.executeQuery(sql);
+
+
+            while (rs.next()) {
+                data.add(rs.getString(1));
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
+    }
+
 
 }

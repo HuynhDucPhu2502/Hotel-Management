@@ -115,7 +115,7 @@ public class InvoiceDAO {
                 int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
 
                 // Định dạng lại phần số, đảm bảo luôn có 3 chữ số
-                String newNextID = prefix + String.format("%03d", nextIDNum);
+                String newNextID = prefix + String.format("%06d", nextIDNum);
 
                 // Thiết lập các giá trị cho câu lệnh INSERT
                 insertStatement.setString(1, currentNextID);
