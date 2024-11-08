@@ -258,7 +258,7 @@ public class RoomDAO {
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
-            preparedStatement.setString(1, newStatus.name()); // Sử dụng name() để lấy tên Enum (AVAILABLE, ON_USE, ...)
+            preparedStatement.setString(1, newStatus.name());
             preparedStatement.setString(2, roomID);
 
             int rowsAffected = preparedStatement.executeUpdate();

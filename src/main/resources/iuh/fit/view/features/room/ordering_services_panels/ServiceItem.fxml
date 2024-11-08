@@ -42,7 +42,7 @@
             <VBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
                <children>
                   <Spinner fx:id="amountField" />
-                  <Button fx:id="addServiceBtn" mnemonicParsing="false" text="Thêm giỏ hàng" />
+                  <Button fx:id="addServiceBtn" mnemonicParsing="false" text="Thêm giỏ hàng" textFill="WHITE" />
                </children>
                <BorderPane.margin>
                   <Insets />
