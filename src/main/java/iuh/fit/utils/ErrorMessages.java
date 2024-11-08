@@ -4,7 +4,7 @@ public class ErrorMessages {
     // Global
     public static final String INVALID_PHONENUMBER = "Số điện thoại phải có 10 chữ số và chữ số đầu tiên là số 0";
     public static final String INVALID_ADDRESS = "Địa chỉ không được rỗng";
-    public static final String INVALID_EMAIL = "Email phải từ 4 đến 30 ký tự và không cứ ký tự đặc biệt";
+    public static final String INVALID_EMAIL = "Email phải từ 4 đến 30 ký tự và không cứ ký tự đặc biệt. Kết thúc phải là @gmail.com hoặc @yahoo.com";
     public static final String INVALID_ID_CARD_NUMBER = "CCCD có cấu trúc XYZ. X là chuỗi 3 chữ số, Y là 1 chữ số thuộc khoảng từ 1 đến 3, và Z là chuỗi 8 chữ số.";
 
     public static final String NULL_ROOMCATEGORY = "Loại phòng không được trống";

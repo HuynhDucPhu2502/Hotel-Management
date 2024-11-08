@@ -42,7 +42,7 @@ CREATE TABLE Employee (
     email NVARCHAR(50) NOT NULL,
     address NVARCHAR(100),
     gender NVARCHAR(6) NOT NULL CHECK (gender IN ('MALE', 'FEMALE')),
-    idCardNumber NVARCHAR(12) NOT NULL,
+    idCardNumber NVARCHAR(12) NOT NULL UNIQUE,
     dob DATE NOT NULL,
     position NVARCHAR(15) NOT NULL CHECK (position IN ('RECEPTIONIST', 'MANAGER'))
 );
