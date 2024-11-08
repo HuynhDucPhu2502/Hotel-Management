@@ -17,7 +17,8 @@ public class RoomDAO {
             SELECT a.roomID, a.roomStatus, a.dateOfCreation, a.roomCategoryID,
                    b.roomCategoryName, b.numberOfBed
             FROM Room a
-            INNER JOIN RoomCategory b ON a.roomCategoryID = b.roomCategoryID
+            INNER JOIN RoomCategory b ON a.roomCategoryID = b.roomCategoryID 
+            WHERE a.isActivate = 'ACTIVATE'
         """;
 
         try (Connection connection = DBHelper.getConnection();
@@ -42,7 +43,7 @@ public class RoomDAO {
                    b.roomCategoryName, b.numberOfBed
             FROM Room a
             INNER JOIN RoomCategory b ON a.roomCategoryID = b.roomCategoryID
-            WHERE roomID = ?
+            WHERE roomID = ?  AND a.isActivate = 'ACTIVATE'
         """;
 
         try (Connection connection = DBHelper.getConnection();
@@ -66,8 +67,8 @@ public class RoomDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                        "INSERT INTO Room(roomID, roomStatus, dateOfCreation, roomCategoryID) " +
-                                "VALUES(?, ?, ?, ?)"
+                        "INSERT INTO Room(roomID, roomStatus, dateOfCreation, roomCategoryID, isActivate) " +
+                                "VALUES(?, ?, ?, ?, 'ACTIVATE')"
                 )
         ){
             preparedStatement.setString(1, room.getRoomID());
@@ -86,13 +87,17 @@ public class RoomDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                        "DELETE FROM Room "
-                                + "WHERE roomID = ?"
+                        """
+                                UPDATE Room
+                                SET isActivate = 'DEACTIVATE'
+                                WHERE roomID = ?
+                                """
                 )
         ){
             preparedStatement.setString(1, roomID);
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
+            exception.printStackTrace();
             System.exit(1);
         }
     }
@@ -136,7 +141,8 @@ public class RoomDAO {
                 "AND (a.roomStatus = ? OR ? IS NULL) " +
                 "AND (a.dateOfCreation >= ? OR ? IS NULL) " +
                 "AND (a.dateOfCreation <= ? OR ? IS NULL) " +
-                "AND ((? = 'ALL') OR (a.roomCategoryID = ? OR (? = 'NULL' AND a.roomCategoryID IS NULL)))";
+                "AND ((? = 'ALL') OR (a.roomCategoryID = ? OR (? = 'NULL' AND a.roomCategoryID IS NULL))) " +
+                "AND a.isActivate = 'ACTIVATE'";
 
         try (
                 Connection connection = DBHelper.getConnection();
@@ -183,9 +189,9 @@ public class RoomDAO {
 
     public static List<Room> findDataByAnyContainsId(String input) {
         List<Room> data = new ArrayList<>();
-        String sql = "SELECT roomID, roomStatus, dateOfCreation, roomCategoryID " +
+        String sql = "SELECT roomID, roomStatus, dateOfCreation, roomCategoryID, isActivate " +
                 "FROM Room " +
-                "WHERE LOWER(roomID) LIKE ?";
+                "WHERE LOWER(roomID) LIKE ? AND isActivate = 'ACTIVATE'";
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
@@ -198,7 +204,8 @@ public class RoomDAO {
                         rs.getString("roomID"),
                         ConvertHelper.roomStatusConverter(rs.getString("roomStatus")),
                         ConvertHelper.localDateTimeConverter(rs.getTimestamp("dateOfCreation")),
-                        RoomCategoryDAO.getDataByID(rs.getString("roomCategoryID"))
+                        RoomCategoryDAO.getDataByID(rs.getString("roomCategoryID")),
+                        ConvertHelper.objectStatusConverter(rs.getString("isActivate"))
                 );
                 data.add(room);
             }
@@ -245,7 +252,7 @@ public class RoomDAO {
     }
 
     public static void updateRoomStatus(String roomID, RoomStatus newStatus) {
-        String sql = "UPDATE Room SET roomStatus = ? WHERE roomID = ?";
+        String sql = "UPDATE Room SET roomStatus = ? WHERE roomID = ? AND isActivate = 'ACTIVATE'";
 
         try (
                 Connection connection = DBHelper.getConnection();
@@ -277,7 +284,7 @@ public class RoomDAO {
           AND rf.checkInDate <= ?\s
           AND rf.checkOutDate >= GETDATE()
         WHERE rf.roomID IS NULL\s
-          AND r.roomID != ? AND rc.roomCategoryID = ?;
+          AND r.roomID != ? AND rc.roomCategoryID = ? AND r.isActivate = 'ACTIVATE';
    \s""";
 
         List<Room> availableRooms = new ArrayList<>();
@@ -322,7 +329,7 @@ public class RoomDAO {
             LEFT JOIN ReservationForm rf
               ON r.roomID = rf.roomID
               AND (? < rf.checkOutDate AND ? > rf.checkInDate)
-            WHERE rf.roomID IS NULL;
+            WHERE rf.roomID IS NULL AND r.isActivate = 'ACTIVATE';
         """;
 
         try (Connection connection = DBHelper.getConnection();

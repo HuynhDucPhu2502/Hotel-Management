@@ -93,6 +93,7 @@ public class AccountManagerController {
 
     public void initialize() {
         dialogPane.toFront();
+        accountTableView.setFixedCellSize(40);
 
         loadData();
         setupTable();
@@ -124,7 +125,6 @@ public class AccountManagerController {
                         .toList()
         );
         statusCBox.getSelectionModel().selectFirst();
-
         accountIDTextField.setText(AccountDAO.getNextAccountID());
 
         List<String> Ids = EmployeeDAO.getTopThreeID();
@@ -185,7 +185,7 @@ public class AccountManagerController {
                 showInfoButton.setOnAction(e -> {
                     Account account = getTableView().getItems().get(getIndex());
                     try {
-                        handleShowAccountInformation(account.getEmployee(), account);
+                        handleShowAccountInformation(account.getEmployee());
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -266,14 +266,14 @@ public class AccountManagerController {
         updateBtn.setVisible(true);
     }
 
-    private void handleShowAccountInformation(Employee employee ,Account account) throws IOException {
+    private void handleShowAccountInformation(Employee employee) throws IOException {
         String source = "/iuh/fit/view/features/employee/EmployeeInformationView.fxml";
 
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
         AnchorPane layout = loader.load();
 
         EmployeeInformationViewController employeeInformationViewController = loader.getController();
-        employeeInformationViewController.setEmployee(employee, account);
+        employeeInformationViewController.setEmployee(employee);
 
         Scene scene = new Scene(layout);
 

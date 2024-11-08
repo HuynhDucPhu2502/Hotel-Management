@@ -3,6 +3,7 @@ package iuh.fit.controller.features.service;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.ServiceCategoryDAO;
 import iuh.fit.models.ServiceCategory;
+import iuh.fit.models.enums.ObjectStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -53,6 +54,8 @@ public class ServiceCategoryManagerController {
 
     public void initialize() {
         dialogPane.toFront();
+        serviceCategoryTableView.setFixedCellSize(40);
+
         loadData();
         setupTable();
 
@@ -165,7 +168,8 @@ public class ServiceCategoryManagerController {
             ServiceCategory serviceCategory = new ServiceCategory(
                     serviceCategoryIDTextField.getText(),
                     serviceCategoryNameTextField.getText(),
-                    iconName
+                    iconName,
+                    ObjectStatus.ACTIVATE
             );
 
             Task<Void> addTask = new Task<>() {
@@ -264,7 +268,7 @@ public class ServiceCategoryManagerController {
             Image selectedIcon = iconSelector.getSelectionModel().getSelectedItem();
             String iconName = iconServiceMap.get(selectedIcon);
 
-            ServiceCategory serviceCategory = new ServiceCategory(serviceCategoryID, serviceCategoryName, iconName);
+            ServiceCategory serviceCategory = new ServiceCategory(serviceCategoryID, serviceCategoryName, iconName, ObjectStatus.ACTIVATE);
 
             DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn cập nhật loại dịch vụ này?");
             dialog.onClose(buttonType -> {

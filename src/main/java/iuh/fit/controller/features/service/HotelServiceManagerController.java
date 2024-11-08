@@ -5,6 +5,7 @@ import iuh.fit.dao.HotelServiceDAO;
 import iuh.fit.dao.ServiceCategoryDAO;
 import iuh.fit.models.HotelService;
 import iuh.fit.models.ServiceCategory;
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.ErrorMessages;
 import javafx.application.Platform;
@@ -85,6 +86,7 @@ public class HotelServiceManagerController {
     // Gọi mấy phương thức để gắn sự kiện và dữ liệu cho lúc đầu khởi tạo giao diện
     public void initialize() {
         dialogPane.toFront();
+        hotelServiceTableView.setFixedCellSize(40);
 
         loadData();
         setupTable();
@@ -275,7 +277,8 @@ public class HotelServiceManagerController {
                     serviceNameTextField.getText(),
                     ConvertHelper.doubleConverter(servicePriceTextField.getText(), ErrorMessages.HOTEL_SERVICE_INVALID_FORMAT),
                     descriptionTextField.getText(),
-                    serviceCategory
+                    serviceCategory,
+                    ObjectStatus.ACTIVATE
             );
 
             Task<Void> addTask = new Task<>() {
@@ -366,7 +369,8 @@ public class HotelServiceManagerController {
                     serviceNameTextField.getText(),
                     ConvertHelper.doubleConverter(servicePriceTextField.getText(), ErrorMessages.HOTEL_SERVICE_INVALID_FORMAT),
                     descriptionTextField.getText(),
-                    serviceCategory
+                    serviceCategory,
+                    ObjectStatus.ACTIVATE
             );
 
             DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN", "Bạn có chắc chắn muốn cập nhật dịch vụ này?");

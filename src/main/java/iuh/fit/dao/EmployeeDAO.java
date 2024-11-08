@@ -4,6 +4,7 @@ import iuh.fit.models.Employee;
 import iuh.fit.models.HotelService;
 import iuh.fit.models.ServiceCategory;
 import iuh.fit.models.enums.Gender;
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
@@ -13,17 +14,19 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EmployeeDAO {
     public static List<Employee> getEmployees() {
         ArrayList<Employee> data = new ArrayList<>();
+        ArrayList<Employee> filteredData = new ArrayList<>();
         try (
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement()
         ){
             String sql = "SELECT employeeID, fullName, phoneNumber, " +
                     "email, address, gender, " +
-                    "idCardNumber, dob, position " +
+                    "idCardNumber, dob, position, isActivate " +
                     "FROM Employee";
             ResultSet rs = statement.executeQuery(sql);
 
@@ -40,8 +43,10 @@ public class EmployeeDAO {
                 employee.setIdCardNumber(rs.getString(7));
                 employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
                 employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
+                employee.setObjectStatus(ConvertHelper.objectStatusConverter(rs.getString(10)));
 
                 data.add(employee);
+                filteredData = new ArrayList<>(data.stream().filter(x->x.getObjectStatus().equals(ObjectStatus.ACTIVATE)).toList());
             }
 
         } catch (Exception exception) {
@@ -49,12 +54,12 @@ public class EmployeeDAO {
             System.exit(1);
         }
 
-        return data;
+        return filteredData;
     }
 
     public static Employee getDataByID(String employeeID) {
 
-        String SQLQueryStatement = "SELECT employeeID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, position "
+        String SQLQueryStatement = "SELECT employeeID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, position, isActivate "
                 + "FROM Employee " +
                 "WHERE employeeID = ?";
 
@@ -78,7 +83,11 @@ public class EmployeeDAO {
                     employee.setIdCardNumber(rs.getString(7));
                     employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
                     employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
+                    employee.setObjectStatus(ConvertHelper.objectStatusConverter(rs.getString(10)));
 
+                    if(employee.getObjectStatus().equals(ObjectStatus.DEACTIVATE)){
+                        return null;
+                    }
 
                     return employee;
                 }
@@ -95,8 +104,8 @@ public class EmployeeDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement insertStatement = connection.prepareStatement(
-                        "INSERT INTO Employee(employeeID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, position) " +
-                                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                        "INSERT INTO Employee(employeeID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, position, isActivate) " +
+                                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                 );
                 PreparedStatement selectSequenceStatement = connection.prepareStatement(
                         "SELECT nextID FROM GlobalSequence WHERE tableName = ?"
@@ -136,6 +145,7 @@ public class EmployeeDAO {
             insertStatement.setString(7, employee.getIdCardNumber());
             insertStatement.setDate(8, ConvertHelper.dateToSQLConverter(employee.getDob()));
             insertStatement.setString(9, employee.getPosition().name());
+            insertStatement.setString(10, ConvertHelper.objectStatusConverterToSQL(employee.getObjectStatus()));
 
             insertStatement.executeUpdate();
             if (rs.next()) {
@@ -152,15 +162,6 @@ public class EmployeeDAO {
                 updateSequenceStatement.setString(1, newNextID);
                 updateSequenceStatement.setString(2, "Employee");
                 updateSequenceStatement.executeUpdate();
-            }
-        } catch (SQLException sqlException) {
-            String sqlMessage = sqlException.getMessage();
-
-            if (sqlMessage.contains("Violation of UNIQUE KEY constraint")) {
-                throw new IllegalArgumentException("ID Card Number đã tồn tại trong hệ thống.");
-            } else {
-                sqlException.printStackTrace();
-                System.exit(1);
             }
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -241,7 +242,7 @@ public class EmployeeDAO {
                     "email, address, gender, " +
                     "idCardNumber, dob, position " +
                     "FROM Employee " +
-                    "WHERE LOWER(employeeID) LIKE ?";
+                    "WHERE LOWER(employeeID) LIKE ? AND isActivate = 'ACTIVATE'";
 
             try (
                     Connection connection = DBHelper.getConnection();
@@ -278,7 +279,7 @@ public class EmployeeDAO {
                 "e.gender, e.idCardNumber, e.dob, e.position " +
                 "FROM Employee e " +
                 "JOIN Account a ON e.employeeID = a.employeeID " +
-                "WHERE a.accountID = ?";
+                "WHERE a.accountID = ? AND e.isActivate = 'ACTIVATE'";
 
         try (
                 Connection connection = DBHelper.getConnection();
@@ -329,7 +330,7 @@ public class EmployeeDAO {
                 "(idCardNumber like ? or ? is null) and " +
                 "(gender = ? OR ? IS NULL) and " +
                 "(dob = ? OR ? IS NULL) and " +
-                "(position = ? OR ? IS NULL)";
+                "(position = ? OR ? IS NULL) and isActivate = 'ACTIVATE'";
 
         try (
                 Connection connection = DBHelper.getConnection();

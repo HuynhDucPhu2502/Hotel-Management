@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="800.0" minWidth="930.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.customer.CustomerSearchingController">
+<AnchorPane minHeight="800.0" minWidth="930.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.customer.CustomerSearchingController">
     <children>
         <DialogPane fx:id="dialogPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
         <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="800.0" minWidth="930.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -36,7 +36,7 @@
                                     <children>
                                         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                             <children>
-                                                <GridPane hgap="10.0" minHeight="160.0" vgap="10.0">
+                                                <GridPane hgap="10.0" minHeight="190.0" vgap="10.0">
                                                     <columnConstraints>
                                                         <ColumnConstraints hgrow="ALWAYS" minWidth="100.0" percentWidth="20.0" />
                                                         <ColumnConstraints minWidth="200.0" percentWidth="30.0" />

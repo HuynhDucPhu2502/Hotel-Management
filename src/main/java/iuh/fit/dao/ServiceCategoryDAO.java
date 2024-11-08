@@ -19,7 +19,8 @@ public class ServiceCategoryDAO {
                 Statement statement = connection.createStatement()
         ){
             String sql = "SELECT serviceCategoryID, serviceCategoryName, icon " +
-                    "FROM ServiceCategory";
+                    "FROM ServiceCategory " +
+                    "WHERE isActivate = 'ACTIVATE'";
             ResultSet rs = statement.executeQuery(sql);
 
 
@@ -43,7 +44,7 @@ public class ServiceCategoryDAO {
     public static ServiceCategory getDataByID(String serviceCategoryID) {
 
         String SQLQueryStatement = "SELECT serviceCategoryID, serviceCategoryName, icon "
-                + "FROM ServiceCategory where serviceCategoryID = ?";
+                + "FROM ServiceCategory where serviceCategoryID = ? AND isActivate = 'ACTIVATE'";
 
         try (
                 Connection con = DBHelper.getConnection();
@@ -74,8 +75,8 @@ public class ServiceCategoryDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement insertStatement = connection.prepareStatement(
-                        "INSERT INTO ServiceCategory(serviceCategoryID, serviceCategoryName, icon) " +
-                                "VALUES(?, ?, ?)"
+                        "INSERT INTO ServiceCategory(serviceCategoryID, serviceCategoryName, icon, isActivate) " +
+                                "VALUES(?, ?, ?, 'ACTIVATE')"
                 );
                 PreparedStatement selectSequenceStatement = connection.prepareStatement(
                         "SELECT nextID FROM GlobalSequence WHERE tableName = ?"
@@ -120,11 +121,18 @@ public class ServiceCategoryDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                            "DELETE FROM ServiceCategory " +
-                                "WHERE serviceCategoryID = ?"
+                            "GO " +
+                                    "UPDATE ServiceCategory " +
+                                    "SET isActivate = 'DEACTIVATE' " +
+                                "WHERE serviceCategoryID = ? " +
+                                    "GO " +
+                                    "UPDATE HotelService " +
+                                    "SET serviceCategoryID = NULL " +
+                                    "WHERE serviceCategoryID = ?"
                 )
         ){
             preparedStatement.setString(1, serviceCategoryID);
+            preparedStatement.setString(2, serviceCategoryID);
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
             System.exit(1);
@@ -159,7 +167,7 @@ public class ServiceCategoryDAO {
                 PreparedStatement preparedStatement = connection.prepareStatement(
                         "SELECT serviceCategoryID, serviceCategoryName, icon " +
                                 "FROM ServiceCategory " +
-                                "WHERE LOWER(serviceCategoryID) LIKE ?"
+                                "WHERE LOWER(serviceCategoryID) LIKE ? AND isActivate = 'ACTIVATE'"
                 )
         ){
             preparedStatement.setString(1, "%" + input + "%");
@@ -190,6 +198,7 @@ public class ServiceCategoryDAO {
         ){
             String sql = "SELECT TOP 3 serviceCategoryID " +
                     "FROM ServiceCategory " +
+                    "WHERE isActivate = 'ACTIVATE' " +
                     "ORDER BY serviceCategoryID DESC";
             ResultSet rs = statement.executeQuery(sql);
 

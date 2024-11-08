@@ -18,7 +18,8 @@ public class RoomDisplayOnTableDAO {
                 "FROM ReservationForm rs \n" +
                 "JOIN Invoice i ON rs.reservationFormID = i.reservationFormID\n" +
                 "JOIN Room r ON rs.roomID = r.roomID\n" +
-                "JOIN RoomCategory rc ON r.roomCategoryID = rc.roomCategoryID ";
+                "JOIN RoomCategory rc ON r.roomCategoryID = rc.roomCategoryID " +
+                "WHERE r.isActivate = 'ACTIVATE' AND rc.isActivate = 'ACTIVATE'";
 
         try (
                 Connection connection = DBHelper.getConnection();

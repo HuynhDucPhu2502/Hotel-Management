@@ -5,6 +5,7 @@ import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.models.Room;
 import iuh.fit.models.RoomCategory;
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.enums.RoomStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -72,6 +73,7 @@ public class RoomManagerController {
     // Gọi mấy phương thức để gắn sự kiện và dữ liệu cho lúc đầu khởi tạo giao diện
     public void initialize() {
         dialogPane.toFront();
+        roomTableView.setFixedCellSize(40);
 
         loadData();
         setupTable();
@@ -193,7 +195,8 @@ public class RoomManagerController {
                         newRoomID,
                         roomStateComboBox.getSelectionModel().getSelectedItem(),
                         LocalDateTime.now(),
-                        roomCategoryComboBox.getSelectionModel().getSelectedItem()
+                        roomCategoryComboBox.getSelectionModel().getSelectedItem(),
+                        ObjectStatus.ACTIVATE
                 );
 
                 RoomDAO.createData(room);
@@ -269,7 +272,8 @@ public class RoomManagerController {
                     newRoomIDWithNewCategory,
                     roomStatus,
                     LocalDateTime.now(),
-                    roomCategoryComboBox.getSelectionModel().getSelectedItem());
+                    roomCategoryComboBox.getSelectionModel().getSelectedItem(),
+                    ObjectStatus.ACTIVATE);
 
             DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
                     "XÁC NHẬN",
@@ -292,7 +296,7 @@ public class RoomManagerController {
 
     private void handleDeleteAction(Room room){
         try{
-
+            System.out.println(room.getRoomID());
             DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
                     "XÁC NHẬN",
                     "Bạn có chắc chắn muốn xóa phòng này?"

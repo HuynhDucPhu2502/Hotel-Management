@@ -57,6 +57,7 @@ public class HotelServiceSearchingController {
     public void initialize() {
         loadData();
         setupTable();
+        hotelServiceTableView.setFixedCellSize(40);
 
         searchBtn.setOnAction(e -> handleSearchAction());
         resetBtn.setOnAction(e -> handleResetAction());

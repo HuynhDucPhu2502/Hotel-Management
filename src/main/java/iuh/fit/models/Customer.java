@@ -1,6 +1,7 @@
 package iuh.fit.models;
 
 import iuh.fit.models.enums.Gender;         // Import enum Gender (Nam, Nữ, ...)
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.utils.ErrorMessages;         // Import các thông điệp lỗi dùng chung
 import iuh.fit.utils.GlobalConstants;       // Import các hằng số toàn cục
 import iuh.fit.utils.RegexChecker;          // Import công cụ kiểm tra định dạng thông qua regex
@@ -19,6 +20,8 @@ public class Customer {
     private String idCardNumber;            // Số CMND/CCCD
     private LocalDate dob;                  // Ngày sinh
 
+    private ObjectStatus objectStatus;
+
     // Phương thức equals để so sánh hai đối tượng Customer
     @Override
     public boolean equals(Object o) {
@@ -35,7 +38,7 @@ public class Customer {
     }
 
     // Constructor với tất cả các thuộc tính
-    public Customer(String customerID, String fulName, String phoneNumber, String email, String address, Gender gender, String idCardNumber, LocalDate dob) {
+    public Customer(String customerID, String fulName, String phoneNumber, String email, String address, Gender gender, String idCardNumber, LocalDate dob, ObjectStatus objectStatus) {
         setCustomerID(customerID);
         setFullName(fulName);
         setPhoneNumber(phoneNumber);
@@ -44,6 +47,7 @@ public class Customer {
         setGender(gender);
         setIdCardNumber(idCardNumber);
         setDob(dob);
+        setObjectStatus(objectStatus);
     }
 
     // Constructor không tham số
@@ -137,6 +141,14 @@ public class Customer {
         if (!RegexChecker.isValidDOB(dob))
             throw new IllegalArgumentException(ErrorMessages.EMP_INVALID_DOB);
         this.dob = dob;
+    }
+
+    public ObjectStatus getObjectStatus() {
+        return objectStatus;
+    }
+
+    public void setObjectStatus(ObjectStatus objectStatus) {
+        this.objectStatus = objectStatus;
     }
 
     // Phương thức toString để hiển thị thông tin của đối tượng Customer

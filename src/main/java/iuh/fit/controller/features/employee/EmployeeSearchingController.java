@@ -1,12 +1,7 @@
 package iuh.fit.controller.features.employee;
 
-import com.dlsc.gemsfx.DialogPane;
-import iuh.fit.dao.AccountDAO;
 import iuh.fit.dao.EmployeeDAO;
-import iuh.fit.dao.HotelServiceDAO;
-import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
-import iuh.fit.models.HotelService;
 import iuh.fit.models.enums.Gender;
 import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
@@ -51,8 +46,6 @@ public class EmployeeSearchingController {
     @FXML
     private RadioButton male;
     @FXML
-    private RadioButton female;
-    @FXML
     private ToggleGroup gender;
 
     // Table
@@ -77,15 +70,12 @@ public class EmployeeSearchingController {
     @FXML
     private Button searchBtn;
 
-    // Dialog
-    @FXML
-    private DialogPane dialogPane;
-
     private ObservableList<Employee> items;
 
     public void initialize() {
         loadData();
         setupTable();
+        employeeTableView.setFixedCellSize(40);
         searchBtn.setOnAction(e -> handleSearchAction());
         resetBtn.setOnAction(e -> handleResetAction());
     }
@@ -150,9 +140,8 @@ public class EmployeeSearchingController {
 
                 showInfoButton.setOnAction(e -> {
                     Employee employee = getTableView().getItems().get(getIndex());
-                    Account account = AccountDAO.getAccountByEmployeeID(employee.getEmployeeID());
                     try {
-                        handleShowEmployeeInformation(employee, account);
+                        handleShowEmployeeInformation(employee);
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -177,14 +166,14 @@ public class EmployeeSearchingController {
         actionColumn.setCellFactory(cellFactory);
     }
 
-    private void handleShowEmployeeInformation(Employee employee, Account account) throws IOException {
+    private void handleShowEmployeeInformation(Employee employee) throws IOException {
         String source = "/iuh/fit/view/features/employee/EmployeeInformationView.fxml";
 
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
         AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
 
         EmployeeInformationViewController employeeInformationViewController = loader.getController();
-        employeeInformationViewController.setEmployee(employee, account);
+        employeeInformationViewController.setEmployee(employee);
 
         Scene scene = new Scene(layout);
 

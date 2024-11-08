@@ -1,5 +1,6 @@
 package iuh.fit.models;
 
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.GlobalConstants;
 import iuh.fit.utils.RegexChecker;
@@ -15,16 +16,19 @@ public class RoomCategory {
 
     // Số lượng giường trong loại phòng, phải có ít nhất 1 giường
     private int numberOfBed;
+
+    private ObjectStatus objectStatus;
     /**
      * Constructor đầy đủ cho RoomCategory
      * @param roomCategoryID Mã loại phòng
      * @param roomCategoryName Tên loại phòng
      * @param numberOfBed Số lượng giường trong loại phòng
      */
-    public RoomCategory(String roomCategoryID, String roomCategoryName, int numberOfBed) {
+    public RoomCategory(String roomCategoryID, String roomCategoryName, int numberOfBed, ObjectStatus objectStatus) {
         this.setRoomCategoryID(roomCategoryID);
         this.setRoomCategoryName(roomCategoryName);
         this.setNumberOfBed(numberOfBed);
+        this.setObjectStatus(objectStatus);
     }
 
     /**
@@ -102,6 +106,13 @@ public class RoomCategory {
         this.numberOfBed = numberOfBed;
     }
 
+    public ObjectStatus getObjectStatus() {
+        return objectStatus;
+    }
+
+    public void setObjectStatus(ObjectStatus objectStatus) {
+        this.objectStatus = objectStatus;
+    }
 
     /**
      * So sánh hai đối tượng RoomCategory dựa trên mã loại phòng
