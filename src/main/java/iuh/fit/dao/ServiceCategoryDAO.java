@@ -118,24 +118,24 @@ public class ServiceCategoryDAO {
     }
 
     public static void deleteData(String serviceCategoryID) {
+        String updateServiceCategorySQL = "UPDATE ServiceCategory SET isActivate = 'DEACTIVATE' WHERE serviceCategoryID = ?";
+        String updateHotelServiceSQL = "UPDATE HotelService SET serviceCategoryID = NULL WHERE serviceCategoryID = ?";
+
         try (
                 Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(
-                            "GO " +
-                                    "UPDATE ServiceCategory " +
-                                    "SET isActivate = 'DEACTIVATE' " +
-                                "WHERE serviceCategoryID = ? " +
-                                    "GO " +
-                                    "UPDATE HotelService " +
-                                    "SET serviceCategoryID = NULL " +
-                                    "WHERE serviceCategoryID = ?"
-                )
-        ){
-            preparedStatement.setString(1, serviceCategoryID);
-            preparedStatement.setString(2, serviceCategoryID);
-            preparedStatement.executeUpdate();
+                PreparedStatement updateServiceCategoryStmt = connection.prepareStatement(updateServiceCategorySQL);
+                PreparedStatement updateHotelServiceStmt = connection.prepareStatement(updateHotelServiceSQL)
+        ) {
+            // Update ServiceCategory
+            updateServiceCategoryStmt.setString(1, serviceCategoryID);
+            updateServiceCategoryStmt.executeUpdate();
+
+            // Update HotelService
+            updateHotelServiceStmt.setString(1, serviceCategoryID);
+            updateHotelServiceStmt.executeUpdate();
+
         } catch (Exception exception) {
-            System.exit(1);
+            exception.printStackTrace();
         }
     }
 

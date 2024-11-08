@@ -167,6 +167,7 @@ public class HotelServiceDAO {
             preparedStatement.setString(1, hotelServiceId);
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
+            exception.printStackTrace();
             System.exit(1);
         }
     }
