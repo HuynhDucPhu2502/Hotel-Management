@@ -106,7 +106,22 @@ public class EmployeeManagerController {
 
     private void loadData() {
         positionCBox.getItems().setAll(
-                Stream.of(Position.values()).map(Enum::name).toList()
+                Stream.of(Position.values())
+                        .map(Enum::name)
+                        .map(position -> {
+                            switch (position) {
+                                case "MANAGER" -> {
+                                    return "QUẢN LÝ";
+                                }
+                                case "RECEPTIONIST" -> {
+                                    return "LỄ TÂN";
+                                }
+                                default -> {
+                                    return position;
+                                }
+                            }
+                        })
+                        .toList()
         );
         positionCBox.getSelectionModel().selectFirst();
 
@@ -125,8 +140,16 @@ public class EmployeeManagerController {
         employeeIDColumn.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
         fullNameColumn.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        positionColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getPosition().name()));
+        positionColumn.setCellValueFactory(data -> {
+            String position = data.getValue().getPosition().name();
+            return new SimpleStringProperty(
+                    switch (position) {
+                        case "MANAGER" -> "QUẢN LÝ";
+                        case "RECEPTIONIST" -> "LỄ TÂN";
+                        default -> position;
+                    }
+            );
+        });
         setupActionColumn();
     }
 
@@ -190,7 +213,6 @@ public class EmployeeManagerController {
         DOBPicker.setValue(null);
         radMale.setSelected(true);
 
-        fullNameTextField.requestFocus();
         addBtn.setManaged(true);
         addBtn.setVisible(true);
         updateBtn.setManaged(false);
@@ -208,12 +230,11 @@ public class EmployeeManagerController {
                     cardIDTextFiled.getText(),
                     ((RadioButton) gender.getSelectedToggle()).getText().equals(Gender.MALE.toString()) ? Gender.MALE : Gender.FEMALE,
                     DOBPicker.getValue(),
-                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem())
-            );
-
+                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem().equalsIgnoreCase("QUẢN LÝ") ? "MANAGER" : "RECEPTIONIST"));
             EmployeeDAO.createData(employee);
             handleResetAction();
             loadData();
+            dialogPane.showInformation("Thông báo", "Thêm nhân viên thành công");
         } catch (IllegalArgumentException e) {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
@@ -228,7 +249,7 @@ public class EmployeeManagerController {
         phoneNumberTextField.setText(employee.getPhoneNumber());
         addressTextField.setText(employee.getAddress());
         cardIDTextFiled.setText(employee.getIdCardNumber());
-        positionCBox.getSelectionModel().select(employee.getPosition().name());
+        positionCBox.getSelectionModel().select(employee.getPosition().name().equalsIgnoreCase("MANAGER")?"QUẢN LÝ":"LỄ TÂN");
 
         DOBPicker.setValue(employee.getDob());
         if(employee.getGender().equals(Gender.MALE))
@@ -254,8 +275,7 @@ public class EmployeeManagerController {
                     cardIDTextFiled.getText(),
                     ((RadioButton) gender.getSelectedToggle()).getText().equals(Gender.MALE.toString()) ? Gender.MALE : Gender.FEMALE,
                     DOBPicker.getValue(),
-                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem())
-            );
+                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem().equalsIgnoreCase("QUẢN LÝ")?"MANAGER":"RECEPTIONIST"));
 
             com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN",
                     "Bạn có chắc chắn muốn cập nhật thông tin nhân viên này?");
@@ -264,6 +284,7 @@ public class EmployeeManagerController {
                 if (buttonType == ButtonType.YES) {
                     try {
                         EmployeeDAO.updateData(employee);
+                        dialogPane.showInformation("Thông báo", "Cập nhật thông tin nhân viên thành công");
                         Platform.runLater(() -> {
                             handleResetAction();
                             loadData();
@@ -295,7 +316,7 @@ public class EmployeeManagerController {
                 Employee employee = employeeList.getFirst();
                 fullNameSearchField.setText(String.valueOf(employee.getFullName()));
                 phoneNumberSearchField.setText(employee.getPhoneNumber());
-                positionSearchField.setText(employee.getPosition().name());
+                positionSearchField.setText(employee.getPosition().name().equalsIgnoreCase("MANAGER")?"QUẢN LÝ":"LỄ TÂN");
             }
         }
 

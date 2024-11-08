@@ -9,10 +9,7 @@ import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 import iuh.fit.utils.GlobalConstants;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -155,6 +152,15 @@ public class EmployeeDAO {
                 updateSequenceStatement.setString(1, newNextID);
                 updateSequenceStatement.setString(2, "Employee");
                 updateSequenceStatement.executeUpdate();
+            }
+        } catch (SQLException sqlException) {
+            String sqlMessage = sqlException.getMessage();
+
+            if (sqlMessage.contains("Violation of UNIQUE KEY constraint")) {
+                throw new IllegalArgumentException("ID Card Number đã tồn tại trong hệ thống.");
+            } else {
+                sqlException.printStackTrace();
+                System.exit(1);
             }
         } catch (Exception exception) {
             exception.printStackTrace();

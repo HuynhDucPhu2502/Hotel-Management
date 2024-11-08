@@ -52,15 +52,22 @@ public class EmployeeInformationViewController {
         phoneNumberTextField.setText(employee.getPhoneNumber());
         addressTextAria.setText(employee.getAddress());
         cardIDTextField.setText(employee.getIdCardNumber());
-        positionTextField.setText(employee.getPosition().name());
+        positionTextField.setText(employee.getPosition().name().equalsIgnoreCase("MANAGER")?"QUẢN LÝ":"LỄ TÂN");
 
         dobDatePicker.setValue(employee.getDob());
-        genderTextField.setText(employee.getGender().name());
+        genderTextField.setText(employee.getGender().name().equalsIgnoreCase("MALE")?"NAM":"NỮ");
 
         if(account != null){
             passwordTextField.setText(account.getPassword());
             usernameTextField.setText(account.getUserName());
-            statusTextField.setText(account.getAccountStatus().name());
+            String status = switch (account.getAccountStatus().name()) {
+                case "ACTIVE" -> "ĐANG HOẠT ĐỘNG";
+                case "INACTIVE" -> "KHÔNG HOẠT ĐỘNG";
+                case "LOCKED" -> "BỊ KHÓA";
+                default -> account.getAccountStatus().name();
+            };
+
+            statusTextField.setText(status);
         }
     }
 }
