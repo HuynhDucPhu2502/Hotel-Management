@@ -2,7 +2,6 @@ package iuh.fit.controller.features.statistics;
 
 import com.dlsc.gemsfx.daterange.DateRange;
 import com.dlsc.gemsfx.daterange.DateRangePicker;
-import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.dao.InvoiceDisplayOnTableDAO;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.UsingRoomDisplayOnTableDAO;
@@ -17,21 +16,17 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.BarChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class RateUsingRoomStatisticsController implements Initializable {
     public ToggleGroup showDataViewToggleGroup;
@@ -204,7 +199,7 @@ public class RateUsingRoomStatisticsController implements Initializable {
     }
 
     private void handleResetAction() {
-        List<InvoiceDisplayOnTable> invoiceDisplayOnTableData = InvoiceDisplayOnTableDAO.getData();
+        List<InvoiceDisplayOnTable> invoiceDisplayOnTableData = InvoiceDisplayOnTableDAO.getAllData();
 
         showTableViewRadioButton.setSelected(true);
 //        switchBetweenTableViewAndChartView();

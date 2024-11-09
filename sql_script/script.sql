@@ -774,3 +774,16 @@ END;
 GO
 
 
+select i.invoiceID, c.fullName, r.roomID, e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, t.taxRate, i.netDue
+from Invoice i join ReservationForm rs on i.reservationFormID = rs.reservationFormID
+join Customer c on c.customerID = rs.customerID
+join Employee e on e.employeeID = rs.employeeID
+join Room r on r.roomID = rs.roomID
+join Tax t on t.taxID = i.taxID
+WHERE DATEPART(YEAR, i.invoiceDate) >= DATEPART(YEAR, GETDATE()) - 2
+
+select * from Invoice
+delete from Invoice
+where invoiceID = 'INV-000001'
+
+

@@ -257,3 +257,24 @@
 .button-delete-reservation-form-2:pressed {
     -fx-background-color: RGB(150, 0, 0);
 }
+
+/* refresh and export excel button*/
+.button-excel {
+    -fx-background-color: #4CAF50; /* Xanh lá đậm */
+    -fx-text-fill: white;          /* Màu chữ trắng */
+    -fx-background-radius: 5;      /* Bo góc cho nút */
+}
+
+.button-excel:hover {
+    -fx-background-color: #388E3C; /* Màu xanh lá đậm hơn khi hover */
+}
+
+.button-refresh {
+    -fx-background-color: #03A9F4; /* Xanh dương nhạt */
+    -fx-text-fill: white;          /* Màu chữ trắng */
+    -fx-background-radius: 5;      /* Bo góc cho nút */
+}
+
+.button-refresh:hover {
+    -fx-background-color: #0288D1; /* Màu xanh dương đậm hơn khi hover */
+}
