@@ -432,7 +432,7 @@
                                     </Text>
                                  </children>
                               </HBox>
-                              <HBox spacing="30.0">
+                              <HBox alignment="CENTER_LEFT" spacing="30.0">
                                  <children>
                                     <Label text="Loại dịch vụ">
                                        <font>

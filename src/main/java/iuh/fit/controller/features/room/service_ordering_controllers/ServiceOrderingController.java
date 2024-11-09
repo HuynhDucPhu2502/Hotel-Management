@@ -126,6 +126,7 @@ public class ServiceOrderingController {
         navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
         navigateToRoomChanging.setOnAction(e -> navigateToRoomChanging());
 
+        // Current Panel Button
         serviceCategoryCBox.setOnAction(e -> filterServicesByCategory());
     }
 
@@ -284,7 +285,6 @@ public class ServiceOrderingController {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource(
                             "/iuh/fit/view/features/room/ordering_services_panels/ServiceItem.fxml"));
                     Pane serviceItem = loader.load();
-                    System.out.println(service.getServiceCategory().getServiceCategoryName());
                     ServiceItemController controller = loader.getController();
                     controller.setupContext(service);
                     controller.getAddServiceBtn().setOnAction(e ->
@@ -304,6 +304,7 @@ public class ServiceOrderingController {
                 serviceGridPane.setManaged(true);
                 emptyLabelContainer.setVisible(false);
                 emptyLabelContainer.setManaged(false);
+                serviceListContainer.setAlignment(Pos.TOP_CENTER);
             } catch (Exception e) {
                 e.printStackTrace();
             }
