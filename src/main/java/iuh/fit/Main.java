@@ -14,8 +14,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-//        startWithoutLogin(primaryStage);
-        startWithLogin(primaryStage);
+        startWithoutLogin(primaryStage);
+        //startWithLogin(primaryStage);
 
     }
 
