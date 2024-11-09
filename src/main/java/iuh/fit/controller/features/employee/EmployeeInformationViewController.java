@@ -1,6 +1,5 @@
 package iuh.fit.controller.features.employee;
 
-import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;

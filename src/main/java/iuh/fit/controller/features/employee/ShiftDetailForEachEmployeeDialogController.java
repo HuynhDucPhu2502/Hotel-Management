@@ -1,13 +1,10 @@
 package iuh.fit.controller.features.employee;
 
 import com.dlsc.gemsfx.DialogPane;
-import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.ShiftAssignmentDAO;
 import iuh.fit.dao.ShiftDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Shift;
-import iuh.fit.models.ShiftAssignment;
-import iuh.fit.models.enums.ShiftDaysSchedule;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
@@ -16,23 +13,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * @author Le Tran Gia Huy
- * @created 02/11/2024 - 7:35 PM
- * @project HotelManagement
- * @package iuh.fit.controller.features.employee
- */
 public class ShiftDetailForEachEmployeeDialogController {
 
     @FXML
@@ -108,7 +96,7 @@ public class ShiftDetailForEachEmployeeDialogController {
 
     private void loadData(Shift shift, String shiftID) {
 
-        List<Employee> employees = new ArrayList<Employee>();
+        List<Employee> employees;
         if(shift != null){
             List<Shift> shiftList = ShiftDAO.getShifts();
             List<Shift> filteredShiftList = shiftList.stream()

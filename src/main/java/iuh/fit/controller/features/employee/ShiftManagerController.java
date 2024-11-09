@@ -2,14 +2,9 @@ package iuh.fit.controller.features.employee;
 
 import com.dlsc.gemsfx.DialogPane;
 import com.dlsc.gemsfx.TimePicker;
-import iuh.fit.controller.MainController;
-import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.ShiftDAO;
 import iuh.fit.models.Employee;
-import iuh.fit.models.Room;
-import iuh.fit.models.RoomCategory;
 import iuh.fit.models.Shift;
-import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.enums.ShiftDaysSchedule;
 import iuh.fit.utils.GlobalConstants;
 import javafx.collections.FXCollections;
@@ -30,17 +25,10 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/**
- * @author Le Tran Gia Huy
- * @created 28/10/2024 - 1:59 PM
- * @project HotelManagement
- * @package iuh.fit.controller.features.employee
- */
 public class ShiftManagerController {
     //Non-input field
     @FXML
@@ -231,7 +219,7 @@ public class ShiftManagerController {
             dialogPane.showInformation("Thông báo", "Không để trống số giờ làm việc");
         }else{
             try{
-                LocalTime endTime = startTimePicker.getTime().plusHours(Integer.valueOf(numbOfHourTextField.getText()));
+                LocalTime endTime = startTimePicker.getTime().plusHours(Integer.parseInt(numbOfHourTextField.getText()));
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
                 String endTimeString = endTime.format(formatter);
                 endTimeTextField.setText(endTimeString);
@@ -242,7 +230,7 @@ public class ShiftManagerController {
     }
 
     private String handleShiftIDGenerate() {
-        LocalTime endTime = startTimePicker.getTime().plusHours(Integer.valueOf(numbOfHourTextField.getText()));
+        LocalTime endTime = startTimePicker.getTime().plusHours(Integer.parseInt(numbOfHourTextField.getText()));
         return ShiftDAO.shiftIDGenerate(endTime);
     }
 
@@ -254,7 +242,7 @@ public class ShiftManagerController {
                     startTimePicker.getTime(),
                     LocalDateTime.now(),
                     scheduleComboBox.getSelectionModel().getSelectedItem(),
-                    Integer.valueOf(numbOfHourTextField.getText())
+                    Integer.parseInt(numbOfHourTextField.getText())
             );
 
             ShiftDAO.createData(shift);
