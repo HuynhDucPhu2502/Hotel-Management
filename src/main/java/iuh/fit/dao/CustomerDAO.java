@@ -1,9 +1,7 @@
 package iuh.fit.dao;
 
 import iuh.fit.models.Customer;
-import iuh.fit.models.Employee;
 import iuh.fit.models.enums.Gender;
-import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 import iuh.fit.utils.GlobalConstants;
@@ -18,7 +16,7 @@ public class CustomerDAO {
         ArrayList<Customer> data = new ArrayList<Customer>();
         try (
                 Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ){
             String sql = "SELECT customerID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, isActivate " +
                     "FROM Customer " +
@@ -57,7 +55,7 @@ public class CustomerDAO {
 
         try (
                 Connection con = DBHelper.getConnection();
-                PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement);
+                PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement)
         ) {
 
             preparedStatement.setString(1, customerID);
@@ -182,7 +180,7 @@ public class CustomerDAO {
                                 "email = ?, address = ?, gender = ?, " +
                                 "idCardNumber = ?, dob = ?" +
                                 "WHERE customerID = ? "
-                );
+                )
         ){
             preparedStatement.setString(1, customer.getFullName());
             preparedStatement.setString(2, customer.getPhoneNumber());
@@ -283,7 +281,7 @@ public class CustomerDAO {
 
         try (
                 Connection con = DBHelper.getConnection();
-                PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement);
+                PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement)
         ) {
 
             preparedStatement.setString(1, idCardNumber);
