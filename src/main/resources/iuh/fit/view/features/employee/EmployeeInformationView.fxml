@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
-<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="469.0" prefWidth="836.0" style="-fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #e0f7fa, #ffffff); " stylesheets="@../../../styles/Button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.employee.EmployeeInformationViewController">
+<AnchorPane prefHeight="469.0" prefWidth="836.0" style="-fx-background-color: white;" stylesheets="@../../../styles/Button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.employee.EmployeeInformationViewController">
     <children>
         <VBox alignment="TOP_CENTER" layoutX="50.400001525878906" layoutY="25.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
@@ -37,9 +34,6 @@
                         <RowConstraints minHeight="100.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                     <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã nhân viên" textAlignment="RIGHT">
@@ -59,21 +53,17 @@
                         </Text>
                         <AnchorPane GridPane.columnIndex="1">
                             <children>
-                                <TextField fx:id="employeeIDTextField" disable="true" editable="false" focusTraversable="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                    <cursor>
-                                        <Cursor fx:constant="CLOSED_HAND" />
-                                    </cursor>
-                                </TextField>
+                                <TextField fx:id="employeeIDTextField" editable="false" focusTraversable="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                             </children>
                         </AnchorPane>
                         <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="1">
                             <children>
-                                <TextField fx:id="phoneNumberTextField" disable="true" editable="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                <TextField fx:id="phoneNumberTextField" editable="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                             </children>
                         </AnchorPane>
                         <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="2">
                             <children>
-                                <TextArea fx:id="addressTextAria" disable="true" editable="false" layoutX="-2.0" layoutY="-1.0" prefHeight="125.0" prefWidth="187.0" style="-fx-opacity: 1.0; -fx-text-fill: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                <TextArea fx:id="addressTextAria" editable="false" layoutX="-2.0" layoutY="-1.0" prefHeight="125.0" prefWidth="187.0" style="-fx-opacity: 1.0; -fx-text-fill: black;" wrapText="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                             </children>
                         </AnchorPane>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Họ tên" GridPane.columnIndex="2">
@@ -83,7 +73,7 @@
                         </Text>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3">
                             <children>
-                                <TextField fx:id="fullNameTextField" disable="true" editable="false" layoutX="-68.0" layoutY="4.0" prefWidth="258.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                <TextField fx:id="fullNameTextField" editable="false" layoutX="-68.0" layoutY="4.0" prefWidth="258.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                             </children>
                         </AnchorPane>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email" GridPane.columnIndex="2" GridPane.rowIndex="1">
@@ -93,7 +83,7 @@
                         </Text>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                             <children>
-                                <TextField fx:id="emailTextField" disable="true" editable="false" layoutX="21.0" layoutY="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                <TextField fx:id="emailTextField" editable="false" layoutX="21.0" layoutY="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                             </children>
                         </AnchorPane>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Giới tính" GridPane.columnIndex="2" GridPane.rowIndex="2">
@@ -108,7 +98,7 @@
                         </Text>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                             <children>
-                                <TextField fx:id="cardIDTextField" disable="true" editable="false" layoutX="15.0" layoutY="1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                <TextField fx:id="cardIDTextField" editable="false" layoutX="15.0" layoutY="1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                             </children>
                         </AnchorPane>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày sinh" GridPane.columnIndex="2" GridPane.rowIndex="3">
@@ -117,54 +107,21 @@
                             </font>
                         </Text>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
-                            <children>
-                                <DatePicker fx:id="dobDatePicker" disable="true" editable="false" layoutX="-26.0" layoutY="2.0" style="-fx-opacity: 1.0; -fx-text-fill: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                            </children>
+                     <children>
+                        <TextField fx:id="dobTextField" editable="false" layoutX="-42.0" layoutY="-12.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
                         </AnchorPane>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Chức vụ" GridPane.rowIndex="4">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="genderTextField" disable="true" editable="false" focusTraversable="false" GridPane.columnIndex="3" GridPane.rowIndex="2">
-                     <cursor>
-                        <Cursor fx:constant="CLOSED_HAND" />
-                     </cursor>
-                  </TextField>
-                  <TextField fx:id="positionTextField" disable="true" editable="false" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="4">
-                     <cursor>
-                        <Cursor fx:constant="CLOSED_HAND" />
-                     </cursor>
-                  </TextField>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tài khoản" GridPane.rowIndex="5">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mật khẩu" GridPane.columnIndex="2" GridPane.rowIndex="5">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Trạng thái tài khoản" GridPane.rowIndex="6">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="usernameTextField" disable="true" editable="false" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                     <cursor>
-                        <Cursor fx:constant="CLOSED_HAND" />
-                     </cursor>
-                  </TextField>
-                  <TextField fx:id="statusTextField" disable="true" editable="false" focusTraversable="false" GridPane.columnIndex="1" GridPane.rowIndex="6">
-                     <cursor>
-                        <Cursor fx:constant="CLOSED_HAND" />
-                     </cursor>
-                  </TextField>
-                  <PasswordField fx:id="passwordTextField" disable="true" editable="false" focusTraversable="false" GridPane.columnIndex="3" GridPane.rowIndex="5">
-                     <cursor>
-                        <Cursor fx:constant="CLOSED_HAND" />
-                     </cursor></PasswordField>
+                  <TextField fx:id="genderTextField" editable="false" focusTraversable="false" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="4">
+                     <children>
+                        <TextField fx:id="positionTextField" editable="false" focusTraversable="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
                     </children>
                 </GridPane>
             </children>

@@ -5,20 +5,25 @@ import iuh.fit.dao.AccountDAO;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
+import iuh.fit.models.enums.AccountStatus;
 import iuh.fit.models.enums.Gender;
+import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 
+import iuh.fit.utils.PasswordHashing;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -34,33 +39,20 @@ public class EmployeeManagerController {
     @FXML
     private ComboBox<String> employeeIDSearchField;
     @FXML
-    private TextField fullNameSearchField;
-    @FXML
-    private TextField phoneNumberSearchField;
-    @FXML
-    private TextField positionSearchField;
+    private TextField fullNameSearchField, phoneNumberSearchField,
+            positionSearchField;
 
     // Input Fields
     @FXML
-    private TextField employeeIDTextField;
-    @FXML
-    private TextField fullNameTextField;
-    @FXML
-    private TextField phoneNumberTextField;
-    @FXML
-    private TextField emailTextField;
-    @FXML
-    private TextField addressTextField;
-    @FXML
-    private TextField cardIDTextFiled;
+    private TextField employeeIDTextField, fullNameTextField,
+            phoneNumberTextField, emailTextField,
+            addressTextField, cardIDTextFiled;
     @FXML
     private ComboBox<String> positionCBox;
     @FXML
-    private DatePicker DOBPicker;
+    private DatePicker dobPicker;
     @FXML
-    private RadioButton radMale;
-    @FXML
-    private RadioButton radFemale;
+    private RadioButton radMale, radFemale;
     @FXML
     private ToggleGroup gender;
 
@@ -80,11 +72,7 @@ public class EmployeeManagerController {
 
     // Buttons
     @FXML
-    private Button resetBtn;
-    @FXML
-    private Button addBtn;
-    @FXML
-    private Button updateBtn;
+    private Button resetBtn, addBtn, updateBtn;
 
     // Dialog
     @FXML
@@ -94,6 +82,8 @@ public class EmployeeManagerController {
 
     public void initialize() {
         dialogPane.toFront();
+
+        employeeTableView.setFixedCellSize(40);
 
         loadData();
         setupTable();
@@ -105,28 +95,63 @@ public class EmployeeManagerController {
     }
 
     private void loadData() {
-        positionCBox.getItems().setAll(
-                Stream.of(Position.values()).map(Enum::name).toList()
-        );
-        positionCBox.getSelectionModel().selectFirst();
+        Task<Void> loadDataTask = new Task<>() {
+            @Override
+            protected Void call() {
+                // Tải danh sách vị trí
+                Platform.runLater(() -> {
+                    positionCBox.getItems().setAll(
+                            Stream.of(Position.values())
+                                    .map(position -> switch (position.name()) {
+                                        case "MANAGER" -> "QUẢN LÝ";
+                                        case "RECEPTIONIST" -> "LỄ TÂN";
+                                        default -> position.name();
+                                    })
+                                    .toList()
+                    );
+                    positionCBox.getSelectionModel().selectFirst();
+                });
 
-        employeeIDTextField.setText(EmployeeDAO.getNextEmployeeID());
+                Platform.runLater(() -> employeeIDTextField.setText(EmployeeDAO.getNextEmployeeID()));
+                List<String> Ids = EmployeeDAO.getTopThreeID();
+                Platform.runLater(() -> employeeIDSearchField.getItems().setAll(Ids));
 
-        List<String> Ids = EmployeeDAO.getTopThreeID();
-        employeeIDSearchField.getItems().setAll(Ids);
+                List<Employee> employeeList = EmployeeDAO.getEmployees();
+                items = FXCollections.observableArrayList(employeeList);
 
-        List<Employee> employeeList = EmployeeDAO.getEmployees();
-        items = FXCollections.observableArrayList(employeeList);
-        employeeTableView.setItems(items);
-        employeeTableView.refresh();
+                Platform.runLater(() -> {
+                    employeeTableView.setItems(items);
+                    employeeTableView.refresh();
+                });
+
+                return null;
+            }
+        };
+
+        loadDataTask.setOnRunning(e -> setButtonsDisabled(true));
+        loadDataTask.setOnSucceeded(e -> setButtonsDisabled(false));
+        loadDataTask.setOnFailed(e -> {
+            setButtonsDisabled(false);
+            dialogPane.showWarning("LỖI", "Lỗi khi tải dữ liệu");
+        });
+
+        new Thread(loadDataTask).start();
     }
 
     private void setupTable() {
         employeeIDColumn.setCellValueFactory(new PropertyValueFactory<>("employeeID"));
         fullNameColumn.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        positionColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getPosition().name()));
+        positionColumn.setCellValueFactory(data -> {
+            String position = data.getValue().getPosition().name();
+            return new SimpleStringProperty(
+                    switch (position) {
+                        case "MANAGER" -> "QUẢN LÝ";
+                        case "RECEPTIONIST" -> "LỄ TÂN";
+                        default -> position;
+                    }
+            );
+        });
         setupActionColumn();
     }
 
@@ -151,9 +176,8 @@ public class EmployeeManagerController {
 
                 showInfoButton.setOnAction(e -> {
                     Employee employee = getTableView().getItems().get(getIndex());
-                    Account account = AccountDAO.getAccountByEmployeeID(employee.getEmployeeID());
                     try {
-                        handleShowEmployeeInformation(employee, account);
+                        handleShowEmployeeInformation(employee);
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
@@ -187,10 +211,14 @@ public class EmployeeManagerController {
         cardIDTextFiled.setText("");
         if (!positionCBox.getItems().isEmpty()) positionCBox.getSelectionModel().selectFirst();
 
-        DOBPicker.setValue(null);
+        dobPicker.setValue(null);
         radMale.setSelected(true);
 
-        fullNameTextField.requestFocus();
+        fullNameSearchField.setText("");
+        phoneNumberSearchField.setText("");
+        positionSearchField.setText("");
+        employeeIDSearchField.getSelectionModel().select(null);
+
         addBtn.setManaged(true);
         addBtn.setVisible(true);
         updateBtn.setManaged(false);
@@ -207,13 +235,17 @@ public class EmployeeManagerController {
                     addressTextField.getText(),
                     cardIDTextFiled.getText(),
                     ((RadioButton) gender.getSelectedToggle()).getText().equals(Gender.MALE.toString()) ? Gender.MALE : Gender.FEMALE,
-                    DOBPicker.getValue(),
-                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem())
+                    dobPicker.getValue(),
+                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem().equals("QUẢN LÝ") ? "MANAGER" : "RECEPTIONIST"),
+                    ObjectStatus.ACTIVATE
             );
 
             EmployeeDAO.createData(employee);
+            Account account = new Account(AccountDAO.getNextAccountID(), employee, this.removePrefix(employee.getEmployeeID()), PasswordHashing.hashPassword("test123@"), AccountStatus.ACTIVE);
+            AccountDAO.createData(account);
             handleResetAction();
             loadData();
+            dialogPane.showInformation("Thông báo", "Thêm nhân viên thành công\nTài khoản: " + this.removePrefix(employee.getEmployeeID()) + "\nMật khẩu: " + "test123@");
         } catch (IllegalArgumentException e) {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
@@ -228,13 +260,16 @@ public class EmployeeManagerController {
         phoneNumberTextField.setText(employee.getPhoneNumber());
         addressTextField.setText(employee.getAddress());
         cardIDTextFiled.setText(employee.getIdCardNumber());
-        positionCBox.getSelectionModel().select(employee.getPosition().name());
 
-        DOBPicker.setValue(employee.getDob());
-        if(employee.getGender().equals(Gender.MALE))
+        // Ánh xạ giá trị position tiếng Anh thành tiếng Việt
+        positionCBox.getSelectionModel().select(employee.getPosition().name().equalsIgnoreCase("MANAGER") ? "QUẢN LÝ" : "LỄ TÂN");
+
+        dobPicker.setValue(employee.getDob());
+        if (employee.getGender().equals(Gender.MALE)) {
             radMale.setSelected(true);
-        else
+        } else {
             radFemale.setSelected(true);
+        }
 
         addBtn.setManaged(false);
         addBtn.setVisible(false);
@@ -253,8 +288,9 @@ public class EmployeeManagerController {
                     addressTextField.getText(),
                     cardIDTextFiled.getText(),
                     ((RadioButton) gender.getSelectedToggle()).getText().equals(Gender.MALE.toString()) ? Gender.MALE : Gender.FEMALE,
-                    DOBPicker.getValue(),
-                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem())
+                    dobPicker.getValue(),
+                    ConvertHelper.positionConverter(positionCBox.getSelectionModel().getSelectedItem().equals("QUẢN LÝ") ? "MANAGER" : "RECEPTIONIST"),
+                    ObjectStatus.ACTIVATE
             );
 
             com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN",
@@ -264,6 +300,7 @@ public class EmployeeManagerController {
                 if (buttonType == ButtonType.YES) {
                     try {
                         EmployeeDAO.updateData(employee);
+                        dialogPane.showInformation("Thông báo", "Cập nhật thông tin nhân viên thành công");
                         Platform.runLater(() -> {
                             handleResetAction();
                             loadData();
@@ -285,39 +322,71 @@ public class EmployeeManagerController {
         positionSearchField.setText("");
 
         String searchText = employeeIDSearchField.getValue();
-        List<Employee> employeeList;
 
-        if (searchText == null || searchText.isEmpty()) {
-            employeeList = EmployeeDAO.getEmployees();
-        } else {
-            employeeList = EmployeeDAO.findDataByContainsId(searchText);
-            if (employeeList.size() == 1) {
-                Employee employee = employeeList.getFirst();
-                fullNameSearchField.setText(String.valueOf(employee.getFullName()));
-                phoneNumberSearchField.setText(employee.getPhoneNumber());
-                positionSearchField.setText(employee.getPosition().name());
+        Task<ObservableList<Employee>> searchTask = new Task<>() {
+            @Override
+            protected ObservableList<Employee> call() {
+                List<Employee> employeeList;
+                if (searchText == null || searchText.isEmpty()) {
+                    employeeList = EmployeeDAO.getEmployees();
+                } else {
+                    employeeList = EmployeeDAO.findDataByContainsId(searchText);
+                }
+                return FXCollections.observableArrayList(employeeList);
             }
-        }
+        };
 
-        // Cập nhật lại bảng với dữ liệu tìm kiếm
-        items.setAll(employeeList);
-        employeeTableView.setItems(items);
+        searchTask.setOnSucceeded(e -> {
+            ObservableList<Employee> employeeList = searchTask.getValue();
+            Platform.runLater(() -> {
+                items.setAll(employeeList);
+                employeeTableView.setItems(items);
+
+                if (employeeList.size() == 1) {
+                    Employee employee = employeeList.getFirst();
+                    fullNameSearchField.setText(employee.getFullName());
+                    phoneNumberSearchField.setText(employee.getPhoneNumber());
+                    positionSearchField.setText(employee.getPosition().name().equalsIgnoreCase("MANAGER") ? "QUẢN LÝ" : "LỄ TÂN");
+                }
+            });
+        });
+
+        searchTask.setOnFailed(e -> Platform.runLater(() -> dialogPane.showWarning("LỖI", "Lỗi khi tìm kiếm dữ liệu")));
+
+        new Thread(searchTask).start();
     }
 
-    private void handleShowEmployeeInformation(Employee employee, Account account) throws IOException {
+    private void handleShowEmployeeInformation(Employee employee) throws IOException {
         String source = "/iuh/fit/view/features/employee/EmployeeInformationView.fxml";
 
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
         AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
 
         EmployeeInformationViewController employeeInformationViewController = loader.getController();
-        employeeInformationViewController.setEmployee(employee, account);
+        employeeInformationViewController.setEmployee(employee);
 
         Scene scene = new Scene(layout);
 
         Stage stage = new Stage();
         stage.setTitle("Thông tin nhân viên");
         stage.setScene(scene);
+
+        String iconPath = "/iuh/fit/icons/menu_icons/ic_employee.png"; // Đường dẫn đến icon
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath))));
+        stage.setTitle("Thông tin nhân viên");
+
         stage.show();
+    }
+    public String removePrefix(String input) {
+        if (input != null && input.startsWith("EMP-")) {
+            return input.substring(4);
+        }
+        return input;
+    }
+
+    private void setButtonsDisabled(boolean disabled) {
+        resetBtn.setDisable(disabled);
+        addBtn.setDisable(disabled);
+        updateBtn.setDisable(disabled);
     }
 }

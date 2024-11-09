@@ -1,7 +1,7 @@
 package iuh.fit.dao;
 
-import iuh.fit.models.Room;
 import iuh.fit.models.RoomCategory;
+import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 import iuh.fit.utils.GlobalConstants;
 
@@ -20,7 +20,8 @@ public class RoomCategoryDAO {
                 Statement statement = connection.createStatement()
         ){
             String sql = "SELECT roomCategoryID, roomCategoryName, numberOfBed " +
-                    "FROM RoomCategory";
+                    "FROM RoomCategory " +
+                    "WHERE isActivate = 'ACTIVATE'";
             ResultSet rs = statement.executeQuery(sql);
 
 
@@ -46,7 +47,7 @@ public class RoomCategoryDAO {
 
         String SQLQueryStatement = "SELECT roomCategoryID, roomCategoryName, numberOfBed "
                 + "FROM RoomCategory " +
-                "WHERE roomCategoryID = ?";
+                "WHERE roomCategoryID = ? AND isActivate = 'ACTIVATE'";
 
         try (
                 Connection con = DBHelper.getConnection();
@@ -79,8 +80,8 @@ public class RoomCategoryDAO {
 
                 // Câu lệnh thêm dữ liệu vào RoomCategory
                 PreparedStatement insertStatement = connection.prepareStatement(
-                        "INSERT INTO RoomCategory(roomCategoryID, roomCategoryName, numberOfBed) " +
-                                "VALUES(?, ?, ?)"
+                        "INSERT INTO RoomCategory(roomCategoryID, roomCategoryName, numberOfBed, isActivate) " +
+                                "VALUES(?, ?, ?, 'ACTIVATE')"
                 );
 
                 // Câu lệnh lấy giá trị nextID từ GlobalSequence
@@ -128,7 +129,8 @@ public class RoomCategoryDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                        "DELETE FROM RoomCategory "
+                        "UPDATE RoomCategory " +
+                                "SET isActivate = 'DEACTIVATE' "
                                 + "WHERE roomCategoryID = ?"
                 )
         ){
@@ -161,9 +163,9 @@ public class RoomCategoryDAO {
 
     public static List<RoomCategory> findDataByContainsId(String input) {
         List<RoomCategory> data = new ArrayList<>();
-        String sql = "SELECT roomCategoryID, roomCategoryName, numberOfBed " +
+        String sql = "SELECT roomCategoryID, roomCategoryName, numberOfBed, isActivate " +
                 "FROM RoomCategory " +
-                "WHERE LOWER(roomCategoryID) LIKE ?";
+                "WHERE LOWER(roomCategoryID) LIKE ? AND isActivate = 'ACTIVATE'";
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
@@ -175,7 +177,8 @@ public class RoomCategoryDAO {
                 RoomCategory roomCategory = new RoomCategory(
                         rs.getString("roomCategoryID"),
                         rs.getString("roomCategoryName"),
-                        rs.getInt("numberOfBed")
+                        rs.getInt("numberOfBed"),
+                        ConvertHelper.objectStatusConverter(rs.getString("isActivate"))
                 );
                 data.add(roomCategory);
             }
@@ -187,7 +190,7 @@ public class RoomCategoryDAO {
 
     public static List<String> getTopThreeID() {
         List<String> data = new ArrayList<>();
-        String sql = "SELECT TOP 3 roomCategoryID FROM RoomCategory ORDER BY roomCategoryID DESC";
+        String sql = "SELECT TOP 3 roomCategoryID FROM RoomCategory WHERE isActivate = 'ACTIVATE' ORDER BY roomCategoryID DESC";
         try (
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement();
@@ -223,7 +226,7 @@ public class RoomCategoryDAO {
 
         String sql = "SELECT roomID " +
                 "FROM Room " +
-                "WHERE roomCategoryID = ? AND (roomStatus = ? OR roomStatus = ?)";
+                "WHERE roomCategoryID = ? AND (roomStatus = ? OR roomStatus = ?) AND isActivate = 'ACTIVATE'";
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)

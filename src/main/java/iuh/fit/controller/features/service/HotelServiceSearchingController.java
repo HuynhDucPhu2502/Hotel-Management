@@ -9,6 +9,7 @@ import iuh.fit.utils.ErrorMessages;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -56,6 +57,7 @@ public class HotelServiceSearchingController {
     public void initialize() {
         loadData();
         setupTable();
+        hotelServiceTableView.setFixedCellSize(40);
 
         searchBtn.setOnAction(e -> handleSearchAction());
         resetBtn.setOnAction(e -> handleResetAction());
@@ -63,29 +65,54 @@ public class HotelServiceSearchingController {
 
     // Phương thức load dữ liệu lên giao diện
     private void loadData() {
-        List<HotelService> hotelServiceList = HotelServiceDAO.getHotelService();
-        items = FXCollections.observableArrayList(hotelServiceList);
-        hotelServiceTableView.setItems(items);
-        hotelServiceTableView.refresh();
+        Task<ObservableList<HotelService>> loadDataTask = new Task<>() {
+            @Override
+            protected ObservableList<HotelService> call() {
+                List<HotelService> hotelServiceList = HotelServiceDAO.getHotelService();
+                return FXCollections.observableArrayList(hotelServiceList);
+            }
+        };
 
-        List<String> comboBoxItems = ServiceCategoryDAO.getServiceCategory()
-                .stream()
-                .map(serviceCategory -> serviceCategory.getServiceCategoryID() +
-                        " " + serviceCategory.getServiceCategoryName()
-                )
-                .collect(Collectors.toList());
-        comboBoxItems.addFirst("KHÔNG CÓ");
-        comboBoxItems.addFirst("TẤT CẢ");
+        loadDataTask.setOnRunning(e -> {
+            searchBtn.setDisable(true);
+            resetBtn.setDisable(true);
+        });
 
-        ObservableList<String> observableComboBoxItems = FXCollections.observableArrayList(comboBoxItems);
-        serviceCategorySearchField.getItems().setAll(observableComboBoxItems);
+        loadDataTask.setOnSucceeded(e -> {
+            items = loadDataTask.getValue();
+            hotelServiceTableView.setItems(items);
+            hotelServiceTableView.refresh();
 
-        if (!serviceCategorySearchField.getItems().isEmpty())
-            serviceCategorySearchField.getSelectionModel().selectFirst();
+            List<String> comboBoxItems = ServiceCategoryDAO.getServiceCategory()
+                    .stream()
+                    .map(serviceCategory -> serviceCategory.getServiceCategoryID() +
+                            " " + serviceCategory.getServiceCategoryName())
+                    .collect(Collectors.toList());
+            comboBoxItems.addFirst("KHÔNG CÓ");
+            comboBoxItems.addFirst("TẤT CẢ");
 
+            ObservableList<String> observableComboBoxItems = FXCollections.observableArrayList(comboBoxItems);
+            serviceCategorySearchField.getItems().setAll(observableComboBoxItems);
 
+            if (!serviceCategorySearchField.getItems().isEmpty()) {
+                serviceCategorySearchField.getSelectionModel().selectFirst();
+            }
 
+            searchBtn.setDisable(false);
+            resetBtn.setDisable(false);
+        });
+
+        loadDataTask.setOnFailed(e -> {
+            searchBtn.setDisable(false);
+            resetBtn.setDisable(false);
+            System.err.println("Failed to load data");
+        });
+
+        Thread loadThread = new Thread(loadDataTask);
+        loadThread.setDaemon(true);
+        loadThread.start();
     }
+
 
     // Phương thức đổ dữ liệu vào bảng
     private void setupTable() {
@@ -152,7 +179,6 @@ public class HotelServiceSearchingController {
         });
     }
 
-
     private void handleResetAction() {
         serviceIDSearchField.setText("");
         serviceNameSearchField.setText("");
@@ -164,21 +190,44 @@ public class HotelServiceSearchingController {
     }
 
     private void handleSearchAction() {
-        try {
-            String serviceID = serviceIDSearchField.getText().isBlank() ? null : serviceIDSearchField.getText().trim();
-            String serviceName = serviceNameSearchField.getText().isBlank() ? null : serviceNameSearchField.getText().trim();
-            Double minPrice = handlePriceInput(priceLowerBoundSearchField.getText());
-            Double maxPrice = handlePriceInput(priceUpperBoundSearchField.getText());
-            String selectedCategory = serviceCategorySearchField.getSelectionModel().getSelectedItem();
-            String categoryID = handleCategoryIDInput(selectedCategory);
+        Task<ObservableList<HotelService>> searchTask = new Task<>() {
+            @Override
+            protected ObservableList<HotelService> call() {
+                String serviceID = serviceIDSearchField.getText().isBlank() ? null : serviceIDSearchField.getText().trim();
+                String serviceName = serviceNameSearchField.getText().isBlank() ? null : serviceNameSearchField.getText().trim();
+                Double minPrice = handlePriceInput(priceLowerBoundSearchField.getText());
+                Double maxPrice = handlePriceInput(priceUpperBoundSearchField.getText());
+                String selectedCategory = serviceCategorySearchField.getSelectionModel().getSelectedItem();
+                String categoryID = handleCategoryIDInput(selectedCategory);
 
-            List<HotelService> searchResults = HotelServiceDAO.searchHotelServices(
-                    serviceID, serviceName, minPrice, maxPrice, categoryID);
-            items.setAll(searchResults);
+                List<HotelService> searchResults = HotelServiceDAO.searchHotelServices(
+                        serviceID, serviceName, minPrice, maxPrice, categoryID);
+                return FXCollections.observableArrayList(searchResults);
+            }
+        };
+
+        searchTask.setOnRunning(e -> {
+            searchBtn.setDisable(true);  // Vô hiệu hóa nút "Tìm kiếm"
+            resetBtn.setDisable(true);   // Vô hiệu hóa nút "Đặt lại"
+        });
+
+        searchTask.setOnSucceeded(e -> {
+            items = searchTask.getValue();
             hotelServiceTableView.setItems(items);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+            searchBtn.setDisable(false); // Kích hoạt lại nút "Tìm kiếm"
+            resetBtn.setDisable(false);  // Kích hoạt lại nút "Đặt lại"
+        });
+
+        searchTask.setOnFailed(e -> {
+            searchBtn.setDisable(false);
+            resetBtn.setDisable(false);
+            System.err.println("Failed to execute search");
+        });
+
+        Thread searchThread = new Thread(searchTask);
+        searchThread.setDaemon(true);
+        searchThread.start();
     }
 
     private Double handlePriceInput(String numbStr) {

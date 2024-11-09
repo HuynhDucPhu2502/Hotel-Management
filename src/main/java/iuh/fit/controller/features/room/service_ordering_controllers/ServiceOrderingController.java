@@ -6,16 +6,16 @@ import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
-import iuh.fit.dao.HistoryCheckinDAO;
-import iuh.fit.dao.HotelServiceDAO;
-import iuh.fit.dao.RoomUsageServiceDAO;
+import iuh.fit.dao.*;
 import iuh.fit.models.*;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -25,6 +25,7 @@ import javafx.scene.layout.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -50,6 +51,9 @@ public class ServiceOrderingController {
             cusomerPhoneNumberLabel, customerEmailLabel,
             customerIDCardNumberLabel;
 
+    @FXML
+    private ComboBox<String> serviceCategoryCBox;
+
 
     private final DateTimeFormatter dateTimeFormatter =
             DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm", Locale.forLanguageTag("vi-VN"));
@@ -74,7 +78,6 @@ public class ServiceOrderingController {
 
     @FXML
     private DialogPane dialogPane;
-
 
     @FXML
     private TitledPane titledPane;
@@ -111,7 +114,6 @@ public class ServiceOrderingController {
         setupReservationForm();
         setupButtonActions();
         loadData();
-        displayServices(hotelServiceList);
     }
 
     private void setupButtonActions() {
@@ -123,16 +125,54 @@ public class ServiceOrderingController {
         navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
         navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
         navigateToRoomChanging.setOnAction(e -> navigateToRoomChanging());
+
+        serviceCategoryCBox.setOnAction(e -> filterServicesByCategory());
     }
 
     private void loadData() {
-        hotelServiceList = HotelServiceDAO.getHotelService();
+        Task<Void> loadDataTask = new Task<>() {
+            @Override
+            protected Void call() {
+                hotelServiceList = HotelServiceDAO.getHotelService();
 
+                loadTable();
+
+                // Tải tên danh mục dịch vụ
+                ArrayList<String> categoryNames = (ArrayList<String>) ServiceCategoryDAO.getServiceCategoryNames();
+                categoryNames.addFirst("TẤT CẢ");
+
+                Platform.runLater(() -> {
+                    serviceCategoryCBox.getItems().setAll(categoryNames);
+                    serviceCategoryCBox.getSelectionModel().selectFirst();
+                });
+
+                // Sau khi tải dữ liệu xong, gọi hàm lọc dịch vụ
+                Platform.runLater(() -> filterServicesByCategory());
+
+                return null;
+            }
+        };
+
+        loadDataTask.setOnFailed(e -> {
+            dialogPane.showWarning("LỖI", "Lỗi khi tải dữ liệu");
+            loadDataTask.getException().printStackTrace();
+        });
+
+        loadDataTask.setOnSucceeded(e -> displayServices(hotelServiceList));
+
+        new Thread(loadDataTask).start();
+    }
+
+    private void loadTable() {
         List<RoomUsageService> roomUsageServices = RoomUsageServiceDAO.getByReservationFormID(roomWithReservation.getReservationForm().getReservationID());
         ObservableList<RoomUsageService> data = FXCollections.observableArrayList(roomUsageServices);
-        roomUsageServiceTableView.setItems(data);
-        roomUsageServiceTableView.refresh();
+
+        Platform.runLater(() -> {
+            roomUsageServiceTableView.setItems(data);
+            roomUsageServiceTableView.refresh();
+        });
     }
+
 
     // ==================================================================================================================
     // 3. Xử lý chức năng hiển thị panel khác
@@ -244,11 +284,11 @@ public class ServiceOrderingController {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource(
                             "/iuh/fit/view/features/room/ordering_services_panels/ServiceItem.fxml"));
                     Pane serviceItem = loader.load();
-
+                    System.out.println(service.getServiceCategory().getServiceCategoryName());
                     ServiceItemController controller = loader.getController();
                     controller.setupContext(service);
                     controller.getAddServiceBtn().setOnAction(e ->
-                            handleAddService(service, controller.getAmountField().getValue())
+                            handleAddService(service, controller.getAmountField().getValue(), controller.getAmountField())
                     );
 
                     serviceGridPane.add(serviceItem, col, row);
@@ -259,6 +299,11 @@ public class ServiceOrderingController {
                         row++;
                     }
                 }
+
+                serviceGridPane.setVisible(true);
+                serviceGridPane.setManaged(true);
+                emptyLabelContainer.setVisible(false);
+                emptyLabelContainer.setManaged(false);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -311,7 +356,7 @@ public class ServiceOrderingController {
     // ==================================================================================================================
     // 6. Xử lý sự kiện thêm dịch vụ
     // ==================================================================================================================
-    private void handleAddService(HotelService service, int amount) {
+    private void handleAddService(HotelService service, int amount, Spinner<Integer> amountField) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
 
@@ -328,15 +373,14 @@ public class ServiceOrderingController {
 
         dialog.onClose(buttonType -> {
             if (buttonType == ButtonType.YES) {
-                handleAddServiceToDB(service, amount);
+                handleAddServiceToDB(service, amount, amountField);
                 dialogPane.showInformation("Thành Công", "Dịch vụ đã được thêm thành công!");
-                loadData();
+                loadTable();
             }
         });
     }
 
-
-    private void handleAddServiceToDB(HotelService service, int amount) {
+    private void handleAddServiceToDB(HotelService service, int amount, Spinner<Integer> amountField) {
         try {
             RoomUsageService roomUsageService = new RoomUsageService();
             roomUsageService.setRoomUsageServiceId(RoomUsageServiceDAO.getNextRoomUsageServiceID());
@@ -348,9 +392,36 @@ public class ServiceOrderingController {
             roomUsageService.setDateAdded(LocalDateTime.now());
 
             RoomUsageServiceDAO.createData(roomUsageService);
+
+            amountField.getValueFactory().setValue(1);
         } catch (Exception e) {
             dialogPane.showInformation("LỖI", e.getMessage());
         }
     }
+
+    // ==================================================================================================================
+    // 7. Chức năng tìm kiếm
+    // ==================================================================================================================
+    private void filterServicesByCategory() {
+        Task<List<HotelService>> filterTask = new Task<>() {
+            @Override
+            protected List<HotelService> call() {
+                String selectedCategory = serviceCategoryCBox.getSelectionModel().getSelectedItem();
+                if ("TẤT CẢ".equals(selectedCategory)) {
+                    return hotelServiceList;
+                } else {
+                    return hotelServiceList.stream()
+                            .filter(service -> service.getServiceCategory().getServiceCategoryName().equalsIgnoreCase(selectedCategory))
+                            .toList();
+                }
+            }
+        };
+
+        filterTask.setOnSucceeded(e -> displayServices(filterTask.getValue()));
+        filterTask.setOnFailed(e -> dialogPane.showWarning("LỖI", "Lỗi khi lọc dịch vụ"));
+
+        new Thread(filterTask).start();
+    }
+
 
 }

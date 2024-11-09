@@ -17,6 +17,9 @@ public class Main extends Application {
         startWithoutLogin(primaryStage);
         //startWithLogin(primaryStage);
 
+//        startWithLogin(primaryStage);
+
+
     }
 
     // Khởi động chương trình không cần đăng nhập

@@ -4,9 +4,11 @@ import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.models.Room;
 import iuh.fit.models.enums.RoomStatus;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -54,36 +56,43 @@ public class RoomSearchingController {
     public void initialize() {
         loadData();
         setupTable();
+        roomTableView.setFixedCellSize(25);
 
         searchBtn.setOnAction(e -> handleSearchAction());
         resetBtn.setOnAction(e -> handleResetAction());
     }
 
     private void loadData() {
-        List<Room> roomList = RoomDAO.getRoom();
-        items = FXCollections.observableArrayList(roomList);
-        roomTableView.setItems(items);
-        roomTableView.refresh();
+        Task<Void> loadDataTask = new Task<>() {
+            @Override
+            protected Void call() {
+                List<Room> roomList = RoomDAO.getRoom();
+                items = FXCollections.observableArrayList(roomList);
 
-        List<String> comboBoxItems = RoomCategoryDAO.getRoomCategory()
-                .stream()
-                .map(roomCategory -> roomCategory.getRoomCategoryID() +
-                        " " + roomCategory.getRoomCategoryName()
-                )
-                .collect(Collectors.toList());
-        comboBoxItems.addFirst("KHÔNG CÓ");
-        comboBoxItems.addFirst("TẤT CẢ");
+                List<String> comboBoxItems = RoomCategoryDAO.getRoomCategory()
+                        .stream()
+                        .map(roomCategory -> roomCategory.getRoomCategoryID() +
+                                " " + roomCategory.getRoomCategoryName())
+                        .collect(Collectors.toList());
+                comboBoxItems.addFirst("KHÔNG CÓ");
+                comboBoxItems.addFirst("TẤT CẢ");
 
-        ObservableList<String> observableComboBoxItems = FXCollections.observableArrayList(comboBoxItems);
-        roomCategorySearchField.getItems().setAll(observableComboBoxItems);
+                Platform.runLater(() -> {
+                    roomTableView.setItems(items);
+                    roomTableView.refresh();
 
-        roomStatusSearchField.getItems().setAll(
-                Stream.of(RoomStatus.values()).map(Enum::name).toList()
-        );
-        roomStatusSearchField.getSelectionModel().selectFirst();
+                    roomCategorySearchField.getItems().setAll(comboBoxItems);
+                    roomStatusSearchField.getItems().setAll(
+                            Stream.of(RoomStatus.values()).map(Enum::name).toList()
+                    );
+                    roomStatusSearchField.getSelectionModel().selectFirst();
+                    roomCategorySearchField.getSelectionModel().selectFirst();
+                });
+                return null;
+            }
+        };
 
-        if (!roomCategorySearchField.getItems().isEmpty())
-            roomCategorySearchField.getSelectionModel().selectFirst();
+        new Thread(loadDataTask).start();
     }
 
     private void setupTable() {
@@ -109,16 +118,27 @@ public class RoomSearchingController {
     }
 
     private void handleSearchAction() {
-        String roomID = roomIDSearchField.getText().isBlank() ? null : roomIDSearchField.getText().trim();
-        String roomStatus = roomStatusSearchField.getSelectionModel().getSelectedItem();
-        LocalDateTime lowerDate = handleDateInput(dateOfCreationLowerBoundSearchField.getValue());
-        LocalDateTime upperDate = handleDateInput(dateOfCreationUpperBoundSearchField.getValue());
-        String selectedCategory = roomCategorySearchField.getSelectionModel().getSelectedItem();
-        String categoryID = handleCategoryIDInput(selectedCategory);
+        Task<ObservableList<Room>> searchTask = new Task<>() {
+            @Override
+            protected ObservableList<Room> call() {
+                String roomID = roomIDSearchField.getText().isBlank() ? null : roomIDSearchField.getText().trim();
+                String roomStatus = roomStatusSearchField.getSelectionModel().getSelectedItem();
+                LocalDateTime lowerDate = handleDateInput(dateOfCreationLowerBoundSearchField.getValue());
+                LocalDateTime upperDate = handleDateInput(dateOfCreationUpperBoundSearchField.getValue());
+                String selectedCategory = roomCategorySearchField.getSelectionModel().getSelectedItem();
+                String categoryID = handleCategoryIDInput(selectedCategory);
 
-        List<Room> searchResults = RoomDAO.searchRooms(roomID, roomStatus, lowerDate, upperDate, categoryID);
-        items.setAll(searchResults);
-        roomTableView.setItems(items);
+                List<Room> searchResults = RoomDAO.searchRooms(roomID, roomStatus, lowerDate, upperDate, categoryID);
+                return FXCollections.observableArrayList(searchResults);
+            }
+        };
+
+        searchTask.setOnSucceeded(e -> {
+            items = searchTask.getValue();
+            roomTableView.setItems(items);
+        });
+
+        new Thread(searchTask).start();
     }
 
     private LocalDateTime handleDateInput(LocalDate date) {

@@ -7,7 +7,7 @@ import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
 import iuh.fit.models.enums.AccountStatus;
 import iuh.fit.utils.ConvertHelper;
-import iuh.fit.utils.PasswordHasher;
+import iuh.fit.utils.PasswordHashing;
 import iuh.fit.utils.RegexChecker;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,6 +18,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -25,6 +27,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -41,12 +44,14 @@ public class AccountManagerController {
     private TextField usernameSearchField;
     @FXML
     private TextField statusSearchField;
+    @FXML
+    private TextField positionSearchField;
 
     // Input Fields
     @FXML
     private TextField accountIDTextField;
     @FXML
-    private ComboBox<String> employeeIDCBox;
+    private TextField employeeIDCBox;
     @FXML
     private TextField fullNameTextField;
     @FXML
@@ -56,11 +61,7 @@ public class AccountManagerController {
     @FXML
     private ComboBox<String> statusCBox;
     @FXML
-    private PasswordField newPasswordTextField;
-    @FXML
     private Text passwordLabel;
-    @FXML
-    private Text newPasswordLabel;
 
     // Table
     @FXML
@@ -74,13 +75,13 @@ public class AccountManagerController {
     @FXML
     private TableColumn<Account, String> statusColumn;
     @FXML
+    private TableColumn<Account, String> positionColumn;
+    @FXML
     private TableColumn<Account , Void> actionColumn;
 
     // Buttons
     @FXML
     private Button resetBtn;
-    @FXML
-    private Button addBtn;
     @FXML
     private Button updateBtn;
 
@@ -92,31 +93,38 @@ public class AccountManagerController {
 
     public void initialize() {
         dialogPane.toFront();
+        accountTableView.setFixedCellSize(40);
 
         loadData();
         setupTable();
 
         resetBtn.setOnAction(e -> handleResetAction());
-        addBtn.setOnAction(e -> handleAddAction());
         updateBtn.setOnAction(e -> handleUpdateAction());
         employeeIDSearchField.setOnAction(e -> handleSearchAction());
-        employeeIDCBox.setOnAction(e -> handleSearchFullName());
     }
 
     private void loadData() {
         statusCBox.getItems().setAll(
-                Stream.of(AccountStatus.values()).map(Enum::name).toList()
+                Stream.of(AccountStatus.values()).map(Enum::name)
+                        .map(position -> {
+                        switch (position) {
+                            case "ACTIVE" -> {
+                                return "ĐANG HOẠT ĐỘNG";
+                            }
+                            case "INACTIVE" -> {
+                                return "KHÔNG HOẠT ĐỘNG";
+                            }
+                            case "LOCKED" -> {
+                                return "BỊ KHÓA";
+                            }
+                            default -> {
+                                return position;
+                            }
+                    }
+                })
+                        .toList()
         );
         statusCBox.getSelectionModel().selectFirst();
-
-        List<String> comboBoxItems = EmployeeDAO.getEmployees()
-                .stream()
-                .map(Employee::getEmployeeID)
-                .collect(Collectors.toList());
-
-        ObservableList<String> observableComboBoxItems = FXCollections.observableArrayList(comboBoxItems);
-        employeeIDCBox.getItems().setAll(observableComboBoxItems);
-
         accountIDTextField.setText(AccountDAO.getNextAccountID());
 
         List<String> Ids = EmployeeDAO.getTopThreeID();
@@ -133,43 +141,58 @@ public class AccountManagerController {
                 new SimpleStringProperty(data.getValue().getEmployee().getEmployeeID()));
         fullNameColumn.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getEmployee().getFullName()));
+        positionColumn.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getEmployee().getPosition().name().equals("MANAGER")?"QUẢN LÝ":"LỄ TÂN"));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("userName"));
-        statusColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getAccountStatus().name()));
+        statusColumn.setCellValueFactory(data -> {
+            String status = switch (data.getValue().getAccountStatus().name()) {
+                case "ACTIVE" -> "ĐANG HOẠT ĐỘNG";
+                case "INACTIVE" -> "KHÔNG HOẠT ĐỘNG";
+                case "LOCKED" -> "BỊ KHÓA";
+                default -> data.getValue().getAccountStatus().name();
+            };
+            return new SimpleStringProperty(status);
+        });
         setupActionColumn();
     }
 
     private void setupActionColumn() {
         Callback<TableColumn<Account, Void>, TableCell<Account, Void>> cellFactory = param -> new TableCell<>() {
-            private final Button updateButton = new Button("Cập nhật");
+            private final Button updateButtonPass = new Button("Cập nhật mật khẩu");
+            private final Button updateButtonStatus = new Button("Cập nhật trạng thái");
             private final Button showInfoButton = new Button("Thông tin");
             private final HBox hBox = new HBox(10);
             {
                 // Thêm class CSS cho các button
-                updateButton.getStyleClass().add("button-update");
+                updateButtonPass.getStyleClass().add("button-update");
+                updateButtonStatus.getStyleClass().add("button-update");
                 showInfoButton.getStyleClass().add("button-view");
 
                 // Thêm file CSS vào HBox
                 hBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/Button.css")).toExternalForm());
 
                 // Set hành động cho các button
-                updateButton.setOnAction(event -> {
+                updateButtonPass.setOnAction(event -> {
                     Account account = getTableView().getItems().get(getIndex());
-                    handleUpdateBtn(account);
+                    handleUpdatePassBtn(account);
                 });
 
+                updateButtonStatus.setOnAction(event -> {
+                    Account account = getTableView().getItems().get(getIndex());
+                    handleUpdateStatusBtn(account);
+                });
 
                 showInfoButton.setOnAction(e -> {
                     Account account = getTableView().getItems().get(getIndex());
                     try {
-                        handleShowAccountInformation(account.getEmployee(), account);
+                        handleShowAccountInformation(account.getEmployee());
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
                 });
 
                 hBox.setAlignment(Pos.CENTER);
-                hBox.getChildren().addAll(updateButton, showInfoButton);
+                hBox.getChildren().addAll(updateButtonStatus, updateButtonPass, showInfoButton);
             }
 
 
@@ -187,42 +210,70 @@ public class AccountManagerController {
         actionColumn.setCellFactory(cellFactory);
     }
 
-    private void handleUpdateBtn(Account account) {
+    private void handleUpdatePassBtn(Account account) {
         accountIDTextField.setText(account.getAccountID());
-        passwordLabel.setText("Mật khẩu cũ");
+        passwordLabel.setText("Mật khẩu mới");
 
-        employeeIDCBox.getSelectionModel().select(account.getEmployee().getEmployeeID());
+        employeeIDCBox.setText(account.getEmployee().getEmployeeID());
 
         fullNameTextField.setText(account.getEmployee().getFullName());
-
         usernameTextField.setText(account.getUserName());
 
-        statusCBox.getSelectionModel().select(account.getAccountStatus().name());
+        String status = switch (account.getAccountStatus().name()) {
+            case "ACTIVE" -> "ĐANG HOẠT ĐỘNG";
+            case "INACTIVE" -> "KHÔNG HOẠT ĐỘNG";
+            case "LOCKED" -> "BỊ KHÓA";
+            default -> account.getAccountStatus().name();
+        };
+        statusCBox.getSelectionModel().select(status);
+
+        statusCBox.setEditable(false);
 
         employeeIDCBox.setEditable(false);
-        employeeIDCBox.setDisable(true);
-        usernameTextField.setEditable(false);
-        usernameTextField.setDisable(true);
-        passwordLabel.setVisible(true);
-        newPasswordLabel.setVisible(true);
-        passwordTextField.setVisible(true);
-        newPasswordTextField.setVisible(true);
 
+        passwordTextField.setEditable(true);
+        passwordTextField.setText("");
+        passwordTextField.setStyle("-fx-background-color: white;");
 
-        addBtn.setManaged(false);
-        addBtn.setVisible(false);
         updateBtn.setManaged(true);
         updateBtn.setVisible(true);
     }
 
-    private void handleShowAccountInformation(Employee employee ,Account account) throws IOException {
+    private void handleUpdateStatusBtn(Account account) {
+        accountIDTextField.setText(account.getAccountID());
+
+        employeeIDCBox.setText(account.getEmployee().getEmployeeID());
+
+        fullNameTextField.setText(account.getEmployee().getFullName());
+
+        passwordTextField.setText(account.getPassword());
+
+        usernameTextField.setText(account.getUserName());
+
+        String status = switch (account.getAccountStatus().name()) {
+            case "ACTIVE" -> "ĐANG HOẠT ĐỘNG";
+            case "INACTIVE" -> "KHÔNG HOẠT ĐỘNG";
+            case "LOCKED" -> "BỊ KHÓA";
+            default -> account.getAccountStatus().name();
+        };
+        statusCBox.getSelectionModel().select(status);
+
+        passwordTextField.setEditable(false);
+        passwordTextField.setStyle("-fx-background-color: rgb(211, 211, 211);");
+        employeeIDCBox.setEditable(false);
+
+        updateBtn.setManaged(true);
+        updateBtn.setVisible(true);
+    }
+
+    private void handleShowAccountInformation(Employee employee) throws IOException {
         String source = "/iuh/fit/view/features/employee/EmployeeInformationView.fxml";
 
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
-        AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
+        AnchorPane layout = loader.load();
 
         EmployeeInformationViewController employeeInformationViewController = loader.getController();
-        employeeInformationViewController.setEmployee(employee, account);
+        employeeInformationViewController.setEmployee(employee);
 
         Scene scene = new Scene(layout);
 
@@ -233,63 +284,26 @@ public class AccountManagerController {
     }
 
     private void handleResetAction() {
-        employeeIDCBox.setEditable(true);
-        employeeIDCBox.setDisable(false);
         passwordLabel.setText("Mật khẩu");
-        newPasswordLabel.setVisible(false);
+
         passwordTextField.setText("");
-        newPasswordTextField.setText("");
-        newPasswordTextField.setVisible(false);
-        usernameTextField.setEditable(true);
-        usernameTextField.setDisable(false);
         accountIDTextField.setText(AccountDAO.getNextAccountID());
-        if (!employeeIDCBox.getItems().isEmpty()) employeeIDCBox.getSelectionModel().select(null);
+        employeeIDCBox.setText("");
         fullNameTextField.setText("");
         usernameTextField.setText("");
         passwordTextField.setText("");
         if (!statusCBox.getItems().isEmpty()) statusCBox.getSelectionModel().selectFirst();
+        passwordTextField.setEditable(false);
+        passwordTextField.setStyle("-fx-background-color: rgb(211, 211, 211);");
 
+        fullNameSearchField.setText("");
+        usernameSearchField.setText("");
+        statusSearchField.setText("");
+        employeeIDSearchField.getSelectionModel().select(null);
+        setupTable();
 
-        addBtn.setManaged(true);
-        addBtn.setVisible(true);
         updateBtn.setManaged(false);
         updateBtn.setVisible(false);
-    }
-
-    private void handleAddAction() {
-        try {
-            Employee employee = EmployeeDAO.getDataByID(employeeIDCBox.getValue());
-
-            if (!RegexChecker.isValidPassword(passwordTextField.getText())) {
-                dialogPane.showWarning("LỖI", "Mật khẩu không hợp lệ! Phải có ít nhất 8 ký tự, bao gồm chữ, số và ký tự đặc biệt.");
-                return;
-            }
-
-            String hashedPassword = PasswordHasher.hashPassword(passwordTextField.getText());
-
-
-            Account account = new Account(
-                    accountIDTextField.getText(),
-                    employee,
-                    usernameTextField.getText(),
-                    hashedPassword,
-                    ConvertHelper.accountStatusConverter(statusCBox.getSelectionModel().getSelectedItem())
-            );
-
-            Account existingAccount = AccountDAO.getAccountByEmployeeID(employeeIDCBox.getValue());
-            if (existingAccount == null) {
-                AccountDAO.createData(account);
-            } else {
-                dialogPane.showWarning("LỖI", "Nhân viên đã có tài khoản");
-                return;
-            }
-
-            handleResetAction();
-            loadData();
-            dialogPane.showInformation("Thành công", "Đã thêm tài khoản thành công");
-        } catch (IllegalArgumentException e) {
-            dialogPane.showWarning("LỖI", e.getMessage());
-        }
     }
 
     private void handleSearchAction() {
@@ -308,7 +322,15 @@ public class AccountManagerController {
                 Account account = accountList.getFirst();
                 fullNameSearchField.setText(String.valueOf(account.getEmployee().getFullName()));
                 usernameSearchField.setText(account.getUserName());
-                statusSearchField.setText(account.getAccountStatus().name());
+                positionSearchField.setText(account.getEmployee().getPosition().name().equalsIgnoreCase("MANAGER")?"QUẢN LÝ":"LỄ TÂN");
+                String status = switch (account.getAccountStatus().name()) {
+                    case "ACTIVE" -> "ĐANG HOẠT ĐỘNG";
+                    case "INACTIVE" -> "KHÔNG HOẠT ĐỘNG";
+                    case "LOCKED" -> "BỊ KHÓA";
+                    default -> account.getAccountStatus().name();
+                };
+
+                statusSearchField.setText(status);
             }
         }
 
@@ -317,36 +339,14 @@ public class AccountManagerController {
         accountTableView.setItems(items);
     }
 
-    private void handleSearchFullName(){
-        fullNameTextField.setText("");
-        String searchText = employeeIDCBox.getValue();
-        List<Employee> employeeList;
-
-        if (searchText == null || searchText.isEmpty()) {
-            employeeList = EmployeeDAO.getEmployees();
-        } else {
-            employeeList = EmployeeDAO.findDataByContainsId(searchText);
-            if (!employeeList.isEmpty()) {
-                Employee employee = employeeList.getFirst();
-                fullNameTextField.setText(String.valueOf(employee.getFullName()));
-                employeeIDCBox.getSelectionModel().select(employee.getEmployeeID());
-            }
-        }
-    }
-
     private void handleUpdateAction() {
         try {
-            Employee employee = EmployeeDAO.getDataByID(employeeIDCBox.getValue());
+            Account account = AccountDAO.getAccountByEmployeeID(employeeIDCBox.getText());
 
-            String hashedNewPassword = PasswordHasher.hashPassword(newPasswordTextField.getText());
-
-            Account account = new Account(
-                    accountIDTextField.getText(),
-                    employee,
-                    usernameTextField.getText(),
-                    hashedNewPassword,
-                    ConvertHelper.accountStatusConverter(statusCBox.getSelectionModel().getSelectedItem())
-            );
+            if (account.getEmployee().getPosition().name().equals("MANAGER")){
+                dialogPane.showWarning("LỖI", "Không thể cập nhật mật khẩu cho QUẢN LÝ!!! Chỉ cho phép cập nhật mật khẩu cho LỄ TÂN");
+                return;
+            }
 
             com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation("XÁC NHẬN",
                     "Bạn có chắc chắn muốn cập nhật thông tin tài khoản của nhân viên này?");
@@ -354,25 +354,32 @@ public class AccountManagerController {
             dialog.onClose(buttonType -> {
                 if (buttonType == ButtonType.YES) {
                     try {
-                        String oldPass = Objects.requireNonNull(AccountDAO.getAccountByEmployeeID(employeeIDCBox.getValue())).getPassword();
-                        String tmpPass = PasswordHasher.hashPassword(passwordTextField.getText());
-                        String newPass = PasswordHasher.hashPassword(newPasswordTextField.getText());
 
-                        if (!RegexChecker.isValidPassword(newPasswordTextField.getText())) {
-                            dialogPane.showWarning("LỖI", "Mật khẩu mới không hợp lệ! Phải có ít nhất 8 ký tự, bao gồm chữ, số và ký tự đặc biệt.");
-                            return;
-                        }
+                        if(passwordTextField.isEditable()){
+                            if (!RegexChecker.isValidPassword(passwordTextField.getText())) {
+                                dialogPane.showWarning("LỖI", "Mật khẩu mới không hợp lệ! Phải có ít nhất 8 ký tự, bao gồm chữ, số và ký tự đặc biệt.");
+                                return;
+                            }
+                            String hashedNewPassword = PasswordHashing.hashPassword(passwordTextField.getText());
+                            if (hashedNewPassword.equals(account.getPassword())){
+                                dialogPane.showWarning("LỖI", "Mật khẩu mới phải khác mật khẩu cũ.");
+                                return;
+                            }
+                            account.setPassword(hashedNewPassword);
 
-                        if (!oldPass.equals(tmpPass)) {
-                            dialogPane.showWarning("LỖI", "Mật khẩu cũ không đúng!");
-                            return;
-                        } else if (tmpPass.equals(newPass)) {
-                            dialogPane.showWarning("LỖI", "Mật khẩu cũ và mật khẩu mới phải khác nhau!");
-                            return;
+                        } else {
+                            String status = switch (statusCBox.getSelectionModel().getSelectedItem()) {
+                                case "ĐANG HOẠT ĐỘNG" -> "ACTIVE";
+                                case "KHÔNG HOẠT ĐỘNG" -> "INACTIVE";
+                                case "BỊ KHÓA" -> "LOCKED";
+                                default -> statusCBox.getSelectionModel().getSelectedItem();
+                            };
+                            account.setAccountStatus(ConvertHelper.accountStatusConverter(status));
+
                         }
                         AccountDAO.updateData(account);
                         Platform.runLater(() -> {
-                            dialogPane.showInformation("Thành công", "Đã đổi mật khẩu thành công");
+                            dialogPane.showInformation("Thành công", "Cập nhật thông tin thành công");
                             handleResetAction();
                             loadData();
                         });

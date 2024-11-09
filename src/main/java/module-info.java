@@ -7,18 +7,16 @@ module iuh.fit {
     requires com.dlsc.unitfx;
     requires org.controlsfx.controls;
     requires com.calendarfx.view;
-
     requires org.apache.poi.poi;
     requires org.apache.poi.ooxml;
-
     requires itextpdf;
-    requires bcrypt;
 
 
     opens iuh.fit to javafx.fxml;
 
     opens iuh.fit.controller to javafx.fxml;
     opens iuh.fit.controller.features to javafx.fxml;
+    opens iuh.fit.controller.features.employee_information to javafx.fxml;
     opens iuh.fit.controller.features.service to javafx.fxml;
     opens iuh.fit.controller.features.room to javafx.fxml;
     opens iuh.fit.controller.features.room.creating_reservation_form_controllers to javafx.fxml;
@@ -39,6 +37,7 @@ module iuh.fit {
 
     exports iuh.fit.controller;
     exports iuh.fit.controller.features;
+    exports iuh.fit.controller.features.employee_information;
     exports iuh.fit.controller.features.service;
     exports iuh.fit.controller.features.room;
     exports iuh.fit.controller.features.room.creating_reservation_form_controllers;
@@ -51,6 +50,8 @@ module iuh.fit {
     exports iuh.fit.models;
     exports iuh.fit.models.enums;
     exports iuh.fit.models.wrapper;
+
+
 
 
 }

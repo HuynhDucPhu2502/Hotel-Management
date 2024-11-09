@@ -4,6 +4,7 @@ import iuh.fit.controller.features.MenuController;
 
 import iuh.fit.controller.features.employee.ShiftManagerController;
 
+import iuh.fit.controller.features.employee_information.EmployeeInformationController;
 import iuh.fit.controller.features.room.InvoiceManagerController;
 
 import iuh.fit.controller.features.room.RoomBookingController;
@@ -13,14 +14,12 @@ import iuh.fit.models.Employee;
 import iuh.fit.models.enums.Position;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 
-import java.net.URL;
 import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.Objects;
 
-public class MainController implements Initializable {
+public class MainController {
     private Account account;
 
     @FXML
@@ -28,8 +27,8 @@ public class MainController implements Initializable {
     @FXML
     private AnchorPane mainPanel;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    // Không xóa
+    public void initialize() {
         Locale locale = new Locale("vi", "VN");
         Locale.setDefault(locale);
     }
@@ -39,17 +38,18 @@ public class MainController implements Initializable {
         initializeMenuBar();
     }
 
-    private void initializeMenuBar() {
+    public void initializeMenuBar() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/MenuPanel.fxml"));
             AnchorPane menuLayout = loader.load();
 
             MenuController menuController = loader.getController();
             if (menuController != null) {
-                menuController.setAccount(account);
+                menuController.loadData(account);
 
 
-                if(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()).getPosition().equals(Position.MANAGER)){
+                if (Objects.requireNonNull(EmployeeDAO.getEmployeeByAccountID(account.getAccountID())).getPosition().equals(Position.MANAGER))
+                {
                     // Dashboard
                     menuController.getDashBoardBtn().setOnAction(e -> loadPanel("/iuh/fit/view/features/DashboardPanel.fxml"));
 
@@ -76,24 +76,21 @@ public class MainController implements Initializable {
                     menuController.getCustomerSearchingButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/customer/CustomerSearchingPanel.fxml"));
                     // Account
                     // Statistics
-                    menuController.getRevenueStatisticsButton().setOnAction(e -> {
-                        loadPanel("/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml");
-                    });
-                    menuController.getRateUsingRoomButton().setOnAction(e -> {
-                      loadPanel("/iuh/fit/view/features/statistics/RateUsingRoomStatisticsPanel.fxml");
-                });
+                    menuController.getRevenueStatisticsButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml"));
+                    menuController.getRateUsingRoomButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/RateUsingRoomStatisticsPanel.fxml"));
                     // History
-                }else{
+                }
+                else if (Objects.requireNonNull(EmployeeDAO.getEmployeeByAccountID(account.getAccountID())).getPosition().equals(Position.RECEPTIONIST))
+                {
                     // Dashboard
                     menuController.getDashBoardBtn().setOnAction(e -> loadPanel("/iuh/fit/view/features/DashboardPanel.fxml"));
 
                     // Employee
                     menuController.getEmployeeManagerButton().setDisable(true);
                     menuController.getAccountOfEmployeeManagerButton().setDisable(true);
-
                     menuController.getShiftManagerButton().setDisable(true);
-
                     menuController.getEmployeeSearchingButton().setDisable(true);
+
                     // Room
                     menuController.getPricingManagerButton().setDisable(true);
                     menuController.getRoomCategoryManagerButton().setDisable(true);
@@ -101,23 +98,24 @@ public class MainController implements Initializable {
                     menuController.getRoomSearchingButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/RoomSearchingPanel.fxml"));
                     menuController.getRoomBookingButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
                     menuController.getInvoiceManagerBtn().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/InvoiceManagerPanel.fxml"));
+
                     // Service
                     menuController.getServiceCategoryManagerButton().setDisable(true);
                     menuController.getHotelServiceManagerButton().setDisable(true);
                     menuController.getHotelServiceSearchingButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/HotelServiceSearchingPanel.fxml"));
+
                     // Customer
                     menuController.getCustomerManagerButton().setDisable(true);
                     menuController.getCustomerSearchingButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/customer/CustomerSearchingPanel.fxml"));
                     // Account
+
                     // Statistics
-                    menuController.getRevenueStatisticsButton().setOnAction(e -> {
-                        loadPanel("/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml");
-                    });
-                    menuController.getRateUsingRoomButton().setOnAction(e -> {
-                        loadPanel("/iuh/fit/view/features/statistics/RateUsingRoomStatisticsPanel.fxml");
-                });
+                    menuController.getRevenueStatisticsButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml"));
+                    menuController.getRateUsingRoomButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/RateUsingRoomStatisticsPanel.fxml"));
                     // History
                 }
+
+                menuController.getEmployeeInformationContainer().setOnMouseClicked(event -> loadPanel("/iuh/fit/view/features/employee_information/EmployeeInformationPanel.fxml"));
 
             }
 
@@ -128,12 +126,12 @@ public class MainController implements Initializable {
         }
     }
 
-    public void loadPanel(String fxmlPath) {
+    private void loadPanel(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             AnchorPane layout = loader.load();
 
-            if(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()).getPosition().equals(Position.MANAGER)){
+            if(Objects.requireNonNull(EmployeeDAO.getEmployeeByAccountID(account.getAccountID())).getPosition().equals(Position.MANAGER)){
                 if (fxmlPath.contains("RoomBookingPanel")) {
                     RoomBookingController roomBookingController = loader.getController();
 
@@ -170,6 +168,13 @@ public class MainController implements Initializable {
                 }
             }
 
+            if (fxmlPath.contains("EmployeeInformation")) {
+                EmployeeInformationController employeeInformationController = loader.getController();
+
+                Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
+                employeeInformationController.setupContext(employee, this);
+            }
+
 
 
             mainPanel.getChildren().clear();
@@ -179,7 +184,12 @@ public class MainController implements Initializable {
         }
     }
 
+
     public AnchorPane getMainPanel() {
         return mainPanel;
+    }
+
+    public Account getAccount() {
+        return account;
     }
 }

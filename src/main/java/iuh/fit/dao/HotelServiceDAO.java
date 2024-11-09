@@ -22,7 +22,8 @@ public class HotelServiceDAO {
             String sql = "SELECT a.hotelServiceId, a.serviceName, a.description, " +
                     "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName, b.icon " +
                     "FROM HotelService a LEFT JOIN ServiceCategory b " +
-                    "ON a.serviceCategoryID = b.serviceCategoryID";
+                    "ON a.serviceCategoryID = b.serviceCategoryID " +
+                    "WHERE a.isActivate = 'ACTIVATE' AND b.serviceCategoryID IS NOT NULL";
             ResultSet rs = statement.executeQuery(sql);
 
             while (rs.next()) {
@@ -64,7 +65,7 @@ public class HotelServiceDAO {
                 "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
                 "FROM HotelService a inner join ServiceCategory b " +
                 "ON a.serviceCategoryID = b.serviceCategoryID " +
-                "WHERE hotelServiceId = ?";
+                "WHERE hotelServiceId = ?  AND a.isActivate = 'ACTIVATE'";
 
         try (
                 Connection con = DBHelper.getConnection();
@@ -108,8 +109,8 @@ public class HotelServiceDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement insertStatement = connection.prepareStatement(
-                        "INSERT INTO HotelService(hotelServiceID, serviceName, description, servicePrice, serviceCategoryID) " +
-                                "VALUES(?, ?, ?, ?, ?)"
+                        "INSERT INTO HotelService(hotelServiceID, serviceName, description, servicePrice, serviceCategoryID, isActivate) " +
+                                "VALUES(?, ?, ?, ?, ?, 'ACTIVATE')"
                 );
 
                 // Câu lệnh để lấy giá trị nextID từ bảng GlobalSequence
@@ -158,13 +159,15 @@ public class HotelServiceDAO {
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
-                        "DELETE FROM HotelService "
+                        "UPDATE HotelService " +
+                                "SET isActivate = 'DEACTIVATE' "
                                 + "WHERE hotelServiceID = ?"
                 )
         ){
             preparedStatement.setString(1, hotelServiceId);
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
+            exception.printStackTrace();
             System.exit(1);
         }
     }
@@ -175,7 +178,7 @@ public class HotelServiceDAO {
                 PreparedStatement preparedStatement = connection.prepareStatement(
                         "UPDATE HotelService " +
                                 "SET serviceName = ?, description = ?, servicePrice = ?, serviceCategoryID = ? " +
-                                "WHERE hotelServiceID = ? "
+                                "WHERE hotelServiceID = ?  AND isActivate = 'ACTIVATE'"
                 )
         ){
             preparedStatement.setString(1, hotelService.getServiceName());
@@ -201,7 +204,7 @@ public class HotelServiceDAO {
                                 "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
                                 "FROM HotelService a LEFT JOIN ServiceCategory b " +
                                 "ON a.serviceCategoryID = b.serviceCategoryID " +
-                                "WHERE LOWER(hotelServiceID) LIKE ?"
+                                "WHERE LOWER(hotelServiceID) LIKE ?  AND a.isActivate = 'ACTIVATE'"
                 )
         ) {
             preparedStatement.setString(1, "%" + input + "%");
@@ -245,6 +248,7 @@ public class HotelServiceDAO {
         ) {
             String sql = "SELECT TOP 3 hotelServiceId " +
                     "FROM HotelService " +
+                    "WHERE  isActivate = 'ACTIVATE' " +
                     "ORDER BY hotelServiceID DESC";
             ResultSet rs = statement.executeQuery(sql);
 
@@ -299,7 +303,8 @@ public class HotelServiceDAO {
                 "(a.serviceName LIKE ? OR ? IS NULL) AND " +
                 "(a.servicePrice >= ? OR ? IS NULL) AND " +
                 "(a.servicePrice <= ? OR ? IS NULL) AND " +
-                "((? = 'ALL') OR (a.serviceCategoryID = ? OR (? = 'NULL' AND a.serviceCategoryID IS NULL)))";
+                "((? = 'ALL') OR (a.serviceCategoryID = ? OR (? = 'NULL' AND a.serviceCategoryID IS NULL))) " +
+                "AND a.isActivate = 'ACTIVATE'";
 
         try (
                 Connection connection = DBHelper.getConnection();

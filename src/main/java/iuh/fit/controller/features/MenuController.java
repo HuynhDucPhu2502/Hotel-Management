@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -21,7 +22,9 @@ public class MenuController {
     @FXML
     private Text employeePositionText;
     @FXML
-    private Text employeeFullNameText;
+    private Label employeeFullNameLabel;
+    @FXML
+    private VBox employeeInformationContainer;
 
 //  =====================================================
     // dasnhBoardBtn
@@ -88,12 +91,21 @@ public class MenuController {
     private Button roomBookingButton;
 
     @FXML
+    private ImageView arrowUpForRoom;
+
+//  =====================================================
+    // Invoice
+    @FXML
+    private Button invoiceBtn;
+
+    @FXML
     private HBox invoiceManagerContainer;
     @FXML
     private Button invoiceManagerBtn;
 
     @FXML
-    private ImageView arrowUpForRoom;
+    private ImageView arrowUpForInvoice;
+
 
 //  =====================================================
     // Service
@@ -150,8 +162,6 @@ public class MenuController {
     @FXML
     private Button rateUsingRoomButton;
     @FXML
-    private HBox buttonThreeContainer2111;
-    @FXML
     private ImageView arrowUpForStatistics;
 
 
@@ -175,16 +185,25 @@ public class MenuController {
         buttonStates.put("customer", false);
         buttonStates.put("statistics", false);
         buttonStates.put("history", false);
-
+        buttonStates.put("invoice", false);
 
         employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(employeeManagerContainer, accountOfEmployeeManagerContainer, employeeSearchingContainer, shiftManagerContainer), arrowUpForEmpBtn, "employee"));
-        roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer, roomCategoryManagerContainer, roomManagerContainer, roomSearchingContainer, roomBookingContainer, invoiceManagerContainer), arrowUpForRoom, "room"));
+        roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer, roomCategoryManagerContainer, roomManagerContainer, roomSearchingContainer, roomBookingContainer), arrowUpForRoom, "room"));
+        invoiceBtn.setOnAction(e -> dropDownMenuEvent(List.of(invoiceManagerContainer), arrowUpForInvoice, "invoice"));
         serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryManagerContainer, hotelServiceManagerContainer, hotelServiceSearchingContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer, customerSearchingContainer), arrowUpForCustomer, "customer"));
         statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(revenueStatisticsContainer, rateUsingRoomContainer), arrowUpForStatistics, "statistics"));
     }
 
-    public void dropDownMenuEvent(List<HBox> buttons, ImageView arrow, String stateKey) {
+    public void loadData(Account account) {
+
+        employeePositionText.setText(account.getEmployee().getPosition().toString());
+        employeeFullNameLabel.setText(account.getEmployee().getFullName());
+    }
+
+
+
+    private void dropDownMenuEvent(List<HBox> buttons, ImageView arrow, String stateKey) {
         Boolean state = buttonStates.get(stateKey);
 
         if (!state) {
@@ -204,10 +223,12 @@ public class MenuController {
         buttonStates.put(stateKey, !state);
     }
 
-    public void setAccount(Account account) {
+    public Button getDashBoardBtn() {
+        return dashBoardBtn;
+    }
 
-        employeePositionText.setText(account.getEmployee().getPosition().toString());
-        employeeFullNameText.setText(account.getEmployee().getFullName());
+    public VBox getEmployeeInformationContainer() {
+        return employeeInformationContainer;
     }
 
     public Button getServiceCategoryManagerButton() {
@@ -271,12 +292,10 @@ public class MenuController {
         return invoiceManagerBtn;
     }
 
-    public Button getDashBoardBtn() {
-        return dashBoardBtn;
-    }
-
     public Button getRateUsingRoomButton(){
         return rateUsingRoomButton;
     }
+
+
 }
 

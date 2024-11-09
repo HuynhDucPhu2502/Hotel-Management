@@ -1,6 +1,7 @@
 package iuh.fit.controller.features.room.service_ordering_controllers;
 
 import iuh.fit.models.HotelService;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,7 +17,7 @@ public class ServiceItemController {
     private ImageView serviceCategoryImg;
 
     @FXML
-    private Label serviceName, servicePrice;
+    private Label serviceName, servicePrice, totalPrice;
 
     @FXML
     private Button addServiceBtn;
@@ -38,7 +39,7 @@ public class ServiceItemController {
     private void loadData() {
         if (hotelService != null) {
             serviceName.setText(hotelService.getServiceName());
-            servicePrice.setText(hotelService.getServicePrice() + " VND");
+            servicePrice.setText("Thành tiền: " + hotelService.getServicePrice() + " VND");
             String iconPath = "/iuh/fit/icons/service_icons/ic_" + hotelService.getServiceCategory().getIcon() + ".png";
             Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath)));
             serviceCategoryImg.setImage(image);
@@ -47,6 +48,9 @@ public class ServiceItemController {
         amountField.setValueFactory(new SpinnerValueFactory
                 .IntegerSpinnerValueFactory(1, 100, 1));
 
+        totalPrice.textProperty().bind(Bindings.createStringBinding(() ->
+                        "Thành tiền: " + (amountField.getValue() * hotelService.getServicePrice()) + " VND",
+                amountField.valueProperty()));
     }
 
     // ==================================================================================================================
@@ -59,4 +63,6 @@ public class ServiceItemController {
     public Button getAddServiceBtn() {
         return addServiceBtn;
     }
+
+
 }

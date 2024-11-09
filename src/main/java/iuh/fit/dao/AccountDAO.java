@@ -1,11 +1,11 @@
 package iuh.fit.dao;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
-import iuh.fit.utils.PasswordHasher;
+import iuh.fit.utils.GlobalConstants;
+import iuh.fit.utils.PasswordHashing;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -54,7 +54,7 @@ public class AccountDAO {
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
                     String hashedPassword = rs.getString(3);
-                    String inputHashedPassword = PasswordHasher.hashPassword(password);
+                    String inputHashedPassword = PasswordHashing.hashPassword(password);
 
                     if (hashedPassword.equals(inputHashedPassword)) {
                         return extractData(rs);
@@ -99,17 +99,48 @@ public class AccountDAO {
                 "VALUES(?, ?, ?, ?, ?)";
         try (
                 Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+                PreparedStatement insertStatement = connection.prepareStatement(
+                        "INSERT INTO Account(accountID, userName, password, status, employeeID) " +
+                                "VALUES(?, ?, ?, ?, ?)"
+                );
+                PreparedStatement selectSequenceStatement = connection.prepareStatement(
+                        "SELECT nextID FROM GlobalSequence WHERE tableName = ?"
+                );
+
+                // Câu lệnh để cập nhật nextID trong GlobalSequence
+                PreparedStatement updateSequenceStatement = connection.prepareStatement(
+                        "UPDATE GlobalSequence SET nextID = ? WHERE tableName = ?"
+                )
         ) {
-            preparedStatement.setString(1, account.getAccountID());
-            preparedStatement.setString(2, account.getUserName());
+            selectSequenceStatement.setString(1, "Account");
+            ResultSet rs = selectSequenceStatement.executeQuery();
+            String newAccountID = "ACC-000001"; // ID mặc định nếu không có trong DB
 
-            preparedStatement.setString(3, account.getPassword());
+            if (rs.next()) {
+                String currentNextID = rs.getString("nextID");
+                String prefix = GlobalConstants.ACCOUNT_PREFIX + "-"; // Tiền tố cho Customer ID
 
-            preparedStatement.setString(4, account.getAccountStatus().toString());
-            preparedStatement.setString(5, account.getEmployee().getEmployeeID());
+                // Tách phần số từ nextID và tăng thêm 1
+                int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
 
-            preparedStatement.executeUpdate();
+                // Định dạng lại phần số, đảm bảo luôn có 6 chữ số
+                newAccountID = prefix + String.format("%06d", nextIDNum);
+
+                // Cập nhật nextID mới trong GlobalSequence
+                updateSequenceStatement.setString(1, newAccountID);
+                updateSequenceStatement.setString(2, "Account");
+                updateSequenceStatement.executeUpdate();
+            }
+
+            insertStatement.setString(1, account.getAccountID());
+            insertStatement.setString(2, account.getUserName());
+
+            insertStatement.setString(3, account.getPassword());
+
+            insertStatement.setString(4, account.getAccountStatus().toString());
+            insertStatement.setString(5, account.getEmployee().getEmployeeID());
+
+            insertStatement.executeUpdate();
         } catch (Exception exception) {
             exception.printStackTrace();
             System.exit(1);

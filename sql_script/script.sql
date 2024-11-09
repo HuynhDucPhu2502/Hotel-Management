@@ -42,7 +42,7 @@ CREATE TABLE Employee (
     email NVARCHAR(50) NOT NULL,
     address NVARCHAR(100),
     gender NVARCHAR(6) NOT NULL CHECK (gender IN ('MALE', 'FEMALE')),
-    idCardNumber NVARCHAR(12) NOT NULL,
+    idCardNumber NVARCHAR(12) NOT NULL UNIQUE,
     dob DATE NOT NULL,
     position NVARCHAR(15) NOT NULL CHECK (position IN ('RECEPTIONIST', 'MANAGER'))
 );
@@ -265,7 +265,7 @@ VALUES
 	('Employee', 'EMP-000006'),
 	('Account', 'ACC-000006'),
 	('ServiceCategory', 'SC-000005'),
-	('HotelService', 'HS-000008'),
+	('HotelService', 'HS-000021'),
 	('Pricing', 'P-000009'),
 	('RoomCategory', 'RC-000005'),
 	('ShiftAssignment', 'SA-000004'),
@@ -773,6 +773,7 @@ BEGIN
 END;
 GO
 
+
 select i.invoiceID, c.fullName, r.roomID, e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, t.taxRate, i.netDue
 from Invoice i join ReservationForm rs on i.reservationFormID = rs.reservationFormID
 join Customer c on c.customerID = rs.customerID
@@ -784,4 +785,5 @@ WHERE DATEPART(YEAR, i.invoiceDate) >= DATEPART(YEAR, GETDATE()) - 2
 select * from Invoice
 delete from Invoice
 where invoiceID = 'INV-000001'
+
 

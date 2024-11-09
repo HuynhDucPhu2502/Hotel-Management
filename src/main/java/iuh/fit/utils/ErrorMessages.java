@@ -4,7 +4,7 @@ public class ErrorMessages {
     // Global
     public static final String INVALID_PHONENUMBER = "Số điện thoại phải có 10 chữ số và chữ số đầu tiên là số 0";
     public static final String INVALID_ADDRESS = "Địa chỉ không được rỗng";
-    public static final String INVALID_EMAIL = "Email phải từ 4 đến 30 ký tự và không cứ ký tự đặc biệt";
+    public static final String INVALID_EMAIL = "Email phải từ 4 đến 30 ký tự và không cứ ký tự đặc biệt. Kết thúc phải là @gmail.com hoặc @yahoo.com";
     public static final String INVALID_ID_CARD_NUMBER = "CCCD có cấu trúc XYZ. X là chuỗi 3 chữ số, Y là 1 chữ số thuộc khoảng từ 1 đến 3, và Z là chuỗi 8 chữ số.";
 
     public static final String NULL_ROOMCATEGORY = "Loại phòng không được trống";
@@ -128,6 +128,7 @@ public class ErrorMessages {
     // ConvertHelper
     public static final String CONVERT_HELPER_INVALID_LOCALTIME = "Thời gian phải nằm từ 5:00 đến 23:00";
     public static final String CONVERT_HELPER_INVALID_GENDER = "Giới tính không hợp lệ. Phải nằm trong FEMALE,  MALE";
+    public static final String CONVERT_HELPER_INVALID_OBJECT_STATUS = "Trạng thái đối tượng không phù hợp. Phải nằm trong ACTIVATE,  DEACTIVATE";
     public static final String CONVERT_HELPER_INVALID_POSITION = "Chức vụ không hợp lệ. Phải nằm trong RECEPTIONIST, MANAGER";
     public static final String CONVERT_HELPER_INVALID_SHIFT_DAYS_SCHEDULE = "Ngày ca làm việc không hợp lệ. Phải nằm trong MON_WED_FRI, TUE_THU_SAT, SUNDAY";
     public static final String CONVERT_HELPER_INVALID_ACCOUNT_STATUS= "trạng thái tài khoản không hợp lệ. Phải nằm trong ACTIVE, INACTIVE, LOCKED";
