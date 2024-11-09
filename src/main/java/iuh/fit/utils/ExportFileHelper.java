@@ -1,6 +1,7 @@
 package iuh.fit.utils;
 
 import com.dlsc.gemsfx.daterange.DateRange;
+import iuh.fit.controller.features.statistics.InvoiceRevenueStatisticsTabController;
 import iuh.fit.models.enums.ExportExcelCategory;
 import iuh.fit.models.enums.Month;
 import iuh.fit.models.wrapper.InvoiceDisplayOnTable;
@@ -21,7 +22,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 public class ExportFileHelper {
-    private static final String DATA_LOCATED = "D://Data";
+    private static final String DATA_LOCATED = "D://Thống kê doanh thu";
 
     public static void createExcelFile(TableView<InvoiceDisplayOnTable> tableView, String filePath, int numOfInvoice, double totalMoney){
         try {
@@ -58,16 +59,16 @@ public class ExportFileHelper {
             try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
                 workbook.write(fileOut);
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new IllegalArgumentException(e.getMessage());
             } finally {
                 try {
                     workbook.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ignored) {
+
                 }
             }
         }catch (Exception e){
-            e.printStackTrace();
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 
@@ -106,16 +107,16 @@ public class ExportFileHelper {
             try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
                 workbook.write(fileOut);
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new IllegalArgumentException(e.getMessage());
             } finally {
                 try {
                     workbook.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException ignored) {
+
                 }
             }
         }catch (Exception e){
-            e.printStackTrace();
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 
@@ -148,20 +149,20 @@ public class ExportFileHelper {
             try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
                 workbook.write(fileOut);
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new IllegalArgumentException(e.getMessage());
             } finally {
                 try {
                     workbook.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException egnored) {
+
                 }
             }
         }catch (Exception e){
-            e.printStackTrace();
+            throw new IllegalArgumentException(e.getMessage());
         }
     }
 
-    public static void exportExcelFile(TableView<InvoiceDisplayOnTable> tableView, ExportExcelCategory type, boolean forEmployee, DateRange date, int numOfInvoice, double totalMoney){
+    public static void exportInvoiceExcelFile(TableView<InvoiceDisplayOnTable> tableView, ExportExcelCategory type, boolean forEmployee, DateRange date, int numOfInvoice, double totalMoney){
         FileChooser fileChooser = new FileChooser();
         File directoryFile = new File(DATA_LOCATED);
         if (!directoryFile.exists()) directoryFile.mkdirs();
@@ -172,6 +173,43 @@ public class ExportFileHelper {
                 new FileChooser.ExtensionFilter("All Files", "*.*")
         );
         switch (type){
+            case ExportExcelCategory.ALL_OF_TIME -> {
+                File invoiceRevenueFolder = new File(DATA_LOCATED.concat("//Tổng danh thu"));
+                if (!invoiceRevenueFolder.exists()) invoiceRevenueFolder.mkdirs();
+
+                InvoiceDisplayOnTable instance = tableView.getItems().getFirst();
+
+                File saveFolder;
+                String initialFileName;
+
+                if (!forEmployee) {
+                    String employeeName = instance.getEmpName();
+                    File employeeFolder = new File(invoiceRevenueFolder.getPath() + "//Nhân viên//" + employeeName);
+                    if (!employeeFolder.exists()) employeeFolder.mkdirs();
+
+                    saveFolder = new File(employeeFolder.getPath());
+
+                    initialFileName = employeeName + " - " + InvoiceRevenueStatisticsTabController.allOfYears.getFirst()
+                            + " - " + InvoiceRevenueStatisticsTabController.allOfYears.getLast() + "-TDTK-" + LocalDate.now();
+                } else {
+                    saveFolder = new File(invoiceRevenueFolder.getPath());
+                    initialFileName = InvoiceRevenueStatisticsTabController.allOfYears.getFirst()
+                            + " - " + InvoiceRevenueStatisticsTabController.allOfYears.getLast() + "-TDTK-" + LocalDate.now();
+                }
+
+                fileChooser.setInitialDirectory(saveFolder);
+                fileChooser.setInitialFileName(initialFileName);
+
+                File userSelection = fileChooser.showSaveDialog(null);
+
+                if (userSelection != null) {
+                    String filePath = userSelection.getAbsolutePath();
+                    createExcelFile(tableView, filePath, numOfInvoice, totalMoney);
+                    openExcelFile(filePath);
+                } else {
+                    System.out.println("No file selected.");
+                }
+            }
             case ExportExcelCategory.ALL_OF_YEAR -> {
                 InvoiceDisplayOnTable instance = tableView.getItems().getFirst();
                 String year = String.valueOf(instance.getCreateDate().getYear());
@@ -243,6 +281,44 @@ public class ExportFileHelper {
                     System.out.println("No file selected.");
                 }
             }
+            case ExportExcelCategory.QUARTER -> {
+                InvoiceDisplayOnTable invoiceInstance = tableView.getItems().getFirst();
+                String year = String.valueOf(invoiceInstance.getCreateDate().getYear());
+                int month = invoiceInstance.getCreateDate().getMonthValue();
+                String quarter;
+
+                if(QuarterChecker.FIRST_QUATER.contains(month)) quarter = "Quý 1";
+                else if(QuarterChecker.SECOND_QUATER.contains(month)) quarter = "Quý 2";
+                else if(QuarterChecker.THIRD_QUATER.contains(month)) quarter = "Quý 3";
+                else quarter = "Quý 4";
+
+                File yearFolder = new File(directoryFile, year);
+                if (!yearFolder.exists()) yearFolder.mkdirs();
+
+                if (!forEmployee) {
+                    String employeeName = invoiceInstance.getEmpName();
+                    File employeeFolder = new File(yearFolder, "Nhân viên/" + employeeName + "/" + quarter);
+                    if (!employeeFolder.exists()) employeeFolder.mkdirs();
+
+                    fileChooser.setInitialDirectory(employeeFolder);
+                    fileChooser.setInitialFileName(employeeName + " - " + quarter + "-TDTK-" + LocalDate.now() + ".xlsx");
+                } else {
+                    File quarterFolder = new File(yearFolder, quarter);
+                    if (!quarterFolder.exists()) quarterFolder.mkdirs();
+
+                    fileChooser.setInitialDirectory(quarterFolder);
+                    fileChooser.setInitialFileName(quarter + "-" + year + "-TDTK-" + LocalDate.now() + ".xlsx");
+                }
+
+                File userSelection = fileChooser.showSaveDialog(null);
+                if (userSelection != null) {
+                    String filePath = userSelection.getAbsolutePath();
+                    createExcelFile(tableView, filePath, numOfInvoice, totalMoney);
+                    openExcelFile(filePath);
+                } else {
+                    System.out.println("No file selected.");
+                }
+            }
             case ExportExcelCategory.DAY_OF_MONTH -> {
                 InvoiceDisplayOnTable invoiceInstance = tableView.getItems().getFirst();
                 String year = String.valueOf(invoiceInstance.getCreateDate().getYear());
@@ -277,7 +353,7 @@ public class ExportFileHelper {
                 }
             }
             case ExportExcelCategory.MANY_YEAR -> {
-                InvoiceDisplayOnTable invoiceInstance = tableView.getItems().get(0);
+                InvoiceDisplayOnTable invoiceInstance = tableView.getItems().getFirst();
                 String fromYear = String.valueOf(date.getStartDate().getYear());
                 String toYear = String.valueOf(date.getEndDate().getYear());
 
