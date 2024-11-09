@@ -7,18 +7,18 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 import java.time.format.DateTimeFormatter;
 
 public class EmployeeInformationController {
     @FXML
-    private Label employeeIDLabel, employeeFullnameLabel,
-            employeePhoneNumber, employeeEmailLabel,
-            employeeGenderLabel, employeeIDCardNumberLabel,
-            employeeDOBLabel, employeeRoleLabel;
+    private TextField employeeIDTextField, employeeFullnameTextField,
+            employeePhoneNumberTextField, employeeEmailTextField,
+            employeeGenderTextField, employeeIDCardNumberTextField,
+            employeeDOBTextField, employeeRoleTextField;
 
     @FXML
     private TextArea employeeAddressTextArea;
@@ -58,15 +58,15 @@ public class EmployeeInformationController {
                 String role = employee.getPosition().toString();
 
                 Platform.runLater(() -> {
-                    employeeIDLabel.setText(employeeID);
-                    employeeFullnameLabel.setText(fullName);
-                    employeePhoneNumber.setText(phoneNumber);
-                    employeeEmailLabel.setText(email);
-                    employeeGenderLabel.setText(gender);
-                    employeeIDCardNumberLabel.setText(idCardNumber);
-                    employeeDOBLabel.setText(dob);
+                    employeeIDTextField.setText(employeeID);
+                    employeeFullnameTextField.setText(fullName);
+                    employeePhoneNumberTextField.setText(phoneNumber);
+                    employeeEmailTextField.setText(email);
+                    employeeGenderTextField.setText(gender);
+                    employeeIDCardNumberTextField.setText(idCardNumber);
+                    employeeDOBTextField.setText(dob);
                     employeeAddressTextArea.setText(address);
-                    employeeRoleLabel.setText(role);
+                    employeeRoleTextField.setText(role);
                 });
                 return null;
             }
