@@ -363,7 +363,7 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
         employeeNameColumn.setCellValueFactory(new PropertyValueFactory<>("empName"));
 
         // Format date column
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("HH:mm:ss dd/MM/yyyy", new Locale("vi", "VN"));
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy", new Locale("vi", "VN"));
         invoiceDateColumn.setCellValueFactory(new PropertyValueFactory<>("createDate"));
         invoiceDateColumn.setCellFactory(column -> new TableCell<>() {
             @Override
