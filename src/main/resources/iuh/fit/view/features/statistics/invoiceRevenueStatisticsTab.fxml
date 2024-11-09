@@ -148,7 +148,7 @@
             <VBox.margin>
                 <Insets />
             </VBox.margin>
-            <AnchorPane prefHeight="54.0" prefWidth="1262.0">
+            <AnchorPane prefHeight="61.0" prefWidth="1354.0">
                 <HBox.margin>
                     <Insets />
                 </HBox.margin>
@@ -180,13 +180,13 @@
                   <Font name="Segoe UI" size="20.0" />
                </font>
             </Text>
+            <Pagination fx:id="invoicePagination" layoutX="946.0" layoutY="4.0" maxPageIndicatorCount="5" prefHeight="61.0" prefWidth="226.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="946.0" AnchorPane.rightAnchor="220.0" AnchorPane.topAnchor="0.0" />
             </AnchorPane>
         </HBox>
       <HBox prefHeight="38.0" prefWidth="1251.0">
          <children>
             <AnchorPane prefHeight="35.0" prefWidth="1262.0">
                <children>
-                  <Pagination fx:id="invoicePagination" layoutX="952.0" layoutY="3.0" maxPageIndicatorCount="5" prefHeight="44.0" prefWidth="298.0" />
                   <Text layoutX="14.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dịch vụ                  : " wrappingWidth="175.42266845703148" AnchorPane.bottomAnchor="-6.0" AnchorPane.topAnchor="12.0">
                      <font>
                         <Font name="Segoe UI" size="20.0" />
