@@ -231,7 +231,7 @@ public class HistoryCheckOutDAO {
                 // Thiết lập giá trị cho câu lệnh INSERT
                 insertStatement.setString(1, currentNextID);
                 insertStatement.setTimestamp(2,
-                        ConvertHelper.dateTimeToSQLConverter(historyCheckOut.getCheckOutDate()));
+                        ConvertHelper.localDateTimeToSQLConverter(historyCheckOut.getCheckOutDate()));
                 insertStatement.setString(3,
                         historyCheckOut.getReservationForm().getReservationID());
                 insertStatement.setString(4,

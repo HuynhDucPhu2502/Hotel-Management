@@ -104,7 +104,7 @@ public class RoomReservationDetailDAO {
                 updateNextIDStatement.executeUpdate();
 
                 insertStatement.setString(1, currentNextID);
-                insertStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(detail.getDateChanged()));
+                insertStatement.setTimestamp(2, ConvertHelper.localDateTimeToSQLConverter(detail.getDateChanged()));
                 insertStatement.setString(3, detail.getRoom().getRoomID());
                 insertStatement.setString(4, detail.getReservationForm().getReservationID());
                 insertStatement.setString(5, detail.getEmployee().getEmployeeID());
@@ -130,7 +130,7 @@ public class RoomReservationDetailDAO {
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement ps = connection.prepareStatement(sql)
         ) {
-            ps.setTimestamp(1, ConvertHelper.dateTimeToSQLConverter(detail.getDateChanged()));
+            ps.setTimestamp(1, ConvertHelper.localDateTimeToSQLConverter(detail.getDateChanged()));
             ps.setString(2, detail.getRoom().getRoomID());
             ps.setString(3, detail.getReservationForm().getReservationID());
             ps.setString(4, detail.getEmployee().getEmployeeID());
