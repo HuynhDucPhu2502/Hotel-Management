@@ -10,28 +10,29 @@ import iuh.fit.models.enums.RoomStatus;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RoomManagerController {
-    @FXML
-    private TextField roomIDTextField;
-
     // Input Fields
     @FXML
-    private ComboBox<RoomCategory> roomCategoryComboBox;
+    private TextField roomIDTextField, floorNumbTextField;
     @FXML
-    private TextField floorNumbTextField;
+    private ComboBox<RoomCategory> roomCategoryComboBox;
     @FXML
     private ComboBox<RoomStatus> roomStateComboBox;
 
@@ -39,9 +40,7 @@ public class RoomManagerController {
     @FXML
     private ComboBox<String> roomIDSearchField;
     @FXML
-    private TextField roomStateSearchField;
-    @FXML
-    private TextField numberOfBedSearchField;
+    private TextField roomStateSearchField, numberOfBedSearchField;
 
     // Table
     @FXML
@@ -57,11 +56,7 @@ public class RoomManagerController {
 
     // Buttons
     @FXML
-    private Button resetBtn;
-    @FXML
-    private Button addBtn;
-    @FXML
-    private Button updateBtn;
+    private Button resetBtn, addBtn, updateBtn;
 
     // Dialog Pane
     @FXML
@@ -122,11 +117,13 @@ public class RoomManagerController {
         Callback<TableColumn<Room, Void>, TableCell<Room, Void>> cellFactory = param -> new TableCell<>() {
             private final Button updateButton = new Button("Cập nhật");
             private final Button deleteButton = new Button("Xóa");
+            private final Button dialogButton = new Button("Nhật ký");
             private final HBox hBox = new HBox(10);
 
             {
                 updateButton.getStyleClass().add("button-update");
                 deleteButton.getStyleClass().add("button-delete");
+                dialogButton.getStyleClass().add("button-view");
                 hBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/Button.css")).toExternalForm());
 
                 updateButton.setOnAction(event -> {
@@ -139,8 +136,17 @@ public class RoomManagerController {
                     handleDeleteAction(room);
                 });
 
+                dialogButton.setOnAction(e -> {
+                    try {
+                        Room room = getTableView().getItems().get(getIndex());
+                        handleShowRoomInformationAction(room);
+                    } catch (Exception exception) {
+                        throw new RuntimeException(exception);
+                    }
+                });
+
                 hBox.setAlignment(Pos.CENTER);
-                hBox.getChildren().addAll(updateButton, deleteButton);
+                hBox.getChildren().addAll(updateButton, deleteButton, dialogButton);
             }
 
             @Override
@@ -250,7 +256,7 @@ public class RoomManagerController {
         int roomCategoryNumbOfBed = newRoomCategory.getNumberOfBed();
 
         //roomCategoryCode là ký tự đầu của mã phòng ("V" hoặc "T")
-        String roomCategoryCode = null;
+        String roomCategoryCode;
         if(roomCategoryName.equalsIgnoreCase("Phòng Thường")){
             roomCategoryCode = "T";
         }else{
@@ -339,5 +345,25 @@ public class RoomManagerController {
 
         items.setAll(room);
         roomTableView.setItems(items);
+    }
+
+    private void handleShowRoomInformationAction(Room room) throws IOException {
+        String source = "/iuh/fit/view/features/room/RoomDialogView.fxml";
+
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
+        AnchorPane layout = loader.load();
+
+        RoomDialogViewController roomDialogViewController = loader.getController();
+        roomDialogViewController.setRoom(room);
+
+        Scene scene = new Scene(layout);
+
+        Stage stage = new Stage();
+        String iconPath = "/iuh/fit/icons/menu_icons/ic_room.png";
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath))));
+        stage.setTitle("Thông tin phòng");
+
+        stage.setScene(scene);
+        stage.show();
     }
 }

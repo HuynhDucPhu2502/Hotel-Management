@@ -321,7 +321,7 @@ public class CustomerManagerController {
         stage.setResizable(false);
         stage.setScene(scene);
 
-        String iconPath = "/iuh/fit/icons/menu_icons/ic_customer.png"; // Đường dẫn đến icon
+        String iconPath = "/iuh/fit/icons/menu_icons/ic_customer.png";
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath))));
         stage.setTitle("Thông tin khách hàng");
 

@@ -1,8 +1,6 @@
 package iuh.fit.dao;
 
 import iuh.fit.models.Employee;
-import iuh.fit.models.HotelService;
-import iuh.fit.models.ServiceCategory;
 import iuh.fit.models.enums.Gender;
 import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.enums.Position;
@@ -14,7 +12,6 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class EmployeeDAO {
     public static List<Employee> getEmployees() {
@@ -141,11 +138,11 @@ public class EmployeeDAO {
             insertStatement.setString(3, employee.getPhoneNumber());
             insertStatement.setString(4, employee.getEmail());
             insertStatement.setString(5, employee.getAddress());
-            insertStatement.setString(6, ConvertHelper.genderConverterToSQL(employee.getGender()));
+            insertStatement.setString(6, ConvertHelper.genderToSQLConverter(employee.getGender()));
             insertStatement.setString(7, employee.getIdCardNumber());
-            insertStatement.setDate(8, ConvertHelper.dateToSQLConverter(employee.getDob()));
+            insertStatement.setDate(8, ConvertHelper.localDateToSQLConverter(employee.getDob()));
             insertStatement.setString(9, employee.getPosition().name());
-            insertStatement.setString(10, ConvertHelper.objectStatusConverterToSQL(employee.getObjectStatus()));
+            insertStatement.setString(10, ConvertHelper.objectStatusToSQLConverter(employee.getObjectStatus()));
 
             insertStatement.executeUpdate();
             if (rs.next()) {
@@ -184,9 +181,9 @@ public class EmployeeDAO {
             preparedStatement.setString(2, employee.getPhoneNumber());
             preparedStatement.setString(3, employee.getEmail());
             preparedStatement.setString(4, employee.getAddress());
-            preparedStatement.setString(5, ConvertHelper.genderConverterToSQL(employee.getGender()));
+            preparedStatement.setString(5, ConvertHelper.genderToSQLConverter(employee.getGender()));
             preparedStatement.setString(6, employee.getIdCardNumber());
-            preparedStatement.setDate(7, ConvertHelper.dateToSQLConverter(employee.getDob()));
+            preparedStatement.setDate(7, ConvertHelper.localDateToSQLConverter(employee.getDob()));
             preparedStatement.setString(8, employee.getPosition().name());
             preparedStatement.setString(9, employee.getEmployeeID());
 
@@ -353,16 +350,16 @@ public class EmployeeDAO {
                 preparedStatement.setObject(13, gender);
                 preparedStatement.setObject(14, gender);
             }else {
-                preparedStatement.setString(13, ConvertHelper.genderConverterToSQL(gender));
-                preparedStatement.setString(14, ConvertHelper.genderConverterToSQL(gender));
+                preparedStatement.setString(13, ConvertHelper.genderToSQLConverter(gender));
+                preparedStatement.setString(14, ConvertHelper.genderToSQLConverter(gender));
             }
 
             if (dob == null){
                 preparedStatement.setObject(15, dob);
                 preparedStatement.setObject(16, dob);
             } else {
-                preparedStatement.setDate(15, ConvertHelper.dateToSQLConverter(dob));
-                preparedStatement.setDate(16, ConvertHelper.dateToSQLConverter(dob));
+                preparedStatement.setDate(15, ConvertHelper.localDateToSQLConverter(dob));
+                preparedStatement.setDate(16, ConvertHelper.localDateToSQLConverter(dob));
             }
 
             if (position == null){

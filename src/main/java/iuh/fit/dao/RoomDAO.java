@@ -72,8 +72,8 @@ public class RoomDAO {
                 )
         ){
             preparedStatement.setString(1, room.getRoomID());
-            preparedStatement.setString(2, ConvertHelper.roomStatusConverterToSQL(room.getRoomStatus()));
-            preparedStatement.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(room.getDateOfCreation()));
+            preparedStatement.setString(2, ConvertHelper.roomStatusToSQLConverter(room.getRoomStatus()));
+            preparedStatement.setTimestamp(3, ConvertHelper.localDateTimeToSQLConverter(room.getDateOfCreation()));
             preparedStatement.setString(4, room.getRoomCategory().getRoomCategoryID());
 
             preparedStatement.executeUpdate();
@@ -113,7 +113,7 @@ public class RoomDAO {
         )
         ){
             preparedStatement.setString(1, newRoom.getRoomID());
-            preparedStatement.setString(2, ConvertHelper.roomStatusConverterToSQL(newRoom.getRoomStatus()));
+            preparedStatement.setString(2, ConvertHelper.roomStatusToSQLConverter(newRoom.getRoomStatus()));
             preparedStatement.setString(3, newRoom.getRoomCategory().getRoomCategoryID());
             preparedStatement.setString(4, oldCategory);
             preparedStatement.setString(5, oldRoomID);

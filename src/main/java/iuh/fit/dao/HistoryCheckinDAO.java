@@ -226,7 +226,7 @@ public class HistoryCheckinDAO {
                 // Thiết lập giá trị cho câu lệnh INSERT
                 insertStatement.setString(1, currentNextID);
                 insertStatement.setTimestamp(2,
-                        ConvertHelper.dateTimeToSQLConverter(historyCheckIn.getCheckInDate()));
+                        ConvertHelper.localDateTimeToSQLConverter(historyCheckIn.getCheckInDate()));
                 insertStatement.setString(3,
                         historyCheckIn.getReservationForm().getReservationID());
                 insertStatement.setString(4,
@@ -294,7 +294,7 @@ public class HistoryCheckinDAO {
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
-            preparedStatement.setTimestamp(1, ConvertHelper.dateTimeToSQLConverter(historyCheckIn.getCheckInDate()));
+            preparedStatement.setTimestamp(1, ConvertHelper.localDateTimeToSQLConverter(historyCheckIn.getCheckInDate()));
             preparedStatement.setString(2, historyCheckIn.getReservationForm().getReservationID());
             preparedStatement.setString(3, historyCheckIn.getEmployee().getEmployeeID());
             preparedStatement.setString(4, historyCheckIn.getHistoryCheckInID());

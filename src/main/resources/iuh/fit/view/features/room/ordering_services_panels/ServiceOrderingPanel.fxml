@@ -200,6 +200,14 @@
                                                 <Font name="System Bold" size="24.0" />
                                              </font>
                                           </Text>
+                                          <Button fx:id="roomDialogBtn" mnemonicParsing="false" styleClass="button-view" text="Xem Nhật Ký Phiếu" textFill="#fffefe">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Button>
                                        </children>
                                     </HBox>
                                     <HBox>

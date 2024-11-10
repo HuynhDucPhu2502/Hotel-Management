@@ -264,6 +264,24 @@ CREATE TABLE Invoice (
 );
 GO
 
+-- Tạo bảng RoomDialog
+CREATE TABLE RoomDialog (
+    dialogID INT IDENTITY(1,1) PRIMARY KEY,
+    roomID NVARCHAR(15) NULL,
+    reservationFormID NVARCHAR(15) NULL,
+    dialog NVARCHAR(200) NOT NULL,
+    dialogType NVARCHAR(15) NOT NULL CHECK (dialogType IN ('TRANSFER', 'RESERVATION', 'CHECKIN', 'CHECKOUT', 'SERVICE')),
+    timestamp DATETIME DEFAULT GETDATE(), -- Thời gian ghi nhật ký
+    FOREIGN KEY (roomID) REFERENCES Room(roomID)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
+);
+GO
+
+
 -- ===================================================================================
 -- 2. THÊM DỮ LIỆU
 -- ===================================================================================
@@ -758,4 +776,3 @@ BEGIN
     END
 END;
 GO
-
