@@ -15,10 +15,9 @@ import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingCo
 import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
 import iuh.fit.dao.CustomerDAO;
 import iuh.fit.dao.ReservationFormDAO;
-import iuh.fit.models.Customer;
-import iuh.fit.models.Employee;
-import iuh.fit.models.ReservationForm;
-import iuh.fit.models.Room;
+import iuh.fit.dao.RoomDialogDAO;
+import iuh.fit.models.*;
+import iuh.fit.models.enums.DialogType;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
@@ -378,6 +377,19 @@ public class CreateReservationFormController {
                     ReservationFormDAO.getNextReservationFormID(), LocalDateTime.now(),
                     checkInTime, checkOutTime, employee, room, customer);
             ReservationFormDAO.createData(reservationForm);
+
+            String dialogMessage = "Đặt phòng cho " + customer.getFullName() + " từ " +
+                    dateTimeFormatter.format(checkInTime.toLocalDate()) + " đến " +
+                    dateTimeFormatter.format(checkOutTime.toLocalDate());
+            RoomDialog roomDialog = new RoomDialog(
+                    room,
+                    reservationForm,
+                    dialogMessage,
+                    DialogType.RESERVATION,
+                    LocalDateTime.now()
+            );
+            RoomDialogDAO.createData(roomDialog);
+
             dialogPane.showInformation("Thành công", "Đã thêm phiếu đặt phòng thành công");
             handleResetAction();
         } catch (Exception e) {

@@ -368,13 +368,12 @@ public class EmployeeManagerController {
         Scene scene = new Scene(layout);
 
         Stage stage = new Stage();
-        stage.setTitle("Thông tin nhân viên");
-        stage.setScene(scene);
 
         String iconPath = "/iuh/fit/icons/menu_icons/ic_employee.png"; // Đường dẫn đến icon
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath))));
         stage.setTitle("Thông tin nhân viên");
 
+        stage.setScene(scene);
         stage.show();
     }
     public String removePrefix(String input) {

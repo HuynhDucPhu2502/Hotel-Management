@@ -153,4 +153,7 @@ public class ErrorMessages {
     // Customer Manager
     public static final String CUS_GENDER_NOT_SELECTED = "Vui lòng chọn giới tính";
 
+    // Room Dialog
+    public static final String ROOM_DIALOG_TYPE_INVALID = "Loại nhật ký không phù hợp";
+
 }

@@ -108,8 +108,8 @@ public class ReservationFormDAO {
                 )
         ) {
             overlapCheckStmt.setString(1, reservationForm.getRoom().getRoomID());
-            overlapCheckStmt.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckInDate()));
-            overlapCheckStmt.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckOutDate()));
+            overlapCheckStmt.setTimestamp(2, ConvertHelper.localDateTimeToSQLConverter(reservationForm.getCheckInDate()));
+            overlapCheckStmt.setTimestamp(3, ConvertHelper.localDateTimeToSQLConverter(reservationForm.getCheckOutDate()));
 
             ResultSet overlapResult = overlapCheckStmt.executeQuery();
             if (overlapResult.next() && overlapResult.getInt(1) > 0)
@@ -117,8 +117,8 @@ public class ReservationFormDAO {
 
 
             overlapIDCardStmt.setString(1, reservationForm.getCustomer().getIdCardNumber());
-            overlapIDCardStmt.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckInDate()));
-            overlapIDCardStmt.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckOutDate()));
+            overlapIDCardStmt.setTimestamp(2, ConvertHelper.localDateTimeToSQLConverter(reservationForm.getCheckInDate()));
+            overlapIDCardStmt.setTimestamp(3, ConvertHelper.localDateTimeToSQLConverter(reservationForm.getCheckOutDate()));
 
             ResultSet overlapIDCardResult = overlapIDCardStmt.executeQuery();
             if (overlapIDCardResult.next() && overlapIDCardResult.getInt(1) > 0)
@@ -142,9 +142,9 @@ public class ReservationFormDAO {
             }
 
             insertStatement.setString(1, newReservationFormID);
-            insertStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(reservationForm.getReservationDate()));
-            insertStatement.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckInDate()));
-            insertStatement.setTimestamp(4, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckOutDate()));
+            insertStatement.setTimestamp(2, ConvertHelper.localDateTimeToSQLConverter(reservationForm.getReservationDate()));
+            insertStatement.setTimestamp(3, ConvertHelper.localDateTimeToSQLConverter(reservationForm.getCheckInDate()));
+            insertStatement.setTimestamp(4, ConvertHelper.localDateTimeToSQLConverter(reservationForm.getCheckOutDate()));
             insertStatement.setString(5, reservationForm.getEmployee().getEmployeeID());
             insertStatement.setString(6, reservationForm.getRoom().getRoomID());
             insertStatement.setString(7, reservationForm.getCustomer().getCustomerID());
@@ -189,9 +189,9 @@ public class ReservationFormDAO {
                                 "WHERE reservationFormID = ? "
                 )
         ){
-            preparedStatement.setTimestamp(1, ConvertHelper.dateTimeToSQLConverter(reservationForm.getReservationDate()));
-            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckInDate()));
-            preparedStatement.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(reservationForm.getCheckOutDate()));
+            preparedStatement.setTimestamp(1, ConvertHelper.localDateTimeToSQLConverter(reservationForm.getReservationDate()));
+            preparedStatement.setTimestamp(2, ConvertHelper.localDateTimeToSQLConverter(reservationForm.getCheckInDate()));
+            preparedStatement.setTimestamp(3, ConvertHelper.localDateTimeToSQLConverter(reservationForm.getCheckOutDate()));
             preparedStatement.setString(4, reservationForm.getEmployee().getEmployeeID());
             preparedStatement.setString(5, reservationForm.getRoom().getRoomID());
             preparedStatement.setString(6, reservationForm.getCustomer().getCustomerID());
@@ -300,7 +300,7 @@ public class ReservationFormDAO {
         ) {
             preparedStatement.setString(1, roomID);
             preparedStatement.setTimestamp(2,
-                    ConvertHelper.dateTimeToSQLConverter(LocalDateTime.now().minusHours(2))
+                    ConvertHelper.localDateTimeToSQLConverter(LocalDateTime.now().minusHours(2))
             );
 
             ResultSet rs = preparedStatement.executeQuery();
