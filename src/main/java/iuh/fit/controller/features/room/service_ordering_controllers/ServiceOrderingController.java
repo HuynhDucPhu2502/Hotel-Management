@@ -2,12 +2,14 @@ package iuh.fit.controller.features.room.service_ordering_controllers;
 
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.room.ReservationFormDialogViewController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
 import iuh.fit.dao.*;
 import iuh.fit.models.*;
+import iuh.fit.models.enums.DialogType;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
 import javafx.application.Platform;
@@ -19,15 +21,20 @@ import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class ServiceOrderingController {
     // ==================================================================================================================
@@ -40,6 +47,8 @@ public class ServiceOrderingController {
     private Button navigateToCreateReservationFormBtn,
             navigateToReservationListBtn, navigateToRoomChanging;
 
+    @FXML
+    private Button roomDialogBtn;
 
     @FXML
     private Label roomNumberLabel, roomCategoryLabel,
@@ -126,7 +135,15 @@ public class ServiceOrderingController {
         navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
         navigateToRoomChanging.setOnAction(e -> navigateToRoomChanging());
 
+        // Current Panel Button
         serviceCategoryCBox.setOnAction(e -> filterServicesByCategory());
+        roomDialogBtn.setOnAction(e -> {
+            try {
+                handleShowRoomInformationAction();
+            } catch (Exception exception) {
+                throw new RuntimeException(exception);
+            }
+        });
     }
 
     private void loadData() {
@@ -284,7 +301,6 @@ public class ServiceOrderingController {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource(
                             "/iuh/fit/view/features/room/ordering_services_panels/ServiceItem.fxml"));
                     Pane serviceItem = loader.load();
-                    System.out.println(service.getServiceCategory().getServiceCategoryName());
                     ServiceItemController controller = loader.getController();
                     controller.setupContext(service);
                     controller.getAddServiceBtn().setOnAction(e ->
@@ -304,6 +320,7 @@ public class ServiceOrderingController {
                 serviceGridPane.setManaged(true);
                 emptyLabelContainer.setVisible(false);
                 emptyLabelContainer.setManaged(false);
+                serviceListContainer.setAlignment(Pos.TOP_CENTER);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -393,6 +410,15 @@ public class ServiceOrderingController {
 
             RoomUsageServiceDAO.createData(roomUsageService);
 
+            RoomDialog roomDialog = new RoomDialog(
+                    roomWithReservation.getRoom(),
+                    roomWithReservation.getReservationForm(),
+                    "Thêm dịch vụ " + "x" + amount + " "  + service.getServiceName() + " " + service.getServiceId(),
+                    DialogType.SERVICE,
+                    LocalDateTime.now()
+            );
+            RoomDialogDAO.createData(roomDialog);
+
             amountField.getValueFactory().setValue(1);
         } catch (Exception e) {
             dialogPane.showInformation("LỖI", e.getMessage());
@@ -421,6 +447,29 @@ public class ServiceOrderingController {
         filterTask.setOnFailed(e -> dialogPane.showWarning("LỖI", "Lỗi khi lọc dịch vụ"));
 
         new Thread(filterTask).start();
+    }
+
+    // ==================================================================================================================
+    // 8. Chức năng hiện nhật ký
+    // ==================================================================================================================
+    private void handleShowRoomInformationAction() throws IOException {
+        String source = "/iuh/fit/view/features/room/ReservationFormDialogView.fxml";
+
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
+        AnchorPane layout = loader.load();
+
+        ReservationFormDialogViewController reservationFormDialogViewController = loader.getController();
+        reservationFormDialogViewController.setReservationForm(roomWithReservation.getReservationForm());
+
+        Scene scene = new Scene(layout);
+
+        Stage stage = new Stage();
+        String iconPath = "/iuh/fit/icons/menu_icons/ic_room.png";
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath))));
+        stage.setTitle("Nhật ký phiếu đặt phòng");
+
+        stage.setScene(scene);
+        stage.show();
     }
 
 

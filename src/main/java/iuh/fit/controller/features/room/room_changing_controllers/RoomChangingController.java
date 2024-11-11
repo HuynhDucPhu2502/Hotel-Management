@@ -2,33 +2,39 @@ package iuh.fit.controller.features.room.room_changing_controllers;
 
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.room.ReservationFormDialogViewController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
-import iuh.fit.dao.HistoryCheckinDAO;
-import iuh.fit.dao.ReservationFormDAO;
-import iuh.fit.dao.RoomDAO;
-import iuh.fit.dao.RoomReservationDetailDAO;
+import iuh.fit.dao.*;
 import iuh.fit.models.*;
+import iuh.fit.models.enums.DialogType;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class RoomChangingController {
     // ==================================================================================================================
@@ -39,6 +45,8 @@ public class RoomChangingController {
    @FXML
    private Button navigateToCreateReservationFormBtn,
            navigateToReservationListBtn, navigateToServiceOrderingBtn;
+    @FXML
+    private Button roomDialogBtn;
 
     @FXML
     private Label roomNumberLabel, roomCategoryLabel,
@@ -79,6 +87,9 @@ public class RoomChangingController {
     @FXML
     private GridPane roomGridPane;
 
+    @FXML
+    private ComboBox<String> floorNumberCBox;
+
     private MainController mainController;
     private RoomWithReservation roomWithReservation;
     private Employee employee;
@@ -107,25 +118,55 @@ public class RoomChangingController {
         setupReservationForm();
         setupButtonActions();
         loadData();
-        displayAvailableRooms(availableRooms);
     }
 
 
     private void loadData() {
-        availableRooms = RoomDAO.getAvailableRoomsUntil(
-                roomWithReservation.getRoom().getRoomID(),
-                roomWithReservation.getRoom().getRoomCategory().getRoomCategoryID(),
-                roomWithReservation.getReservationForm().getCheckOutDate()
+        Task<Void> loadDataTask = new Task<>() {
+            @Override
+            protected Void call() {
+                // Tải danh sách phòng khả dụng từ cơ sở dữ liệu.
+                availableRooms = RoomDAO.getAvailableRoomsUntil(
+                        roomWithReservation.getRoom().getRoomID(),
+                        roomWithReservation.getRoom().getRoomCategory().getRoomCategoryID(),
+                        roomWithReservation.getReservationForm().getCheckOutDate()
+                );
 
-        );
-        List<RoomReservationDetail> roomReservationDetails = RoomReservationDetailDAO.getByReservationFormID(
-                roomWithReservation.getReservationForm().getReservationID()
-        );
+                // Tải danh sách chi tiết đặt phòng.
+                List<RoomReservationDetail> roomReservationDetails = RoomReservationDetailDAO.getByReservationFormID(
+                        roomWithReservation.getReservationForm().getReservationID()
+                );
 
-        ObservableList<RoomReservationDetail> data = FXCollections.observableArrayList(roomReservationDetails);
+                // Cập nhật bảng chi tiết đặt phòng.
+                ObservableList<RoomReservationDetail> data = FXCollections.observableArrayList(roomReservationDetails);
+                Platform.runLater(() -> {
+                    roomReservationDetailTableView.setItems(data);
+                    roomReservationDetailTableView.refresh();
+                });
 
-        roomReservationDetailTableView.setItems(data);
-        roomReservationDetailTableView.refresh();
+                // Thiết lập danh sách tầng cho ComboBox và chọn giá trị đầu tiên.
+                Platform.runLater(() -> {
+                    floorNumberCBox.getItems().setAll(getFloorNumbers());
+                    floorNumberCBox.getSelectionModel().selectFirst();
+                    filterAvailableRoomsByFloor();
+                });
+
+                return null;
+            }
+        };
+
+        loadDataTask.setOnFailed(e -> {
+            dialogPane.showWarning("LỖI", "Lỗi khi tải dữ liệu");
+            loadDataTask.getException().printStackTrace();
+        });
+
+        loadDataTask.setOnSucceeded(e -> displayAvailableRooms(availableRooms));
+
+        new Thread(loadDataTask).start();
+    }
+
+    private List<String> getFloorNumbers() {
+        return List.of("TẤT CẢ", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
     }
 
     private void setupButtonActions() {
@@ -137,6 +178,16 @@ public class RoomChangingController {
         navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
         navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
         navigateToServiceOrderingBtn.setOnAction(e -> navigateToServiceOrderingPanel());
+
+        // Current Panel Button
+        floorNumberCBox.setOnAction(e -> filterAvailableRoomsByFloor());
+        roomDialogBtn.setOnAction(e -> {
+            try {
+                handleShowRoomInformationAction();
+            } catch (Exception exception) {
+                throw new RuntimeException(exception);
+            }
+        });
 
     }
 
@@ -266,6 +317,12 @@ public class RoomChangingController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+            roomGridPane.setVisible(true);
+            roomGridPane.setManaged(true);
+            emptyLabelContainer.setVisible(false);
+            emptyLabelContainer.setManaged(false);
+            roomListContainer.setAlignment(Pos.TOP_CENTER);
         } else {
             roomGridPane.setVisible(false);
             roomGridPane.setManaged(false);
@@ -282,6 +339,30 @@ public class RoomChangingController {
             roomListContainer.setAlignment(Pos.CENTER);
         }
     }
+
+    private void filterAvailableRoomsByFloor() {
+        String selectedFloor = floorNumberCBox.getSelectionModel().getSelectedItem();
+
+        Task<List<Room>> filterTask = new Task<>() {
+            @Override
+            protected List<Room> call() {
+                if ("TẤT CẢ".equals(selectedFloor)) {
+                    return availableRooms;
+                } else {
+                    // Lọc danh sách phòng theo tầng được chọn.
+                    return availableRooms.stream()
+                            .filter(room -> String.valueOf(room.getRoomFloorNumber()).equals(selectedFloor))
+                            .toList();
+                }
+            }
+        };
+
+        filterTask.setOnSucceeded(e -> displayAvailableRooms(filterTask.getValue()));
+        filterTask.setOnFailed(e -> dialogPane.showWarning("LỖI", "Lỗi khi lọc phòng"));
+
+        new Thread(filterTask).start();
+    }
+
 
     // ==================================================================================================================
     // 5.  Setup table lịch sử dùng phòng
@@ -347,6 +428,27 @@ public class RoomChangingController {
                     detail.setEmployee(employee);
                     RoomReservationDetailDAO.createData(detail);
 
+                    // 5. Tạo bản ghi trong RoomDialog để ghi nhận lịch sử chuyển phòng
+                    String dialogMessageOrigin = "Phòng " + roomWithReservation.getRoom().getRoomNumber() + " đã chuyển sang phòng " + newRoom.getRoomNumber();
+                    RoomDialog roomDialogOrigin = new RoomDialog(
+                            roomWithReservation.getRoom(),
+                            roomWithReservation.getReservationForm(),
+                            dialogMessageOrigin,
+                            DialogType.TRANSFER,
+                            LocalDateTime.now()
+                    );
+                    RoomDialogDAO.createData(roomDialogOrigin);
+
+                    String dialogMessageDestination = "Phòng " + newRoom.getRoomNumber() + " đã nhận chuyển từ phòng " + roomWithReservation.getRoom().getRoomNumber();
+                    RoomDialog roomDialogDestination = new RoomDialog(
+                            newRoom,
+                            roomWithReservation.getReservationForm(),
+                            dialogMessageDestination,
+                            DialogType.TRANSFER,
+                            LocalDateTime.now()
+                    );
+                    RoomDialogDAO.createData(roomDialogDestination);
+
                     dialogPane.showInformation("Thành Công","Chuyển phòng thành công!");
                     navigateToRoomBookingPanel();
                 }
@@ -358,4 +460,26 @@ public class RoomChangingController {
         }
     }
 
+    // ==================================================================================================================
+    // 7. Chức năng hiện nhật ký
+    // ==================================================================================================================
+    private void handleShowRoomInformationAction() throws IOException {
+        String source = "/iuh/fit/view/features/room/ReservationFormDialogView.fxml";
+
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
+        AnchorPane layout = loader.load();
+
+        ReservationFormDialogViewController reservationFormDialogViewController = loader.getController();
+        reservationFormDialogViewController.setReservationForm(roomWithReservation.getReservationForm());
+
+        Scene scene = new Scene(layout);
+
+        Stage stage = new Stage();
+        String iconPath = "/iuh/fit/icons/menu_icons/ic_room.png";
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath))));
+        stage.setTitle("Nhật ký phiếu đặt phòng");
+
+        stage.setScene(scene);
+        stage.show();
+    }
 }

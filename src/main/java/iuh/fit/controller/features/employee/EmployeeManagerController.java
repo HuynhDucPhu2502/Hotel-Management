@@ -473,6 +473,7 @@ public class EmployeeManagerController {
             topBorder.setStyle("-fx-background-color: #F28A0C; -fx-border-radius: 20 20 0 0;");
         });
 
+
         topBorder.setOnMouseReleased(mouseEvent -> {
             topBorder.setStyle("-fx-background-color: #F39C12; -fx-border-radius: 20 20 0 0;");
         });
@@ -484,6 +485,9 @@ public class EmployeeManagerController {
 
         stage.setResizable(false);
         stage.getScene().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/TopBorder.css")).toExternalForm());
+
+        stage.setScene(scene);
+
         stage.show();
         stage.centerOnScreen();
     }

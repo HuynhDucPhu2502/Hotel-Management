@@ -1,7 +1,6 @@
 package iuh.fit.dao;
 
 import iuh.fit.models.Employee;
-import iuh.fit.models.Room;
 import iuh.fit.models.Shift;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
@@ -125,11 +124,11 @@ public class ShiftDAO {
         ){
 
             preparedStatement.setString(1, shift.getShiftID());
-            preparedStatement.setTime(2, ConvertHelper.timeConvertertoSQL(shift.getStartTime()));
-            preparedStatement.setTime(3, ConvertHelper.timeConvertertoSQL(shift.getEndTime()));
-            preparedStatement.setTimestamp(4, ConvertHelper.dateTimeToSQLConverter(shift.getUpdatedDate()));
+            preparedStatement.setTime(2, ConvertHelper.localTimeToSQLConverter(shift.getStartTime()));
+            preparedStatement.setTime(3, ConvertHelper.localTimeToSQLConverter(shift.getEndTime()));
+            preparedStatement.setTimestamp(4, ConvertHelper.localDateTimeToSQLConverter(shift.getUpdatedDate()));
             preparedStatement.setDouble(5, shift.getNumberOfHour());
-            preparedStatement.setString(6, ConvertHelper.shiftDaysScheduleConverterToSQL(shift.getShiftDaysSchedule()));
+            preparedStatement.setString(6, ConvertHelper.shiftDaysScheduleToSQLConverter(shift.getShiftDaysSchedule()));
 
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
@@ -163,11 +162,11 @@ public class ShiftDAO {
                                 "WHERE shiftID = ? "
                 );
         ){
-            preparedStatement.setTime(1, ConvertHelper.timeConvertertoSQL(shift.getStartTime()));
-            preparedStatement.setTime(2, ConvertHelper.timeConvertertoSQL(shift.getEndTime()));
-            preparedStatement.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(shift.getUpdatedDate()));
+            preparedStatement.setTime(1, ConvertHelper.localTimeToSQLConverter(shift.getStartTime()));
+            preparedStatement.setTime(2, ConvertHelper.localTimeToSQLConverter(shift.getEndTime()));
+            preparedStatement.setTimestamp(3, ConvertHelper.localDateTimeToSQLConverter(shift.getUpdatedDate()));
             preparedStatement.setDouble(4, shift.getNumberOfHour());
-            preparedStatement.setString(5, ConvertHelper.shiftDaysScheduleConverterToSQL(shift.getShiftDaysSchedule()));
+            preparedStatement.setString(5, ConvertHelper.shiftDaysScheduleToSQLConverter(shift.getShiftDaysSchedule()));
             preparedStatement.setString(6, shift.getShiftID());
 
             preparedStatement.executeUpdate();
@@ -228,11 +227,11 @@ public class ShiftDAO {
                 )
         ){
             preparedStatement.setString(1, shift.getShiftID());
-            preparedStatement.setTime(2, ConvertHelper.timeConvertertoSQL(shift.getStartTime()));
-            preparedStatement.setTime(3, ConvertHelper.timeConvertertoSQL(shift.getEndTime()));
-            preparedStatement.setTimestamp(4, ConvertHelper.dateTimeToSQLConverter(shift.getUpdatedDate()));
+            preparedStatement.setTime(2, ConvertHelper.localTimeToSQLConverter(shift.getStartTime()));
+            preparedStatement.setTime(3, ConvertHelper.localTimeToSQLConverter(shift.getEndTime()));
+            preparedStatement.setTimestamp(4, ConvertHelper.localDateTimeToSQLConverter(shift.getUpdatedDate()));
             preparedStatement.setDouble(5, shift.getNumberOfHour());
-            preparedStatement.setString(6, ConvertHelper.shiftDaysScheduleConverterToSQL(shift.getShiftDaysSchedule()));
+            preparedStatement.setString(6, ConvertHelper.shiftDaysScheduleToSQLConverter(shift.getShiftDaysSchedule()));
             preparedStatement.setString(7, oldID);
 
 

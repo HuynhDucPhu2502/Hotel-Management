@@ -1,9 +1,7 @@
 package iuh.fit.dao;
 
 import iuh.fit.models.Customer;
-import iuh.fit.models.Employee;
 import iuh.fit.models.enums.Gender;
-import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 import iuh.fit.utils.GlobalConstants;
@@ -18,7 +16,7 @@ public class CustomerDAO {
         ArrayList<Customer> data = new ArrayList<Customer>();
         try (
                 Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ){
             String sql = "SELECT customerID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, isActivate " +
                     "FROM Customer " +
@@ -57,7 +55,7 @@ public class CustomerDAO {
 
         try (
                 Connection con = DBHelper.getConnection();
-                PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement);
+                PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement)
         ) {
 
             preparedStatement.setString(1, customerID);
@@ -139,7 +137,7 @@ public class CustomerDAO {
             insertStatement.setString(5, customer.getAddress());
             insertStatement.setString(6, customer.getGender().name());
             insertStatement.setString(7, customer.getIdCardNumber());
-            insertStatement.setDate(8, ConvertHelper.dateToSQLConverter(customer.getDob()));
+            insertStatement.setDate(8, ConvertHelper.localDateToSQLConverter(customer.getDob()));
 
             insertStatement.executeUpdate();
         } catch (SQLException sqlException) {
@@ -182,7 +180,7 @@ public class CustomerDAO {
                                 "email = ?, address = ?, gender = ?, " +
                                 "idCardNumber = ?, dob = ?" +
                                 "WHERE customerID = ? "
-                );
+                )
         ){
             preparedStatement.setString(1, customer.getFullName());
             preparedStatement.setString(2, customer.getPhoneNumber());
@@ -190,7 +188,7 @@ public class CustomerDAO {
             preparedStatement.setString(4, customer.getAddress());
             preparedStatement.setString(5, customer.getGender().name());
             preparedStatement.setString(6, customer.getIdCardNumber());
-            preparedStatement.setDate(7, ConvertHelper.dateToSQLConverter(customer.getDob()));
+            preparedStatement.setDate(7, ConvertHelper.localDateToSQLConverter(customer.getDob()));
             preparedStatement.setString(8, customer.getCustomerID());
 
             preparedStatement.executeUpdate();
@@ -283,7 +281,7 @@ public class CustomerDAO {
 
         try (
                 Connection con = DBHelper.getConnection();
-                PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement);
+                PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement)
         ) {
 
             preparedStatement.setString(1, idCardNumber);
@@ -352,16 +350,16 @@ public class CustomerDAO {
                 preparedStatement.setObject(13, gender);
                 preparedStatement.setObject(14, gender);
             }else {
-                preparedStatement.setString(13, ConvertHelper.genderConverterToSQL(gender));
-                preparedStatement.setString(14, ConvertHelper.genderConverterToSQL(gender));
+                preparedStatement.setString(13, ConvertHelper.genderToSQLConverter(gender));
+                preparedStatement.setString(14, ConvertHelper.genderToSQLConverter(gender));
             }
 
             if (dob == null){
                 preparedStatement.setObject(15, dob);
                 preparedStatement.setObject(16, dob);
             } else {
-                preparedStatement.setDate(15, ConvertHelper.dateToSQLConverter(dob));
-                preparedStatement.setDate(16, ConvertHelper.dateToSQLConverter(dob));
+                preparedStatement.setDate(15, ConvertHelper.localDateToSQLConverter(dob));
+                preparedStatement.setDate(16, ConvertHelper.localDateToSQLConverter(dob));
             }
 
             ResultSet rs = preparedStatement.executeQuery();

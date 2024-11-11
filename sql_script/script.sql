@@ -264,6 +264,24 @@ CREATE TABLE Invoice (
 );
 GO
 
+-- Tạo bảng RoomDialog
+CREATE TABLE RoomDialog (
+    dialogID INT IDENTITY(1,1) PRIMARY KEY,
+    roomID NVARCHAR(15) NULL,
+    reservationFormID NVARCHAR(15) NULL,
+    dialog NVARCHAR(200) NOT NULL,
+    dialogType NVARCHAR(15) NOT NULL CHECK (dialogType IN ('TRANSFER', 'RESERVATION', 'CHECKIN', 'CHECKOUT', 'SERVICE')),
+    timestamp DATETIME DEFAULT GETDATE(), -- Thời gian ghi nhật ký
+    FOREIGN KEY (roomID) REFERENCES Room(roomID)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+    FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE
+);
+GO
+
+
 -- ===================================================================================
 -- 2. THÊM DỮ LIỆU
 -- ===================================================================================
@@ -290,6 +308,7 @@ GO
 -- Thêm dữ liệu vào bảng Employee
 INSERT INTO Employee (employeeID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, position, isActivate)
 VALUES
+	('EMP-000000', N'ADMIN', '0912345678', 'quanlykhachsan@gmail.com', 'KHÔNG CÓ', 'MALE', '001099012346', '2000-01-01', 'MANAGER', 'ACTIVATE'),
     ('EMP-000001', N'Huynh Duc Phu', '0912345678', 'phuhuynh@gmail.com', N'123 Ho Chi Minh', 'MALE', '001099012345', '1985-06-15', 'MANAGER', 'ACTIVATE'),
     ('EMP-000002', N'Nguyen Xuan Chuc', '0908765432', 'chucnguyen@yahoo.com', N'456 Hue', 'MALE', '002199012346', '1990-04-22', 'RECEPTIONIST', 'ACTIVATE'),
     ('EMP-000003', N'Le Tran Gia Huy', '0987654321', 'huytranle@gmail.com', N'789 Ho Chi Minh', 'MALE', '003299012347', '1992-08-19', 'MANAGER', 'ACTIVATE'),

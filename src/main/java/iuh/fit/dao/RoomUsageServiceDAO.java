@@ -152,7 +152,7 @@ public class RoomUsageServiceDAO {
                 insertStatement.setString(1, currentNextID);
                 insertStatement.setInt(2, roomUsageService.getQuantity());
                 insertStatement.setDouble(3, roomUsageService.getUnitPrice());
-                insertStatement.setTimestamp(4, ConvertHelper.dateTimeToSQLConverter(roomUsageService.getDateAdded()));
+                insertStatement.setTimestamp(4, ConvertHelper.localDateTimeToSQLConverter(roomUsageService.getDateAdded()));
                 insertStatement.setString(5, roomUsageService.getHotelService().getServiceId());
                 insertStatement.setString(6, roomUsageService.getReservationForm().getReservationID());
                 insertStatement.setString(7, roomUsageService.getEmployee().getEmployeeID());
@@ -201,7 +201,7 @@ public class RoomUsageServiceDAO {
 
                 preparedStatement.setInt(1, roomUsageService.getQuantity());
                 preparedStatement.setDouble(2, roomUsageService.getUnitPrice());
-                preparedStatement.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(roomUsageService.getDateAdded()));
+                preparedStatement.setTimestamp(3, ConvertHelper.localDateTimeToSQLConverter(roomUsageService.getDateAdded()));
                 preparedStatement.setString(4, roomUsageService.getHotelService().getServiceId());
                 preparedStatement.setString(5, roomUsageService.getEmployee().getEmployeeID());
                 preparedStatement.setString(6, roomUsageService.getRoomUsageServiceId());

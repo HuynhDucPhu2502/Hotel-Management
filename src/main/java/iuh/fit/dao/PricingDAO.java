@@ -110,7 +110,7 @@ public class PricingDAO {
         ) {
             // Thiết lập các giá trị cho câu lệnh INSERT
             insertStatement.setString(1, pricing.getPricingID());
-            insertStatement.setString(2, ConvertHelper.pricingConverterToSQL(pricing.getPriceUnit()));
+            insertStatement.setString(2, ConvertHelper.priceUnitToSQLConverter(pricing.getPriceUnit()));
             insertStatement.setDouble(3, pricing.getPrice());
             insertStatement.setString(4, pricing.getRoomCategory().getRoomCategoryID());
             insertStatement.executeUpdate();
@@ -180,7 +180,7 @@ public class PricingDAO {
                         "UPDATE Pricing SET priceUnit = ?, price = ?, roomCategoryID = ? WHERE pricingID = ?"
                 )
         ) {
-            preparedStatement.setString(1, ConvertHelper.pricingConverterToSQL(pricing.getPriceUnit()));
+            preparedStatement.setString(1, ConvertHelper.priceUnitToSQLConverter(pricing.getPriceUnit()));
             preparedStatement.setDouble(2, pricing.getPrice());
             preparedStatement.setString(3, pricing.getRoomCategory().getRoomCategoryID());
             preparedStatement.setString(4, pricing.getPricingID());

@@ -95,8 +95,6 @@ public class AccountDAO {
     }
 
     public static void createData(Account account) {
-        String sql = "INSERT INTO Account(accountID, userName, password, status, employeeID) " +
-                "VALUES(?, ?, ?, ?, ?)";
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement insertStatement = connection.prepareStatement(
@@ -169,7 +167,7 @@ public class AccountDAO {
                         "UPDATE Account " +
                                 "SET userName = ?, password = ?, status = ?, employeeID = ? " +
                                 "WHERE accountID = ? "
-                );
+                )
         ){
 
             preparedStatement.setString(1, account.getUserName());

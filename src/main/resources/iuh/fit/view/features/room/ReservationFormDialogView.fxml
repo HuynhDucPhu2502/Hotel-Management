@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefWidth="840.0" style="-fx-background-color: white;" stylesheets="@../../../styles/Button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.ReservationFormDialogViewController">
+   <children>
+      <VBox layoutX="10.399999618530273" layoutY="10.399999618530273" minHeight="420.0" minWidth="820.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nhật ký phiếu đặt phòng">
+                     <font>
+                        <Font name="System Bold" size="32.0" />
+                     </font>
+                  </Text>
+               </children>
+            </HBox>
+            <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="319.0" prefWidth="798.0">
+              <content>
+                  <TableView fx:id="roomDialogTableView" stylesheets="@../../../styles/TableView.css">
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                     <columns>
+                      <TableColumn fx:id="indexColumn" prefWidth="49.60000532865524" text="STT" />
+                        <TableColumn fx:id="dialogTypeColumn" prefWidth="124.00007629394531" text="Loại nhật ký" />
+                        <TableColumn fx:id="dialogColumn" prefWidth="161.60003662109375" text="Nhật ký" />
+                        <TableColumn fx:id="roomIDColumn" prefWidth="161.60003662109375" text="Mã phòng" />
+                        <TableColumn fx:id="timeStampColumn" prefWidth="161.60003662109375" text="Thời gian" />
+                    </columns>
+                  </TableView>
+              </content>
+            </ScrollPane>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>
