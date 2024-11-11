@@ -24,7 +24,8 @@ public class EmployeeDAO {
             String sql = "SELECT employeeID, fullName, phoneNumber, " +
                     "email, address, gender, " +
                     "idCardNumber, dob, position, isActivate " +
-                    "FROM Employee";
+                    "FROM Employee " +
+                    "WHERE employeeID != 'EMP-000000'";
             ResultSet rs = statement.executeQuery(sql);
 
 
@@ -55,6 +56,8 @@ public class EmployeeDAO {
     }
 
     public static Employee getDataByID(String employeeID) {
+
+
 
         String SQLQueryStatement = "SELECT employeeID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, position, isActivate "
                 + "FROM Employee " +
@@ -283,6 +286,43 @@ public class EmployeeDAO {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setString(1, accountID);
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    Employee employee = new Employee();
+
+                    employee.setEmployeeID(rs.getString(1));
+                    employee.setFullName(rs.getString(2));
+                    employee.setPhoneNumber(rs.getString(3));
+                    employee.setEmail(rs.getString(4));
+                    employee.setAddress(rs.getString(5));
+                    employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
+                    employee.setIdCardNumber(rs.getString(7));
+                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
+                    employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
+
+                    return employee;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static Employee getEmployeeByEmployeeID(String employeeID) {
+        String sql = "SELECT e.employeeID, e.fullName, e.phoneNumber, e.email, e.address, " +
+                "e.gender, e.idCardNumber, e.dob, e.position " +
+                "FROM Employee e " +
+                "WHERE e.employeeID = ? AND e.isActivate = 'ACTIVATE'";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            preparedStatement.setString(1, employeeID);
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {

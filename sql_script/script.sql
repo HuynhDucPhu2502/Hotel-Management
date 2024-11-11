@@ -308,6 +308,7 @@ GO
 -- Thêm dữ liệu vào bảng Employee
 INSERT INTO Employee (employeeID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, position, isActivate)
 VALUES
+	('EMP-000000', N'ADMIN', '0912345678', 'quanlykhachsan@gmail.com', 'KHÔNG CÓ', 'MALE', '001099012346', '2000-01-01', 'MANAGER', 'ACTIVATE'),
     ('EMP-000001', N'Huynh Duc Phu', '0912345678', 'phuhuynh@gmail.com', N'123 Ho Chi Minh', 'MALE', '001099012345', '1985-06-15', 'MANAGER', 'ACTIVATE'),
     ('EMP-000002', N'Nguyen Xuan Chuc', '0908765432', 'chucnguyen@yahoo.com', N'456 Hue', 'MALE', '002199012346', '1990-04-22', 'RECEPTIONIST', 'ACTIVATE'),
     ('EMP-000003', N'Le Tran Gia Huy', '0987654321', 'huytranle@gmail.com', N'789 Ho Chi Minh', 'MALE', '003299012347', '1992-08-19', 'MANAGER', 'ACTIVATE'),
@@ -776,3 +777,4 @@ BEGIN
     END
 END;
 GO
+

@@ -3,6 +3,7 @@ package iuh.fit;
 import iuh.fit.controller.MainController;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.models.Account;
+import iuh.fit.utils.RoomStatusHelper;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,9 +15,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        startWithoutLogin(primaryStage);
-        //startWithLogin(primaryStage);
+        RoomStatusHelper.startAutoCheckoutScheduler();
 
+        startWithoutLogin(primaryStage);
 //        startWithLogin(primaryStage);
 
 

@@ -9,7 +9,6 @@ import iuh.fit.controller.features.room.group_booking_controllers.GroupBookingCo
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomWithReservationDAO;
 import iuh.fit.models.Employee;
-import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
@@ -87,7 +86,7 @@ public class RoomBookingController {
         roomFloorNumberCBox.getItems().setAll(getFloorNumbers());
         roomFloorNumberCBox.getSelectionModel().selectFirst();
 
-        RoomStatusHelper.autoCheckoutOverdueRooms(employee);
+        RoomStatusHelper.autoCheckoutOverdueRooms();
         roomWithReservations = RoomWithReservationDAO.getRoomWithReservation().stream()
                 .sorted(Comparator.comparing(r -> r.getRoom().getRoomNumber()))
                 .toList();
@@ -140,9 +139,6 @@ public class RoomBookingController {
         Pane roomItem;
 
         Room room = roomWithReservation.getRoom();
-        ReservationForm reservationForm = roomWithReservation.getReservationForm();
-        RoomStatusHelper.updateRoomStatusIfOverdue(room, reservationForm,
-                roomWithReservation, employee);
 
         switch (room.getRoomStatus()) {
             case AVAILABLE -> {
