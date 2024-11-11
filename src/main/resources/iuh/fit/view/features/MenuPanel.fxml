@@ -335,8 +335,6 @@
                                           <MoveTo x="10" y="25" />
                                           <LineTo x="10" y="40" />
                                           <LineTo x="20" y="40" />
-                                          <MoveTo x="10" y="40" />
-                                          <LineTo x="10" y="55" />
                                        </elements>
                                     </Path>
                                     <Button fx:id="invoiceManagerBtn" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Quản lý hóa đơn" />
