@@ -1,6 +1,5 @@
 package iuh.fit.dao;
 
-import iuh.fit.models.wrapper.InvoiceDisplayOnTable;
 import iuh.fit.models.wrapper.UsingRoomDetailDisplayOnTable;
 import iuh.fit.models.wrapper.UsingRoomDisplayOnTable;
 import iuh.fit.utils.ConvertHelper;
@@ -18,16 +17,19 @@ import java.util.List;
 public class UsingRoomDisplayOnTableDAO {
     public static List<UsingRoomDisplayOnTable> getData(){
         List<UsingRoomDisplayOnTable> data = new ArrayList<>();
-        String SqlQuery = "select r.roomID, c.fullName , e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, t.taxRate, i.netDue\n" +
-                "from Invoice i join ReservationForm rs on i.reservationFormID = rs.reservationFormID\n" +
-                "join Customer c on c.customerID = rs.customerID\n" +
-                "join Employee e on e.employeeID = rs.employeeID\n" +
-                "join Room r on r.roomID = rs.roomID\n" +
-                "join Tax t on t.taxID = i.taxID";
+        String SqlQuery =
+                """
+                select r.roomID, c.fullName , e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, t.taxRate, i.netDue
+                from Invoice i join ReservationForm rs on i.reservationFormID = rs.reservationFormID
+                join Customer c on c.customerID = rs.customerID
+                join Employee e on e.employeeID = rs.employeeID
+                join Room r on r.roomID = rs.roomID
+                join Tax t on t.taxID = i.
+                """;
 
         try (
                 Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ){
             ResultSet rs = statement.executeQuery(SqlQuery);
 
@@ -124,8 +126,8 @@ public class UsingRoomDisplayOnTableDAO {
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(SqlQuery)
         ) {
-            preparedStatement.setTimestamp(1, ConvertHelper.dateTimeToSQLConverter(beginDate));
-            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(endDate));
+            preparedStatement.setTimestamp(1, ConvertHelper.localDateTimeToSQLConverter(beginDate));
+            preparedStatement.setTimestamp(2, ConvertHelper.localDateTimeToSQLConverter(endDate));
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
@@ -159,7 +161,7 @@ public class UsingRoomDisplayOnTableDAO {
 
 
     public static List<UsingRoomDetailDisplayOnTable> getDataDetail(){
-        List<UsingRoomDetailDisplayOnTable> data = new ArrayList<UsingRoomDetailDisplayOnTable>();
+        List<UsingRoomDetailDisplayOnTable> data = new ArrayList<>();
         String SqlQuery = "SELECT r.roomID, COUNT(r.roomID) AS roomCount, SUM(i.netDue) AS totalNetDue, " +
                 "(COUNT(r.roomID) * 100.0 / SUM(COUNT(r.roomID)) OVER()) AS percentUsing, " +
                 "(SUM(i.netDue) * 100.0 / SUM(SUM(i.netDue)) OVER()) AS percentNetDue " +
@@ -171,7 +173,7 @@ public class UsingRoomDisplayOnTableDAO {
                 "GROUP BY r.roomID;";
         try (
                 Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ){
             ResultSet rs = statement.executeQuery(SqlQuery);
 
@@ -264,12 +266,12 @@ public class UsingRoomDisplayOnTableDAO {
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(SqlQuery)
         ) {
-            preparedStatement.setTimestamp(1, ConvertHelper.dateTimeToSQLConverter(beginDate));
-            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(endDate));
-            preparedStatement.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(beginDate));
-            preparedStatement.setTimestamp(4, ConvertHelper.dateTimeToSQLConverter(endDate));
-            preparedStatement.setTimestamp(5, ConvertHelper.dateTimeToSQLConverter(beginDate));
-            preparedStatement.setTimestamp(6, ConvertHelper.dateTimeToSQLConverter(endDate));
+            preparedStatement.setTimestamp(1, ConvertHelper.localDateTimeToSQLConverter(beginDate));
+            preparedStatement.setTimestamp(2, ConvertHelper.localDateTimeToSQLConverter(endDate));
+            preparedStatement.setTimestamp(3, ConvertHelper.localDateTimeToSQLConverter(beginDate));
+            preparedStatement.setTimestamp(4, ConvertHelper.localDateTimeToSQLConverter(endDate));
+            preparedStatement.setTimestamp(5, ConvertHelper.localDateTimeToSQLConverter(beginDate));
+            preparedStatement.setTimestamp(6, ConvertHelper.localDateTimeToSQLConverter(endDate));
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
