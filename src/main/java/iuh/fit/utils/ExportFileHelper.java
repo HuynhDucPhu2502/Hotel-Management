@@ -137,7 +137,9 @@ public class ExportFileHelper {
 
                 contentRow.createCell(0).setCellValue(inv.getRoomID());
                 contentRow.createCell(1).setCellValue(inv.getTimesUsing());
+                contentRow.createCell(2).setCellValue(inv.getPercentUsing());
                 contentRow.createCell(3).setCellValue(inv.getNetDue());
+                contentRow.createCell(4).setCellValue(inv.getPercentNetDue());
             }
 
             Row statisticRow = sheet.createRow(tableView.getItems().size()+1);
