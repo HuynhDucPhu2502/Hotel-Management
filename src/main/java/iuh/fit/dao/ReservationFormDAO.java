@@ -270,38 +270,38 @@ public class ReservationFormDAO {
     public static List<ReservationForm> getUpcomingReservations(String roomID) {
         List<ReservationForm> reservations = new ArrayList<>();
 
-        String sql =
-                "SELECT a.reservationFormID, a.reservationDate, a.checkInDate, " +
-                        "a.checkOutDate, a.roomBookingDeposit, a.employeeID, " +
-                        "a.roomID, a.customerID, b.fullName, " +
-                        "b.phoneNumber, b.email, b.address, " +
-                        "b.gender, b.idCardNumber, b.dob, " +
-                        "b.position, c.roomStatus, c.dateOfCreation, " +
-                        "c.roomCategoryID, d.fullName, d.phoneNumber, " +
-                        "d.email, d.address, d.gender, " +
-                        "d.idCardNumber, d.dob, e.roomCategoryName, " +
-                        "e.numberOfBed " +
-                        "FROM ReservationForm a " +
-                        "INNER JOIN Employee b ON a.employeeID = b.employeeID " +
-                        "INNER JOIN Room c ON a.roomID = c.roomID " +
-                        "INNER JOIN Customer d ON a.customerID = d.customerID " +
-                        "INNER JOIN RoomCategory e ON c.roomCategoryID = e.roomCategoryID " +
-                        "WHERE a.roomID = ? " +
-                        "AND a.checkInDate >= ? " +
-                        "AND NOT EXISTS ( " +
-                        "    SELECT 1 FROM HistoryCheckin hci " +
-                        "    WHERE hci.reservationFormID = a.reservationFormID " +
-                        ") " +
-                        "ORDER BY a.checkInDate";
+        String sql = """
+        SELECT a.reservationFormID, a.reservationDate, a.checkInDate,
+               a.checkOutDate, a.roomBookingDeposit, a.employeeID,
+               a.roomID, a.customerID, b.fullName,
+               b.phoneNumber, b.email, b.address,
+               b.gender, b.idCardNumber, b.dob,
+               b.position, c.roomStatus, c.dateOfCreation,
+               c.roomCategoryID, d.fullName, d.phoneNumber,
+               d.email, d.address, d.gender,
+               d.idCardNumber, d.dob, e.roomCategoryName,
+               e.numberOfBed
+        FROM ReservationForm a
+        INNER JOIN Employee b ON a.employeeID = b.employeeID
+        INNER JOIN Room c ON a.roomID = c.roomID
+        INNER JOIN Customer d ON a.customerID = d.customerID
+        INNER JOIN RoomCategory e ON c.roomCategoryID = e.roomCategoryID
+        WHERE a.roomID = ?
+          AND a.checkInDate >= DATEADD(HOUR, -2, GETDATE())
+          AND NOT EXISTS (
+              SELECT 1 FROM HistoryCheckin hci
+              WHERE hci.reservationFormID = a.reservationFormID
+          )
+        ORDER BY a.checkInDate
+        """;
+
+
 
         try (
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setString(1, roomID);
-            preparedStatement.setTimestamp(2,
-                    ConvertHelper.localDateTimeToSQLConverter(LocalDateTime.now().minusHours(2))
-            );
 
             ResultSet rs = preparedStatement.executeQuery();
 
@@ -349,23 +349,23 @@ public class ReservationFormDAO {
 
         String sql =
             """
-            SELECT a.reservationFormID, a.reservationDate, a.checkInDate, 
-                   a.checkOutDate, a.roomBookingDeposit, a.employeeID, 
-                   a.roomID, a.customerID, b.fullName, 
-                   b.phoneNumber, b.email, b.address, 
-                   b.gender, b.idCardNumber, b.dob, 
-                   b.position, c.roomStatus, c.dateOfCreation,  
-                   c.roomCategoryID, d.fullName, d.phoneNumber, 
-                   d.email, d.address, d.gender, 
-                   d.idCardNumber, d.dob, e.roomCategoryName, 
-                   e.numberOfBed 
-            FROM ReservationForm a 
-            INNER JOIN Employee b ON a.employeeID = b.employeeID 
-            INNER JOIN Room c ON a.roomID = c.roomID 
-            INNER JOIN Customer d ON a.customerID = d.customerID 
-            INNER JOIN RoomCategory e ON c.roomCategoryID = e.roomCategoryID 
+            SELECT a.reservationFormID, a.reservationDate, a.checkInDate,\s
+            a.checkOutDate, a.roomBookingDeposit, a.employeeID,\s
+            a.roomID, a.customerID, b.fullName,\s
+            b.phoneNumber, b.email, b.address,\s
+            b.gender, b.idCardNumber, b.dob,\s
+            b.position, c.roomStatus, c.dateOfCreation, \s
+            c.roomCategoryID, d.fullName, d.phoneNumber,\s
+            d.email, d.address, d.gender,\s
+            d.idCardNumber, d.dob, e.roomCategoryName,\s
+            e.numberOfBed\s
+            FROM ReservationForm a\s
+            INNER JOIN Employee b ON a.employeeID = b.employeeID\s
+            INNER JOIN Room c ON a.roomID = c.roomID\s
+            INNER JOIN Customer d ON a.customerID = d.customerID\s
+            INNER JOIN RoomCategory e ON c.roomCategoryID = e.roomCategoryID\s
             WHERE a.customerID = ?
-            """;
+           \s""";
 
         try (
                 Connection connection = DBHelper.getConnection();
