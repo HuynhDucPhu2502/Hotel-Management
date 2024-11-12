@@ -13,6 +13,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import static iuh.fit.utils.GlobalConstants.SHIFTASSIGNMENT_PREFIX;
+
 public class ShiftAssignmentDAO {
     public static List<ShiftAssignment> getShiftAssignments() {
         ArrayList<ShiftAssignment> data = new ArrayList<ShiftAssignment>();
@@ -248,5 +250,50 @@ public class ShiftAssignmentDAO {
             System.exit(1);
         }
 
+    }
+
+
+    public static String getShiftAssignmentId(){
+        String sql = "SELECT nextID " +
+                "FROM GlobalSequence " +
+                "WHERE tableName = 'ShiftAssignment'";
+        try (
+                Connection connection = DBHelper.getConnection();
+                Statement statement = connection.createStatement();
+                )
+        {
+            ResultSet rs = statement.executeQuery(sql);
+            while(rs.next()){
+                return rs.getString(1);
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+        return "";
+    }
+    public static void createNextShiftAssignmentID(String shiftAssignmentID){
+
+        int subShiftAssignmentIDNumb = Integer.parseInt(shiftAssignmentID.substring(shiftAssignmentID.length() - 6));
+        subShiftAssignmentIDNumb++;
+        String newID = String.format("%s%s%06d",SHIFTASSIGNMENT_PREFIX, "-", subShiftAssignmentIDNumb);
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "UPDATE GlobalSequence " +
+                                "SET nextID = ? " +
+                                "WHERE tableName = 'ShiftAssignment'"
+                )
+        ){
+
+            preparedStatement.setString(1, newID);
+
+            preparedStatement.executeUpdate();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
     }
 }
