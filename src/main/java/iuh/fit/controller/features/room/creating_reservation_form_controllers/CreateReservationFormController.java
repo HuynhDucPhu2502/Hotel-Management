@@ -63,9 +63,11 @@ public class CreateReservationFormController {
     @FXML private TextField checkInDateTextField, checkOutDateTextField;
     @FXML private Label stayLengthLabel, bookingDepositLabel;
 
-    @FXML private TextField customerIDCardNumberTextField, customerFullnameTextField, customerPhoneNumberTextField;
+    @FXML private TextField customerIDCardNumberTextField, customerFullnameTextField,
+            customerPhoneNumberTextField;
 
-    @FXML private Label employeeIDLabel, employeeFullNameLabel, employeePositionLabel, employeePhoneNumberLabel;
+    @FXML private Label employeeIDLabel, employeeFullNameLabel,
+            employeePositionLabel, employeePhoneNumberLabel;
 
     @FXML private DialogPane dialogPane;
     @FXML private TitledPane titledPane;
@@ -208,6 +210,11 @@ public class CreateReservationFormController {
 
         bookDateRangePicker.setValue(new DateRange("Chọn Lịch Đặt Phòng", LocalDate.now(), LocalDate.now().plusDays(7)));
         bookDateRangePicker.setFormatter(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+
+        bookDateRangePicker.getDateRangeView().presetTitleProperty().set("Chọn Lịch Đặt Phòng");
+        bookDateRangePicker.getDateRangeView().toTextProperty().set("Đến");
+        bookDateRangePicker.getDateRangeView().cancelTextProperty().set("Hủy");
+        bookDateRangePicker.getDateRangeView().applyTextProperty().set("Áp dụng");
 
         bookDateRangePicker.getDateRangeView().getPresets().setAll(
                 createThreeDaysPreset(),
@@ -367,33 +374,27 @@ public class CreateReservationFormController {
     private void handleCreateReservationRoom() {
         try {
             if (checkInTime == null)
-                throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_CHECKIN_DATE_ISNULL);
+                throw new IllegalArgumentException(
+                        ErrorMessages.RESERVATION_FORM_INVALID_CHECKIN_DATE_ISNULL);
+
             if (checkOutTime == null)
-                throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_CHECKOUT_DATE_ISNULL);
+                throw new IllegalArgumentException(
+                        ErrorMessages.RESERVATION_FORM_INVALID_CHECKOUT_DATE_ISNULL);
+
             if (Calculator.calculateStayLengthToDouble(checkInTime, checkOutTime) <= 0)
-                throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_STAY_LENGTH_INVALID);
+                throw new IllegalArgumentException(
+                        ErrorMessages.RESERVATION_FORM_STAY_LENGTH_INVALID);
 
             ReservationForm reservationForm = new ReservationForm(
                     ReservationFormDAO.getNextReservationFormID(), LocalDateTime.now(),
                     checkInTime, checkOutTime, employee, room, customer);
             ReservationFormDAO.createData(reservationForm);
 
-            String dialogMessage = "Đặt phòng cho " + customer.getFullName() + " từ " +
-                    dateTimeFormatter.format(checkInTime.toLocalDate()) + " đến " +
-                    dateTimeFormatter.format(checkOutTime.toLocalDate());
-            RoomDialog roomDialog = new RoomDialog(
-                    room,
-                    reservationForm,
-                    dialogMessage,
-                    DialogType.RESERVATION,
-                    LocalDateTime.now()
-            );
-            RoomDialogDAO.createData(roomDialog);
-
             dialogPane.showInformation("Thành công", "Đã thêm phiếu đặt phòng thành công");
             handleResetAction();
         } catch (Exception e) {
             dialogPane.showWarning("LỖI", e.getMessage());
+            e.printStackTrace();
         }
     }
 

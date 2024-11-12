@@ -89,17 +89,17 @@ public class ReservationForm {
     }
 
     private void validateDateRange() {
-        if (reservationDate == null) {
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_RESERVATION_DATE_ISNULL);
-        }
-
-        if (checkInDate != null && reservationDate != null && checkInDate.isBefore(reservationDate)) {
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_CHECKIN_DATE);
-        }
-
-        if (checkOutDate != null && checkInDate != null && checkOutDate.isBefore(checkInDate)) {
-            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_CHECKOUT_DATE);
-        }
+//        if (reservationDate == null) {
+//            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_RESERVATION_DATE_ISNULL);
+//        }
+//
+//        if (checkInDate != null && reservationDate != null && checkInDate.isBefore(reservationDate)) {
+//            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_CHECKIN_DATE);
+//        }
+//
+//        if (checkOutDate != null && checkInDate != null && checkOutDate.isBefore(checkInDate)) {
+//            throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_CHECKOUT_DATE);
+//        }
     }
 
 

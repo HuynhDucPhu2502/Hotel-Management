@@ -2,20 +2,22 @@ package iuh.fit.controller.features.room;
 
 import com.dlsc.gemsfx.daterange.DateRangePicker;
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.room.invoice_controllers.InvoiceDetailsController;
 import iuh.fit.controller.features.room.invoice_controllers.InvoiceItemController;
 import iuh.fit.dao.InvoiceDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Invoice;
+import iuh.fit.utils.EditDateRangePicker;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class InvoiceManagerController {
@@ -23,8 +25,6 @@ public class InvoiceManagerController {
     private DateRangePicker invoiceDateRangeSearchField;
     @FXML
     private TextField invoiceIDSearchField;
-    @FXML
-    private Button searchBtn;
     @FXML
     private GridPane invoiceGridPane;
 
@@ -34,7 +34,7 @@ public class InvoiceManagerController {
     private List<Invoice> invoiceList;
 
     public void initialize() {
-
+        setupSearchListeners();
     }
 
     public void setupContext(MainController mainController, Employee employee) {
@@ -45,8 +45,24 @@ public class InvoiceManagerController {
     }
 
     private void loadData() {
-        invoiceList = InvoiceDAO.getAllInvoices();
-        displayInvoices(invoiceList);
+        Task<List<Invoice>> loadDataTask = new Task<>() {
+            @Override
+            protected List<Invoice> call() {
+                return InvoiceDAO.getAllInvoices();
+            }
+        };
+
+        loadDataTask.setOnSucceeded(event -> {
+            invoiceList = loadDataTask.getValue();
+            displayInvoices(invoiceList);
+            EditDateRangePicker.editDateRangePicker(invoiceDateRangeSearchField);
+            invoiceDateRangeSearchField
+                    .getDateRangeView()
+                    .presetTitleProperty()
+                    .set("Thời điểm tạo hóa đơn");
+        });
+
+        new Thread(loadDataTask).start();
     }
 
     private void displayInvoices(List<Invoice> invoices) {
@@ -80,6 +96,37 @@ public class InvoiceManagerController {
         controller.setupContext(mainController, employee, invoice);
 
         return invoiceItem;
+    }
+
+    private void setupSearchListeners() {
+        invoiceIDSearchField.textProperty().addListener((observable, oldValue, newValue) -> handleSearchAction());
+
+        invoiceDateRangeSearchField.valueProperty().addListener((observable, oldValue, newValue) -> handleSearchAction());
+    }
+
+    private void handleSearchAction() {
+        if (invoiceList == null)
+            return;
+
+        String invoiceID = invoiceIDSearchField.getText().trim();
+        LocalDate startDate = invoiceDateRangeSearchField.getValue().getStartDate();
+        LocalDate endDate = invoiceDateRangeSearchField.getValue().getEndDate();
+
+        Task<List<Invoice>> searchTask = new Task<>() {
+            @Override
+            protected List<Invoice> call() {
+                return invoiceList.stream()
+                        .filter(invoice -> (invoiceID.isEmpty() || invoice.getInvoiceID().contains(invoiceID)) &&
+                                (startDate == null || endDate == null ||
+                                        (!invoice.getInvoiceDate().toLocalDate().isBefore(startDate) &&
+                                                !invoice.getInvoiceDate().toLocalDate().isAfter(endDate))))
+                        .collect(Collectors.toList());
+            }
+        };
+
+        searchTask.setOnSucceeded(event -> displayInvoices(searchTask.getValue()));
+
+        new Thread(searchTask).start();
     }
 
 }
