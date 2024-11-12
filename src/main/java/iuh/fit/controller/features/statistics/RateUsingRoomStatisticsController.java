@@ -1,13 +1,12 @@
 package iuh.fit.controller.features.statistics;
 
+import com.dlsc.gemsfx.DialogPane;
 import com.dlsc.gemsfx.daterange.DateRange;
 import com.dlsc.gemsfx.daterange.DateRangePicker;
-import iuh.fit.dao.InvoiceDisplayOnTableDAO;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.UsingRoomDisplayOnTableDAO;
 import iuh.fit.models.Room;
 import iuh.fit.models.enums.ExportExcelCategory;
-import iuh.fit.models.wrapper.InvoiceDisplayOnTable;
 import iuh.fit.models.wrapper.UsingRoomDetailDisplayOnTable;
 import iuh.fit.models.wrapper.UsingRoomDisplayOnTable;
 import iuh.fit.utils.ExportFileHelper;
@@ -15,14 +14,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.net.URL;
-import java.time.DayOfWeek;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -39,6 +46,10 @@ public class RateUsingRoomStatisticsController implements Initializable {
     private TableColumn<UsingRoomDetailDisplayOnTable, Double> netDueDetailColumn;
     @FXML
     private TableColumn<UsingRoomDetailDisplayOnTable, Integer> timesUsingColumn;
+    @FXML
+    private TableColumn<UsingRoomDetailDisplayOnTable, Float> percentUsingColumn;
+    @FXML
+    private TableColumn<UsingRoomDetailDisplayOnTable, Float> percentNetDueColumn;
     @FXML
     private TableColumn<UsingRoomDetailDisplayOnTable, String> roomIDDetailColumn;
     //table
@@ -69,19 +80,34 @@ public class RateUsingRoomStatisticsController implements Initializable {
     @FXML
     private RadioButton showChartDataRadioButton;
     @FXML
-    private AnchorPane chartViewAnchorPane;
+    private HBox chartViewAnchorPane;
     @FXML
     private AnchorPane tableViewAnchorPane;
     @FXML
     private AnchorPane tableViewDetailAnchorPane;
+
     @FXML
-    private CheckBox filterByYearCheckBox;
+    private PieChart timesUsingPiechart;
+    @FXML
+    private PieChart netDuePiechart;
+
+
+    @FXML
+    private Text timeText;
+    @FXML ComboBox<String> QCbox;
+
+    @FXML
+    private RadioButton yearRad;
+    @FXML
+    private RadioButton dateRangeRad;
+    @FXML
+    private RadioButton allStatictisRad;
+
     @FXML
     private DateRangePicker invoiceTabDateRangePicker;
     @FXML
     private ComboBox<String> roomIDCombobox;
-    @FXML
-    private BarChart<String, Double> invoiceDataBarChart;
+
     @FXML
     private Text totalMoneyText;
     @FXML
@@ -89,23 +115,43 @@ public class RateUsingRoomStatisticsController implements Initializable {
 
     @FXML
     private Button resetBtn;
-    @FXML
-    private Button statisticsBtn;
+
     @FXML
     private Button exportExcelBtn;
 
+    @FXML
+    private DialogPane dialogPane;
+
     private static final String NONE_VALUE_ROOM_NAME = "Chọn mã phòng";
     private static final String CHART_TITLE = "Thống kê doanh thu";
-    private static final int COMBO_YEAR_CAPACITY = 5;
+    private static final int COMBO_YEAR_CAPACITY = 4;
+
+    private static List<UsingRoomDisplayOnTable> usingRoomDisplayOnTableList = new ArrayList<>();
+    private static List<UsingRoomDetailDisplayOnTable> usingRoomDetailDisplayOnTableList = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         loadData();
-        setUpTable();
 
-        filterByYearCheckBox.setOnAction(e -> switchBetweenCBBYearAndDateRangePicker());
+        LocalDateTime startDate = invoiceTabDateRangePicker.getValue().getStartDate().atTime(0, 0, 0);
+        LocalDateTime endDate = invoiceTabDateRangePicker.getValue().getEndDate().atTime(23, 59, 59);
+        usingRoomDisplayOnTableList = UsingRoomDisplayOnTableDAO.getDataByDateRange(startDate, endDate);
+        usingRoomDetailDisplayOnTableList = UsingRoomDisplayOnTableDAO.getDataDetailDateRange(startDate, endDate);
+        setUpTable(usingRoomDisplayOnTableList, usingRoomDetailDisplayOnTableList);
+
+
+        dateRangeRad.setOnAction(e -> switchBetweenCBBYearAndDateRangePicker());
+        yearRad.setOnAction(e -> switchBetweenCBBYearAndDateRangePicker());
+        allStatictisRad.setOnAction(e -> switchBetweenCBBYearAndDateRangePicker());
+
+        yearsCombobox.setOnAction(e -> statictisDataByYear());
+        QCbox.setOnAction(e -> statictisDataByYear());
+        invoiceTabDateRangePicker.valueProperty().addListener((obs, oldRange, newRange) -> {
+            if (newRange != null) statictisByDateRange();
+        });
+
+        roomIDCombobox.setOnAction(e -> chooseID());
         resetBtn.setOnAction(e -> handleResetAction());
-        statisticsBtn.setOnAction(e -> statisticsAction());
         exportExcelBtn.setOnAction(e -> exportExcelFile());
     }
 
@@ -113,29 +159,27 @@ public class RateUsingRoomStatisticsController implements Initializable {
         loadDataToComboboxOfYear();
         loadDataToRoomNameCombobox();
         invoiceTabDateRangePicker.setValue(new DateRange(LocalDate.now()));
-        List<UsingRoomDisplayOnTable> usingRoomDisplayOnTableData = UsingRoomDisplayOnTableDAO.getData();
-        setNumOfUsingRoom(String.valueOf(getNumOfUsingRoom(FXCollections.observableArrayList(usingRoomDisplayOnTableData))));
-        setTotalMoney(String.valueOf(caculateTotalMoney(FXCollections.observableArrayList(usingRoomDisplayOnTableData))));
+        if(invoiceTabDateRangePicker.getValue().getStartDate().equals(invoiceTabDateRangePicker.getValue().getEndDate())){
+            timeText.setText("Ngày " + invoiceTabDateRangePicker.getValue().getStartDate());
+        } else{
+            timeText.setText("Ngày " + invoiceTabDateRangePicker.getValue().getStartDate() + " - " + invoiceTabDateRangePicker.getValue().getEndDate());
+        }
     }
 
-    private void setUpTable(){
-        List<UsingRoomDisplayOnTable> usingRoomDisplayOnTableData = UsingRoomDisplayOnTableDAO.getData();
-        usingRoomDisplayOnTableData.sort(Comparator.comparing(UsingRoomDisplayOnTable::getRoomID));
-        showDataToTableView(usingRoomDisplayOnTableData);
+    private void setUpTable(List<UsingRoomDisplayOnTable> list, List<UsingRoomDetailDisplayOnTable> listDetail){
 
+        showDataToTableView(list);
+        showDataDetailToTableView(listDetail);
+        showPieChart(listDetail);
 
-        List<UsingRoomDetailDisplayOnTable> usingRoomDetailDisplayOnTableData = UsingRoomDisplayOnTableDAO.getDataDetail();
-        usingRoomDetailDisplayOnTableData.sort(Comparator.comparing(UsingRoomDetailDisplayOnTable::getRoomID));
-        showDataDetailToTableView(usingRoomDetailDisplayOnTableData);
-
-        //        showDataToChartView(false);
+        setNumOfUsingRoom(String.valueOf(getNumOfUsingRoom(list)));
+        setTotalMoney(String.valueOf(caculateTotalMoney(list)));
     }
 
     private void showDataToTableView(List<UsingRoomDisplayOnTable> usingRoomDisplayOnTableData) {
-        // set data to ObservableList
         ObservableList<UsingRoomDisplayOnTable> dataOfTableView = FXCollections.observableArrayList();
         dataOfTableView.addAll(usingRoomDisplayOnTableData);
-        // set data on column
+
         roomIDColumn.setCellValueFactory(new PropertyValueFactory<UsingRoomDisplayOnTable, String>("roomID"));
         customerNameColumn.setCellValueFactory(new PropertyValueFactory<UsingRoomDisplayOnTable, String>("cusName"));
         employeeNameColumn.setCellValueFactory(new PropertyValueFactory<UsingRoomDisplayOnTable, String>("empName"));
@@ -145,30 +189,38 @@ public class RateUsingRoomStatisticsController implements Initializable {
         roomChargeColumn.setCellValueFactory(new PropertyValueFactory<UsingRoomDisplayOnTable, Double>("roomCharge"));
         taxColumn.setCellValueFactory(new PropertyValueFactory<UsingRoomDisplayOnTable, Double>("tax"));
         netDueColumn.setCellValueFactory(new PropertyValueFactory<UsingRoomDisplayOnTable, Double>("netDue"));
-        // set data to table
+
+        usingRateRoomDataTableView.getItems().clear();
         usingRateRoomDataTableView.setItems(dataOfTableView);
 
     }
 
     private void showDataDetailToTableView(List<UsingRoomDetailDisplayOnTable> usingRoomDetailDisplayOnTableData) {
-        // set data to ObservableList
+
         ObservableList<UsingRoomDetailDisplayOnTable> dataOfTableView = FXCollections.observableArrayList();
         dataOfTableView.addAll(usingRoomDetailDisplayOnTableData);
-        // set data on column
+
         roomIDDetailColumn.setCellValueFactory(new PropertyValueFactory<UsingRoomDetailDisplayOnTable, String>("roomID"));
         timesUsingColumn.setCellValueFactory(new PropertyValueFactory<UsingRoomDetailDisplayOnTable, Integer>("timesUsing"));
         netDueDetailColumn.setCellValueFactory(new PropertyValueFactory<UsingRoomDetailDisplayOnTable, Double>("netDue"));
-        // set data to table
+        percentUsingColumn.setCellValueFactory(new PropertyValueFactory<UsingRoomDetailDisplayOnTable, Float>("percentUsing"));
+        percentNetDueColumn.setCellValueFactory(new PropertyValueFactory<UsingRoomDetailDisplayOnTable, Float>("percentNetDue"));
+
+        usingRateRoomDetailDataTableView.getItems().clear();
         usingRateRoomDetailDataTableView.setItems(dataOfTableView);
 
     }
 
     private void loadDataToComboboxOfYear() {
         ObservableList<Integer> years = FXCollections.observableArrayList();
-        for (int i = 0; i < COMBO_YEAR_CAPACITY; i++)
+        for (int i = 0; i < COMBO_YEAR_CAPACITY; i++){
             years.add(LocalDate.now().getYear() - i);
+            QCbox.getItems().add("Quý " + (i+1));
+        }
+        QCbox.getItems().addFirst("Quý");
+        QCbox.getSelectionModel().selectFirst();
+
         yearsCombobox.setItems(years);
-        yearsCombobox.getItems().addFirst(null);
         yearsCombobox.setValue(years.getFirst());
     }
 
@@ -184,7 +236,7 @@ public class RateUsingRoomStatisticsController implements Initializable {
         numOfInvoiceText.setText(num);
     }
 
-    private int getNumOfUsingRoom(ObservableList<UsingRoomDisplayOnTable> usingRoomDisplayOnTableData){
+    private int getNumOfUsingRoom(List<UsingRoomDisplayOnTable> usingRoomDisplayOnTableData){
         return usingRoomDisplayOnTableData.size();
     }
 
@@ -192,174 +244,119 @@ public class RateUsingRoomStatisticsController implements Initializable {
         totalMoneyText.setText(totalMoney);
     }
 
-    private double caculateTotalMoney(ObservableList<UsingRoomDisplayOnTable> usingRoomDisplayOnTableData){
+    private double caculateTotalMoney(List<UsingRoomDisplayOnTable> usingRoomDisplayOnTableData){
         return usingRoomDisplayOnTableData.stream()
                 .mapToDouble(UsingRoomDisplayOnTable::getNetDue)
                 .sum();
     }
 
     private void handleResetAction() {
-        List<InvoiceDisplayOnTable> invoiceDisplayOnTableData = InvoiceDisplayOnTableDAO.getAllData();
-
-        showTableViewRadioButton.setSelected(true);
-//        switchBetweenTableViewAndChartView();
-        loadData();
-        setUpTable();
+        if(yearRad.isSelected()){
+            yearsCombobox.getSelectionModel().selectFirst();
+            QCbox.getSelectionModel().selectFirst();
+            roomIDCombobox.getSelectionModel().selectFirst();
+            statictisDataByYear();
+            chooseID();
+        } else if(dateRangeRad.isSelected()){
+            invoiceTabDateRangePicker.setValue(new DateRange(LocalDate.now()));
+            roomIDCombobox.getSelectionModel().selectFirst();
+            statictisByDateRange();
+            chooseID();
+        } else if (allStatictisRad.isSelected()){
+            roomIDCombobox.getSelectionModel().selectFirst();
+            statictisAll();
+            chooseID();
+        }
     }
 
     private void switchBetweenCBBYearAndDateRangePicker() {
-        if (filterByYearCheckBox.isSelected()) {
+        if(yearRad.isSelected()){
             yearsCombobox.setDisable(false);
+            QCbox.setDisable(false);
             invoiceTabDateRangePicker.setDisable(true);
-        } else {
+            statictisDataByYear();
+            chooseID();
+        } else if(dateRangeRad.isSelected()){
             yearsCombobox.setDisable(true);
+            QCbox.setDisable(true);
             invoiceTabDateRangePicker.setDisable(false);
+            statictisByDateRange();
+            chooseID();
+        } else if (allStatictisRad.isSelected()){
+            yearsCombobox.setDisable(true);
+            QCbox.setDisable(true);
+            invoiceTabDateRangePicker.setDisable(true);
+            statictisAll();
+            chooseID();
         }
     }
 
-    private void statisticsAction() {
-        ObservableList<UsingRoomDisplayOnTable> data;
-        ObservableList<UsingRoomDetailDisplayOnTable> data1;
-        List<UsingRoomDisplayOnTable> usingRoomDisplayOnTableData = UsingRoomDisplayOnTableDAO.getData();
-        usingRoomDisplayOnTableData.sort(Comparator.comparing(UsingRoomDisplayOnTable::getRoomID));
-
-        String roomID = roomIDCombobox.getValue();
-        if (filterByYearCheckBox.isSelected()) {
-            if(yearsCombobox.getSelectionModel().getSelectedItem() == null && roomIDCombobox.getSelectionModel().getSelectedItem().equals(NONE_VALUE_ROOM_NAME)){
-                setUpTable();
-                setNumOfUsingRoom(String.valueOf(getNumOfUsingRoom(FXCollections.observableArrayList(usingRoomDisplayOnTableData))));
-                setTotalMoney(String.valueOf(caculateTotalMoney(FXCollections.observableArrayList(usingRoomDisplayOnTableData))));
-                return;
-            }
-
-            data = getDataToTableViewByYearOption(usingRoomDisplayOnTableData, roomID);
-            showDataToTableView(data);
-
-
-            data1 = getDataDetailToTableViewByYearOption(usingRoomDisplayOnTableData, roomID);
-            showDataDetailToTableView(data1);
-
-            setNumOfUsingRoom(String.valueOf(getNumOfUsingRoom(data)));
-            setTotalMoney(String.valueOf(caculateTotalMoney(data)));
-
-//            showDataToChartView(true);
-
-
-
-        } else {
-            data = getDataToTableViewByDateRangeOption(usingRoomDisplayOnTableData, roomID);
-            data1 = getDataDetailToTableViewByDateRangeOption(usingRoomDisplayOnTableData, roomID);
-            showDataToTableView(data);
-            showDataDetailToTableView(data1);
-
-            setNumOfUsingRoom(String.valueOf(getNumOfUsingRoom(data)));
-            setTotalMoney(String.valueOf(caculateTotalMoney(data)));
-//            showDataToChartView(false);
-        }
-    }
-
-    private ObservableList<UsingRoomDisplayOnTable> getDataToTableViewByYearOption(List<UsingRoomDisplayOnTable> usingRoomDisplayOnTableData, String roomID) {
-
-        ObservableList<UsingRoomDisplayOnTable> filteredData = FXCollections.observableArrayList();
-        if (yearsCombobox.getSelectionModel().getSelectedItem() == null){
-            usingRoomDisplayOnTableData.stream()
-                    .filter(i -> i.getRoomID().equalsIgnoreCase(roomID) || roomID.equals(NONE_VALUE_ROOM_NAME))
-                    .forEach(filteredData::add);
-            return filteredData;
-        }
-        int year = yearsCombobox.getSelectionModel().getSelectedItem();
-        usingRoomDisplayOnTableData.stream()
-                .filter(i -> i.getCreateDate().getYear() == year)
-                .filter(i -> i.getRoomID().equalsIgnoreCase(roomID) || roomID.equals(NONE_VALUE_ROOM_NAME))
-                .forEach(filteredData::add);
-        return filteredData;
-    }
-
-    private ObservableList<UsingRoomDetailDisplayOnTable> getDataDetailToTableViewByYearOption(List<UsingRoomDisplayOnTable> usingRoomDisplayOnTableData, String roomID) {
-        ObservableList<UsingRoomDetailDisplayOnTable> filteredData = FXCollections.observableArrayList();
-        if (yearsCombobox.getSelectionModel().getSelectedItem() == null){
-            ObservableList<UsingRoomDetailDisplayOnTable> observableList = usingRoomDisplayOnTableData.stream()
-                    .filter(i -> i.getRoomID().equalsIgnoreCase(roomID) || roomID.equals(NONE_VALUE_ROOM_NAME))
-                    .collect(Collectors.groupingBy(
-                            UsingRoomDisplayOnTable::getRoomID,
-                            Collectors.collectingAndThen(
-                                    Collectors.toList(),
-                                    list -> {
-                                        int count = list.size();
-                                        double totalNetDue = list.stream()
-                                                .mapToDouble(UsingRoomDisplayOnTable::getNetDue)
-                                                .sum();
-                                        return new UsingRoomDetailDisplayOnTable(
-                                                list.get(0).getRoomID(),
-                                                count,
-                                                totalNetDue
-                                        );
-                                    }
-                            )
-                    ))
-                    .values()
-                    .stream()
-                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
-            filteredData.addAll(observableList);
-            return filteredData;
-        }
-        int year = yearsCombobox.getSelectionModel().getSelectedItem();
-        ObservableList<UsingRoomDetailDisplayOnTable> observableList = usingRoomDisplayOnTableData.stream()
-                .filter(i -> i.getCreateDate().getYear() == year)
-                .filter(i -> i.getRoomID().equalsIgnoreCase(roomID) || roomID.equals(NONE_VALUE_ROOM_NAME))
-                .collect(Collectors.groupingBy(
-                        UsingRoomDisplayOnTable::getRoomID,
-                        Collectors.collectingAndThen(
-                                Collectors.toList(),
-                                list -> {
-                                    int count = list.size();
-                                    double totalNetDue = list.stream()
-                                            .mapToDouble(UsingRoomDisplayOnTable::getNetDue)
-                                            .sum();
-                                    return new UsingRoomDetailDisplayOnTable(
-                                            list.get(0).getRoomID(),
-                                            count,
-                                            totalNetDue
-                                    );
-                                }
-                        )
-                ))
-                .values()
-                .stream()
-                .collect(Collectors.toCollection(FXCollections::observableArrayList));
-        filteredData.addAll(observableList);
-        return filteredData;
-    }
-
-    private ObservableList<UsingRoomDisplayOnTable> getDataToTableViewByDateRangeOption(List<UsingRoomDisplayOnTable> usingRoomDisplayOnTableData, String roomID) {
+    private void statictisByDateRange(){
         LocalDateTime startDate = invoiceTabDateRangePicker.getValue().getStartDate().atTime(0, 0, 0);
         LocalDateTime endDate = invoiceTabDateRangePicker.getValue().getEndDate().atTime(23, 59, 59);
-        ObservableList<UsingRoomDisplayOnTable> filteredData = FXCollections.observableArrayList();
 
-        if (startDate.toLocalDate().equals(endDate.toLocalDate())) {
-            usingRoomDisplayOnTableData.stream()
-                    .filter(i -> i.getCreateDate().toLocalDate().equals(startDate.toLocalDate()))
-                    .filter(i -> roomID.equalsIgnoreCase(NONE_VALUE_ROOM_NAME) || i.getRoomID().equalsIgnoreCase(roomID))
-                    .forEach(filteredData::add);
-        } else {
-            usingRoomDisplayOnTableData.stream()
-                    .filter(i -> (i.getCreateDate().isAfter(startDate) || i.getCreateDate().isEqual(startDate))
-                            && (i.getCreateDate().isBefore(endDate) || i.getCreateDate().isEqual(endDate)))
-                    .filter(i -> roomID.equalsIgnoreCase(NONE_VALUE_ROOM_NAME) || i.getRoomID().equalsIgnoreCase(roomID))
-                    .forEach(filteredData::add);
+        usingRoomDisplayOnTableList.clear();
+        usingRoomDetailDisplayOnTableList.clear();
+
+        usingRoomDisplayOnTableList = UsingRoomDisplayOnTableDAO.getDataByDateRange(startDate, endDate);
+        usingRoomDetailDisplayOnTableList = UsingRoomDisplayOnTableDAO.getDataDetailDateRange(startDate, endDate);
+
+        showDataToTableView(usingRoomDisplayOnTableList);
+        showDataDetailToTableView(usingRoomDetailDisplayOnTableList);
+        showPieChart(usingRoomDetailDisplayOnTableList);
+
+        if(invoiceTabDateRangePicker.getValue().getStartDate().equals(invoiceTabDateRangePicker.getValue().getEndDate())){
+            timeText.setText("Ngày " + invoiceTabDateRangePicker.getValue().getStartDate());
+        } else{
+            timeText.setText("Ngày " + invoiceTabDateRangePicker.getValue().getStartDate() + " - " + invoiceTabDateRangePicker.getValue().getEndDate());
         }
-        return filteredData;
+
+        setNumOfUsingRoom(String.valueOf(getNumOfUsingRoom(usingRoomDisplayOnTableList)));
+        setTotalMoney(String.valueOf(caculateTotalMoney(usingRoomDisplayOnTableList)));
     }
 
-    private ObservableList<UsingRoomDetailDisplayOnTable> getDataDetailToTableViewByDateRangeOption(List<UsingRoomDisplayOnTable> usingRoomDisplayOnTableData, String roomID) {
-        LocalDateTime startDate = invoiceTabDateRangePicker.getValue().getStartDate().atTime(0, 0, 0);
-        LocalDateTime endDate = invoiceTabDateRangePicker.getValue().getEndDate().atTime(23, 59, 59);
-        ObservableList<UsingRoomDetailDisplayOnTable> filteredData = FXCollections.observableArrayList();
+    private void statictisDataByYear(){
+        String quy = QCbox.getSelectionModel().getSelectedItem();
+        int year = yearsCombobox.getSelectionModel().getSelectedItem();
 
-        if (startDate.toLocalDate().equals(endDate.toLocalDate())) {
-            ObservableList<UsingRoomDetailDisplayOnTable> observableList = usingRoomDisplayOnTableData.stream()
-                    .filter(i -> i.getCreateDate().toLocalDate().equals(startDate.toLocalDate()))
-                    .filter(i -> roomID.equalsIgnoreCase(NONE_VALUE_ROOM_NAME) || i.getRoomID().equalsIgnoreCase(roomID))
+        usingRoomDisplayOnTableList.clear();
+        usingRoomDetailDisplayOnTableList.clear();
+
+        usingRoomDisplayOnTableList = UsingRoomDisplayOnTableDAO.getDataByYear(year);
+        usingRoomDetailDisplayOnTableList = UsingRoomDisplayOnTableDAO.getDataDetailByYear(year);
+
+        if (!quy.equalsIgnoreCase("Quý")){
+            List<UsingRoomDisplayOnTable> list1 = usingRoomDisplayOnTableList.stream()
+                    .filter(x -> {
+                        if (quy.equals("Quý 1")) {
+                            return x.getCreateDate().getMonthValue() == 1 || x.getCreateDate().getMonthValue() == 2 || x.getCreateDate().getMonthValue() == 3;
+                        } else if (quy.equals("Quý 2")){
+                            return x.getCreateDate().getMonthValue() == 4 || x.getCreateDate().getMonthValue() == 5 || x.getCreateDate().getMonthValue() == 6;
+                        } else if (quy.equals("Quý 3")){
+                            return x.getCreateDate().getMonthValue() == 7 || x.getCreateDate().getMonthValue() == 8 || x.getCreateDate().getMonthValue() == 9;
+                        } else {
+                            return x.getCreateDate().getMonthValue() == 10 || x.getCreateDate().getMonthValue() == 11 || x.getCreateDate().getMonthValue() == 12;
+                        }
+                    })
+                    .toList();
+
+            int totalUsageCount = list1.size();
+            double totalNetDueSum = list1.stream()
+                    .mapToDouble(UsingRoomDisplayOnTable::getNetDue)
+                    .sum();
+
+            List<UsingRoomDetailDisplayOnTable> list2 = usingRoomDisplayOnTableList.stream()
+                    .filter(x -> {
+                        if (quy.equals("Quý 1")) {
+                            return x.getCreateDate().getMonthValue() == 1 || x.getCreateDate().getMonthValue() == 2 || x.getCreateDate().getMonthValue() == 3;
+                        } else if (quy.equals("Quý 2")){
+                            return x.getCreateDate().getMonthValue() == 4 || x.getCreateDate().getMonthValue() == 5 || x.getCreateDate().getMonthValue() == 6;
+                        } else if (quy.equals("Quý 3")){
+                            return x.getCreateDate().getMonthValue() == 7 || x.getCreateDate().getMonthValue() == 8 || x.getCreateDate().getMonthValue() == 9;
+                        } else {
+                            return x.getCreateDate().getMonthValue() == 10 || x.getCreateDate().getMonthValue() == 11 || x.getCreateDate().getMonthValue() == 12;
+                        }
+                    })
                     .collect(Collectors.groupingBy(
                             UsingRoomDisplayOnTable::getRoomID,
                             Collectors.collectingAndThen(
@@ -369,48 +366,83 @@ public class RateUsingRoomStatisticsController implements Initializable {
                                         double totalNetDue = list.stream()
                                                 .mapToDouble(UsingRoomDisplayOnTable::getNetDue)
                                                 .sum();
+                                        float usagePercentage = ((float) count / totalUsageCount) * 100;
+                                        float netDuePercentage = (float) (totalNetDue / totalNetDueSum * 100);
                                         return new UsingRoomDetailDisplayOnTable(
                                                 list.get(0).getRoomID(),
                                                 count,
-                                                totalNetDue
+                                                usagePercentage,
+                                                totalNetDue,
+                                                netDuePercentage
                                         );
                                     }
                             )
                     ))
                     .values()
                     .stream()
-                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
-            filteredData.addAll(observableList);
-        } else {
-            ObservableList<UsingRoomDetailDisplayOnTable> observableList = usingRoomDisplayOnTableData.stream()
-                    .filter(i -> (i.getCreateDate().isAfter(startDate) || i.getCreateDate().isEqual(startDate))
-                            && (i.getCreateDate().isBefore(endDate) || i.getCreateDate().isEqual(endDate)))
-                    .filter(i -> roomID.equalsIgnoreCase(NONE_VALUE_ROOM_NAME) || i.getRoomID().equalsIgnoreCase(roomID))
-                    .collect(Collectors.groupingBy(
-                            UsingRoomDisplayOnTable::getRoomID,
-                            Collectors.collectingAndThen(
-                                    Collectors.toList(),
-                                    list -> {
-                                        int count = list.size();
-                                        double totalNetDue = list.stream()
-                                                .mapToDouble(UsingRoomDisplayOnTable::getNetDue)
-                                                .sum();
-                                        return new UsingRoomDetailDisplayOnTable(
-                                                list.get(0).getRoomID(),
-                                                count,
-                                                totalNetDue
-                                        );
-                                    }
-                            )
-                    ))
-                    .values()
-                    .stream()
-                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
-            filteredData.addAll(observableList);
+                    .collect(Collectors.toList());
+
+            usingRoomDisplayOnTableList.clear();
+            usingRoomDetailDisplayOnTableList.clear();
+
+            usingRoomDisplayOnTableList.addAll(list1);
+            usingRoomDetailDisplayOnTableList.addAll(list2);
         }
-        return filteredData;
+
+        showDataToTableView(usingRoomDisplayOnTableList);
+        showDataDetailToTableView(usingRoomDetailDisplayOnTableList);
+        showPieChart(usingRoomDetailDisplayOnTableList);
+
+        if (quy.equalsIgnoreCase("Quý")) {
+            timeText.setText("Năm " + yearsCombobox.getSelectionModel().getSelectedItem());
+        } else {
+            timeText.setText("Năm " + yearsCombobox.getSelectionModel().getSelectedItem() + " " + quy);
+        }
+
+
+        setNumOfUsingRoom(String.valueOf(getNumOfUsingRoom(usingRoomDisplayOnTableList)));
+        setTotalMoney(String.valueOf(caculateTotalMoney(usingRoomDisplayOnTableList)));
     }
 
+    private void statictisAll(){
+        usingRoomDisplayOnTableList.clear();
+        usingRoomDetailDisplayOnTableList.clear();
+        usingRoomDisplayOnTableList = UsingRoomDisplayOnTableDAO.getData();
+        usingRoomDetailDisplayOnTableList = UsingRoomDisplayOnTableDAO.getDataDetail();
+
+        showDataToTableView(usingRoomDisplayOnTableList);
+        showDataDetailToTableView(usingRoomDetailDisplayOnTableList);
+        showPieChart(usingRoomDetailDisplayOnTableList);
+
+        timeText.setText("Tất cả");
+
+        setNumOfUsingRoom(String.valueOf(getNumOfUsingRoom(usingRoomDisplayOnTableList)));
+        setTotalMoney(String.valueOf(caculateTotalMoney(usingRoomDisplayOnTableList)));
+    }
+
+    private void chooseID(){
+        String id = roomIDCombobox.getSelectionModel().getSelectedItem();
+        if(id.equals(NONE_VALUE_ROOM_NAME)){
+            showDataToTableView(usingRoomDisplayOnTableList);
+            showDataDetailToTableView(usingRoomDetailDisplayOnTableList);
+            showPieChart(usingRoomDetailDisplayOnTableList);
+
+            setNumOfUsingRoom(String.valueOf(getNumOfUsingRoom(usingRoomDisplayOnTableList)));
+            setTotalMoney(String.valueOf(caculateTotalMoney(usingRoomDisplayOnTableList)));
+        } else {
+            List<UsingRoomDisplayOnTable> list;
+            List<UsingRoomDetailDisplayOnTable> listDetail;
+            list = usingRoomDisplayOnTableList.stream().filter(x -> id.equals(x.getRoomID())).toList();
+            listDetail = usingRoomDetailDisplayOnTableList.stream().filter(x -> id.equals(x.getRoomID())).toList();
+
+            showDataToTableView(list);
+            showDataDetailToTableView(listDetail);
+            showPieChart(listDetail);
+
+            setNumOfUsingRoom(String.valueOf(getNumOfUsingRoom(list)));
+            setTotalMoney(String.valueOf(caculateTotalMoney(list)));
+        }
+    }
 
     @FXML
     void switchBetweenTableViewAndChartView() {
@@ -432,18 +464,21 @@ public class RateUsingRoomStatisticsController implements Initializable {
     }
 
     private void exportExcelFile() {
+        if (usingRoomDisplayOnTableList.isEmpty()){
+            dialogPane.showWarning("Lỗi", "Không có dữ liệu");
+            return;
+        }
         if (showTableViewRadioButton.isSelected()){
             boolean forEmployee = roomIDCombobox.getValue().equalsIgnoreCase(NONE_VALUE_ROOM_NAME);
-            boolean yearCBBChecked = filterByYearCheckBox.isSelected();
             int numOfInvoice = getNumOfUsingRoom(usingRateRoomDataTableView.getItems());
             double totalMoney = caculateTotalMoney(usingRateRoomDataTableView.getItems());
-            if(yearCBBChecked){
+            if(yearRad.isSelected()){
                 ExportFileHelper.exportUsingRoomExcelFile(usingRateRoomDataTableView,
                         ExportExcelCategory.ALL_OF_YEAR,
                         forEmployee,
                         invoiceTabDateRangePicker.getValue(),
                         numOfInvoice, totalMoney);
-            } else{
+            } else if (dateRangeRad.isSelected()){
                 LocalDateTime startDate = invoiceTabDateRangePicker.getValue().getStartDate().atTime(0, 0,0);
                 LocalDateTime endDate = invoiceTabDateRangePicker.getValue().getEndDate().atTime(23, 59,59);
                 if(isAMonth(startDate, endDate))
@@ -477,20 +512,25 @@ public class RateUsingRoomStatisticsController implements Initializable {
                             invoiceTabDateRangePicker.getValue(),
                             numOfInvoice,
                             totalMoney);
+            } else {
+                ExportFileHelper.exportUsingRoomExcelFile(usingRateRoomDataTableView,
+                        ExportExcelCategory.ALL_OF_YEAR,
+                        forEmployee,
+                        invoiceTabDateRangePicker.getValue(),
+                        numOfInvoice, totalMoney);
             }
         }
-        if(showTableViewDetailRadioButton.isSelected()){
+        if(showTableViewDetailRadioButton.isSelected() || showChartDataRadioButton.isSelected()){
             boolean forEmployee = roomIDCombobox.getValue().equalsIgnoreCase(NONE_VALUE_ROOM_NAME);
-            boolean yearCBBChecked = filterByYearCheckBox.isSelected();
             int numOfInvoice = getNumOfUsingRoom(usingRateRoomDataTableView.getItems());
             double totalMoney = caculateTotalMoney(usingRateRoomDataTableView.getItems());
-            if(yearCBBChecked){
+            if(yearRad.isSelected()){
                 ExportFileHelper.exportUsingRoomDetailExcelFile(usingRateRoomDetailDataTableView,
                         ExportExcelCategory.ALL_OF_YEAR,
                         forEmployee,
                         invoiceTabDateRangePicker.getValue(),
                         numOfInvoice, totalMoney);
-            } else{
+            } else if (dateRangeRad.isSelected()){
                 LocalDateTime startDate = invoiceTabDateRangePicker.getValue().getStartDate().atTime(0, 0,0);
                 LocalDateTime endDate = invoiceTabDateRangePicker.getValue().getEndDate().atTime(23, 59,59);
                 if(isAMonth(startDate, endDate))
@@ -524,27 +564,14 @@ public class RateUsingRoomStatisticsController implements Initializable {
                             invoiceTabDateRangePicker.getValue(),
                             numOfInvoice,
                             totalMoney);
+            } else {
+                ExportFileHelper.exportUsingRoomExcelFile(usingRateRoomDataTableView,
+                        ExportExcelCategory.ALL_OF_YEAR,
+                        forEmployee,
+                        invoiceTabDateRangePicker.getValue(),
+                        numOfInvoice, totalMoney);
             }
         }
-    }
-    private boolean isToday(LocalDateTime startDate, LocalDateTime endDate){
-        return startDate.toLocalDate().equals(LocalDate.now()) && endDate.toLocalDate().equals(LocalDate.now());
-    }
-
-    private boolean isYesterDay(LocalDateTime startDate, LocalDateTime endDate){
-        return startDate.toLocalDate().equals(LocalDate.now().minusDays(1)) && endDate.toLocalDate().equals(LocalDate.now().minusDays(1));
-    }
-
-    private boolean isThisWeek(LocalDateTime startDate, LocalDateTime endDate){
-        return startDate.toLocalDate().equals(LocalDate.now().with(DayOfWeek.MONDAY)) && endDate.toLocalDate().equals(LocalDate.now().with(DayOfWeek.SUNDAY));
-    }
-
-    private boolean isThisMonth(LocalDateTime startDate, LocalDateTime endDate){
-        return startDate.toLocalDate().equals(LocalDate.now().withDayOfMonth(1)) && endDate.toLocalDate().equals(LocalDate.now().withDayOfMonth(LocalDate.now().lengthOfMonth()));
-    }
-
-    private boolean isLastMonth(LocalDateTime startDate, LocalDateTime endDate){
-        return startDate.toLocalDate().equals(LocalDate.now().minusMonths(1).withDayOfMonth(1)) && endDate.toLocalDate().equals(LocalDate.now().minusMonths(1).withDayOfMonth(LocalDate.now().minusMonths(1).lengthOfMonth()));
     }
 
     private boolean isAMonth(LocalDateTime startDate, LocalDateTime endDate){
@@ -562,5 +589,15 @@ public class RateUsingRoomStatisticsController implements Initializable {
 
     private boolean isManyYear(LocalDateTime startDate, LocalDateTime endDate){
         return startDate.toLocalDate().getYear() != endDate.toLocalDate().getYear();
+    }
+
+    private void showPieChart(List<UsingRoomDetailDisplayOnTable> list){
+        timesUsingPiechart.getData().clear();
+        netDuePiechart.getData().clear();
+
+        list.forEach(x -> {
+            timesUsingPiechart.getData().add(new PieChart.Data(x.getRoomID() + "(" + x.getPercentUsing() + "%)", x.getTimesUsing()));
+            netDuePiechart.getData().add(new PieChart.Data(x.getRoomID() + "(" + x.getPercentNetDue() + "%)", x.getNetDue()));
+        });
     }
 }
