@@ -148,7 +148,7 @@ public class ErrorMessages {
     public static final String ID_CARD_NUMBER_OVER_LIMIT = "CCCD không được quá 12 ký tự";
     public static final String CUS_NOT_FOUND = "Không tìm thấy khách hàng";
     public static final String RESERVATION_CHECK_DATE_OVERLAP = "Thời gian đặt phòng đã trùng, không thể tạo phiếu mới.";
-    public static final String RESERVATION_ID_CARD_NUMBER_OVERLAP = "ID Card Number đã được sử dụng cho cho việc đặt phòng, không thể tạo phiếu mới.";
+    public static final String RESERVATION_ID_CARD_NUMBER_OVERLAP = "CCCD đã được sử dụng cho cho việc đặt phòng, không thể tạo phiếu mới.";
 
     // Customer Manager
     public static final String CUS_GENDER_NOT_SELECTED = "Vui lòng chọn giới tính";

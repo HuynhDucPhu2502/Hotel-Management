@@ -306,6 +306,76 @@ BEGIN
 END;
 GO
 
+-- Tạo procedure cho quy trình thêm phiếu đặt phòng
+-- (procedure không hỗ trợ sinh nextID mới)
+CREATE PROCEDURE CreateReservationForm
+    @checkInDate DATETIME,
+    @checkOutDate DATETIME,
+    @employeeID NVARCHAR(20),
+    @roomID NVARCHAR(20),
+    @customerID NVARCHAR(20),
+    @roomBookingDeposit FLOAT,
+    @message NVARCHAR(255) OUTPUT,
+    @reservationFormID NVARCHAR(15)
+AS
+BEGIN
+    DECLARE @reservationCount INT = 0;
+    DECLARE @idCardCount INT = 0;
+    DECLARE @dialogMessage NVARCHAR(255);
+
+    -- Kiểm tra trùng ngày đặt phòng
+    SELECT @reservationCount = COUNT(*)
+    FROM ReservationForm
+    WHERE roomID = @roomID
+      AND @checkInDate < checkOutDate
+      AND @checkOutDate > checkInDate;
+
+    IF @reservationCount > 0
+    BEGIN
+        SET @message = 'RESERVATION_CHECK_DATE_OVERLAP';
+        RETURN;
+    END
+
+    -- Kiểm tra trùng số CCCD
+    SELECT @idCardCount = COUNT(*)
+    FROM ReservationForm rf
+    INNER JOIN Customer c ON rf.customerID = c.customerID
+    WHERE c.customerID = @customerID
+      AND @checkInDate < rf.checkOutDate
+      AND @checkOutDate > rf.checkInDate;
+
+    IF @idCardCount > 0
+    BEGIN
+        SET @message = 'RESERVATION_ID_CARD_NUMBER_OVERLAP';
+        RETURN;
+    END
+
+    -- Lấy nextID từ GlobalSequence
+    SELECT @reservationFormID = nextID
+    FROM GlobalSequence
+    WHERE tableName = 'ReservationForm';
+
+    -- Thêm dữ liệu vào bảng ReservationForm
+    INSERT INTO ReservationForm(reservationFormID, reservationDate, checkInDate, checkOutDate,
+                                employeeID, roomID, customerID, roomBookingDeposit)
+    VALUES(@reservationFormID, GETDATE(), @checkInDate, @checkOutDate,
+           @employeeID, @roomID, @customerID, @roomBookingDeposit);
+
+    -- Tạo message cho RoomDialog
+    SET @dialogMessage = N'Đặt phòng cho ' + @customerID + N' từ ' + CONVERT(NVARCHAR, @checkInDate, 103) +
+                         N' đến ' + CONVERT(NVARCHAR, @checkOutDate, 103);
+
+    -- Thêm dữ liệu vào RoomDialog
+    INSERT INTO RoomDialog(roomID, reservationFormID, dialog, dialogType, timestamp)
+    VALUES (@roomID, @reservationFormID, @dialogMessage, 'RESERVATION', GETDATE());
+
+    SET @message = 'Thêm phiếu đặt phòng và RoomDialog thành công';
+END
+GO
+
+
+
+
 
 -- ===================================================================================
 -- 3. THÊM DỮ LIỆU
@@ -784,4 +854,5 @@ GO
 --INSERT INTO ReservationForm (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit, isActivate)
 --VALUES ('RF-000112', GETDATE(), DATEADD(HOUR, -2, DATEADD(MINUTE, 3, GETDATE())), DATEADD(DAY, 1, GETDATE()), 'EMP-000001', 'T1203', 'CUS-000010', 700000, 'ACTIVATE');
 --GO
+
 
