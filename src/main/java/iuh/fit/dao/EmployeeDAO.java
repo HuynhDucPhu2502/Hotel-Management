@@ -55,6 +55,48 @@ public class EmployeeDAO {
         return filteredData;
     }
 
+    public static ArrayList<Employee> getEmployeesWithoutShift() {
+        ArrayList<Employee> data = new ArrayList<>();
+        ArrayList<Employee> filteredData = new ArrayList<>();
+        try (
+                Connection connection = DBHelper.getConnection();
+                Statement statement = connection.createStatement()
+        ){
+            String sql = "SELECT e.employeeID, fullName, phoneNumber, " +
+                    "email, address, gender, " +
+                    "idCardNumber, dob, position, isActivate " +
+                    "FROM Employee e " +
+                    "LEFT JOIN ShiftAssignment s ON e.employeeID = s.employeeId " +
+                    "WHERE e.isActivate = 'ACTIVATE' AND s.employeeId IS NULL";
+            ResultSet rs = statement.executeQuery(sql);
+
+
+            while (rs.next()) {
+                Employee employee = new Employee();
+
+                employee.setEmployeeID(rs.getString(1));
+                employee.setFullName(rs.getString(2));
+                employee.setPhoneNumber(rs.getString(3));
+                employee.setEmail(rs.getString(4));
+                employee.setAddress(rs.getString(5));
+                employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
+                employee.setIdCardNumber(rs.getString(7));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
+                employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
+                employee.setObjectStatus(ConvertHelper.objectStatusConverter(rs.getString(10)));
+
+                data.add(employee);
+                filteredData = new ArrayList<>(data.stream().filter(x->x.getObjectStatus().equals(ObjectStatus.ACTIVATE)).toList());
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return filteredData;
+    }
+
     public static Employee getDataByID(String employeeID) {
 
 

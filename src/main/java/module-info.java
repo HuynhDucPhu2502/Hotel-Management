@@ -1,5 +1,4 @@
 module iuh.fit {
-    requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
     requires java.desktop;
@@ -10,6 +9,7 @@ module iuh.fit {
     requires org.apache.poi.poi;
     requires org.apache.poi.ooxml;
     requires itextpdf;
+    requires net.synedra.validatorfx;
 
 
     opens iuh.fit to javafx.fxml;

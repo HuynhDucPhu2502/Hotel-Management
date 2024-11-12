@@ -237,8 +237,8 @@
                                                 <TableColumn fx:id="startTimeColumn" minWidth="100.0" prefWidth="104.80001831054688" text="Giờ bắt đầu" />
                                                 <TableColumn fx:id="numbOfHourColumn" minWidth="98.4000244140625" prefWidth="123.99995422363281" text="Số giờ làm việc" />
                                                 <TableColumn fx:id="endTimeColumn" minWidth="104.79998779296875" prefWidth="107.99993896484375" text="Giờ kết thúc" />
-                                                <TableColumn fx:id="scheduleColumn" prefWidth="155.20004272460938" text="Ngày trong tuần" />
-                                                <TableColumn fx:id="actionColumn" minWidth="225.60003662109375" prefWidth="231.20001220703125" text="Thao tác" />
+                                                <TableColumn fx:id="scheduleColumn" prefWidth="132.0" text="Ngày trong tuần" />
+                                                <TableColumn fx:id="actionColumn" minWidth="225.60003662109375" prefWidth="253.5999877929687" text="Thao tác" />
                                             </columns>
 
                                             <VBox.margin>
