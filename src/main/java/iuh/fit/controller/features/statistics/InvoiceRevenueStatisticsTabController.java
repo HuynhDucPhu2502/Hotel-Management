@@ -784,7 +784,12 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
                 return baseTitle + "cho năm " + year + ", quý " + quarter + employeeTitle;
             }
         } else if (filterAllTheTimeCheckbox.isSelected()){
-            return baseTitle + " toàn bộ từ năm " + allOfYears.getFirst() + " đến năm " + allOfYears.getLast() + employeeTitle;
+            if(allOfYears.isEmpty())
+                return "Không có dữ liệu" + employeeTitle;
+            if(allOfYears.size() == 1)
+                return baseTitle + " toàn bộ từ năm " + allOfYears.getFirst()  + employeeTitle;
+            else
+                return baseTitle + " toàn bộ từ năm " + allOfYears.getFirst() + " đến năm " + allOfYears.getLast()  + employeeTitle;
         } else  {
             if (isToday(startDate, endDate)) {
                 return baseTitle + "cho ngày " + startDate.toLocalDate().toString() + employeeTitle;
