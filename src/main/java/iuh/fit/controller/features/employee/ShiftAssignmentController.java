@@ -3,7 +3,6 @@ package iuh.fit.controller.features.employee;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.dao.ShiftAssignmentDAO;
-import iuh.fit.dao.ShiftDAO;
 import iuh.fit.models.CheckedEmployee;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Shift;
@@ -67,6 +66,8 @@ public class ShiftAssignmentController {
     private TableColumn<CheckedEmployee, String> phoneNumberColumn;
     @FXML
     private TableColumn<CheckedEmployee, Void> isCheckedColumn;
+    @FXML
+    private CheckBox showAllEmployeeOption;
 
     @FXML
     private DialogPane dialogPane;
@@ -83,9 +84,11 @@ public class ShiftAssignmentController {
 
 
         showOnLabel(shift);
-        loadData();
+        handelShowAllEmployee(shift);
         setupTable();
         employeeTableView.setFixedCellSize(25);
+
+        showAllEmployeeOption.setOnAction(e->handelShowAllEmployee(shift));
 
         submitBtn.getStyleClass().add("button-update");
         cancelBtn.getStyleClass().add("button-delete");
@@ -93,7 +96,7 @@ public class ShiftAssignmentController {
         cancelBtn.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/Button.css")).toExternalForm());
 
         searchEmployeeBtn.setOnAction(e -> handleSearchAction());
-        submitBtn.setOnAction(e -> handleAddAction(shift));
+        submitBtn.setOnAction(e->handleAddAction(shift));
         cancelBtn.setOnAction(e->handleCancelAction());
         anchorPane.setOnMouseClicked(e->disableFocusForEmployeeIDTextField());
 
@@ -101,13 +104,32 @@ public class ShiftAssignmentController {
 
     }
 
+    private void handelShowAllEmployee(Shift shift) {
+        if(showAllEmployeeOption.isSelected()){
+            ArrayList<Employee> employeeList = EmployeeDAO.getEmployeesWithoutSpecificShift(shift);
+            if(checkedEmployees.isEmpty()){
+                loadData(employeeList);
+            }else{
+                checkedEmployees.clear();
+                loadData(employeeList);
+            }
+        }else{
+            ArrayList<Employee> employeeList = EmployeeDAO.getEmployeesWithoutAllShift();
+            if(checkedEmployees.isEmpty()){
+                loadData(employeeList);
+            }else{
+                checkedEmployees.clear();
+                loadData(employeeList);
+            }
+        }
+    }
+
 //    public void setupContext(Employee employeee) {
 //        this.employee = employeee;
 //    }
 
 //  Phương thức load dữ liệu lên giao diện
-    public void loadData() {
-        ArrayList<Employee> employeeList = EmployeeDAO.getEmployeesWithoutShift();
+    public void loadData(ArrayList<Employee> employeeList) {
         if(!employeeList.isEmpty()){
             employeeList.forEach(x->{
                 CheckedEmployee checkedEmployee = new CheckedEmployee(x, false);
@@ -126,6 +148,10 @@ public class ShiftAssignmentController {
             employeeTableView.setItems(items);
             employeeTableView.refresh();
         }
+    }
+
+    public void deleteAllTable(){
+        employeeTableView.getItems().clear();
     }
 
     public void resetTableView(){

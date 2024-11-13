@@ -319,7 +319,7 @@
                                              </image>
                                           </ImageView>
                                           <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Hóa đơn" textFill="WHITE" />
-                                          <ImageView fx:id="arrowUpForInvoice" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="28">
+                                          <ImageView fx:id="arrowUpForInvoice" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="35">
                                              <image>
                                                 <Image url="@../../icons/menu_icons/arrow_down.png" />
                                              </image>
