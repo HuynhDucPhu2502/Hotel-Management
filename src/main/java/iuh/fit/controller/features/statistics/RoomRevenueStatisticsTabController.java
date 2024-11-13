@@ -108,8 +108,6 @@ public class RoomRevenueStatisticsTabController implements Initializable {
         showDataToChartView(0);
         setNumOfInvoice(String.valueOf(getNumOfInvoice(data)));
         setTotalMoney(formatCurrency(calculateTotalMoney(data)));
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // handle event for quarter filter
@@ -123,8 +121,6 @@ public class RoomRevenueStatisticsTabController implements Initializable {
         showDataToChartView(0);
         setNumOfInvoice(String.valueOf(getNumOfInvoice(data)));
         setTotalMoney(formatCurrency(calculateTotalMoney(data)));
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // handle event for employee filter
@@ -150,8 +146,6 @@ public class RoomRevenueStatisticsTabController implements Initializable {
         }
         setNumOfInvoice(String.valueOf(getNumOfInvoice(data)));
         setTotalMoney(formatCurrency(calculateTotalMoney(data)));
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // handle event for statistic all the time
@@ -402,8 +396,6 @@ public class RoomRevenueStatisticsTabController implements Initializable {
         setNumOfInvoice(String.valueOf(getNumOfInvoice(data)));
         setTotalMoney(formatCurrency(calculateTotalMoney(data)));
         showDataToChartView(1);
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // check if user want to statistic all the time
@@ -480,15 +472,13 @@ public class RoomRevenueStatisticsTabController implements Initializable {
     // if flat equal 2, that means statistics all of time
     private void showDataToChartView(int flat) {
         String roomCategoryName = roomCategoryNameCombobox.getValue();
-        roomDataBarChart.getXAxis().setLabel("Mốc thời gian");
+        roomDataBarChart.getXAxis().setLabel(getChartTitle());
         roomDataBarChart.getYAxis().setLabel("Tiền (NVĐ)");
         roomDataBarChart.getData().clear();
         if(flat == 0) roomDataBarChart.getData().add(getDataByYear(this.rooomDisplayOnTableData, roomCategoryName));
         else if(flat == 1) roomDataBarChart.getData().add(getDataByDateRange(this.rooomDisplayOnTableData, roomCategoryName));
         else if (flat == 2)roomDataBarChart.getData().add(getDataForAllOfTime(roomCategoryName));
         else throw new IllegalArgumentException("Errors flat for statistic");
-
-        roomDataBarChart.setTitle(getChartTitle());
     }
 
     // get data of all the time to show on bar chart
