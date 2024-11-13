@@ -386,8 +386,8 @@ public class CreateReservationFormController {
                         ErrorMessages.RESERVATION_FORM_STAY_LENGTH_INVALID);
 
             ReservationForm reservationForm = new ReservationForm(
-                    ReservationFormDAO.getNextReservationFormID(), LocalDateTime.now(),
-                    checkInTime, checkOutTime, employee, room, customer);
+                    LocalDateTime.now(), checkInTime, checkOutTime,
+                    employee, room, customer);
             ReservationFormDAO.createData(reservationForm);
 
             dialogPane.showInformation("Thành công", "Đã thêm phiếu đặt phòng thành công");
