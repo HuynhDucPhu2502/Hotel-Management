@@ -1,6 +1,7 @@
 package iuh.fit.dao;
 
 import iuh.fit.models.Employee;
+import iuh.fit.models.Shift;
 import iuh.fit.models.enums.Gender;
 import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.enums.Position;
@@ -16,7 +17,6 @@ import java.util.List;
 public class EmployeeDAO {
     public static List<Employee> getEmployees() {
         ArrayList<Employee> data = new ArrayList<>();
-        ArrayList<Employee> filteredData = new ArrayList<>();
         try (
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement()
@@ -25,9 +25,8 @@ public class EmployeeDAO {
                     "email, address, gender, " +
                     "idCardNumber, dob, position, isActivate " +
                     "FROM Employee " +
-                    "WHERE employeeID != 'EMP-000000'";
+                    "WHERE employeeID != 'EMP-000000' AND isActivate = 'ACTIVATE'";
             ResultSet rs = statement.executeQuery(sql);
-
 
             while (rs.next()) {
                 Employee employee = new Employee();
@@ -44,7 +43,6 @@ public class EmployeeDAO {
                 employee.setObjectStatus(ConvertHelper.objectStatusConverter(rs.getString(10)));
 
                 data.add(employee);
-                filteredData = new ArrayList<>(data.stream().filter(x->x.getObjectStatus().equals(ObjectStatus.ACTIVATE)).toList());
             }
 
         } catch (Exception exception) {
@@ -52,12 +50,11 @@ public class EmployeeDAO {
             System.exit(1);
         }
 
-        return filteredData;
+        return data;
     }
 
-    public static ArrayList<Employee> getEmployeesWithoutShift() {
+    public static ArrayList<Employee> getEmployeesWithoutAllShift() {
         ArrayList<Employee> data = new ArrayList<>();
-        ArrayList<Employee> filteredData = new ArrayList<>();
         try (
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement()
@@ -86,7 +83,6 @@ public class EmployeeDAO {
                 employee.setObjectStatus(ConvertHelper.objectStatusConverter(rs.getString(10)));
 
                 data.add(employee);
-                filteredData = new ArrayList<>(data.stream().filter(x->x.getObjectStatus().equals(ObjectStatus.ACTIVATE)).toList());
             }
 
         } catch (Exception exception) {
@@ -94,7 +90,57 @@ public class EmployeeDAO {
             System.exit(1);
         }
 
-        return filteredData;
+        return data;
+    }
+
+    public static ArrayList<Employee> getEmployeesWithoutSpecificShift(Shift shift) {
+        ArrayList<Employee> data = new ArrayList<>();
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement statement = connection.prepareStatement(
+                        """
+                                SELECT DISTINCT e.employeeID, fullName, phoneNumber,\s
+                                email, address, gender,\s
+                                idCardNumber, dob, position, isActivate\s
+                                FROM Employee e\s
+                                LEFT JOIN ShiftAssignment s ON e.employeeID = s.employeeId\s
+                                WHERE e.isActivate = 'ACTIVATE' AND (s.shiftId IS NULL OR e.employeeID NOT IN
+                                	(
+                                		SELECT employeeID
+                                		FROM ShiftAssignment
+                                		WHERE shiftId = ?
+                                	)
+                                )
+                        """)
+        ){
+            statement.setString(1, shift.getShiftID());
+
+            ResultSet rs = statement.executeQuery();
+
+
+            while (rs.next()) {
+                Employee employee = new Employee();
+
+                employee.setEmployeeID(rs.getString(1));
+                employee.setFullName(rs.getString(2));
+                employee.setPhoneNumber(rs.getString(3));
+                employee.setEmail(rs.getString(4));
+                employee.setAddress(rs.getString(5));
+                employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
+                employee.setIdCardNumber(rs.getString(7));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
+                employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
+                employee.setObjectStatus(ConvertHelper.objectStatusConverter(rs.getString(10)));
+
+                data.add(employee);
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
     }
 
     public static Employee getDataByID(String employeeID) {
