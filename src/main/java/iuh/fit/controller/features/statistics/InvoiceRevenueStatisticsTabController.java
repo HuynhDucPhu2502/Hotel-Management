@@ -117,8 +117,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
         setServiceCharge(formatCurrency(calculateServiceCharge(data)));
         setRoomCharge(formatCurrency(calculateRoomCharge(data)));
         setTax(formatCurrency(calculateTax(data)));
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // handle event for quarter filter
@@ -136,8 +134,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
         setServiceCharge(formatCurrency(calculateServiceCharge(data)));
         setRoomCharge(formatCurrency(calculateRoomCharge(data)));
         setTax(formatCurrency(calculateTax(data)));
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // handle event for employee filter
@@ -167,8 +163,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
         setServiceCharge(formatCurrency(calculateServiceCharge(data)));
         setRoomCharge(formatCurrency(calculateRoomCharge(data)));
         setTax(formatCurrency(calculateTax(data)));
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // handle event for statistic all the time
@@ -444,8 +438,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
         setRoomCharge(formatCurrency(calculateRoomCharge(data)));
         setTax(formatCurrency(calculateTax(data)));
         showDataToChartView(1);
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // check if user want to statistic all the time
