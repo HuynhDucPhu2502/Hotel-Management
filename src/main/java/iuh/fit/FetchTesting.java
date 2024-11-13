@@ -27,6 +27,6 @@ public class FetchTesting {
         //System.out.println(InvoiceDisplayOnTableDAO.getData());
 //        String month = Month.valueOf(Arrays.stream(Month.values()).toList().get(0).toString()).getName();
 //        System.out.println(month);
-        System.out.println(RoomDisplayOnTableDAO.getData());
+        //System.out.println(RoomDisplayOnTableDAO.getData());
     }
 }

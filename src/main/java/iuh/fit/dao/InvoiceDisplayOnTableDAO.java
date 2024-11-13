@@ -13,12 +13,11 @@ import java.util.List;
 public class InvoiceDisplayOnTableDAO {
     public static List<InvoiceDisplayOnTable> getAllData(){
         List<InvoiceDisplayOnTable> data = new ArrayList<>();
-        String SqlQuery = "select i.invoiceID, c.fullName, r.roomID, e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, t.taxRate, i.netDue\n" +
+        String SqlQuery = "select i.invoiceID, c.fullName, r.roomID, e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, i.netDue\n" +
                 "from Invoice i join ReservationForm rs on i.reservationFormID = rs.reservationFormID\n" +
                 "join Customer c on c.customerID = rs.customerID\n" +
                 "join Employee e on e.employeeID = rs.employeeID\n" +
-                "join Room r on r.roomID = rs.roomID\n" +
-                "join Tax t on t.taxID = i.taxID";
+                "join Room r on r.roomID = rs.roomID ";
 
         try (
                 Connection connection = DBHelper.getConnection();
@@ -38,8 +37,8 @@ public class InvoiceDisplayOnTableDAO {
                 invoiceDisplayOnTable.setDeposit(rs.getDouble(6));
                 invoiceDisplayOnTable.setServiceCharge(rs.getDouble(7));
                 invoiceDisplayOnTable.setRoomCharge(rs.getDouble(8));
-                invoiceDisplayOnTable.setTax(rs.getDouble(9));
-                invoiceDisplayOnTable.setNetDue(rs.getDouble(10));
+                invoiceDisplayOnTable.setTax(0);
+                invoiceDisplayOnTable.setNetDue(rs.getDouble(9));
 
                 data.add(invoiceDisplayOnTable);
             }
@@ -54,12 +53,11 @@ public class InvoiceDisplayOnTableDAO {
 
     public static List<InvoiceDisplayOnTable> getDataThreeYearsLatest(){
         List<InvoiceDisplayOnTable> data = new ArrayList<>();
-        String SqlQuery = "select i.invoiceID, c.fullName, r.roomID, e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, t.taxRate, i.netDue\n" +
+        String SqlQuery = "select i.invoiceID, c.fullName, r.roomID, e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, i.netDue\n" +
                 "from Invoice i join ReservationForm rs on i.reservationFormID = rs.reservationFormID\n" +
                 "join Customer c on c.customerID = rs.customerID\n" +
                 "join Employee e on e.employeeID = rs.employeeID\n" +
                 "join Room r on r.roomID = rs.roomID\n" +
-                "join Tax t on t.taxID = i.taxID\n" +
                 "WHERE DATEPART(YEAR, i.invoiceDate) >= DATEPART(YEAR, GETDATE()) - 2 ";
 
         try (
@@ -80,8 +78,8 @@ public class InvoiceDisplayOnTableDAO {
                 invoiceDisplayOnTable.setDeposit(rs.getDouble(6));
                 invoiceDisplayOnTable.setServiceCharge(rs.getDouble(7));
                 invoiceDisplayOnTable.setRoomCharge(rs.getDouble(8));
-                invoiceDisplayOnTable.setTax(rs.getDouble(9));
-                invoiceDisplayOnTable.setNetDue(rs.getDouble(10));
+                invoiceDisplayOnTable.setTax(0);
+                invoiceDisplayOnTable.setNetDue(rs.getDouble(9));
 
                 data.add(invoiceDisplayOnTable);
             }
