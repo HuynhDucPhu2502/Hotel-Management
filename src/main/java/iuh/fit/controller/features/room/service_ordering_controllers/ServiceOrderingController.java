@@ -9,7 +9,6 @@ import iuh.fit.controller.features.room.checking_in_reservation_list_controllers
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
 import iuh.fit.dao.*;
 import iuh.fit.models.*;
-import iuh.fit.models.enums.DialogType;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
 import javafx.application.Platform;
@@ -397,33 +396,24 @@ public class ServiceOrderingController {
         });
     }
 
-    private void handleAddServiceToDB(HotelService service, int amount, Spinner<Integer> amountField) {
+    private void handleAddServiceToDB(HotelService service, int quantity, Spinner<Integer> amountField) {
         try {
-            RoomUsageService roomUsageService = new RoomUsageService();
-            roomUsageService.setRoomUsageServiceId(RoomUsageServiceDAO.getNextRoomUsageServiceID());
-            roomUsageService.setQuantity(amount);
-            roomUsageService.setUnitPrice(service.getServicePrice());
-            roomUsageService.setHotelService(service);
-            roomUsageService.setReservationForm(roomWithReservation.getReservationForm());
-            roomUsageService.setEmployee(employee);
-            roomUsageService.setDateAdded(LocalDateTime.now());
-
-            RoomUsageServiceDAO.createData(roomUsageService);
-
-            RoomDialog roomDialog = new RoomDialog(
-                    roomWithReservation.getRoom(),
+            RoomUsageService roomUsageService = new RoomUsageService(
+                    quantity,
+                    service.getServicePrice(),
+                    service,
                     roomWithReservation.getReservationForm(),
-                    "Thêm dịch vụ " + "x" + amount + " "  + service.getServiceName() + " " + service.getServiceId(),
-                    DialogType.SERVICE,
+                    employee,
                     LocalDateTime.now()
             );
-            RoomDialogDAO.createData(roomDialog);
-
+            RoomUsageServiceDAO.createData(roomUsageService);
             amountField.getValueFactory().setValue(1);
+
         } catch (Exception e) {
             dialogPane.showInformation("LỖI", e.getMessage());
         }
     }
+
 
     // ==================================================================================================================
     // 7. Chức năng tìm kiếm

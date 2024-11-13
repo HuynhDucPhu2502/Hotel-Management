@@ -79,7 +79,7 @@ public class ReservationFormDAO {
     }
 
     public static void createData(ReservationForm reservationForm) {
-        String callProcedure = "{CALL CreateReservationForm(?, ?, ?, ?, ?, ?, ?, ?)}";
+        String callProcedure = "{CALL CreateReservationForm(?, ?, ?, ?, ?, ?, ?)}";
 
         try (Connection connection = DBHelper.getConnection();
              CallableStatement callableStatement = connection.prepareCall(callProcedure)) {
@@ -91,7 +91,6 @@ public class ReservationFormDAO {
             callableStatement.setString(4, reservationForm.getRoom().getRoomID());
             callableStatement.setString(5, reservationForm.getCustomer().getCustomerID());
             callableStatement.setDouble(6, reservationForm.getRoomBookingDeposit());
-            callableStatement.setString(8, reservationForm.getReservationID());
 
             // Đăng ký tham số đầu ra cho message
             callableStatement.registerOutParameter(7, Types.VARCHAR);
@@ -108,8 +107,11 @@ public class ReservationFormDAO {
                     throw new IllegalArgumentException(ErrorMessages.RESERVATION_CHECK_DATE_OVERLAP);
                 case "RESERVATION_ID_CARD_NUMBER_OVERLAP":
                     throw new IllegalArgumentException(ErrorMessages.RESERVATION_ID_CARD_NUMBER_OVERLAP);
-                default:
+                case "CREATE_RESERVATION_FORM_SUCCESS":
                     incrementAndUpdateNextID();
+                    break;
+                default:
+                    throw new IllegalArgumentException("Lỗi không xác định từ Stored Procedure.");
             }
 
         } catch (SQLException e) {
@@ -151,51 +153,6 @@ public class ReservationFormDAO {
         } catch (Exception exception) {
             exception.printStackTrace();
             System.exit(1);
-        }
-    }
-
-    public static String getNextReservationFormID() {
-        String nextID = "RF-000001";
-        String query = "SELECT nextID FROM GlobalSequence WHERE tableName = 'ReservationForm'";
-        try (Connection connection = DBHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query);
-             ResultSet rs = preparedStatement.executeQuery()) {
-            if (rs.next()) {
-                nextID = rs.getString(1);
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            System.exit(1);
-        }
-        return nextID;
-    }
-
-    public static void incrementAndUpdateNextID() {
-        String selectQuery = "SELECT nextID FROM GlobalSequence WHERE tableName = 'ReservationForm'";
-        String updateQuery = "UPDATE GlobalSequence SET nextID = ? WHERE tableName = 'ReservationForm'";
-        String currentNextID;
-
-        try (Connection connection = DBHelper.getConnection();
-             PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
-             PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
-            ResultSet resultSet = selectStatement.executeQuery();
-
-            if (resultSet.next()) {
-                currentNextID = resultSet.getString("nextID");
-
-                String prefix = "RF-";
-                int numericPart = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
-                String updatedNextID = prefix + String.format("%06d", numericPart);
-
-                updateStatement.setString(1, updatedNextID);
-                updateStatement.executeUpdate();
-
-            } else {
-                throw new IllegalArgumentException("Không tìm thấy bản ghi với tableName: ReservationForm");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Lỗi khi lấy và cập nhật nextID trong GlobalSequence", e);
         }
     }
 
@@ -302,6 +259,35 @@ public class ReservationFormDAO {
             System.exit(1);
         }
         return data;
+    }
+
+    public static void incrementAndUpdateNextID() {
+        String selectQuery = "SELECT nextID FROM GlobalSequence WHERE tableName = 'ReservationForm'";
+        String updateQuery = "UPDATE GlobalSequence SET nextID = ? WHERE tableName = 'ReservationForm'";
+        String currentNextID;
+
+        try (Connection connection = DBHelper.getConnection();
+             PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
+             PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+            ResultSet resultSet = selectStatement.executeQuery();
+
+            if (resultSet.next()) {
+                currentNextID = resultSet.getString("nextID");
+
+                String prefix = "RF-";
+                int numericPart = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
+                String updatedNextID = prefix + String.format("%06d", numericPart);
+
+                updateStatement.setString(1, updatedNextID);
+                updateStatement.executeUpdate();
+
+            } else {
+                throw new IllegalArgumentException("Không tìm thấy bản ghi với tableName: ReservationForm");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi khi lấy và cập nhật nextID trong GlobalSequence", e);
+        }
     }
 
     private static ReservationForm extractData(ResultSet rs) throws SQLException {

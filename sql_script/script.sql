@@ -315,13 +315,13 @@ CREATE PROCEDURE CreateReservationForm
     @roomID NVARCHAR(20),
     @customerID NVARCHAR(20),
     @roomBookingDeposit FLOAT,
-    @message NVARCHAR(255) OUTPUT,
-    @reservationFormID NVARCHAR(15)
+    @message NVARCHAR(255) OUTPUT
 AS
 BEGIN
     DECLARE @reservationCount INT = 0;
     DECLARE @idCardCount INT = 0;
     DECLARE @dialogMessage NVARCHAR(255);
+	DECLARE @reservationFormID NVARCHAR(15)
 
     -- Kiểm tra trùng ngày đặt phòng
     SELECT @reservationCount = COUNT(*)
@@ -356,25 +356,91 @@ BEGIN
     WHERE tableName = 'ReservationForm';
 
     -- Thêm dữ liệu vào bảng ReservationForm
-    INSERT INTO ReservationForm(reservationFormID, reservationDate, checkInDate, checkOutDate,
-                                employeeID, roomID, customerID, roomBookingDeposit)
-    VALUES(@reservationFormID, GETDATE(), @checkInDate, @checkOutDate,
-           @employeeID, @roomID, @customerID, @roomBookingDeposit);
+    INSERT INTO ReservationForm (
+        reservationFormID, reservationDate, checkInDate, checkOutDate,
+        employeeID, roomID, customerID, roomBookingDeposit
+    )
+    VALUES (
+        @reservationFormID, GETDATE(), @checkInDate, @checkOutDate,
+        @employeeID, @roomID, @customerID, @roomBookingDeposit
+    );
 
     -- Tạo message cho RoomDialog
-    SET @dialogMessage = N'Đặt phòng cho ' + @customerID + N' từ ' + CONVERT(NVARCHAR, @checkInDate, 103) +
-                         N' đến ' + CONVERT(NVARCHAR, @checkOutDate, 103);
+    SET @dialogMessage = N'Đặt phòng cho ' + @customerID + N' từ '
+                        + CONVERT(NVARCHAR, @checkInDate, 103) + N' đến '
+                        + CONVERT(NVARCHAR, @checkOutDate, 103);
 
     -- Thêm dữ liệu vào RoomDialog
-    INSERT INTO RoomDialog(roomID, reservationFormID, dialog, dialogType, timestamp)
-    VALUES (@roomID, @reservationFormID, @dialogMessage, 'RESERVATION', GETDATE());
+    INSERT INTO RoomDialog (
+        roomID, reservationFormID, dialog, dialogType, timestamp
+    )
+    VALUES (
+        @roomID, @reservationFormID, @dialogMessage, 'RESERVATION', GETDATE()
+    );
 
-    SET @message = 'Thêm phiếu đặt phòng và RoomDialog thành công';
+    SET @message = 'CREATE_RESERVATION_FORM_SUCCESS';
 END
 GO
 
+-- Tạo procedure cho thêm
+-- (procedure không hỗ trợ sinh nextID mới)
+CREATE PROCEDURE AddServiceToReservation
+    @quantity INT,
+    @unitPrice DECIMAL(18, 2),
+    @serviceID NVARCHAR(20),
+    @reservationFormID NVARCHAR(15),
+    @employeeID NVARCHAR(15),
+    @dateAdded DATETIME,
+    @message NVARCHAR(255) OUTPUT
+AS
+BEGIN
+    DECLARE @dialogMessage NVARCHAR(255);
+    DECLARE @roomUsageServiceID NVARCHAR(15);
+    DECLARE @serviceName NVARCHAR(50);
 
+    -- Kiểm tra nếu số lượng nhỏ hơn hoặc bằng 0
+    IF @quantity <= 0
+    BEGIN
+        SET @message = 'INVALID_QUANTITY';
+        RETURN;
+    END
 
+    -- Lấy nextID từ GlobalSequence
+    SELECT @roomUsageServiceID = nextID
+    FROM GlobalSequence
+    WHERE tableName = 'RoomUsageService';
+
+    -- Lấy serviceName từ HotelService
+    SELECT @serviceName = serviceName
+    FROM HotelService
+    WHERE hotelServiceId = @serviceID;
+
+    -- Thêm dữ liệu vào bảng RoomUsageService
+    INSERT INTO RoomUsageService (
+        roomUsageServiceId, reservationFormID, hotelServiceId, quantity,
+        unitPrice, dateAdded, employeeID
+    )
+    VALUES (
+        @roomUsageServiceID, @reservationFormID, @serviceID, @quantity,
+        @unitPrice, @dateAdded, @employeeID
+    );
+
+    -- Tạo message cho RoomDialog
+    SET @dialogMessage = N'Đặt dịch vụ x' + CONVERT(NVARCHAR, @quantity) + N' '
+                        + @serviceName + N' ' + @serviceID;
+
+    -- Thêm dữ liệu vào RoomDialog
+    INSERT INTO RoomDialog (
+        roomID, reservationFormID, dialog, dialogType, timestamp
+    )
+    VALUES (
+        (SELECT roomID FROM ReservationForm WHERE reservationFormID = @reservationFormID),
+        @reservationFormID, @dialogMessage, 'SERVICE', GETDATE()
+    );
+
+    SET @message = 'SERVICE_ORDERING_SUCCESS';
+END
+GO
 
 
 -- ===================================================================================
