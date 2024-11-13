@@ -117,8 +117,6 @@ public class ServiceRevenueStatisticsTabController implements Initializable {
         showDataToChartView(0);
         setNumOfInvoice(String.valueOf(getNumOfInvoice(data)));
         setTotalMoney(formatCurrency(calculateTotalMoney(data)));
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // handle event for service category
@@ -145,8 +143,6 @@ public class ServiceRevenueStatisticsTabController implements Initializable {
         }
         setNumOfInvoice(String.valueOf(getNumOfInvoice(data)));
         setTotalMoney(formatCurrency(calculateTotalMoney(data)));
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // handle event for quarter filter
@@ -161,8 +157,6 @@ public class ServiceRevenueStatisticsTabController implements Initializable {
         showDataToChartView(0);
         setNumOfInvoice(String.valueOf(getNumOfInvoice(data)));
         setTotalMoney(formatCurrency(calculateTotalMoney(data)));
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // handle event for employee filter
@@ -189,8 +183,6 @@ public class ServiceRevenueStatisticsTabController implements Initializable {
         }
         setNumOfInvoice(String.valueOf(getNumOfInvoice(data)));
         setTotalMoney(formatCurrency(calculateTotalMoney(data)));
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // handle event for statistic all the time
@@ -449,8 +441,6 @@ public class ServiceRevenueStatisticsTabController implements Initializable {
         setNumOfInvoice(String.valueOf(getNumOfInvoice(data)));
         setTotalMoney(formatCurrency(calculateTotalMoney(data)));
         showDataToChartView(1);
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // check if user want to statistic all the time
@@ -532,15 +522,13 @@ public class ServiceRevenueStatisticsTabController implements Initializable {
     private void showDataToChartView(int flat) {
         String empName = employeeNameCombobox.getValue();
         String serviceCategory = serviceCategoryNameCombobox.getValue();
-        invoiceDataBarChart.getXAxis().setLabel("Mốc thời gian");
+        invoiceDataBarChart.getXAxis().setLabel(getChartTitle());
         invoiceDataBarChart.getYAxis().setLabel("Tiền (NVĐ)");
         invoiceDataBarChart.getData().clear();
         if(flat == 0) invoiceDataBarChart.getData().add(getDataByYear(this.serviceDisplayOnTableData, empName, serviceCategory));
         else if(flat == 1) invoiceDataBarChart.getData().add(getDataByDateRange(this.serviceDisplayOnTableData, empName, serviceCategory));
         else if (flat == 2) invoiceDataBarChart.getData().add(getDataForAllOfTime(empName, serviceCategory));
         else throw new IllegalArgumentException("Errors flat for statistic");
-
-        invoiceDataBarChart.setTitle(getChartTitle());
     }
 
     // get data of all the time to show on bar chart

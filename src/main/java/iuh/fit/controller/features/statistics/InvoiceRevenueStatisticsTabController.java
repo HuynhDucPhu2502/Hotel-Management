@@ -514,15 +514,13 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
     // if flat equal 2, that means statistics all of time
     private void showDataToChartView(int flat) {
         String empName = employeeNameCombobox.getValue();
-        invoiceDataBarChart.getXAxis().setLabel("Mốc thời gian");
+        invoiceDataBarChart.getXAxis().setLabel(getChartTitle());
         invoiceDataBarChart.getYAxis().setLabel("Tiền (NVĐ)");
         invoiceDataBarChart.getData().clear();
         if(flat == 0) invoiceDataBarChart.getData().add(getDataByYear(this.invoiceDisplayOnTableData, empName));
         else if(flat == 1) invoiceDataBarChart.getData().add(getDataByDateRange(this.invoiceDisplayOnTableData, empName));
         else if (flat == 2)invoiceDataBarChart.getData().add(getDataForAllOfTime(empName));
         else throw new IllegalArgumentException("Errors flat for statistic");
-
-        invoiceDataBarChart.setTitle(getChartTitle());
     }
 
     // get data of all the time to show on bar chart
