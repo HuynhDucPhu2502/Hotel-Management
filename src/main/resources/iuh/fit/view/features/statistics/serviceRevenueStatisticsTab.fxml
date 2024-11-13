@@ -35,7 +35,7 @@
                 </font>
             </Text>
             <DateRangePicker fx:id="serviceTabDateRangePicker" prefHeight="32.0" prefWidth="390.0" />
-            <ComboBox fx:id="serviceCategoryNameCombobox" prefWidth="190.0" promptText="Loại dịch vụ">
+            <ComboBox fx:id="serviceCategoryNameCombobox" onAction="#statisticByServiceCategory" prefWidth="190.0" promptText="Loại dịch vụ">
                 <HBox.margin>
                     <Insets left="80.0" />
                 </HBox.margin>
@@ -72,7 +72,7 @@
                <HBox.margin>
                   <Insets left="24.0" top="4.0" />
                </HBox.margin></CheckBox>
-               <Button mnemonicParsing="false" styleClass="button-excel" stylesheets="@../../../styles/Button.css" text="Xuất Excel">
+               <Button mnemonicParsing="false" onAction="#exportExcelFile" styleClass="button-excel" stylesheets="@../../../styles/Button.css" text="Xuất Excel">
                <HBox.margin>
                   <Insets left="190.0" />
                </HBox.margin>
