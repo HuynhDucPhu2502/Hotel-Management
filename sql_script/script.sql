@@ -308,7 +308,7 @@ GO
 
 -- Tạo procedure cho quy trình thêm phiếu đặt phòng
 -- (procedure không hỗ trợ sinh nextID mới)
-CREATE PROCEDURE CreateReservationForm
+CREATE PROCEDURE CreatingReservationForm
     @checkInDate DATETIME,
     @checkOutDate DATETIME,
     @employeeID NVARCHAR(20),
@@ -321,70 +321,82 @@ BEGIN
     DECLARE @reservationCount INT = 0;
     DECLARE @idCardCount INT = 0;
     DECLARE @dialogMessage NVARCHAR(255);
-	DECLARE @reservationFormID NVARCHAR(15)
+    DECLARE @reservationFormID NVARCHAR(15);
 
-    -- Kiểm tra trùng ngày đặt phòng
-    SELECT @reservationCount = COUNT(*)
-    FROM ReservationForm
-    WHERE roomID = @roomID
-      AND @checkInDate < checkOutDate
-      AND @checkOutDate > checkInDate;
+    BEGIN TRY
+        BEGIN TRANSACTION;
 
-    IF @reservationCount > 0
-    BEGIN
-        SET @message = 'RESERVATION_CHECK_DATE_OVERLAP';
-        RETURN;
-    END
+        -- Kiểm tra trùng ngày đặt phòng
+        SELECT @reservationCount = COUNT(*)
+        FROM ReservationForm
+        WHERE roomID = @roomID
+          AND @checkInDate < checkOutDate
+          AND @checkOutDate > checkInDate;
 
-    -- Kiểm tra trùng số CCCD
-    SELECT @idCardCount = COUNT(*)
-    FROM ReservationForm rf
-    INNER JOIN Customer c ON rf.customerID = c.customerID
-    WHERE c.customerID = @customerID
-      AND @checkInDate < rf.checkOutDate
-      AND @checkOutDate > rf.checkInDate;
+        IF @reservationCount > 0
+        BEGIN
+            SET @message = 'CREATING_RESERVATION_FORM_CHECK_DATE_OVERLAP';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
 
-    IF @idCardCount > 0
-    BEGIN
-        SET @message = 'RESERVATION_ID_CARD_NUMBER_OVERLAP';
-        RETURN;
-    END
+        -- Kiểm tra trùng số CCCD
+        SELECT @idCardCount = COUNT(*)
+        FROM ReservationForm rf
+        INNER JOIN Customer c ON rf.customerID = c.customerID
+        WHERE c.customerID = @customerID
+          AND @checkInDate < rf.checkOutDate
+          AND @checkOutDate > rf.checkInDate;
 
-    -- Lấy nextID từ GlobalSequence
-    SELECT @reservationFormID = nextID
-    FROM GlobalSequence
-    WHERE tableName = 'ReservationForm';
+        IF @idCardCount > 0
+        BEGIN
+            SET @message = 'CREATING_RESERVATION_FORM_ID_CARD_NUMBER_OVERLAP';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
 
-    -- Thêm dữ liệu vào bảng ReservationForm
-    INSERT INTO ReservationForm (
-        reservationFormID, reservationDate, checkInDate, checkOutDate,
-        employeeID, roomID, customerID, roomBookingDeposit
-    )
-    VALUES (
-        @reservationFormID, GETDATE(), @checkInDate, @checkOutDate,
-        @employeeID, @roomID, @customerID, @roomBookingDeposit
-    );
+        -- Lấy nextID từ GlobalSequence
+        SELECT @reservationFormID = nextID
+        FROM GlobalSequence
+        WHERE tableName = 'ReservationForm';
 
-    -- Tạo message cho RoomDialog
-    SET @dialogMessage = N'Đặt phòng cho ' + @customerID + N' từ '
-                        + CONVERT(NVARCHAR, @checkInDate, 103) + N' đến '
-                        + CONVERT(NVARCHAR, @checkOutDate, 103);
+        -- Thêm dữ liệu vào bảng ReservationForm
+        INSERT INTO ReservationForm (
+            reservationFormID, reservationDate, checkInDate, checkOutDate,
+            employeeID, roomID, customerID, roomBookingDeposit
+        )
+        VALUES (
+            @reservationFormID, GETDATE(), @checkInDate, @checkOutDate,
+            @employeeID, @roomID, @customerID, @roomBookingDeposit
+        );
 
-    -- Thêm dữ liệu vào RoomDialog
-    INSERT INTO RoomDialog (
-        roomID, reservationFormID, dialog, dialogType, timestamp
-    )
-    VALUES (
-        @roomID, @reservationFormID, @dialogMessage, 'RESERVATION', GETDATE()
-    );
+        -- Tạo message cho RoomDialog
+        SET @dialogMessage = N'Đặt phòng cho ' + @customerID + N' từ '
+                            + CONVERT(NVARCHAR, @checkInDate, 103) + N' đến '
+                            + CONVERT(NVARCHAR, @checkOutDate, 103);
 
-    SET @message = 'CREATE_RESERVATION_FORM_SUCCESS';
+        -- Thêm dữ liệu vào RoomDialog
+        INSERT INTO RoomDialog (
+            roomID, reservationFormID, dialog, dialogType, timestamp
+        )
+        VALUES (
+            @roomID, @reservationFormID, @dialogMessage, 'RESERVATION', GETDATE()
+        );
+
+        COMMIT TRANSACTION;
+        SET @message = 'CREATING_RESERVATION_FORM_SUCCESS';
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        SET @message = ERROR_MESSAGE();
+    END CATCH
 END
 GO
 
--- Tạo procedure cho thêm
+
+-- Tạo procedure đặt dịch vụ phòng
 -- (procedure không hỗ trợ sinh nextID mới)
-CREATE PROCEDURE AddServiceToReservation
+CREATE PROCEDURE ServiceOrdering
     @quantity INT,
     @unitPrice DECIMAL(18, 2),
     @serviceID NVARCHAR(20),
@@ -398,49 +410,60 @@ BEGIN
     DECLARE @roomUsageServiceID NVARCHAR(15);
     DECLARE @serviceName NVARCHAR(50);
 
-    -- Kiểm tra nếu số lượng nhỏ hơn hoặc bằng 0
-    IF @quantity <= 0
-    BEGIN
-        SET @message = 'INVALID_QUANTITY';
-        RETURN;
-    END
+    BEGIN TRY
+        BEGIN TRANSACTION;
 
-    -- Lấy nextID từ GlobalSequence
-    SELECT @roomUsageServiceID = nextID
-    FROM GlobalSequence
-    WHERE tableName = 'RoomUsageService';
+        -- Kiểm tra nếu số lượng nhỏ hơn hoặc bằng 0
+        IF @quantity <= 0
+        BEGIN
+            SET @message = 'SERVICE_ORDERING_INVALID_QUANTITY';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
 
-    -- Lấy serviceName từ HotelService
-    SELECT @serviceName = serviceName
-    FROM HotelService
-    WHERE hotelServiceId = @serviceID;
+        -- Lấy nextID từ GlobalSequence
+        SELECT @roomUsageServiceID = nextID
+        FROM GlobalSequence
+        WHERE tableName = 'RoomUsageService';
 
-    -- Thêm dữ liệu vào bảng RoomUsageService
-    INSERT INTO RoomUsageService (
-        roomUsageServiceId, reservationFormID, hotelServiceId, quantity,
-        unitPrice, dateAdded, employeeID
-    )
-    VALUES (
-        @roomUsageServiceID, @reservationFormID, @serviceID, @quantity,
-        @unitPrice, @dateAdded, @employeeID
-    );
+        -- Lấy serviceName từ HotelService
+        SELECT @serviceName = serviceName
+        FROM HotelService
+        WHERE hotelServiceId = @serviceID;
 
-    -- Tạo message cho RoomDialog
-    SET @dialogMessage = N'Đặt dịch vụ x' + CONVERT(NVARCHAR, @quantity) + N' '
-                        + @serviceName + N' ' + @serviceID;
+        -- Thêm dữ liệu vào bảng RoomUsageService
+        INSERT INTO RoomUsageService (
+            roomUsageServiceId, reservationFormID, hotelServiceId, quantity,
+            unitPrice, dateAdded, employeeID
+        )
+        VALUES (
+            @roomUsageServiceID, @reservationFormID, @serviceID, @quantity,
+            @unitPrice, @dateAdded, @employeeID
+        );
 
-    -- Thêm dữ liệu vào RoomDialog
-    INSERT INTO RoomDialog (
-        roomID, reservationFormID, dialog, dialogType, timestamp
-    )
-    VALUES (
-        (SELECT roomID FROM ReservationForm WHERE reservationFormID = @reservationFormID),
-        @reservationFormID, @dialogMessage, 'SERVICE', GETDATE()
-    );
+        -- Tạo message cho RoomDialog
+        SET @dialogMessage = N'Đặt dịch vụ x' + CONVERT(NVARCHAR, @quantity) + N' '
+                            + @serviceName + N' ' + @serviceID;
 
-    SET @message = 'SERVICE_ORDERING_SUCCESS';
+        -- Thêm dữ liệu vào RoomDialog
+        INSERT INTO RoomDialog (
+            roomID, reservationFormID, dialog, dialogType, timestamp
+        )
+        VALUES (
+            (SELECT roomID FROM ReservationForm WHERE reservationFormID = @reservationFormID),
+            @reservationFormID, @dialogMessage, 'SERVICE', GETDATE()
+        );
+
+        COMMIT TRANSACTION;
+        SET @message = 'SERVICE_ORDERING_SUCCESS';
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        SET @message = ERROR_MESSAGE();
+    END CATCH
 END
 GO
+
 
 
 -- ===================================================================================
@@ -463,7 +486,7 @@ VALUES
 	('HistoryCheckOut', 'HCO-000001'),
 	('RoomReservationDetail', 'RRD-000005'),
 	('RoomUsageService', 'RUS-000005'),
-	('Invoice', 'INV-000001');
+	('Invoice', 'INV-000101');
 GO
 
 -- Thêm dữ liệu vào bảng Employee

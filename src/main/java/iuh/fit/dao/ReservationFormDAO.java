@@ -79,7 +79,7 @@ public class ReservationFormDAO {
     }
 
     public static void createData(ReservationForm reservationForm) {
-        String callProcedure = "{CALL CreateReservationForm(?, ?, ?, ?, ?, ?, ?)}";
+        String callProcedure = "{CALL CreatingReservationForm(?, ?, ?, ?, ?, ?, ?)}";
 
         try (Connection connection = DBHelper.getConnection();
              CallableStatement callableStatement = connection.prepareCall(callProcedure)) {
@@ -103,11 +103,11 @@ public class ReservationFormDAO {
 
             // Kiểm tra kết quả trả về từ Stored Procedure
             switch (message) {
-                case "RESERVATION_CHECK_DATE_OVERLAP":
-                    throw new IllegalArgumentException(ErrorMessages.RESERVATION_CHECK_DATE_OVERLAP);
-                case "RESERVATION_ID_CARD_NUMBER_OVERLAP":
-                    throw new IllegalArgumentException(ErrorMessages.RESERVATION_ID_CARD_NUMBER_OVERLAP);
-                case "CREATE_RESERVATION_FORM_SUCCESS":
+                case "CREATING_RESERVATION_FORM_CHECK_DATE_OVERLAP":
+                    throw new IllegalArgumentException(ErrorMessages.CREATING_RESERVATION_FORM_CHECK_DATE_OVERLAP);
+                case "CREATING_RESERVATION_FORM_ID_CARD_NUMBER_OVERLAP":
+                    throw new IllegalArgumentException(ErrorMessages.CREATING_RESERVATION_FORM_ID_CARD_NUMBER_OVERLAP);
+                case "CREATING_RESERVATION_FORM_SUCCESS":
                     incrementAndUpdateNextID();
                     break;
                 default:
