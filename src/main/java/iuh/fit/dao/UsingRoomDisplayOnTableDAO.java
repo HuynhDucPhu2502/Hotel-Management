@@ -1,6 +1,5 @@
 package iuh.fit.dao;
 
-import iuh.fit.models.wrapper.InvoiceDisplayOnTable;
 import iuh.fit.models.wrapper.UsingRoomDetailDisplayOnTable;
 import iuh.fit.models.wrapper.UsingRoomDisplayOnTable;
 import iuh.fit.utils.ConvertHelper;
@@ -24,10 +23,9 @@ public class UsingRoomDisplayOnTableDAO {
                 "join Employee e on e.employeeID = rs.employeeID\n" +
                 "join Room r on r.roomID = rs.roomID\n" +
                 "join RoomCategory rc on rc.roomCategoryID = r.roomCategoryID";
-
         try (
                 Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ){
             ResultSet rs = statement.executeQuery(SqlQuery);
 
@@ -124,8 +122,8 @@ public class UsingRoomDisplayOnTableDAO {
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(SqlQuery)
         ) {
-            preparedStatement.setTimestamp(1, ConvertHelper.dateTimeToSQLConverter(beginDate));
-            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(endDate));
+            preparedStatement.setTimestamp(1, ConvertHelper.localDateTimeToSQLConverter(beginDate));
+            preparedStatement.setTimestamp(2, ConvertHelper.localDateTimeToSQLConverter(endDate));
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {
@@ -174,7 +172,7 @@ public class UsingRoomDisplayOnTableDAO {
 
         try (
                 Connection connection = DBHelper.getConnection();
-                Statement statement = connection.createStatement();
+                Statement statement = connection.createStatement()
         ){
             ResultSet rs = statement.executeQuery(SqlQuery);
 
@@ -274,12 +272,12 @@ public class UsingRoomDisplayOnTableDAO {
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(SqlQuery)
         ) {
-            preparedStatement.setTimestamp(1, ConvertHelper.dateTimeToSQLConverter(beginDate));
-            preparedStatement.setTimestamp(2, ConvertHelper.dateTimeToSQLConverter(endDate));
-            preparedStatement.setTimestamp(3, ConvertHelper.dateTimeToSQLConverter(beginDate));
-            preparedStatement.setTimestamp(4, ConvertHelper.dateTimeToSQLConverter(endDate));
-            preparedStatement.setTimestamp(5, ConvertHelper.dateTimeToSQLConverter(beginDate));
-            preparedStatement.setTimestamp(6, ConvertHelper.dateTimeToSQLConverter(endDate));
+            preparedStatement.setTimestamp(1, ConvertHelper.localDateTimeToSQLConverter(beginDate));
+            preparedStatement.setTimestamp(2, ConvertHelper.localDateTimeToSQLConverter(endDate));
+            preparedStatement.setTimestamp(3, ConvertHelper.localDateTimeToSQLConverter(beginDate));
+            preparedStatement.setTimestamp(4, ConvertHelper.localDateTimeToSQLConverter(endDate));
+            preparedStatement.setTimestamp(5, ConvertHelper.localDateTimeToSQLConverter(beginDate));
+            preparedStatement.setTimestamp(6, ConvertHelper.localDateTimeToSQLConverter(endDate));
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 while (rs.next()) {

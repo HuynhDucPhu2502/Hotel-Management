@@ -117,8 +117,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
         setServiceCharge(formatCurrency(calculateServiceCharge(data)));
         setRoomCharge(formatCurrency(calculateRoomCharge(data)));
         setTax(formatCurrency(calculateTax(data)));
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // handle event for quarter filter
@@ -136,8 +134,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
         setServiceCharge(formatCurrency(calculateServiceCharge(data)));
         setRoomCharge(formatCurrency(calculateRoomCharge(data)));
         setTax(formatCurrency(calculateTax(data)));
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // handle event for employee filter
@@ -167,8 +163,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
         setServiceCharge(formatCurrency(calculateServiceCharge(data)));
         setRoomCharge(formatCurrency(calculateRoomCharge(data)));
         setTax(formatCurrency(calculateTax(data)));
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // handle event for statistic all the time
@@ -444,8 +438,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
         setRoomCharge(formatCurrency(calculateRoomCharge(data)));
         setTax(formatCurrency(calculateTax(data)));
         showDataToChartView(1);
-        showTableViewRadioButton.setSelected(true);
-        switchBetweenTableViewAndChartView();
     }
 
     // check if user want to statistic all the time
@@ -522,15 +514,13 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
     // if flat equal 2, that means statistics all of time
     private void showDataToChartView(int flat) {
         String empName = employeeNameCombobox.getValue();
-        invoiceDataBarChart.getXAxis().setLabel("Mốc thời gian");
+        invoiceDataBarChart.getXAxis().setLabel(getChartTitle());
         invoiceDataBarChart.getYAxis().setLabel("Tiền (NVĐ)");
         invoiceDataBarChart.getData().clear();
         if(flat == 0) invoiceDataBarChart.getData().add(getDataByYear(this.invoiceDisplayOnTableData, empName));
         else if(flat == 1) invoiceDataBarChart.getData().add(getDataByDateRange(this.invoiceDisplayOnTableData, empName));
         else if (flat == 2)invoiceDataBarChart.getData().add(getDataForAllOfTime(empName));
         else throw new IllegalArgumentException("Errors flat for statistic");
-
-        invoiceDataBarChart.setTitle(getChartTitle());
     }
 
     // get data of all the time to show on bar chart
@@ -784,7 +774,12 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
                 return baseTitle + "cho năm " + year + ", quý " + quarter + employeeTitle;
             }
         } else if (filterAllTheTimeCheckbox.isSelected()){
-            return baseTitle + " toàn bộ từ năm " + allOfYears.getFirst() + " đến năm " + allOfYears.getLast() + employeeTitle;
+            if(allOfYears.isEmpty())
+                return "Không có dữ liệu" + employeeTitle;
+            if(allOfYears.size() == 1)
+                return baseTitle + " toàn bộ từ năm " + allOfYears.getFirst()  + employeeTitle;
+            else
+                return baseTitle + " toàn bộ từ năm " + allOfYears.getFirst() + " đến năm " + allOfYears.getLast()  + employeeTitle;
         } else  {
             if (isToday(startDate, endDate)) {
                 return baseTitle + "cho ngày " + startDate.toLocalDate().toString() + employeeTitle;

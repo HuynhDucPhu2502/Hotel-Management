@@ -96,6 +96,24 @@ public class CustomerManagerController {
         updateBtn.setOnAction(e -> handleUpdateAction());
         resetBtn.setOnAction(e -> handleResetAction());
         customerIDSearchField.setOnAction(e -> handleSearchAction());
+
+        customerTableView.setRowFactory(x->{
+            TableRow<Customer> customerRow = new TableRow<>();
+
+            customerRow.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !customerRow.isEmpty()) { // Kiểm tra double-click và dòng không trống
+                    Customer rowData = customerRow.getItem();
+                    // Thực hiện hành động khi double-click
+                    try {
+                        handleShowCustomerInformation(rowData);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+
+            return customerRow;
+        });
     }
 
     // Phương thức load dữ liệu lên giao diện
@@ -321,7 +339,7 @@ public class CustomerManagerController {
         stage.setResizable(false);
         stage.setScene(scene);
 
-        String iconPath = "/iuh/fit/icons/menu_icons/ic_customer.png"; // Đường dẫn đến icon
+        String iconPath = "/iuh/fit/icons/menu_icons/ic_customer.png";
         stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath))));
         stage.setTitle("Thông tin khách hàng");
 

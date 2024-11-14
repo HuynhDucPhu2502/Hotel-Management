@@ -14,7 +14,8 @@ public class RoomWithReservationDAO {
     public static List<RoomWithReservation> getRoomWithReservation() {
         List<RoomWithReservation> data = new ArrayList<>();
 
-        String sql = """
+        String sql =
+        """
         SELECT r.roomID, r.roomStatus, r.dateOfCreation,
                rc.roomCategoryID, rc.roomCategoryName, rc.numberOfBed,
                rf.reservationFormID, rf.reservationDate, rf.checkInDate,
@@ -32,7 +33,9 @@ public class RoomWithReservationDAO {
         ) AS rf ON r.roomID = rf.roomID
         LEFT JOIN Employee e ON rf.employeeID = e.employeeID
         LEFT JOIN Customer c ON rf.customerID = c.customerID
-        WHERE r.isActivate = 'ACTIVATE' AND rc.isActivate = 'ACTIVATE'
+        WHERE r.isActivate = 'ACTIVATE'
+        AND rc.isActivate = 'ACTIVATE'
+        AND r.roomStatus != 'UNAVAILABLE'
         """;
 
         try (
@@ -53,7 +56,8 @@ public class RoomWithReservationDAO {
     }
 
     public static RoomWithReservation getRoomWithReservationByID(String reservationFormID, String roomID) {
-        String sql = """
+        String sql =
+        """
         SELECT r.roomID, r.roomStatus, r.dateOfCreation,
                rc.roomCategoryID, rc.roomCategoryName, rc.numberOfBed,
                rf.reservationFormID, rf.reservationDate, rf.checkInDate,
@@ -71,8 +75,13 @@ public class RoomWithReservationDAO {
         ) AS rf ON r.roomID = rf.roomID
         LEFT JOIN Employee e ON rf.employeeID = e.employeeID
         LEFT JOIN Customer c ON rf.customerID = c.customerID
-        WHERE r.roomID = ? AND r.isActivate = 'ACTIVATE' AND rc.isActivate = 'ACTIVATE' AND e.isActivate = 'ACTIVATE' AND c.isActivate = 'ACTIVATE'
-        """;
+        WHERE r.roomID = ?
+        AND r.isActivate = 'ACTIVATE'
+        AND rc.isActivate = 'ACTIVATE'
+        AND e.isActivate = 'ACTIVATE'
+        AND c.isActivate = 'ACTIVATE'
+        AND r.roomStatus != 'UNAVAILABLE'
+       """;
 
         try (
                 Connection connection = DBHelper.getConnection();
@@ -96,7 +105,8 @@ public class RoomWithReservationDAO {
     public static List<RoomWithReservation> getRoomOverDueWithLatestReservation() {
         List<RoomWithReservation> data = new ArrayList<>();
 
-        String sql = """
+        String sql =
+        """
         SELECT r.roomID, r.roomStatus, r.dateOfCreation,
                rc.roomCategoryID, rc.roomCategoryName, rc.numberOfBed,
                rf.reservationFormID, rf.reservationDate, rf.checkInDate,
@@ -119,10 +129,14 @@ public class RoomWithReservationDAO {
         ) AS rf ON r.roomID = rf.roomID
         LEFT JOIN Employee e ON rf.employeeID = e.employeeID
         LEFT JOIN Customer c ON rf.customerID = c.customerID
-        WHERE (r.roomStatus = 'OVERDUE' OR r.roomStatus = 'ON_USE')\s
-        AND rf.reservationFormID IS NOT NULL AND r.isActivate = 'ACTIVATE' AND rc.isActivate = 'ACTIVATE'
-        AND e.isActivate = 'ACTIVATE' AND c.isActivate = 'ACTIVATE'
-      \s""";
+        WHERE (r.roomStatus = 'OVERDUE' OR r.roomStatus = 'ON_USE')
+        AND rf.reservationFormID IS NOT NULL
+        AND r.isActivate = 'ACTIVATE'
+        AND rc.isActivate = 'ACTIVATE'
+        AND e.isActivate = 'ACTIVATE'
+        AND c.isActivate = 'ACTIVATE'
+        AND r.roomStatus != 'UNAVAILABLE'
+        """;
 
         try (Connection connection = DBHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);

@@ -34,15 +34,17 @@ public class ReservationForm {
         updateBookingDeposit();
     }
 
-    public ReservationForm(String reservationID) {
-        this.setReservationID(reservationID);
+    public ReservationForm(LocalDateTime reservationDate, LocalDateTime checkInDate, LocalDateTime checkOutDate,
+                           Employee employee, Room room, Customer customer) {
+        this.setReservationDate(reservationDate);
+        this.setCheckInDate(checkInDate);
+        this.setCheckOutDate(checkOutDate);
+        this.setEmployee(employee);
+        this.setRoom(room);
+        this.setCustomer(customer);
+        updateBookingDeposit();
     }
 
-    public ReservationForm(String reservationID, Customer customer) {
-        this.reservationID = reservationID;
-        this.customer = customer;
-    }
-      
     public ReservationForm() {}
 
     public void setEmployee(Employee employee) {
@@ -93,7 +95,7 @@ public class ReservationForm {
             throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_RESERVATION_DATE_ISNULL);
         }
 
-        if (checkInDate != null && reservationDate != null && checkInDate.isBefore(reservationDate)) {
+        if (checkInDate != null && checkInDate.isBefore(reservationDate)) {
             throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_CHECKIN_DATE);
         }
 

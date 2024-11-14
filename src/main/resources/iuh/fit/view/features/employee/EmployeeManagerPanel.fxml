@@ -249,10 +249,10 @@
 
                                             <columns>
                                                 <TableColumn fx:id="employeeIDColumn" minWidth="100.0" text="Mã NV" />
-                                                <TableColumn fx:id="fullNameColumn" minWidth="100.0" text="Họ tên" />
-                                                <TableColumn fx:id="phoneNumberColumn" minWidth="100.0" text="Số điện thoại" />
-                                                <TableColumn fx:id="positionColumn" minWidth="150.0" text="Chức vụ" />
-                                                <TableColumn fx:id="actionColumn" minWidth="300.0" prefWidth="300.0" text="Thao tác" />
+                                                <TableColumn fx:id="fullNameColumn" minWidth="100.0" prefWidth="211.99999237060547" text="Họ tên" />
+                                                <TableColumn fx:id="phoneNumberColumn" minWidth="100.0" prefWidth="168.800048828125" text="Số điện thoại" />
+                                                <TableColumn fx:id="positionColumn" minWidth="150.0" prefWidth="160.00003051757812" text="Chức vụ" />
+                                                <TableColumn fx:id="actionColumn" minWidth="236.7999267578125" prefWidth="236.7999267578125" text="Thao tác" />
                                             </columns>
 
                                             <VBox.margin>

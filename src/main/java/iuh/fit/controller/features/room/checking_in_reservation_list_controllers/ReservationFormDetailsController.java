@@ -5,6 +5,7 @@ import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.dao.*;
 import iuh.fit.models.*;
+import iuh.fit.models.enums.DialogType;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
@@ -219,6 +220,15 @@ public class ReservationFormDetailsController {
 
             room.setRoomStatus(RoomStatus.ON_USE);
             RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.ON_USE);
+
+            RoomDialog roomDialog = new RoomDialog(
+                    room,
+                    reservationForm,
+                    "Check-in tại phòng " + room.getRoomNumber(),
+                    DialogType.CHECKIN,
+                    now
+            );
+            RoomDialogDAO.createData(roomDialog);
 
             navigateToReservationListPanel();
 

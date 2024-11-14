@@ -35,7 +35,7 @@
                     <Font size="20.0" />
                 </font>
             </Text>
-            <DateRangePicker fx:id="invoiceTabDateRangePicker" prefHeight="32.0" prefWidth="254.0" />
+            <DateRangePicker fx:id="invoiceTabDateRangePicker" prefHeight="32.0" prefWidth="390.0" />
             <ComboBox fx:id="employeeNameCombobox" onAction="#statisticByEmployeeName" prefHeight="30.0" prefWidth="244.0" promptText="Chọn nhân viên">
                 <HBox.margin>
                     <Insets left="80.0" />
@@ -77,7 +77,7 @@
          </ComboBox>
          <Button fx:id="statisticAllTheTimeButton" disable="true" mnemonicParsing="false" onAction="#statisticAllTheTime" prefHeight="26.0" prefWidth="244.0" text="Thống kê toàn bộ">
             <HBox.margin>
-               <Insets left="105.0" />
+               <Insets left="210.0" />
             </HBox.margin>
          </Button>
          <CheckBox fx:id="filterAllTheTimeCheckbox" mnemonicParsing="false" onAction="#statisticAllTheTimeChecked">
@@ -160,12 +160,12 @@
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font></Text>
-                <Text fontSmoothingType="LCD" layoutX="14.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng số hóa đơn  :" wrappingWidth="175.42266845703136" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="1201.0" AnchorPane.topAnchor="15.0">
+                <Text fontSmoothingType="LCD" layoutX="14.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng số hóa đơn  :" wrappingWidth="175.42266845703136" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1201.0" AnchorPane.topAnchor="15.0">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
             </Text>
-                <Text fx:id="numOfInvoiceText" fontSmoothingType="LCD" layoutX="190.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" AnchorPane.bottomAnchor="17.200000000000003" AnchorPane.topAnchor="15.0">
+                <Text fx:id="numOfInvoiceText" fontSmoothingType="LCD" layoutX="175.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" AnchorPane.bottomAnchor="16.0" AnchorPane.topAnchor="15.0">
                <font>
                   <Font name="Segoe UI" size="20.0" />
                </font>
@@ -187,12 +187,12 @@
          <children>
             <AnchorPane prefHeight="35.0" prefWidth="1262.0">
                <children>
-                  <Text layoutX="14.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dịch vụ                  : " wrappingWidth="175.42266845703148" AnchorPane.bottomAnchor="-6.0" AnchorPane.topAnchor="12.0">
+                  <Text layoutX="14.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dịch vụ                  : " wrappingWidth="175.42266845703148" AnchorPane.bottomAnchor="-6.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="12.0">
                      <font>
                         <Font name="Segoe UI" size="20.0" />
                      </font>
                   </Text>
-                  <Text fx:id="serviceChargeText" layoutX="189.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" AnchorPane.topAnchor="13.0">
+                  <Text fx:id="serviceChargeText" layoutX="175.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" AnchorPane.topAnchor="12.41796875">
                      <font>
                         <Font name="Segoe UI" size="20.0" />
                      </font>

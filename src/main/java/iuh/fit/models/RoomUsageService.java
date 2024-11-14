@@ -18,10 +18,20 @@ public class RoomUsageService {
     private LocalDateTime dateAdded;
 
     public RoomUsageService(String roomUsageServiceId, int quantity, double unitPrice,
-                            double totalPrice, HotelService hotelService,
-                            ReservationForm reservationForm, Employee employee,
+                            HotelService hotelService, ReservationForm reservationForm, Employee employee,
                             LocalDateTime dateAdded) {
         this.setRoomUsageServiceId(roomUsageServiceId);
+        this.setQuantity(quantity);
+        this.setUnitPrice(unitPrice);
+        this.setHotelService(hotelService);
+        this.setReservationForm(reservationForm);
+        this.setEmployee(employee);
+        this.setDateAdded(dateAdded);
+        this.calculateTotalPrice();
+    }
+
+    public RoomUsageService(int quantity, double unitPrice, HotelService hotelService,
+                            ReservationForm reservationForm, Employee employee, LocalDateTime dateAdded) {
         this.setQuantity(quantity);
         this.setUnitPrice(unitPrice);
         this.setHotelService(hotelService);

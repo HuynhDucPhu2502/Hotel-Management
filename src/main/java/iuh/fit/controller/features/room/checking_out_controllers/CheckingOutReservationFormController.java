@@ -3,8 +3,10 @@ package iuh.fit.controller.features.room.checking_out_controllers;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
+
 import iuh.fit.dao.*;
 import iuh.fit.models.*;
+import iuh.fit.models.enums.DialogType;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
@@ -269,6 +271,16 @@ public class CheckingOutReservationFormController {
                         // 4. Cập nhật trạng thái phòng về AVAILABLE
                         Room room = roomWithReservation.getRoom();
                         RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.AVAILABLE);
+
+                        // 5. Ghi nhận vào RoomDialog với sự kiện Check-Out
+                        RoomDialog roomDialog = new RoomDialog(
+                                room,
+                                roomWithReservation.getReservationForm(),
+                                "Check-out cho phòng " + room.getRoomNumber(),
+                                DialogType.CHECKOUT,
+                                LocalDateTime.now()
+                        );
+                        RoomDialogDAO.createData(roomDialog);
 
                         // Hiển thị thông báo thành công
                         dialogPane.showInformation("THÀNH CÔNG", "Check-out và tạo hóa đơn thành công!");

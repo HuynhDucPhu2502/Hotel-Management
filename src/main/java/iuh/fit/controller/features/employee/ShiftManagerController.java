@@ -154,11 +154,13 @@ public class ShiftManagerController {
         Callback<TableColumn<Shift, Void>, TableCell<Shift, Void>> cellFactory = param -> new TableCell<>() {
             private final Button updateButton = new Button("Cập nhật");
             private final Button deleteButton = new Button("Xóa");
+            private final Button assignmentButton = new Button("Phân công");
             private final HBox hBox = new HBox(10);
 
             {
                 updateButton.getStyleClass().add("button-update");
                 deleteButton.getStyleClass().add("button-delete");
+                assignmentButton.getStyleClass().add("button-view");
                 hBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/Button.css")).toExternalForm());
 
                 updateButton.setOnAction(event -> {
@@ -179,8 +181,17 @@ public class ShiftManagerController {
                     }
                 });
 
+                assignmentButton.setOnAction(event -> {
+                    Shift shift = getTableView().getItems().get(getIndex());
+                    try {
+                        handelShowShiftAssignmentPanel(shift);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
                 hBox.setAlignment(Pos.CENTER);
-                hBox.getChildren().addAll(updateButton, deleteButton);
+                hBox.getChildren().addAll(updateButton, deleteButton, assignmentButton);
             }
 
             @Override
@@ -270,6 +281,25 @@ public class ShiftManagerController {
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Thông tin ca làm");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    private void handelShowShiftAssignmentPanel(Shift shift) throws IOException {
+        String source = "/iuh/fit/view/features/employee/ShiftAssignmentPanel.fxml";
+
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
+        AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
+
+        ShiftAssignmentController shiftAssignmentController = loader.getController();
+        shiftAssignmentController.initialize(shift);
+
+        Scene scene = new Scene(layout);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Phân công ca làm");
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();

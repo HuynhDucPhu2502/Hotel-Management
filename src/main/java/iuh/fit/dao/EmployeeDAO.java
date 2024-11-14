@@ -1,8 +1,7 @@
 package iuh.fit.dao;
 
 import iuh.fit.models.Employee;
-import iuh.fit.models.HotelService;
-import iuh.fit.models.ServiceCategory;
+import iuh.fit.models.Shift;
 import iuh.fit.models.enums.Gender;
 import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.enums.Position;
@@ -14,12 +13,10 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class EmployeeDAO {
     public static List<Employee> getEmployees() {
         ArrayList<Employee> data = new ArrayList<>();
-        ArrayList<Employee> filteredData = new ArrayList<>();
         try (
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement()
@@ -27,7 +24,47 @@ public class EmployeeDAO {
             String sql = "SELECT employeeID, fullName, phoneNumber, " +
                     "email, address, gender, " +
                     "idCardNumber, dob, position, isActivate " +
-                    "FROM Employee";
+                    "FROM Employee " +
+                    "WHERE employeeID != 'EMP-000000' AND isActivate = 'ACTIVATE'";
+            ResultSet rs = statement.executeQuery(sql);
+
+            while (rs.next()) {
+                Employee employee = new Employee();
+
+                employee.setEmployeeID(rs.getString(1));
+                employee.setFullName(rs.getString(2));
+                employee.setPhoneNumber(rs.getString(3));
+                employee.setEmail(rs.getString(4));
+                employee.setAddress(rs.getString(5));
+                employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
+                employee.setIdCardNumber(rs.getString(7));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
+                employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
+                employee.setObjectStatus(ConvertHelper.objectStatusConverter(rs.getString(10)));
+
+                data.add(employee);
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
+    }
+
+    public static ArrayList<Employee> getEmployeesWithoutAllShift() {
+        ArrayList<Employee> data = new ArrayList<>();
+        try (
+                Connection connection = DBHelper.getConnection();
+                Statement statement = connection.createStatement()
+        ){
+            String sql = "SELECT e.employeeID, fullName, phoneNumber, " +
+                    "email, address, gender, " +
+                    "idCardNumber, dob, position, isActivate " +
+                    "FROM Employee e " +
+                    "LEFT JOIN ShiftAssignment s ON e.employeeID = s.employeeId " +
+                    "WHERE e.isActivate = 'ACTIVATE' AND s.employeeId IS NULL";
             ResultSet rs = statement.executeQuery(sql);
 
 
@@ -46,7 +83,6 @@ public class EmployeeDAO {
                 employee.setObjectStatus(ConvertHelper.objectStatusConverter(rs.getString(10)));
 
                 data.add(employee);
-                filteredData = new ArrayList<>(data.stream().filter(x->x.getObjectStatus().equals(ObjectStatus.ACTIVATE)).toList());
             }
 
         } catch (Exception exception) {
@@ -54,10 +90,62 @@ public class EmployeeDAO {
             System.exit(1);
         }
 
-        return filteredData;
+        return data;
+    }
+
+    public static ArrayList<Employee> getEmployeesWithoutSpecificShift(Shift shift) {
+        ArrayList<Employee> data = new ArrayList<>();
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement statement = connection.prepareStatement(
+                        """
+                                SELECT DISTINCT e.employeeID, fullName, phoneNumber,\s
+                                email, address, gender,\s
+                                idCardNumber, dob, position, isActivate\s
+                                FROM Employee e\s
+                                LEFT JOIN ShiftAssignment s ON e.employeeID = s.employeeId\s
+                                WHERE e.isActivate = 'ACTIVATE' AND (s.shiftId IS NULL OR e.employeeID NOT IN
+                                	(
+                                		SELECT employeeID
+                                		FROM ShiftAssignment
+                                		WHERE shiftId = ?
+                                	)
+                                )
+                        """)
+        ){
+            statement.setString(1, shift.getShiftID());
+
+            ResultSet rs = statement.executeQuery();
+
+
+            while (rs.next()) {
+                Employee employee = new Employee();
+
+                employee.setEmployeeID(rs.getString(1));
+                employee.setFullName(rs.getString(2));
+                employee.setPhoneNumber(rs.getString(3));
+                employee.setEmail(rs.getString(4));
+                employee.setAddress(rs.getString(5));
+                employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
+                employee.setIdCardNumber(rs.getString(7));
+                employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
+                employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
+                employee.setObjectStatus(ConvertHelper.objectStatusConverter(rs.getString(10)));
+
+                data.add(employee);
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return data;
     }
 
     public static Employee getDataByID(String employeeID) {
+
+
 
         String SQLQueryStatement = "SELECT employeeID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, position, isActivate "
                 + "FROM Employee " +
@@ -141,11 +229,11 @@ public class EmployeeDAO {
             insertStatement.setString(3, employee.getPhoneNumber());
             insertStatement.setString(4, employee.getEmail());
             insertStatement.setString(5, employee.getAddress());
-            insertStatement.setString(6, ConvertHelper.genderConverterToSQL(employee.getGender()));
+            insertStatement.setString(6, ConvertHelper.genderToSQLConverter(employee.getGender()));
             insertStatement.setString(7, employee.getIdCardNumber());
-            insertStatement.setDate(8, ConvertHelper.dateToSQLConverter(employee.getDob()));
+            insertStatement.setDate(8, ConvertHelper.localDateToSQLConverter(employee.getDob()));
             insertStatement.setString(9, employee.getPosition().name());
-            insertStatement.setString(10, ConvertHelper.objectStatusConverterToSQL(employee.getObjectStatus()));
+            insertStatement.setString(10, ConvertHelper.objectStatusToSQLConverter(employee.getObjectStatus()));
 
             insertStatement.executeUpdate();
             if (rs.next()) {
@@ -184,9 +272,9 @@ public class EmployeeDAO {
             preparedStatement.setString(2, employee.getPhoneNumber());
             preparedStatement.setString(3, employee.getEmail());
             preparedStatement.setString(4, employee.getAddress());
-            preparedStatement.setString(5, ConvertHelper.genderConverterToSQL(employee.getGender()));
+            preparedStatement.setString(5, ConvertHelper.genderToSQLConverter(employee.getGender()));
             preparedStatement.setString(6, employee.getIdCardNumber());
-            preparedStatement.setDate(7, ConvertHelper.dateToSQLConverter(employee.getDob()));
+            preparedStatement.setDate(7, ConvertHelper.localDateToSQLConverter(employee.getDob()));
             preparedStatement.setString(8, employee.getPosition().name());
             preparedStatement.setString(9, employee.getEmployeeID());
 
@@ -312,6 +400,43 @@ public class EmployeeDAO {
         return null;
     }
 
+    public static Employee getEmployeeByEmployeeID(String employeeID) {
+        String sql = "SELECT e.employeeID, e.fullName, e.phoneNumber, e.email, e.address, " +
+                "e.gender, e.idCardNumber, e.dob, e.position " +
+                "FROM Employee e " +
+                "WHERE e.employeeID = ? AND e.isActivate = 'ACTIVATE'";
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            preparedStatement.setString(1, employeeID);
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    Employee employee = new Employee();
+
+                    employee.setEmployeeID(rs.getString(1));
+                    employee.setFullName(rs.getString(2));
+                    employee.setPhoneNumber(rs.getString(3));
+                    employee.setEmail(rs.getString(4));
+                    employee.setAddress(rs.getString(5));
+                    employee.setGender(ConvertHelper.genderConverter(rs.getString(6)));
+                    employee.setIdCardNumber(rs.getString(7));
+                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
+                    employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
+
+                    return employee;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public static List<Employee> searchEmployee(
             String employeeID, String fullName, String phoneNumber, String email, String address, Gender gender, String idCardNumber, LocalDate dob, Position position
             ) {
@@ -353,16 +478,16 @@ public class EmployeeDAO {
                 preparedStatement.setObject(13, gender);
                 preparedStatement.setObject(14, gender);
             }else {
-                preparedStatement.setString(13, ConvertHelper.genderConverterToSQL(gender));
-                preparedStatement.setString(14, ConvertHelper.genderConverterToSQL(gender));
+                preparedStatement.setString(13, ConvertHelper.genderToSQLConverter(gender));
+                preparedStatement.setString(14, ConvertHelper.genderToSQLConverter(gender));
             }
 
             if (dob == null){
                 preparedStatement.setObject(15, dob);
                 preparedStatement.setObject(16, dob);
             } else {
-                preparedStatement.setDate(15, ConvertHelper.dateToSQLConverter(dob));
-                preparedStatement.setDate(16, ConvertHelper.dateToSQLConverter(dob));
+                preparedStatement.setDate(15, ConvertHelper.localDateToSQLConverter(dob));
+                preparedStatement.setDate(16, ConvertHelper.localDateToSQLConverter(dob));
             }
 
             if (position == null){

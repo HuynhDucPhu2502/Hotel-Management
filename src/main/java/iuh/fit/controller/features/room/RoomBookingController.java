@@ -9,11 +9,12 @@ import iuh.fit.controller.features.room.group_booking_controllers.GroupBookingCo
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomWithReservationDAO;
 import iuh.fit.models.Employee;
-import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.RoomStatusHelper;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -62,7 +63,6 @@ public class RoomBookingController {
         this.mainController = mainController;
         this.employee = employeee;
         loadData();
-        loadDataForBtn();
         setupEventHandlers();
 
         groupBookingBtn.setOnAction(e -> navigateToGroupBookingPanel());
@@ -81,20 +81,41 @@ public class RoomBookingController {
     }
 
     private void loadData() {
-        roomCategoryCBox.getItems().setAll(getRoomCategories());
-        roomCategoryCBox.getSelectionModel().selectFirst();
+        Task<List<RoomWithReservation>> loadDataTask = new Task<>() {
+            @Override
+            protected List<RoomWithReservation> call() {
+                List<String> roomCategories = getRoomCategories();
+                List<String> floorNumbers = getFloorNumbers();
 
-        roomFloorNumberCBox.getItems().setAll(getFloorNumbers());
-        roomFloorNumberCBox.getSelectionModel().selectFirst();
+                Platform.runLater(() -> {
+                    roomCategoryCBox.getItems().setAll(roomCategories);
+                    roomCategoryCBox.getSelectionModel().selectFirst();
 
-        RoomStatusHelper.autoCheckoutOverdueRooms(employee);
-        roomWithReservations = RoomWithReservationDAO.getRoomWithReservation().stream()
-                .sorted(Comparator.comparing(r -> r.getRoom().getRoomNumber()))
-                .toList();
-        displayFilteredRooms(roomWithReservations);
+                    roomFloorNumberCBox.getItems().setAll(floorNumbers);
+                    roomFloorNumberCBox.getSelectionModel().selectFirst();
+                });
+
+                RoomStatusHelper.autoCheckoutOverdueRooms();
+                return RoomWithReservationDAO.getRoomWithReservation().stream()
+                        .sorted(Comparator.comparing(r -> r.getRoom().getRoomNumber()))
+                        .toList();
+            }
+        };
+
+        loadDataTask.setOnSucceeded(event -> {
+            roomWithReservations = loadDataTask.getValue();
+            displayFilteredRooms(roomWithReservations);
+            loadDataForBtn();
+        });
+
+        loadDataTask.setOnFailed(event -> {
+            throw new IllegalArgumentException(loadDataTask.getException().getMessage());
+        });
+
+        new Thread(loadDataTask).start();
     }
 
-    private void loadDataForBtn(){
+    private void loadDataForBtn() {
         allBtn.setText(ROOM_BOOKING_ALL_BTN + "("+roomWithReservations.size()+")");
 
         List<RoomWithReservation> availableRoom = roomWithReservations.stream()
@@ -108,7 +129,7 @@ public class RoomBookingController {
         onUseBtn.setText(ROOM_BOOKING_ON_USE_BTN + "("+onUseRoom.size()+")");
 
         List<RoomWithReservation> overDueRoom = roomWithReservations.stream()
-                .filter(r -> r.getRoom().getRoomStatus() == RoomStatus.ON_USE)
+                .filter(r -> r.getRoom().getRoomStatus() == RoomStatus.OVERDUE)
                 .toList();
         overDueBtn.setText(ROOM_BOOKING_OVER_DUE_BTN + "("+overDueRoom.size()+")");
     }
@@ -140,9 +161,6 @@ public class RoomBookingController {
         Pane roomItem;
 
         Room room = roomWithReservation.getRoom();
-        ReservationForm reservationForm = roomWithReservation.getReservationForm();
-        RoomStatusHelper.updateRoomStatusIfOverdue(room, reservationForm,
-                roomWithReservation, employee);
 
         switch (room.getRoomStatus()) {
             case AVAILABLE -> {
@@ -175,6 +193,10 @@ public class RoomBookingController {
     }
 
     private void handleSearch() {
+        if (roomWithReservations == null) {
+            return;
+        }
+
         List<RoomWithReservation> filteredRooms = roomWithReservations;
 
         String selectedCategory = roomCategoryCBox.getSelectionModel().getSelectedItem();

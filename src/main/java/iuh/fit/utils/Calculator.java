@@ -14,19 +14,20 @@ import java.util.List;
 
 public class Calculator {
 
-    // 1. Tính  tiền phòng theo số ngày lưu trú
-    public static double calculateRoomCharge(Room room, LocalDateTime checkIn, LocalDateTime checkOut) {
+    // ======================================================================================================
+    // Các hàm chính
+    // ======================================================================================================
+
+    // 1. Tính tiền phòng theo số ngày lưu trú
+    public static double calculateRoomCharge(
+            Room room,
+            LocalDateTime checkIn,
+            LocalDateTime checkOut
+    ) {
         List<Pricing> pricingList = PricingDAO.findDataByCategoryID(room.getRoomCategory().getRoomCategoryID());
 
-        Pricing dayPricing = pricingList.stream()
-                .filter(x -> x.getPriceUnit() == PriceUnit.DAY)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.PRICING_NOT_FOUND));
-
-        Pricing hourPricing = pricingList.stream()
-                .filter(x -> x.getPriceUnit() == PriceUnit.HOUR)
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.PRICING_NOT_FOUND));
+        Pricing hourPricing = extractPricingBasedOnPriceUnit(pricingList, PriceUnit.HOUR);
+        Pricing dayPricing = extractPricingBasedOnPriceUnit(pricingList, PriceUnit.DAY);
 
         double hours = calculateHours(checkIn, checkOut);
 
@@ -39,14 +40,20 @@ public class Calculator {
         }
     }
 
-
-    // 2. Tính  tiền đặt cọc theo số ngày lưu trú
-    public static double calculateBookingDeposit(Room room, LocalDateTime checkIn, LocalDateTime checkOut) {
+    // 2. Tính tiền đặt cọc theo số ngày lưu trú
+    public static double calculateBookingDeposit(
+            Room room,
+            LocalDateTime checkIn,
+            LocalDateTime checkOut
+    ) {
         return calculateRoomCharge(room, checkIn, checkOut) * 0.1;
     }
 
     // 3. Tính số ngày lưu trú ra chuỗi
-    public static String calculateStayLengthToString(LocalDateTime checkInTime, LocalDateTime checkOutTime) {
+    public static String calculateStayLengthToString(
+            LocalDateTime checkInTime,
+            LocalDateTime checkOutTime
+    ) {
         long hours = java.time.Duration.between(checkInTime, checkOutTime).toHours();
         double days = hours / 24.0;
 
@@ -59,7 +66,10 @@ public class Calculator {
     }
 
     // 4. Tính số ngày lưu trú ra số
-    public static double calculateStayLengthToDouble(LocalDateTime checkInTime, LocalDateTime checkOutTime) {
+    public static double calculateStayLengthToDouble(
+            LocalDateTime checkInTime,
+            LocalDateTime checkOutTime
+    ) {
         long hours = java.time.Duration.between(checkInTime, checkOutTime).toHours();
         double days = hours / 24.0;
 
@@ -93,10 +103,10 @@ public class Calculator {
         return roomCharge + serviceCharge;
     }
 
-    // ======================================================================================================
-    // Các hàm phụ
 
-    // Tính số giờ giữa checkin và checkout
+    // ======================================================================================================
+    // Các hàm phụ (private)
+    // ======================================================================================================
     private static double calculateHours(LocalDateTime checkIn, LocalDateTime checkOut) {
         if (checkOut.isBefore(checkIn)) {
             throw new IllegalArgumentException(ErrorMessages.ERROR_CHECK_OUT_BEFORE_CHECK_IN);
@@ -105,9 +115,14 @@ public class Calculator {
         return duration.toHours();
     }
 
-    // Làm tròn đến 0.5
     private static double roundToNearestHalfDay(double days) {
         return Math.ceil(days * 2) / 2.0;
     }
 
+    private static Pricing extractPricingBasedOnPriceUnit(List<Pricing> pricingList, PriceUnit priceUnit) {
+        return pricingList.stream()
+                .filter(x -> x.getPriceUnit() == priceUnit)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(ErrorMessages.PRICING_NOT_FOUND));
+    }
 }

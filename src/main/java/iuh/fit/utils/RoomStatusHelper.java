@@ -9,20 +9,55 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class RoomStatusHelper {
 
-    public static void autoCheckoutOverdueRooms(Employee employee) {
+    private static final ScheduledExecutorService SCHEDULER =
+            Executors.newScheduledThreadPool(1);
+    public static final Employee SYSTEM_EMPLOYEE =
+            EmployeeDAO.getEmployeeByEmployeeID("EMP-000000");
+
+    public static void startAutoCheckoutScheduler() {
+        SCHEDULER.scheduleAtFixedRate(
+                RoomStatusHelper::autoCheckoutOverdueRooms,
+                0,
+                30,
+                TimeUnit.MINUTES
+        );
+    }
+
+    public static void autoCheckoutOverdueRooms() {
         List<RoomWithReservation> overdueRooms =
                 RoomWithReservationDAO.getRoomOverDueWithLatestReservation();
 
         for (RoomWithReservation roomWithReservation : overdueRooms) {
-            autoCheckoutRoom(roomWithReservation.getRoom(), roomWithReservation, employee);
+            checkAndUpdateRoomStatus(
+                    roomWithReservation,
+                    SYSTEM_EMPLOYEE
+            );
+        }
+
+        List<RoomWithReservation> allRoomWithReservation =
+                RoomWithReservationDAO.getRoomWithReservation();
+
+        for (RoomWithReservation roomWithReservation : allRoomWithReservation) {
+            checkAndUpdateRoomStatus(
+                    roomWithReservation,
+                    SYSTEM_EMPLOYEE
+            );
         }
     }
 
-    public static void updateRoomStatusIfOverdue(Room room, ReservationForm
-            reservationForm, RoomWithReservation roomWithReservation, Employee employee) {
+    public static void checkAndUpdateRoomStatus(
+            RoomWithReservation roomWithReservation,
+            Employee employee
+    ) {
+        ReservationForm reservationForm = roomWithReservation.getReservationForm();
+        Room room = roomWithReservation.getRoom();
+
         if (reservationForm == null || room == null) return;
 
         LocalDateTime now = LocalDateTime.now();
@@ -32,18 +67,14 @@ public class RoomStatusHelper {
             long hoursOverdue = ChronoUnit.HOURS.between(checkOutDate, now);
 
             if (hoursOverdue >= 2) {
-                autoCheckoutRoom(room, roomWithReservation, employee);
+                handleCheckOut(roomWithReservation, employee);
+                room.setRoomStatus(RoomStatus.AVAILABLE);
+                RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.AVAILABLE);
             } else {
                 RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.OVERDUE);
                 room.setRoomStatus(RoomStatus.OVERDUE);
             }
         }
-    }
-
-    private static void autoCheckoutRoom(Room room, RoomWithReservation roomWithReservation, Employee employee) {
-        handleCheckOut(roomWithReservation, employee);
-        room.setRoomStatus(RoomStatus.AVAILABLE);
-        RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.AVAILABLE);
     }
 
     private static void handleCheckOut(RoomWithReservation roomWithReservation, Employee employee) {

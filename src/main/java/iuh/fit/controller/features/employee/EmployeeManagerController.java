@@ -4,6 +4,8 @@ import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Account;
+import iuh.fit.models.Customer;
+import iuh.fit.models.Delta;
 import iuh.fit.models.Employee;
 import iuh.fit.models.enums.AccountStatus;
 import iuh.fit.models.enums.Gender;
@@ -17,16 +19,26 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -79,6 +91,8 @@ public class EmployeeManagerController {
     private DialogPane dialogPane;
 
     private ObservableList<Employee> items;
+    private Delta mouseCordinate;
+    private Delta currentStageCordinate;
 
     public void initialize() {
         dialogPane.toFront();
@@ -92,6 +106,24 @@ public class EmployeeManagerController {
         addBtn.setOnAction(e -> handleAddAction());
         updateBtn.setOnAction(e -> handleUpdateAction());
         employeeIDSearchField.setOnAction(e -> handleSearchAction());
+
+        employeeTableView.setRowFactory(x->{
+            TableRow<Employee> employeeRow = new TableRow<>();
+
+            employeeRow.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !employeeRow.isEmpty()) { // Kiểm tra double-click và dòng không trống
+                    Employee rowData = employeeRow.getItem();
+                    // Thực hiện hành động khi double-click
+                    try {
+                        handleShowEmployeeInformation(rowData);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+
+            return employeeRow;
+        });
     }
 
     private void loadData() {
@@ -365,18 +397,107 @@ public class EmployeeManagerController {
         EmployeeInformationViewController employeeInformationViewController = loader.getController();
         employeeInformationViewController.setEmployee(employee);
 
+        layout.setId("infoPane");
+
         Scene scene = new Scene(layout);
+        scene.setFill(Color.TRANSPARENT);  // Chỉnh sửa background thành trong suốt nếu cần
 
         Stage stage = new Stage();
+        stage.initStyle(StageStyle.TRANSPARENT); // Giữ style bình thường
+
+        AnchorPane topBorder = new AnchorPane();
+        topBorder.setPrefHeight(10); // Độ cao của viền trên
+
+        // Tạo các nút thu nhỏ và đóng
+        Button minimizeButton = new Button("_");
+        minimizeButton.setStyle("-fx-background-color: #E67E22; -fx-text-fill: black;");
+        minimizeButton.setOnMouseEntered(e->minimizeButton.setStyle("-fx-background-color: #B9773C; -fx-text-fill: white;"));
+        minimizeButton.setOnMousePressed(e->minimizeButton.setStyle("-fx-background-color: #AF6E33; -fx-text-fill: white;"));
+        minimizeButton.setOnMouseExited(e->minimizeButton.setStyle("-fx-background-color: #E67E22; -fx-text-fill: black;"));
+        minimizeButton.setPrefSize(40, 10);
+        minimizeButton.setOnAction(event -> stage.setIconified(true));
+
+        Button closeButton = new Button("X");
+        closeButton.setStyle("-fx-background-color: #E67E22; -fx-text-fill: black;");
+        closeButton.setOnMouseEntered(e->closeButton.setStyle("-fx-background-color: #C0392B; -fx-text-fill: white;"));
+        closeButton.setOnMousePressed(e->closeButton.setStyle("-fx-background-color: #A93226; -fx-text-fill: white;"));
+        closeButton.setOnMouseExited(e->closeButton.setStyle("-fx-background-color: #E67E22; -fx-text-fill: black;"));
+        closeButton.setPrefSize(40, 10);
+        closeButton.setOnAction(event -> stage.close());
+
+        // Thêm icon cho cửa sổ
+        String iconPath = "/iuh/fit/icons/menu_icons/ic_employee.png";
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath))));
+
+        HBox buttonBox = new HBox(5, minimizeButton, closeButton);
+        buttonBox.setAlignment(Pos.CENTER_RIGHT);
+        buttonBox.setPadding(new Insets(4, 10, 5, 0));
+
+        ImageView icon = new ImageView(String.valueOf(Objects.requireNonNull(getClass().getResource(iconPath))));
+        Label title = new Label();
+        title.setText("Thông tin nhân viên");
+        title.setTextFill(Color.valueOf("#FFFFFF"));
+        title.setStyle("-fx-font-weight: bold; -fx-font-size: 14");
+        icon.setFitHeight(25);
+        icon.setFitWidth(25);
+        HBox iconAndTitleBox = new HBox(5, icon, title);
+        iconAndTitleBox.setAlignment(Pos.CENTER_LEFT);
+        iconAndTitleBox.setPadding(new Insets(5, 5, 5, 10));
+
+        AnchorPane.setRightAnchor(buttonBox, 0.0);
+        AnchorPane.setTopAnchor(buttonBox, 0.0);
+        AnchorPane.setLeftAnchor(iconAndTitleBox, 0.0);
+        AnchorPane.setTopAnchor(iconAndTitleBox, 0.0);
+        topBorder.getChildren().addAll(buttonBox, iconAndTitleBox);
+
+        AnchorPane.setTopAnchor(topBorder, 0.0);
+        AnchorPane.setLeftAnchor(topBorder, 0.0);
+        AnchorPane.setRightAnchor(topBorder, 0.0);
+        layout.getChildren().add(topBorder);
+
+        // Đặt màu nền cho topBorder
+        topBorder.setStyle("-fx-background-color: #F39C12; -fx-border-radius: 20 20 0 0;");
+
+        // Tạo Rectangle để bo góc cho cửa sổ
+        Rectangle clip = new Rectangle(836, 470);
+        clip.setArcHeight(20);  // Tùy chỉnh chiều cao bo góc
+        clip.setArcWidth(20);   // Tùy chỉnh chiều rộng bo góc
+        layout.setClip(clip);
         stage.setTitle("Thông tin nhân viên");
         stage.setScene(scene);
 
-        String iconPath = "/iuh/fit/icons/menu_icons/ic_employee.png"; // Đường dẫn đến icon
-        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath))));
-        stage.setTitle("Thông tin nhân viên");
+        // Cập nhật vị trí kéo cửa sổ
+        topBorder.setOnMousePressed(mouseEvent -> {
+            mouseCordinate = new Delta(mouseEvent.getScreenX(), mouseEvent.getScreenY());
+            currentStageCordinate = new Delta(stage.getX(), stage.getY());
+            topBorder.setStyle("-fx-background-color: #F28A0C; -fx-border-radius: 20 20 0 0;");
+        });
+
+
+        topBorder.setOnMouseReleased(mouseEvent -> {
+            topBorder.setStyle("-fx-background-color: #F39C12; -fx-border-radius: 20 20 0 0;");
+        });
+
+        topBorder.setOnMouseDragged(mouseEvent -> {
+            handelOnMouseDragEvent(mouseCordinate, currentStageCordinate, stage, mouseEvent);
+            topBorder.setStyle("-fx-background-color: #F28A0C; -fx-border-radius: 20 20 0 0;");
+        });
+
+        stage.setResizable(false);
+        stage.getScene().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/TopBorder.css")).toExternalForm());
+
+        stage.setScene(scene);
 
         stage.show();
+        stage.centerOnScreen();
     }
+
+
+    private void handelOnMouseDragEvent(Delta mouseCord, Delta currentStageCordinate, Stage stage, MouseEvent mouseEvent){
+        stage.setX(currentStageCordinate.getX() + (mouseEvent.getScreenX()-mouseCord.getX()));
+        stage.setY(currentStageCordinate.getY() + (mouseEvent.getScreenY()-mouseCord.getY()));
+    }
+
     public String removePrefix(String input) {
         if (input != null && input.startsWith("EMP-")) {
             return input.substring(4);

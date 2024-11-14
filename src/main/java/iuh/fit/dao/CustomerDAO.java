@@ -137,7 +137,7 @@ public class CustomerDAO {
             insertStatement.setString(5, customer.getAddress());
             insertStatement.setString(6, customer.getGender().name());
             insertStatement.setString(7, customer.getIdCardNumber());
-            insertStatement.setDate(8, ConvertHelper.dateToSQLConverter(customer.getDob()));
+            insertStatement.setDate(8, ConvertHelper.localDateToSQLConverter(customer.getDob()));
 
             insertStatement.executeUpdate();
         } catch (SQLException sqlException) {
@@ -188,7 +188,7 @@ public class CustomerDAO {
             preparedStatement.setString(4, customer.getAddress());
             preparedStatement.setString(5, customer.getGender().name());
             preparedStatement.setString(6, customer.getIdCardNumber());
-            preparedStatement.setDate(7, ConvertHelper.dateToSQLConverter(customer.getDob()));
+            preparedStatement.setDate(7, ConvertHelper.localDateToSQLConverter(customer.getDob()));
             preparedStatement.setString(8, customer.getCustomerID());
 
             preparedStatement.executeUpdate();
@@ -350,16 +350,16 @@ public class CustomerDAO {
                 preparedStatement.setObject(13, gender);
                 preparedStatement.setObject(14, gender);
             }else {
-                preparedStatement.setString(13, ConvertHelper.genderConverterToSQL(gender));
-                preparedStatement.setString(14, ConvertHelper.genderConverterToSQL(gender));
+                preparedStatement.setString(13, ConvertHelper.genderToSQLConverter(gender));
+                preparedStatement.setString(14, ConvertHelper.genderToSQLConverter(gender));
             }
 
             if (dob == null){
                 preparedStatement.setObject(15, dob);
                 preparedStatement.setObject(16, dob);
             } else {
-                preparedStatement.setDate(15, ConvertHelper.dateToSQLConverter(dob));
-                preparedStatement.setDate(16, ConvertHelper.dateToSQLConverter(dob));
+                preparedStatement.setDate(15, ConvertHelper.localDateToSQLConverter(dob));
+                preparedStatement.setDate(16, ConvertHelper.localDateToSQLConverter(dob));
             }
 
             ResultSet rs = preparedStatement.executeQuery();
