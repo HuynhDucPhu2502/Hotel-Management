@@ -13,12 +13,13 @@ import java.util.List;
 public class RoomDAO {
     public static List<Room> getRoom() {
         ArrayList<Room> data = new ArrayList<>();
-        String sql = """
-            SELECT a.roomID, a.roomStatus, a.dateOfCreation, a.roomCategoryID,
-                   b.roomCategoryName, b.numberOfBed
-            FROM Room a
-            INNER JOIN RoomCategory b ON a.roomCategoryID = b.roomCategoryID 
-            WHERE a.isActivate = 'ACTIVATE'
+        String sql =
+        """
+        SELECT a.roomID, a.roomStatus, a.dateOfCreation, a.roomCategoryID,
+               b.roomCategoryName, b.numberOfBed
+        FROM Room a
+        INNER JOIN RoomCategory b ON a.roomCategoryID = b.roomCategoryID 
+        WHERE a.isActivate = 'ACTIVATE'
         """;
 
         try (Connection connection = DBHelper.getConnection();
@@ -279,22 +280,26 @@ public class RoomDAO {
                rc.roomCategoryID, rc.roomCategoryName, rc.numberOfBed
         FROM Room r
         LEFT JOIN RoomCategory rc ON r.roomCategoryID = rc.roomCategoryID
-        LEFT JOIN ReservationForm rf\s
-          ON r.roomID = rf.roomID\s
-          AND rf.checkInDate <= ?\s
-          AND rf.checkOutDate >= GETDATE()
-        WHERE rf.roomID IS NULL\s
-          AND r.roomID != ? AND rc.roomCategoryID = ? AND r.isActivate = 'ACTIVATE';
-   \s""";
+        WHERE r.roomID != ?
+          AND rc.roomCategoryID = ?
+          AND r.isActivate = 'ACTIVATE'
+          AND NOT EXISTS (
+                SELECT 1
+                FROM ReservationForm rf
+                WHERE rf.roomID = r.roomID
+                  AND rf.checkInDate < ?
+                  AND DATEADD(HOUR, 2, rf.checkOutDate) > GETDATE()
+            )
+    """;
 
         List<Room> availableRooms = new ArrayList<>();
 
         try (Connection connection = DBHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-            preparedStatement.setTimestamp(1, Timestamp.valueOf(checkOutDate));
-            preparedStatement.setString(2, currentRoomID);
-            preparedStatement.setString(3, currentRoomCategoryID);
+            preparedStatement.setString(1, currentRoomID);
+            preparedStatement.setString(2, currentRoomCategoryID);
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(checkOutDate));
 
             ResultSet rs = preparedStatement.executeQuery();
 

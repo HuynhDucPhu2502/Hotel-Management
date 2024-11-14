@@ -6,6 +6,7 @@ import iuh.fit.models.RoomUsageService;
 import iuh.fit.models.ServiceCategory;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
+import iuh.fit.utils.ErrorMessages;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -76,7 +77,7 @@ public class RoomUsageServiceDAO {
 }
 
     public static void createData(RoomUsageService roomUsageService) {
-        String callProcedure = "{CALL AddServiceToReservation(?, ?, ?, ?, ?, ?, ?)}";
+        String callProcedure = "{CALL ServiceOrdering(?, ?, ?, ?, ?, ?, ?)}";
 
         try (Connection connection = DBHelper.getConnection();
              CallableStatement callableStatement = connection.prepareCall(callProcedure)) {
@@ -100,8 +101,8 @@ public class RoomUsageServiceDAO {
 
             // Kiểm tra kết quả trả về từ Stored Procedure
             switch (message) {
-                case "INVALID_QUANTITY":
-                    throw new IllegalArgumentException("Số lượng không hợp lệ.");
+                case "SERVICE_ORDERING_INVALID_QUANTITY":
+                    throw new IllegalArgumentException(ErrorMessages.SERVICE_ORDERING_INVALID_QUANTITY);
                 case "SERVICE_ORDERING_SUCCESS":
                     incrementAndUpdateNextID();
                     break;
