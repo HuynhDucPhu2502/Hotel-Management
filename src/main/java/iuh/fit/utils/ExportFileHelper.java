@@ -87,22 +87,23 @@ public class ExportFileHelper {
                 Row contentRow = sheet.createRow(i + 1);
                 UsingRoomDisplayOnTable inv = data.get(i);
 
-                contentRow.createCell(0).setCellValue(inv.getRoomID());
-                contentRow.createCell(1).setCellValue(inv.getCusName());
-                contentRow.createCell(2).setCellValue(inv.getEmpName());
-                contentRow.createCell(3).setCellValue(inv.getCreateDate());
-                contentRow.createCell(4).setCellValue(inv.getDeposit());
-                contentRow.createCell(5).setCellValue(inv.getServiceCharge());
-                contentRow.createCell(6).setCellValue(inv.getRoomCharge());
-                contentRow.createCell(7).setCellValue(inv.getTax());
-                contentRow.createCell(8).setCellValue(inv.getNetDue());
+                contentRow.createCell(0).setCellValue(inv.getRoomCategoryID());
+                contentRow.createCell(1).setCellValue(inv.getNameRoomCategory());
+                contentRow.createCell(2).setCellValue(inv.getRoomID());
+                contentRow.createCell(3).setCellValue(inv.getCusName());
+                contentRow.createCell(4).setCellValue(inv.getEmpName());
+                contentRow.createCell(5).setCellValue(inv.getCreateDate());
+                contentRow.createCell(6).setCellValue(inv.getDeposit());
+                contentRow.createCell(7).setCellValue(inv.getServiceCharge());
+                contentRow.createCell(8).setCellValue(inv.getRoomCharge());
+                contentRow.createCell(9).setCellValue(inv.getNetDue());
             }
 
             Row statisticRow = sheet.createRow(tableView.getItems().size()+1);
-            statisticRow.createCell(5).setCellValue("Số lần sử dụng phòng");
-            statisticRow.createCell(6).setCellValue(numOfInvoice);
-            statisticRow.createCell(7).setCellValue("Tổng tiền");
-            statisticRow.createCell(8).setCellValue(totalMoney);
+            statisticRow.createCell(6).setCellValue("Số lần sử dụng phòng");
+            statisticRow.createCell(7).setCellValue(numOfInvoice);
+            statisticRow.createCell(8).setCellValue("Tổng tiền");
+            statisticRow.createCell(9).setCellValue(totalMoney);
 
             try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
                 workbook.write(fileOut);
@@ -135,7 +136,7 @@ public class ExportFileHelper {
                 Row contentRow = sheet.createRow(i + 1);
                 UsingRoomDetailDisplayOnTable inv = data.get(i);
 
-                contentRow.createCell(0).setCellValue(inv.getRoomID());
+                contentRow.createCell(0).setCellValue(inv.getRoomCategoryID());
                 contentRow.createCell(1).setCellValue(inv.getTimesUsing());
                 contentRow.createCell(2).setCellValue(inv.getPercentUsing());
                 contentRow.createCell(3).setCellValue(inv.getNetDue());
@@ -627,7 +628,7 @@ public class ExportFileHelper {
                 String initialFileName;
 
                 if (!forEmployee) {
-                    String employeeName = instance.getRoomID();
+                    String employeeName = instance.getRoomCategoryID();
                     File employeeFolder = new File(yearFolder.getPath() + "//Nhân viên//" + employeeName);
                     if (!employeeFolder.exists()) employeeFolder.mkdirs();
 
@@ -664,7 +665,7 @@ public class ExportFileHelper {
                 if (!yearFolder.exists()) yearFolder.mkdirs();
 
                 if (!forEmployee) {
-                    String employeeName = invoiceInstance.getRoomID();
+                    String employeeName = invoiceInstance.getRoomCategoryID();
                     File employeeFolder = new File(yearFolder, "Nhân viên/" + employeeName + "/" + Month.valueOf(month).getName());
                     if (!employeeFolder.exists()) employeeFolder.mkdirs();
 
@@ -697,7 +698,7 @@ public class ExportFileHelper {
                 if (!yearFolder.exists()) yearFolder.mkdirs();
 
                 if (!forEmployee) {
-                    String employeeName = invoiceInstance.getRoomID();
+                    String employeeName = invoiceInstance.getNameRoomCategory();
                     File dayFolder = new File(yearFolder, "Nhân viên/" + employeeName + "/" + Month.valueOf(month).getName() + "/Ngay " + day);
                     if (!dayFolder.exists()) dayFolder.mkdirs();
 
@@ -729,7 +730,7 @@ public class ExportFileHelper {
                 if (!yearFolder.exists()) yearFolder.mkdirs();
 
                 if (!forEmployee) {
-                    String employeeName = invoiceInstance.getRoomID();
+                    String employeeName = invoiceInstance.getNameRoomCategory();
                     File dateRangeFolder = new File(yearFolder, "Nhân viên/" + employeeName + "/" + date.getStartDate() + " đến " + date.getEndDate());
                     if (!dateRangeFolder.exists()) dateRangeFolder.mkdirs();
 
@@ -759,7 +760,7 @@ public class ExportFileHelper {
                 if (!yearFolder.exists()) yearFolder.mkdirs();
 
                 if (!forEmployee) {
-                    String employeeName = invoiceInstance.getRoomID();
+                    String employeeName = invoiceInstance.getNameRoomCategory();
                     File dateRangeFolder = new File(yearFolder, "Nhân viên/" + employeeName + "/" + date.getStartDate() + " đến " + date.getEndDate());
                     if (!dateRangeFolder.exists()) dateRangeFolder.mkdirs();
 

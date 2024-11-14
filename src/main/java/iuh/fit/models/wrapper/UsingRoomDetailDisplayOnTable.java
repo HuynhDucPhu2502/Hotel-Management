@@ -4,33 +4,43 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class UsingRoomDetailDisplayOnTable {
-    private String roomID;
+    private String roomCategoryID;
+    private String nameRoomCategory;
     private int timesUsing;
     private float percentUsing;
     private double netDue;
     private float percentNetDue;
 
-    public UsingRoomDetailDisplayOnTable(String roomID, int timesUsing, float percentUsing, double netDue, float percentNetDue) {
-        this.setRoomID(roomID);
+    public UsingRoomDetailDisplayOnTable(String roomCategoryID, String nameRoomCategory, int timesUsing, float percentUsing, double netDue, float percentNetDue) {
+        this.setRoomCategoryID(roomCategoryID);
+        this.setNameRoomCategory(nameRoomCategory);
         this.setTimesUsing(timesUsing);
         this.setPercentUsing(percentUsing);
         this.setNetDue(netDue);
         this.setPercentNetDue(percentNetDue);
     }
 
-    public UsingRoomDetailDisplayOnTable(String roomID) {
-        this.roomID = roomID;
+    public UsingRoomDetailDisplayOnTable(String roomCategoryID) {
+        this.roomCategoryID = roomCategoryID;
     }
 
     public UsingRoomDetailDisplayOnTable() {
     }
 
-    public String getRoomID() {
-        return roomID;
+    public String getRoomCategoryID() {
+        return roomCategoryID;
     }
 
-    public void setRoomID(String roomID) {
-        this.roomID = roomID;
+    public void setRoomCategoryID(String roomCategoryID) {
+        this.roomCategoryID = roomCategoryID;
+    }
+
+    public String getNameRoomCategory() {
+        return nameRoomCategory;
+    }
+
+    public void setNameRoomCategory(String nameRoomCategory) {
+        this.nameRoomCategory = nameRoomCategory;
     }
 
     public double getNetDue() {
@@ -69,18 +79,19 @@ public class UsingRoomDetailDisplayOnTable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof UsingRoomDetailDisplayOnTable that)) return false;
-        return Objects.equals(getRoomID(), that.getRoomID());
+        return Objects.equals(getRoomCategoryID(), that.getRoomCategoryID());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getRoomID());
+        return Objects.hash(getRoomCategoryID());
     }
 
     @Override
     public String toString() {
         return "UsingRoomDetailDisplayOnTable{" +
-                "roomID='" + roomID + '\'' +
+                "roomCategoryID='" + roomCategoryID + '\'' +
+                ", nameRoomCategory='" + nameRoomCategory + '\'' +
                 ", timesUsing=" + timesUsing +
                 ", percentUsing=" + percentUsing +
                 ", netDue=" + netDue +

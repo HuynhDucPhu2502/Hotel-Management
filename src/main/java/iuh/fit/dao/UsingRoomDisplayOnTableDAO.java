@@ -18,12 +18,12 @@ import java.util.List;
 public class UsingRoomDisplayOnTableDAO {
     public static List<UsingRoomDisplayOnTable> getData(){
         List<UsingRoomDisplayOnTable> data = new ArrayList<>();
-        String SqlQuery = "select r.roomID, c.fullName , e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, t.taxRate, i.netDue\n" +
+        String SqlQuery = "select rc.roomCategoryID, rc.roomCategoryName, r.roomID, c.fullName , e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, i.netDue\n" +
                 "from Invoice i join ReservationForm rs on i.reservationFormID = rs.reservationFormID\n" +
                 "join Customer c on c.customerID = rs.customerID\n" +
                 "join Employee e on e.employeeID = rs.employeeID\n" +
                 "join Room r on r.roomID = rs.roomID\n" +
-                "join Tax t on t.taxID = i.taxID";
+                "join RoomCategory rc on rc.roomCategoryID = r.roomCategoryID";
 
         try (
                 Connection connection = DBHelper.getConnection();
@@ -35,15 +35,16 @@ public class UsingRoomDisplayOnTableDAO {
             while (rs.next()) {
                 UsingRoomDisplayOnTable usingRoomDisplayOnTable = new UsingRoomDisplayOnTable();
 
-                usingRoomDisplayOnTable.setRoomID(rs.getString(1));
-                usingRoomDisplayOnTable.setCusName(rs.getString(2));
-                usingRoomDisplayOnTable.setEmpName(rs.getString(3));
-                usingRoomDisplayOnTable.setCreateDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(4)));
-                usingRoomDisplayOnTable.setDeposit(rs.getDouble(5));
-                usingRoomDisplayOnTable.setServiceCharge(rs.getDouble(6));
-                usingRoomDisplayOnTable.setRoomCharge(rs.getDouble(7));
-                usingRoomDisplayOnTable.setTax(rs.getDouble(8));
-                usingRoomDisplayOnTable.setNetDue(rs.getDouble(9));
+                usingRoomDisplayOnTable.setRoomCategoryID(rs.getString(1));
+                usingRoomDisplayOnTable.setNameRoomCategory(rs.getString(2));
+                usingRoomDisplayOnTable.setRoomID(rs.getString(3));
+                usingRoomDisplayOnTable.setCusName(rs.getString(4));
+                usingRoomDisplayOnTable.setEmpName(rs.getString(5));
+                usingRoomDisplayOnTable.setCreateDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(6)));
+                usingRoomDisplayOnTable.setDeposit(rs.getDouble(7));
+                usingRoomDisplayOnTable.setServiceCharge(rs.getDouble(8));
+                usingRoomDisplayOnTable.setRoomCharge(rs.getDouble(9));
+                usingRoomDisplayOnTable.setNetDue(rs.getDouble(10));
 
                 data.add(usingRoomDisplayOnTable);
             }
@@ -61,13 +62,12 @@ public class UsingRoomDisplayOnTableDAO {
 
     public static List<UsingRoomDisplayOnTable> getDataByYear(int year) {
         List<UsingRoomDisplayOnTable> data = new ArrayList<>();
-        String SqlQuery = "SELECT r.roomID, c.fullName, e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, t.taxRate, i.netDue " +
-                "FROM Invoice i " +
-                "JOIN ReservationForm rs ON i.reservationFormID = rs.reservationFormID " +
-                "JOIN Customer c ON c.customerID = rs.customerID " +
-                "JOIN Employee e ON e.employeeID = rs.employeeID " +
-                "JOIN Room r ON r.roomID = rs.roomID " +
-                "JOIN Tax t ON t.taxID = i.taxID " +
+        String SqlQuery = "select rc.roomCategoryID, rc.roomCategoryName, r.roomID, c.fullName , e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, i.netDue\n" +
+                "from Invoice i join ReservationForm rs on i.reservationFormID = rs.reservationFormID\n" +
+                "join Customer c on c.customerID = rs.customerID\n" +
+                "join Employee e on e.employeeID = rs.employeeID\n" +
+                "join Room r on r.roomID = rs.roomID\n" +
+                "join RoomCategory rc on rc.roomCategoryID = r.roomCategoryID " +
                 "WHERE YEAR(i.invoiceDate) = ?";
 
         try (
@@ -82,15 +82,16 @@ public class UsingRoomDisplayOnTableDAO {
                 while (rs.next()) {
                     UsingRoomDisplayOnTable usingRoomDisplayOnTable = new UsingRoomDisplayOnTable();
 
-                    usingRoomDisplayOnTable.setRoomID(rs.getString(1));
-                    usingRoomDisplayOnTable.setCusName(rs.getString(2));
-                    usingRoomDisplayOnTable.setEmpName(rs.getString(3));
-                    usingRoomDisplayOnTable.setCreateDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(4)));
-                    usingRoomDisplayOnTable.setDeposit(rs.getDouble(5));
-                    usingRoomDisplayOnTable.setServiceCharge(rs.getDouble(6));
-                    usingRoomDisplayOnTable.setRoomCharge(rs.getDouble(7));
-                    usingRoomDisplayOnTable.setTax(rs.getDouble(8));
-                    usingRoomDisplayOnTable.setNetDue(rs.getDouble(9));
+                    usingRoomDisplayOnTable.setRoomCategoryID(rs.getString(1));
+                    usingRoomDisplayOnTable.setNameRoomCategory(rs.getString(2));
+                    usingRoomDisplayOnTable.setRoomID(rs.getString(3));
+                    usingRoomDisplayOnTable.setCusName(rs.getString(4));
+                    usingRoomDisplayOnTable.setEmpName(rs.getString(5));
+                    usingRoomDisplayOnTable.setCreateDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(6)));
+                    usingRoomDisplayOnTable.setDeposit(rs.getDouble(7));
+                    usingRoomDisplayOnTable.setServiceCharge(rs.getDouble(8));
+                    usingRoomDisplayOnTable.setRoomCharge(rs.getDouble(9));
+                    usingRoomDisplayOnTable.setNetDue(rs.getDouble(10));
 
                     data.add(usingRoomDisplayOnTable);
                 }
@@ -111,13 +112,12 @@ public class UsingRoomDisplayOnTableDAO {
 
     public static List<UsingRoomDisplayOnTable> getDataByDateRange(LocalDateTime beginDate, LocalDateTime endDate){
         List<UsingRoomDisplayOnTable> data = new ArrayList<>();
-        String SqlQuery = "SELECT r.roomID, c.fullName, e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, t.taxRate, i.netDue " +
-                "FROM Invoice i " +
-                "JOIN ReservationForm rs ON i.reservationFormID = rs.reservationFormID " +
-                "JOIN Customer c ON c.customerID = rs.customerID " +
-                "JOIN Employee e ON e.employeeID = rs.employeeID " +
-                "JOIN Room r ON r.roomID = rs.roomID " +
-                "JOIN Tax t ON t.taxID = i.taxID " +
+        String SqlQuery = "select rc.roomCategoryID, rc.roomCategoryName, r.roomID, c.fullName , e.fullName, i.invoiceDate, rs.roomBookingDeposit, i.servicesCharge, i.roomCharge, i.netDue\n" +
+                "from Invoice i join ReservationForm rs on i.reservationFormID = rs.reservationFormID\n" +
+                "join Customer c on c.customerID = rs.customerID\n" +
+                "join Employee e on e.employeeID = rs.employeeID\n" +
+                "join Room r on r.roomID = rs.roomID\n" +
+                "join RoomCategory rc on rc.roomCategoryID = r.roomCategoryID " +
                 "WHERE i.invoiceDate >= ? AND i.invoiceDate <= ?";
 
         try (
@@ -131,15 +131,16 @@ public class UsingRoomDisplayOnTableDAO {
                 while (rs.next()) {
                     UsingRoomDisplayOnTable usingRoomDisplayOnTable = new UsingRoomDisplayOnTable();
 
-                    usingRoomDisplayOnTable.setRoomID(rs.getString(1));
-                    usingRoomDisplayOnTable.setCusName(rs.getString(2));
-                    usingRoomDisplayOnTable.setEmpName(rs.getString(3));
-                    usingRoomDisplayOnTable.setCreateDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(4)));
-                    usingRoomDisplayOnTable.setDeposit(rs.getDouble(5));
-                    usingRoomDisplayOnTable.setServiceCharge(rs.getDouble(6));
-                    usingRoomDisplayOnTable.setRoomCharge(rs.getDouble(7));
-                    usingRoomDisplayOnTable.setTax(rs.getDouble(8));
-                    usingRoomDisplayOnTable.setNetDue(rs.getDouble(9));
+                    usingRoomDisplayOnTable.setRoomCategoryID(rs.getString(1));
+                    usingRoomDisplayOnTable.setNameRoomCategory(rs.getString(2));
+                    usingRoomDisplayOnTable.setRoomID(rs.getString(3));
+                    usingRoomDisplayOnTable.setCusName(rs.getString(4));
+                    usingRoomDisplayOnTable.setEmpName(rs.getString(5));
+                    usingRoomDisplayOnTable.setCreateDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp(6)));
+                    usingRoomDisplayOnTable.setDeposit(rs.getDouble(7));
+                    usingRoomDisplayOnTable.setServiceCharge(rs.getDouble(8));
+                    usingRoomDisplayOnTable.setRoomCharge(rs.getDouble(9));
+                    usingRoomDisplayOnTable.setNetDue(rs.getDouble(10));
 
                     data.add(usingRoomDisplayOnTable);
                 }
@@ -160,15 +161,17 @@ public class UsingRoomDisplayOnTableDAO {
 
     public static List<UsingRoomDetailDisplayOnTable> getDataDetail(){
         List<UsingRoomDetailDisplayOnTable> data = new ArrayList<UsingRoomDetailDisplayOnTable>();
-        String SqlQuery = "SELECT r.roomID, COUNT(r.roomID) AS roomCount, SUM(i.netDue) AS totalNetDue, " +
+        String SqlQuery = "SELECT rc.roomCategoryID, rc.roomCategoryName, " +
+                "COUNT(r.roomID) AS timesUsing, " +
+                "SUM(i.netDue) AS totalNetDue, " +
                 "(COUNT(r.roomID) * 100.0 / SUM(COUNT(r.roomID)) OVER()) AS percentUsing, " +
                 "(SUM(i.netDue) * 100.0 / SUM(SUM(i.netDue)) OVER()) AS percentNetDue " +
-                "FROM Invoice i JOIN ReservationForm rs ON i.reservationFormID = rs.reservationFormID " +
-                "JOIN Customer c ON c.customerID = rs.customerID " +
-                "JOIN Employee e ON e.employeeID = rs.employeeID " +
+                "FROM Invoice i " +
+                "JOIN ReservationForm rs ON i.reservationFormID = rs.reservationFormID " +
                 "JOIN Room r ON r.roomID = rs.roomID " +
-                "JOIN Tax t ON t.taxID = i.taxID " +
-                "GROUP BY r.roomID;";
+                "JOIN RoomCategory rc ON rc.roomCategoryID = r.roomCategoryID " +
+                "GROUP BY rc.roomCategoryID, rc.roomCategoryName;";
+
         try (
                 Connection connection = DBHelper.getConnection();
                 Statement statement = connection.createStatement();
@@ -179,11 +182,12 @@ public class UsingRoomDisplayOnTableDAO {
             while (rs.next()) {
                 UsingRoomDetailDisplayOnTable usingRoomDisplayOnTable = new UsingRoomDetailDisplayOnTable();
 
-                usingRoomDisplayOnTable.setRoomID(rs.getString(1));
-                usingRoomDisplayOnTable.setTimesUsing(rs.getInt(2));
-                usingRoomDisplayOnTable.setNetDue(rs.getDouble(3));
-                usingRoomDisplayOnTable.setPercentUsing(rs.getFloat(4));
-                usingRoomDisplayOnTable.setPercentNetDue(rs.getFloat(5));
+                usingRoomDisplayOnTable.setRoomCategoryID(rs.getString(1));
+                usingRoomDisplayOnTable.setNameRoomCategory(rs.getString(2));
+                usingRoomDisplayOnTable.setTimesUsing(rs.getInt(3));
+                usingRoomDisplayOnTable.setNetDue(rs.getDouble(4));
+                usingRoomDisplayOnTable.setPercentUsing(rs.getFloat(5));
+                usingRoomDisplayOnTable.setPercentNetDue(rs.getFloat(6));
 
                 data.add(usingRoomDisplayOnTable);
             }
@@ -193,26 +197,29 @@ public class UsingRoomDisplayOnTableDAO {
             System.exit(1);
         }
 
-        data.sort(Comparator.comparing(UsingRoomDetailDisplayOnTable::getRoomID));
+        data.sort(Comparator.comparing(UsingRoomDetailDisplayOnTable::getRoomCategoryID));
 
         return data;
     }
 
     public static List<UsingRoomDetailDisplayOnTable> getDataDetailByYear(int year) {
         List<UsingRoomDetailDisplayOnTable> data = new ArrayList<>();
-        String SqlQuery = "SELECT r.roomID, " +
-                "COUNT(r.roomID) AS roomCount, " +
+        String SqlQuery = "SELECT rc.roomCategoryID, rc.roomCategoryName, " +
+                "COUNT(r.roomID) AS timesUsing, " +
                 "SUM(i.netDue) AS totalNetDue, " +
-                "(COUNT(r.roomID) * 100.0 / (SELECT COUNT(*) FROM Invoice WHERE YEAR(invoiceDate) = ?)) AS percentUsing, " +
+                "(COUNT(r.roomID) * 100.0 / (SELECT COUNT(r2.roomID) FROM Invoice i2 " +
+                "JOIN ReservationForm rs2 ON i2.reservationFormID = rs2.reservationFormID " +
+                "JOIN Room r2 ON r2.roomID = rs2.roomID " +
+                "JOIN RoomCategory rc2 ON rc2.roomCategoryID = r2.roomCategoryID " +
+                "WHERE YEAR(i2.invoiceDate) = ?)) AS percentUsing, " +
                 "(SUM(i.netDue) * 100.0 / (SELECT SUM(i2.netDue) FROM Invoice i2 WHERE YEAR(i2.invoiceDate) = ?)) AS percentNetDue " +
                 "FROM Invoice i " +
                 "JOIN ReservationForm rs ON i.reservationFormID = rs.reservationFormID " +
-                "JOIN Customer c ON c.customerID = rs.customerID " +
-                "JOIN Employee e ON e.employeeID = rs.employeeID " +
                 "JOIN Room r ON r.roomID = rs.roomID " +
-                "JOIN Tax t ON t.taxID = i.taxID " +
+                "JOIN RoomCategory rc ON rc.roomCategoryID = r.roomCategoryID " +
                 "WHERE YEAR(i.invoiceDate) = ? " +
-                "GROUP BY r.roomID";
+                "GROUP BY rc.roomCategoryID, rc.roomCategoryName;";
+
 
         try (
                 Connection connection = DBHelper.getConnection();
@@ -226,11 +233,12 @@ public class UsingRoomDisplayOnTableDAO {
                 while (rs.next()) {
                     UsingRoomDetailDisplayOnTable usingRoomDisplayOnTable = new UsingRoomDetailDisplayOnTable();
 
-                    usingRoomDisplayOnTable.setRoomID(rs.getString(1));
-                    usingRoomDisplayOnTable.setTimesUsing(rs.getInt(2));
-                    usingRoomDisplayOnTable.setNetDue(rs.getDouble(3));
-                    usingRoomDisplayOnTable.setPercentUsing(rs.getFloat(4));
-                    usingRoomDisplayOnTable.setPercentNetDue(rs.getFloat(5));
+                    usingRoomDisplayOnTable.setRoomCategoryID(rs.getString(1));
+                    usingRoomDisplayOnTable.setNameRoomCategory(rs.getString(2));
+                    usingRoomDisplayOnTable.setTimesUsing(rs.getInt(3));
+                    usingRoomDisplayOnTable.setNetDue(rs.getDouble(4));
+                    usingRoomDisplayOnTable.setPercentUsing(rs.getFloat(5));
+                    usingRoomDisplayOnTable.setPercentNetDue(rs.getFloat(6));
 
                     data.add(usingRoomDisplayOnTable);
                 }
@@ -240,7 +248,7 @@ public class UsingRoomDisplayOnTableDAO {
             System.exit(1);
         }
 
-        data.sort(Comparator.comparing(UsingRoomDetailDisplayOnTable::getRoomID));
+        data.sort(Comparator.comparing(UsingRoomDetailDisplayOnTable::getRoomCategoryID));
 
         return data;
     }
@@ -248,17 +256,19 @@ public class UsingRoomDisplayOnTableDAO {
 
     public static List<UsingRoomDetailDisplayOnTable> getDataDetailDateRange(LocalDateTime beginDate, LocalDateTime endDate) {
         List<UsingRoomDetailDisplayOnTable> data = new ArrayList<>();
-        String SqlQuery = "SELECT r.roomID, COUNT(r.roomID) AS roomCount, SUM(i.netDue) AS totalNetDue, " +
-                "(COUNT(r.roomID) * 100.0 / (SELECT COUNT(*) FROM Invoice WHERE invoiceDate >= ? AND invoiceDate <= ?)) AS percentUsing, " +
+        String SqlQuery = "SELECT rc.roomCategoryID, rc.roomCategoryName, COUNT(r.roomID) AS roomCount, SUM(i.netDue) AS totalNetDue, " +
+                "(COUNT(r.roomID) * 100.0 / (SELECT COUNT(*) FROM Invoice i2 " +
+                "JOIN ReservationForm rs2 ON i2.reservationFormID = rs2.reservationFormID " +
+                "JOIN Room r2 ON r2.roomID = rs2.roomID " +
+                "JOIN RoomCategory rc2 ON rc2.roomCategoryID = r2.roomCategoryID " +
+                "WHERE i2.invoiceDate >= ? AND i2.invoiceDate <= ?)) AS percentUsing, " +
                 "(SUM(i.netDue) * 100.0 / (SELECT SUM(i2.netDue) FROM Invoice i2 WHERE i2.invoiceDate >= ? AND i2.invoiceDate <= ?)) AS percentNetDue " +
                 "FROM Invoice i " +
                 "JOIN ReservationForm rs ON i.reservationFormID = rs.reservationFormID " +
-                "JOIN Customer c ON c.customerID = rs.customerID " +
-                "JOIN Employee e ON e.employeeID = rs.employeeID " +
                 "JOIN Room r ON r.roomID = rs.roomID " +
-                "JOIN Tax t ON t.taxID = i.taxID " +
+                "JOIN RoomCategory rc ON rc.roomCategoryID = r.roomCategoryID " +
                 "WHERE i.invoiceDate >= ? AND i.invoiceDate <= ? " +
-                "GROUP BY r.roomID";
+                "GROUP BY rc.roomCategoryID, rc.roomCategoryName;";
 
         try (
                 Connection connection = DBHelper.getConnection();
@@ -275,11 +285,12 @@ public class UsingRoomDisplayOnTableDAO {
                 while (rs.next()) {
                     UsingRoomDetailDisplayOnTable usingRoomDisplayOnTable = new UsingRoomDetailDisplayOnTable();
 
-                    usingRoomDisplayOnTable.setRoomID(rs.getString(1));
-                    usingRoomDisplayOnTable.setTimesUsing(rs.getInt(2));
-                    usingRoomDisplayOnTable.setNetDue(rs.getDouble(3));
-                    usingRoomDisplayOnTable.setPercentUsing(rs.getFloat(4));
-                    usingRoomDisplayOnTable.setPercentNetDue(rs.getFloat(5));
+                    usingRoomDisplayOnTable.setRoomCategoryID(rs.getString(1));
+                    usingRoomDisplayOnTable.setNameRoomCategory(rs.getString(2));
+                    usingRoomDisplayOnTable.setTimesUsing(rs.getInt(3));
+                    usingRoomDisplayOnTable.setNetDue(rs.getDouble(4));
+                    usingRoomDisplayOnTable.setPercentUsing(rs.getFloat(5));
+                    usingRoomDisplayOnTable.setPercentNetDue(rs.getFloat(6));
 
                     data.add(usingRoomDisplayOnTable);
                 }
@@ -289,7 +300,7 @@ public class UsingRoomDisplayOnTableDAO {
             System.exit(1);
         }
 
-        data.sort(Comparator.comparing(UsingRoomDetailDisplayOnTable::getRoomID));
+        data.sort(Comparator.comparing(UsingRoomDetailDisplayOnTable::getRoomCategoryID));
 
         return data;
     }

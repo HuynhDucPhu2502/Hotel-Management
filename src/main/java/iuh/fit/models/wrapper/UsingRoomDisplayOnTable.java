@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class UsingRoomDisplayOnTable {
+    private String roomCategoryID;
+    private String nameRoomCategory;
     private String roomID;
     private String cusName;
     private String empName;
@@ -11,19 +13,19 @@ public class UsingRoomDisplayOnTable {
     private double deposit;
     private double serviceCharge;
     private double roomCharge;
-    private double tax;
     private double netDue;
 
-    public UsingRoomDisplayOnTable( String cusName, String roomID, String empName, LocalDateTime createDate, double deposit, double serviceCharge, double roomCharge, double tax, double netDue) {
-        this.cusName = cusName;
-        this.roomID = roomID;
-        this.empName = empName;
-        this.createDate = createDate;
-        this.deposit = deposit;
-        this.serviceCharge = serviceCharge;
-        this.roomCharge = roomCharge;
-        this.setTax(tax);
-        this.netDue = netDue;
+    public UsingRoomDisplayOnTable(String roomCategoryID, String nameRoomCategory, String roomID, String cusName, String empName, LocalDateTime createDate, double deposit, double serviceCharge, double roomCharge, double netDue) {
+        this.setRoomCategoryID(roomCategoryID);
+        this.setNameRoomCategory(nameRoomCategory);
+        this.setRoomID(roomID);
+        this.setCusName(cusName);
+        this.setEmpName(empName);
+        this.setCreateDate(createDate);
+        this.setDeposit(deposit);
+        this.setServiceCharge(serviceCharge);
+        this.setRoomCharge(roomCharge);
+        this.setNetDue(netDue);
     }
 
     public UsingRoomDisplayOnTable(String roomID) {
@@ -31,6 +33,22 @@ public class UsingRoomDisplayOnTable {
     }
 
     public UsingRoomDisplayOnTable() {
+    }
+
+    public String getRoomCategoryID() {
+        return roomCategoryID;
+    }
+
+    public void setRoomCategoryID(String roomCategoryID) {
+        this.roomCategoryID = roomCategoryID;
+    }
+
+    public String getNameRoomCategory() {
+        return nameRoomCategory;
+    }
+
+    public void setNameRoomCategory(String nameRoomCategory) {
+        this.nameRoomCategory = nameRoomCategory;
     }
 
     public String getRoomID() {
@@ -89,20 +107,12 @@ public class UsingRoomDisplayOnTable {
         this.roomCharge = roomCharge;
     }
 
-    public double getTax() {
-        return tax;
-    }
-
     public double getNetDue() {
         return netDue;
     }
 
     public void setNetDue(double netDue) {
         this.netDue = netDue;
-    }
-
-    public void setTax(double tax) {
-        this.tax = tax * (this.serviceCharge + this.roomCharge);
     }
 
     @Override
@@ -127,7 +137,6 @@ public class UsingRoomDisplayOnTable {
                 ", deposit=" + deposit +
                 ", serviceCharge=" + serviceCharge +
                 ", roomCharge=" + roomCharge +
-                ", tax=" + tax +
                 ", netDue=" + netDue +
                 '}';
     }
