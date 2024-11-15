@@ -7,11 +7,15 @@ import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
 import iuh.fit.models.wrapper.RoomWithReservation;
+import iuh.fit.utils.RoomStatusHelper;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,9 +37,15 @@ public class RoomOnUseItemController {
     private Employee employee;
     private RoomWithReservation roomWithReservation;
 
+    private Timeline timeline;
+
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
+    public void initialize() {
+        MainController.setRoomBookingLoaded(false);
+    }
+
     public void setupContext(MainController mainController, Employee employee, RoomWithReservation roomWithReservation) {
         this.mainController = mainController;
         this.employee = employee;
@@ -48,6 +58,25 @@ public class RoomOnUseItemController {
         roomNumberText.setText(room.getRoomNumber());
         customerFullNameLabel.setText(customer.getFullName());
         checkOutDateText.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
+
+        initializeRoomOverdueCheck(reservationForm.getCheckOutDate());
+    }
+
+    private void initializeRoomOverdueCheck(LocalDateTime checkOutDate) {
+        timeline = new Timeline(
+                new KeyFrame(Duration.seconds(1), event -> {
+                    LocalDateTime now = LocalDateTime.now();
+                    java.time.Duration duration = java.time.Duration.between(now, checkOutDate);
+
+                    if (!duration.isPositive()) {
+                        timeline.stop();
+                        if (MainController.isRoomBookingLoaded()) navigateToRoomBookingPanel(false);
+                        else RoomStatusHelper.autoCheckoutOverdueRooms();
+                    }
+                })
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 
     // ==================================================================================================================
@@ -59,7 +88,7 @@ public class RoomOnUseItemController {
         LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
 
         if (now.isAfter(checkOutDate)) {
-            navigateToRoomBookingPanel();
+            navigateToRoomBookingPanel(true);
             return;
         }
 
@@ -81,18 +110,18 @@ public class RoomOnUseItemController {
         }
     }
 
-    private void navigateToRoomBookingPanel() {
+    private void navigateToRoomBookingPanel(boolean isError) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
             roomBookingController.setupContext(mainController, employee);
-            roomBookingController.getDialogPane().showInformation(
-                    "Không thể thực hiện thao tác",
-                    "Phòng này đã quá hạn Checkout. Bạn phải Checkout mới có thể thực hiện chức năng khác."
-            );
-
+            if (isError)
+                roomBookingController.getDialogPane().showInformation(
+                        "Không thể thực hiện thao tác",
+                        "Phòng này đã quá hạn Checkout. Bạn phải Checkout mới có thể thực hiện chức năng khác."
+                );
 
             mainController.getMainPanel().getChildren().clear();
             mainController.getMainPanel().getChildren().addAll(layout.getChildren());

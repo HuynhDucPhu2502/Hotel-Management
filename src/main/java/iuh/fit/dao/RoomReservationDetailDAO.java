@@ -3,6 +3,7 @@ package iuh.fit.dao;
 import iuh.fit.models.*;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
+import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.GlobalConstants;
 
 import java.sql.*;
@@ -39,38 +40,6 @@ public class RoomReservationDetailDAO {
             System.exit(1);
         }
         return data;
-    }
-
-    public static RoomReservationDetail getById(String id) {
-        String sql = """
-                SELECT rrd.roomReservationDetailID, rrd.dateChanged, rrd.roomID, 
-                       rrd.reservationFormID, rrd.employeeID,
-                       r.roomStatus, r.dateOfCreation, r.roomCategoryID,
-                       rf.reservationDate, rf.checkInDate, rf.checkOutDate,
-                       e.fullName, e.phoneNumber, e.email, e.address, e.gender, e.idCardNumber, e.dob, e.position
-                FROM RoomReservationDetail rrd
-                INNER JOIN Room r ON rrd.roomID = r.roomID
-                INNER JOIN ReservationForm rf ON rrd.reservationFormID = rf.reservationFormID
-                INNER JOIN Employee e ON rrd.employeeID = e.employeeID
-                WHERE rrd.roomReservationDetailID = ?
-                AND r.isActivate = 'ACTIVATE' AND e.isActivate = 'ACTIVATE'
-                """;
-
-        try (
-                Connection connection = DBHelper.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
-            ps.setString(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return extractRoomReservationDetailFromResultSet(rs);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-        return null;
     }
 
     public static void createData(RoomReservationDetail detail) {
@@ -119,41 +88,77 @@ public class RoomReservationDetailDAO {
         }
     }
 
-    public static void updateData(RoomReservationDetail detail) {
-        String sql = """
-                UPDATE RoomReservationDetail
-                SET dateChanged = ?, roomID = ?, reservationFormID = ?, employeeID = ?
-                WHERE roomReservationDetailID = ?
-                """;
+    public static void changingRoom(String currentRoomID, String newRoomID, String reservationFormID, String employeeID) {
+        String callProcedure = "{CALL RoomChanging(?, ?, ?, ?, ?)}";
 
-        try (
-                Connection connection = DBHelper.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)
-        ) {
-            ps.setTimestamp(1, ConvertHelper.localDateTimeToSQLConverter(detail.getDateChanged()));
-            ps.setString(2, detail.getRoom().getRoomID());
-            ps.setString(3, detail.getReservationForm().getReservationID());
-            ps.setString(4, detail.getEmployee().getEmployeeID());
-            ps.setString(5, detail.getRoomReservationDetailID());
-            ps.executeUpdate();
+        try (Connection connection = DBHelper.getConnection();
+             CallableStatement callableStatement = connection.prepareCall(callProcedure)) {
+
+            // Thiết lập tham số đầu vào cho Stored Procedure
+            callableStatement.setString(1, currentRoomID); // currentRoomID
+            callableStatement.setString(2, newRoomID); // newRoomID
+            callableStatement.setString(3, reservationFormID); // reservationFormID
+            callableStatement.setString(4, employeeID); // employeeID
+
+            // Đăng ký tham số đầu ra cho message
+            callableStatement.registerOutParameter(5, Types.VARCHAR);
+
+            // Thực thi Stored Procedure
+            callableStatement.execute();
+
+            // Lấy thông báo từ Stored Procedure
+            String message = callableStatement.getString(5);
+
+            // Kiểm tra kết quả trả về từ Stored Procedure
+            switch (message) {
+                case "ROOM_CHANGING_RESERVATION_NOT_FOUND_OR_EXPIRED":
+                    throw new IllegalArgumentException("Phiếu đặt phòng không tồn tại hoặc đã hết hạn.");
+                case "ROOM_CHANGING_NEW_ROOM_NOT_AVAILABLE":
+                    throw new IllegalArgumentException("Phòng mới không khả dụng.");
+                case "ROOM_CHANGING_SUCCESS":
+                    incrementAndUpdateNextID();
+                    break;
+                default:
+                    throw new IllegalArgumentException(ErrorMessages.STORE_PROCEDURE_ERROR);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
+            throw new RuntimeException("Lỗi khi thực thi RoomChanging", e);
         }
     }
 
-    public static void deleteData(String id) {
-        String sql = "DELETE FROM RoomReservationDetail WHERE roomReservationDetailID = ?";
+    private static String incrementAndUpdateNextID() {
+        String selectQuery = "SELECT nextID FROM GlobalSequence WHERE tableName = 'RoomReservationDetail'";
+        String updateQuery = "UPDATE GlobalSequence SET nextID = ? WHERE tableName = 'RoomReservationDetail'";
+        String currentNextID;
 
         try (
                 Connection connection = DBHelper.getConnection();
-                PreparedStatement ps = connection.prepareStatement(sql)
+                PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
+                PreparedStatement updateStatement = connection.prepareStatement(updateQuery)
         ) {
-            ps.setString(1, id);
-            ps.executeUpdate();
+            ResultSet resultSet = selectStatement.executeQuery();
+
+            if (resultSet.next()) {
+                currentNextID = resultSet.getString("nextID");
+
+                // Tạo prefix cho RoomReservationDetail
+                String prefix = GlobalConstants.ROOM_RESERVATION_DETAIL_PREFIX + "-";
+                int numericPart = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
+                String updatedNextID = prefix + String.format("%06d", numericPart);
+
+                // Cập nhật giá trị mới cho nextID
+                updateStatement.setString(1, updatedNextID);
+                updateStatement.executeUpdate();
+
+                return currentNextID;
+            } else {
+                throw new IllegalArgumentException("Không thể tìm thấy nextID cho RoomReservationDetail");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.exit(1);
+            throw new RuntimeException("Lỗi khi lấy và cập nhật nextID cho RoomReservationDetail", e);
         }
     }
 
@@ -198,7 +203,7 @@ public class RoomReservationDetailDAO {
 
         try (
                 Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
             preparedStatement.setString(1, reservationFormID);
             ResultSet rs = preparedStatement.executeQuery();

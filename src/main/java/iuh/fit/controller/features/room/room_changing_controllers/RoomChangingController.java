@@ -9,8 +9,6 @@ import iuh.fit.controller.features.room.checking_in_reservation_list_controllers
 import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
 import iuh.fit.dao.*;
 import iuh.fit.models.*;
-import iuh.fit.models.enums.DialogType;
-import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
 import javafx.application.Platform;
@@ -408,55 +406,26 @@ public class RoomChangingController {
 
             dialog.onClose(buttonType -> {
                 if (buttonType == ButtonType.YES) {
-                    // 1. Cập nhật trạng thái phòng cũ thành AVAILABLE
-                    RoomDAO.updateRoomStatus(roomWithReservation.getRoom().getRoomID(), RoomStatus.AVAILABLE);
+                    try {
+                        RoomReservationDetailDAO.changingRoom(
+                                roomWithReservation.getRoom().getRoomID(),
+                                newRoom.getRoomID(),
+                                roomWithReservation.getReservationForm().getReservationID(),
+                                employee.getEmployeeID()
+                        );
 
-                    // 2. Cập nhật reservationForm với roomID mới
-                    ReservationFormDAO.updateRoomInReservationForm(
-                            roomWithReservation.getReservationForm().getReservationID(),
-                            newRoom.getRoomID()
-                    );
-
-                    // 3. Cập nhật trạng thái phòng mới thành ON_USE
-                    RoomDAO.updateRoomStatus(newRoom.getRoomID(), RoomStatus.ON_USE);
-
-                    // 4. Tạo bản ghi trong RoomReservationDetail để lưu lại lịch sử chuyển phòng
-                    RoomReservationDetail detail = new RoomReservationDetail();
-                    detail.setDateChanged(LocalDateTime.now());
-                    detail.setRoom(newRoom);
-                    detail.setReservationForm(roomWithReservation.getReservationForm());
-                    detail.setEmployee(employee);
-                    RoomReservationDetailDAO.createData(detail);
-
-                    // 5. Tạo bản ghi trong RoomDialog để ghi nhận lịch sử chuyển phòng
-                    String dialogMessageOrigin = "Phòng " + roomWithReservation.getRoom().getRoomNumber() + " đã chuyển sang phòng " + newRoom.getRoomNumber();
-                    RoomDialog roomDialogOrigin = new RoomDialog(
-                            roomWithReservation.getRoom(),
-                            roomWithReservation.getReservationForm(),
-                            dialogMessageOrigin,
-                            DialogType.TRANSFER,
-                            LocalDateTime.now()
-                    );
-                    RoomDialogDAO.createData(roomDialogOrigin);
-
-                    String dialogMessageDestination = "Phòng " + newRoom.getRoomNumber() + " đã nhận chuyển từ phòng " + roomWithReservation.getRoom().getRoomNumber();
-                    RoomDialog roomDialogDestination = new RoomDialog(
-                            newRoom,
-                            roomWithReservation.getReservationForm(),
-                            dialogMessageDestination,
-                            DialogType.TRANSFER,
-                            LocalDateTime.now()
-                    );
-                    RoomDialogDAO.createData(roomDialogDestination);
-
-                    dialogPane.showInformation("Thành Công","Chuyển phòng thành công!");
-                    navigateToRoomBookingPanel();
+                        dialogPane.showInformation("Thành Công", "Chuyển phòng thành công!");
+                        navigateToRoomBookingPanel();
+                    }  catch (Exception e) {
+                        e.printStackTrace();
+                        dialogPane.showInformation("LỖI", e.getMessage());
+                    }
                 }
             });
 
         } catch (Exception e) {
             e.printStackTrace();
-            dialogPane.showInformation("LỖI", e.getMessage());
+            dialogPane.showInformation("LỖI", "Có lỗi xảy ra khi xử lý thao tác chuyển phòng.");
         }
     }
 

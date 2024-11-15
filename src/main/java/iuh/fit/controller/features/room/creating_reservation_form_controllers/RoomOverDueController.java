@@ -8,6 +8,7 @@ import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
 import iuh.fit.models.wrapper.RoomWithReservation;
+import iuh.fit.utils.RoomStatusHelper;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -38,10 +39,15 @@ public class RoomOverDueController {
     private RoomWithReservation roomWithReservation;
 
     private java.time.Duration duration;
+    private Timeline timeline;
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
+    public void initialize() {
+        MainController.setRoomBookingLoaded(false);
+    }
+
     public void setupContext(MainController mainController, Employee employee, RoomWithReservation roomWithReservation) {
         this.mainController = mainController;
         this.employee = employee;
@@ -56,26 +62,33 @@ public class RoomOverDueController {
         customerFullNameLabel.setText(customer.getFullName());
         checkOutDateText.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
 
-        startLateDurationCountdown(roomWithReservation.getReservationForm().getCheckOutDate());
+        initializeOverdueTimeTracking(roomWithReservation.getReservationForm().getCheckOutDate());
     }
 
-    private void startLateDurationCountdown(LocalDateTime checkOutDate) {
-        updateLateDurationText(checkOutDate);
+    private void initializeOverdueTimeTracking(LocalDateTime checkOutDate) {
+        refreshLateDurationDisplay(checkOutDate);
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateLateDurationText(checkOutDate)));
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> refreshLateDurationDisplay(checkOutDate)));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
 
-    private void updateLateDurationText(LocalDateTime checkOutDate) {
-        LocalDateTime now = LocalDateTime.now();
-        duration = java.time.Duration.between(checkOutDate, now);
+    private void refreshLateDurationDisplay(LocalDateTime checkOutDate) {
+        duration = java.time.Duration.between(checkOutDate, LocalDateTime.now());
 
         long hours = duration.toHours();
         long minutes = duration.toMinutesPart();
         long seconds = duration.toSecondsPart();
 
         lateDuration.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+
+        if (hours >= 2) {
+            if (MainController.isRoomBookingLoaded()) navigateToRoomBookingPanel(false);
+            else RoomStatusHelper.autoCheckoutOverdueRooms();
+            if (timeline != null) {
+                timeline.stop();
+            }
+        }
     }
 
     // ==================================================================================================================
@@ -84,7 +97,7 @@ public class RoomOverDueController {
     @FXML
     private void navigateToCheckingOutReservationForm() {
         if (duration != null && duration.toHours() >= 2) {
-            navigateToRoomBookingPanel();
+            navigateToRoomBookingPanel(true);
             return;
         }
 
@@ -106,17 +119,18 @@ public class RoomOverDueController {
         }
     }
 
-    private void navigateToRoomBookingPanel() {
+    private void navigateToRoomBookingPanel(boolean isError) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
             roomBookingController.setupContext(mainController, employee);
-            roomBookingController.getDialogPane().showInformation(
-                    "Không thể thực hiện thao tác",
-                    "Phòng này đã quá hạn Checkout. Hệ thống đã tự động thực hiện Checkout và xuất hóa đơn."
-            );
+            if (isError)
+                roomBookingController.getDialogPane().showInformation(
+                        "Không thể thực hiện thao tác",
+                        "Phòng này đã quá hạn Checkout. Hệ thống đã tự động thực hiện Checkout và xuất hóa đơn."
+                );
 
 
             mainController.getMainPanel().getChildren().clear();

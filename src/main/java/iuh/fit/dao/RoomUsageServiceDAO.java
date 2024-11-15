@@ -4,9 +4,9 @@ import iuh.fit.models.Employee;
 import iuh.fit.models.HotelService;
 import iuh.fit.models.RoomUsageService;
 import iuh.fit.models.ServiceCategory;
-import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
 import iuh.fit.utils.ErrorMessages;
+import iuh.fit.utils.GlobalConstants;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -14,36 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoomUsageServiceDAO {
-    public static RoomUsageService getDataByID(String roomUsageServiceId) {
-        String sql = """
-        SELECT a.roomUsageServiceId, a.quantity, a.unitPrice, a.dateAdded, a.hotelServiceId,\s
-               b.serviceName, b.description, b.servicePrice, b.serviceCategoryID,\s
-               c.serviceCategoryName, a.employeeID, e.fullName AS employeeName, e.phoneNumber AS employeePhone
-        FROM RoomUsageService a\s
-        JOIN HotelService b ON a.hotelServiceId = b.hotelServiceId\s
-        JOIN ServiceCategory c ON b.serviceCategoryID = c.serviceCategoryID\s
-        LEFT JOIN Employee e ON a.employeeID = e.employeeID
-        WHERE a.roomUsageServiceId = ?
-        AND b.isActivate = 'ACTIVATE' AND c.isActivate = 'ACTIVATE' AND e.isActivate = 'ACTIVATE'
-       \s""";
-
-        try (Connection con = DBHelper.getConnection();
-             PreparedStatement preparedStatement = con.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, roomUsageServiceId);
-
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                if (rs.next()) {
-                    return extractData(rs);
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public static List<RoomUsageService> getByReservationFormID(String reservationFormID) {
     List<RoomUsageService> data = new ArrayList<>();
     String sql = """
@@ -76,7 +46,7 @@ public class RoomUsageServiceDAO {
     return data;
 }
 
-    public static void createData(RoomUsageService roomUsageService) {
+    public static void serviceOrdering(RoomUsageService roomUsageService) {
         String callProcedure = "{CALL ServiceOrdering(?, ?, ?, ?, ?, ?, ?)}";
 
         try (Connection connection = DBHelper.getConnection();
@@ -107,45 +77,12 @@ public class RoomUsageServiceDAO {
                     incrementAndUpdateNextID();
                     break;
                 default:
-                    throw new IllegalArgumentException("Lỗi không xác định từ Stored Procedure.");
+                    throw new IllegalArgumentException(ErrorMessages.STORE_PROCEDURE_ERROR);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(1);
-        }
-    }
-
-    public static void deleteData(String roomUsageServiceId) {
-        String sql = "DELETE FROM RoomUsageService WHERE roomUsageServiceId = ?";
-        try (Connection connection = DBHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, roomUsageServiceId);
-            preparedStatement.executeUpdate();
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-    }
-
-    public static void updateData(RoomUsageService roomUsageService) {
-        String sql = """
-        UPDATE RoomUsageService SET quantity = ?, unitPrice = ?, dateAdded = ?, hotelServiceId = ?, employeeID = ?
-        WHERE roomUsageServiceId = ?
-        """;
-        try (Connection connection = DBHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setInt(1, roomUsageService.getQuantity());
-            preparedStatement.setDouble(2, roomUsageService.getUnitPrice());
-            preparedStatement.setTimestamp(3, ConvertHelper.localDateTimeToSQLConverter(roomUsageService.getDateAdded()));
-            preparedStatement.setString(4, roomUsageService.getHotelService().getServiceId());
-            preparedStatement.setString(5, roomUsageService.getEmployee().getEmployeeID());
-            preparedStatement.setString(6, roomUsageService.getRoomUsageServiceId());
-
-            preparedStatement.executeUpdate();
-        } catch (Exception exception) {
-            exception.printStackTrace();
         }
     }
 
@@ -163,7 +100,7 @@ public class RoomUsageServiceDAO {
             if (resultSet.next()) {
                 currentNextID = resultSet.getString("nextID");
 
-                String prefix = "RUS-";
+                String prefix = GlobalConstants.ROOM_USAGE_SERVICE_PREFIX + "-";
                 int numericPart = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
                 String updatedNextID = prefix + String.format("%06d", numericPart);
 
@@ -208,6 +145,5 @@ public class RoomUsageServiceDAO {
 
             return roomUsageService;
         }
-
 
 }

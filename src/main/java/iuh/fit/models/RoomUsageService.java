@@ -64,7 +64,7 @@ public class RoomUsageService {
         if (roomUsageServiceId == null || roomUsageServiceId.trim().isEmpty()) {
             throw new IllegalArgumentException(ErrorMessages.ROOM_USAGE_SERVICE_INVALID_ID_ISNULL);
         }
-        if (!RegexChecker.isValidIDFormat(GlobalConstants.ROOMUSAGESERVICE_PREFIX, roomUsageServiceId)) {
+        if (!RegexChecker.isValidIDFormat(GlobalConstants.ROOM_USAGE_SERVICE_PREFIX, roomUsageServiceId)) {
             throw new IllegalArgumentException(ErrorMessages.ROOM_USAGE_SERVICE_INVALID_ID_FORMAT);
         }
         this.roomUsageServiceId = roomUsageServiceId;
