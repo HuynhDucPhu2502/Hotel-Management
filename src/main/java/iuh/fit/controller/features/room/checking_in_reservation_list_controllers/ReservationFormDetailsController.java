@@ -75,7 +75,6 @@ public class ReservationFormDetailsController {
         this.employee = employee;
 
         titledPane.setText("Quản lý đặt phòng " + roomWithReservation.getRoom().getRoomNumber());
-        System.out.println(reservationForm.getReservationID());
 
         setupReservationForm();
         setupButtonActions();

@@ -17,6 +17,8 @@ public class ErrorMessages {
     public static final String NULL_RESERVATIONFORM = "Phiếu đặt phòng không được để trống";
     public static final String NULL_INVOICE = "Hóa đơn không được để trống";
 
+    public static final String STORE_PROCEDURE_ERROR = "Lỗi không xác định từ Stored Procedure.";
+
     // Employee
     public static final String EMP_INVALID_ID = "Mã nhân viên phải theo định dạng EMP-XXXXXX, với X là ký số";
     public static final String EMP_INVALID_FULLNAME = "Tên nhân viên phải từ 2 đến 50 ký tự";

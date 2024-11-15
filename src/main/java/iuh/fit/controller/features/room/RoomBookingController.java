@@ -57,6 +57,7 @@ public class RoomBookingController {
         dialogPane.toFront();
         activeButton = allBtn;
         setActiveButtonStyle(allBtn);
+        MainController.setRoomBookingLoaded(true);
     }
 
     public void setupContext(MainController mainController, Employee employeee) {

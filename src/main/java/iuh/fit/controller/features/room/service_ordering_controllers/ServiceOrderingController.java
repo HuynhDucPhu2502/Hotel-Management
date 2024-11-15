@@ -303,7 +303,7 @@ public class ServiceOrderingController {
                     ServiceItemController controller = loader.getController();
                     controller.setupContext(service);
                     controller.getAddServiceBtn().setOnAction(e ->
-                            handleAddService(service, controller.getAmountField().getValue(), controller.getAmountField())
+                            handleServiceOrdering(service, controller.getAmountField().getValue(), controller.getAmountField())
                     );
 
                     serviceGridPane.add(serviceItem, col, row);
@@ -372,7 +372,7 @@ public class ServiceOrderingController {
     // ==================================================================================================================
     // 6. Xử lý sự kiện thêm dịch vụ
     // ==================================================================================================================
-    private void handleAddService(HotelService service, int amount, Spinner<Integer> amountField) {
+    private void handleServiceOrdering(HotelService service, int amount, Spinner<Integer> amountField) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
 
@@ -389,14 +389,14 @@ public class ServiceOrderingController {
 
         dialog.onClose(buttonType -> {
             if (buttonType == ButtonType.YES) {
-                handleAddServiceToDB(service, amount, amountField);
+                handleServiceOrderingDAO(service, amount, amountField);
                 dialogPane.showInformation("Thành Công", "Dịch vụ đã được thêm thành công!");
                 loadTable();
             }
         });
     }
 
-    private void handleAddServiceToDB(HotelService service, int quantity, Spinner<Integer> amountField) {
+    private void handleServiceOrderingDAO(HotelService service, int quantity, Spinner<Integer> amountField) {
         try {
             RoomUsageService roomUsageService = new RoomUsageService(
                     quantity,
@@ -406,7 +406,7 @@ public class ServiceOrderingController {
                     employee,
                     LocalDateTime.now()
             );
-            RoomUsageServiceDAO.createData(roomUsageService);
+            RoomUsageServiceDAO.serviceOrdering(roomUsageService);
             amountField.getValueFactory().setValue(1);
 
         } catch (Exception e) {

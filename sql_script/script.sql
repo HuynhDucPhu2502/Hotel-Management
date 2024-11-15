@@ -464,6 +464,103 @@ BEGIN
 END
 GO
 
+-- Tạo procedure chuyển phòng
+-- (procedure không hỗ trợ sinh nextID mới)
+CREATE PROCEDURE RoomChanging
+    @currentRoomID NVARCHAR(20),
+    @newRoomID NVARCHAR(20),
+    @reservationFormID NVARCHAR(15),
+    @employeeID NVARCHAR(15),
+    @message NVARCHAR(255) OUTPUT
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Kiểm tra nếu phiếu đặt phòng không tồn tại hoặc đã quá hạn
+        IF NOT EXISTS (
+            SELECT 1
+            FROM ReservationForm
+            WHERE reservationFormID = @reservationFormID
+              AND checkOutDate >= GETDATE()
+        )
+        BEGIN
+            SET @message = 'ROOM_CHANGING_RESERVATION_NOT_FOUND_OR_EXPIRED';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        -- Kiểm tra trạng thái phòng mới có khả dụng hay không
+        IF NOT EXISTS (
+            SELECT 1
+            FROM Room
+            WHERE roomID = @newRoomID
+              AND roomStatus = 'AVAILABLE'
+              AND isActivate = 'ACTIVATE'
+        )
+        BEGIN
+            SET @message = 'ROOM_CHANGING_NEW_ROOM_NOT_AVAILABLE';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        -- Cập nhật trạng thái phòng hiện tại thành AVAILABLE
+        UPDATE Room
+        SET roomStatus = 'AVAILABLE'
+        WHERE roomID = @currentRoomID;
+
+        -- Cập nhật reservationForm với roomID mới
+        UPDATE ReservationForm
+        SET roomID = @newRoomID
+        WHERE reservationFormID = @reservationFormID;
+
+        -- Cập nhật trạng thái phòng mới thành ON_USE
+        UPDATE Room
+        SET roomStatus = 'ON_USE'
+        WHERE roomID = @newRoomID;
+
+        -- Thêm bản ghi vào RoomReservationDetail và chọn nextID trực tiếp
+        INSERT INTO RoomReservationDetail (roomReservationDetailID, dateChanged, roomID, reservationFormID, employeeID)
+        VALUES (
+            (SELECT nextID FROM GlobalSequence WHERE tableName = 'RoomReservationDetail'),
+            GETDATE(),
+            @newRoomID,
+            @reservationFormID,
+            @employeeID
+        );
+
+        -- Tạo RoomDialog cho phòng hiện tại
+        INSERT INTO RoomDialog (roomID, reservationFormID, dialog, dialogType, timestamp)
+        VALUES (
+            @currentRoomID,
+            @reservationFormID,
+            CONCAT(N'Phòng ', @currentRoomID, N' đã chuyển sang phòng ', @newRoomID),
+            'TRANSFER',
+            GETDATE()
+        );
+
+        -- Tạo RoomDialog cho phòng mới
+        INSERT INTO RoomDialog (roomID, reservationFormID, dialog, dialogType, timestamp)
+        VALUES (
+            @newRoomID,
+            @reservationFormID,
+            CONCAT(N'Phòng ', @newRoomID, N' đã nhận chuyển từ phòng ', @currentRoomID),
+            'TRANSFER',
+            GETDATE()
+        );
+
+        COMMIT TRANSACTION;
+
+        SET @message = 'ROOM_CHANGING_SUCCESS';
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        SET @message = ERROR_MESSAGE();
+    END CATCH
+END
+GO
+
+
 
 
 -- ===================================================================================
@@ -943,5 +1040,3 @@ GO
 --INSERT INTO ReservationForm (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit, isActivate)
 --VALUES ('RF-000112', GETDATE(), DATEADD(HOUR, -2, DATEADD(MINUTE, 3, GETDATE())), DATEADD(DAY, 1, GETDATE()), 'EMP-000001', 'T1203', 'CUS-000010', 700000, 'ACTIVATE');
 --GO
-
-

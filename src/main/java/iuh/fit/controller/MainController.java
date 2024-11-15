@@ -27,10 +27,13 @@ public class MainController {
     @FXML
     private AnchorPane mainPanel;
 
+    private static boolean ROOM_BOOKING_LOADED = false;
+
     // Không xóa
     public void initialize() {
         Locale locale = new Locale("vi", "VN");
         Locale.setDefault(locale);
+
     }
 
     public void setAccount(Account account) {
@@ -130,9 +133,9 @@ public class MainController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             AnchorPane layout = loader.load();
-
             if(Objects.requireNonNull(EmployeeDAO.getEmployeeByAccountID(account.getAccountID())).getPosition().equals(Position.MANAGER)){
                 if (fxmlPath.contains("RoomBookingPanel")) {
+
                     RoomBookingController roomBookingController = loader.getController();
 
                     Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
@@ -154,6 +157,7 @@ public class MainController {
                 }
             }else{
                 if (fxmlPath.contains("RoomBookingPanel")) {
+
                     RoomBookingController roomBookingController = loader.getController();
 
                     Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
@@ -176,6 +180,10 @@ public class MainController {
             }
 
 
+            // Không xóa
+            if (fxmlPath.contains("RoomBookingPanel")) ROOM_BOOKING_LOADED = true;
+            else ROOM_BOOKING_LOADED = false;
+
 
             mainPanel.getChildren().clear();
             mainPanel.getChildren().addAll(layout.getChildren());
@@ -184,12 +192,19 @@ public class MainController {
         }
     }
 
-
     public AnchorPane getMainPanel() {
         return mainPanel;
     }
 
     public Account getAccount() {
         return account;
+    }
+
+    public static boolean isRoomBookingLoaded() {
+        return ROOM_BOOKING_LOADED;
+    }
+
+    public static void setRoomBookingLoaded(boolean roomBookingLoaded) {
+        ROOM_BOOKING_LOADED = roomBookingLoaded;
     }
 }
