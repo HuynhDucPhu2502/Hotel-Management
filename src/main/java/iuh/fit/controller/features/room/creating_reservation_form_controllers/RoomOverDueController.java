@@ -127,6 +127,7 @@ public class RoomOverDueController {
 
             mainController.getMainPanel().getChildren().clear();
             mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+            MainController.setRoomBookingLoaded(false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -148,6 +149,7 @@ public class RoomOverDueController {
 
             mainController.getMainPanel().getChildren().clear();
             mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
