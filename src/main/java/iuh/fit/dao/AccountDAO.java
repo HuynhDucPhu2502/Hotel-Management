@@ -56,11 +56,8 @@ public class AccountDAO {
                     String hashedPassword = rs.getString(3);
                     String inputHashedPassword = PasswordHashing.hashPassword(password);
 
-                    if (hashedPassword.equals(inputHashedPassword)) {
-                        return extractData(rs);
-                    } else {
-                        System.out.println("Password verification failed.");
-                    }
+                    if (hashedPassword.equals(inputHashedPassword)) return extractData(rs);
+                    else throw new IllegalArgumentException("Dang nhap that bai");
                 }
             }
         } catch (Exception e) {

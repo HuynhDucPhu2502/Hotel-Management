@@ -119,6 +119,7 @@ public class ServiceOrderingController {
 
         titledPane.setText("Quản lý đặt phòng " + roomWithReservation.getRoom().getRoomNumber());
 
+
         setupReservationForm();
         setupButtonActions();
         loadData();
@@ -153,7 +154,6 @@ public class ServiceOrderingController {
 
                 loadTable();
 
-                // Tải tên danh mục dịch vụ
                 ArrayList<String> categoryNames = (ArrayList<String>) ServiceCategoryDAO.getServiceCategoryNames();
                 categoryNames.addFirst("TẤT CẢ");
 
@@ -162,7 +162,6 @@ public class ServiceOrderingController {
                     serviceCategoryCBox.getSelectionModel().selectFirst();
                 });
 
-                // Sau khi tải dữ liệu xong, gọi hàm lọc dịch vụ
                 Platform.runLater(() -> filterServicesByCategory());
 
                 return null;

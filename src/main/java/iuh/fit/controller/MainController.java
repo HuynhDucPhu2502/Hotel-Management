@@ -27,7 +27,7 @@ public class MainController {
     @FXML
     private AnchorPane mainPanel;
 
-    private static boolean ROOM_BOOKING_LOADED = false;
+    private static boolean ROOM_BOOKING_LOADED = true;
 
     // Không xóa
     public void initialize() {
