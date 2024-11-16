@@ -26,10 +26,6 @@ public class RoomAvailableItemController {
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
-    public void initialize() {
-        MainController.setRoomBookingLoaded(false);
-    }
-
     public void setupContext(MainController mainController, Employee employee, RoomWithReservation roomWithReservation) {
         this.mainController = mainController;
         this.employee = employee;

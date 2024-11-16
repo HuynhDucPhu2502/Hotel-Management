@@ -6,8 +6,10 @@ import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
+import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.RoomStatusHelper;
+import iuh.fit.utils.TimelineManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -42,10 +44,6 @@ public class RoomOnUseItemController {
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
-    public void initialize() {
-        MainController.setRoomBookingLoaded(false);
-    }
-
     public void setupContext(MainController mainController, Employee employee, RoomWithReservation roomWithReservation) {
         this.mainController = mainController;
         this.employee = employee;
@@ -60,9 +58,16 @@ public class RoomOnUseItemController {
         checkOutDateText.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
 
         initializeRoomOverdueCheck(reservationForm.getCheckOutDate());
+
     }
 
     private void initializeRoomOverdueCheck(LocalDateTime checkOutDate) {
+        String timelineKey = roomWithReservation.getRoom().getRoomID() + RoomStatus.ON_USE.name();
+
+        if (TimelineManager.getInstance().containsTimeline(timelineKey)) {
+            TimelineManager.getInstance().removeTimeline(timelineKey);
+        }
+
         timeline = new Timeline(
                 new KeyFrame(Duration.seconds(1), event -> {
                     LocalDateTime now = LocalDateTime.now();
@@ -70,14 +75,19 @@ public class RoomOnUseItemController {
 
                     if (!duration.isPositive()) {
                         timeline.stop();
+                        TimelineManager.getInstance().removeTimeline(timelineKey);
                         if (MainController.isRoomBookingLoaded()) navigateToRoomBookingPanel(false);
                         else RoomStatusHelper.autoCheckoutOverdueRooms();
                     }
                 })
         );
+
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+
+        TimelineManager.getInstance().addTimeline(timelineKey, timeline);
     }
+
 
     // ==================================================================================================================
     // 3. Xử lý chức năng hiển thị panel khác

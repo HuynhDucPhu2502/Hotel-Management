@@ -23,7 +23,7 @@ public class RoomStatusHelper {
     public static void startAutoCheckoutScheduler() {
         SCHEDULER.scheduleAtFixedRate(
                 RoomStatusHelper::autoCheckoutOverdueRooms,
-                0,
+                30,
                 30,
                 TimeUnit.MINUTES
         );
