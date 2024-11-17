@@ -30,8 +30,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 
-import javafx.geometry.Pos;
-
 import java.util.Objects;
 
 public class LoginController {
@@ -189,11 +187,13 @@ public class LoginController {
 
                     Scene scene = new Scene(mainPanel);
                     Stage currentStage = (Stage) signInButton.getScene().getWindow();
+
                     currentStage.setScene(scene);
-                    currentStage.show();
                     currentStage.setResizable(true);
                     currentStage.setMaximized(true);
                     currentStage.centerOnScreen();
+
+                    currentStage.show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
