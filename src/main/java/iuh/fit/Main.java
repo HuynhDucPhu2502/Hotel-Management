@@ -18,8 +18,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         RoomStatusHelper.startAutoCheckoutScheduler();
 
-//        startWithoutLogin(primaryStage);
-        startWithLogin(primaryStage);
+        startWithoutLogin(primaryStage);
+//        startWithLogin(primaryStage);
 
 
     }

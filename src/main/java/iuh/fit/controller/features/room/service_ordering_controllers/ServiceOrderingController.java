@@ -119,6 +119,11 @@ public class ServiceOrderingController {
 
         titledPane.setText("Quản lý đặt phòng " + roomWithReservation.getRoom().getRoomNumber());
 
+        if (handleValidTime()) {
+            Platform.runLater(() -> navigateToRoomBookingPanel(true));
+            return;
+        }
+
 
         setupReservationForm();
         setupButtonActions();
@@ -384,11 +389,8 @@ public class ServiceOrderingController {
 
         dialog.onClose(buttonType -> {
             if (buttonType == ButtonType.YES) {
-                LocalDateTime now = LocalDateTime.now();
-                LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
-
-                if (now.isAfter(checkOutDate)) {
-                    navigateToRoomBookingPanel(true);
+                if (handleValidTime()) {
+                    Platform.runLater(() -> navigateToRoomBookingPanel(true));
                     return;
                 }
 
@@ -463,6 +465,15 @@ public class ServiceOrderingController {
 
         stage.setScene(scene);
         stage.show();
+    }
+
+    // ==================================================================================================================
+    // 9. Kiểm tra thời gian có phù hợp
+    // ==================================================================================================================
+    private boolean handleValidTime() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
+        return now.isAfter(checkOutDate);
     }
 
 
