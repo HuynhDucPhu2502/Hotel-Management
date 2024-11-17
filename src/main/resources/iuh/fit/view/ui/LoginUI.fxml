@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.dlsc.gemsfx.DialogPane?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -15,11 +17,10 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import com.dlsc.gemsfx.DialogPane?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="logo-panel-banner-title" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.LoginController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="logo-panel-banner-title" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.LoginController">
    <children>
        <DialogPane fx:id="dialogPane" animationDuration="200.0ms" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <VBox prefHeight="400.0" prefWidth="200.0" spacing="10.0" style="-fx-alignment: center; -fx-background-color: RGB(70, 130, 180);" styleClass="login-panel-banner" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="symbolPanel" prefHeight="400.0" prefWidth="200.0" spacing="10.0" style="-fx-alignment: center; -fx-background-color: RGB(70, 130, 180);" styleClass="login-panel-banner" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="100.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -41,7 +42,7 @@
             </Label>
          </children>
       </VBox>
-      <GridPane focusTraversable="true" layoutX="200.0" prefHeight="378.0" prefWidth="409.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <GridPane fx:id="loginGrid" focusTraversable="true" layoutX="200.0" prefHeight="378.0" prefWidth="409.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="97.20001220703125" minWidth="10.0" prefWidth="52.8" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="316.8000244140625" minWidth="10.0" prefWidth="300.8000244140625" />
@@ -116,7 +117,151 @@
                   <PasswordField fx:id="hiddenPasswordField" prefHeight="26.0" promptText="Mật khẩu" GridPane.columnIndex="1" />
                </children>
             </GridPane>
-            <Text fx:id="errorMessage" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="login-panel-widget-error-message" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <GridPane GridPane.columnIndex="1" GridPane.rowIndex="4">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="146.20001220703125" minWidth="10.0" prefWidth="88.60003662109375" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.39996337890625" minWidth="10.0" prefWidth="213.39996337890625" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Text fx:id="forgotPasswordBtn" fill="BLUE" strokeType="OUTSIDE" strokeWidth="0.0" text="Quên mật khẩu?" textAlignment="RIGHT" underline="true" wrappingWidth="99.73659592866898" GridPane.columnIndex="1">
+                           <font>
+                              <Font name="System Italic" size="12.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="CLOSED_HAND" />
+                           </cursor>
+                        </Text>
+                     </children>
+                  </GridPane>
+               </children>
+            </GridPane>
+         </children>
+      </GridPane>
+      <GridPane fx:id="forgotPasswordGrid" layoutX="200.0" prefHeight="400.0" prefWidth="400.0" visible="false">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="129.20001220703125" minWidth="10.0" prefWidth="15.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="377.5999389648438" minWidth="10.0" prefWidth="366.3999877929688" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="108.5999755859375" minWidth="6.400061035156284" prefWidth="15.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="80.4" minHeight="10.0" prefHeight="40.399993896484375" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="164.8" minHeight="10.0" prefHeight="43.8" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="230.40001525878904" minHeight="10.0" prefHeight="42.799987792968764" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="230.40001525878904" minHeight="10.0" prefHeight="208.40001220703124" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="226.00002136230466" minHeight="10.0" prefHeight="45.59998779296876" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <AnchorPane prefHeight="53.0" prefWidth="228.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="-14.0" layoutY="-2.0" prefHeight="59.0" prefWidth="382.0" text="QUÊN MẬT KHẨU" textAlignment="CENTER" textFill="STEELBLUE">
+                     <font>
+                        <Font name="System Bold" size="26.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <Label fx:id="loginBtn" alignment="TOP_CENTER" prefHeight="18.0" prefWidth="87.0" text="Đăng nhập" textFill="BLUE" underline="true" GridPane.columnIndex="1">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/ic_back.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="CLOSED_HAND" />
+               </cursor>
+            </Label>
+            <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Nhập thông tin xác nhận bên dưới để đổi mật khẩu" textAlignment="CENTER" wrappingWidth="367.68321990966797" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <GridPane GridPane.columnIndex="1" GridPane.rowIndex="3">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.39996337890625" minWidth="10.0" prefWidth="81.5999755859375" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="304.800048828125" minWidth="10.0" prefWidth="286.4000244140625" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints maxHeight="34.599981689453124" minHeight="4.999976539611815" prefHeight="5.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="73.80002346038819" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="90.0000099182129" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="80.199991607666" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="67.80000915527343" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="59.400000000000006" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="48.400000000000006" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="48.400000000000006" minHeight="10.0" prefHeight="5.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã nhân viên:" GridPane.rowIndex="1" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Họ tên:" GridPane.rowIndex="2" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Số điện thoại:" GridPane.rowIndex="3" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CCCD:" GridPane.rowIndex="4" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" GridPane.rowIndex="5" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tài khoản:" GridPane.rowIndex="6" />
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                        <TextField fx:id="employeeIDTextField" layoutX="10.0" layoutY="3.0" prefHeight="26.0" prefWidth="266.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <children>
+                        <TextField fx:id="fullNameTextField" layoutX="10.0" layoutY="1.0" prefHeight="26.0" prefWidth="266.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <children>
+                        <TextField fx:id="phoneNumberTextField" layoutX="10.0" layoutY="1.0" prefHeight="26.0" prefWidth="266.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                     <children>
+                        <TextField fx:id="cardIDTextField" layoutX="10.0" layoutY="1.0" prefHeight="26.0" prefWidth="266.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                     <children>
+                        <TextField fx:id="emailTextField" layoutX="10.0" layoutY="1.0" prefHeight="26.0" prefWidth="266.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                     <children>
+                        <TextField fx:id="usernameTextField" layoutX="10.0" layoutY="1.0" prefHeight="26.0" prefWidth="266.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </GridPane>
+            <GridPane GridPane.columnIndex="1" GridPane.rowIndex="4">
+              <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="209.60003662109375" minWidth="10.0" prefWidth="208.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="179.199951171875" minWidth="10.0" prefWidth="160.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="confirmBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="115.0" style="-fx-background-radius: 30;" stylesheets="@../../styles/Button.css" text="Xác nhận" textFill="WHITE" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="resetBtn" mnemonicParsing="false" prefHeight="35.0" prefWidth="115.0" style="-fx-background-radius: 30;" stylesheets="@../../styles/Button.css" text="Làm mới" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Button>
+               </children>
+            </GridPane>
          </children>
       </GridPane>
    </children>
