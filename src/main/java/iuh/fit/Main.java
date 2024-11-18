@@ -11,8 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import java.time.LocalDateTime;
-
 @SuppressWarnings("unused")
 public class Main extends Application {
 
@@ -42,6 +40,8 @@ public class Main extends Application {
 
             primaryStage.setScene(scene);
             primaryStage.setResizable(true);
+            primaryStage.setWidth(1200);
+            primaryStage.setHeight(680);
             primaryStage.setMaximized(true);
             primaryStage.centerOnScreen();
 

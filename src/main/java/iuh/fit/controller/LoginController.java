@@ -171,7 +171,7 @@ public class LoginController {
         try {
             Account account = AccountDAO.getLogin(userName, password);
             if (account == null) throw new IllegalArgumentException(ErrorMessages.LOGIN_INVALID_ACCOUNT);
-            if(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()).getPosition().equals(Position.RECEPTIONIST)){
+            if (EmployeeDAO.getEmployeeByAccountID(account.getAccountID()).getPosition().equals(Position.RECEPTIONIST)){
                 Shift currentShift = ShiftDAO.getCurrentShiftForLogin(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()));
                 if (
                     account.getAccountStatus().equals(AccountStatus.INACTIVE) ||
@@ -197,6 +197,8 @@ public class LoginController {
                             Scene scene = new Scene(mainPanel);
                             Stage currentStage = (Stage) signInButton.getScene().getWindow();
 
+                            currentStage.setWidth(1200);
+                            currentStage.setHeight(680);
                             currentStage.setScene(scene);
                             currentStage.setResizable(true);
                             currentStage.setMaximized(true);
@@ -229,9 +231,12 @@ public class LoginController {
                         Scene scene = new Scene(mainPanel);
                         Stage currentStage = (Stage) signInButton.getScene().getWindow();
 
+                        currentStage.setWidth(1200);
+                        currentStage.setHeight(680);
                         currentStage.setScene(scene);
                         currentStage.setResizable(true);
                         currentStage.setMaximized(true);
+
                         currentStage.centerOnScreen();
 
                         currentStage.show();
