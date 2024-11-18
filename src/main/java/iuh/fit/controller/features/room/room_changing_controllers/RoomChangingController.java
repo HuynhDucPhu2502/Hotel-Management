@@ -108,10 +108,14 @@ public class RoomChangingController {
         this.mainController = mainController;
         this.employee = employee;
         this.roomWithReservation = roomWithReservation;
-
         titledPane.setText("Quản lý đặt phòng " + roomWithReservation.getRoom().getRoomNumber());
         roomAvailableTitle.setText("Danh sách phòng trống từ hiện tại đến ngày " +
                 dateTimeFormatter.format(roomWithReservation.getReservationForm().getCheckOutDate()));
+
+        if (handleValidTime()) {
+            Platform.runLater(() -> navigateToRoomBookingPanel(true));
+            return;
+        }
 
         setupReservationForm();
         setupButtonActions();
@@ -352,7 +356,6 @@ public class RoomChangingController {
                 if ("TẤT CẢ".equals(selectedFloor)) {
                     return availableRooms;
                 } else {
-                    // Lọc danh sách phòng theo tầng được chọn.
                     return availableRooms.stream()
                             .filter(room -> String.valueOf(room.getRoomFloorNumber()).equals(selectedFloor))
                             .toList();
@@ -402,11 +405,8 @@ public class RoomChangingController {
 
             dialog.onClose(buttonType -> {
                 if (buttonType == ButtonType.YES) {
-                    LocalDateTime now = LocalDateTime.now();
-                    LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
-
-                    if (now.isAfter(checkOutDate)) {
-                        navigateToRoomBookingPanel(true);
+                    if (handleValidTime()) {
+                        Platform.runLater(() -> navigateToRoomBookingPanel(true));
                         return;
                     }
 
@@ -454,5 +454,15 @@ public class RoomChangingController {
 
         stage.setScene(scene);
         stage.show();
+    }
+
+    // ==================================================================================================================
+    // 8. Kiểm tra thời gian có phù hợp
+    // ==================================================================================================================
+    private boolean handleValidTime() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
+
+        return now.isAfter(checkOutDate);
     }
 }

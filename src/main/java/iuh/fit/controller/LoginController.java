@@ -168,50 +168,44 @@ public class LoginController {
             return;
         }
 
-        Account account = AccountDAO.getLogin(userName, password);
-
-        if (account == null) {
-            errorMessage.setText(ErrorMessages.LOGIN_INVALID_ACCOUNT);
-        } else {
+        try {
+            Account account = AccountDAO.getLogin(userName, password);
+            if (account == null) throw new IllegalArgumentException(ErrorMessages.LOGIN_INVALID_ACCOUNT);
             if(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()).getPosition().equals(Position.RECEPTIONIST)){
                 Shift currentShift = ShiftDAO.getCurrentShiftForLogin(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()));
-                if(account.getAccountStatus().equals(AccountStatus.INACTIVE)||
-                        account.getAccountStatus().equals(AccountStatus.LOCKED)){
-                    dialogPane.showInformation("Thông báo", "Tài khoản bị khóa hoặc không có hiệu lực" +
-                            "\nVui lòng báo người quản lý khách sạn để biết thêm thông tin");
+                if (
+                    account.getAccountStatus().equals(AccountStatus.INACTIVE) ||
+                    account.getAccountStatus().equals(AccountStatus.LOCKED)
+                ) {
+                dialogPane.showInformation(
+                        "Thông báo",
+                        "Tài khoản bị khóa hoặc không có hiệu lực.\n" +
+                                "Vui lòng báo người quản lý khách sạn để biết thêm thông tin."
+                );
+                } else {
+                  try {
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/MainUI.fxml"));
+                    AnchorPane mainPanel = fxmlLoader.load();
 
-                }else{
-                    if(currentShift == null){
-                        dialogPane.showInformation("Thông báo", "Nhân viên không thuộc ca làm hiện tại\nKhông thể đăng" +
-                                " nhập được");
-                    }else{
-                        try {
-                            System.out.println(currentShift.toString());
-                            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/MainUI.fxml"));
-                            AnchorPane mainPanel = fxmlLoader.load();
+                    MainController mainController = fxmlLoader.getController();
+                    mainController.setAccount(account);
 
-                            MainController mainController = fxmlLoader.getController();
+                    Scene scene = new Scene(mainPanel);
+                    Stage currentStage = (Stage) signInButton.getScene().getWindow();
 
-                            mainController.setAccount(account);
-                            mainController.setShift(currentShift);
+                    currentStage.setScene(scene);
+                    currentStage.setResizable(true);
+                    currentStage.setMaximized(true);
+                    currentStage.centerOnScreen();
+                    currentStage.show();
 
-
-                            Scene scene = new Scene(mainPanel);
-                            Stage currentStage = (Stage) signInButton.getScene().getWindow();
-
-                            currentStage.setScene(scene);
-                            currentStage.setResizable(true);
-                            currentStage.setMaximized(true);
-                            currentStage.centerOnScreen();
-
-                            currentStage.show();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    dialogPane.showError("Lỗi", "Không thể tải giao diện chính.");
                 }
+              }
             }else{
-                Shift currentShift = ShiftDAO.getCurrentShiftForLogin(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()));
+              Shift currentShift = ShiftDAO.getCurrentShiftForLogin(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()));
                 if(account.getAccountStatus().equals(AccountStatus.INACTIVE)||
                         account.getAccountStatus().equals(AccountStatus.LOCKED)){
                     dialogPane.showInformation("Thông báo", "Tài khoản bị khóa hoặc không có hiệu lực" +
@@ -238,12 +232,14 @@ public class LoginController {
 
                         currentStage.show();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                       errorMessage.setText(e.getMessage());;
                     }
                 }
-            }
+        } catch (Exception e) {
+            errorMessage.setText(e.getMessage());
         }
     }
+
 
     private void forgotPass(){
         slideOutGridFromBot(loginGrid, forgotPasswordGrid);
