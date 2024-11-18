@@ -183,26 +183,31 @@ public class LoginController {
                                 "Vui lòng báo người quản lý khách sạn để biết thêm thông tin."
                 );
                 } else {
-                  try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/MainUI.fxml"));
-                    AnchorPane mainPanel = fxmlLoader.load();
+                    if(currentShift == null){
+                        dialogPane.showInformation("Thông báo", "Nhân viên không thuộc ca làm hiện tại\nKhông thể đăng" +
+                                " nhập được");
+                    }else {
+                        try {
+                            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/MainUI.fxml"));
+                            AnchorPane mainPanel = fxmlLoader.load();
 
-                    MainController mainController = fxmlLoader.getController();
-                    mainController.setAccount(account);
+                            MainController mainController = fxmlLoader.getController();
+                            mainController.setAccount(account);
 
-                    Scene scene = new Scene(mainPanel);
-                    Stage currentStage = (Stage) signInButton.getScene().getWindow();
+                            Scene scene = new Scene(mainPanel);
+                            Stage currentStage = (Stage) signInButton.getScene().getWindow();
 
-                    currentStage.setScene(scene);
-                    currentStage.setResizable(true);
-                    currentStage.setMaximized(true);
-                    currentStage.centerOnScreen();
-                    currentStage.show();
+                            currentStage.setScene(scene);
+                            currentStage.setResizable(true);
+                            currentStage.setMaximized(true);
+                            currentStage.centerOnScreen();
+                            currentStage.show();
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    dialogPane.showError("Lỗi", "Không thể tải giao diện chính.");
-                }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            dialogPane.showError("Lỗi", "Không thể tải giao diện chính.");
+                        }
+                    }
               }
             }else {
                 Shift currentShift = ShiftDAO.getCurrentShiftForLogin(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()));
@@ -232,7 +237,6 @@ public class LoginController {
                         currentStage.show();
                     } catch (Exception e) {
                         errorMessage.setText(e.getMessage());
-                        ;
                     }
                 }
             }
