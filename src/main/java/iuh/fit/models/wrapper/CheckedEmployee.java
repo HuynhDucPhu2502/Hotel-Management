@@ -1,4 +1,6 @@
-package iuh.fit.models;
+package iuh.fit.models.wrapper;
+
+import iuh.fit.models.Employee;
 
 /**
  * @author Le Tran Gia Huy

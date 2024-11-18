@@ -65,9 +65,13 @@ public class ShiftDetailForEachEmployeeDialogController {
     private ShiftManagerController shiftManagerControllerReferences;
     @FXML
     private DialogPane dialogPane;
+    private Employee employee;
 
     public void setController(ShiftManagerController shiftManagerController) {
         this.shiftManagerControllerReferences = shiftManagerController;
+    }
+    public void setEmployee(Employee employee){
+        this.employee = employee;
     }
 
     public void getData(Shift shift, String func, String shiftID){
@@ -84,7 +88,7 @@ public class ShiftDetailForEachEmployeeDialogController {
 
         if(func.equals("delete")){
             handelDelete();
-            updateBtn.setOnAction(e->handelUpdateForAllEmployeeWhenDelete(shift));
+            updateBtn.setOnAction(e->handelUpdateForAllEmployeeWhenDelete(shift, employee));
             forceDeteleBtn.setOnAction(e->handelForceDeleteShift(shift));
             cancelBtn.setOnAction(e->handeCancel());
         }else{
@@ -140,7 +144,7 @@ public class ShiftDetailForEachEmployeeDialogController {
         employeeTable.setItems(items);
     }
 
-    private void handelUpdateForAllEmployeeWhenDelete(Shift currentShift){
+    private void handelUpdateForAllEmployeeWhenDelete(Shift currentShift, Employee employee){
         Shift newShift = shiftComboBox.getSelectionModel().getSelectedItem();
         try{
 
@@ -280,7 +284,7 @@ public class ShiftDetailForEachEmployeeDialogController {
         Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Xác nhận");
         dialog.setContentText("Bạn có muốn cập nhật ca làm: "+ shiftManagerControllerReferences.getOldShiftID() + " hay không?\n" +
-                "Mọi nhân viên trong ca làm này đều sẽ được cập nhật\nSuy nghĩ kĩ trước khi xóa.");
+                "Mọi nhân viên trong ca làm này đều sẽ được cập nhật\nSuy nghĩ kĩ trước khi cập nhật.");
         javafx.scene.control.DialogPane dialogPane = dialog.getDialogPane();
 
         // Tạo nút xác nhận và nút hủy

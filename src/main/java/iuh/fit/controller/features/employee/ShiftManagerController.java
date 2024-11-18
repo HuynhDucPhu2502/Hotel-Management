@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+
 public class ShiftManagerController {
     //Non-input field
     @FXML
@@ -88,6 +89,7 @@ public class ShiftManagerController {
 
     private Employee employee;
     private ObservableList<Shift> items;
+    private Shift currentShift;
 
     public void initialize() {
         dialogPane.toFront();
@@ -97,6 +99,7 @@ public class ShiftManagerController {
         loadData();
         setupTable();
         shiftTableView.setFixedCellSize(40);
+
 
         resetBtn.setOnAction(e -> handleResetAction());
         addBtn.setOnAction(e -> handleAddAction());
@@ -119,6 +122,9 @@ public class ShiftManagerController {
 
     public void setupContext(Employee employeee) {
         this.employee = employeee;
+    }
+    public void setUpCurrentShift(Shift shift){
+        this.currentShift = shift;
     }
 
     // Phương thức load dữ liệu lên giao diện
@@ -155,29 +161,42 @@ public class ShiftManagerController {
             private final Button updateButton = new Button("Cập nhật");
             private final Button deleteButton = new Button("Xóa");
             private final Button assignmentButton = new Button("Phân công");
+            private final Button changeShiftButton = new Button("Chuyển ca");
             private final HBox hBox = new HBox(10);
 
             {
                 updateButton.getStyleClass().add("button-update");
                 deleteButton.getStyleClass().add("button-delete");
                 assignmentButton.getStyleClass().add("button-view");
-                hBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/Button.css")).toExternalForm());
+                changeShiftButton.getStyleClass().add("button-view");
+                hBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/item_styles/ButtonForShiftAssignment.css")).toExternalForm());
+
 
                 updateButton.setOnAction(event -> {
                     Shift shift = getTableView().getItems().get(getIndex());
-                    handleUpdateBtn(shift);
+                    if(shift.equals(currentShift)){
+                        dialogPane.showInformation("Thông báo","Không thể xóa hay chỉnh sửa ca làm vì bạn " +
+                                "đang thuộc ca làm này");
+                    }else{
+                        handleUpdateBtn(shift);
+                    }
                 });
 
                 deleteButton.setOnAction(event -> {
                     Shift shift = getTableView().getItems().get(getIndex());
-                    if (!ShiftDAO.checkAllowUpdateAndDelete(shift.getShiftID())) {
-                        try {
-                            handelShowDetailData(shift, "delete", null);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
+                    if(shift.equals(currentShift)){
+                        dialogPane.showInformation("Thông báo","Không thể xóa hay chỉnh sửa ca làm vì bạn " +
+                                "đang thuộc ca làm này");
+                    }else{
+                        if (!ShiftDAO.checkAllowUpdateOrDelete(shift.getShiftID())) {
+                            try {
+                                handelShowDetailData(shift, "delete", null, employee);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        } else {
+                            handleDeleteAction(shift);
                         }
-                    } else {
-                        handleDeleteAction(shift);
                     }
                 });
 
@@ -190,8 +209,12 @@ public class ShiftManagerController {
                     }
                 });
 
+                changeShiftButton.setOnAction(event -> {
+
+                });
+
                 hBox.setAlignment(Pos.CENTER);
-                hBox.getChildren().addAll(updateButton, deleteButton, assignmentButton);
+                hBox.getChildren().addAll(updateButton, deleteButton, assignmentButton, changeShiftButton);
             }
 
             @Override
@@ -266,7 +289,7 @@ public class ShiftManagerController {
         }
     }
 
-    private void handelShowDetailData(Shift shift, String func, String shiftID) throws IOException {
+    private void handelShowDetailData(Shift shift, String func, String shiftID, Employee employee) throws IOException {
         String source = "/iuh/fit/view/features/employee/ShiftDetailForEachEmployeeDialog.fxml";
 
         FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
@@ -275,6 +298,7 @@ public class ShiftManagerController {
         ShiftDetailForEachEmployeeDialogController shiftDetailForEachEmployeeDialogController = loader.getController();
         shiftDetailForEachEmployeeDialogController.setController(this);
         shiftDetailForEachEmployeeDialogController.getData(shift, func, shiftID);
+        shiftDetailForEachEmployeeDialogController.setEmployee(employee);
 
         Scene scene = new Scene(layout);
 
@@ -320,9 +344,9 @@ public class ShiftManagerController {
     }
 
     private void handelUpdateShift(){
-        if (!ShiftDAO.checkAllowUpdateAndDelete(shiftIDTextField.getText())) {
+        if (!ShiftDAO.checkAllowUpdateOrDelete(shiftIDTextField.getText())) {
             try {
-                handelShowDetailData(null, "update", shiftIDTextField.getText());
+                handelShowDetailData(null, "update", shiftIDTextField.getText(), employee);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -365,7 +389,6 @@ public class ShiftManagerController {
 
     private void handleDeleteAction(Shift shift){
         try{
-
             DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
                     "XÁC NHẬN",
                     "Bạn có chắc chắn muốn xóa ca làm này?"
