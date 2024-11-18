@@ -11,6 +11,7 @@ import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
+import iuh.fit.models.Shift;
 import iuh.fit.models.enums.Position;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +22,7 @@ import java.util.Objects;
 
 public class MainController {
     private Account account;
+    private Shift shift;
 
     @FXML
     private AnchorPane menuBar;
@@ -39,6 +41,10 @@ public class MainController {
     public void setAccount(Account account) {
         this.account = account;
         initializeMenuBar();
+    }
+
+    public void setShift(Shift shift){
+        this.shift = shift;
     }
 
     public void initializeMenuBar() {
@@ -154,6 +160,7 @@ public class MainController {
                     Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
 
                     shiftManagerController.setupContext(employee);
+                    shiftManagerController.setUpCurrentShift(shift);
                 }
             }else{
                 if (fxmlPath.contains("RoomBookingPanel")) {

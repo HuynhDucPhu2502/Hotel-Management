@@ -3,7 +3,7 @@ package iuh.fit.controller.features.employee;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.dao.ShiftAssignmentDAO;
-import iuh.fit.models.CheckedEmployee;
+import iuh.fit.models.wrapper.CheckedEmployee;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Shift;
 import iuh.fit.models.ShiftAssignment;

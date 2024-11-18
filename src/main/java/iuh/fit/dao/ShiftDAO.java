@@ -7,9 +7,12 @@ import iuh.fit.utils.DBHelper;
 import iuh.fit.utils.GlobalConstants;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static iuh.fit.utils.ConvertHelper.currentDaysScheduleToSQLConverter;
 
 public class ShiftDAO {
     public static List<Shift> getShifts() {
@@ -276,7 +279,7 @@ public class ShiftDAO {
     }
 
 
-    public static boolean checkAllowUpdateAndDelete(String shiftID) {
+    public static boolean checkAllowUpdateOrDelete(String shiftID) {
         ArrayList<Shift> data = new ArrayList<Shift>();
         try (
                 Connection connection = DBHelper.getConnection();
@@ -302,6 +305,65 @@ public class ShiftDAO {
         }
 
         return true;
+    }
+
+//    public static boolean checkCurrentEmployeeWhileUpdateOrDelete(Shift shift, Employee employee) {
+//        ArrayList<Shift> data = new ArrayList<Shift>();
+//        ArrayList<Employee> employees = new ArrayList<Employee>();
+//        try (
+//                Connection connection = DBHelper.getConnection();
+//                PreparedStatement statement = connection.prepareStatement
+//                        ("SELECT a.shiftID, b.employeeID " +
+//                        "FROM Shift a " +
+//                        "INNER JOIN ShiftAssignment b ON a.shiftID = b.shiftID " +
+//                        "WHERE a.shiftID = ?");
+//        ){
+//            statement.setString(1,shift.getShiftID());
+//            ResultSet rs = statement.executeQuery();
+//
+//            while (rs.next()) {
+//                String employeeID = rs.getString(2);
+//                employees.add(EmployeeDAO.getEmployeeByEmployeeID(employeeID));
+//            }
+//            if (employees.contains(employee)) {
+//                return false;
+//            }
+//
+//        } catch (Exception exception) {
+//            exception.printStackTrace();
+//            System.exit(1);
+//        }
+//
+//        return true;
+//    }
+
+    public static Shift getCurrentShiftForLogin(Employee employee) {
+        ArrayList<Shift> data = new ArrayList<Shift>();
+        Shift currentShift = null;
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement statement = connection.prepareStatement
+                        ("SELECT s.shiftID, b.employeeID " +
+                                "FROM Employee e " +
+                                "INNER JOIN ShiftAssignment b ON e.employeeID = b.employeeID " +
+                                "INNER JOIN Shift s ON b.shiftID = s.shiftID " +
+                                "WHERE e.employeeID = ? AND startTime <= CONVERT(TIME, GETDATE()) AND endTime >= CONVERT(TIME, GETDATE()) " +
+                                "AND s.shiftDaysSchedule = ?");
+        ){
+            statement.setString(1, employee.getEmployeeID());
+            statement.setString(2, currentDaysScheduleToSQLConverter(LocalDateTime.now()));
+            ResultSet rs = statement.executeQuery();
+
+            while (rs.next()) {
+                currentShift = ShiftDAO.getDataByID(rs.getString(1));
+            }
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+        return currentShift;
     }
 
     public static List<Employee> getEmployeeListByShift(String shiftID) {

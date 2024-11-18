@@ -576,7 +576,7 @@ VALUES
 	('HotelService', 'HS-000021'),
 	('Pricing', 'P-000009'),
 	('RoomCategory', 'RC-000005'),
-	('ShiftAssignment', 'SA-000004'),
+	('ShiftAssignment', 'SA-000005'),
 	('Customer', 'CUS-000031'),
 	('ReservationForm', 'RF-000113'),
 	('HistoryCheckIn', 'HCI-000005'),

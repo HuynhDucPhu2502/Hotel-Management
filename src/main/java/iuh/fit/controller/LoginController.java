@@ -3,9 +3,12 @@ package iuh.fit.controller;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.dao.EmployeeDAO;
+import iuh.fit.dao.ShiftDAO;
 import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
+import iuh.fit.models.Shift;
 import iuh.fit.models.enums.AccountStatus;
+import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.PasswordHashing;
 import iuh.fit.utils.RegexChecker;
@@ -168,17 +171,19 @@ public class LoginController {
         try {
             Account account = AccountDAO.getLogin(userName, password);
             if (account == null) throw new IllegalArgumentException(ErrorMessages.LOGIN_INVALID_ACCOUNT);
-            if (
+            if(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()).getPosition().equals(Position.RECEPTIONIST)){
+                Shift currentShift = ShiftDAO.getCurrentShiftForLogin(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()));
+                if (
                     account.getAccountStatus().equals(AccountStatus.INACTIVE) ||
                     account.getAccountStatus().equals(AccountStatus.LOCKED)
-            ) {
+                ) {
                 dialogPane.showInformation(
                         "Thông báo",
                         "Tài khoản bị khóa hoặc không có hiệu lực.\n" +
                                 "Vui lòng báo người quản lý khách sạn để biết thêm thông tin."
                 );
-            } else {
-                try {
+                } else {
+                  try {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/MainUI.fxml"));
                     AnchorPane mainPanel = fxmlLoader.load();
 
@@ -198,7 +203,38 @@ public class LoginController {
                     e.printStackTrace();
                     dialogPane.showError("Lỗi", "Không thể tải giao diện chính.");
                 }
-            }
+              }
+            }else{
+              Shift currentShift = ShiftDAO.getCurrentShiftForLogin(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()));
+                if(account.getAccountStatus().equals(AccountStatus.INACTIVE)||
+                        account.getAccountStatus().equals(AccountStatus.LOCKED)){
+                    dialogPane.showInformation("Thông báo", "Tài khoản bị khóa hoặc không có hiệu lực" +
+                            "\nVui lòng báo người quản lý khách sạn để biết thêm thông tin");
+                }else{
+                    try {
+//                        System.out.println(currentShift.toString());
+                        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/MainUI.fxml"));
+                        AnchorPane mainPanel = fxmlLoader.load();
+
+                        MainController mainController = fxmlLoader.getController();
+
+                        mainController.setAccount(account);
+                        mainController.setShift(currentShift);
+
+
+                        Scene scene = new Scene(mainPanel);
+                        Stage currentStage = (Stage) signInButton.getScene().getWindow();
+
+                        currentStage.setScene(scene);
+                        currentStage.setResizable(true);
+                        currentStage.setMaximized(true);
+                        currentStage.centerOnScreen();
+
+                        currentStage.show();
+                    } catch (Exception e) {
+                       errorMessage.setText(e.getMessage());;
+                    }
+                }
         } catch (Exception e) {
             errorMessage.setText(e.getMessage());
         }
