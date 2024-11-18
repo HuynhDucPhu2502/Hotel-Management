@@ -204,15 +204,14 @@ public class LoginController {
                     dialogPane.showError("Lỗi", "Không thể tải giao diện chính.");
                 }
               }
-            }else{
-              Shift currentShift = ShiftDAO.getCurrentShiftForLogin(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()));
-                if(account.getAccountStatus().equals(AccountStatus.INACTIVE)||
-                        account.getAccountStatus().equals(AccountStatus.LOCKED)){
+            }else {
+                Shift currentShift = ShiftDAO.getCurrentShiftForLogin(EmployeeDAO.getEmployeeByAccountID(account.getAccountID()));
+                if (account.getAccountStatus().equals(AccountStatus.INACTIVE) ||
+                        account.getAccountStatus().equals(AccountStatus.LOCKED)) {
                     dialogPane.showInformation("Thông báo", "Tài khoản bị khóa hoặc không có hiệu lực" +
                             "\nVui lòng báo người quản lý khách sạn để biết thêm thông tin");
-                }else{
+                } else {
                     try {
-//                        System.out.println(currentShift.toString());
                         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/MainUI.fxml"));
                         AnchorPane mainPanel = fxmlLoader.load();
 
@@ -232,9 +231,11 @@ public class LoginController {
 
                         currentStage.show();
                     } catch (Exception e) {
-                       errorMessage.setText(e.getMessage());;
+                        errorMessage.setText(e.getMessage());
+                        ;
                     }
                 }
+            }
         } catch (Exception e) {
             errorMessage.setText(e.getMessage());
         }
