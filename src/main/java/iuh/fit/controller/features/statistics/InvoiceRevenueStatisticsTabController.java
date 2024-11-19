@@ -7,13 +7,16 @@ import iuh.fit.dao.InvoiceDisplayOnTableDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.enums.ExportExcelCategory;
 import iuh.fit.models.wrapper.InvoiceDisplayOnTable;
+import iuh.fit.security.PreferencesKey;
 import iuh.fit.utils.EditDateRangePicker;
 import iuh.fit.utils.ExportFileHelper;
 import iuh.fit.utils.QuarterChecker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
@@ -21,7 +24,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.time.DayOfWeek;
@@ -325,6 +330,24 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
                         numOfInvoice,
                         totalMoney);
         }
+    }
+
+
+    @FXML
+    void showFileAddress() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/statistics/FileAddress.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        FileAddressController fileAddressController = fxmlLoader.getController();
+
+        fileAddressController.initialize(PreferencesKey.EXPORT_INVOICE_STATISTIC);
+
+        Stage stage = new Stage();
+        stage.setScene(scene);
+
+        fileAddressController.setStage(stage);
+        fileAddressController.setPreferencesKey(PreferencesKey.EXPORT_INVOICE_STATISTIC);
+
+        stage.show();
     }
 
     // set action for pagination page, change data on table when choose another page
@@ -914,5 +937,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
                 .mapToDouble(InvoiceDisplayOnTable::getTax)
                 .sum();
     }
+
 
 }
