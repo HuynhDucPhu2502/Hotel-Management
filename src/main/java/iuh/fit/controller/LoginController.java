@@ -2,19 +2,13 @@ package iuh.fit.controller;
 
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.AccountDAO;
-import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Account;
-import iuh.fit.models.Employee;
 import iuh.fit.models.enums.AccountStatus;
-import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ErrorMessages;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -50,7 +44,6 @@ public class LoginController {
     private DialogPane dialogPane;
 
     private boolean isDefaultIcon = true;
-
 
     @FXML
     private void initialize() {
@@ -142,7 +135,7 @@ public class LoginController {
 
                     MainController mainController = fxmlLoader.getController();
 
-                    mainController.setAccount(account);
+                    mainController.setupContext(account, mainController.getMainStage());
 
 
                     Scene scene = new Scene(mainPanel);
