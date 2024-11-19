@@ -74,7 +74,12 @@
                </HBox.margin></CheckBox>
                <Button mnemonicParsing="false" onAction="#exportExcelFile" styleClass="button-excel" stylesheets="@../../../styles/Button.css" text="Xuất Excel">
                <HBox.margin>
-                  <Insets left="190.0" />
+                  <Insets left="87.0" />
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#showFileAddress" prefHeight="30.0" text="...">
+               <HBox.margin>
+                  <Insets left="27.0" />
                </HBox.margin>
             </Button>
             </children>
