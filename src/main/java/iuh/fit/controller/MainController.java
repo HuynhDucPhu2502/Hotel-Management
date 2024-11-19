@@ -15,7 +15,10 @@ import iuh.fit.models.enums.Position;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -27,17 +30,19 @@ public class MainController {
     @FXML
     private AnchorPane mainPanel;
 
+    private Stage mainStage;
+
     private static boolean ROOM_BOOKING_LOADED = false;
 
     // Không xóa
-    public void initialize() {
+    public void initialize() throws SQLException, IOException {
         Locale locale = new Locale("vi", "VN");
         Locale.setDefault(locale);
-
     }
 
-    public void setAccount(Account account) {
+    public void setupContext(Account account, Stage stage) {
         this.account = account;
+        this.mainStage = stage;
         initializeMenuBar();
     }
 
@@ -82,6 +87,9 @@ public class MainController {
                     menuController.getRevenueStatisticsButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml"));
                     menuController.getRateUsingRoomButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/RateUsingRoomStatisticsPanel.fxml"));
                     // History
+
+                    // setting
+                    menuController.getBackupBtn().setOnAction(e -> loadPanel("/iuh/fit/view/features/backup/BackupPanel.fxml"));
                 }
                 else if (Objects.requireNonNull(EmployeeDAO.getEmployeeByAccountID(account.getAccountID())).getPosition().equals(Position.RECEPTIONIST))
                 {
@@ -192,6 +200,8 @@ public class MainController {
         }
     }
 
+
+
     public AnchorPane getMainPanel() {
         return mainPanel;
     }
@@ -206,5 +216,9 @@ public class MainController {
 
     public static void setRoomBookingLoaded(boolean roomBookingLoaded) {
         ROOM_BOOKING_LOADED = roomBookingLoaded;
+    }
+
+    public Stage getMainStage() {
+        return mainStage;
     }
 }
