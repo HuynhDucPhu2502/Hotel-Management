@@ -144,13 +144,9 @@ public class EmployeeDAO {
     }
 
     public static Employee getDataByID(String employeeID) {
-
-
-
         String SQLQueryStatement = "SELECT employeeID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, position, isActivate "
                 + "FROM Employee " +
                 "WHERE employeeID = ?";
-
         try (
                 Connection con = DBHelper.getConnection();
                 PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement)

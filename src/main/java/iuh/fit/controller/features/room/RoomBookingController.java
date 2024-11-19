@@ -13,6 +13,7 @@ import iuh.fit.models.Room;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.RoomStatusHelper;
+import iuh.fit.utils.TimelineManager;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -58,6 +59,8 @@ public class RoomBookingController {
         activeButton = allBtn;
         setActiveButtonStyle(allBtn);
         MainController.setRoomBookingLoaded(true);
+
+        TimelineManager.getInstance().printAllTimelines();
     }
 
     public void setupContext(MainController mainController, Employee employeee) {

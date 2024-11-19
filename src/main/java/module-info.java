@@ -56,8 +56,8 @@ module iuh.fit {
     exports iuh.fit.models;
     exports iuh.fit.models.enums;
     exports iuh.fit.models.wrapper;
-
-
+    exports iuh.fit.models.misc;
+    opens iuh.fit.models.misc to javafx.base, javafx.fxml;
 
 
 }

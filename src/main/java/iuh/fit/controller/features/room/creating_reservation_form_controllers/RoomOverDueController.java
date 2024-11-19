@@ -7,8 +7,10 @@ import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
+import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.RoomStatusHelper;
+import iuh.fit.utils.TimelineManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -44,10 +46,6 @@ public class RoomOverDueController {
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
-    public void initialize() {
-        MainController.setRoomBookingLoaded(false);
-    }
-
     public void setupContext(MainController mainController, Employee employee, RoomWithReservation roomWithReservation) {
         this.mainController = mainController;
         this.employee = employee;
@@ -66,11 +64,25 @@ public class RoomOverDueController {
     }
 
     private void initializeOverdueTimeTracking(LocalDateTime checkOutDate) {
-        refreshLateDurationDisplay(checkOutDate);
+        String timelineKey = roomWithReservation.getRoom().getRoomID() + RoomStatus.OVERDUE.name();
+
+        duration = java.time.Duration.between(checkOutDate, LocalDateTime.now());
+
+        long hours = duration.toHours();
+        long minutes = duration.toMinutesPart();
+        long seconds = duration.toSecondsPart();
+
+        lateDuration.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+
+        if (TimelineManager.getInstance().containsTimeline(timelineKey)) {
+            TimelineManager.getInstance().removeTimeline(timelineKey);
+        }
 
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> refreshLateDurationDisplay(checkOutDate)));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+
+        TimelineManager.getInstance().addTimeline(timelineKey, timeline);
     }
 
     private void refreshLateDurationDisplay(LocalDateTime checkOutDate) {
@@ -83,11 +95,12 @@ public class RoomOverDueController {
         lateDuration.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
 
         if (hours >= 2) {
-            if (MainController.isRoomBookingLoaded()) navigateToRoomBookingPanel(false);
-            else RoomStatusHelper.autoCheckoutOverdueRooms();
             if (timeline != null) {
-                timeline.stop();
+                if (MainController.isRoomBookingLoaded()) navigateToRoomBookingPanel(false);
+                else RoomStatusHelper.autoCheckoutOverdueRooms();
+                TimelineManager.getInstance().removeTimeline(roomWithReservation.getRoom().getRoomID() + RoomStatus.OVERDUE.name());
             }
+
         }
     }
 
@@ -114,6 +127,7 @@ public class RoomOverDueController {
 
             mainController.getMainPanel().getChildren().clear();
             mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+            MainController.setRoomBookingLoaded(false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -135,6 +149,7 @@ public class RoomOverDueController {
 
             mainController.getMainPanel().getChildren().clear();
             mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+
         } catch (Exception e) {
             e.printStackTrace();
         }

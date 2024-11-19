@@ -29,8 +29,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         RoomStatusHelper.startAutoCheckoutScheduler();
 
-        startWithoutLogin(primaryStage);
-//        startWithLogin(primaryStage);
+//        startWithoutLogin(primaryStage);
+        startWithLogin(primaryStage);
 
         // handle backup event when slose the app
         primaryStage.setOnCloseRequest(event -> {
@@ -105,18 +105,21 @@ public class Main extends Application {
 
             Scene scene = new Scene(root);
 
-            primaryStage.setMaximized(true);
-
             primaryStage.setTitle("Quản Lý Khách Sạn");
+
             primaryStage.setScene(scene);
             primaryStage.setResizable(true);
+            primaryStage.setWidth(1200);
+            primaryStage.setHeight(680);
+            primaryStage.setMaximized(true);
+            primaryStage.centerOnScreen();
+
             primaryStage.show();
 
             primaryStage.setOnCloseRequest(event -> {
                 Platform.exit();
                 System.exit(0);
             });
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -131,9 +134,20 @@ public class Main extends Application {
             Scene scene = new Scene(root);
 
             primaryStage.setTitle("Quản Lý Khách Sạn");
+
             primaryStage.setScene(scene);
-            primaryStage.show();
+            primaryStage.setResizable(false);
+            primaryStage.setWidth(610);
+            primaryStage.setHeight(400);
+            primaryStage.setMaximized(false);
             primaryStage.centerOnScreen();
+
+            primaryStage.show();
+
+            primaryStage.setOnCloseRequest(event -> {
+                Platform.exit();
+                System.exit(0);
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

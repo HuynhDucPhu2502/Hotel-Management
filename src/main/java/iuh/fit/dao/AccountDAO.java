@@ -2,10 +2,7 @@ package iuh.fit.dao;
 
 import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
-import iuh.fit.utils.ConvertHelper;
-import iuh.fit.utils.DBHelper;
-import iuh.fit.utils.GlobalConstants;
-import iuh.fit.utils.PasswordHashing;
+import iuh.fit.utils.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -56,11 +53,8 @@ public class AccountDAO {
                     String hashedPassword = rs.getString(3);
                     String inputHashedPassword = PasswordHashing.hashPassword(password);
 
-                    if (hashedPassword.equals(inputHashedPassword)) {
-                        return extractData(rs);
-                    } else {
-                        System.out.println("Password verification failed.");
-                    }
+                    if (hashedPassword.equals(inputHashedPassword)) return extractData(rs);
+                    else throw new IllegalArgumentException(ErrorMessages.LOGIN_INVALID_ACCOUNT);
                 }
             }
         } catch (Exception e) {

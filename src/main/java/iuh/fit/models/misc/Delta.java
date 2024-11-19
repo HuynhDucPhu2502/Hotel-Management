@@ -1,4 +1,4 @@
-package iuh.fit.models;
+package iuh.fit.models.misc;
 
 /**
  * @author Le Tran Gia Huy

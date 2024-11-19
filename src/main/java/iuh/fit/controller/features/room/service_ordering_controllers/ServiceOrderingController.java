@@ -119,6 +119,12 @@ public class ServiceOrderingController {
 
         titledPane.setText("Quản lý đặt phòng " + roomWithReservation.getRoom().getRoomNumber());
 
+        if (handleValidTime()) {
+            Platform.runLater(() -> navigateToRoomBookingPanel(true));
+            return;
+        }
+
+
         setupReservationForm();
         setupButtonActions();
         loadData();
@@ -126,8 +132,8 @@ public class ServiceOrderingController {
 
     private void setupButtonActions() {
         // Label Navigate Button
-        backBtn.setOnAction(e -> navigateToRoomBookingPanel());
-        bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
+        backBtn.setOnAction(e -> navigateToRoomBookingPanel(false));
+        bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel(false));
 
         // Box Navigate Button
         navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
@@ -153,7 +159,6 @@ public class ServiceOrderingController {
 
                 loadTable();
 
-                // Tải tên danh mục dịch vụ
                 ArrayList<String> categoryNames = (ArrayList<String>) ServiceCategoryDAO.getServiceCategoryNames();
                 categoryNames.addFirst("TẤT CẢ");
 
@@ -162,7 +167,6 @@ public class ServiceOrderingController {
                     serviceCategoryCBox.getSelectionModel().selectFirst();
                 });
 
-                // Sau khi tải dữ liệu xong, gọi hàm lọc dịch vụ
                 Platform.runLater(() -> filterServicesByCategory());
 
                 return null;
@@ -193,14 +197,17 @@ public class ServiceOrderingController {
     // ==================================================================================================================
     // 3. Xử lý chức năng hiển thị panel khác
     // ==================================================================================================================
-    private void navigateToRoomBookingPanel() {
+    private void navigateToRoomBookingPanel(boolean isError) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
             roomBookingController.setupContext(mainController, employee);
-
+            if (isError)
+                roomBookingController
+                        .getDialogPane()
+                        .showInformation("LỖI", "Thời gian lưu trú đã kết thúc. Không thể thêm dịch vụ.");
 
             mainController.getMainPanel().getChildren().clear();
             mainController.getMainPanel().getChildren().addAll(layout.getChildren());
@@ -373,14 +380,7 @@ public class ServiceOrderingController {
     // 6. Xử lý sự kiện thêm dịch vụ
     // ==================================================================================================================
     private void handleServiceOrdering(HotelService service, int amount, Spinner<Integer> amountField) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
 
-        if (now.isAfter(checkOutDate)) {
-            dialogPane.showInformation("LỖI", "Thời gian lưu trú đã kết thúc. Không thể thêm dịch vụ.");
-            navigateToRoomBookingPanel();
-            return;
-        }
 
         com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> dialog = dialogPane.showConfirmation(
                 "XÁC NHẬN",
@@ -389,6 +389,11 @@ public class ServiceOrderingController {
 
         dialog.onClose(buttonType -> {
             if (buttonType == ButtonType.YES) {
+                if (handleValidTime()) {
+                    Platform.runLater(() -> navigateToRoomBookingPanel(true));
+                    return;
+                }
+
                 handleServiceOrderingDAO(service, amount, amountField);
                 dialogPane.showInformation("Thành Công", "Dịch vụ đã được thêm thành công!");
                 loadTable();
@@ -460,6 +465,15 @@ public class ServiceOrderingController {
 
         stage.setScene(scene);
         stage.show();
+    }
+
+    // ==================================================================================================================
+    // 9. Kiểm tra thời gian có phù hợp
+    // ==================================================================================================================
+    private boolean handleValidTime() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
+        return now.isAfter(checkOutDate);
     }
 
 

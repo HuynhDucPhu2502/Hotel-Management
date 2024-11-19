@@ -1,0 +1,59 @@
+/* ========================================================== */
+/* Default Button */
+/* ========================================================== */
+.button  {
+    -fx-background-color: RGB(135, 162, 255)
+}
+
+.button:hover   {
+    -fx-background-color: RGB(63, 162, 246);
+}
+
+.button:pressed   {
+    -fx-background-color: RGB(70, 130, 180);
+}
+
+/* ========================================================== */
+/* Action Button */
+/* ========================================================== */
+.button-update {
+    -fx-background-color: RGB(120, 180, 120);
+    -fx-text-fill: white;
+    -fx-min-width: 50px;
+}
+
+.button-update:hover {
+    -fx-background-color: RGB(0, 255, 0);
+}
+
+.button-update:pressed {
+    -fx-background-color: RGB(0, 150, 0);
+}
+
+.button-delete {
+    -fx-background-color: RGB(200, 120, 120);
+    -fx-text-fill: white;
+    -fx-min-width: 50px;
+}
+
+.button-delete:hover {
+    -fx-background-color: RGB(255, 0, 0);
+}
+
+.button-delete:pressed {
+    -fx-background-color: RGB(150, 0, 0);
+}
+
+.button-view {
+    -fx-background-color: RGB(70, 130, 180);
+    -fx-text-fill: white;
+    -fx-min-width: 50px;
+}
+
+.button-view:hover {
+    -fx-background-color: RGB(100, 149, 237);
+}
+
+.button-view:pressed {
+    -fx-background-color: RGB(65, 105, 225);
+}
