@@ -42,6 +42,7 @@
             </ComboBox>
             <Button fx:id="refreshData" mnemonicParsing="false" onAction="#refreshData" prefHeight="30.0" prefWidth="75.0" styleClass="button-refresh" stylesheets="@../../../styles/Button.css" text="Tải lại" />
             <Button minWidth="79.0" mnemonicParsing="false" onAction="#exportExcelFile" styleClass="button-excel" stylesheets="@../../../styles/Button.css" text="Xuất Excel" />
+         <Button mnemonicParsing="false" onAction="#showFileAddress" prefHeight="30.0" text="..." />
         </HBox>
         <HBox prefHeight="68.0" prefWidth="1240.0">
             <VBox.margin>
