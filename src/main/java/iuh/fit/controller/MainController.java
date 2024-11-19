@@ -81,7 +81,6 @@ public class MainController {
             menuController.getRoomManagerButton().setDisable(true);
             menuController.getServiceCategoryManagerButton().setDisable(true);
             menuController.getHotelServiceManagerButton().setDisable(true);
-            menuController.getCustomerManagerButton().setDisable(true);
         }
 
         // xử lý sự kiện hiện giao diện cho cả lễ tân và quản lý
