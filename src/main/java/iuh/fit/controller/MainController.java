@@ -18,7 +18,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.Locale;
-import java.util.Objects;
 
 public class MainController {
     private Account account;
@@ -41,7 +40,6 @@ public class MainController {
 
     public void setAccount(Account account) {
         if (account == null) throw new IllegalArgumentException("Tài khoản không tồn tại");
-
 
         this.account = account;
         initializeMenuBar();
@@ -149,8 +147,7 @@ public class MainController {
                 employeeInformationController.setupContext(employee, this);
             }
 
-            if (fxmlPath.contains("RoomBookingPanel")) ROOM_BOOKING_LOADED = true;
-            else ROOM_BOOKING_LOADED = false;
+            ROOM_BOOKING_LOADED = fxmlPath.contains("RoomBookingPanel");
 
             mainPanel.getChildren().clear();
             mainPanel.getChildren().addAll(layout.getChildren());
