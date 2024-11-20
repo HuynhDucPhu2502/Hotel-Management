@@ -29,14 +29,12 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         RoomStatusHelper.startAutoCheckoutScheduler();
 
-//        startWithoutLogin(primaryStage);
-        startWithLogin(primaryStage);
+        startWithoutLogin(primaryStage);
+//        startWithLogin(primaryStage);
 
-        // handle backup event when slose the app
         primaryStage.setOnCloseRequest(event -> backupData(primaryStage));
     }
 
-    // handle backup event when slose the app
     private void backupData(Stage primaryStage){
         String defaultBackupName = "/HotelBackup-" + LocalDate.now() + "-Full.bak";
         String defaultZipBackupName = "/HotelBackup-" + LocalDate.now() + "-Full.zip";

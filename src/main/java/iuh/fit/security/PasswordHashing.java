@@ -1,4 +1,4 @@
-package iuh.fit.utils;
+package iuh.fit.security;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

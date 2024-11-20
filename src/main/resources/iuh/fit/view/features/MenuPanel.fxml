@@ -95,7 +95,7 @@
                   
                                        <ImageView fx:id="arrowUpForEmpBtn" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="20">
                                           <image>
-                                             <Image url="@../../icons/menu_icons/arrow_down.png" />
+                                             <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -200,7 +200,7 @@
             
                                              <ImageView fx:id="arrowUpForRoom" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="55">
                                           <image>
-                                             <Image url="@../../icons/menu_icons/arrow_down.png" />
+                                             <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -321,7 +321,7 @@
                                           <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Hóa đơn" textFill="WHITE" />
                                           <ImageView fx:id="arrowUpForInvoice" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="35">
                                              <image>
-                                                <Image url="@../../icons/menu_icons/arrow_down.png" />
+                                                <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
                                              </image>
                                           </ImageView>
                                        </children>
@@ -363,7 +363,7 @@
             
                                              <ImageView fx:id="arrowUpForService" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="45">
                                           <image>
-                                             <Image url="@../../icons/menu_icons/arrow_down.png" />
+                                             <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -451,7 +451,7 @@
             
                                              <ImageView fx:id="arrowUpForCustomer" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="6">
                                           <image>
-                                             <Image url="@../../icons/menu_icons/arrow_down.png" />
+                                             <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -514,7 +514,7 @@
             
                                              <ImageView fx:id="arrowUpForStatistics" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="28">
                                           <image>
-                                             <Image url="@../../icons/menu_icons/arrow_down.png" />
+                                             <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
                                           </image>
                                        </ImageView>
                                     </HBox>
@@ -578,13 +578,13 @@
                                        <children>
                                           <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true">
                                              <image>
-                                                <Image url="@../../icons/settings.png" />
+                                                <Image url="@../../icons/menu_icons/ic_settings.png" />
                                              </image>
                                           </ImageView>
                                           <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Thiết lập" textFill="WHITE" />
                                           <ImageView fx:id="arrowUpForSetting" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="28">
                                              <image>
-                                                <Image url="@../../icons/menu_icons/arrow_down.png" />
+                                                <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
                                              </image>
                                           </ImageView>
                                        </children>

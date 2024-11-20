@@ -22,7 +22,7 @@
          <center>
             <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <image>
-                  <Image url="@../../../../icons/ic_view_reservation_form.png" />
+                  <Image url="@../../../../icons/room_booking_menu_icons/ic_view_reservation_form.png" />
                </image>
             </ImageView>
          </center>

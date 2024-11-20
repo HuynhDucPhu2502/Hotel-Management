@@ -7,7 +7,7 @@ import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
 import iuh.fit.models.enums.AccountStatus;
 import iuh.fit.utils.ConvertHelper;
-import iuh.fit.utils.PasswordHashing;
+import iuh.fit.security.PasswordHashing;
 import iuh.fit.utils.RegexChecker;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,11 +27,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AccountManagerController {

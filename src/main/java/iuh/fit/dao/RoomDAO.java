@@ -8,6 +8,7 @@ import iuh.fit.utils.DBHelper;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RoomDAO {
@@ -18,7 +19,7 @@ public class RoomDAO {
         SELECT a.roomID, a.roomStatus, a.dateOfCreation, a.roomCategoryID,
                b.roomCategoryName, b.numberOfBed
         FROM Room a
-        INNER JOIN RoomCategory b ON a.roomCategoryID = b.roomCategoryID 
+        INNER JOIN RoomCategory b ON a.roomCategoryID = b.roomCategoryID
         WHERE a.isActivate = 'ACTIVATE'
         """;
 
@@ -354,6 +355,35 @@ public class RoomDAO {
         }
 
         return availableRooms;
+    }
+
+    public static HashMap<RoomStatus, Integer> getRoomStatusCount() {
+        HashMap<RoomStatus, Integer> roomStatusCount = new HashMap<>();
+
+        for (RoomStatus status : RoomStatus.values()) {
+            roomStatusCount.put(status, 0);
+        }
+
+        String sql =
+            """
+            select roomStatus, COUNT(*) as count
+            from Room
+            GROUP BY roomStatus
+            """;
+        try (Connection connection = DBHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            ResultSet rs = preparedStatement.executeQuery();
+
+            while (rs.next()) {
+                RoomStatus roomStatus = ConvertHelper.roomStatusConverter(rs.getString("roomStatus"));
+                int count = rs.getInt("count");
+                roomStatusCount.put(roomStatus, count);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return roomStatusCount;
     }
 
     private static Room extractRoomData(ResultSet rs) throws SQLException {

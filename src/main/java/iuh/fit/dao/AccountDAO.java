@@ -2,6 +2,7 @@ package iuh.fit.dao;
 
 import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
+import iuh.fit.security.PasswordHashing;
 import iuh.fit.utils.*;
 
 import java.sql.Connection;
