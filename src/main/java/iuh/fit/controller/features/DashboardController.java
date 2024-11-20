@@ -141,7 +141,7 @@ public class DashboardController {
 
     private void bindSearchFunctionality() {
         inputTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            featureGridPane.getChildren().clear(); // Xóa tất cả các phần tử trong GridPane
+            featureGridPane.getChildren().clear();
 
             if (newValue == null || newValue.trim().isEmpty()) {
                 loadFeaturesIntoGridPane();
