@@ -567,6 +567,71 @@
                               <Insets />
                            </VBox.margin>
                         </VBox>
+                        <VBox prefHeight="32.0" prefWidth="293.0">
+                           <children>
+                              <Button fx:id="settingBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="248.0" styleClass="menu-bar-parent">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <graphic>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
+                                       <children>
+                                          <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true">
+                                             <image>
+                                                <Image url="@../../icons/settings.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Thiết lập" textFill="WHITE" />
+                                          <ImageView fx:id="arrowUpForSetting" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="28">
+                                             <image>
+                                                <Image url="@../../icons/menu_icons/arrow_down.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </Button>
+                              <HBox fx:id="backupSettingContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
+                                 <children>
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                          <MoveTo x="10" y="40" />
+                                          <LineTo x="10" y="55" />
+                                       </elements>
+                                    </Path>
+                                    <Button fx:id="backupBtn" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 5;" styleClass="menu-bar-child" text="Thiết lập sao lưu dữ liệu" />
+                                 </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </HBox>
+                              <HBox fx:id="rateUsingRoomContainer1" managed="false" prefHeight="46" prefWidth="300.0" style="-fx-padding: 0 0 0 20;" visible="false">
+                                 <children>
+                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
+                                       <elements>
+                                          <MoveTo x="10" y="25" />
+                                          <LineTo x="10" y="40" />
+                                          <LineTo x="20" y="40" />
+                                       </elements>
+                                    </Path>
+                                 </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </HBox>
+                              <HBox fx:id="buttonThreeContainer21111" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                                 <children>
+                                    <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
+                                 </children>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </HBox>
+                           </children>
+                        </VBox>
                      </children>
                   </VBox>
                </content>

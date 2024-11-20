@@ -46,7 +46,13 @@ public class TopController {
             Stage currentStage = (Stage) (logoutBtn.getScene().getWindow());
 
             Scene loginScene = new Scene(loginPane);
+
             currentStage.setScene(loginScene);
+            currentStage.setResizable(false);
+            currentStage.setWidth(700);
+            currentStage.setHeight(500);
+            currentStage.setMaximized(false);
+
             currentStage.show();
             currentStage.centerOnScreen();
         } catch (Exception e) {

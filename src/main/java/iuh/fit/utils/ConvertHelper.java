@@ -162,6 +162,15 @@ public class ConvertHelper {
         };
     }
 
+    public static String currentDaysScheduleToSQLConverter(LocalDateTime dateTime) {
+        return switch (dateTime.getDayOfWeek().toString()) {
+            case "MONDAY", "WEDNESDAY", "FRIDAY" -> "MON_WEB_FRI";
+            case "TUESDAY", "THURSDAY", "SATURDAY" -> "TUE_THU_SAT";
+            case "SUNDAY" -> "SUNDAY";
+            default -> throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_SHIFT_DAYS_SCHEDULE);
+        };
+    }
+
     public static String roomStatusToSQLConverter(RoomStatus input) {
         return switch (input.toString()) {
             case "Phòng trống" -> "AVAILABLE";

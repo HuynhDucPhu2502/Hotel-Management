@@ -10,6 +10,8 @@ module iuh.fit {
     requires org.apache.poi.ooxml;
     requires itextpdf;
     requires net.synedra.validatorfx;
+    requires java.prefs;
+    requires zip4j;
 
 
     opens iuh.fit to javafx.fxml;
@@ -29,6 +31,8 @@ module iuh.fit {
     opens iuh.fit.controller.features.employee to javafx.fxml;
     opens iuh.fit.controller.features.customer to javafx.fxml;
     opens iuh.fit.controller.features.statistics to javafx.fxml;
+    opens iuh.fit.controller.features.backup to javafx.fxml;
+    opens iuh.fit.security to javafx.fxml;
 
     opens iuh.fit.models to javafx.base, javafx.fxml;
     opens iuh.fit.models.wrapper to javafx.base, javafx.fxml;
@@ -46,12 +50,14 @@ module iuh.fit {
     exports iuh.fit.controller.features.room.room_changing_controllers;
     exports iuh.fit.controller.features.customer;
     exports iuh.fit.controller.features.statistics;
+    exports iuh.fit.controller.features.backup;
+    exports iuh.fit.security;
 
     exports iuh.fit.models;
     exports iuh.fit.models.enums;
     exports iuh.fit.models.wrapper;
-
-
+    exports iuh.fit.models.misc;
+    opens iuh.fit.models.misc to javafx.base, javafx.fxml;
 
 
 }

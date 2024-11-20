@@ -8,6 +8,7 @@ import iuh.fit.controller.features.statistics.StatisticalController;
 import iuh.fit.models.enums.ExportExcelCategory;
 import iuh.fit.models.enums.Month;
 import iuh.fit.models.wrapper.*;
+import iuh.fit.security.PreferencesKey;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableView;
@@ -263,8 +264,8 @@ public class ExportFileHelper {
 
     public static void exportInvoiceExcelFile(TableView<InvoiceDisplayOnTable> tableView, ExportExcelCategory type, boolean forEmployee, DateRange date, int numOfInvoice, double totalMoney){
         FileChooser fileChooser = new FileChooser();
-        File directoryFile = new File(DATA_LOCATED);
-        if (!directoryFile.exists()) directoryFile.mkdirs();
+
+        String fileAddress = FilePathManager.getPath(PreferencesKey.EXPORT_INVOICE_STATISTIC, PreferencesKey.DEFAULT_FILE_PATH);
 
         fileChooser.setTitle("Save Excel File");
         fileChooser.getExtensionFilters().addAll(
@@ -272,7 +273,7 @@ public class ExportFileHelper {
                 new FileChooser.ExtensionFilter("All Files", "*.*")
         );
 
-        File serviceRevenueFolder = new File(DATA_LOCATED.concat("//Doanh thu hóa đơn"));
+        File serviceRevenueFolder = new File(fileAddress.concat("//Doanh thu hóa đơn"));
         if (!serviceRevenueFolder.exists()) serviceRevenueFolder.mkdirs();
 
         switch (type){
@@ -565,8 +566,8 @@ public class ExportFileHelper {
 
     public static void exportServiceExcelFile(TableView<ServiceDisplayOnTable> tableView, ExportExcelCategory type, boolean forEmployee, boolean forService, DateRange date, int numOfInvoice, double totalMoney) throws IOException {
         FileChooser fileChooser = new FileChooser();
-        File directoryFile = new File(DATA_LOCATED);
-        if (!directoryFile.exists()) directoryFile.mkdirs();
+
+        String fileAddress = FilePathManager.getPath(PreferencesKey.EXPORT_SERVICE_STATISTIC, PreferencesKey.DEFAULT_FILE_PATH);
 
         fileChooser.setTitle("Save Excel File");
         fileChooser.getExtensionFilters().addAll(
@@ -574,7 +575,7 @@ public class ExportFileHelper {
                 new FileChooser.ExtensionFilter("All Files", "*.*")
         );
 
-        File serviceRevenueFolder = new File(DATA_LOCATED.concat("//Doanh thu dịch vụ"));
+        File serviceRevenueFolder = new File(fileAddress.concat("//Doanh thu dịch vụ"));
         if (!serviceRevenueFolder.exists()) serviceRevenueFolder.mkdirs();
 
         switch (type){
@@ -1011,8 +1012,8 @@ public class ExportFileHelper {
 
     public static void exportRoomExcelFile(TableView<RoomDisplayOnTable> tableView, ExportExcelCategory type, boolean forRoomCategory, DateRange date, int numOfInvoice, double totalMoney) throws IOException {
         FileChooser fileChooser = new FileChooser();
-        File directoryFile = new File(DATA_LOCATED);
-        if (!directoryFile.exists()) directoryFile.mkdirs();
+
+        String fileAddress = FilePathManager.getPath(PreferencesKey.EXPORT_ROOM_STATISTIC, PreferencesKey.DEFAULT_FILE_PATH);
 
         fileChooser.setTitle("Save Excel File");
         fileChooser.getExtensionFilters().addAll(
@@ -1020,7 +1021,7 @@ public class ExportFileHelper {
                 new FileChooser.ExtensionFilter("All Files", "*.*")
         );
 
-        File serviceRevenueFolder = new File(DATA_LOCATED.concat("//Doanh thu phòng"));
+        File serviceRevenueFolder = new File(fileAddress.concat("//Doanh thu phòng"));
         if (!serviceRevenueFolder.exists()) serviceRevenueFolder.mkdirs();
 
         switch (type){

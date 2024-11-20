@@ -164,6 +164,16 @@ public class MenuController {
     @FXML
     private ImageView arrowUpForStatistics;
 
+    // setting
+    @FXML
+    private Button settingBtn;
+    @FXML
+    private HBox backupSettingContainer;
+    @FXML
+    private Button backupBtn;
+    @FXML
+    private ImageView arrowUpForSetting;
+
 
 //  =====================================================
 
@@ -186,6 +196,7 @@ public class MenuController {
         buttonStates.put("statistics", false);
         buttonStates.put("history", false);
         buttonStates.put("invoice", false);
+        buttonStates.put("setting", false);
 
         employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(employeeManagerContainer, accountOfEmployeeManagerContainer, employeeSearchingContainer, shiftManagerContainer), arrowUpForEmpBtn, "employee"));
         roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer, roomCategoryManagerContainer, roomManagerContainer, roomSearchingContainer, roomBookingContainer), arrowUpForRoom, "room"));
@@ -193,6 +204,7 @@ public class MenuController {
         serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryManagerContainer, hotelServiceManagerContainer, hotelServiceSearchingContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer, customerSearchingContainer), arrowUpForCustomer, "customer"));
         statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(revenueStatisticsContainer, rateUsingRoomContainer), arrowUpForStatistics, "statistics"));
+        settingBtn.setOnAction(e -> dropDownMenuEvent(List.of(backupSettingContainer), arrowUpForSetting, "setting"));
     }
 
     public void loadData(Account account) {
@@ -295,6 +307,8 @@ public class MenuController {
         return rateUsingRoomButton;
     }
 
-
+    public Button getBackupBtn() {
+        return backupBtn;
+    }
 }
 

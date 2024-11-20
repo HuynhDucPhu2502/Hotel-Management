@@ -4,9 +4,12 @@ import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.features.DashboardController;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.dao.EmployeeDAO;
+import iuh.fit.dao.ShiftDAO;
 import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
+import iuh.fit.models.Shift;
 import iuh.fit.models.enums.AccountStatus;
+import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.PasswordHashing;
 import iuh.fit.utils.RegexChecker;
@@ -30,8 +33,6 @@ import javafx.util.Duration;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
-
-import javafx.geometry.Pos;
 
 import java.util.Objects;
 
@@ -112,8 +113,6 @@ public class LoginController {
         resetBtn.setOnAction(event -> resetAction());
     }
 
-
-
     private void registerEventEnterKey() {
         userNameField.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) signIn();
@@ -170,35 +169,67 @@ public class LoginController {
 
         Account account = AccountDAO.getLogin(userName, password);
 
+        // Kiểm tra tài khoản có tồn tại
         if (account == null) {
             errorMessage.setText(ErrorMessages.LOGIN_INVALID_ACCOUNT);
-        } else {
-            if(account.getAccountStatus().equals(AccountStatus.INACTIVE)||
-                    account.getAccountStatus().equals(AccountStatus.LOCKED)){
-                dialogPane.showInformation("Thông báo", "Tài khoản bị khóa hoặc không có hiệu lực" +
-                        "\nVui lòng báo người quản lý khách sạn để biết thêm thông tin");
+            return;
+        }
 
-            }else{
-                try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/MainUI.fxml"));
-                    AnchorPane mainPanel = fxmlLoader.load();
+        // Kiểm tra trạng thái tài khoản
+        if (
+                account.getAccountStatus().equals(AccountStatus.INACTIVE)
+                || account.getAccountStatus().equals(AccountStatus.LOCKED)
+        ) {
+            dialogPane.showInformation(
+                    "Thông báo",
+                    "Tài khoản bị khóa hoặc không có hiệu lực.\n" +
+                            "Vui lòng báo người quản lý khách sạn để biết thêm thông tin."
+            );
+            return;
+        }
 
-                    MainController mainController = fxmlLoader.getController();
+        // Lấy thông tin cần thiết
+        Position position = account.getEmployee().getPosition();
+        Shift currentShift = ShiftDAO.getCurrentShiftForLogin(account.getEmployee());
 
-                    mainController.setAccount(account);
+        if (position.equals(Position.RECEPTIONIST)) {
+            if (currentShift == null)
+                dialogPane.showInformation(
+                        "Thông báo",
+                        "Nhân viên không thuộc ca làm việc hiện tại\n" +
+                                "Không thể đăng nhập"
+                );
+            else loadMainUI(account, currentShift);
+        } else if (position.equals(Position.MANAGER)) {
+            loadMainUI(account, currentShift);
+        }
+    }
+
+    private void loadMainUI(Account account, Shift currentShift) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/MainUI.fxml"));
+            AnchorPane mainPanel = fxmlLoader.load();
+
+            MainController mainController = fxmlLoader.getController();
+
+            mainController.setAccount(account);
+            mainController.setShift(currentShift);
 
 
-                    Scene scene = new Scene(mainPanel);
-                    Stage currentStage = (Stage) signInButton.getScene().getWindow();
-                    currentStage.setScene(scene);
-                    currentStage.show();
-                    currentStage.setResizable(true);
-                    currentStage.setMaximized(true);
-                    currentStage.centerOnScreen();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+            Scene scene = new Scene(mainPanel);
+            Stage currentStage = (Stage) signInButton.getScene().getWindow();
+
+            currentStage.setWidth(1200);
+            currentStage.setHeight(680);
+            currentStage.setScene(scene);
+            currentStage.setResizable(true);
+            currentStage.setMaximized(true);
+
+            currentStage.centerOnScreen();
+
+            currentStage.show();
+        } catch (Exception e) {
+            errorMessage.setText(e.getMessage());
         }
     }
 
@@ -257,25 +288,43 @@ public class LoginController {
         String email = emailTextField.getText();
         String username = usernameTextField.getText();
 
-        if(employeeID.isBlank() || fullName.isBlank() || phoneNumber.isBlank() || cardID.isBlank() || email.isBlank() || username.isBlank()){
-            dialogPane.showWarning("Cảnh báo", "Bạn phải nhập đầy đủ thông tin xác nhận để có thể thay đổi mật khẩu");
+        if (
+                employeeID.isBlank()
+                || fullName.isBlank()
+                || phoneNumber.isBlank()
+                || cardID.isBlank()
+                || email.isBlank()
+                || username.isBlank()
+        ) {
+            dialogPane.showWarning(
+                    "Cảnh báo",
+                    "Bạn phải nhập đầy đủ thông tin xác nhận để có thể thay đổi mật khẩu"
+            );
             return;
         }
 
         Employee employee = EmployeeDAO.getEmployeeByEmployeeID(employeeID);
         Account account = AccountDAO.getAccountByEmployeeID(employeeID);
 
-        if (employee == null){
-            dialogPane.showWarning("Cảnh báo", "Thông tin bạn nhập chưa chính xác.\nXin vui lòng nhập lại!!!");
+        if (employee == null || account == null) {
+            dialogPane.showWarning(
+                    "Cảnh báo",
+                    "Thông tin bạn nhập chưa chính xác.\nXin vui lòng nhập lại!!!");
             return;
         }
-        if(!employee.getFullName().equals(fullName)
+
+
+        if (
+                !employee.getFullName().equals(fullName)
                 || !employee.getPhoneNumber().equals(phoneNumber)
                 || !employee.getIdCardNumber().equals(cardID)
                 || !employee.getEmail().equals(email)
                 || !account.getUserName().equals(username)
-        ){
-            dialogPane.showWarning("Cảnh báo", "Thông tin bạn nhập chưa chính xác.\nXin vui lòng nhập lại!!!");
+        ) {
+            dialogPane.showWarning(
+                    "Cảnh báo",
+                    "Thông tin bạn nhập chưa chính xác.\nXin vui lòng nhập lại!!!"
+            );
             return;
         }
 
