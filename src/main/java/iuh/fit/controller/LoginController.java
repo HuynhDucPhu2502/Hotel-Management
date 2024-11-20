@@ -1,6 +1,7 @@
 package iuh.fit.controller;
 
 import com.dlsc.gemsfx.DialogPane;
+import iuh.fit.controller.features.DashboardController;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Account;

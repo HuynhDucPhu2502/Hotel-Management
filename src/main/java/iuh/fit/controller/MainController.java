@@ -1,5 +1,6 @@
 package iuh.fit.controller;
 
+import iuh.fit.controller.features.DashboardController;
 import iuh.fit.controller.features.MenuController;
 
 import iuh.fit.controller.features.employee.ShiftManagerController;
@@ -14,9 +15,12 @@ import iuh.fit.models.Employee;
 import iuh.fit.models.enums.Position;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 public class MainController {
@@ -33,13 +37,57 @@ public class MainController {
     public void initialize() {
         Locale locale = new Locale("vi", "VN");
         Locale.setDefault(locale);
-
     }
 
     public void setAccount(Account account) {
         this.account = account;
+        initializeDashBoard();
         initializeMenuBar();
     }
+
+    public void initializeDashBoard(){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/DashboardPanel.fxml"));
+            AnchorPane menuLayout = loader.load();
+            DashboardController dashboardController = loader.getController();
+            dashboardController.setupKey();
+
+            dashboardController.getListLabel().forEach((key, value) -> {
+                if (key != null) {
+                    key.setOnMouseClicked(e -> {
+                        loadPanel(value);
+                    });
+                }
+            });
+
+            dashboardController.getFindBtn().setOnMouseClicked(event -> {
+                dashboardController.addKey();
+                dashboardController.getListLabel().forEach((key, value) -> {
+                    if (key != null) {
+                        key.setOnMouseClicked(e -> {
+                            loadPanel(value);
+                        });
+                    }
+                });
+            });
+            dashboardController.getFindTextField().setOnAction(event -> {
+                dashboardController.addKey();
+                dashboardController.getListLabel().forEach((key, value) -> {
+                    if (key != null) {
+                        key.setOnMouseClicked(e -> {
+                            loadPanel(value);
+                        });
+                    }
+                });
+            });
+
+            mainPanel.getChildren().clear();
+            mainPanel.getChildren().addAll(menuLayout.getChildren());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void initializeMenuBar() {
         try {
@@ -54,7 +102,10 @@ public class MainController {
                 if (Objects.requireNonNull(EmployeeDAO.getEmployeeByAccountID(account.getAccountID())).getPosition().equals(Position.MANAGER))
                 {
                     // Dashboard
-                    menuController.getDashBoardBtn().setOnAction(e -> loadPanel("/iuh/fit/view/features/DashboardPanel.fxml"));
+                    menuController.getDashBoardBtn().setOnAction(e -> {
+                        loadPanel("/iuh/fit/view/features/DashboardPanel.fxml");
+                        initializeDashBoard();
+                    });
 
                     // Employee
                     menuController.getEmployeeManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/employee/EmployeeManagerPanel.fxml"));
@@ -86,7 +137,10 @@ public class MainController {
                 else if (Objects.requireNonNull(EmployeeDAO.getEmployeeByAccountID(account.getAccountID())).getPosition().equals(Position.RECEPTIONIST))
                 {
                     // Dashboard
-                    menuController.getDashBoardBtn().setOnAction(e -> loadPanel("/iuh/fit/view/features/DashboardPanel.fxml"));
+                    menuController.getDashBoardBtn().setOnAction(e -> {
+                        loadPanel("/iuh/fit/view/features/DashboardPanel.fxml");
+                        initializeDashBoard();
+                    });
 
                     // Employee
                     menuController.getEmployeeManagerButton().setDisable(true);
@@ -129,7 +183,7 @@ public class MainController {
         }
     }
 
-    private void loadPanel(String fxmlPath) {
+    public void loadPanel(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             AnchorPane layout = loader.load();

@@ -196,7 +196,6 @@ public class MenuController {
     }
 
     public void loadData(Account account) {
-
         employeePositionText.setText(account.getEmployee().getPosition().toString());
         employeeFullNameLabel.setText(account.getEmployee().getFullName());
     }
