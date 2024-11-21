@@ -282,7 +282,7 @@ public class ServiceOrderingController {
         LocalDateTime actualCheckInDate = HistoryCheckinDAO.getActualCheckInDate(reservationForm.getReservationID());
 
         roomNumberLabel.setText(reservationFormRoom.getRoomNumber());
-        roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
+        roomCategoryLabel.setText(reservationFormRoom.getRoomCategory().getRoomCategoryName());
         checkInDateLabel.setText(dateTimeFormatter.format(actualCheckInDate != null ? actualCheckInDate : reservationForm.getCheckInDate()));
         checkOutDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
         stayLengthLabel.setText(Calculator.calculateStayLengthToString(
