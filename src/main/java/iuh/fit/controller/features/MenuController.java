@@ -253,28 +253,22 @@ public class MenuController {
         )).toExternalForm();
 
         if (helpFilePath != null) {
-            // Tạo WebView và load nội dung HTML
             WebView webView = new WebView();
             WebEngine engine = webView.getEngine();
-
-            // Load file HTML vào WebView
             engine.load(helpFilePath);
 
-            // Tạo một Label hoặc bất kỳ phần tử nào để hiển thị URL
+            // URL Label
             Label locationLabel = new Label();
-            locationLabel.textProperty().bind(engine.locationProperty()); // Gắn kết URL với Label
+            locationLabel.textProperty().bind(engine.locationProperty());
 
-            // Tạo Stage mới để chứa WebView và hiển thị URL
             Stage helpStage = new Stage();
             helpStage.initModality(Modality.APPLICATION_MODAL); // Chặn tương tác với cửa sổ chính
             helpStage.setTitle("Help Center");
 
-            // Tạo Scene và thêm WebView và Label vào
             VBox vbox = new VBox(10, locationLabel, webView);
-            Scene scene = new Scene(vbox, 800, 600); // Kích thước 800x600
+            Scene scene = new Scene(vbox, 800, 600);
             helpStage.setScene(scene);
 
-            // Hiển thị Stage mới
             helpStage.show();
         } else {
             System.out.println("File không tồn tại trong resources!");
