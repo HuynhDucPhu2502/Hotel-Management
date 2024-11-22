@@ -247,7 +247,6 @@ public class MenuController {
     }
 
     private void openHelpCenter() {
-        // Lấy đường dẫn tới file HTML trong resources
         String helpFilePath = Objects.requireNonNull(getClass().getResource(
                 "/iuh/fit/help-center-website/html/index.html"
         )).toExternalForm();
@@ -271,7 +270,7 @@ public class MenuController {
 
             helpStage.show();
         } else {
-            System.out.println("File không tồn tại trong resources!");
+            throw new IllegalArgumentException("Không tìm thấy file HTML");
         }
     }
 
