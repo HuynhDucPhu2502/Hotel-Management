@@ -297,7 +297,6 @@ public class MenuController {
 
     public Button getCustomerSearchingButton(){
         return customerSearchingButton;
-
     }
 
     public Button getInvoiceManagerBtn() {
