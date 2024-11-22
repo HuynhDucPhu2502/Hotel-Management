@@ -98,7 +98,7 @@ public class ReservationListController {
     }
 
     // ==================================================================================================================
-    // 3.. Xử lý chức năng hiển thị panel khác
+    // 3. Xử lý chức năng hiển thị panel khác
     // ==================================================================================================================
     private void navigateToRoomBookingPanel() {
         try {
@@ -170,7 +170,7 @@ public class ReservationListController {
     }
 
     // ==================================================================================================================
-    // 3. Chức năng hiển thị phiếu đặt phòng
+    // 4. Chức năng hiển thị phiếu đặt phòng
     // ==================================================================================================================
     private void displayFilteredRooms(List<ReservationForm> reservationForms) {
         if (!reservationForms.isEmpty()) {

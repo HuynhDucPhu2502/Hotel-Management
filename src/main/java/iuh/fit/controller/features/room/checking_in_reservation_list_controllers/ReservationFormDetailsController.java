@@ -107,7 +107,7 @@ public class ReservationFormDetailsController {
         Employee reservationFormEmployee = reservationForm.getEmployee();
 
         roomNumberLabel.setText(reservationFormRoom.getRoomNumber());
-        roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
+        roomCategoryLabel.setText(reservationFormRoom.getRoomCategory().getRoomCategoryName());
         checkInDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckInDate()));
         checkOutDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
         stayLengthLabel.setText(Calculator.calculateStayLengthToString(
