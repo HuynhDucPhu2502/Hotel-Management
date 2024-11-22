@@ -2,7 +2,10 @@ package iuh.fit.controller.features;
 
 import iuh.fit.models.Account;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -10,6 +13,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +34,7 @@ public class MenuController {
     private VBox employeeInformationContainer;
 
 //  =====================================================
-    // dasnhBoardBtn
+    // Dashboard
     @FXML
     private Button dashBoardBtn;
 
@@ -164,7 +171,8 @@ public class MenuController {
     @FXML
     private ImageView arrowUpForStatistics;
 
-    // setting
+//  =====================================================
+    // Settings
     @FXML
     private Button settingBtn;
     @FXML
@@ -174,6 +182,10 @@ public class MenuController {
     @FXML
     private ImageView arrowUpForSetting;
 
+//  =====================================================
+    // Help
+    @FXML
+    private Button helpBtn;
 
 //  =====================================================
 
@@ -205,6 +217,7 @@ public class MenuController {
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer, customerSearchingContainer), arrowUpForCustomer, "customer"));
         statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(revenueStatisticsContainer, rateUsingRoomContainer), arrowUpForStatistics, "statistics"));
         settingBtn.setOnAction(e -> dropDownMenuEvent(List.of(backupSettingContainer), arrowUpForSetting, "setting"));
+        helpBtn.setOnAction(e -> openHelpCenter());
     }
 
     public void loadData(Account account) {
@@ -212,8 +225,6 @@ public class MenuController {
         employeePositionText.setText(account.getEmployee().getPosition().toString());
         employeeFullNameLabel.setText(account.getEmployee().getFullName());
     }
-
-
 
     private void dropDownMenuEvent(List<HBox> buttons, ImageView arrow, String stateKey) {
         Boolean state = buttonStates.get(stateKey);
@@ -234,6 +245,43 @@ public class MenuController {
 
         buttonStates.put(stateKey, !state);
     }
+
+    private void openHelpCenter() {
+        // Lấy đường dẫn tới file HTML trong resources
+        String helpFilePath = Objects.requireNonNull(getClass().getResource(
+                "/iuh/fit/help-center-website/html/index.html"
+        )).toExternalForm();
+
+        if (helpFilePath != null) {
+            // Tạo WebView và load nội dung HTML
+            WebView webView = new WebView();
+            WebEngine engine = webView.getEngine();
+
+            // Load file HTML vào WebView
+            engine.load(helpFilePath);
+
+            // Tạo một Label hoặc bất kỳ phần tử nào để hiển thị URL
+            Label locationLabel = new Label();
+            locationLabel.textProperty().bind(engine.locationProperty()); // Gắn kết URL với Label
+
+            // Tạo Stage mới để chứa WebView và hiển thị URL
+            Stage helpStage = new Stage();
+            helpStage.initModality(Modality.APPLICATION_MODAL); // Chặn tương tác với cửa sổ chính
+            helpStage.setTitle("Help Center");
+
+            // Tạo Scene và thêm WebView và Label vào
+            VBox vbox = new VBox(10, locationLabel, webView);
+            Scene scene = new Scene(vbox, 800, 600); // Kích thước 800x600
+            helpStage.setScene(scene);
+
+            // Hiển thị Stage mới
+            helpStage.show();
+        } else {
+            System.out.println("File không tồn tại trong resources!");
+        }
+    }
+
+
 
     public Button getDashBoardBtn() {
         return dashBoardBtn;

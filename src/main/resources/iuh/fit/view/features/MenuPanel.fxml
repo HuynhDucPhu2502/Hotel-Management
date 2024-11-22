@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="600.0" minWidth="240.0" prefHeight="601.0" prefWidth="254.0" stylesheets="@../../styles/Menubar.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
+<AnchorPane stylesheets="@../../styles/Menubar.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
    <children>
       <VBox fx:id="employeeInformationContainer" minHeight="165.0" styleClass="menu-bar-topbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -630,6 +630,27 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="32.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="helpBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="248.0" styleClass="menu-bar-parent">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <graphic>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
+                                       <children>
+                                          <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true">
+                                             <image>
+                                                <Image url="@../../icons/menu_icons/ic_help.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Trợ Giúp" textFill="WHITE" />
+                                       </children>
+                                    </HBox>
+                                 </graphic>
+                              </Button>
                            </children>
                         </VBox>
                      </children>

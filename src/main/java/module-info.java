@@ -12,6 +12,7 @@ module iuh.fit {
     requires net.synedra.validatorfx;
     requires java.prefs;
     requires zip4j;
+    requires javafx.web;
 
 
     opens iuh.fit to javafx.fxml;
