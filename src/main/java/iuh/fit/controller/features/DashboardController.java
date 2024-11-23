@@ -79,13 +79,42 @@ public class DashboardController {
         // Thêm chức năng riêng cho MANAGER
         if (position.equals(Position.MANAGER)) {
             featureKeywordFXMLMapping.put(createKeyword("Quản lý nhân viên", "Quản lý nhân viên, quan ly nhan vien, qlnv, employee_manager"), "/iuh/fit/view/features/employee/EmployeeManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Thêm nhân viên", "Thêm nhân viên, them nhan vien, tnv"), "/iuh/fit/view/features/employee/EmployeeManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Cập nhật thông tin nhân viên", "Cập nhật thông tin nhân viên, cap nhat thong tin nhan vien, cnttnv"), "/iuh/fit/view/features/employee/EmployeeManagerPanel.fxml");
+
             featureKeywordFXMLMapping.put(createKeyword("Quản lý tài khoản", "Quản lý tài khoản, quan ly tai khoan, qltk, account_manager"), "/iuh/fit/view/features/employee/AccountManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Cập nhật thông tin tài khoản", "Cập nhật thông tin tài khoản, cập nhật tài khoản, cap nhat thong tin tai khoan, cap nhat tai khoan, cntk"), "/iuh/fit/view/features/employee/AccountManagerPanel.fxml");
+
             featureKeywordFXMLMapping.put(createKeyword("Quản lý ca làm", "Quản lý ca làm, quan ly ca lam, qlcl, shift_manager"), "/iuh/fit/view/features/employee/ShiftManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Thêm ca làm", "Thêm ca làm, them ca lam, tcl"), "/iuh/fit/view/features/employee/ShiftManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Xóa ca làm", "Xóa ca làm, xoa ca lam, xcl"), "/iuh/fit/view/features/employee/ShiftManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Cập hật ca làm", "Cập nhật ca làm, cap nhat ca lam, cncl"), "/iuh/fit/view/features/employee/ShiftManagerPanel.fxml");
+
             featureKeywordFXMLMapping.put(createKeyword("Quản lý giá phòng", "Quản lý giá phòng, quan ly gia phong, qlgp, pricing_manager"), "/iuh/fit/view/features/room/PricingManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Thêm giá phòng", "Thêm giá phòng, them gia phong, tgp"), "/iuh/fit/view/features/room/PricingManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Xóa giá phòng", "Xóa giá phòng, xoa gia phong, xgp"), "/iuh/fit/view/features/room/PricingManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Cập nhật giá phòng", "Cập nhật giá phòng, cap nhat gia phong, cngp"), "/iuh/fit/view/features/room/PricingManagerPanel.fxml");
+
             featureKeywordFXMLMapping.put(createKeyword("Quản lý loại phòng", "Quản lý loại phòng, quan ly loai phong, qllp, room_category_manager"), "/iuh/fit/view/features/room/RoomCategoryManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Thêm loại phòng", "Thêm loại phòng, them loai phong, tlp"), "/iuh/fit/view/features/room/RoomCategoryManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Xóa loại phòng", "Xóa loại phòng, xoa loai phong, xlp"), "/iuh/fit/view/features/room/RoomCategoryManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Cập nhật loại phòng", "Cập nhật loại phòng, cap nhat loai phong, cnlp"), "/iuh/fit/view/features/room/RoomCategoryManagerPanel.fxml");
+
             featureKeywordFXMLMapping.put(createKeyword("Quản lý phòng", "Quản lý phòng, quan ly phong, qlp, room_manager"), "/iuh/fit/view/features/room/RoomManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Thêm phòng", "Thêm phòng, them phong, tp"), "/iuh/fit/view/features/room/RoomManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Xóa phòng", "Xóa phòng, xoa phong, xp"), "/iuh/fit/view/features/room/RoomManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Cập nhật phòng", "Cập nhật phòng, cap nhat phong, cnp"), "/iuh/fit/view/features/room/RoomManagerPanel.fxml");
+
             featureKeywordFXMLMapping.put(createKeyword("Quản lý loại dịch vụ", "Quản lý loại dịch vụ, quan ly loai dich vu, qlldv, service_category_manager"), "/iuh/fit/view/features/service/ServiceCategoryManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Thêm loại dịch vụ", "Thêm loại dịch vụ, them loai dich vu, tldv"), "/iuh/fit/view/features/service/ServiceCategoryManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Xóa loại dịch vụ", "Xóa loại dịch vụ, xoa loai dich vu, xldv"), "/iuh/fit/view/features/service/ServiceCategoryManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Cập loại nhật dịch vụ", "Cập nhật loại dịch vụ, cap nhat loai dich vu, cnldv"), "/iuh/fit/view/features/service/ServiceCategoryManagerPanel.fxml");
+
             featureKeywordFXMLMapping.put(createKeyword("Quản lý dịch vụ", "Quản lý dịch vụ, quan ly dich vu, qldv, hotel_service_manager"), "/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Thêm dịch vụ", "Thêm dịch vụ, them dich vu, tdv"), "/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Xóa dịch vụ", "Xóa dịch vụ, xoa dich vu, xdv"), "/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Cập nhật dịch vụ", "Cập nhật dịch vụ, cap nhat dich vu, cndv"), "/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml");
+
             featureKeywordFXMLMapping.put(createKeyword("Sao lưu dữ liệu", "Sao lưu dữ liệu, sao luu du lieu, backup"), "/iuh/fit/view/features/backup/BackupPanel.fxml");
         }
     }
