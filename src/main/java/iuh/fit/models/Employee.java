@@ -35,6 +35,10 @@ public class Employee {
 
     private ObjectStatus objectStatus;
 
+    private String avatar;
+
+    private static String AVATAR_DEFAULT = "target/classes/iuh/fit/imgs/default_avatar.png";
+
     /**
      * Hàm khởi tạo đầy đủ cho lớp Employee.
      *
@@ -59,6 +63,7 @@ public class Employee {
         setDob(dob);
         setPosition(position);
         setObjectStatus(objectStatus);
+        setAvatar(AVATAR_DEFAULT);
     }
 
     /**
@@ -285,6 +290,14 @@ public class Employee {
         this.objectStatus = objectStatus;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -297,6 +310,8 @@ public class Employee {
                 ", idCardNumber='" + idCardNumber + '\'' +
                 ", dob=" + dob +
                 ", position=" + position +
+                ", objectStatus=" + objectStatus +
+                ", avatar='" + avatar + '\'' +
                 '}';
     }
 }

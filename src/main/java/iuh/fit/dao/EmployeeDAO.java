@@ -260,7 +260,7 @@ public class EmployeeDAO {
                         "UPDATE Employee " +
                                 "SET fullName = ?, phoneNumber = ?, email = ?, " +
                                 "address = ?, gender = ?, idCardNumber = ?, " +
-                                "dob = ?, position = ? " +
+                                "dob = ?, position = ?, avatar = ? " +
                                 "WHERE employeeID = ? "
                 )
         ){
@@ -272,8 +272,8 @@ public class EmployeeDAO {
             preparedStatement.setString(6, employee.getIdCardNumber());
             preparedStatement.setDate(7, ConvertHelper.localDateToSQLConverter(employee.getDob()));
             preparedStatement.setString(8, employee.getPosition().name());
-            preparedStatement.setString(9, employee.getEmployeeID());
-
+            preparedStatement.setString(9, employee.getAvatar());
+            preparedStatement.setString(10, employee.getEmployeeID());
             preparedStatement.executeUpdate();
         } catch (Exception exception) {
             exception.printStackTrace();

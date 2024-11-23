@@ -66,6 +66,7 @@ public class MainController {
         }
     }
 
+
     public void initializeMenuBar() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/MenuPanel.fxml"));
@@ -189,4 +190,5 @@ public class MainController {
     public static void setRoomBookingLoaded(boolean roomBookingLoaded) {
         ROOM_BOOKING_LOADED = roomBookingLoaded;
     }
+
 }
