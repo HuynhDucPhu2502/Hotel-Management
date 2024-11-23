@@ -34,7 +34,8 @@ CREATE TABLE Employee (
     idCardNumber NVARCHAR(12) NOT NULL,
     dob DATE NOT NULL,
     position NVARCHAR(15) NOT NULL CHECK (position IN ('RECEPTIONIST', 'MANAGER')),
-	isActivate NVARCHAR(10) NOT NULL DEFAULT 'ACTIVATE' CHECK (isActivate IN ('ACTIVATE', 'DEACTIVATE'))
+	isActivate NVARCHAR(10) NOT NULL DEFAULT 'ACTIVATE' CHECK (isActivate IN ('ACTIVATE', 'DEACTIVATE')),
+	avatar NVARCHAR(255) DEFAULT 'HotelManagement/src/main/resources/iuh/fit/imgs/default_avatar.png'
 );
 GO
 
