@@ -4,6 +4,7 @@ import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Employee;
+import iuh.fit.utils.ConvertImage;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -32,9 +33,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class EmployeeInformationController {
     @FXML
@@ -55,8 +58,10 @@ public class EmployeeInformationController {
     private Employee employee;
     private MainController mainController;
 
-    private static String AVATAR_DEFAULT = "target/classes/iuh/fit/imgs/default_avatar.png";
+    private static String AVATAR_DEFAULT = "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAABRElEQVRIieXVSU/CQAAF4P7/EyfE4MkAmiBcBEwgokhAIwGUxi40gGA3QAmdtudnW1MMURjpcvLwkqYzed/MNJMy9kpBnGH+EfDxBmsxgr2cOM9ydIClCSBcBaSfA+llvZj9c1hi7QsMA1gav1X8I8952ItxcIDwld3l/m6kmxDAvtX7wKAYL0AGF3HvoBAcMNkCHeDKIQD+ig4MQ3xka9ymAtasEwLQBTpAuWyUmyyDsMXdwMvl3vI/AArWUvP38m4W61E7PEAUAbN6Ckb3u9zoZfBaS8KQuSgAzgGOIZYTHjStH0EsJTC9TnljgQFTFbES76C3M1AbJ1AaaW/Vk2oSym3ae+eOuXPcuVTA1CXnTDt4Z6ub0kOitU6xfCphNWxt7YwxVQHzx/zBhbS4nabzL2HmD7nIyzfI/RmYuMr9xA58As9AE1gjSRApAAAAAElFTkSuQmCC";
+    private static String DEFAULT_PATH = "avatar";
 
+    private static final String[] IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".bmp"};
     public void initialize() {
 
     }
@@ -173,15 +178,6 @@ public class EmployeeInformationController {
     }
 
     private void setDefaultAvatar(){
-        if(!employee.getAvatar().equals(AVATAR_DEFAULT)){
-            Path filePath = Paths.get(employee.getAvatar());
-            try {
-                Files.delete(filePath);
-            } catch (IOException e) {
-                dialogPane.showWarning("Lỗi", "Lỗi khi thay thế ảnh");
-                e.printStackTrace();
-            }
-        }
 
         employee.setAvatar(AVATAR_DEFAULT);
         EmployeeDAO.updateData(employee);
@@ -204,32 +200,18 @@ public class EmployeeInformationController {
 
         if (selectedFile != null) {
             try {
-                // Kiểm tra thư mục đích có tồn tại không
-                File targetDir = new File("target/classes/iuh/fit/imgs");
-                if (!targetDir.exists()) {
-                    dialogPane.showWarning("Lỗi", "Không tìm thấy thư mục lưu");
-                    return;
-                }
-                //Xóa ảnh cũ
-                if(!employee.getAvatar().equals(AVATAR_DEFAULT)){
-                    Path filePath = Paths.get(employee.getAvatar());
-                    try {
-                            Files.delete(filePath);
-                    } catch (IOException e) {
-                        dialogPane.showWarning("Lỗi", "Lỗi khi thay thế ảnh");
-                        e.printStackTrace();
-                    }
-                }
                 Path sourcePath = selectedFile.toPath();
-                Path targetPath = Paths.get("target/classes/iuh/fit/imgs", selectedFile.getName());
-                resizeAndCopyImage(sourcePath.toString(), targetPath.toString(), 100, 100);
 
-                String finalpath = targetPath.toString().replace("\\", "/");
-                employee.setAvatar(finalpath);
+                File img = resizeImage(sourcePath.toString());
+
+                String base64 = ConvertImage.encodeImageToBase64(img);
+
+                employee.setAvatar(base64);
 
                 Employee newEmp = employee;
                 EmployeeDAO.updateData(employee);
                 mainController.getAccount().setEmployee(newEmp);
+
 
                 dialogPane.showInformation("Thành công", "Đổi ảnh đại diện thành công");
 
@@ -245,90 +227,45 @@ public class EmployeeInformationController {
     }
 
 
-    public void resizeAndCopyImage(String sourcePath, String targetPath, int targetWidth, int targetHeight) {
+    public File resizeImage(String sourcePath) {
         try {
             BufferedImage originalImage = ImageIO.read(new File(sourcePath));
 
-            int originalWidth = originalImage.getWidth();
-            int originalHeight = originalImage.getHeight();
+            final int TARGET_WIDTH = 100;
+            final int TARGET_HEIGHT = 100;
 
-            double widthRatio = (double) targetWidth / originalWidth;
-            double heightRatio = (double) targetHeight / originalHeight;
-            double ratio = Math.min(widthRatio, heightRatio);
+            BufferedImage resizedImage = new BufferedImage(TARGET_WIDTH, TARGET_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 
-            int newWidth = (int) (originalWidth * ratio);
-            int newHeight = (int) (originalHeight * ratio);
 
-            BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
+            double widthRatio = (double) TARGET_WIDTH / originalImage.getWidth();
+            double heightRatio = (double) TARGET_HEIGHT / originalImage.getHeight();
+            double ratio = Math.max(widthRatio, heightRatio);
+
+            int intermediateWidth = (int) (originalImage.getWidth() * ratio);
+            int intermediateHeight = (int) (originalImage.getHeight() * ratio);
+
+            int x = (intermediateWidth - TARGET_WIDTH) / 2;
+            int y = (intermediateHeight - TARGET_HEIGHT) / 2;
+
             Graphics2D g2d = resizedImage.createGraphics();
+            configureGraphicsQuality(g2d);
 
-            g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-            g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
-            g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-
-            g2d.setComposite(AlphaComposite.Clear);
-            g2d.fillRect(0, 0, newWidth, newHeight);
-
-            g2d.setComposite(AlphaComposite.Src);
-
-            BufferedImage tempImage = originalImage;
-            double currentWidth = originalWidth;
-            double currentHeight = originalHeight;
-
-            while (currentWidth > newWidth * 1.1 || currentHeight > newHeight * 1.1) {
-                currentWidth *= 0.7;
-                currentHeight *= 0.7;
-
-                BufferedImage tempResized = new BufferedImage((int)currentWidth, (int)currentHeight, BufferedImage.TYPE_INT_ARGB);
-                Graphics2D tempG2D = tempResized.createGraphics();
-
-                tempG2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-                tempG2D.drawImage(tempImage, 0, 0, (int)currentWidth, (int)currentHeight, null);
-                tempG2D.dispose();
-
-                tempImage = tempResized;
-            }
-
-            g2d.drawImage(tempImage, 0, 0, newWidth, newHeight, null);
+            g2d.drawImage(originalImage, -x, -y, intermediateWidth, intermediateHeight, null);
             g2d.dispose();
 
-            Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName(
-                    targetPath.substring(targetPath.lastIndexOf(".") + 1).toLowerCase());
+            File outputFile = File.createTempFile("resized_", ".png");
+            ImageIO.write(resizedImage, "png", outputFile);
+            return outputFile;
 
-            if (writers.hasNext()) {
-                ImageWriter writer = writers.next();
-                ImageWriteParam param = writer.getDefaultWriteParam();
-
-                if (param.canWriteCompressed()) {
-                    param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-                    param.setCompressionQuality(0.95f);
-                }
-
-                ImageOutputStream output = ImageIO.createImageOutputStream(new File(targetPath));
-                writer.setOutput(output);
-
-                IIOImage image = new IIOImage(resizedImage, null, null);
-                writer.write(null, image, param);
-
-                output.close();
-                writer.dispose();
-            } else {
-                ImageIO.write(resizedImage,
-                        targetPath.substring(targetPath.lastIndexOf(".") + 1).toLowerCase(),
-                        new File(targetPath));
-            }
-
-            System.out.println("Đã resize và copy ảnh thành công!");
-            System.out.println("Kích thước mới: " + newWidth + "x" + newHeight);
-
-        } catch (Exception e) {
-            System.err.println("Lỗi khi resize và copy ảnh: " + e.getMessage());
-            e.printStackTrace();
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException("Lỗi khi resize ảnh: " + e.getMessage(), e);
         }
     }
 
-
+    private void configureGraphicsQuality(Graphics2D g2d) {
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+    }
 }

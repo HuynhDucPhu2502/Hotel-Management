@@ -2,6 +2,7 @@ package iuh.fit.controller.features;
 
 import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
+import iuh.fit.utils.ConvertImage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,7 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -226,42 +227,14 @@ public class MenuController {
 
 
 
-    public void loadData(Account account) {
-
-        System.out.println(account.getEmployee());
-        String path = account.getEmployee().getAvatar();
-
-        int index = path.indexOf("/iuh");
-        if (index != -1) {
-            path = path.substring(index);
-        } else {
-            return;
-        }
-
-        try {
-            URL resourceUrl = getClass().getResource(path);
-
-            System.out.println(path);
-            System.out.println(resourceUrl);
-
-
-            if (resourceUrl == null || path == null) {
-                System.err.println("Không tìm thấy file ảnh: " + path);
-                return;
-            }
-
-            Image image = new Image(resourceUrl.toExternalForm());
-            if (image.isError()) {
-                System.err.println("Lỗi load ảnh: " + image.getException());
-                return;
-            }
-
+    public void loadData(Account account) throws Exception {
+        String base64 = account.getEmployee().getAvatar();
+        File img = ConvertImage.decodeBase64ToImage(base64);
+        if (img != null && img.exists()) {
+            Image image = new Image(img.toURI().toString());
             avatar.setFill(new ImagePattern(image));
-            System.out.println("Load ảnh thành công!");
-
-        } catch (Exception e) {
-            System.err.println("Lỗi: " + e.getMessage());
-            e.printStackTrace();
+        } else {
+            System.err.println("Không thể tạo ảnh từ Base64 hoặc file không tồn tại.");
         }
 
         employeePositionText.setText(account.getEmployee().getPosition().toString());
