@@ -4,6 +4,8 @@ import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
 import iuh.fit.utils.ConvertImage;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -260,34 +262,22 @@ public class MenuController {
     }
 
     private void openHelpCenter() {
-        String helpFilePath = Objects.requireNonNull(getClass().getResource(
-                "/iuh/fit/help-center-website/html/index.html"
-        )).toExternalForm();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/HelpCenterWebUI.fxml"));
 
-        if (helpFilePath != null) {
-            WebView webView = new WebView();
-            WebEngine engine = webView.getEngine();
-            engine.load(helpFilePath);
+            Parent root = fxmlLoader.load();
 
-            // URL Label
-            Label locationLabel = new Label();
-            locationLabel.textProperty().bind(engine.locationProperty());
+            Stage stage = new Stage();
+            stage.setTitle("Trung tâm hỗ trợ");
+            stage.setScene(new Scene(root));
+            stage.setHeight(800);
+            stage.setWidth(1000);
 
-            Stage helpStage = new Stage();
-            helpStage.initModality(Modality.APPLICATION_MODAL); // Chặn tương tác với cửa sổ chính
-            helpStage.setTitle("Help Center");
-
-            VBox vbox = new VBox(10, locationLabel, webView);
-            Scene scene = new Scene(vbox, 800, 600);
-            helpStage.setScene(scene);
-
-            helpStage.show();
-        } else {
-            throw new IllegalArgumentException("Không tìm thấy file HTML");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-
-
 
     public Button getDashBoardBtn() {
         return dashBoardBtn;
