@@ -1,7 +1,6 @@
 package iuh.fit.controller.features;
 
 import iuh.fit.models.Account;
-import iuh.fit.models.Employee;
 import iuh.fit.utils.ConvertImage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,18 +16,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.net.URI;
-import java.net.URL;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class MenuController {
     @FXML
@@ -225,12 +219,10 @@ public class MenuController {
         helpBtn.setOnAction(e -> openHelpCenter());
     }
 
-
-
     public void loadData(Account account) throws Exception {
         String base64 = account.getEmployee().getAvatar();
         File img = ConvertImage.decodeBase64ToImage(base64);
-        if (img != null && img.exists()) {
+        if (img.exists()) {
             Image image = new Image(img.toURI().toString());
             avatar.setFill(new ImagePattern(image));
         } else {
@@ -353,10 +345,6 @@ public class MenuController {
 
     public Button getBackupBtn() {
         return backupBtn;
-    }
-
-    public Circle getAvatar(){
-        return avatar;
     }
 
 }

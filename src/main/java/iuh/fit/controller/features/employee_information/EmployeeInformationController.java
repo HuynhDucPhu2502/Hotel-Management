@@ -5,39 +5,27 @@ import iuh.fit.controller.MainController;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.utils.ConvertImage;
+import iuh.fit.utils.GlobalConstants;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Side;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.ImagePattern;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.format.DateTimeFormatter;
-import java.util.Base64;
-import java.util.Iterator;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class EmployeeInformationController {
     @FXML
@@ -58,10 +46,6 @@ public class EmployeeInformationController {
     private Employee employee;
     private MainController mainController;
 
-    private static String AVATAR_DEFAULT = "iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAABRElEQVRIieXVSU/CQAAF4P7/EyfE4MkAmiBcBEwgokhAIwGUxi40gGA3QAmdtudnW1MMURjpcvLwkqYzed/MNJMy9kpBnGH+EfDxBmsxgr2cOM9ydIClCSBcBaSfA+llvZj9c1hi7QsMA1gav1X8I8952ItxcIDwld3l/m6kmxDAvtX7wKAYL0AGF3HvoBAcMNkCHeDKIQD+ig4MQ3xka9ymAtasEwLQBTpAuWyUmyyDsMXdwMvl3vI/AArWUvP38m4W61E7PEAUAbN6Ckb3u9zoZfBaS8KQuSgAzgGOIZYTHjStH0EsJTC9TnljgQFTFbES76C3M1AbJ1AaaW/Vk2oSym3ae+eOuXPcuVTA1CXnTDt4Z6ub0kOitU6xfCphNWxt7YwxVQHzx/zBhbS4nabzL2HmD7nIyzfI/RmYuMr9xA58As9AE1gjSRApAAAAAElFTkSuQmCC";
-    private static String DEFAULT_PATH = "avatar";
-
-    private static final String[] IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".bmp"};
     public void initialize() {
 
     }
@@ -178,8 +162,7 @@ public class EmployeeInformationController {
     }
 
     private void setDefaultAvatar(){
-
-        employee.setAvatar(AVATAR_DEFAULT);
+        employee.setAvatar(GlobalConstants.DEFAULT_AVATAR_BASE64);
         EmployeeDAO.updateData(employee);
 
         mainController.getAccount().setEmployee(employee);

@@ -7,7 +7,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Base64;
 
 public class ConvertImage {
@@ -17,8 +16,7 @@ public class ConvertImage {
             if (imageBytes.length == 0) {
                 throw new IOException("File rỗng: " + imageFile.getAbsolutePath());
             }
-            String base64String = Base64.getEncoder().encodeToString(imageBytes);
-            return base64String;
+            return Base64.getEncoder().encodeToString(imageBytes);
 
         } catch (IOException e) {
             System.err.println("Lỗi khi đọc/chuyển đổi file: " + e.getMessage());
