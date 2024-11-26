@@ -141,7 +141,7 @@ public class MainController {
 
             menuController.getBackupBtn().setOnAction(event -> loadPanel("/iuh/fit/view/features/backup_restore_database/Backup_Restore_Panel.fxml", this, account));
 
-            menuController.getBackupBtn().setOnAction(event -> loadPanel("/iuh/fit/view/features/backup/BackupPanel.fxml", this, account));
+
 
         }
     }
