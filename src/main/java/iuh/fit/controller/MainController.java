@@ -1,5 +1,6 @@
 package iuh.fit.controller;
 
+import iuh.fit.controller.features.DashboardController;
 import iuh.fit.controller.features.MenuController;
 
 import iuh.fit.controller.features.employee.ShiftManagerController;
@@ -42,12 +43,29 @@ public class MainController {
         if (account == null) throw new IllegalArgumentException("Tài khoản không tồn tại");
 
         this.account = account;
+        initializeDashboard();
         initializeMenuBar();
     }
 
     public void setShift(Shift shift){
         this.shift = shift;
     }
+
+    public void initializeDashboard() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/DashboardPanel.fxml"));
+            AnchorPane dashboardLayout = loader.load();
+
+            DashboardController dashboardController = loader.getController();
+            dashboardController.setupContext(account, this);
+
+            mainPanel.getChildren().clear();
+            mainPanel.getChildren().addAll(dashboardLayout.getChildren());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void initializeMenuBar() {
         try {
@@ -85,77 +103,81 @@ public class MainController {
 
         // xử lý sự kiện hiện giao diện cho cả lễ tân và quản lý
         // Dashboard
-        menuController.getDashBoardBtn().setOnAction(e -> loadPanel("/iuh/fit/view/features/DashboardPanel.fxml"));
+        menuController.getDashBoardBtn().setOnAction(e -> loadPanel("/iuh/fit/view/features/DashboardPanel.fxml", this, account));
         // Room
-        menuController.getRoomSearchingButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/RoomSearchingPanel.fxml"));
-        menuController.getRoomBookingButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/RoomBookingPanel.fxml"));
+        menuController.getRoomSearchingButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/RoomSearchingPanel.fxml", this, account));
+        menuController.getRoomBookingButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/RoomBookingPanel.fxml", this, account));
         // Invoice
-        menuController.getInvoiceManagerBtn().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/InvoiceManagerPanel.fxml"));
+        menuController.getInvoiceManagerBtn().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/InvoiceManagerPanel.fxml", this, account));
         // Hotel Service
-        menuController.getHotelServiceSearchingButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/HotelServiceSearchingPanel.fxml"));
+        menuController.getHotelServiceSearchingButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/HotelServiceSearchingPanel.fxml", this, account));
         // Customer
-        menuController.getCustomerSearchingButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/customer/CustomerSearchingPanel.fxml"));
-        menuController.getCustomerManagerButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/customer/CustomerManagerPanel.fxml"));
+        menuController.getCustomerSearchingButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/customer/CustomerSearchingPanel.fxml", this, account));
+        menuController.getCustomerManagerButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/customer/CustomerManagerPanel.fxml", this, account));
         // Statistics
-        menuController.getRevenueStatisticsButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml"));
-        menuController.getRateUsingRoomButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/RateUsingRoomStatisticsPanel.fxml"));
+        menuController.getRevenueStatisticsButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml", this, account));
+        menuController.getRateUsingRoomButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/RateUsingRoomStatisticsPanel.fxml", this, account));
         // Employee Information
-        menuController.getEmployeeInformationContainer().setOnMouseClicked(event -> loadPanel("/iuh/fit/view/features/employee_information/EmployeeInformationPanel.fxml"));
+        menuController.getEmployeeInformationContainer().setOnMouseClicked(event -> loadPanel("/iuh/fit/view/features/employee_information/EmployeeInformationPanel.fxml", this, account));
 
         // Thêm các sự kiện xử lý giao diện cho quản lý
-        if (position.equals(Position.MANAGER))
-        {
+        if (position.equals(Position.MANAGER)) {
             // Employee
-            menuController.getEmployeeManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/employee/EmployeeManagerPanel.fxml"));
-            menuController.getAccountOfEmployeeManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/employee/AccountManagerPanel.fxml"));
-            menuController.getShiftManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/employee/ShiftManagerPanel.fxml"));
-            menuController.getEmployeeSearchingButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/employee/EmployeeSearchingPanel.fxml"));
+            menuController.getEmployeeManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/employee/EmployeeManagerPanel.fxml", this, account));
+            menuController.getAccountOfEmployeeManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/employee/AccountManagerPanel.fxml", this, account));
+            menuController.getShiftManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/employee/ShiftManagerPanel.fxml", this, account));
+            menuController.getEmployeeSearchingButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/employee/EmployeeSearchingPanel.fxml", this, account));
             // Room
-            menuController.getPricingManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/PricingManagerPanel.fxml"));
-            menuController.getRoomCategoryManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/RoomCategoryManagerPanel.fxml"));
-            menuController.getRoomManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/RoomManagerPanel.fxml"));
+            menuController.getPricingManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/PricingManagerPanel.fxml", this, account));
+            menuController.getRoomCategoryManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/RoomCategoryManagerPanel.fxml", this, account));
+            menuController.getRoomManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/room/RoomManagerPanel.fxml", this, account));
             // Hotel Service
-            menuController.getServiceCategoryManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/ServiceCategoryManagerPanel.fxml"));
-            menuController.getHotelServiceManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml"));
+            menuController.getServiceCategoryManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/ServiceCategoryManagerPanel.fxml", this, account));
+            menuController.getHotelServiceManagerButton().setOnAction(event -> loadPanel("/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml", this, account));
             // Statistics
-            menuController.getRevenueStatisticsButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml"));
-            menuController.getRateUsingRoomButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/RateUsingRoomStatisticsPanel.fxml"));
+            menuController.getRevenueStatisticsButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml", this, account));
+            menuController.getRateUsingRoomButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/RateUsingRoomStatisticsPanel.fxml", this, account));
             // Settings
+
             menuController.getBackupBtn().setOnAction(event -> loadPanel("/iuh/fit/view/features/backup_restore_database/Backup_Restore_Panel.fxml"));
+
+            menuController.getBackupBtn().setOnAction(event -> loadPanel("/iuh/fit/view/features/backup/BackupPanel.fxml", this, account));
+
         }
     }
 
-    private void loadPanel(String fxmlPath) {
+    public void loadPanel(String fxmlPath, MainController mainController, Account account) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             AnchorPane layout = loader.load();
-            if (fxmlPath.contains("RoomBookingPanel")) {
-                RoomBookingController roomBookingController = loader.getController();
+
+            // Lấy controller của giao diện được load và truyền các tham số cần thiết
+            Object controller = loader.getController();
+            if (controller instanceof RoomBookingController) {
+                ((RoomBookingController) controller).setupContext(mainController, account.getEmployee());
+            } else if (controller instanceof InvoiceManagerController) {
                 Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
-                roomBookingController.setupContext(this, employee);
-            } else if (fxmlPath.contains("InvoiceManagerPanel")) {
-                InvoiceManagerController invoiceManagerController = loader.getController();
+                ((InvoiceManagerController) controller).setupContext(mainController, employee);
+            } else if (controller instanceof ShiftManagerController) {
                 Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
-                invoiceManagerController.setupContext(this, employee);
-            } else if (fxmlPath.contains("ShiftManagerPanel")) {
-                ShiftManagerController shiftManagerController = loader.getController();
-                Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
-                shiftManagerController.setupContext(employee);
-                shiftManagerController.setUpCurrentShift(shift);
-            } else if (fxmlPath.contains("EmployeeInformation")) {
-                EmployeeInformationController employeeInformationController = loader.getController();
-                Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
-                employeeInformationController.setupContext(employee, this);
+                ((ShiftManagerController) controller).setupContext(employee);
+                ((ShiftManagerController) controller).setUpCurrentShift(shift);
+            } else if (controller instanceof EmployeeInformationController) {
+                ((EmployeeInformationController) controller).setupContext(account.getEmployee(), mainController);
+            } else if (controller instanceof DashboardController) {
+                ((DashboardController) controller).setupContext(account, mainController);
             }
 
             ROOM_BOOKING_LOADED = fxmlPath.contains("RoomBookingPanel");
 
+            // Thay đổi giao diện trong mainPanel
             mainPanel.getChildren().clear();
             mainPanel.getChildren().addAll(layout.getChildren());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     public AnchorPane getMainPanel() {
         return mainPanel;
@@ -172,4 +194,5 @@ public class MainController {
     public static void setRoomBookingLoaded(boolean roomBookingLoaded) {
         ROOM_BOOKING_LOADED = roomBookingLoaded;
     }
+
 }

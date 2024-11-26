@@ -2,6 +2,7 @@ package iuh.fit.dao;
 
 import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
+import iuh.fit.security.PasswordHashing;
 import iuh.fit.utils.*;
 
 import java.sql.Connection;
@@ -18,7 +19,7 @@ public class AccountDAO {
                 "a.status, b.employeeID, b.fullName, " +
                 "b.phoneNumber, b.email, b.address, " +
                 "b.gender, b.idCardNumber, b.dob, " +
-                "b.position " +
+                "b.position, b.avatar " +
                 "FROM Account a INNER JOIN Employee b " +
                 "ON a.employeeID = b.employeeID";
         try (Connection connection = DBHelper.getConnection();
@@ -40,7 +41,7 @@ public class AccountDAO {
                 "a.status, b.employeeID, b.fullName, " +
                 "b.phoneNumber, b.email, b.address, " +
                 "b.gender, b.idCardNumber, b.dob, " +
-                "b.position " +
+                "b.position, b.avatar " +
                 "FROM Account a INNER JOIN Employee b " +
                 "ON a.employeeID = b.employeeID " +
                 "WHERE a.userName = ?";
@@ -318,6 +319,7 @@ public class AccountDAO {
         employee.setIdCardNumber(rs.getString(11));
         employee.setDob(ConvertHelper.localDateConverter(rs.getDate(12)));
         employee.setPosition(ConvertHelper.positionConverter(rs.getString(13)));
+        employee.setAvatar(rs.getString(14));
 
         account.setEmployee(employee);
         return account;

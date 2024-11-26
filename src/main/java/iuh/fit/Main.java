@@ -31,6 +31,7 @@ public class Main extends Application {
         RoomStatusHelper.startAutoCheckoutScheduler();
 
         startWithoutLogin(primaryStage);
+
         //startWithLogin(primaryStage);
 
         // check if we have 30 backup dif already
@@ -40,6 +41,32 @@ public class Main extends Application {
 
         // handle backup event when slose the app
         primaryStage.setOnCloseRequest(event -> {
+
+//        startWithLogin(primaryStage);
+
+        primaryStage.setOnCloseRequest(event -> backupData(primaryStage));
+    }
+
+    private void backupData(Stage primaryStage){
+        String defaultBackupName = "/HotelBackup-" + LocalDate.now() + "-Full.bak";
+        String defaultZipBackupName = "/HotelBackup-" + LocalDate.now() + "-Full.zip";
+        String zipFilePath;
+        String filePath = FilePathManager.getPath(
+                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
+                PreferencesKey.DEFAULT_FILE_PATH).equalsIgnoreCase(PreferencesKey.DEFAULT_FILE_PATH)
+                ? null
+                : FilePathManager.getPath(
+                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
+                PreferencesKey.DEFAULT_FILE_PATH) + defaultBackupName;
+
+        if(filePath == null) return;
+        else zipFilePath = FilePathManager.getPath(
+                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
+                PreferencesKey.DEFAULT_FILE_PATH) + defaultZipBackupName;
+
+        if(FilePathManager.getPath(PreferencesKey.BACK_UP_FORM_KEY, PreferencesKey.DEFAULT_FILE_PATH)
+                .equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_AUTO_VALUE))
+
             try {
                 BackupDatabase.backupData(primaryStage);
             } catch (SQLException e) {

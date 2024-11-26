@@ -12,7 +12,7 @@ import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 
-import iuh.fit.utils.PasswordHashing;
+import iuh.fit.security.PasswordHashing;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

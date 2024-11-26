@@ -26,7 +26,7 @@
          <bottom>
             <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <image>
-                  <Image url="@../../../../icons/room_item_icons/ic_available.png" />
+                  <Image url="@../../../../icons/room_status_item_icons/ic_available.png" />
                </image>
             </ImageView>
          </bottom>

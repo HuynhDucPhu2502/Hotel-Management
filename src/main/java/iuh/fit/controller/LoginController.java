@@ -10,7 +10,7 @@ import iuh.fit.models.Shift;
 import iuh.fit.models.enums.AccountStatus;
 import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ErrorMessages;
-import iuh.fit.utils.PasswordHashing;
+import iuh.fit.security.PasswordHashing;
 import iuh.fit.utils.RegexChecker;
 import javafx.animation.*;
 import javafx.event.ActionEvent;

@@ -7,6 +7,7 @@ import iuh.fit.controller.features.room.creating_reservation_form_controllers.Ro
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOverDueController;
 import iuh.fit.controller.features.room.group_booking_controllers.GroupBookingController;
 import iuh.fit.dao.RoomCategoryDAO;
+import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.RoomWithReservationDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Room;
@@ -26,6 +27,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -120,22 +122,11 @@ public class RoomBookingController {
     }
 
     private void loadDataForBtn() {
+        HashMap<RoomStatus, Integer> roomStatusCount = RoomDAO.getRoomStatusCount();
+        availableBtn.setText(ROOM_BOOKING_AVAIL_BTN + "("+ roomStatusCount.get(RoomStatus.AVAILABLE) + ")");
+        onUseBtn.setText(ROOM_BOOKING_ON_USE_BTN + "("+ roomStatusCount.get(RoomStatus.ON_USE) + ")");
+        overDueBtn.setText(ROOM_BOOKING_OVER_DUE_BTN + "("+ roomStatusCount.get(RoomStatus.OVERDUE) + ")");
         allBtn.setText(ROOM_BOOKING_ALL_BTN + "("+roomWithReservations.size()+")");
-
-        List<RoomWithReservation> availableRoom = roomWithReservations.stream()
-                .filter(r -> r.getRoom().getRoomStatus() == RoomStatus.AVAILABLE)
-                .toList();
-        availableBtn.setText(ROOM_BOOKING_AVAIL_BTN + "("+availableRoom.size()+")");
-
-        List<RoomWithReservation> onUseRoom = roomWithReservations.stream()
-                .filter(r -> r.getRoom().getRoomStatus() == RoomStatus.ON_USE)
-                .toList();
-        onUseBtn.setText(ROOM_BOOKING_ON_USE_BTN + "("+onUseRoom.size()+")");
-
-        List<RoomWithReservation> overDueRoom = roomWithReservations.stream()
-                .filter(r -> r.getRoom().getRoomStatus() == RoomStatus.OVERDUE)
-                .toList();
-        overDueBtn.setText(ROOM_BOOKING_OVER_DUE_BTN + "("+overDueRoom.size()+")");
     }
 
     private void displayFilteredRooms(List<RoomWithReservation> roomsWithReservations) {

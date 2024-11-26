@@ -5,7 +5,7 @@ import iuh.fit.controller.MainController;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
-import iuh.fit.utils.PasswordHashing;
+import iuh.fit.security.PasswordHashing;
 import iuh.fit.utils.RegexChecker;
 import javafx.application.Platform;
 import javafx.fxml.FXML;

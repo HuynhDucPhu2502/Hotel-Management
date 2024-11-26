@@ -92,7 +92,7 @@
                                                    <children>
                                                       <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@../../../../icons/ic_create_reservation_form.png" />
+                                                            <Image url="@../../../../icons/room_booking_menu_icons/ic_create_reservation_form.png" />
                                                          </image>
                                                       </ImageView>
                                                    </children>
@@ -118,7 +118,7 @@
                                                    <children>
                                                       <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@../../../../icons/ic_view_reservation_form.png" />
+                                                            <Image url="@../../../../icons/room_booking_menu_icons/ic_view_reservation_form.png" />
                                                          </image>
                                                       </ImageView>
                                                    </children>
@@ -144,7 +144,7 @@
                                                    <children>
                                                       <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@../../../../icons/ic_add_services.png" />
+                                                            <Image url="@../../../../icons/room_booking_menu_icons/ic_add_services.png" />
                                                          </image>
                                                       </ImageView>
                                                    </children>
@@ -170,7 +170,7 @@
                                                    <children>
                                                       <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@../../../../icons/ic_room_changing.png" />
+                                                            <Image url="@../../../../icons/room_booking_menu_icons/ic_room_changing.png" />
                                                          </image>
                                                       </ImageView>
                                                    </children>
