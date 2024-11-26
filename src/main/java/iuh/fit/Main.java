@@ -4,10 +4,7 @@ import iuh.fit.controller.MainController;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.models.Account;
 import iuh.fit.security.PreferencesKey;
-import iuh.fit.utils.BackupDatabase;
-import iuh.fit.utils.CompressFile;
-import iuh.fit.utils.FilePathManager;
-import iuh.fit.utils.RoomStatusHelper;
+import iuh.fit.utils.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -21,74 +18,34 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Optional;
 
 @SuppressWarnings("unused")
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
+    public void start(Stage primaryStage) throws IOException, SQLException {
         RoomStatusHelper.startAutoCheckoutScheduler();
 
-//        startWithoutLogin(primaryStage);
-        startWithLogin(primaryStage);
+        startWithoutLogin(primaryStage);
+        //startWithLogin(primaryStage);
+
+        // check if we have 30 backup dif already
+        // if > 30, backupfull with the day nearest the backupfule file
+        // and remove this file
+        // BackupDatabase.checkNumOfBackupFile();
 
         // handle backup event when slose the app
-        primaryStage.setOnCloseRequest(event -> backupData(primaryStage));
-    }
-
-    // handle backup event when slose the app
-    private void backupData(Stage primaryStage){
-        String defaultBackupName = "/HotelBackup-" + LocalDate.now() + "-Full.bak";
-        String defaultZipBackupName = "/HotelBackup-" + LocalDate.now() + "-Full.zip";
-        String zipFilePath;
-        String filePath = FilePathManager.getPath(
-                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
-                PreferencesKey.DEFAULT_FILE_PATH).equalsIgnoreCase(PreferencesKey.DEFAULT_FILE_PATH)
-                ? null
-                : FilePathManager.getPath(
-                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
-                PreferencesKey.DEFAULT_FILE_PATH) + defaultBackupName;
-
-        if(filePath == null) return;
-        else zipFilePath = FilePathManager.getPath(
-                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
-                PreferencesKey.DEFAULT_FILE_PATH) + defaultZipBackupName;
-
-        if(FilePathManager.getPath(PreferencesKey.BACK_UP_FORM_KEY, PreferencesKey.DEFAULT_FILE_PATH)
-                .equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_AUTO_VALUE))
+        primaryStage.setOnCloseRequest(event -> {
             try {
-                BackupDatabase.backupDatabase(filePath);
-                if(FilePathManager.getPath(PreferencesKey.BACKUP_COMPRESS_FILE, PreferencesKey.DEFAULT_VALUE)
-                        .equalsIgnoreCase("1")){
-                    CompressFile.compressWithPassword(filePath, zipFilePath, null);
-                    new File(filePath).delete();
-                }
+                BackupDatabase.backupData(primaryStage);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        else if(FilePathManager.getPath(PreferencesKey.BACK_UP_FORM_KEY, PreferencesKey.DEFAULT_FILE_PATH)
-                .equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_WARNING_VALUE)){
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("logout");
-            alert.setHeaderText("logout ne");
-            alert.setContentText("do you wanana logout");
-
-            if(alert.showAndWait().get() == ButtonType.OK){
-                try {
-                    BackupDatabase.backupDatabase(filePath);
-                    if(FilePathManager.getPath(PreferencesKey.BACKUP_COMPRESS_FILE, PreferencesKey.DEFAULT_VALUE)
-                            .equalsIgnoreCase("1")){
-                        CompressFile.compressWithPassword(filePath, zipFilePath, null);
-                        new File(filePath).delete();
-                    }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            }else{
-                System.exit(0);
-            }
-        }
-        System.exit(0);
+        });
     }
 
     // Khởi động chương trình không cần đăng nhập

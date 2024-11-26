@@ -7,6 +7,7 @@ public class PreferencesKey {
     public static final String  DEFAULT_FILE_PATH = "C:/Users/Default";
     // key for backup data address
     public static final String BACK_UP_DATA_FILE_ADDRESS_KEY = "BACK_UP_DATA";
+    public static final String BACK_UP_FULL_HAND_ADDRESS_KEY = "BACK_UP_FULL_HAND_DATA";
 
     public static final String BACK_UP_FORM_KEY = "BACK_UP_FORM";
     public static final String BACK_UP_FORM_AUTO_VALUE = "AUTO";
@@ -19,5 +20,10 @@ public class PreferencesKey {
     public static final String EXPORT_SERVICE_STATISTIC = "SERVICE";
     public static final String EXPORT_ROOM_STATISTIC = "ROOM";
 
+    public static final String RESTORE_FILE = "RESTORE_FILE";
+
+    public static final String CURRENT_USING_DATA = "CURRENT_USING_DATA";
+
+    public static final String USING_BACKUP_FUCTION = "USING_BACKUP_FUCTION";
 
 }

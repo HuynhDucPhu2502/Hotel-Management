@@ -121,7 +121,7 @@ public class MainController {
             menuController.getRevenueStatisticsButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml"));
             menuController.getRateUsingRoomButton().setOnAction(e -> loadPanel("/iuh/fit/view/features/statistics/RateUsingRoomStatisticsPanel.fxml"));
             // Settings
-            menuController.getBackupBtn().setOnAction(event -> loadPanel("/iuh/fit/view/features/backup/BackupPanel.fxml"));
+            menuController.getBackupBtn().setOnAction(event -> loadPanel("/iuh/fit/view/features/backup_restore_database/Backup_Restore_Panel.fxml"));
         }
     }
 
