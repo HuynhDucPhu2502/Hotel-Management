@@ -1,9 +1,15 @@
 package iuh.fit.controller.features.room;
 
+import iuh.fit.controller.MainController;
+import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomDAO;
+import iuh.fit.dao.RoomWithReservationDAO;
+import iuh.fit.models.Account;
+import iuh.fit.models.Customer;
 import iuh.fit.models.Room;
 import iuh.fit.models.enums.RoomStatus;
+import iuh.fit.models.wrapper.RoomWithReservation;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -13,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -52,6 +59,14 @@ public class RoomSearchingController {
     private Button resetBtn;
 
     private ObservableList<Room> items;
+
+    private MainController mainController;
+    private Account account;
+
+    public void setupContext(MainController mainController, Account account) {
+        this.mainController = mainController;
+        this.account = account;
+    }
 
     public void initialize() {
         loadData();
@@ -105,6 +120,52 @@ public class RoomSearchingController {
         });
 
         roomTableView.setItems(items);
+        setupTableContextMenu();
+    }
+
+    private void setupTableContextMenu() {
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem editMenuItem = new MenuItem("Chỉnh sửa");
+        MenuItem editMenuItem1 = new MenuItem("Quản lý đặt phòng");
+
+        editMenuItem.setOnAction(event -> {
+            Room room = roomTableView.getSelectionModel().getSelectedItem();
+            if (room != null) {
+                try {
+                    handleEditRoom(room);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        editMenuItem1.setOnAction(event -> {
+            Room room = roomTableView.getSelectionModel().getSelectedItem();
+            if (room != null) {
+                try {
+                    handleCreateReservationForm(room);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        contextMenu.getItems().addAll(editMenuItem, editMenuItem1);
+        roomTableView.setContextMenu(contextMenu);
+    }
+
+    private void handleEditRoom(Room room) throws IOException {
+        mainController.loadPanelRoomManagerController("/iuh/fit/view/features/room/RoomManagerPanel.fxml", mainController, account, room);
+    }
+
+    private void handleCreateReservationForm(Room room) throws IOException {
+        List<RoomWithReservation> roomWithReservationsList = RoomWithReservationDAO.getRoomWithReservation();
+        RoomWithReservation roomWithReservations = roomWithReservationsList.stream()
+                .filter(x -> x.getRoom().getRoomID().equals(room.getRoomID()))
+                .findFirst()
+                .orElse(null);
+
+        mainController.loadPanelCreateReservationFormController("/iuh/fit/view/features/room/creating_reservation_form_panels/CreateReservationFormPanel.fxml", mainController, account, roomWithReservations);
     }
 
     private void handleResetAction() {
