@@ -1,7 +1,10 @@
 package iuh.fit.controller.features.customer;
 
+import iuh.fit.controller.MainController;
 import iuh.fit.dao.CustomerDAO;
+import iuh.fit.models.Account;
 import iuh.fit.models.Customer;
+import iuh.fit.models.Employee;
 import iuh.fit.models.enums.Gender;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -59,6 +62,14 @@ public class CustomerSearchingController {
 
     private ObservableList<Customer> items;
 
+    MainController mainController;
+    Account account;
+
+    public void setupContext(MainController mainController, Account account) {
+        this.mainController = mainController;
+        this.account = account;
+    }
+
     public void initialize() {
         loadData();
         setupTable();
@@ -91,6 +102,30 @@ public class CustomerSearchingController {
         cardIDColumn.setCellValueFactory(new PropertyValueFactory<>("idCardNumber"));
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         setupActionColumn();
+        setupTableContextMenu();
+    }
+
+    private void setupTableContextMenu() {
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem editMenuItem = new MenuItem("Chỉnh sửa");
+
+        editMenuItem.setOnAction(event -> {
+            Customer employee = customerTableView.getSelectionModel().getSelectedItem();
+            if (employee != null) {
+                try {
+                    handleEditCustomer(employee);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        contextMenu.getItems().addAll(editMenuItem);
+        customerTableView.setContextMenu(contextMenu);
+    }
+
+    private void handleEditCustomer(Customer customer) throws IOException {
+        mainController.loadPanelCustomerManagerController("/iuh/fit/view/features/customer/CustomerManagerPanel.fxml", mainController, account, customer);
     }
 
     private void setupActionColumn() {

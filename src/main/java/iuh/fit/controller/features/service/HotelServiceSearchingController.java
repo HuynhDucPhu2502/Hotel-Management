@@ -1,7 +1,10 @@
 package iuh.fit.controller.features.service;
 
+import iuh.fit.controller.MainController;
 import iuh.fit.dao.HotelServiceDAO;
 import iuh.fit.dao.ServiceCategoryDAO;
+import iuh.fit.models.Account;
+import iuh.fit.models.Employee;
 import iuh.fit.models.HotelService;
 import iuh.fit.models.ServiceCategory;
 import iuh.fit.utils.ConvertHelper;
@@ -15,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,6 +57,14 @@ public class HotelServiceSearchingController {
     private Button resetBtn;
 
     private ObservableList<HotelService> items;
+
+    MainController mainController;
+    Account account;
+
+    public void setupContext(MainController mainController, Account account) {
+        this.mainController = mainController;
+        this.account = account;
+    }
 
     public void initialize() {
         loadData();
@@ -131,6 +143,7 @@ public class HotelServiceSearchingController {
         setupHotelServiceDescriptionColumn();
 
         hotelServiceTableView.setItems(items);
+        setupTableContextMenu();
     }
 
     // setup cho cột mô tả
@@ -177,6 +190,30 @@ public class HotelServiceSearchingController {
                 }
             }
         });
+    }
+
+    private void setupTableContextMenu() {
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem editMenuItem = new MenuItem("Chỉnh sửa");
+
+        editMenuItem.setOnAction(event -> {
+            HotelService service = hotelServiceTableView.getSelectionModel().getSelectedItem();
+            if (service != null) {
+                try {
+                    handleEditService(service);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        contextMenu.getItems().addAll(editMenuItem);
+        hotelServiceTableView.setContextMenu(contextMenu);
+    }
+
+    private void handleEditService(HotelService service) throws IOException {
+        mainController.loadPanelHotelServiceManagerController("/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml", mainController, account, service);
     }
 
     private void handleResetAction() {

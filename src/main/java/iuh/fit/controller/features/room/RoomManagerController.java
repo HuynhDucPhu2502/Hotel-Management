@@ -7,6 +7,7 @@ import iuh.fit.models.Room;
 import iuh.fit.models.RoomCategory;
 import iuh.fit.models.enums.ObjectStatus;
 import iuh.fit.models.enums.RoomStatus;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -365,5 +366,14 @@ public class RoomManagerController {
 
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void setInformation(Room room){
+        Platform.runLater(() -> {
+            roomIDSearchField.setValue(room.getRoomID());
+        });
+        Platform.runLater(() -> {
+            handleUpdateBtn(room);
+        });
     }
 }

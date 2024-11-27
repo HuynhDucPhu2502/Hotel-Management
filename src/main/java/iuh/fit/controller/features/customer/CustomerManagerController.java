@@ -371,4 +371,13 @@ public class CustomerManagerController {
         addBtn.setManaged(addButton);
         addBtn.setVisible(addButton);
     }
+
+    public void setInformation(Customer customer){
+        Platform.runLater(() -> {
+            customerIDSearchField.setValue(customer.getCustomerID());
+        });
+        Platform.runLater(() -> {
+            handleUpdateBtn(customer);
+        });
+    }
 }
