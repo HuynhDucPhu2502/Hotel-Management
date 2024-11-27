@@ -48,45 +48,6 @@ public class InvoiceDAO {
         return invoices;
     }
 
-    public static Invoice getInvoiceByID(String invoiceID) {
-        String sql = """
-            SELECT i.invoiceID, i.invoiceDate, i.roomCharge, i.servicesCharge,
-                   i.totalDue, i.netDue, t.taxID, t.taxName, t.taxRate,
-                   t.dateOfCreation, t.activate, rf.reservationFormID,
-                   rf.reservationDate, rf.checkInDate, rf.checkOutDate, rf.roomBookingDeposit,
-                   e.employeeID, e.fullName AS employeeName, e.position,
-                   c.customerID, c.fullName AS customerName, c.phoneNumber, c.email, c.idCardNumber,
-                   r.roomID, r.roomStatus, r.dateOfCreation AS roomDateOfCreation,
-                   rc.roomCategoryID, rc.roomCategoryName, rc.numberOfBed
-            FROM Invoice i
-            LEFT JOIN Tax t ON i.taxID = t.taxID
-            LEFT JOIN ReservationForm rf ON i.reservationFormID = rf.reservationFormID
-            LEFT JOIN Employee e ON rf.employeeID = e.employeeID
-            LEFT JOIN Customer c ON rf.customerID = c.customerID
-            LEFT JOIN Room r ON rf.roomID = r.roomID
-            LEFT JOIN RoomCategory rc ON r.roomCategoryID = rc.roomCategoryID
-            WHERE i.invoiceID = ?
-              AND EXISTS (
-                SELECT 1 FROM HistoryCheckIn hci WHERE hci.reservationFormID = rf.reservationFormID
-              ) AND EXISTS (
-                SELECT 1 FROM HistoryCheckOut hco WHERE hco.reservationFormID = rf.reservationFormID
-              );
-           \s""";
-
-        try (Connection connection = DBHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, invoiceID);
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                if (rs.next()) {
-                    return extractData(rs);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     public static void createData(Invoice invoice) {
         String insertSQL = "INSERT INTO Invoice(invoiceID, invoiceDate, roomCharge, servicesCharge, reservationFormID) " +
