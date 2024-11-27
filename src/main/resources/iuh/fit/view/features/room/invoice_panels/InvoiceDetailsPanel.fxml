@@ -331,6 +331,7 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                 </rowConstraints>
                                  <VBox.margin>
                                     <Insets left="80.0" right="80.0" />
@@ -354,7 +355,7 @@
                                           </Text>
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
+                                    <HBox alignment="CENTER" GridPane.rowIndex="1">
                                        <children>
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng tiền dịch vụ" textAlignment="CENTER">
                                              <font>
@@ -366,7 +367,7 @@
                                           </Text>
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER_LEFT" GridPane.rowIndex="2">
+                                    <HBox alignment="CENTER" GridPane.rowIndex="2">
                                        <children>
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng tiền phòng" textAlignment="CENTER">
                                              <font>
@@ -378,7 +379,7 @@
                                           </Text>
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER_LEFT" GridPane.rowIndex="3">
+                                    <HBox alignment="CENTER" GridPane.rowIndex="6">
                                        <children>
                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tiền đặt cọc" textAlignment="CENTER">
                                              <font>
@@ -414,7 +415,7 @@
                                           </Text>
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                    <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="6">
                                        <children>
                                           <Text fx:id="totalRoomDepositeText" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="-100" textAlignment="CENTER">
                                              <font>
@@ -426,16 +427,16 @@
                                           </Text>
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER" style="-fx-background-color: rgb(96, 139, 193);" GridPane.rowIndex="4">
+                                    <HBox alignment="CENTER" style="-fx-background-color: rgb(96, 139, 193);" GridPane.rowIndex="3">
                                        <children>
-                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng tiền">
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng tiền Trước Thuế">
                                              <font>
                                                 <Font name="System Bold" size="24.0" />
                                              </font>
                                           </Text>
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                    <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                        <children>
                                           <Text fx:id="totalDueText" strokeType="OUTSIDE" strokeWidth="0.0" text="450">
                                              <font>
@@ -447,25 +448,25 @@
                                           </Text>
                                        </children>
                                     </HBox>
+                                    <HBox alignment="CENTER" style="-fx-background-color: rgb(96, 139, 193);" GridPane.rowIndex="4">
+                                       <children>
+                                          <Text fx:id="invoiceTitleText" fill="#fffefe" strokeType="OUTSIDE" strokeWidth="0.0" text="Tiền Thuế">
+                                             <font>
+                                                <Font name="System Bold" size="24.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
                                     <HBox alignment="CENTER" style="-fx-background-color: rgb(96, 139, 193);" GridPane.rowIndex="5">
                                        <children>
-                                          <Text fx:id="invoiceTitleText" fill="#fffefe" strokeType="OUTSIDE" strokeWidth="0.0" text="Thuế ">
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng tiền Sau Thuế">
                                              <font>
                                                 <Font name="System Bold" size="24.0" />
                                              </font>
                                           </Text>
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER" style="-fx-background-color: rgb(96, 139, 193);" GridPane.rowIndex="6">
-                                       <children>
-                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Thành tiền">
-                                             <font>
-                                                <Font name="System Bold" size="24.0" />
-                                             </font>
-                                          </Text>
-                                       </children>
-                                    </HBox>
-                                    <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                    <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                        <children>
                                           <Text fx:id="taxText" strokeType="OUTSIDE" strokeWidth="0.0" text="45">
                                              <font>
@@ -477,9 +478,30 @@
                                           </Text>
                                        </children>
                                     </HBox>
-                                    <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                                    <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                        <children>
                                           <Text fx:id="netDueText" strokeType="OUTSIDE" strokeWidth="0.0" text="595">
+                                             <font>
+                                                <Font name="System Bold" size="24.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets right="10.0" />
+                                             </HBox.margin>
+                                          </Text>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" style="-fx-background-color: rgb(96, 139, 193);" GridPane.rowIndex="7">
+                                       <children>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Thành Tiền">
+                                             <font>
+                                                <Font name="System Bold" size="24.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="1" GridPane.rowIndex="7">
+                                       <children>
+                                          <Text fx:id="remaningDueText" strokeType="OUTSIDE" strokeWidth="0.0" text="595">
                                              <font>
                                                 <Font name="System Bold" size="24.0" />
                                              </font>

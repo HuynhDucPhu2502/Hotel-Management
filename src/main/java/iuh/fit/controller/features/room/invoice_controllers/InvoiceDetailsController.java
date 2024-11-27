@@ -43,7 +43,7 @@ public class InvoiceDetailsController {
     @FXML
     private Text totalServiceChargeText, totalRoomChargeText,
             totalRoomDepositeText, totalDueText, taxText,
-            netDueText, invoiceTitleText;
+            netDueText, invoiceTitleText, remaningDueText;
 
     @FXML
     private TableView<RoomUsageService> roomUsageServiceTableView;
@@ -154,12 +154,11 @@ public class InvoiceDetailsController {
         double depositAmount = invoice.getReservationForm().getRoomBookingDeposit();
         totalRoomDepositeText.setText("-" + String.format("%,.0f", depositAmount));
         totalDueText.setText(String.format("%,.0f", invoice.getTotalDue()));
-        double taxRate = invoice.getTax().getTaxRate();
-        double taxAmount = invoice.getTotalDue() * taxRate / 100;
+        double taxAmount = invoice.getTotalDue() * 0.1;
+        invoiceTitleText.setText("Thuế (10%)" );
         taxText.setText(String.format("%,.0f", taxAmount));
         netDueText.setText(String.format("%,.0f", invoice.getNetDue()));
-
-        invoiceTitleText.setText("Thuế " + "(" + taxRate * 100 + "%)");
+        remaningDueText.setText(String.format("%,.0f", invoice.getNetDue() - depositAmount));
     }
 
     // ==================================================================================================================

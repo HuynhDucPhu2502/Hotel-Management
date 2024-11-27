@@ -189,10 +189,7 @@ public class PDFHelper {
         paymentSummaryTitle.setSpacingAfter(5f);
         document.add(paymentSummaryTitle);
 
-        double totalRoomCost = invoice.getRoomCharge();
-        double deposit = invoice.getReservationForm().getRoomBookingDeposit();
-        double taxRate = invoice.getTax().getTaxRate();
-        PdfPTable totalTable = createTotalTable(invoice.getServicesCharge(), totalRoomCost, deposit, taxRate, headerFont, font);
+        PdfPTable totalTable = createTotalTable(invoice, invoice.getReservationForm().getRoomBookingDeposit(), headerFont, font);
         document.add(totalTable);
 
         document.close();
@@ -244,7 +241,7 @@ public class PDFHelper {
         return infoTable;
     }
 
-    private static PdfPTable createTotalTable(double totalServiceCost, double totalRoomCost, double deposit, double taxRate, Font headerFont, Font font) {
+    private static PdfPTable createTotalTable(Invoice invoice, double deposit, Font headerFont, Font font) {
         PdfPTable totalTable = new PdfPTable(2); // 2 columns
         totalTable.setWidthPercentage(100);
         try {
@@ -253,59 +250,72 @@ public class PDFHelper {
             e.printStackTrace();
         }
 
-        double totalDue = totalServiceCost + totalRoomCost - deposit;
-        double taxAmount = totalDue * taxRate;
-        double netDue = totalDue + taxAmount;
+        double totalRoomCharge = invoice.getRoomCharge();
+        double totalServiceCharge = invoice.getServicesCharge();
+        double totalAmountBeforeTax = totalRoomCharge + totalServiceCharge;
+        double taxAmount = totalAmountBeforeTax * 0.1;
+        double totalAfterTax = totalAmountBeforeTax + taxAmount;
+        double remainingAmount = totalAfterTax - deposit;
 
         // Header row
-        PdfPCell titleCellLeft = new PdfPCell(new Phrase("Tên tiền thanh toán", headerFont));
+        PdfPCell titleCellLeft = new PdfPCell(new Phrase("Tên khoản thanh toán", headerFont));
         titleCellLeft.setBorder(PdfPCell.BOTTOM);
         titleCellLeft.setPadding(8f);
         titleCellLeft.setHorizontalAlignment(Element.ALIGN_LEFT);
         totalTable.addCell(titleCellLeft);
 
-        PdfPCell titleCellRight = new PdfPCell(new Phrase("Số tiền", headerFont));
+        PdfPCell titleCellRight = new PdfPCell(new Phrase("Số tiền (VND)", headerFont));
         titleCellRight.setBorder(PdfPCell.BOTTOM);
         titleCellRight.setPadding(8f);
         titleCellRight.setHorizontalAlignment(Element.ALIGN_RIGHT);
         totalTable.addCell(titleCellRight);
 
-        // Dòng "Tổng tiền dịch vụ"
-        totalTable.addCell(createAlignedCell("Tổng tiền dịch vụ", font, Element.ALIGN_LEFT));
-        totalTable.addCell(createAlignedCell(String.format("%,.0f VND", totalServiceCost), font, Element.ALIGN_RIGHT));
+        // Dòng "Tiền phòng"
+        totalTable.addCell(createAlignedCell("Tiền phòng", font, Element.ALIGN_LEFT));
+        totalTable.addCell(createAlignedCell(String.format("%,.0f", totalRoomCharge), font, Element.ALIGN_RIGHT));
 
-        // Dòng "Tổng tiền phòng"
-        totalTable.addCell(createAlignedCell("Tổng tiền phòng", font, Element.ALIGN_LEFT));
-        totalTable.addCell(createAlignedCell(String.format("%,.0f VND", totalRoomCost), font, Element.ALIGN_RIGHT));
+        // Dòng "Tiền dịch vụ"
+        totalTable.addCell(createAlignedCell("Tiền dịch vụ", font, Element.ALIGN_LEFT));
+        totalTable.addCell(createAlignedCell(String.format("%,.0f", totalServiceCharge), font, Element.ALIGN_RIGHT));
+
+        // Dòng "Tổng trước thuế"
+        PdfPCell subtotalTitleCell = createAlignedCell("Tổng trước thuế", font, Element.ALIGN_LEFT);
+        subtotalTitleCell.setBorderWidthTop(1f);
+        totalTable.addCell(subtotalTitleCell);
+
+        PdfPCell subtotalCell = createAlignedCell(String.format("%,.0f", totalAmountBeforeTax), font, Element.ALIGN_RIGHT);
+        subtotalCell.setBorderWidthTop(1f);
+        totalTable.addCell(subtotalCell);
+
+        // Dòng "Thuế"
+        totalTable.addCell(createAlignedCell("Thuế (10%)", font, Element.ALIGN_LEFT));
+        totalTable.addCell(createAlignedCell(String.format("%,.0f", taxAmount), font, Element.ALIGN_RIGHT));
+
+        // Dòng "Tổng sau thuế"
+        PdfPCell totalAfterTaxTitleCell = createAlignedCell("Tổng sau thuế", headerFont, Element.ALIGN_LEFT);
+        totalAfterTaxTitleCell.setBorderWidthTop(1f);
+        totalTable.addCell(totalAfterTaxTitleCell);
+
+        PdfPCell totalAfterTaxCell = createAlignedCell(String.format("%,.0f", totalAfterTax), headerFont, Element.ALIGN_RIGHT);
+        totalAfterTaxCell.setBorderWidthTop(1f);
+        totalTable.addCell(totalAfterTaxCell);
 
         // Dòng "Tiền đặt cọc"
         totalTable.addCell(createAlignedCell("Tiền đặt cọc", font, Element.ALIGN_LEFT));
-        totalTable.addCell(createAlignedCell("-" + String.format("%,.0f VND", deposit), font, Element.ALIGN_RIGHT));
+        totalTable.addCell(createAlignedCell("-" + String.format("%,.0f", deposit), font, Element.ALIGN_RIGHT));
 
-        // Dòng "Tổng tiền" với border trên dày hơn
-        PdfPCell totalTitleCell = createAlignedCell("Tổng tiền", font, Element.ALIGN_LEFT);
-        totalTitleCell.setBorderWidthTop(2f);
-        totalTable.addCell(totalTitleCell);
+        // Dòng "Số tiền còn lại"
+        PdfPCell remainingTitleCell = createAlignedCell("Thành tiền", headerFont, Element.ALIGN_LEFT);
+        remainingTitleCell.setBorderWidthTop(2f);
+        totalTable.addCell(remainingTitleCell);
 
-        PdfPCell totalDueCell = createAlignedCell(String.format("%,.0f VND", totalDue), font, Element.ALIGN_RIGHT);
-        totalDueCell.setBorderWidthTop(2f);
-        totalTable.addCell(totalDueCell);
-
-        // Dòng "Thuế"
-        totalTable.addCell(createAlignedCell("Thuế (" + taxRate * 100 + "%)", font, Element.ALIGN_LEFT));
-        totalTable.addCell(createAlignedCell(String.format("%,.0f VND", taxAmount), font, Element.ALIGN_RIGHT));
-
-        // Dòng "Thành tiền" với border trên dày hơn
-        PdfPCell finalTitleCell = createAlignedCell("Thành tiền", headerFont, Element.ALIGN_LEFT);
-        finalTitleCell.setBorderWidthTop(2f);
-        totalTable.addCell(finalTitleCell);
-
-        PdfPCell netDueCell = createAlignedCell(String.format("%,.0f VND", netDue), headerFont, Element.ALIGN_RIGHT);
-        netDueCell.setBorderWidthTop(2f);
-        totalTable.addCell(netDueCell);
+        PdfPCell remainingAmountCell = createAlignedCell(String.format("%,.0f", remainingAmount), headerFont, Element.ALIGN_RIGHT);
+        remainingAmountCell.setBorderWidthTop(2f);
+        totalTable.addCell(remainingAmountCell);
 
         return totalTable;
     }
+
 
     private static PdfPCell createAlignedCell(String text, Font font, int alignment) {
         PdfPCell cell = new PdfPCell(new Phrase(text, font));

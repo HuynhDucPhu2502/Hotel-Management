@@ -24,7 +24,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 
 public class CheckingOutReservationFormController {
@@ -243,29 +242,21 @@ public class CheckingOutReservationFormController {
                         // Lưu thông tin check-out vào DB
                         HistoryCheckOutDAO.createData(historyCheckOut);
 
-                        // 2. Lấy đối tượng Tax mặc định
-                        Tax tax = TaxDAO.getDataByID("tax-000001");
-
                         // 3. Tạo hóa đơn mới
                         Invoice invoice = new Invoice();
+
                         invoice.setInvoiceID(InvoiceDAO.getNextInvoiceID());
                         invoice.setInvoiceDate(LocalDateTime.now());
-
-                        // Tính toán các chi phí cho hóa đơn
-                        double roomCharge = Calculator.calculateRoomCharge(roomWithReservation.getRoom(),
-                                roomWithReservation.getReservationForm().getCheckInDate(), roomWithReservation.getReservationForm().getCheckOutDate());
-                        double servicesCharge = Calculator.calculateTotalServiceCharge(roomWithReservation.getReservationForm().getReservationID());
-                        double totalDue = roomCharge * 0.9 + servicesCharge;
-                        double netDue = totalDue * (1 + Objects.requireNonNull(tax).getTaxRate());
-
-                        invoice.setRoomCharge(roomCharge);
-                        invoice.setServicesCharge(servicesCharge);
-                        invoice.setTotalDue(totalDue);
-                        invoice.setNetDue(netDue);
-                        invoice.setTax(tax);
+                        invoice.setRoomCharge(Calculator.calculateRoomCharge(
+                                roomWithReservation.getRoom(),
+                                roomWithReservation.getReservationForm().getCheckInDate(),
+                                roomWithReservation.getReservationForm().getCheckOutDate()
+                        ));
+                        invoice.setServicesCharge(Calculator.calculateTotalServiceCharge(
+                                roomWithReservation.getReservationForm().getReservationID()
+                        ));
                         invoice.setReservationForm(roomWithReservation.getReservationForm());
 
-                        // Lưu hóa đơn vào DB
                         InvoiceDAO.createData(invoice);
 
                         // 4. Cập nhật trạng thái phòng về AVAILABLE

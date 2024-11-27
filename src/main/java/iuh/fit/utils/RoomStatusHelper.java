@@ -8,7 +8,6 @@ import iuh.fit.models.wrapper.RoomWithReservation;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -87,32 +86,21 @@ public class RoomStatusHelper {
 
             HistoryCheckOutDAO.createData(historyCheckOut);
 
-            Tax tax = TaxDAO.getDataByID("tax-000001");
-
             Invoice invoice = new Invoice();
+
             invoice.setInvoiceID(InvoiceDAO.getNextInvoiceID());
             invoice.setInvoiceDate(LocalDateTime.now());
-
-            double totalCharge = Calculator.calculateTotalCharge(roomWithReservation.getReservationForm(),
-                    roomWithReservation.getRoom());
-            double totalDue = totalCharge * 0.9;
-            double netDue = totalDue * (1 + Objects.requireNonNull(tax).getTaxRate());
-
             invoice.setRoomCharge(Calculator.calculateRoomCharge(
                     roomWithReservation.getRoom(),
                     roomWithReservation.getReservationForm().getCheckInDate(),
                     roomWithReservation.getReservationForm().getCheckOutDate()
             ));
-            invoice.setServicesCharge(Calculator.calculateTotalServiceCharge(roomWithReservation.getReservationForm().getReservationID()));
-            invoice.setTotalDue(totalDue);
-            invoice.setNetDue(netDue);
-            invoice.setTax(tax);
+            invoice.setServicesCharge(Calculator.calculateTotalServiceCharge(
+                    roomWithReservation.getReservationForm().getReservationID()
+            ));
             invoice.setReservationForm(roomWithReservation.getReservationForm());
 
             InvoiceDAO.createData(invoice);
-
-
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
