@@ -232,8 +232,8 @@ CREATE TABLE Invoice (
     invoiceDate DATETIME NOT NULL,
     roomCharge DECIMAL(18, 2) NOT NULL,
     servicesCharge DECIMAL(18, 2) NOT NULL,
-    totalDue AS (roomCharge + servicesCharge),
-    netDue AS ((roomCharge + servicesCharge) * 1.1),
+    totalDue AS (roomCharge + servicesCharge) PERSISTED,
+    netDue AS ((roomCharge + servicesCharge) * 1.1) PERSISTED,
     reservationFormID NVARCHAR(15) NOT NULL,
     FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID)
 );
@@ -945,7 +945,7 @@ VALUES
     ('INV-000033', '2022-11-09 16:35:20.897', 10000, 5000, 'RF-000033'),
     ('INV-000034', '2022-11-29 08:50:15.897', 10000, 5000, 'RF-000034'),
     ('INV-000035', '2022-12-05 12:45:55.897', 10000, 5000, 'RF-000035'),
-        ('INV-000036', '2022-12-08 14:05:10.897', 12000, 6000, 'RF-000036'),
+    ('INV-000036', '2022-12-08 14:05:10.897', 12000, 6000, 'RF-000036'),
     ('INV-000037', '2022-12-13 10:15:25.897', 12500, 6500, 'RF-000037'),
     ('INV-000038', '2022-12-18 13:25:40.897', 13000, 7000, 'RF-000038'),
     ('INV-000039', '2022-12-24 18:35:55.897', 13500, 7200, 'RF-000039'),
