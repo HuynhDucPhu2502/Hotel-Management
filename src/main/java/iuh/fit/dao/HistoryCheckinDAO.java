@@ -33,63 +33,7 @@ public class HistoryCheckinDAO {
                 ResultSet rs = statement.executeQuery(sql)
         ) {
             while (rs.next()) {
-                HistoryCheckIn historyCheckIn = new HistoryCheckIn();
-                ReservationForm reservationForm = new ReservationForm();
-                Employee employee = new Employee();
-                Room room = new Room();
-                Customer customer = new Customer();
-                RoomCategory roomCategory = new RoomCategory();
-
-                // Gán giá trị cho ReservationForm
-                reservationForm.setReservationID(rs.getString("reservationFormID"));
-                reservationForm.setReservationDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("reservationDate")));
-                reservationForm.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkInDate")));
-                reservationForm.setCheckOutDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkOutDate")));
-
-                // Gán giá trị cho Employee
-                employee.setEmployeeID(rs.getString("employeeID"));
-                employee.setFullName(rs.getString("fullName"));
-                employee.setPhoneNumber(rs.getString("phoneNumber"));
-                employee.setEmail(rs.getString("email"));
-                employee.setAddress(rs.getString("address"));
-                employee.setGender(ConvertHelper.genderConverter(rs.getString("gender")));
-                employee.setIdCardNumber(rs.getString("idCardNumber"));
-                employee.setDob(ConvertHelper.localDateConverter(rs.getDate("dob")));
-                employee.setPosition(ConvertHelper.positionConverter(rs.getString("position")));
-
-                // Gán giá trị cho Room
-                room.setRoomID(rs.getString("roomID"));
-                room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString("roomStatus")));
-                room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp("dateOfCreation")));
-
-                // Gán giá trị cho Customer
-                customer.setCustomerID(rs.getString("customerID"));
-                customer.setFullName(rs.getString(21));
-                customer.setPhoneNumber(rs.getString(22));
-                customer.setEmail(rs.getString(23));
-                customer.setAddress(rs.getString(24));
-                customer.setGender(ConvertHelper.genderConverter(rs.getString(25)));
-                customer.setIdCardNumber(rs.getString(26));
-                customer.setDob(ConvertHelper.localDateConverter(rs.getDate(27)));
-
-                // Gán giá trị cho RoomCategory
-                roomCategory.setRoomCategoryID(rs.getString("roomCategoryID"));
-                roomCategory.setRoomCategoryName(rs.getString("roomCategoryName"));
-                roomCategory.setNumberOfBed(rs.getInt("numberOfBed"));
-
-                // Set mối quan hệ giữa các đối tượng
-                room.setRoomCategory(roomCategory);
-                reservationForm.setEmployee(employee);
-                reservationForm.setRoom(room);
-                reservationForm.setCustomer(customer);
-
-                // Gán dữ liệu cho HistoryCheckIn
-                historyCheckIn.setHistoryCheckInID(rs.getString("historyCheckInID"));
-                historyCheckIn.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkInDate")));
-                historyCheckIn.setReservationForm(reservationForm);
-                historyCheckIn.setEmployee(employee);
-
-                data.add(historyCheckIn);
+                data.add(extractData(rs));
             }
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -121,63 +65,7 @@ public class HistoryCheckinDAO {
             preparedStatement.setString(1, historyCheckInID);
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
-                    HistoryCheckIn historyCheckIn = new HistoryCheckIn();
-                    ReservationForm reservationForm = new ReservationForm();
-                    Employee employee = new Employee();
-                    Room room = new Room();
-                    Customer customer = new Customer();
-                    RoomCategory roomCategory = new RoomCategory();
-
-                    // Gán giá trị cho ReservationForm
-                    reservationForm.setReservationID(rs.getString("reservationFormID"));
-                    reservationForm.setReservationDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("reservationDate")));
-                    reservationForm.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkInDate")));
-                    reservationForm.setCheckOutDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkOutDate")));
-
-                    // Gán giá trị cho Employee
-                    employee.setEmployeeID(rs.getString("employeeID"));
-                    employee.setFullName(rs.getString("fullName"));
-                    employee.setPhoneNumber(rs.getString("phoneNumber"));
-                    employee.setEmail(rs.getString("email"));
-                    employee.setAddress(rs.getString("address"));
-                    employee.setGender(ConvertHelper.genderConverter(rs.getString("gender")));
-                    employee.setIdCardNumber(rs.getString("idCardNumber"));
-                    employee.setDob(ConvertHelper.localDateConverter(rs.getDate("dob")));
-                    employee.setPosition(ConvertHelper.positionConverter(rs.getString("position")));
-
-                    // Gán giá trị cho Room
-                    room.setRoomID(rs.getString("roomID"));
-                    room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString("roomStatus")));
-                    room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp("dateOfCreation")));
-
-                    // Gán giá trị cho Customer
-                    customer.setCustomerID(rs.getString("customerID"));
-                    customer.setFullName(rs.getString(21));
-                    customer.setPhoneNumber(rs.getString(22));
-                    customer.setEmail(rs.getString(23));
-                    customer.setAddress(rs.getString(24));
-                    customer.setGender(ConvertHelper.genderConverter(rs.getString(25)));
-                    customer.setIdCardNumber(rs.getString(26));
-                    customer.setDob(ConvertHelper.localDateConverter(rs.getDate(27)));
-
-                    // Gán giá trị cho RoomCategory
-                    roomCategory.setRoomCategoryID(rs.getString("roomCategoryID"));
-                    roomCategory.setRoomCategoryName(rs.getString("roomCategoryName"));
-                    roomCategory.setNumberOfBed(rs.getInt("numberOfBed"));
-
-                    // Set mối quan hệ giữa các đối tượng
-                    room.setRoomCategory(roomCategory);
-                    reservationForm.setEmployee(employee);
-                    reservationForm.setRoom(room);
-                    reservationForm.setCustomer(customer);
-
-                    // Gán dữ liệu cho HistoryCheckIn
-                    historyCheckIn.setHistoryCheckInID(rs.getString("historyCheckInID"));
-                    historyCheckIn.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkInDate")));
-                    historyCheckIn.setReservationForm(reservationForm);
-                    historyCheckIn.setEmployee(employee);
-
-                    return historyCheckIn;
+                    return extractData(rs);
                 }
             }
         } catch (Exception e) {
@@ -186,103 +74,35 @@ public class HistoryCheckinDAO {
         return null;
     }
 
-    public static void createData(HistoryCheckIn historyCheckIn) {
-        String insertSQL =
-                "INSERT INTO HistoryCheckin(historyCheckInID, checkInDate, reservationFormID, employeeID) " +
-                        "VALUES (?, ?, ?, ?)";
-
-        String selectNextIDSQL =
-                "SELECT nextID FROM GlobalSequence WHERE tableName = ?";
-
-        String updateNextIDSQL =
-                "UPDATE GlobalSequence SET nextID = ? WHERE tableName = ?";
+    public static void incrementAndUpdateNextID() {
+        String selectQuery = "SELECT nextID FROM GlobalSequence WHERE tableName = 'HistoryCheckIn'";
+        String updateQuery = "UPDATE GlobalSequence SET nextID = ? WHERE tableName = 'HistoryCheckIn'";
+        String currentNextID;
 
         try (
                 Connection connection = DBHelper.getConnection();
-
-                // Câu lệnh chuẩn bị để thêm dữ liệu vào HistoryCheckIn
-                PreparedStatement insertStatement = connection.prepareStatement(insertSQL);
-
-                // Câu lệnh lấy nextID từ GlobalSequence
-                PreparedStatement selectSequenceStatement = connection.prepareStatement(selectNextIDSQL);
-
-                // Câu lệnh cập nhật nextID trong GlobalSequence
-                PreparedStatement updateSequenceStatement = connection.prepareStatement(updateNextIDSQL)
+                PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
+                PreparedStatement updateStatement = connection.prepareStatement(updateQuery)
         ) {
-            // Lấy nextID hiện tại cho HistoryCheckIn từ GlobalSequence
-            selectSequenceStatement.setString(1, "HistoryCheckIn");
-            ResultSet rs = selectSequenceStatement.executeQuery();
+            ResultSet resultSet = selectStatement.executeQuery();
 
-            if (rs.next()) {
-                String currentNextID = rs.getString("nextID");
+            if (resultSet.next()) {
+                currentNextID = resultSet.getString("nextID");
+
                 String prefix = GlobalConstants.HISTORY_CHECKIN_ID_PREFIX + "-";
+                int numericPart = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
+                String updatedNextID = prefix + String.format("%06d", numericPart);
 
-                // Tách phần số và tăng thêm 1
-                int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
+                updateStatement.setString(1, updatedNextID);
+                updateStatement.executeUpdate();
 
-                // Định dạng lại phần số với 6 chữ số
-                String newNextID = prefix + String.format("%06d", nextIDNum);
-
-                // Thiết lập giá trị cho câu lệnh INSERT
-                insertStatement.setString(1, currentNextID);
-                insertStatement.setTimestamp(2,
-                        ConvertHelper.localDateTimeToSQLConverter(historyCheckIn.getCheckInDate()));
-                insertStatement.setString(3,
-                        historyCheckIn.getReservationForm().getReservationID());
-                insertStatement.setString(4,
-                        historyCheckIn.getEmployee().getEmployeeID());
-
-                // Thực thi câu lệnh INSERT
-                insertStatement.executeUpdate();
-
-                // Cập nhật nextID trong GlobalSequence
-                updateSequenceStatement.setString(1, newNextID);
-                updateSequenceStatement.setString(2, "HistoryCheckIn");
-                updateSequenceStatement.executeUpdate();
+            } else {
+                throw new IllegalArgumentException("Không thể tìm thấy nextID cho HistoryCheckIn");
             }
-
-        }  catch (Exception exception) {
-            exception.printStackTrace();
-            System.exit(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi khi lấy và cập nhật nextID cho HistoryCheckIn", e);
         }
-    }
-
-    public static void deleteData(String historyCheckInID) {
-        String sql = "DELETE FROM HistoryCheckin WHERE historyCheckInID = ?";
-
-        try (
-                Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(sql)
-        ) {
-            preparedStatement.setString(1, historyCheckInID);
-            preparedStatement.executeUpdate();
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            System.exit(1);
-        }
-    }
-
-    public static String getNextID() {
-        String nextID = "HCI-000001";
-
-        String query = "SELECT nextID FROM GlobalSequence WHERE tableName = ?";
-
-        try (
-                Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(query)
-        ) {
-            preparedStatement.setString(1, "HistoryCheckIn");
-            ResultSet rs = preparedStatement.executeQuery();
-
-            if (rs.next()) {
-                nextID = rs.getString(1);
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            System.exit(1);
-        }
-
-        return nextID;
     }
 
     public static void updateData(HistoryCheckIn historyCheckIn) {
@@ -326,5 +146,66 @@ public class HistoryCheckinDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private static HistoryCheckIn extractData(ResultSet rs) throws SQLException {
+        // Tạo các đối tượng
+        HistoryCheckIn historyCheckIn = new HistoryCheckIn();
+        ReservationForm reservationForm = new ReservationForm();
+        Employee employee = new Employee();
+        Room room = new Room();
+        Customer customer = new Customer();
+        RoomCategory roomCategory = new RoomCategory();
+
+        // Gán giá trị cho ReservationForm
+        reservationForm.setReservationID(rs.getString("reservationFormID"));
+        reservationForm.setReservationDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("reservationDate")));
+        reservationForm.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkInDate")));
+        reservationForm.setCheckOutDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkOutDate")));
+
+        // Gán giá trị cho Employee
+        employee.setEmployeeID(rs.getString("employeeID"));
+        employee.setFullName(rs.getString("fullName"));
+        employee.setPhoneNumber(rs.getString("phoneNumber"));
+        employee.setEmail(rs.getString("email"));
+        employee.setAddress(rs.getString("address"));
+        employee.setGender(ConvertHelper.genderConverter(rs.getString("gender")));
+        employee.setIdCardNumber(rs.getString("idCardNumber"));
+        employee.setDob(ConvertHelper.localDateConverter(rs.getDate("dob")));
+        employee.setPosition(ConvertHelper.positionConverter(rs.getString("position")));
+
+        // Gán giá trị cho Room
+        room.setRoomID(rs.getString("roomID"));
+        room.setRoomStatus(ConvertHelper.roomStatusConverter(rs.getString("roomStatus")));
+        room.setDateOfCreation(ConvertHelper.localDateTimeConverter(rs.getTimestamp("dateOfCreation")));
+
+        // Gán giá trị cho Customer
+        customer.setCustomerID(rs.getString("customerID"));
+        customer.setFullName(rs.getString(21));
+        customer.setPhoneNumber(rs.getString(22));
+        customer.setEmail(rs.getString(23));
+        customer.setAddress(rs.getString(24));
+        customer.setGender(ConvertHelper.genderConverter(rs.getString(25)));
+        customer.setIdCardNumber(rs.getString(26));
+        customer.setDob(ConvertHelper.localDateConverter(rs.getDate(27)));
+
+        // Gán giá trị cho RoomCategory
+        roomCategory.setRoomCategoryID(rs.getString("roomCategoryID"));
+        roomCategory.setRoomCategoryName(rs.getString("roomCategoryName"));
+        roomCategory.setNumberOfBed(rs.getInt("numberOfBed"));
+
+        // Set mối quan hệ giữa các đối tượng
+        room.setRoomCategory(roomCategory);
+        reservationForm.setEmployee(employee);
+        reservationForm.setRoom(room);
+        reservationForm.setCustomer(customer);
+
+        // Gán dữ liệu cho HistoryCheckIn
+        historyCheckIn.setHistoryCheckInID(rs.getString("historyCheckInID"));
+        historyCheckIn.setCheckInDate(ConvertHelper.localDateTimeConverter(rs.getTimestamp("checkInDate")));
+        historyCheckIn.setReservationForm(reservationForm);
+        historyCheckIn.setEmployee(employee);
+
+        return historyCheckIn;
     }
 }

@@ -1,5 +1,6 @@
 package iuh.fit.controller.features.room.checking_in_reservation_list_controllers;
 
+import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
@@ -43,6 +44,9 @@ public class ReservationListController {
     @FXML
     private GridPane reservationFormGidPane;
 
+    @FXML
+    private DialogPane dialogPane;
+
     private MainController mainController;
     private Employee employee;
     private Room room;
@@ -53,6 +57,7 @@ public class ReservationListController {
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
     public void initialize() {
+        dialogPane.toFront();
     }
 
     public void setupContext(
@@ -218,4 +223,10 @@ public class ReservationListController {
         }
     }
 
+    // ==================================================================================================================
+    // 5. Khác
+    // ==================================================================================================================
+    public DialogPane getDialogPane() {
+        return dialogPane;
+    }
 }

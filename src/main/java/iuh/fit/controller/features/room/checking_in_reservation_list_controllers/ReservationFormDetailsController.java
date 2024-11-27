@@ -5,8 +5,6 @@ import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.dao.*;
 import iuh.fit.models.*;
-import iuh.fit.models.enums.DialogType;
-import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
 import javafx.fxml.FXML;
@@ -150,6 +148,26 @@ public class ReservationFormDetailsController {
         }
     }
 
+    // Có tin nhắn
+    private void navigateToReservationListPanel(String message) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/checking_in_reservation_list_panels/ReservationListPanel.fxml"));
+            AnchorPane layout = loader.load();
+
+            ReservationListController reservationListController = loader.getController();
+            reservationListController.getDialogPane().showInformation("Thông Báo", message);
+            reservationListController.setupContext(
+                    mainController, employee, roomWithReservation
+            );
+
+            mainController.getMainPanel().getChildren().clear();
+            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Không tin nhắn
     private void navigateToReservationListPanel() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/checking_in_reservation_list_panels/ReservationListPanel.fxml"));
@@ -195,47 +213,17 @@ public class ReservationFormDetailsController {
     // ==================================================================================================================
     private void handleCheckIn() {
         try {
-            Room room = reservationForm.getRoom();
-            Employee employee = this.employee;
-            LocalDateTime now = LocalDateTime.now();
-
-            RoomReservationDetail detail = new RoomReservationDetail(
-                    RoomReservationDetailDAO.getNextID(),
-                    now,
-                    room,
-                    reservationForm,
-                    employee
+            RoomReservationDetailDAO.roomCheckingIn(
+                    reservationForm.getReservationID(),
+                    employee.getEmployeeID()
             );
-
-            HistoryCheckIn historyCheckIn = new HistoryCheckIn(
-                    HistoryCheckinDAO.getNextID(),
-                    LocalDateTime.now(),
-                    reservationForm,
-                    employee
-            );
-
-            RoomReservationDetailDAO.createData(detail);
-            HistoryCheckinDAO.createData(historyCheckIn);
-
-            room.setRoomStatus(RoomStatus.ON_USE);
-            RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.ON_USE);
-
-            RoomDialog roomDialog = new RoomDialog(
-                    room,
-                    reservationForm,
-                    "Check-in tại phòng " + room.getRoomNumber(),
-                    DialogType.CHECKIN,
-                    now
-            );
-            RoomDialogDAO.createData(roomDialog);
-
-            navigateToReservationListPanel();
 
             roomWithReservation = RoomWithReservationDAO
-                    .getRoomWithReservationByID(reservationForm.getReservationID(), room.getRoomID());
-            navigateToReservationListPanel();
+                    .getRoomWithReservationByID(reservationForm.getReservationID(), roomWithReservation.getRoom().getRoomID());
+
+            navigateToReservationListPanel("Check-in thành công tại phòng đã đặt.");
         } catch (Exception e) {
-            dialogPane.showWarning("LỖI", e.getMessage());
+            navigateToReservationListPanel(e.getMessage());
         }
     }
 

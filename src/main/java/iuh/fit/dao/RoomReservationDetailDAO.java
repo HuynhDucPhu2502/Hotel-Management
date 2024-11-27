@@ -44,10 +44,10 @@ public class RoomReservationDetailDAO {
 
     public static void createData(RoomReservationDetail detail) {
         String insertSql = """
-            INSERT INTO RoomReservationDetail(roomReservationDetailID, dateChanged, roomID, 
-                                              reservationFormID, employeeID) 
+            INSERT INTO RoomReservationDetail(roomReservationDetailID, dateChanged, roomID,\s
+                                              reservationFormID, employeeID)\s
             VALUES (?, ?, ?, ?, ?)
-            """;
+           \s""";
 
         String selectNextIDSql = "SELECT nextID FROM GlobalSequence WHERE tableName = 'RoomReservationDetail'";
         String updateNextIDSql = "UPDATE GlobalSequence SET nextID = ? WHERE tableName = 'RoomReservationDetail'";
@@ -128,7 +128,45 @@ public class RoomReservationDetailDAO {
         }
     }
 
-    private static String incrementAndUpdateNextID() {
+    public static void roomCheckingIn(String reservationFormID, String employeeID) {
+        String callProcedure = "{CALL RoomCheckingIn(?, ?, ?)}";
+
+        try (Connection connection = DBHelper.getConnection();
+             CallableStatement callableStatement = connection.prepareCall(callProcedure)) {
+
+            // Thiết lập tham số đầu vào cho Stored Procedure
+            callableStatement.setString(1, reservationFormID);
+            callableStatement.setString(2, employeeID);
+
+            // Đăng ký tham số đầu ra
+            callableStatement.registerOutParameter(3, Types.VARCHAR);
+
+            // Thực thi Stored Procedure
+            callableStatement.execute();
+
+            // Lấy thông báo từ Stored Procedure
+            String message = callableStatement.getString(3);
+
+            // Xử lý thông báo trả về
+            switch (message) {
+                case "ROOM_CHECKING_IN_INVALID_RESERVATION":
+                    throw new IllegalArgumentException("Phiếu đặt phòng không hợp lệ hoặc không tồn tại.");
+                case "ROOM_CHECKING_IN_TIME_INVALID":
+                    throw new IllegalArgumentException("Thời gian check-in không nằm trong khoảng cho phép.");
+                case "ROOM_CHECKING_IN_SUCCESS":
+                    HistoryCheckinDAO.incrementAndUpdateNextID();
+                    incrementAndUpdateNextID();
+                    break;
+                default:
+                    throw new IllegalArgumentException(ErrorMessages.STORE_PROCEDURE_ERROR);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Lỗi khi thực thi RoomCheckingIn", e);
+        }
+    }
+
+    private static void incrementAndUpdateNextID() {
         String selectQuery = "SELECT nextID FROM GlobalSequence WHERE tableName = 'RoomReservationDetail'";
         String updateQuery = "UPDATE GlobalSequence SET nextID = ? WHERE tableName = 'RoomReservationDetail'";
         String currentNextID;
@@ -143,16 +181,14 @@ public class RoomReservationDetailDAO {
             if (resultSet.next()) {
                 currentNextID = resultSet.getString("nextID");
 
-                // Tạo prefix cho RoomReservationDetail
                 String prefix = GlobalConstants.ROOM_RESERVATION_DETAIL_PREFIX + "-";
                 int numericPart = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
                 String updatedNextID = prefix + String.format("%06d", numericPart);
 
-                // Cập nhật giá trị mới cho nextID
+
                 updateStatement.setString(1, updatedNextID);
                 updateStatement.executeUpdate();
 
-                return currentNextID;
             } else {
                 throw new IllegalArgumentException("Không thể tìm thấy nextID cho RoomReservationDetail");
             }
@@ -162,33 +198,10 @@ public class RoomReservationDetailDAO {
         }
     }
 
-    public static String getNextID() {
-        String nextID = "RRD-000001";
-
-        String query = "SELECT nextID FROM GlobalSequence WHERE tableName = ?";
-
-        try (
-                Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(query)
-        ) {
-            preparedStatement.setString(1, "RoomReservationDetail");
-            ResultSet rs = preparedStatement.executeQuery();
-
-            if (rs.next()) {
-                nextID = rs.getString(1);
-            }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            System.exit(1);
-        }
-
-        return nextID;
-    }
-
     public static List<RoomReservationDetail> getByReservationFormID(String reservationFormID) {
         List<RoomReservationDetail> data = new ArrayList<>();
         String sql = """
-            SELECT rrd.roomReservationDetailID, rrd.dateChanged, rrd.roomID, 
+            SELECT rrd.roomReservationDetailID, rrd.dateChanged, rrd.roomID,
                    rrd.reservationFormID, rrd.employeeID,
                    r.roomStatus, r.dateOfCreation, r.roomCategoryID,
                    rf.reservationDate, rf.checkInDate, rf.checkOutDate,
@@ -199,7 +212,7 @@ public class RoomReservationDetailDAO {
             INNER JOIN Employee e ON rrd.employeeID = e.employeeID
             WHERE rrd.reservationFormID = ?
             AND r.isActivate = 'ACTIVATE' AND e.isActivate = 'ACTIVATE'
-            """;
+           \s""";
 
         try (
                 Connection connection = DBHelper.getConnection();
