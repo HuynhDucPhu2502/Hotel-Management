@@ -159,12 +159,7 @@ public class RoomSearchingController {
     }
 
     private void handleCreateReservationForm(Room room) throws IOException {
-        List<RoomWithReservation> roomWithReservationsList = RoomWithReservationDAO.getRoomWithReservation();
-        RoomWithReservation roomWithReservations = roomWithReservationsList.stream()
-                .filter(x -> x.getRoom().getRoomID().equals(room.getRoomID()))
-                .findFirst()
-                .orElse(null);
-
+        RoomWithReservation roomWithReservations = RoomWithReservationDAO.getRoomWithReservationByRoomId(room.getRoomID());
         mainController.loadPanelCreateReservationFormController("/iuh/fit/view/features/room/creating_reservation_form_panels/CreateReservationFormPanel.fxml", mainController, account, roomWithReservations);
     }
 
