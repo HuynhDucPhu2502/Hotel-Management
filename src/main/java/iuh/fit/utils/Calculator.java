@@ -88,22 +88,6 @@ public class Calculator {
                 .mapToDouble(service -> service.getQuantity() * service.getUnitPrice())
                 .sum();
     }
-
-    // 6. Tính tổng chi phí cho phòng và dịch vụ
-    // (chưa trừ tiền đặt cọc và cộng thuế)
-    public static double calculateTotalCharge(
-            ReservationForm reservationForm,
-            Room room
-    ) {
-        double roomCharge = calculateRoomCharge(room,
-                reservationForm.getCheckInDate(), reservationForm.getCheckOutDate());
-
-        double serviceCharge = calculateTotalServiceCharge(reservationForm.getReservationID());
-
-        return roomCharge + serviceCharge;
-    }
-
-
     // ======================================================================================================
     // Các hàm phụ (private)
     // ======================================================================================================

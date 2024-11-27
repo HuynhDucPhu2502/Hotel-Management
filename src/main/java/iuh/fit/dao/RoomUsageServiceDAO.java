@@ -112,7 +112,7 @@ public class RoomUsageServiceDAO {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Lỗi khi lấy và cập nhật nextID trong GlobalSequence", e);
+            System.exit(1);
         }
     }
 

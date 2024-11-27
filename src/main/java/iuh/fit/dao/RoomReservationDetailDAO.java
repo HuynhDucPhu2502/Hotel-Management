@@ -194,7 +194,7 @@ public class RoomReservationDetailDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Lỗi khi lấy và cập nhật nextID cho RoomReservationDetail", e);
+            System.exit(1);
         }
     }
 

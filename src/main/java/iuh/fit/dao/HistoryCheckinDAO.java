@@ -101,27 +101,6 @@ public class HistoryCheckinDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Lỗi khi lấy và cập nhật nextID cho HistoryCheckIn", e);
-        }
-    }
-
-    public static void updateData(HistoryCheckIn historyCheckIn) {
-        String sql = "UPDATE HistoryCheckin " +
-                "SET checkInDate = ?, reservationFormID = ?, employeeID = ? " +
-                "WHERE historyCheckInID = ?";
-
-        try (
-                Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(sql)
-        ) {
-            preparedStatement.setTimestamp(1, ConvertHelper.localDateTimeToSQLConverter(historyCheckIn.getCheckInDate()));
-            preparedStatement.setString(2, historyCheckIn.getReservationForm().getReservationID());
-            preparedStatement.setString(3, historyCheckIn.getEmployee().getEmployeeID());
-            preparedStatement.setString(4, historyCheckIn.getHistoryCheckInID());
-
-            preparedStatement.executeUpdate();
-        } catch (Exception exception) {
-            exception.printStackTrace();
             System.exit(1);
         }
     }

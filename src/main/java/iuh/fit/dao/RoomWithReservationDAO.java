@@ -55,6 +55,51 @@ public class RoomWithReservationDAO {
         return data;
     }
 
+    public static RoomWithReservation getRoomWithReservationByRoomId(String roomId) {
+        String sql =
+                """
+                SELECT r.roomID, r.roomStatus, r.dateOfCreation,
+                       rc.roomCategoryID, rc.roomCategoryName, rc.numberOfBed,
+                       rf.reservationFormID, rf.reservationDate, rf.checkInDate,
+                       rf.checkOutDate, rf.roomBookingDeposit, rf.employeeID, rf.customerID,
+                       e.fullName AS employeeName,
+                       c.fullName AS customerName, c.phoneNumber, c.email, c.idCardNumber
+                FROM Room r
+                LEFT JOIN RoomCategory rc ON r.roomCategoryID = rc.roomCategoryID
+                LEFT JOIN (
+                    SELECT rf.*
+                    FROM ReservationForm rf
+                    LEFT JOIN HistoryCheckOut hco ON rf.reservationFormID = hco.reservationFormID
+                    WHERE hco.historyCheckOutID IS NULL
+                      AND GETDATE() BETWEEN rf.checkInDate AND DATEADD(hour, 2, rf.checkOutDate)
+                ) AS rf ON r.roomID = rf.roomID
+                LEFT JOIN Employee e ON rf.employeeID = e.employeeID
+                LEFT JOIN Customer c ON rf.customerID = c.customerID
+                WHERE r.isActivate = 'ACTIVATE'
+                  AND rc.isActivate = 'ACTIVATE'
+                  AND r.roomStatus != 'UNAVAILABLE'
+                  AND r.roomID = ?
+                """;
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            preparedStatement.setString(1, roomId);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) return extractData(rs);
+            else throw new IllegalArgumentException("Phòng không hợp lệ hoặc không tồn tại!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        return null;
+    }
+
+
+
     public static RoomWithReservation getRoomWithReservationByID(String reservationFormID, String roomID) {
         String sql =
         """
