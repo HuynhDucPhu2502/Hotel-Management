@@ -10,7 +10,6 @@ public class ErrorMessages {
     public static final String NULL_ROOMCATEGORY = "Loại phòng không được trống";
     public static final String NULL_EMPLOYEE = "Nhân viên không được để trống";
     public static final String NULL_SHIFT = "Ca làm không được để trống";
-    public static final String NULL_SERVICECATEGORY = "Loại dịch vụ không được để trống";
     public static final String NULL_HOTELSERVICE = "Dịch vụ không được để trống";
     public static final String NULL_CUSTOMER = "Khách hàng không được để trống";
     public static final String NULL_ROOM = "Phòng không được để trống";
@@ -58,11 +57,6 @@ public class ErrorMessages {
     // Customer
     public static final String CUS_INVALID_ID = "Mã khách hàng phải theo định dạng CUS-XXXXXX, với X là ký số";
     public static final String CUS_INVALID_FULLNAME = "Tên Khách hàng phải từ 3 đến 30 ký tự";
-
-    // Tax
-    public static final String TAX_INVALID_TAXNAME = "Tên thuế không được trùng, không rỗng và không chưa khoảng trắng";
-    public static final String TAX_INVALID_TAXRATE = "Hệ số thuế phải là số dương";
-    public static final String TAX_INVALID_TAXDATEOFCREATION = "Ngày gian thêm thuế phải trước ngày hiện tại";
 
     // Room
     public static final String ROOM_INVALID_ID_ISNULL = "Mã phòng không được rỗng!!!";
@@ -114,18 +108,14 @@ public class ErrorMessages {
 
     // Invoice
     public static final String INVOICE_INVALID_ID_ISNUL = "Mã hóa đơn không dược rỗng!!!";
-    public static final String INVOICE_INVALID_ID_FORMAT = "Mã hóa đơn phải theo đúng định dạng INV-XXXXXXXXXX-YYYY!!!";
     public static final String INVOICE_INVALID_INVOICE_DATE_ISNULL = "Ngày tạo hóa đơn không được rỗng!!!";
-    public static final String INVOICE_INVALID_INVOICE_DATE = "Ngày tạo hóa đơn phải trước ngày hiện tại!!!";
     public static final String INVOICE_INVALID_TOTALDUE= "Tiền trước thuế không được rỗng và phải lớn hơn 0!!!";
     public static final String INVOICE_INVALID_NETDUE= "Tiền sau thuế không được rỗng và phải lớn hơn 0!!!";
-    public static final String INVOICE_INVALID_TAX_ISNULL= "Thông tin thuế không được rỗng!!!";
 
     // HistoryCheckout
     public static final String HISTORY_CHECKOUT_INVALID_ID_ISNULL = "Mã phiếu trả phòng không được rỗng!!!";
     public static final String HISTORY_CHECKOUT_INVALID_ID_FORMAT = "Mã phiếu trả phòng phải theo định dạng HCO-XXXXXX!!!";
     public static final String HISTORY_CHECKOUT_INVALID_CHECKOUT_DATE_ISNULL = "Ngày trả phòng không được rỗng!!!";
-    public static final String HISTORY_CHECKOUT_INVALID_CHECKOUT_DATE= "Ngày trả phòng phải trước ngày hiện tại!!!";
 
     // ConvertHelper
     public static final String CONVERT_HELPER_INVALID_LOCALTIME = "Thời gian phải nằm từ 5:00 đến 23:00";
@@ -162,6 +152,7 @@ public class ErrorMessages {
 
     // Room Dialog
     public static final String ROOM_DIALOG_TYPE_INVALID = "Loại nhật ký không phù hợp";
+
 
 
 

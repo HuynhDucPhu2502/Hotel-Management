@@ -8,7 +8,7 @@ import iuh.fit.models.ReservationForm;
 import iuh.fit.models.Room;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
-import iuh.fit.utils.RoomStatusHelper;
+import iuh.fit.utils.RoomManagementService;
 import iuh.fit.utils.TimelineManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -77,7 +77,7 @@ public class RoomOnUseItemController {
                         timeline.stop();
                         TimelineManager.getInstance().removeTimeline(timelineKey);
                         if (MainController.isRoomBookingLoaded()) navigateToRoomBookingPanel(false);
-                        else RoomStatusHelper.autoCheckoutOverdueRooms();
+                        else RoomManagementService.autoCheckoutOverdueRooms();
                     }
                 })
         );

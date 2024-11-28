@@ -7,7 +7,7 @@ import iuh.fit.dao.InvoiceDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Invoice;
 import iuh.fit.utils.EditDateRangePicker;
-import iuh.fit.utils.RoomStatusHelper;
+import iuh.fit.utils.RoomManagementService;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -49,7 +49,7 @@ public class InvoiceManagerController {
         Task<List<Invoice>> loadDataTask = new Task<>() {
             @Override
             protected List<Invoice> call() {
-                RoomStatusHelper.autoCheckoutOverdueRooms();
+                RoomManagementService.autoCheckoutOverdueRooms();
 
                 return InvoiceDAO.getAllInvoices();
             }

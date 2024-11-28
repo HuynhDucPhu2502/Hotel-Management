@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class RoomStatusHelper {
+public class RoomManagementService {
 
     private static final ScheduledExecutorService SCHEDULER =
             Executors.newScheduledThreadPool(1);
@@ -21,7 +21,7 @@ public class RoomStatusHelper {
 
     public static void startAutoCheckoutScheduler() {
         SCHEDULER.scheduleAtFixedRate(
-                RoomStatusHelper::autoCheckoutOverdueRooms,
+                RoomManagementService::autoCheckoutOverdueRooms,
                 0,
                 1,
                 TimeUnit.MINUTES
@@ -76,7 +76,7 @@ public class RoomStatusHelper {
         }
     }
 
-    private static void handleCheckOut(RoomWithReservation roomWithReservation, Employee employee) {
+    public static void handleCheckOut(RoomWithReservation roomWithReservation, Employee employee) {
         try {
             double roomCharge = Calculator.calculateRoomCharge(
                     roomWithReservation.getRoom(),

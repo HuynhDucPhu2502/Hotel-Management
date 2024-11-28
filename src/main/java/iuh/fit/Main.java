@@ -19,7 +19,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException, SQLException {
-        RoomStatusHelper.startAutoCheckoutScheduler();
+        RoomManagementService.startAutoCheckoutScheduler();
 
         startWithoutLogin(primaryStage);
         //startWithLogin(primaryStage);
