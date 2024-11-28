@@ -48,43 +48,24 @@ public class BackupDatabase {
 
     // handle backup event when slose the app
     public static void backupData(Stage primaryStage) throws SQLException {
+        if(FilePathManager.getPath(PreferencesKey.BACK_UP_FORM_KEY, PreferencesKey.DEFAULT_VALUE)
+                .equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_NO_VALUE)) System.exit(0);
+
         String defaultFullBackupName = "\\HotelBackup-" + LocalDate.now().format(dateTimeFormatter) + "-FULL.bak";
         String defaultBackupName = "\\HotelBackup-" + LocalDate.now().format(dateTimeFormatter) + "-DIF.bak";
         String defaultZipBackupName = "\\HotelBackup-" + LocalDate.now().format(dateTimeFormatter) + "-DIF.zip";
         String zipFilePath;
         String filePath = FilePathManager.getPath(
                 PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
-                PreferencesKey.DEFAULT_FILE_PATH).equalsIgnoreCase(PreferencesKey.DEFAULT_FILE_PATH)
-                ? null
-                : FilePathManager.getPath(
-                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
-                PreferencesKey.DEFAULT_FILE_PATH) + defaultBackupName;
-
-        if(filePath == null) return;
-        else zipFilePath = FilePathManager.getPath(
-                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
-                PreferencesKey.DEFAULT_FILE_PATH) + defaultZipBackupName;
-
-        File[] files = new File(FilePathManager.getPath(
-                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
-                PreferencesKey.DEFAULT_FILE_PATH)).listFiles();
-        if(files != null){
-            File fullBackup = Arrays.stream(files).filter(x -> x.getName().contains("FULL"))
-                    .findFirst().orElse(null);
-            if(fullBackup == null) {
-                BackupDatabase.backupFullDatabase(
-                        FilePathManager.getPath(
-                                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
-                                PreferencesKey.DEFAULT_FILE_PATH) + defaultFullBackupName
-                );
-                showMessage(
-                        Alert.AlertType.INFORMATION,
-                        "Sao luu thanh cong",
-                        "Du lieu da duoc sao luu thanh cong",
-                        "Nhan ok de Xac nhan"
-                ).showAndWait();
-                System.exit(0);
-            }
+                PreferencesKey.DEFAULT_FILE_PATH);
+        if(filePath.equalsIgnoreCase(PreferencesKey.DEFAULT_FILE_PATH)){
+            System.out.println("Chon dia chi di");
+            return;
+        } else{
+            filePath = filePath + defaultBackupName;
+            zipFilePath = FilePathManager.getPath(
+                    PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
+                    PreferencesKey.DEFAULT_FILE_PATH) + defaultZipBackupName;
         }
 
         if(FilePathManager.getPath(PreferencesKey.BACK_UP_FORM_KEY, PreferencesKey.DEFAULT_FILE_PATH)
