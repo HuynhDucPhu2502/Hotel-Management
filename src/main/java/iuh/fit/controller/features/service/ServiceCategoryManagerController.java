@@ -86,7 +86,6 @@ public class ServiceCategoryManagerController {
             serviceCategoryIDTextField.setText(ServiceCategoryDAO.getNextServiceCategoryID());
         });
 
-        loadDataTask.setOnFailed(e -> dialogPane.showWarning("Error", "Failed to load data"));
 
         Thread loadDataThread = new Thread(loadDataTask);
         loadDataThread.setDaemon(true);

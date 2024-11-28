@@ -10,7 +10,7 @@ import iuh.fit.controller.features.employee.EmployeeSearchingController;
 import iuh.fit.controller.features.employee.ShiftManagerController;
 
 import iuh.fit.controller.features.employee_information.EmployeeInformationController;
-import iuh.fit.controller.features.room.InvoiceManagerController;
+import iuh.fit.controller.features.invoice.InvoiceManagerController;
 
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.RoomManagerController;

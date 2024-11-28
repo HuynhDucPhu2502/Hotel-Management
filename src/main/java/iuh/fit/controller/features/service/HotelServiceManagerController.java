@@ -425,7 +425,6 @@ public class HotelServiceManagerController {
             hotelServiceTableView.setItems(items);
             hotelServiceTableView.refresh();
 
-            // Nếu chỉ tìm thấy một kết quả, điền thông tin vào các trường tìm kiếm tương ứng
             if (items.size() == 1) {
                 HotelService hotelService = items.getFirst();
                 hotelSerivceNameSearchField.setText(hotelService.getServiceName());
@@ -441,8 +440,6 @@ public class HotelServiceManagerController {
                 descriptionSearchField.clear();
             }
         }));
-
-        searchTask.setOnFailed(e -> dialogPane.showWarning("LỖI", "Failed to search data"));
 
         Thread searchThread = new Thread(searchTask);
         searchThread.setDaemon(true);
@@ -464,11 +461,7 @@ public class HotelServiceManagerController {
     }
 
     public void setInformation(HotelService service){
-        Platform.runLater(() -> {
-            hotelServiceIDSearchField.setValue(service.getServiceId());
-        });
-        Platform.runLater(() -> {
-            handleUpdateBtn(service);
-        });
+        Platform.runLater(() -> hotelServiceIDSearchField.setValue(service.getServiceId()));
+        Platform.runLater(() -> handleUpdateBtn(service));
     }
 }

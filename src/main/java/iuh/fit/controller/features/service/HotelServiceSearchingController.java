@@ -243,16 +243,16 @@ public class HotelServiceSearchingController {
         };
 
         searchTask.setOnRunning(e -> {
-            searchBtn.setDisable(true);  // Vô hiệu hóa nút "Tìm kiếm"
-            resetBtn.setDisable(true);   // Vô hiệu hóa nút "Đặt lại"
+            searchBtn.setDisable(true);
+            resetBtn.setDisable(true);
         });
 
         searchTask.setOnSucceeded(e -> {
             items = searchTask.getValue();
             hotelServiceTableView.setItems(items);
 
-            searchBtn.setDisable(false); // Kích hoạt lại nút "Tìm kiếm"
-            resetBtn.setDisable(false);  // Kích hoạt lại nút "Đặt lại"
+            searchBtn.setDisable(false);
+            resetBtn.setDisable(false);
         });
 
         searchTask.setOnFailed(e -> {

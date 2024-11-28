@@ -27,7 +27,7 @@ module iuh.fit {
     opens iuh.fit.controller.features.room.checking_out_controllers to javafx.fxml;
     opens iuh.fit.controller.features.room.room_changing_controllers to javafx.fxml;
     opens iuh.fit.controller.features.room.service_ordering_controllers to javafx.fxml;
-    opens iuh.fit.controller.features.room.invoice_controllers to javafx.fxml;
+    opens iuh.fit.controller.features.invoice.invoice_controllers to javafx.fxml;
     opens iuh.fit.controller.features.room.group_booking_controllers to javafx.fxml;
     opens iuh.fit.controller.features.employee to javafx.fxml;
     opens iuh.fit.controller.features.customer to javafx.fxml;
@@ -59,6 +59,8 @@ module iuh.fit {
     exports iuh.fit.models.wrapper;
     exports iuh.fit.models.misc;
     opens iuh.fit.models.misc to javafx.base, javafx.fxml;
+    exports iuh.fit.controller.features.invoice;
+    opens iuh.fit.controller.features.invoice to javafx.fxml;
 
 
 }
