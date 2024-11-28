@@ -62,7 +62,7 @@ public class RoomBookingController {
         setActiveButtonStyle(allBtn);
         MainController.setRoomBookingLoaded(true);
 
-        TimelineManager.getInstance().printAllTimelines();
+
     }
 
     public void setupContext(MainController mainController, Employee employeee) {
@@ -112,6 +112,7 @@ public class RoomBookingController {
             roomWithReservations = loadDataTask.getValue();
             displayFilteredRooms(roomWithReservations);
             loadDataForBtn();
+            TimelineManager.getInstance().printAllTimelines();
         });
 
         loadDataTask.setOnFailed(event -> {
