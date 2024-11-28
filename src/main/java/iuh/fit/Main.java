@@ -35,7 +35,7 @@ public class Main extends Application {
         if(!RestoreDatabase.isDatabaseExist("HotelDatabase")) return;
 
         try {
-            RoomStatusHelper.startAutoCheckoutScheduler();
+            RoomManagementService.startAutoCheckoutScheduler();
         }catch (Exception e){
             System.out.println("Chua co database");
         }
