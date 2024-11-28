@@ -67,6 +67,8 @@ public class ShiftDetailForEachEmployeeDialogController {
     private DialogPane dialogPane;
     private Employee employee;
 
+    private Stage PrevStage;
+
     public void setController(ShiftManagerController shiftManagerController) {
         this.shiftManagerControllerReferences = shiftManagerController;
     }
@@ -74,10 +76,15 @@ public class ShiftDetailForEachEmployeeDialogController {
         this.employee = employee;
     }
 
+    public void getComponentFormController(){
+        PrevStage = shiftManagerControllerReferences.getStage();
+    }
+
     public void getData(Shift shift, String func, String shiftID){
         dialogPane.toFront();
         loadData(shift, shiftID);
         setupTable();
+
 
         updateBtn.getStyleClass().add("button-update");
         forceDeteleBtn.getStyleClass().add("button-delete");

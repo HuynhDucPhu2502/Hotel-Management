@@ -155,9 +155,9 @@ public class ConvertHelper {
 
     public static String shiftDaysScheduleToSQLConverter(ShiftDaysSchedule input) {
         return switch (input.toString().toUpperCase()) {
-            case "2 4 6" -> "MON_WEB_FRI";
-            case "3 5 7" -> "TUE_THU_SAT";
-            case "CN" -> "SUNDAY";
+            case "Thứ 2, 4, 6" -> "MON_WEB_FRI";
+            case "Thứ 3, 5, 7" -> "TUE_THU_SAT";
+            case "Chủ nhật" -> "SUNDAY";
             default -> throw new IllegalArgumentException(ErrorMessages.CONVERT_HELPER_INVALID_SHIFT_DAYS_SCHEDULE);
         };
     }
