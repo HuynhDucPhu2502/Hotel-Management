@@ -4,7 +4,6 @@ import iuh.fit.controller.MainController;
 import iuh.fit.dao.HotelServiceDAO;
 import iuh.fit.dao.ServiceCategoryDAO;
 import iuh.fit.models.Account;
-import iuh.fit.models.Employee;
 import iuh.fit.models.HotelService;
 import iuh.fit.models.ServiceCategory;
 import iuh.fit.utils.ConvertHelper;
@@ -213,7 +212,7 @@ public class HotelServiceSearchingController {
     }
 
     private void handleEditService(HotelService service) throws IOException {
-        mainController.loadPanelHotelServiceManagerController("/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml", mainController, account, service);
+        mainController.loadPanelHotelServiceManagerController("/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml", service);
     }
 
     private void handleResetAction() {

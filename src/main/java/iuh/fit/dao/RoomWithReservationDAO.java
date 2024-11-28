@@ -1,6 +1,7 @@
 package iuh.fit.dao;
 
 import iuh.fit.models.*;
+import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
@@ -97,8 +98,6 @@ public class RoomWithReservationDAO {
 
         return null;
     }
-
-
 
     public static RoomWithReservation getRoomWithReservationByID(String reservationFormID, String roomID) {
         String sql =

@@ -22,6 +22,7 @@ import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.*;
 import iuh.fit.models.enums.Position;
 import iuh.fit.models.wrapper.RoomWithReservation;
+import iuh.fit.utils.TimelineManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -177,7 +178,7 @@ public class MainController {
             } else if (controller instanceof DashboardController) {
                 ((DashboardController) controller).setupContext(account, mainController);
             } else if (controller instanceof EmployeeSearchingController){
-                ((EmployeeSearchingController) controller).setupContext(this, account);
+                ((EmployeeSearchingController) controller).setupContext(this);
             } else if (controller instanceof HotelServiceSearchingController){
                 ((HotelServiceSearchingController) controller).setupContext(this, account);
             } else if (controller instanceof CustomerSearchingController){
@@ -186,6 +187,7 @@ public class MainController {
                 ((RoomSearchingController) controller).setupContext(this, account);
             }
 
+            if (!fxmlPath.contains("RoomBookingPanel")) TimelineManager.getInstance().stopAllTimelines();
             ROOM_BOOKING_LOADED = fxmlPath.contains("RoomBookingPanel");
 
             // Thay đổi giao diện trong mainPanel
@@ -196,7 +198,7 @@ public class MainController {
         }
     }
 
-    public void loadPanelEmployeeManagerController(String fxmlPath, MainController mainController, Account account, Employee emp){
+    public void loadPanelEmployeeManagerController(String fxmlPath, Employee emp){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             AnchorPane layout = loader.load();
@@ -208,16 +210,14 @@ public class MainController {
             mainPanel.getChildren().clear();
             mainPanel.getChildren().addAll(layout.getChildren());
 
-            Platform.runLater(() -> {
-                controller.setInformation(emp);
-            });
+            Platform.runLater(() -> controller.setInformation(emp));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void loadPanelRoomManagerController(String fxmlPath, MainController mainController, Account account, Room room){
+    public void loadPanelRoomManagerController(String fxmlPath, Room room){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             AnchorPane layout = loader.load();
@@ -229,9 +229,7 @@ public class MainController {
             mainPanel.getChildren().clear();
             mainPanel.getChildren().addAll(layout.getChildren());
 
-            Platform.runLater(() -> {
-                controller.setInformation(room);
-            });
+            Platform.runLater(() -> controller.setInformation(room));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -250,19 +248,17 @@ public class MainController {
             mainPanel.getChildren().clear();
             mainPanel.getChildren().addAll(layout.getChildren());
             MainController.setRoomBookingLoaded(false);
-            Platform.runLater(() -> {
-                controller.setupContext(
-                        mainController, account.getEmployee(), room,
-                        null, null, null
-                );
-            });
+            Platform.runLater(() -> controller.setupContext(
+                    mainController, account.getEmployee(), room,
+                    null, null, null
+            ));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void loadPanelHotelServiceManagerController(String fxmlPath, MainController mainController, Account account, HotelService service){
+    public void loadPanelHotelServiceManagerController(String fxmlPath, HotelService service){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             AnchorPane layout = loader.load();
@@ -272,15 +268,13 @@ public class MainController {
             ROOM_BOOKING_LOADED = fxmlPath.contains("RoomBookingPanel");
             mainPanel.getChildren().clear();
             mainPanel.getChildren().addAll(layout.getChildren());
-            Platform.runLater(() -> {
-                controller.setInformation(service);
-            });
+            Platform.runLater(() -> controller.setInformation(service));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void loadPanelCustomerManagerController(String fxmlPath, MainController mainController, Account account, Customer customer){
+    public void loadPanelCustomerManagerController(String fxmlPath, Customer customer){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
             AnchorPane layout = loader.load();
@@ -290,9 +284,7 @@ public class MainController {
             ROOM_BOOKING_LOADED = fxmlPath.contains("RoomBookingPanel");
             mainPanel.getChildren().clear();
             mainPanel.getChildren().addAll(layout.getChildren());
-            Platform.runLater(() -> {
-                controller.setInformation(customer);
-            });
+            Platform.runLater(() -> controller.setInformation(customer));
         } catch (Exception e) {
             e.printStackTrace();
         }

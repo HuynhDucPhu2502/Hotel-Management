@@ -4,7 +4,6 @@ import iuh.fit.controller.MainController;
 import iuh.fit.dao.CustomerDAO;
 import iuh.fit.models.Account;
 import iuh.fit.models.Customer;
-import iuh.fit.models.Employee;
 import iuh.fit.models.enums.Gender;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -125,7 +124,7 @@ public class CustomerSearchingController {
     }
 
     private void handleEditCustomer(Customer customer) throws IOException {
-        mainController.loadPanelCustomerManagerController("/iuh/fit/view/features/customer/CustomerManagerPanel.fxml", mainController, account, customer);
+        mainController.loadPanelCustomerManagerController("/iuh/fit/view/features/customer/CustomerManagerPanel.fxml", customer);
     }
 
     private void setupActionColumn() {

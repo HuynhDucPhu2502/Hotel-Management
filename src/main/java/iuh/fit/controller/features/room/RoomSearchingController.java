@@ -1,12 +1,10 @@
 package iuh.fit.controller.features.room;
 
 import iuh.fit.controller.MainController;
-import iuh.fit.dao.ReservationFormDAO;
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.RoomWithReservationDAO;
 import iuh.fit.models.Account;
-import iuh.fit.models.Customer;
 import iuh.fit.models.Room;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
@@ -155,7 +153,7 @@ public class RoomSearchingController {
     }
 
     private void handleEditRoom(Room room) throws IOException {
-        mainController.loadPanelRoomManagerController("/iuh/fit/view/features/room/RoomManagerPanel.fxml", mainController, account, room);
+        mainController.loadPanelRoomManagerController("/iuh/fit/view/features/room/RoomManagerPanel.fxml", room);
     }
 
     private void handleCreateReservationForm(Room room) throws IOException {
