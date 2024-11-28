@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -28,11 +29,21 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException, SQLException {
-        RoomStatusHelper.startAutoCheckoutScheduler();
+        startWithLogin(primaryStage);
 
-        startWithoutLogin(primaryStage);
+        // check if db not exist
+        if(!RestoreDatabase.isDatabaseExist("HotelDatabase")) return;
 
-        //startWithLogin(primaryStage);
+        try {
+            RoomStatusHelper.startAutoCheckoutScheduler();
+        }catch (Exception e){
+            System.out.println("Chua co database");
+        }
+
+
+        //startWithoutLogin(primaryStage);
+
+
 
         // check if we have 30 backup dif already
         // if > 30, backupfull with the day nearest the backupfule file
