@@ -9,9 +9,8 @@ import iuh.fit.models.Employee;
 import iuh.fit.models.Shift;
 import iuh.fit.models.enums.AccountStatus;
 import iuh.fit.models.enums.Position;
-import iuh.fit.utils.ErrorMessages;
+import iuh.fit.utils.*;
 import iuh.fit.security.PasswordHashing;
-import iuh.fit.utils.RegexChecker;
 import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,6 +25,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -33,62 +33,54 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 
+import java.io.File;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class LoginController {
-    @FXML
-    private TextField userNameField;
+    @FXML private TextField userNameField;
+    @FXML private PasswordField hiddenPasswordField;
+    @FXML private TextField visiblePasswordField;
+    @FXML private Button ShowPasswordBtn;
+    @FXML private Text errorMessage;
+    @FXML private Button signInButton;
+    @FXML private ImageView showPassButton;
+    @FXML private DialogPane dialogPane;
+    @FXML private Text forgotPasswordBtn;
+    @FXML private Label loginBtn;
+    @FXML private Button confirmBtn;
+    @FXML private Button resetBtn;
 
-    @FXML
-    private PasswordField hiddenPasswordField;
+    @FXML private GridPane loginGrid;
+    @FXML private GridPane forgotPasswordGrid;
+    @FXML private GridPane restoreDataGrid;
 
-    @FXML
-    private TextField visiblePasswordField;
-
-    @FXML
-    private Button ShowPasswordBtn;
-
-    @FXML
-    private Text errorMessage;
-
-    @FXML
-    private Button signInButton;
-
-    @FXML
-    private ImageView showPassButton;
-
-    @FXML
-    private DialogPane dialogPane;
-
-    @FXML
-    private Text forgotPasswordBtn;
-    @FXML
-    private Label loginBtn;
-    @FXML
-    private Button confirmBtn;
-    @FXML
-    private Button resetBtn;
-
-    @FXML
-    private GridPane loginGrid;
-
-    @FXML
-    private GridPane forgotPasswordGrid;
-
-    @FXML
-    private TextField employeeIDTextField;
-    @FXML
-    private TextField fullNameTextField;
-    @FXML
-    private TextField phoneNumberTextField;
-    @FXML
-    private TextField cardIDTextField;
-    @FXML
-    private TextField emailTextField;
-    @FXML
-    private TextField usernameTextField;
+    @FXML private TextField employeeIDTextField;
+    @FXML private TextField fullNameTextField;
+    @FXML private TextField phoneNumberTextField;
+    @FXML private TextField cardIDTextField;
+    @FXML private TextField emailTextField;
+    @FXML private TextField usernameTextField;
 
     private boolean isDefaultIcon = true;
+
+    @FXML private PasswordField passRestorePasswordField;
+    @FXML private TextField passRestoreTextField;
+    @FXML private TextField filePathRestoreTextField;
+    @FXML private Text passTitleText;
+    @FXML private Text filepathTitleText;
+
+    @FXML private Button showPassRestoreButton;
+    @FXML private Button filePathRestoreButton;
+    @FXML private Button researchFileRestoreButton;
+
+    @FXML private Button refreshPassRestoreButton;
+    @FXML private Button cancelRestoreButton;
+    @FXML private Button confirmPassRestoreButton;
+    @FXML private Button restoreDataButton;
 
 
     @FXML
@@ -96,12 +88,19 @@ public class LoginController {
         dialogPane.toFront();
         registerEventEnterKey();
         hiddenPasswordField.textProperty().bindBidirectional(visiblePasswordField.textProperty());
+        passRestorePasswordField.textProperty().bindBidirectional(passRestoreTextField.textProperty());
 
         ShowPasswordBtn.setOnAction(event -> {
             PasswordVisibility();
             changeButtonIconForShowPasswordBtn();
         });
-        signInButton.setOnAction(event -> signIn());
+        signInButton.setOnAction(event -> {
+            try {
+                signIn();
+            } catch (SQLException ignored) {
+
+            }
+        });
 
         Image defaultIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/login_panel_icons/ic_show_password.png")));
         showPassButton.setImage(defaultIcon);
@@ -114,15 +113,33 @@ public class LoginController {
 
     private void registerEventEnterKey() {
         userNameField.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.ENTER) signIn();
+            if (e.getCode() == KeyCode.ENTER) {
+                try {
+                    signIn();
+                } catch (SQLException ignored) {
+
+                }
+            }
         });
 
         hiddenPasswordField.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.ENTER) signIn();
+            if (e.getCode() == KeyCode.ENTER) {
+                try {
+                    signIn();
+                } catch (SQLException ignored) {
+
+                }
+            }
         });
 
         visiblePasswordField.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.ENTER) signIn();
+            if (e.getCode() == KeyCode.ENTER) {
+                try {
+                    signIn();
+                } catch (SQLException ignored) {
+
+                }
+            }
         });
     }
 
@@ -153,7 +170,12 @@ public class LoginController {
         }
     }
 
-    private void signIn() {
+    private void signIn() throws SQLException {
+        if(!RestoreDatabase.isDatabaseExist("HotelDatabase")) {
+            errorMessage.setText("Chua co du lieu");
+            return;
+        };
+
         String userName = userNameField.getText();
         if (userName.isEmpty()) {
             errorMessage.setText(ErrorMessages.LOGIN_INVALID_USERNAME);
@@ -404,5 +426,189 @@ public class LoginController {
         cardIDTextField.setText("");
         emailTextField.setText("");
         usernameTextField.setText("");
+    }
+
+    @FXML
+    void restoreData() {
+        slideOutGridFromTop(loginGrid, restoreDataGrid);
+    }
+
+    @FXML
+    void backToLoginPanel() {
+        slideOutGridFromTop(restoreDataGrid, loginGrid);
+        switchFromPassPanelToRestorePanel(true, false);
+        passRestorePasswordField.setText("");
+        filePathRestoreTextField.setText("");
+    }
+
+    @FXML
+    void confirmPassRestore() {
+        final String key = "7523C62ABDB7628C5A9DAD8F97D8D8C5C040EDE36535E531A8A3748B6CAE7E00";
+        final String filePath = "E201065D0554652615C320C00A1D5BC8EDCA469D72C2790E24152D0C1E2B6189.properties";
+        String userPassInput =passRestorePasswordField.getText();
+        if(userPassInput == null || userPassInput.isBlank()){
+            showMessage(
+                    Alert.AlertType.INFORMATION,
+                    "Thong bao",
+                    "nhap pass di",
+                    "nhan ok de xac nhan"
+            ).show();
+            return;
+        }
+
+        if(PasswordHashing.hashPassword(userPassInput)
+                .equalsIgnoreCase(PropertiesFile.readFile(filePath, key))){
+            switchFromPassPanelToRestorePanel(false, true);
+        }else{
+            showMessage(
+                    Alert.AlertType.INFORMATION,
+                    "sai mat khau",
+                   "sai pass roi nha bro",
+                    "nhan ok de xac nhan"
+            ).show();
+        }
+    }
+
+    private void switchFromPassPanelToRestorePanel(boolean passPanelShow, boolean restorePanelShow){
+        passTitleText.setVisible(passPanelShow);
+        passTitleText.setManaged(passPanelShow);
+        filepathTitleText.setVisible(restorePanelShow);
+        filepathTitleText.setManaged(restorePanelShow);
+
+        passRestorePasswordField.setVisible(passPanelShow);
+        passRestorePasswordField.setManaged(passPanelShow);
+        passRestoreTextField.setVisible(passPanelShow);
+        passRestoreTextField.setManaged(passPanelShow);
+        filePathRestoreTextField.setVisible(restorePanelShow);
+        filePathRestoreTextField.setManaged(restorePanelShow);
+
+        showPassRestoreButton.setVisible(passPanelShow);
+        showPassRestoreButton.setManaged(passPanelShow);
+        filePathRestoreButton.setVisible(restorePanelShow);
+        filePathRestoreButton.setManaged(restorePanelShow);
+        researchFileRestoreButton.setVisible(restorePanelShow);
+        researchFileRestoreButton.setManaged(restorePanelShow);
+
+        refreshPassRestoreButton.setVisible(passPanelShow);
+        refreshPassRestoreButton.setManaged(passPanelShow);
+        confirmPassRestoreButton.setVisible(passPanelShow);
+        confirmPassRestoreButton.setManaged(passPanelShow);
+        cancelRestoreButton.setVisible(restorePanelShow);
+        cancelRestoreButton.setManaged(restorePanelShow);
+        restoreDataButton.setVisible(restorePanelShow);
+        restoreDataButton.setManaged(restorePanelShow);
+    }
+
+    @FXML
+    void refreshPassRestore() {
+        passRestorePasswordField.setText("");
+        passRestorePasswordField.requestFocus();
+    }
+
+    @FXML
+    void showPassRestore() {
+        changeButtonIconForShowPasswordBtn();
+        if(passRestorePasswordField.isVisible()){
+            passRestoreTextField.setVisible(true);
+            passRestoreTextField.setManaged(true);
+            passRestorePasswordField.setVisible(false);
+            passRestorePasswordField.setManaged(false);
+        }else{
+            passRestoreTextField.setVisible(false);
+            passRestoreTextField.setManaged(false);
+            passRestorePasswordField.setVisible(true);
+            passRestorePasswordField.setManaged(true);
+        }
+    }
+
+    @FXML
+    void confirmRestoreData() throws SQLException {
+        String filePath = filePathRestoreTextField.getText();
+        if(filePath == null || filePath.isBlank()){
+            showMessage(
+                    Alert.AlertType.INFORMATION,
+                    "Thong bao",
+                    "Hay chon tep du lieu de khoi phuc",
+                    "Nhan ok de xac nhan"
+            ).show();
+            return;
+        }
+
+        String[] parts = filePath.split("\\\\");
+        String fileName = parts[parts.length - 1];
+        if(!fileName.contains(".bak")){
+            showMessage(
+                    Alert.AlertType.INFORMATION,
+                    "Thong bao",
+                    "Sai loai tep, tep phai co duoi .bak",
+                    "Nhan ok de xac nhan"
+            ).show();
+            return;
+        }
+
+        String databaseName = "HotelDatabase";
+        if(RestoreDatabase.isDatabaseExist(databaseName)) {
+            Optional<ButtonType> optional = showMessage(
+                    Alert.AlertType.CONFIRMATION,
+                    "Thong bao",
+                    "Du lieu da ton tai, co muon ghi de khong",
+                    "Nhan ok de ghi de, cancel de huy"
+            ).showAndWait();
+
+            if(optional.isPresent() && optional.get().equals(ButtonType.OK)){
+                try {
+                    RestoreDatabase.restoreFullWhenNoDB(filePath);
+                    System.out.println("Database restored successfully!");
+                }catch (Exception e){
+                    showMessage(
+                            Alert.AlertType.INFORMATION,
+                            "Thong bao",
+                            "Tep du lieu phuc hoi rong",
+                            "Nhan ok de xac nhan"
+                    ).show();
+                }
+
+            }
+        }else{
+            try {
+                RestoreDatabase.restoreFullWhenNoDB(filePath);
+                System.out.println("Database restored successfully!");
+            }catch (Exception e){
+                showMessage(
+                        Alert.AlertType.INFORMATION,
+                        "Thong bao",
+                        "Tep du lieu phuc hoi rong",
+                        "Nhan ok de xac nhan"
+                ).show();
+            }
+        }
+    }
+
+    @FXML
+    void cancelRestore(ActionEvent event) {
+        switchFromPassPanelToRestorePanel(true, false);
+        filePathRestoreTextField.setText("");
+    }
+
+    @FXML
+    void researchFileRestore(ActionEvent event) {
+
+    }
+
+    @FXML
+    void getFilePath() {
+        FileChooser fileChooser = new FileChooser();
+        File f = fileChooser.showOpenDialog(null);
+
+        if(f == null) return;
+        filePathRestoreTextField.setText(f.getAbsolutePath());
+    }
+
+    private Alert showMessage(Alert.AlertType alertType, String title, String header, String content){
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+        return alert;
     }
 }

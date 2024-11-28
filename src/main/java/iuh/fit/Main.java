@@ -3,27 +3,54 @@ package iuh.fit;
 import iuh.fit.controller.MainController;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.models.Account;
+import iuh.fit.security.PreferencesKey;
 import iuh.fit.utils.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Optional;
 
 @SuppressWarnings("unused")
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException, SQLException {
-        RoomManagementService.startAutoCheckoutScheduler();
+        startWithLogin(primaryStage);
 
-        startWithoutLogin(primaryStage);
-        //startWithLogin(primaryStage);
+        // check if db not exist
+        if(!RestoreDatabase.isDatabaseExist("HotelDatabase")) return;
 
+        try {
+            RoomManagementService.startAutoCheckoutScheduler();
+        }catch (Exception e){
+            System.out.println("Chua co database");
+        }
+
+
+        //startWithoutLogin(primaryStage);
+
+
+
+        // check if we have 30 backup dif already
+        // if > 30, backupfull with the day nearest the backupfule file
+        // and remove this file
+        // BackupDatabase.checkNumOfBackupFile();
+
+        // handle backup event when slose the app
         primaryStage.setOnCloseRequest(event -> {
             try {
                 BackupDatabase.backupData(primaryStage);

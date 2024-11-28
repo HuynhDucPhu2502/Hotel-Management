@@ -64,13 +64,6 @@ public class BackupAndRestoreController {
         this.loadingProgressBarPanel();
     }
 
-    private void loadingProgressBarPanel() throws IOException {
-        this.progressPanelFXML = getProgressPanelFXML();
-        this.progressPanelFXML.load();
-        this.progressbarScene = new Scene(progressPanelFXML.getRoot());
-        this.progressController = progressPanelFXML.getController();
-    }
-
     @FXML
     void setBackupWay() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -99,7 +92,6 @@ public class BackupAndRestoreController {
             return;
         }
 
-
         Optional<ButtonType> optional = showMessage(
                 Alert.AlertType.CONFIRMATION,
                 "Khoi phuc du lieu",
@@ -121,7 +113,7 @@ public class BackupAndRestoreController {
                         .findFirst().orElse(null);
                 if(fullBackup == null) return;
 
-                if(dataIsUnsing(displayOnTableTableRow.getFilePath())){
+                if(dataIsUsing(displayOnTableTableRow.getFilePath())){
                     showMessage(
                             Alert.AlertType.ERROR,
                             "Canh bao",
@@ -131,20 +123,46 @@ public class BackupAndRestoreController {
                     tableData.getSelectionModel().clearSelection();
                     return;
                 }
+
+                String filePath = displayOnTableTableRow.getFilePath();
+                File f = new File(filePath);
+
+                // dung xoa cai nay
+                if(!f.exists()) {
+                    showMessage(
+                            Alert.AlertType.INFORMATION,
+                            "Thong bao",
+                            "Tep du lieu phuc hoi rong",
+                            "Nhan ok de xac nhan"
+                    ).show();
+                    return;
+                }
+
                 stage.show();
 
                 progressController.setProgress(0.3);
 
-                RestoreDatabase.restoreDif(fullBackup.getAbsolutePath(), displayOnTableTableRow.getFilePath());
+                try {
+                    RestoreDatabase.restoreDif(fullBackup.getAbsolutePath(), filePath);
+                }catch (Exception e){
+                    showMessage(
+                            Alert.AlertType.INFORMATION,
+                            "Thong bao",
+                            "Tep du lieu phuc hoi rong",
+                            "Nhan ok de xac nhan"
+                    ).show();
+                }
+
                 progressController.setProgress(0.5);
 
                 FilePathManager.savePath(
                         PreferencesKey.CURRENT_USING_DATA,
-                        displayOnTableTableRow.getFilePath());
-                currentUsingDataText.setText(displayOnTableTableRow.getFilePath());
+                        filePath);
+                currentUsingDataText.setText(filePath);
                 progressController.setProgress(1);
-            } else if (displayOnTableTableRow.getFilePath().contains("FULL")){
-                if(dataIsUnsing(displayOnTableTableRow.getFilePath())){
+            }
+            else if (displayOnTableTableRow.getFilePath().contains("FULL")){
+                if(dataIsUsing(displayOnTableTableRow.getFilePath())){
                     showMessage(
                             Alert.AlertType.ERROR,
                             "Canh bao",
@@ -154,35 +172,49 @@ public class BackupAndRestoreController {
                     tableData.getSelectionModel().clearSelection();
                     return;
                 }
+
+
+
+                String filePath = displayOnTableTableRow.getFilePath();
+                File f = new File(filePath);
+
+                // dung xoa cai nay
+                if(!f.exists()) {
+                    showMessage(
+                            Alert.AlertType.INFORMATION,
+                            "Thong bao",
+                            "Tep du lieu phuc hoi rong",
+                            "Nhan ok de xac nhan"
+                    ).show();
+                    return;
+                }
+
                 stage.show();
+
                 progressController.setProgress(0.3);
-                RestoreDatabase.restoreFull(displayOnTableTableRow.getFilePath());
+
+                RestoreDatabase.restoreFull(filePath);
+
                 progressController.setProgress(0.5);
                 FilePathManager.savePath(
                         PreferencesKey.CURRENT_USING_DATA,
-                        displayOnTableTableRow.getFilePath());
-                currentUsingDataText.setText(displayOnTableTableRow.getFilePath());
+                        filePath);
+                currentUsingDataText.setText(filePath);
                 progressController.setProgress(1);
+
+                showMessage(
+                        Alert.AlertType.INFORMATION,
+                        "Phu hoi du lieu thanh cong",
+                        "Du lieu da duoc phuc hoi thanh cong",
+                        "Nhan ok de Xac nhan"
+                ).show();
             }
 
             stage.close();
 
-            showMessage(
-                    Alert.AlertType.INFORMATION,
-                    "Phu hoi du lieu thanh cong",
-                    "Du lieu da duoc phuc hoi thanh cong",
-                    "Nhan ok de Xac nhan"
-            ).show();
-
-            progressController.setProgress(0.1);
+            progressController.setProgress(0);
         }
         tableData.getSelectionModel().clearSelection();
-    }
-
-    private boolean dataIsUnsing(String dataFilePath){
-        File currentUsingFile = new File(currentUsingDataText.getText());
-        File checkingFile = new File(dataFilePath);
-        return currentUsingFile.equals(checkingFile);
     }
 
     @FXML
@@ -312,7 +344,7 @@ public class BackupAndRestoreController {
         ObservableList<FileDisplayOnTable> data = FXCollections.observableArrayList();
         File[] files = new File(restoreFolder).listFiles();
 
-        if(files == null || files.length == 0) {
+        if(files == null) {
             tableData.getItems().setAll(data);
             return;
         }
@@ -374,6 +406,9 @@ public class BackupAndRestoreController {
         tableData.getSortOrder().add(createdColumn);
         createdColumn.setSortType(TableColumn.SortType.DESCENDING);
         tableData.sort();
+
+        // clear selection
+        tableData.getSelectionModel().clearSelection();
     }
 
     private void loadSettingData(){
@@ -487,6 +522,19 @@ public class BackupAndRestoreController {
         stage.setScene(scene);
         stage.setTitle(title);
         return stage;
+    }
+
+    private void loadingProgressBarPanel() throws IOException {
+        this.progressPanelFXML = getProgressPanelFXML();
+        this.progressPanelFXML.load();
+        this.progressbarScene = new Scene(progressPanelFXML.getRoot());
+        this.progressController = progressPanelFXML.getController();
+    }
+
+    private boolean dataIsUsing(String dataFilePath){
+        File currentUsingFile = new File(currentUsingDataText.getText());
+        File checkingFile = new File(dataFilePath);
+        return currentUsingFile.equals(checkingFile);
     }
 }
 
