@@ -16,6 +16,12 @@ public class DBHelper {
             encrypt=true;
             trustServerCertificate=true
             """;
+    private static final String URL_NO_DB =
+            """
+            jdbc:sqlserver://localhost;
+            encrypt=true;
+            trustServerCertificate=true
+            """;
 
     private static int connectCount = 0;
 
@@ -47,5 +53,9 @@ public class DBHelper {
                 USER_NAME,
                 USER_PASSWORD
         );
+    }
+
+    public static Connection getConnectWhenNoDB() throws SQLException {
+        return DriverManager.getConnection(URL_NO_DB, USER_NAME, USER_PASSWORD);
     }
 }
