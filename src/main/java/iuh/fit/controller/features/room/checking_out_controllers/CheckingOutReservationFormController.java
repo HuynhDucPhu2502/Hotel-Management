@@ -6,10 +6,9 @@ import iuh.fit.controller.features.room.RoomBookingController;
 
 import iuh.fit.dao.*;
 import iuh.fit.models.*;
-import iuh.fit.models.enums.DialogType;
-import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
+import iuh.fit.utils.RoomManagementService;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -24,7 +23,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 
 public class CheckingOutReservationFormController {
@@ -233,62 +231,13 @@ public class CheckingOutReservationFormController {
             confirmDialog.onClose(buttonType -> {
                 if (buttonType == ButtonType.YES) {
                     try {
-                        // 1. Tạo mới một bản ghi HistoryCheckOut
-                        HistoryCheckOut historyCheckOut = new HistoryCheckOut();
-                        historyCheckOut.setHistoryCheckOutID(HistoryCheckOutDAO.getNextID());
-                        historyCheckOut.setCheckOutDate(LocalDateTime.now());
-                        historyCheckOut.setReservationForm(roomWithReservation.getReservationForm());
-                        historyCheckOut.setEmployee(employee);
+                        RoomManagementService.handleCheckOut(roomWithReservation, employee);
 
-                        // Lưu thông tin check-out vào DB
-                        HistoryCheckOutDAO.createData(historyCheckOut);
-
-                        // 2. Lấy đối tượng Tax mặc định
-                        Tax tax = TaxDAO.getDataByID("tax-000001");
-
-                        // 3. Tạo hóa đơn mới
-                        Invoice invoice = new Invoice();
-                        invoice.setInvoiceID(InvoiceDAO.getNextInvoiceID());
-                        invoice.setInvoiceDate(LocalDateTime.now());
-
-                        // Tính toán các chi phí cho hóa đơn
-                        double roomCharge = Calculator.calculateRoomCharge(roomWithReservation.getRoom(),
-                                roomWithReservation.getReservationForm().getCheckInDate(), roomWithReservation.getReservationForm().getCheckOutDate());
-                        double servicesCharge = Calculator.calculateTotalServiceCharge(roomWithReservation.getReservationForm().getReservationID());
-                        double totalDue = roomCharge * 0.9 + servicesCharge;
-                        double netDue = totalDue * (1 + Objects.requireNonNull(tax).getTaxRate());
-
-                        invoice.setRoomCharge(roomCharge);
-                        invoice.setServicesCharge(servicesCharge);
-                        invoice.setTotalDue(totalDue);
-                        invoice.setNetDue(netDue);
-                        invoice.setTax(tax);
-                        invoice.setReservationForm(roomWithReservation.getReservationForm());
-
-                        // Lưu hóa đơn vào DB
-                        InvoiceDAO.createData(invoice);
-
-                        // 4. Cập nhật trạng thái phòng về AVAILABLE
-                        Room room = roomWithReservation.getRoom();
-                        RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.AVAILABLE);
-
-                        // 5. Ghi nhận vào RoomDialog với sự kiện Check-Out
-                        RoomDialog roomDialog = new RoomDialog(
-                                room,
-                                roomWithReservation.getReservationForm(),
-                                "Check-out cho phòng " + room.getRoomNumber(),
-                                DialogType.CHECKOUT,
-                                LocalDateTime.now()
-                        );
-                        RoomDialogDAO.createData(roomDialog);
-
-                        // Hiển thị thông báo thành công
                         dialogPane.showInformation("THÀNH CÔNG", "Check-out và tạo hóa đơn thành công!");
                         navigateToRoomBookingPanel();
-
                     } catch (Exception ex) {
                         ex.printStackTrace();
-                        dialogPane.showInformation("LỖI", "Đã xảy ra lỗi trong quá trình check-out. Vui lòng thử lại!");
+                        dialogPane.showInformation("LỖI", ex.getMessage());
                     }
                 }
             });
@@ -298,10 +247,4 @@ public class CheckingOutReservationFormController {
             dialogPane.showInformation("LỖI", "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại!");
         }
     }
-
-
-
-
-
-
 }

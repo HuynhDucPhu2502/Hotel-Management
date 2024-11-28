@@ -1,12 +1,13 @@
-package iuh.fit.controller.features.room;
+package iuh.fit.controller.features.invoice;
 
 import com.dlsc.gemsfx.daterange.DateRangePicker;
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.room.invoice_controllers.InvoiceItemController;
+import iuh.fit.controller.features.invoice.invoice_controllers.InvoiceItemController;
 import iuh.fit.dao.InvoiceDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Invoice;
 import iuh.fit.utils.EditDateRangePicker;
+import iuh.fit.utils.RoomManagementService;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -48,6 +49,8 @@ public class InvoiceManagerController {
         Task<List<Invoice>> loadDataTask = new Task<>() {
             @Override
             protected List<Invoice> call() {
+                RoomManagementService.autoCheckoutOverdueRooms();
+
                 return InvoiceDAO.getAllInvoices();
             }
         };

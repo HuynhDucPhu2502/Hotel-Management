@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.dlsc.gemsfx.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="407.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.employee.ShiftInformationViewCotroller">
+   <children>
+       <DialogPane fx:id="dialogPane" animationDuration="200.0ms" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Label layoutX="161.0" layoutY="14.0" text="THÔNG TIN CA LÀM CHI TIẾT">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <GridPane layoutX="31.0" layoutY="49.0" prefHeight="118.0" prefWidth="538.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="113.79998779296875" minWidth="10.0" prefWidth="106.4" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="127.9999755859375" minWidth="10.0" prefWidth="127.9999755859375" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="98.20001220703125" minWidth="10.0" prefWidth="29.599963378906267" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="161.60003662109375" minWidth="10.0" prefWidth="161.60003662109375" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="108.79998779296875" minWidth="10.0" prefWidth="108.79998779296875" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="28.59998779296875" minHeight="10.0" prefHeight="27.9999755859375" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="42.3999755859375" minHeight="10.0" prefHeight="34.4000244140625" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="38.399993896484375" minHeight="10.0" prefHeight="29.4" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="38.399993896484375" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label prefWidth="113.0" text="Thông tin chi tiết">
+               <font>
+                  <Font name="System Italic" size="14.0" />
+               </font>
+            </Label>
+            <Label text="Mã ca làm:" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label text="Giờ bắt đầu:" GridPane.rowIndex="2">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label text="Ngày trong tuần:" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label text="Giờ kết thúc:" GridPane.columnIndex="3" GridPane.rowIndex="2">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="shiftIDLabel" text="rỗng" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="startTimeLabel" text="rỗng" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="scheduleLabel" text="rỗng" GridPane.columnIndex="4" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="endTimeLabel" text="rỗng" GridPane.columnIndex="4" GridPane.rowIndex="2">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label text="Số giờ làm việc:" GridPane.rowIndex="3">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="numberOfHourLabel" text="rỗng" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label text="Ngày cập nhật mới nhất:" GridPane.columnIndex="3" GridPane.rowIndex="3">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="modifiedDateLabel" text="rỗng" GridPane.columnIndex="4" GridPane.rowIndex="3">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </GridPane>
+      <Label layoutX="31.0" layoutY="168.0" text="Những nhân viên thuộc ca làm này:">
+         <font>
+            <Font name="System Italic" size="14.0" />
+         </font>
+      </Label>
+      <TableView fx:id="employeeTableView" layoutX="31.0" layoutY="200.0" prefHeight="190.0" prefWidth="538.0">
+        <columns>
+          <TableColumn fx:id="employeeIDColumn" prefWidth="105.60003662109375" text="Mã nhân viên" />
+          <TableColumn fx:id="fullNameColumn" prefWidth="172.0" text="Họ và tên" />
+            <TableColumn fx:id="positionColumn" prefWidth="115.20001220703125" text="Chức vụ" />
+            <TableColumn fx:id="phoneNumberColumn" prefWidth="143.19998779296873" text="Số điện thoại" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

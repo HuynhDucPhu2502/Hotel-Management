@@ -1,5 +1,6 @@
 package iuh.fit.controller.features.employee;
 
+import iuh.fit.controller.MainController;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.enums.Gender;
@@ -72,6 +73,12 @@ public class EmployeeSearchingController {
 
     private ObservableList<Employee> items;
 
+    private MainController mainController;
+
+    public void setupContext(MainController mainController) {
+        this.mainController = mainController;
+    }
+
     public void initialize() {
         loadData();
         setupTable();
@@ -104,8 +111,6 @@ public class EmployeeSearchingController {
         items = FXCollections.observableArrayList(employeeList);
         employeeTableView.setItems(items);
         employeeTableView.refresh();
-
-
         positionCBox.getSelectionModel().selectFirst();
     }
 
@@ -125,6 +130,31 @@ public class EmployeeSearchingController {
             );
         });
         setupActionColumn();
+        setupTableContextMenu();
+    }
+
+    private void setupTableContextMenu() {
+        ContextMenu contextMenu = new ContextMenu();
+
+        MenuItem editMenuItem = new MenuItem("Chỉnh sửa");
+
+        editMenuItem.setOnAction(event -> {
+            Employee employee = employeeTableView.getSelectionModel().getSelectedItem();
+            if (employee != null) {
+                try {
+                    handleEditEmployee(employee);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        contextMenu.getItems().addAll(editMenuItem);
+        employeeTableView.setContextMenu(contextMenu);
+    }
+
+    private void handleEditEmployee(Employee employee) throws IOException {
+        mainController.loadPanelEmployeeManagerController("/iuh/fit/view/features/employee/EmployeeManagerPanel.fxml", employee);
     }
 
     private void setupActionColumn() {

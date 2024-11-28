@@ -106,15 +106,6 @@ public class MenuController {
     @FXML
     private Button invoiceBtn;
 
-    @FXML
-    private HBox invoiceManagerContainer;
-    @FXML
-    private Button invoiceManagerBtn;
-
-    @FXML
-    private ImageView arrowUpForInvoice;
-
-
 //  =====================================================
     // Service
     @FXML
@@ -211,7 +202,6 @@ public class MenuController {
 
         employeeBtn.setOnAction(e -> dropDownMenuEvent(List.of(employeeManagerContainer, accountOfEmployeeManagerContainer, employeeSearchingContainer, shiftManagerContainer), arrowUpForEmpBtn, "employee"));
         roomBtn.setOnAction(e -> dropDownMenuEvent(List.of(pricingManagerContainer, roomCategoryManagerContainer, roomManagerContainer, roomSearchingContainer, roomBookingContainer), arrowUpForRoom, "room"));
-        invoiceBtn.setOnAction(e -> dropDownMenuEvent(List.of(invoiceManagerContainer), arrowUpForInvoice, "invoice"));
         serviceBtn.setOnAction(e -> dropDownMenuEvent(List.of(serviceCategoryManagerContainer, hotelServiceManagerContainer, hotelServiceSearchingContainer), arrowUpForService, "service"));
         customerBtn.setOnAction(e -> dropDownMenuEvent(List.of(customerManagerContainer, customerSearchingContainer), arrowUpForCustomer, "customer"));
         statisticsBtn.setOnAction(e -> dropDownMenuEvent(List.of(revenueStatisticsContainer, rateUsingRoomContainer), arrowUpForStatistics, "statistics"));
@@ -335,10 +325,6 @@ public class MenuController {
         return customerSearchingButton;
     }
 
-    public Button getInvoiceManagerBtn() {
-        return invoiceManagerBtn;
-    }
-
     public Button getRateUsingRoomButton(){
         return rateUsingRoomButton;
     }
@@ -347,5 +333,8 @@ public class MenuController {
         return backupBtn;
     }
 
+    public Button getInvoiceBtn() {
+        return invoiceBtn;
+    }
 }
 

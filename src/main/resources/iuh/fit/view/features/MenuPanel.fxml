@@ -18,9 +18,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane stylesheets="@../../styles/Menubar.css" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
+<AnchorPane stylesheets="@../../styles/Menubar.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.MenuController">
    <children>
-      <VBox fx:id="employeeInformationContainer" minHeight="165.0" prefHeight="189.0" prefWidth="254.0" styleClass="menu-bar-topbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="employeeInformationContainer" styleClass="menu-bar-topbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Circle fx:id="avatar" fill="DODGERBLUE" radius="42.0" stroke="TRANSPARENT" strokeType="INSIDE" />
             <Text fx:id="employeePositionText" fill="#fffbfb" strokeType="OUTSIDE" strokeWidth="0.0" text="Quản Lý">
@@ -50,7 +50,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </VBox>
-      <AnchorPane layoutY="199.2" minHeight="399.0" minWidth="240.0" prefHeight="399.0" prefWidth="254.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="199.0">
+      <AnchorPane layoutY="199.2" minHeight="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="199.0">
          <children>
             <ScrollPane fx:id="scrollPane" style="-fx-background-radius: 10; -fx-border-radius: 10;" styleClass="scrollPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <content>
@@ -319,30 +319,10 @@
                                              </image>
                                           </ImageView>
                                           <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Hóa đơn" textFill="WHITE" />
-                                          <ImageView fx:id="arrowUpForInvoice" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="35">
-                                             <image>
-                                                <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
-                                             </image>
-                                          </ImageView>
                                        </children>
                                     </HBox>
                                  </graphic>
                               </Button>
-                              <HBox fx:id="invoiceManagerContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
-                                 <children>
-                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
-                                       <elements>
-                                          <MoveTo x="10" y="25" />
-                                          <LineTo x="10" y="40" />
-                                          <LineTo x="20" y="40" />
-                                       </elements>
-                                    </Path>
-                                    <Button fx:id="invoiceManagerBtn" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 10;" styleClass="menu-bar-child" text="Quản lý hóa đơn" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </HBox>
                            </children>
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="200.0">
@@ -598,25 +578,9 @@
                                           <MoveTo x="10" y="25" />
                                           <LineTo x="10" y="40" />
                                           <LineTo x="20" y="40" />
-                                          <MoveTo x="10" y="40" />
-                                          <LineTo x="10" y="55" />
                                        </elements>
                                     </Path>
                                     <Button fx:id="backupBtn" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 5;" styleClass="menu-bar-child" text="Thiết lập sao lưu dữ liệu" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </HBox>
-                              <HBox fx:id="rateUsingRoomContainer1" managed="false" prefHeight="46" prefWidth="300.0" style="-fx-padding: 0 0 0 20;" visible="false">
-                                 <children>
-                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
-                                       <elements>
-                                          <MoveTo x="10" y="25" />
-                                          <LineTo x="10" y="40" />
-                                          <LineTo x="20" y="40" />
-                                       </elements>
-                                    </Path>
                                  </children>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />

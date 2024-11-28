@@ -1,4 +1,4 @@
-package iuh.fit.controller.features.room.invoice_controllers;
+package iuh.fit.controller.features.invoice.invoice_controllers;
 
 import iuh.fit.controller.MainController;
 import iuh.fit.models.Employee;

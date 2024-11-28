@@ -13,7 +13,7 @@ import iuh.fit.models.Employee;
 import iuh.fit.models.Room;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
-import iuh.fit.utils.RoomStatusHelper;
+import iuh.fit.utils.RoomManagementService;
 import iuh.fit.utils.TimelineManager;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -62,7 +62,7 @@ public class RoomBookingController {
         setActiveButtonStyle(allBtn);
         MainController.setRoomBookingLoaded(true);
 
-        TimelineManager.getInstance().printAllTimelines();
+
     }
 
     public void setupContext(MainController mainController, Employee employeee) {
@@ -101,7 +101,7 @@ public class RoomBookingController {
                     roomFloorNumberCBox.getSelectionModel().selectFirst();
                 });
 
-                RoomStatusHelper.autoCheckoutOverdueRooms();
+                RoomManagementService.autoCheckoutOverdueRooms();
                 return RoomWithReservationDAO.getRoomWithReservation().stream()
                         .sorted(Comparator.comparing(r -> r.getRoom().getRoomNumber()))
                         .toList();
@@ -112,6 +112,7 @@ public class RoomBookingController {
             roomWithReservations = loadDataTask.getValue();
             displayFilteredRooms(roomWithReservations);
             loadDataForBtn();
+            TimelineManager.getInstance().printAllTimelines();
         });
 
         loadDataTask.setOnFailed(event -> {

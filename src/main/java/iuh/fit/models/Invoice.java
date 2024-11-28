@@ -1,7 +1,6 @@
 package iuh.fit.models;
 
 import iuh.fit.utils.ErrorMessages;
-import iuh.fit.utils.RegexChecker;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -13,31 +12,20 @@ public class Invoice {
     private double servicesCharge;
     private double totalDue;
     private double netDue;
-    private Tax tax;
-
     private ReservationForm reservationForm;
 
     public Invoice(String invoiceID, LocalDateTime invoiceDate, double roomCharge, double servicesCharge,
-            double totalDue, double netDue, Tax tax, ReservationForm reservationForm) {
+            double totalDue, double netDue, ReservationForm reservationForm) {
         this.setInvoiceID(invoiceID);
         this.setInvoiceDate(invoiceDate);
         this.roomCharge = roomCharge;
         this.servicesCharge = servicesCharge;
         this.setTotalDue(totalDue);
         this.setNetDue(netDue);
-        this.setTax(tax);
         this.reservationForm = reservationForm;
     }
 
-    public Invoice(String invoiceID) {
-        this.setInvoiceID(invoiceID);
-    }
-
     public Invoice() {
-    }
-
-    public String getInvoiceID() {
-        return invoiceID;
     }
 
     public void setInvoiceID(String invoiceID) {
@@ -46,18 +34,10 @@ public class Invoice {
         this.invoiceID = invoiceID;
     }
 
-    public LocalDateTime getInvoiceDate() {
-        return invoiceDate;
-    }
-
     public void setInvoiceDate(LocalDateTime invoiceDate) {
         if (invoiceDate == null)
             throw new IllegalArgumentException(ErrorMessages.INVOICE_INVALID_INVOICE_DATE_ISNULL);
         this.invoiceDate = invoiceDate;
-    }
-
-    public double getTotalDue() {
-        return totalDue;
     }
 
     public void setTotalDue(double totalDue) {
@@ -66,48 +46,50 @@ public class Invoice {
         this.totalDue = totalDue;
     }
 
-    public double getNetDue() {
-        return netDue;
-    }
-
     public void setNetDue(double netDue) {
         if (netDue <= 0)
             throw new IllegalArgumentException(ErrorMessages.INVOICE_INVALID_NETDUE);
         this.netDue = netDue;
     }
 
-    public double getRoomCharge() {
-        return roomCharge;
-    }
-
     public void setRoomCharge(double roomCharge) {
         this.roomCharge = roomCharge;
-    }
-
-    public double getServicesCharge() {
-        return servicesCharge;
     }
 
     public void setServicesCharge(double servicesCharge) {
         this.servicesCharge = servicesCharge;
     }
 
-    public ReservationForm getReservationForm() {
-        return reservationForm;
-    }
-
     public void setReservationForm(ReservationForm reservationForm) {
         this.reservationForm = reservationForm;
     }
 
-    public Tax getTax() {
-        return tax;
+    public String getInvoiceID() {
+        return invoiceID;
     }
 
-    public void setTax(Tax tax) {
-        if (tax == null)
-            throw new IllegalArgumentException(ErrorMessages.INVOICE_INVALID_TAX_ISNULL);
-        this.tax = tax;
+    public LocalDateTime getInvoiceDate() {
+        return invoiceDate;
+    }
+
+    public double getRoomCharge() {
+        return roomCharge;
+    }
+
+    public double getServicesCharge() {
+        return servicesCharge;
+    }
+
+    public double getTotalDue() {
+        return totalDue;
+    }
+
+    public double getNetDue() {
+        return netDue;
+    }
+
+    public ReservationForm getReservationForm() {
+        return reservationForm;
     }
 
     @Override
@@ -121,19 +103,5 @@ public class Invoice {
     @Override
     public int hashCode() {
         return Objects.hash(invoiceID);
-    }
-
-    @Override
-    public String toString() {
-        return "Invoice{" +
-                "invoiceID='" + invoiceID + '\'' +
-                ", invoiceDate=" + invoiceDate +
-                ", roomCharge=" + roomCharge +
-                ", servicesCharge=" + servicesCharge +
-                ", totalDue=" + totalDue +
-                ", netDue=" + netDue +
-                ", tax=" + tax +
-                ", reservationForm=" + reservationForm +
-                '}';
     }
 }

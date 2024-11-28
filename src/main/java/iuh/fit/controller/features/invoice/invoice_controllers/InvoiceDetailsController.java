@@ -1,9 +1,9 @@
-package iuh.fit.controller.features.room.invoice_controllers;
+package iuh.fit.controller.features.invoice.invoice_controllers;
 
 import com.dlsc.gemsfx.DialogPane;
 import com.itextpdf.text.DocumentException;
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.room.InvoiceManagerController;
+import iuh.fit.controller.features.invoice.InvoiceManagerController;
 import iuh.fit.dao.HistoryCheckOutDAO;
 import iuh.fit.dao.HistoryCheckinDAO;
 import iuh.fit.dao.RoomUsageServiceDAO;
@@ -43,7 +43,7 @@ public class InvoiceDetailsController {
     @FXML
     private Text totalServiceChargeText, totalRoomChargeText,
             totalRoomDepositeText, totalDueText, taxText,
-            netDueText, invoiceTitleText;
+            netDueText, invoiceTitleText, remaningDueText;
 
     @FXML
     private TableView<RoomUsageService> roomUsageServiceTableView;
@@ -154,12 +154,11 @@ public class InvoiceDetailsController {
         double depositAmount = invoice.getReservationForm().getRoomBookingDeposit();
         totalRoomDepositeText.setText("-" + String.format("%,.0f", depositAmount));
         totalDueText.setText(String.format("%,.0f", invoice.getTotalDue()));
-        double taxRate = invoice.getTax().getTaxRate();
-        double taxAmount = invoice.getTotalDue() * taxRate / 100;
+        double taxAmount = invoice.getTotalDue() * 0.1;
+        invoiceTitleText.setText("Thuế (10%)" );
         taxText.setText(String.format("%,.0f", taxAmount));
         netDueText.setText(String.format("%,.0f", invoice.getNetDue()));
-
-        invoiceTitleText.setText("Thuế " + "(" + taxRate * 100 + "%)");
+        remaningDueText.setText(String.format("%,.0f", invoice.getNetDue() - depositAmount));
     }
 
     // ==================================================================================================================

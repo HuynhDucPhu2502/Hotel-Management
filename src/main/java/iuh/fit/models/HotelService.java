@@ -31,67 +31,63 @@ public class HotelService {
         this.setServiceId(serviceId);
     }
 
-    public String getServiceId() {
-        return serviceId;
-    }
-
     public void setServiceId(String serviceId) {
-        if (serviceId == null || serviceId.trim().isEmpty()) {
+        if (serviceId == null || serviceId.trim().isEmpty())
             throw new IllegalArgumentException(ErrorMessages.HOTEL_SERVICE_INVALID_ID_ISNULL);
-        }
-        if (!RegexChecker.isValidIDFormat(GlobalConstants.HOTELSERVICE_PREFIX, serviceId)) {
+
+        if (!RegexChecker.isValidIDFormat(GlobalConstants.HOTELSERVICE_PREFIX, serviceId))
             throw new IllegalArgumentException(ErrorMessages.HOTEL_SERVICE_INVALID_ID_FORMAT);
-        }
+
         this.serviceId = serviceId;
     }
 
-    public String getServiceName() {
-        return serviceName;
-    }
-
     public void setServiceName(String serviceName) {
-        if (serviceName == null || serviceName.trim().isEmpty()) {
+        if (serviceName == null || serviceName.trim().isEmpty())
             throw new IllegalArgumentException(ErrorMessages.HOTEL_SERVICE_INVALID_NAME_ISNULL);
-        }
         this.serviceName = serviceName;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setDescription(String description) {
-        if (description == null || description.trim().isEmpty()) {
+        if (description == null || description.trim().isEmpty())
             throw new IllegalArgumentException(ErrorMessages.HOTEL_SERVICE_DESCRIPTION_ISNULL);
-        }
         this.description = description;
     }
 
-    public double getServicePrice() {
-        return servicePrice;
-    }
-
     public void setServicePrice(double servicePrice) {
-        if (servicePrice < 0) {
-            throw new IllegalArgumentException(ErrorMessages.HOTEL_SERVICE_INVALID_PRICE);
-        }
+        if (servicePrice < 0) throw new IllegalArgumentException(ErrorMessages.HOTEL_SERVICE_INVALID_PRICE);
         this.servicePrice = servicePrice;
-    }
-
-    public ServiceCategory getServiceCategory() {
-        return serviceCategory;
     }
 
     public void setServiceCategory(ServiceCategory serviceCategory) {
         this.serviceCategory = serviceCategory;
     }
 
-    public ObjectStatus getObjectStatus() {
-        return objectStatus;
-    }
-
     public void setObjectStatus(ObjectStatus objectStatus) {
         this.objectStatus = objectStatus;
+    }
+
+    public String getServiceId() {
+        return serviceId;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public double getServicePrice() {
+        return servicePrice;
+    }
+
+    public ServiceCategory getServiceCategory() {
+        return serviceCategory;
+    }
+
+    public ObjectStatus getObjectStatus() {
+        return objectStatus;
     }
 
     @Override
@@ -107,14 +103,4 @@ public class HotelService {
         return Objects.hash(serviceId);
     }
 
-    @Override
-    public String toString() {
-        return "HotelService{" +
-                "serviceId='" + serviceId + '\'' +
-                ", serviceName='" + serviceName + '\'' +
-                ", servicePrice=" + servicePrice +
-                ", description='" + description + '\'' +
-                ", serviceCategory=" + serviceCategory +
-                '}';
-    }
 }

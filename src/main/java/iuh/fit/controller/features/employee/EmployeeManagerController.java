@@ -93,14 +93,15 @@ public class EmployeeManagerController {
         dialogPane.toFront();
 
         employeeTableView.setFixedCellSize(40);
-
-        loadData();
+        employeeIDSearchField.setOnAction(e -> handleSearchAction());
         setupTable();
+        loadData();
+
 
         resetBtn.setOnAction(e -> handleResetAction());
         addBtn.setOnAction(e -> handleAddAction());
         updateBtn.setOnAction(e -> handleUpdateAction());
-        employeeIDSearchField.setOnAction(e -> handleSearchAction());
+
 
         employeeTableView.setRowFactory(x->{
             TableRow<Employee> employeeRow = new TableRow<>();
@@ -121,7 +122,7 @@ public class EmployeeManagerController {
         });
     }
 
-    private void loadData() {
+    public void loadData() {
         Task<Void> loadDataTask = new Task<>() {
             @Override
             protected Void call() {
@@ -343,7 +344,7 @@ public class EmployeeManagerController {
     }
 
     // 5. Chức năng Tìm kiếm
-    private void handleSearchAction() {
+    public void handleSearchAction() {
         fullNameSearchField.setText("");
         phoneNumberSearchField.setText("");
         positionSearchField.setText("");
@@ -504,5 +505,12 @@ public class EmployeeManagerController {
         resetBtn.setDisable(disabled);
         addBtn.setDisable(disabled);
         updateBtn.setDisable(disabled);
+    }
+
+    public void setInformation(Employee emp){
+        Platform.runLater(() -> {
+            employeeIDSearchField.setValue(emp.getEmployeeID());
+            handleUpdateBtn(emp);
+        });
     }
 }
