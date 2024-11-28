@@ -210,6 +210,28 @@ public class ShiftAssignmentDAO {
 
     }
 
+    public static void updateShiftAssignmentForOneEmployee(Shift oldShift, Shift newShift, Employee employee) {
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(
+                        "UPDATE ShiftAssignment " +
+                                "SET shiftId = ? " +
+                                "WHERE shiftId = ? AND employeeID = ?"
+                );
+        ){
+
+            preparedStatement.setString(1, newShift.getShiftID());
+            preparedStatement.setString(2, oldShift.getShiftID());
+            preparedStatement.setString(3, employee.getEmployeeID());
+
+            preparedStatement.executeUpdate();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(1);
+        }
+
+    }
+
     public static void updateShiftAssignmentWithoutID(Shift oldShift, Shift newShift) {
         try (
                 Connection connection = DBHelper.getConnection();

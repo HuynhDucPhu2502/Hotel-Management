@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.dlsc.gemsfx.DialogPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="670.0" prefWidth="603.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.employee.ShiftChangingController">
+   <children>
+       <DialogPane fx:id="dialogPane" animationDuration="200.0ms" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+       <Label layoutX="204.0" layoutY="22.0" text="CHUYỂN CA LÀM">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="26.0" layoutY="57.0" text="Thông tin ca làm hiện tại">
+         <font>
+            <Font name="System Italic" size="14.0" />
+         </font>
+      </Label>
+      <GridPane layoutX="26.0" layoutY="85.0" prefHeight="91.0" prefWidth="551.0" vgap="10.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.0" minWidth="10.0" prefWidth="149.59996337890624" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="106.20001220703125" minWidth="10.0" prefWidth="44.79999999999998" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="158.20001220703125" minWidth="10.0" prefWidth="108.80000000000001" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.199951171875" minWidth="10.0" prefWidth="148.00001220703132" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Mã ca làm:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label text="Giờ bắt đầu:" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label text="Giờ kết thúc:" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label text="Ngày trong tuần:" GridPane.columnIndex="3">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label text="Số giờ làm việc" GridPane.columnIndex="3" GridPane.rowIndex="2">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="shiftIDTextField" editable="false" GridPane.columnIndex="1" />
+            <TextField fx:id="startTimeTextField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="scheduleTextField" editable="false" GridPane.columnIndex="4" />
+            <TextField fx:id="endTimeTextField" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <TextField fx:id="numberOfHourTextField" editable="false" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
+      <AnchorPane layoutX="26.0" layoutY="225.0" prefHeight="173.0" prefWidth="551.0">
+         <children>
+            <TableView fx:id="employeeTableView" layoutX="92.0" layoutY="-18.0" prefHeight="174.0" prefWidth="551.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <columns>
+                <TableColumn fx:id="employeeIDColumn" prefWidth="94.40002250671387" resizable="false" text="Mã nhân viên" />
+                <TableColumn fx:id="fullNameColumn" prefWidth="157.59998321533203" resizable="false" text="Họ và tên" />
+                  <TableColumn fx:id="positionColumn" prefWidth="97.60003662109375" resizable="false" text="Chức vụ" />
+                  <TableColumn fx:id="phoneNumberColumn" prefWidth="119.20001220703125" resizable="false" text="Số điện thoại" />
+                  <TableColumn fx:id="isCheckedEmployeeColumn" prefWidth="78.39999389648438" resizable="false" text="Đã chọn" />
+              </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+      <Label layoutX="27.0" layoutY="170.0" text="Tìm kiếm nhân viên trong ca này">
+         <font>
+            <Font name="System Italic" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="employeeSearchTextField" layoutX="28.0" layoutY="191.0" prefHeight="26.0" prefWidth="153.0" promptText="Nhập mã nhân viên...">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </TextField>
+      <Button fx:id="employeeSearchBtn" layoutX="188.0" layoutY="191.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="39.0" text="Tìm" />
+      <Line endX="359.4000244140625" endY="3.0517578125E-5" layoutX="199.0" layoutY="408.0" startX="-154.39999389648438" startY="3.0517578125E-5" stroke="#00000041" />
+      <Label layoutX="236.0" layoutY="422.0" text="Chọn / tìm kiếm ca làm mà muốn chuyển nhân viên qua">
+         <font>
+            <Font name="System Italic" size="14.0" />
+         </font>
+      </Label>
+      <AnchorPane layoutX="26.0" layoutY="452.0" prefHeight="151.0" prefWidth="551.0">
+         <children>
+            <TableView fx:id="shiftTableView" layoutX="161.0" layoutY="-14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <columns>
+                <TableColumn fx:id="shiftIDColumn" prefWidth="120.8000545501709" resizable="false" text="Mã ca làm" />
+                <TableColumn fx:id="startTimeColumn" prefWidth="97.5999755859375" resizable="false" text="Giờ bắt đầu" />
+                  <TableColumn fx:id="numberOfHourColumn" prefWidth="112.00006103515625" resizable="false" text="Số giờ làm việc" />
+                  <TableColumn fx:id="endTimeColumn" prefWidth="94.4000244140625" resizable="false" text="Giờ kết thúc" />
+                  <TableColumn fx:id="scheduleColumn" prefWidth="125.59994506835938" resizable="false" text="Ngày trong tuần" />
+              </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+      <TextField fx:id="shiftSearchTextField" layoutX="26.0" layoutY="419.0" prefHeight="26.0" prefWidth="154.0" promptText="Nhập mã ca làm...">
+         <font>
+            <Font name="System Italic" size="12.0" />
+         </font>
+      </TextField>
+      <Button fx:id="shiftSearchBtn" layoutX="188.0" layoutY="419.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="39.0" text="Tìm" />
+      <AnchorPane layoutX="164.0" layoutY="620.0" prefHeight="35.0" prefWidth="275.0">
+         <children>
+            <GridPane layoutX="38.0" layoutY="-45.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="123.4000244140625" minWidth="10.0" prefWidth="109.79998779296875" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="87.199951171875" minWidth="10.0" prefWidth="58.20000000000002" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="121.60003662109375" minWidth="10.0" prefWidth="109.39999999999998" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Button fx:id="cancelBtn" mnemonicParsing="false" prefHeight="39.0" prefWidth="109.0" text="HỦY" GridPane.columnIndex="2">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Button>
+                  <Button fx:id="submitBtn" mnemonicParsing="false" prefHeight="38.0" prefWidth="110.0" text="CHUYỂN CA">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Button>
+               </children>
+            </GridPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

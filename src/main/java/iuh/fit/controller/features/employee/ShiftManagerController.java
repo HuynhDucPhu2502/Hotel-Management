@@ -6,19 +6,26 @@ import iuh.fit.dao.ShiftDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Shift;
 import iuh.fit.models.enums.ShiftDaysSchedule;
+import iuh.fit.models.misc.Delta;
 import iuh.fit.utils.GlobalConstants;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
 import java.io.IOException;
@@ -87,9 +94,11 @@ public class ShiftManagerController {
     @FXML
     private DialogPane dialogPane;
 
-    private Employee employee;
+    private Employee currentEmployee;
     private ObservableList<Shift> items;
     private Shift currentShift;
+
+    private Stage stage;
 
     public void initialize() {
         dialogPane.toFront();
@@ -116,15 +125,40 @@ public class ShiftManagerController {
         updateBtn.setOnAction(e -> handelUpdateShift());
         shiftIDSearchField.setOnKeyReleased((keyEvent) -> handleSearchAction());
         shiftIDSearchField.setOnAction(event -> handleSearchAction());
+        shiftTableView.setRowFactory(x->{
+            TableRow<Shift> shiftRow = new TableRow<>();
+
+            shiftRow.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !shiftRow.isEmpty()) { // Kiểm tra double-click và dòng không trống
+                    Shift rowData = shiftRow.getItem();
+                    // Thực hiện hành động khi double-click
+                    try {
+                        handleShowShiftInformation(rowData);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+
+            return shiftRow;
+        });
 
 
     }
 
     public void setupContext(Employee employeee) {
-        this.employee = employeee;
+        this.currentEmployee = employeee;
     }
     public void setUpCurrentShift(Shift shift){
         this.currentShift = shift;
+    }
+
+    public void setStage (Stage stage){
+        this.stage = stage;
+    }
+
+    public Stage getStage(){
+        return stage;
     }
 
     // Phương thức load dữ liệu lên giao diện
@@ -190,7 +224,7 @@ public class ShiftManagerController {
                     }else{
                         if (!ShiftDAO.checkAllowUpdateOrDelete(shift.getShiftID())) {
                             try {
-                                handelShowDetailData(shift, "delete", null, employee);
+                                handelShowDetailData(shift, "delete", null, currentEmployee);
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
@@ -210,7 +244,26 @@ public class ShiftManagerController {
                 });
 
                 changeShiftButton.setOnAction(event -> {
-
+                    Shift shift = getTableView().getItems().get(getIndex());
+                    if(shift == currentShift){
+                        List<Employee> tempList = ShiftDAO.getEmployeeListByShift(shift.getShiftID());
+                        tempList.remove(currentEmployee);
+                        if(tempList.isEmpty()){
+                            dialogPane.showInformation("Thông báo", "Ca làm này hiện không có nhân viên để chuyển ca");
+                        }
+                    }else {
+                        List<Employee> tempList = ShiftDAO.getEmployeeListByShift(shift.getShiftID());
+                        tempList.remove(currentEmployee);
+                        if(tempList.isEmpty()){
+                            dialogPane.showInformation("Thông báo", "Ca làm này hiện không có nhân viên để chuyển ca");
+                        }else{
+                            try {
+                                handelShowShiftChangingPanel(shift);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
                 });
 
                 hBox.setAlignment(Pos.CENTER);
@@ -289,53 +342,15 @@ public class ShiftManagerController {
         }
     }
 
-    private void handelShowDetailData(Shift shift, String func, String shiftID, Employee employee) throws IOException {
-        String source = "/iuh/fit/view/features/employee/ShiftDetailForEachEmployeeDialog.fxml";
-
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
-        AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
-
-        ShiftDetailForEachEmployeeDialogController shiftDetailForEachEmployeeDialogController = loader.getController();
-        shiftDetailForEachEmployeeDialogController.setController(this);
-        shiftDetailForEachEmployeeDialogController.getData(shift, func, shiftID);
-        shiftDetailForEachEmployeeDialogController.setEmployee(employee);
-
-        Scene scene = new Scene(layout);
-
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Thông tin ca làm");
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
-    }
-
-    private void handelShowShiftAssignmentPanel(Shift shift) throws IOException {
-        String source = "/iuh/fit/view/features/employee/ShiftAssignmentPanel.fxml";
-
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
-        AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
-
-        ShiftAssignmentController shiftAssignmentController = loader.getController();
-        shiftAssignmentController.initialize(shift);
-
-        Scene scene = new Scene(layout);
-
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Phân công ca làm");
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
-    }
-
     private void handleUpdateBtn(Shift shift) {
         shiftIDTextField.setText(shift.getShiftID());
         startTimePicker.setTime(shift.getStartTime());
         numbOfHourTextField.setText(String.valueOf(shift.getNumberOfHour()));
         endTimeTextField.setText(String.valueOf(shift.getEndTime()));
         scheduleComboBox.setValue(shift.getShiftDaysSchedule());
-        modifiedDateTextField.setText(String.valueOf(shift.getUpdatedDate()));
+        String format = "dd/MM/yyyy";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+        modifiedDateTextField.setText(shift.getUpdatedDate().format(formatter));
 
         addBtn.setManaged(false);
         addBtn.setVisible(false);
@@ -346,7 +361,7 @@ public class ShiftManagerController {
     private void handelUpdateShift(){
         if (!ShiftDAO.checkAllowUpdateOrDelete(shiftIDTextField.getText())) {
             try {
-                handelShowDetailData(null, "update", shiftIDTextField.getText(), employee);
+                handelShowDetailData(null, "update", shiftIDTextField.getText(), currentEmployee);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -437,5 +452,84 @@ public class ShiftManagerController {
 
         items.setAll(shift);
         shiftTableView.setItems(items);
+    }
+
+    private void handelShowDetailData(Shift shift, String func, String shiftID, Employee employee) throws IOException {
+        String source = "/iuh/fit/view/features/employee/ShiftDetailForEachEmployeeDialog.fxml";
+
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
+        AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
+
+        ShiftDetailForEachEmployeeDialogController shiftDetailForEachEmployeeDialogController = loader.getController();
+        shiftDetailForEachEmployeeDialogController.setController(this);
+        shiftDetailForEachEmployeeDialogController.getData(shift, func, shiftID);
+        shiftDetailForEachEmployeeDialogController.setEmployee(employee);
+
+        Scene scene = new Scene(layout);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Thông tin ca làm");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        setStage(stage);
+        shiftDetailForEachEmployeeDialogController.getComponentFormController();
+        stage.show();
+    }
+
+    private void handelShowShiftAssignmentPanel(Shift shift) throws IOException {
+        String source = "/iuh/fit/view/features/employee/ShiftAssignmentPanel.fxml";
+
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
+        AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
+
+        ShiftAssignmentController shiftAssignmentController = loader.getController();
+        shiftAssignmentController.initialize(shift);
+
+        Scene scene = new Scene(layout);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Phân công ca làm");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    public void handelShowShiftChangingPanel(Shift shift) throws IOException {
+        String source = "/iuh/fit/view/features/employee/ShiftChangingPanel.fxml";
+
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
+        AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
+
+        ShiftChangingController shiftChangingController = loader.getController();
+        shiftChangingController.initialize(shift, currentShift, currentEmployee);
+
+        Scene scene = new Scene(layout);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Chuyển ca làm");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+    }
+
+    public void handleShowShiftInformation(Shift shift) throws IOException {
+        String source = "/iuh/fit/view/features/employee/ShiftInformationView.fxml";
+
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
+        AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
+
+        ShiftInformationViewCotroller shiftChangingController = loader.getController();
+        shiftChangingController.initialize(shift);
+
+        Scene scene = new Scene(layout);
+
+        Stage stage = new Stage();
+        stage.setTitle("Chuyển ca làm");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
     }
 }
