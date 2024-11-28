@@ -78,29 +78,21 @@ public class RoomStatusHelper {
 
     private static void handleCheckOut(RoomWithReservation roomWithReservation, Employee employee) {
         try {
-            HistoryCheckOut historyCheckOut = new HistoryCheckOut();
-            historyCheckOut.setHistoryCheckOutID(HistoryCheckOutDAO.getNextID());
-            historyCheckOut.setCheckOutDate(LocalDateTime.now());
-            historyCheckOut.setReservationForm(roomWithReservation.getReservationForm());
-            historyCheckOut.setEmployee(employee);
-
-            HistoryCheckOutDAO.createData(historyCheckOut);
-
-            Invoice invoice = new Invoice();
-
-            invoice.setInvoiceID(InvoiceDAO.getNextInvoiceID());
-            invoice.setInvoiceDate(LocalDateTime.now());
-            invoice.setRoomCharge(Calculator.calculateRoomCharge(
+            double roomCharge = Calculator.calculateRoomCharge(
                     roomWithReservation.getRoom(),
                     roomWithReservation.getReservationForm().getCheckInDate(),
                     roomWithReservation.getReservationForm().getCheckOutDate()
-            ));
-            invoice.setServicesCharge(Calculator.calculateTotalServiceCharge(
+            );
+            double serviceCharge = Calculator.calculateTotalServiceCharge(
                     roomWithReservation.getReservationForm().getReservationID()
-            ));
-            invoice.setReservationForm(roomWithReservation.getReservationForm());
+            );
 
-            InvoiceDAO.createData(invoice);
+            InvoiceDAO.roomCheckingOut(
+                    roomWithReservation.getReservationForm().getReservationID(),
+                    employee.getEmployeeID(),
+                    roomCharge,
+                    serviceCharge
+            );
         } catch (Exception ex) {
             ex.printStackTrace();
         }

@@ -3,6 +3,7 @@ package iuh.fit.dao;
 import iuh.fit.models.*;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.DBHelper;
+import iuh.fit.utils.ErrorMessages;
 import iuh.fit.utils.GlobalConstants;
 
 import java.sql.*;
@@ -48,75 +49,76 @@ public class InvoiceDAO {
         return invoices;
     }
 
+    public static void roomCheckingOut(String reservationFormID, String employeeID,
+                                       double roomCharge, double serviceCharge)
+    {
+        String callProcedure = "{CALL roomCheckingOut(?, ?, ?, ?, ?)}";
 
-    public static void createData(Invoice invoice) {
-        String insertSQL = "INSERT INTO Invoice(invoiceID, invoiceDate, roomCharge, servicesCharge, reservationFormID) " +
-                "VALUES(?, ?, ?, ?, ?)";
-        String selectNextIDSQL = "SELECT nextID FROM GlobalSequence WHERE tableName = ?";
-        String updateNextIDSQL = "UPDATE GlobalSequence SET nextID = ? WHERE tableName = ?";
+        try (Connection connection = DBHelper.getConnection();
+             CallableStatement callableStatement = connection.prepareCall(callProcedure)) {
 
-        try (
-                Connection connection = DBHelper.getConnection();
-                PreparedStatement insertStatement = connection.prepareStatement(insertSQL);
-                PreparedStatement selectSequenceStatement = connection.prepareStatement(selectNextIDSQL);
-                PreparedStatement updateSequenceStatement = connection.prepareStatement(updateNextIDSQL)
-        ) {
-            // Lấy nextID hiện tại cho Invoice từ GlobalSequence
-            selectSequenceStatement.setString(1, "Invoice");
-            ResultSet rs = selectSequenceStatement.executeQuery();
+            // Thiết lập tham số đầu vào
+            callableStatement.setString(1, reservationFormID);
+            callableStatement.setString(2, employeeID);
+            callableStatement.setDouble(3, roomCharge);
+            callableStatement.setDouble(4, serviceCharge);
 
-            if (rs.next()) {
-                String currentNextID = rs.getString("nextID");
-                String prefix = GlobalConstants.INVOICE_ID_PREFIX + "-";
+            // Đăng ký tham số đầu ra
+            callableStatement.registerOutParameter(5, Types.VARCHAR);
 
-                // Tách phần số và tăng thêm 1
-                int nextIDNum = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
+            // Thực thi stored procedure
+            callableStatement.execute();
 
-                // Định dạng lại phần số, đảm bảo luôn có 6 chữ số
-                String newNextID = prefix + String.format("%06d", nextIDNum);
+            // Lấy thông báo từ stored procedure
+            String message = callableStatement.getString(5);
 
-                // Thiết lập các giá trị cho câu lệnh INSERT
-                insertStatement.setString(1, currentNextID);
-                insertStatement.setTimestamp(2, java.sql.Timestamp.valueOf(invoice.getInvoiceDate()));
-                insertStatement.setDouble(3, invoice.getRoomCharge());
-                insertStatement.setDouble(4, invoice.getServicesCharge());
-                insertStatement.setString(5, invoice.getReservationForm().getReservationID());
-
-                // Thực thi câu lệnh INSERT
-                insertStatement.executeUpdate();
-
-                // Cập nhật nextID trong GlobalSequence
-                updateSequenceStatement.setString(1, newNextID);
-                updateSequenceStatement.setString(2, "Invoice");
-                updateSequenceStatement.executeUpdate();
+            // Xử lý thông báo trả về
+            switch (message) {
+                case "RESERVATION_FORM_NOT_FOUND":
+                    throw new IllegalArgumentException("Phiếu đặt phòng không tồn tại hoặc không được kích hoạt.");
+                case "ROOM_CHECKOUT_SUCCESS":
+                    HistoryCheckOutDAO.incrementAndUpdateNextID();
+                    incrementAndUpdateNextID();
+                    break;
+                default:
+                    throw new IllegalArgumentException(ErrorMessages.STORE_PROCEDURE_ERROR);
             }
 
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-            throw new RuntimeException("Lỗi khi thêm dữ liệu Invoice", sqlException);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
         }
     }
 
-    public static String getNextInvoiceID() {
-        String nextID = "INV-000001";
-        String query = "SELECT nextID FROM GlobalSequence WHERE tableName = ?";
+    public static void incrementAndUpdateNextID() {
+        String selectQuery = "SELECT nextID FROM GlobalSequence WHERE tableName = 'Invoice'";
+        String updateQuery = "UPDATE GlobalSequence SET nextID = ? WHERE tableName = 'Invoice'";
+        String currentNextID;
 
         try (
                 Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(query)
+                PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
+                PreparedStatement updateStatement = connection.prepareStatement(updateQuery)
         ) {
-            preparedStatement.setString(1, "Invoice");
-            ResultSet rs = preparedStatement.executeQuery();
+            ResultSet resultSet = selectStatement.executeQuery();
 
-            if (rs.next()) {
-                nextID = rs.getString("nextID");
+            if (resultSet.next()) {
+                currentNextID = resultSet.getString("nextID");
+
+                String prefix = GlobalConstants.INVOICE_ID_PREFIX + "-";
+                int numericPart = Integer.parseInt(currentNextID.substring(prefix.length())) + 1;
+                String updatedNextID = prefix + String.format("%06d", numericPart);
+
+                updateStatement.setString(1, updatedNextID);
+                updateStatement.executeUpdate();
+
+            } else {
+                throw new IllegalArgumentException("Không thể tìm thấy nextID cho Invoice");
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
             System.exit(1);
         }
-
-        return nextID;
     }
 
     private static Invoice extractData(ResultSet rs) throws SQLException {
