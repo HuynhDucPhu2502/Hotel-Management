@@ -199,31 +199,6 @@ public class ReservationFormDAO {
         return reservations;
     }
 
-    public static void updateRoomInReservationForm(String reservationFormID, String newRoomID) {
-        String sql = """
-        UPDATE ReservationForm
-        SET roomID = ?
-        WHERE reservationFormID = ?
-        """;
-
-        try (Connection connection = DBHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, newRoomID);
-            preparedStatement.setString(2, reservationFormID);
-
-            int rowsAffected = preparedStatement.executeUpdate();
-
-            if (rowsAffected == 0) {
-                throw new IllegalArgumentException(
-                        "Không tìm thấy phiếu đặt phòng với ID: " + reservationFormID
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Lỗi khi cập nhật phòng cho phiếu đặt phòng", e);
-        }
-    }
-
     public static List<ReservationForm> getReservationFormByCustomerID(String customerID) {
         List<ReservationForm> data = new ArrayList<>();
 
