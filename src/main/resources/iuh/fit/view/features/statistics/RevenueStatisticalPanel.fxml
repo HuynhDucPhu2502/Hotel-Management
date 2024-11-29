@@ -7,20 +7,20 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="669.0" prefWidth="1270.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.statistics.StatisticalController">
-   <TitledPane animated="false" stylesheets="@../../../styles/TitlePanel.css" text="Thống kê doanh thu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+   <TitledPane collapsible="false" animated="false" stylesheets="@../../../styles/TitlePanel.css" text="Thống kê doanh thu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <font>
          <Font name="System Bold" size="18.0" />
       </font>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
          <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <Tab text="Tổng doanh thu">
-               <fx:include source="invoiceRevenueStatisticsTab.fxml" />
+               <fx:include source="InvoiceRevenueStatisticsTab.fxml" />
             </Tab>
             <Tab text="Doanh thu dịch vụ">
-               <fx:include source="serviceRevenueStatisticsTab.fxml" />
+               <fx:include source="ServiceRevenueStatisticsTab.fxml" />
             </Tab>
             <Tab text="Doanh thu phòng">
-               <fx:include source="roomRevenueStatisticsTab.fxml" />
+               <fx:include source="RoomRevenueStatisticsTab.fxml" />
             </Tab>
          </TabPane>
       </AnchorPane>

@@ -16,9 +16,9 @@ public class StatisticalController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        String invoiceUIResource = "/iuh/fit/view/features/statistics/invoiceRevenueStatisticsTab.fxml";
-//        String serviceUIResource = "/iuh/fit/view/features/statistics/serviceRevenueStatisticsTab.fxml";
-//        String roomUIResource = "/iuh/fit/view/features/statistics/roomRevenueStatisticsTab.fxml";
+//        String invoiceUIResource = "/iuh/fit/view/features/statistics/InvoiceRevenueStatisticsTab.fxml";
+//        String serviceUIResource = "/iuh/fit/view/features/statistics/ServiceRevenueStatisticsTab.fxml";
+//        String roomUIResource = "/iuh/fit/view/features/statistics/RoomRevenueStatisticsTab.fxml";
 //        invoiceRevenueStatisticsTabController = loadUI(invoiceUIResource).getController();
 //        serviceRevenueStatisticsTabController = loadUI(serviceUIResource).getController();
 //        roomRevenueStatisticsTabController = loadUI(roomUIResource).getController();
