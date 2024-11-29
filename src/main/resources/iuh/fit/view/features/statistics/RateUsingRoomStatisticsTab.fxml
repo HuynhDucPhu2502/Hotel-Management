@@ -8,8 +8,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -18,266 +20,280 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="665.0" prefWidth="1251.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.statistics.RateUsingRoomStatisticsController">
-    <padding>
-        <Insets top="10.0" />
-    </padding>
-    <VBox layoutY="20.8" prefHeight="671.0" prefWidth="1251.0" AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
-        <HBox prefHeight="28.0" prefWidth="1242.0" spacing="25.0">
-            <VBox.margin>
-                <Insets top="3.0" />
-            </VBox.margin>
-         <RadioButton fx:id="dateRangeRad" mnemonicParsing="false" prefHeight="27.0" prefWidth="155.0" selected="true" text="Chọn khoảng:">
-            <HBox.margin>
-               <Insets right="-20.0" />
-            </HBox.margin>
+<AnchorPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.statistics.RateUsingRoomStatisticsController">
+   <DialogPane fx:id="dialogPane" animationDuration="200.0ms" layoutX="10.0" layoutY="10.0" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+   <ScrollPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <content>
+         <TitledPane animated="false" collapsible="false" stylesheets="@../../../styles/TitlePanel.css" text="Thống kê doanh thu">
             <font>
-               <Font size="18.0" />
+               <Font name="System Bold" size="18.0" />
             </font>
-            <toggleGroup>
-               <ToggleGroup fx:id="date" />
-            </toggleGroup>
-         </RadioButton>
-            <DateRangePicker fx:id="invoiceTabDateRangePicker" prefHeight="30.0" prefWidth="254.0">
-            <HBox.margin>
-               <Insets right="30.0" />
-            </HBox.margin></DateRangePicker>
-         <RadioButton fx:id="yearRad" mnemonicParsing="false" prefHeight="27.0" prefWidth="136.0" text="Chọn năm:" toggleGroup="$date">
-            <HBox.margin>
-               <Insets right="-60.0" />
-            </HBox.margin>
-            <font>
-               <Font size="18.0" />
-            </font>
-         </RadioButton>
-            <ComboBox fx:id="yearsCombobox" disable="true" prefHeight="27.0" prefWidth="118.0" promptText="Năm">
-                <HBox.margin>
-                    <Insets left="35.0" right="-20.0" />
-                </HBox.margin>
-            </ComboBox>
-         <ComboBox fx:id="QCbox" disable="true" prefHeight="26.0" prefWidth="145.0" promptText="Quý">
-            <HBox.margin>
-               <Insets right="30.0" />
-            </HBox.margin>
-         </ComboBox>
-         <RadioButton fx:id="allStatictisRad" mnemonicParsing="false" prefHeight="27.0" text="Thống kê tất cả" toggleGroup="$date">
-            <font>
-               <Font size="18.0" />
-            </font>
-         </RadioButton>
-        </HBox>
-        <HBox prefHeight="12.0" prefWidth="1242.0">
-            <VBox.margin>
-                <Insets bottom="20.0" top="20.0" />
-            </VBox.margin>
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Loại phòng:">
-            <font>
-               <Font size="18.0" />
-            </font>
-            <HBox.margin>
-               <Insets right="30.0" />
-            </HBox.margin>
-         </Text>
-         <ComboBox fx:id="roomCategoryCBox" prefHeight="26.0" prefWidth="284.0" promptText="Chọn loại phòng">
-            <HBox.margin>
-               <Insets right="80.0" />
-            </HBox.margin>
-         </ComboBox>
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã phòng:">
-            <font>
-               <Font size="18.0" />
-            </font>
-            <HBox.margin>
-               <Insets right="-30.0" />
-            </HBox.margin>
-         </Text>
-            <ComboBox fx:id="roomIDCombobox" prefHeight="30.0" prefWidth="244.0" promptText="Chọn mã phòng">
-                <HBox.margin>
-                    <Insets left="80.0" right="100.0" />
-                </HBox.margin>
-            </ComboBox>
-            <Button fx:id="resetBtn" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" stylesheets="@../../../styles/Button.css" text="Tải lại">
-            <HBox.margin>
-               <Insets right="20.0" />
-            </HBox.margin>
-            <styleClass>
-               <String fx:value="refesh" />
-               <String fx:value="button-refresh" />
-            </styleClass></Button>
-            <Button fx:id="exportExcelBtn" mnemonicParsing="false" styleClass="button-excel" stylesheets="@../../../styles/Button.css" text="Xuất Excel" />
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-        </HBox>
-        <HBox prefHeight="8.0" prefWidth="1242.0" spacing="20.0">
-            <VBox.margin>
-                <Insets />
-            </VBox.margin>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hình thức hiển thị:">
-                <font>
-                    <Font size="18.0" />
-                </font>
-            </Text>
-            <RadioButton fx:id="showTableViewRadioButton" mnemonicParsing="false" onAction="#switchBetweenTableViewAndChartView" prefHeight="27.0" prefWidth="145.0" selected="true" text="Bảng dữ liệu chi tiết">
-                <HBox.margin>
-                    <Insets left="24.0" />
-                </HBox.margin>
-                <toggleGroup>
-                    <ToggleGroup fx:id="showDataViewToggleGroup" />
-                </toggleGroup>
-            </RadioButton>
-            <RadioButton fx:id="showTableViewDetailRadioButton" mnemonicParsing="false" onAction="#switchBetweenTableViewAndChartView" prefHeight="27.0" prefWidth="149.0" text="Bảng dữ liệu thống kê" toggleGroup="$showDataViewToggleGroup" />
-         <RadioButton fx:id="showChartDataRadioButton" mnemonicParsing="false" onAction="#switchBetweenTableViewAndChartView" prefHeight="28.0" text="Biểu đồ thống kê" toggleGroup="$showDataViewToggleGroup" />
-        </HBox>
-      <HBox prefHeight="9.0" prefWidth="1242.0">
-         <children>
-            <Text fx:id="titleStatictis" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="1242.1367473602295">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Text>
-         </children>
-         <VBox.margin>
-            <Insets bottom="5.0" top="5.0" />
-         </VBox.margin>
-      </HBox>
-        <StackPane prefHeight="402.0" prefWidth="1242.0">
-            <VBox.margin>
-                <Insets />
-            </VBox.margin>
-            <AnchorPane fx:id="tableViewAnchorPane" prefHeight="414.0" prefWidth="1242.0">
-                <VBox layoutY="8.0" prefHeight="402.0" prefWidth="1242.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <TableView fx:id="usingRateRoomDataTableView" prefHeight="409.0" prefWidth="1242.0" stylesheets="@../../../styles/TableView.css">
-                  <columns>
-                     <TableColumn fx:id="roomCategoryIDColumn" prefWidth="138.3999446630478" text="Mã loại phòng" />
-                     <TableColumn fx:id="nameRoomCategoryColumn" prefWidth="159.2000732421875" text="Tên loại phòng" />
-                     <TableColumn fx:id="roomIDColumn" prefWidth="88.80001831054688" text="Mã phòng" />
-                     <TableColumn fx:id="customerNameColumn" prefWidth="119.199951171875" text="Khách hàng" />
-                     <TableColumn fx:id="employeeNameColumn" prefWidth="104.7999267578125" text="Nhân viên" />
-                     <TableColumn fx:id="invoiceDateColumn" prefWidth="200.0" text="Ngày trả phòng" />
-                     <TableColumn fx:id="depositColumn" prefWidth="117.5999755859375" text="Tiền cọc" />
-                     <TableColumn fx:id="serviceChargeColumn" prefWidth="102.39990234375" text="Dịch vụ" />
-                     <TableColumn fx:id="roomChargeColumn" prefWidth="115.2000732421875" text="Tiền phòng" />
-                     <TableColumn fx:id="netDueColumn" prefWidth="98.39996337890625" text="Tổng tiền" />
-                  </columns>
-                  <VBox.margin>
-                     <Insets />
-                  </VBox.margin>
-               </TableView>
-                </VBox>
-            </AnchorPane>
-         <AnchorPane fx:id="tableViewDetailAnchorPane" prefHeight="334.0" prefWidth="1242.0" visible="false">
-            <children>
-               <VBox prefHeight="402.0" prefWidth="1240.0">
+            <content>
+               <AnchorPane>
                   <children>
-                          <TableView fx:id="usingRateRoomDetailDataTableView" prefHeight="487.0" prefWidth="1240.0" stylesheets="@../../../styles/TableView.css">
-                              <columns>
-                                  <TableColumn fx:id="roomCategoryIDDetailColumn" prefWidth="156.0000246167183" text="Mã loại phòng" />
-                           <TableColumn fx:id="nameRoomCategoryDetailColumn" prefWidth="220.80001831054688" text="Tên loại phòng" />
-                                  <TableColumn fx:id="timesUsingColumn" prefWidth="206.4000244140625" text="Số lần sử dụng" />
-                           <TableColumn fx:id="percentUsingColumn" prefWidth="224.79998779296875" text="Tỉ lệ sử dụng" />
-                                  <TableColumn fx:id="netDueDetailColumn" prefWidth="197.5999755859375" text="Doanh thu" />
-                           <TableColumn fx:id="percentNetDueColumn" prefWidth="231.20001220703125" text="Tỉ lệ doanh thu" />
-                              </columns>
+                      <VBox prefHeight="671.0" prefWidth="1251.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <HBox prefHeight="28.0" prefWidth="1242.0" spacing="25.0">
+                              <VBox.margin>
+                                  <Insets top="3.0" />
+                              </VBox.margin>
+                           <RadioButton fx:id="dateRangeRad" mnemonicParsing="false" prefHeight="27.0" prefWidth="155.0" selected="true" text="Chọn khoảng:">
+                              <HBox.margin>
+                                 <Insets right="-20.0" />
+                              </HBox.margin>
+                              <font>
+                                 <Font size="18.0" />
+                              </font>
+                              <toggleGroup>
+                                 <ToggleGroup fx:id="date" />
+                              </toggleGroup>
+                           </RadioButton>
+                              <DateRangePicker fx:id="invoiceTabDateRangePicker" prefHeight="30.0" prefWidth="254.0">
+                              <HBox.margin>
+                                 <Insets right="30.0" />
+                              </HBox.margin>
+                           </DateRangePicker>
+                           <RadioButton fx:id="yearRad" mnemonicParsing="false" prefHeight="27.0" prefWidth="136.0" text="Chọn năm:" toggleGroup="$date">
+                              <HBox.margin>
+                                 <Insets right="-60.0" />
+                              </HBox.margin>
+                              <font>
+                                 <Font size="18.0" />
+                              </font>
+                           </RadioButton>
+                              <ComboBox fx:id="yearsCombobox" disable="true" prefHeight="27.0" prefWidth="118.0" promptText="Năm">
+                                  <HBox.margin>
+                                      <Insets left="35.0" right="-20.0" />
+                                  </HBox.margin>
+                              </ComboBox>
+                           <ComboBox fx:id="QCbox" disable="true" prefHeight="26.0" prefWidth="145.0" promptText="Quý">
+                              <HBox.margin>
+                                 <Insets right="30.0" />
+                              </HBox.margin>
+                           </ComboBox>
+                           <RadioButton fx:id="allStatictisRad" mnemonicParsing="false" prefHeight="27.0" text="Thống kê tất cả" toggleGroup="$date">
+                              <font>
+                                 <Font size="18.0" />
+                              </font>
+                           </RadioButton>
+                          </HBox>
+                          <HBox prefHeight="12.0" prefWidth="1242.0">
+                              <VBox.margin>
+                                  <Insets bottom="20.0" top="20.0" />
+                              </VBox.margin>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Loại phòng:">
+                              <font>
+                                 <Font size="18.0" />
+                              </font>
+                              <HBox.margin>
+                                 <Insets right="30.0" />
+                              </HBox.margin>
+                           </Text>
+                           <ComboBox fx:id="roomCategoryCBox" prefHeight="26.0" prefWidth="284.0" promptText="Chọn loại phòng">
+                              <HBox.margin>
+                                 <Insets right="80.0" />
+                              </HBox.margin>
+                           </ComboBox>
+                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã phòng:">
+                              <font>
+                                 <Font size="18.0" />
+                              </font>
+                              <HBox.margin>
+                                 <Insets right="-30.0" />
+                              </HBox.margin>
+                           </Text>
+                              <ComboBox fx:id="roomIDCombobox" prefHeight="30.0" prefWidth="244.0" promptText="Chọn mã phòng">
+                                  <HBox.margin>
+                                      <Insets left="80.0" right="100.0" />
+                                  </HBox.margin>
+                              </ComboBox>
+                              <Button fx:id="resetBtn" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" stylesheets="@../../../styles/Button.css" text="Tải lại">
+                              <HBox.margin>
+                                 <Insets right="20.0" />
+                              </HBox.margin>
+                              <styleClass>
+                                 <String fx:value="refesh" />
+                                 <String fx:value="button-refresh" />
+                              </styleClass>
+                           </Button>
+                              <Button fx:id="exportExcelBtn" mnemonicParsing="false" styleClass="button-excel" stylesheets="@../../../styles/Button.css" text="Xuất Excel" />
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                          </HBox>
+                          <HBox prefHeight="8.0" prefWidth="1242.0" spacing="20.0">
                               <VBox.margin>
                                   <Insets />
                               </VBox.margin>
-                          </TableView>
-                  </children>
-               </VBox>
-            </children>
-         </AnchorPane>
-         <HBox fx:id="chartViewAnchorPane" prefHeight="416.0" prefWidth="1242.0" visible="false">
-            <children>
-               <AnchorPane prefHeight="417.0" prefWidth="585.0" style="-fx-background-color: lightgrey;">
-                  <HBox.margin>
-                     <Insets left="30.0" right="40.0" />
-                  </HBox.margin>
-                  <children>
-                     <VBox prefHeight="402.0" prefWidth="570.0">
-                        <children>
-                           <PieChart fx:id="timesUsingPiechart" prefHeight="375.0" prefWidth="570.0" />
-                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Biểu đồ thống kê tỉ lệ sử dụng phòng" textAlignment="CENTER" wrappingWidth="569.3367290496826">
-                              <font>
-                                 <Font name="System Bold" size="16.0" />
-                              </font>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hình thức hiển thị:">
+                                  <font>
+                                      <Font size="18.0" />
+                                  </font>
+                              </Text>
+                              <RadioButton fx:id="showTableViewRadioButton" mnemonicParsing="false" onAction="#switchBetweenTableViewAndChartView" prefHeight="27.0" prefWidth="145.0" selected="true" text="Bảng dữ liệu chi tiết">
+                                  <HBox.margin>
+                                      <Insets left="24.0" />
+                                  </HBox.margin>
+                                  <toggleGroup>
+                                      <ToggleGroup fx:id="showDataViewToggleGroup" />
+                                  </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="showTableViewDetailRadioButton" mnemonicParsing="false" onAction="#switchBetweenTableViewAndChartView" prefHeight="27.0" prefWidth="149.0" text="Bảng dữ liệu thống kê" toggleGroup="$showDataViewToggleGroup" />
+                           <RadioButton fx:id="showChartDataRadioButton" mnemonicParsing="false" onAction="#switchBetweenTableViewAndChartView" prefHeight="28.0" text="Biểu đồ thống kê" toggleGroup="$showDataViewToggleGroup" />
+                          </HBox>
+                        <HBox prefHeight="9.0" prefWidth="1242.0">
+                           <children>
+                              <Text fx:id="titleStatictis" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="1242.1367473602295">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                          <StackPane prefHeight="402.0" prefWidth="1242.0">
                               <VBox.margin>
-                                 <Insets bottom="10.0" />
+                                  <Insets />
                               </VBox.margin>
-                           </Text>
-                        </children>
-                     </VBox>
+                              <AnchorPane fx:id="tableViewAnchorPane" prefHeight="414.0" prefWidth="1242.0">
+                                  <VBox layoutY="8.0" prefHeight="402.0" prefWidth="1242.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <TableView fx:id="usingRateRoomDataTableView" prefHeight="409.0" prefWidth="1242.0" stylesheets="@../../../styles/TableView.css">
+                                    <columns>
+                                       <TableColumn fx:id="roomCategoryIDColumn" prefWidth="138.3999446630478" text="Mã loại phòng" />
+                                       <TableColumn fx:id="nameRoomCategoryColumn" prefWidth="159.2000732421875" text="Tên loại phòng" />
+                                       <TableColumn fx:id="roomIDColumn" prefWidth="88.80001831054688" text="Mã phòng" />
+                                       <TableColumn fx:id="customerNameColumn" prefWidth="119.199951171875" text="Khách hàng" />
+                                       <TableColumn fx:id="employeeNameColumn" prefWidth="104.7999267578125" text="Nhân viên" />
+                                       <TableColumn fx:id="invoiceDateColumn" prefWidth="200.0" text="Ngày trả phòng" />
+                                       <TableColumn fx:id="depositColumn" prefWidth="117.5999755859375" text="Tiền cọc" />
+                                       <TableColumn fx:id="serviceChargeColumn" prefWidth="102.39990234375" text="Dịch vụ" />
+                                       <TableColumn fx:id="roomChargeColumn" prefWidth="115.2000732421875" text="Tiền phòng" />
+                                       <TableColumn fx:id="netDueColumn" prefWidth="98.39996337890625" text="Tổng tiền" />
+                                    </columns>
+                                    <VBox.margin>
+                                       <Insets />
+                                    </VBox.margin>
+                                 </TableView>
+                                  </VBox>
+                              </AnchorPane>
+                           <AnchorPane fx:id="tableViewDetailAnchorPane" prefHeight="334.0" prefWidth="1242.0" visible="false">
+                              <children>
+                                 <VBox prefHeight="402.0" prefWidth="1240.0">
+                                    <children>
+                                            <TableView fx:id="usingRateRoomDetailDataTableView" prefHeight="487.0" prefWidth="1240.0" stylesheets="@../../../styles/TableView.css">
+                                                <columns>
+                                                    <TableColumn fx:id="roomCategoryIDDetailColumn" prefWidth="156.0000246167183" text="Mã loại phòng" />
+                                             <TableColumn fx:id="nameRoomCategoryDetailColumn" prefWidth="220.80001831054688" text="Tên loại phòng" />
+                                                    <TableColumn fx:id="timesUsingColumn" prefWidth="206.4000244140625" text="Số lần sử dụng" />
+                                             <TableColumn fx:id="percentUsingColumn" prefWidth="224.79998779296875" text="Tỉ lệ sử dụng" />
+                                                    <TableColumn fx:id="netDueDetailColumn" prefWidth="197.5999755859375" text="Doanh thu" />
+                                             <TableColumn fx:id="percentNetDueColumn" prefWidth="231.20001220703125" text="Tỉ lệ doanh thu" />
+                                                </columns>
+                                                <VBox.margin>
+                                                    <Insets />
+                                                </VBox.margin>
+                                            </TableView>
+                                    </children>
+                                 </VBox>
+                              </children>
+                           </AnchorPane>
+                           <HBox fx:id="chartViewAnchorPane" prefHeight="416.0" prefWidth="1242.0" visible="false">
+                              <children>
+                                 <AnchorPane prefHeight="417.0" prefWidth="585.0" style="-fx-background-color: lightgrey;">
+                                    <HBox.margin>
+                                       <Insets left="30.0" right="40.0" />
+                                    </HBox.margin>
+                                    <children>
+                                       <VBox prefHeight="402.0" prefWidth="570.0">
+                                          <children>
+                                             <PieChart fx:id="timesUsingPiechart" prefHeight="375.0" prefWidth="570.0" />
+                                             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Biểu đồ thống kê tỉ lệ sử dụng phòng" textAlignment="CENTER" wrappingWidth="569.3367290496826">
+                                                <font>
+                                                   <Font name="System Bold" size="16.0" />
+                                                </font>
+                                                <VBox.margin>
+                                                   <Insets bottom="10.0" />
+                                                </VBox.margin>
+                                             </Text>
+                                          </children>
+                                       </VBox>
+                                    </children>
+                                 </AnchorPane>
+                                 <AnchorPane prefHeight="413.0" prefWidth="570.0" style="-fx-background-color: lightgrey;">
+                                    <HBox.margin>
+                                       <Insets right="30.0" />
+                                    </HBox.margin>
+                                    <children>
+                                       <VBox prefHeight="402.0" prefWidth="570.0">
+                                          <children>
+                                             <PieChart fx:id="netDuePiechart" prefHeight="395.0" prefWidth="570.0" />
+                                             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Biểu đồ thống kê tỉ lệ doanh thu phòng" textAlignment="CENTER" wrappingWidth="568.7545928955078">
+                                                <font>
+                                                   <Font name="System Bold" size="16.0" />
+                                                </font>
+                                                <VBox.margin>
+                                                   <Insets bottom="10.0" />
+                                                </VBox.margin>
+                                             </Text>
+                                          </children>
+                                       </VBox>
+                                    </children>
+                                 </AnchorPane>
+                              </children>
+                              <StackPane.margin>
+                                 <Insets />
+                              </StackPane.margin>
+                           </HBox>
+                          </StackPane>
+                          <HBox prefHeight="76.0" prefWidth="1425.0">
+                              <VBox.margin>
+                                  <Insets />
+                              </VBox.margin>
+                              <AnchorPane prefHeight="75.0" prefWidth="1426.0">
+                                  <HBox.margin>
+                                      <Insets />
+                                  </HBox.margin>
+                                  <Text layoutY="55.665625" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng số lần sử dụng phòng:" wrappingWidth="206.9296875" AnchorPane.bottomAnchor="27.384375000000006" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1219.0" AnchorPane.topAnchor="38.0">
+                                 <font>
+                                    <Font name="System Bold Italic" size="16.0" />
+                                 </font>
+                              </Text>
+                                  <Text fx:id="numOfInvoiceText" layoutX="221.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                              </Text>
+                                  <Text layoutX="927.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng doanh thu : ">
+                                 <font>
+                                    <Font name="System Bold Italic" size="16.0" />
+                                 </font>
+                              </Text>
+                                  <Text fx:id="totalMoneyText" layoutX="1070.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                              </Text>
+                              <Text layoutX="532.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Thời gian:">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Text>
+                              <Text fx:id="timeText" layoutX="609.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                 <font>
+                                    <Font name="System Italic" size="14.0" />
+                                 </font>
+                              </Text>
+                              </AnchorPane>
+                          </HBox>
+                        <padding>
+                           <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                        </padding>
+                      </VBox>
                   </children>
                </AnchorPane>
-               <AnchorPane prefHeight="413.0" prefWidth="570.0" style="-fx-background-color: lightgrey;">
-                  <HBox.margin>
-                     <Insets right="30.0" />
-                  </HBox.margin>
-                  <children>
-                     <VBox prefHeight="402.0" prefWidth="570.0">
-                        <children>
-                           <PieChart fx:id="netDuePiechart" prefHeight="395.0" prefWidth="570.0" />
-                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Biểu đồ thống kê tỉ lệ doanh thu phòng" textAlignment="CENTER" wrappingWidth="568.7545928955078">
-                              <font>
-                                 <Font name="System Bold" size="16.0" />
-                              </font>
-                              <VBox.margin>
-                                 <Insets bottom="10.0" />
-                              </VBox.margin>
-                           </Text>
-                        </children>
-                     </VBox>
-                  </children>
-               </AnchorPane>
-            </children>
-            <StackPane.margin>
-               <Insets />
-            </StackPane.margin>
-         </HBox>
-        </StackPane>
-        <HBox prefHeight="76.0" prefWidth="1425.0">
-            <VBox.margin>
-                <Insets />
-            </VBox.margin>
-            <AnchorPane prefHeight="75.0" prefWidth="1426.0">
-                <HBox.margin>
-                    <Insets />
-                </HBox.margin>
-                <Text layoutY="55.665625" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng số lần sử dụng phòng:" wrappingWidth="206.9296875" AnchorPane.bottomAnchor="27.384375000000006" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1219.0" AnchorPane.topAnchor="38.0">
-               <font>
-                  <Font name="System Bold Italic" size="16.0" />
-               </font>
-            </Text>
-                <Text fx:id="numOfInvoiceText" layoutX="221.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Text>
-                <Text layoutX="927.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng doanh thu : ">
-               <font>
-                  <Font name="System Bold Italic" size="16.0" />
-               </font>
-            </Text>
-                <Text fx:id="totalMoneyText" layoutX="1070.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Text>
-            <Text layoutX="532.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Thời gian:">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Text>
-            <Text fx:id="timeText" layoutX="609.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-            </Text>
-            </AnchorPane>
-        </HBox>
-      <padding>
-         <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-      </padding>
-    </VBox>
-   <DialogPane fx:id="dialogPane" animationDuration="200.0ms" layoutX="10.0" layoutY="10.0" maximizedPadding="10.0" />
+            </content>
+         </TitledPane>
+      </content>
+   </ScrollPane>
 </AnchorPane>
