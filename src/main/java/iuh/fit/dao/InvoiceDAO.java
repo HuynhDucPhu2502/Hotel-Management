@@ -75,7 +75,7 @@ public class InvoiceDAO {
             // Xử lý thông báo trả về
             switch (message) {
                 case "RESERVATION_FORM_NOT_FOUND":
-                    throw new IllegalArgumentException("Phiếu đặt phòng không tồn tại hoặc không được kích hoạt.");
+                    throw new IllegalArgumentException(ErrorMessages.NULL_RESERVATIONFORM);
                 case "ROOM_CHECKOUT_SUCCESS":
                     HistoryCheckOutDAO.incrementAndUpdateNextID();
                     incrementAndUpdateNextID();

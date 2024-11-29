@@ -111,7 +111,7 @@ public class ReservationFormDAO {
                     incrementAndUpdateNextID();
                     break;
                 default:
-                    throw new IllegalArgumentException("Lỗi không xác định từ Stored Procedure.");
+                    throw new IllegalArgumentException(ErrorMessages.STORE_PROCEDURE_ERROR);
             }
 
         } catch (SQLException e) {

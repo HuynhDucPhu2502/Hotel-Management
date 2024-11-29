@@ -1,8 +1,6 @@
 package iuh.fit.utils;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class RestoreDatabase {
     public static void restoreDif(String backupFullFilePath, String backupDifFilePath) throws SQLException {
@@ -31,7 +29,7 @@ public class RestoreDatabase {
         } catch (SQLException e) {
             System.err.println("Errors : " + e.getMessage());
             throw e;
-        }finally {
+        } finally {
             try (Connection con = DBHelper.getConnection()) {
                 Statement stmt = con.createStatement();
                 stmt.execute(setMultiUserSQL);
@@ -64,4 +62,30 @@ public class RestoreDatabase {
             throw e;
         }
     }
+
+    public static void restoreFullWhenNoDB(String backupFullFilePath) throws SQLException {
+        String databaseName = "HotelDatabase";
+
+        try (Connection con = DBHelper.getConnectWhenNoDB()) {
+            Statement stmt = con.createStatement();
+
+            String restoreQuery = "RESTORE DATABASE " + databaseName + " " +
+                    "FROM DISK = '" + backupFullFilePath + "' " +
+                    "WITH REPLACE;";
+
+            stmt.execute(restoreQuery);
+        }
+    }
+
+    public static boolean isDatabaseExist(String databaseName) throws SQLException {
+        String checkDatabaseSQL = "SELECT database_id FROM sys.databases WHERE name = '" + databaseName + "';";
+
+        try (Connection con = DBHelper.getConnectWhenNoDB();
+             Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery(checkDatabaseSQL)) {
+
+            return rs.next();
+        }
+    }
+
 }

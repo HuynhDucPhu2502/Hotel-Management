@@ -53,6 +53,7 @@
           <RowConstraints percentHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints percentHeight="10.0" vgrow="SOMETIMES" />
           <RowConstraints vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
@@ -145,6 +146,33 @@
                   </GridPane>
                </children>
             </GridPane>
+            <GridPane GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="205.00001220703126" minWidth="10.0" prefWidth="152.0000244140625" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="229.39996337890625" minWidth="10.0" prefWidth="153.59997558593753" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <children>
+                        <Text layoutX="58.0" layoutY="14.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Phục hồi dữ liệu" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </GridPane>
+            <Button mnemonicParsing="false" onAction="#restoreData" GridPane.columnIndex="2" GridPane.rowIndex="4">
+               <graphic>
+                  <ImageView fitHeight="26.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/backup_restore_icons/database.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
          </children>
       </GridPane>
       <GridPane fx:id="forgotPasswordGrid" layoutX="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -256,6 +284,152 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Button>
+               </children>
+            </GridPane>
+         </children>
+      </GridPane>
+      <GridPane fx:id="restoreDataGrid" cacheShape="false" layoutX="210.0" layoutY="10.0" prefHeight="400.0" prefWidth="410.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="129.20001220703125" minWidth="10.0" prefWidth="15.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="377.5999389648438" minWidth="10.0" prefWidth="366.3999877929688" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="108.5999755859375" minWidth="6.400061035156284" prefWidth="15.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="80.4" minHeight="10.0" prefHeight="40.399993896484375" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="164.8" minHeight="10.0" prefHeight="43.8" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="230.40001525878904" minHeight="10.0" prefHeight="42.799987792968764" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="230.40001525878904" minHeight="10.0" prefHeight="208.40001220703124" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="226.00002136230466" minHeight="10.0" prefHeight="45.59998779296876" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <AnchorPane prefHeight="53.0" prefWidth="228.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="-14.0" layoutY="-2.0" prefHeight="59.0" prefWidth="382.0" text="Phục hồi dữ liệu" textAlignment="CENTER" textFill="STEELBLUE">
+                     <font>
+                        <Font name="System Bold" size="26.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <Label alignment="TOP_CENTER" onMouseClicked="#backToLoginPanel" prefHeight="18.0" prefWidth="87.0" text="Đăng nhập" textFill="BLUE" underline="true" GridPane.columnIndex="1">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../icons/ic_back.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="CLOSED_HAND" />
+               </cursor>
+            </Label>
+            <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Lưu ý : chức năng chỉ dành cho người quản lý" textAlignment="CENTER" wrappingWidth="367.68321990966797" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <GridPane prefHeight="141.0" prefWidth="366.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="356.8" minWidth="10.0" prefWidth="356.8" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="178.39996337890625" minWidth="0.0" prefWidth="0.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="34.599981689453124" minHeight="4.999976539611815" prefHeight="5.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="73.80002346038819" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="73.80002346038819" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="90.0000099182129" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Text fx:id="passTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Nhập mật khẩu để kích hoạt chức năng " textAlignment="CENTER" wrappingWidth="358.21697998046875">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="filepathTitleText" strokeType="OUTSIDE" strokeWidth="0.0" text="Chọn tệp dữ liệu cần khôi phục" textAlignment="CENTER" visible="false" wrappingWidth="289.4170227050781">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <GridPane GridPane.rowIndex="1">
+                     <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="335.8000244140625" minWidth="10.0" prefWidth="274.2000305175781" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="197.599951171875" minWidth="10.0" prefWidth="82.19996948242186" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <AnchorPane prefHeight="60.0" prefWidth="286.0">
+                           <children>
+                              <PasswordField fx:id="passRestorePasswordField" layoutX="20.8" layoutY="1.0" prefHeight="26.0" prefWidth="254.0" AnchorPane.leftAnchor="21.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0" />
+                              <TextField fx:id="passRestoreTextField" layoutX="29.0" layoutY="2.0" prefHeight="26.0" prefWidth="252.0" visible="false" AnchorPane.leftAnchor="21.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0" />
+                              <TextField fx:id="filePathRestoreTextField" layoutX="39.0" layoutY="12.0" prefHeight="26.0" prefWidth="252.0" visible="false" AnchorPane.leftAnchor="21.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="1.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                           <children>
+                              <Button fx:id="showPassRestoreButton" layoutX="25.0" minHeight="25.6" onAction="#showPassRestore" style="-fx-background-color: white;">
+                                 <graphic>
+                                    <ImageView fx:id="" fitHeight="18.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                                       <image>
+                                          <Image url="@../../icons/login_panel_icons/ic_hidden_password.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="filePathRestoreButton" layoutX="14.0" mnemonicParsing="false" onAction="#getFilePath" prefHeight="26.0" prefWidth="30.0" visible="false">
+                                 <graphic>
+                                    <ImageView fitHeight="17.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../icons/backup_restore_icons/folder.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="researchFileRestoreButton" layoutX="52.0" mnemonicParsing="false" onAction="#researchFileRestore" prefHeight="26.0" visible="false">
+                                 <graphic>
+                                    <ImageView fitHeight="17.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../icons/backup_restore_icons/search-interface-symbol.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </GridPane>
+                  <GridPane GridPane.rowIndex="2">
+                     <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="209.60003662109375" minWidth="10.0" prefWidth="159.200048828125" />
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="197.599951171875" minWidth="10.0" prefWidth="197.599951171875" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Button fx:id="refreshPassRestoreButton" mnemonicParsing="false" onAction="#refreshPassRestore" prefHeight="35.0" prefWidth="115.0" style="-fx-background-radius: 30;" stylesheets="@../../styles/Button.css" text="Làm mới" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="cancelRestoreButton" mnemonicParsing="false" onAction="#cancelRestore" prefHeight="35.0" prefWidth="115.0" style="-fx-background-radius: 30;" stylesheets="@../../styles/Button.css" text="Hủy" textFill="WHITE" visible="false">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="confirmPassRestoreButton" mnemonicParsing="false" onAction="#confirmPassRestore" prefHeight="35.0" prefWidth="115.0" style="-fx-background-radius: 30;" stylesheets="@../../styles/Button.css" text="Xác nhận" textFill="WHITE" GridPane.columnIndex="1">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="restoreDataButton" mnemonicParsing="false" onAction="#confirmRestoreData" prefHeight="35.0" prefWidth="115.0" style="-fx-background-radius: 30;" stylesheets="@../../styles/Button.css" text="Phục hồi" textFill="WHITE" visible="false" GridPane.columnIndex="1">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </GridPane>
                </children>
             </GridPane>
          </children>

@@ -73,8 +73,8 @@ public class DashboardController {
         featureKeywordFXMLMapping.put(createKeyword("Tìm kiếm dịch vụ", "Tìm kiếm dịch vụ, tim kiem dich vu, tkdv, hotel_service_search"), "/iuh/fit/view/features/service/HotelServiceSearchingPanel.fxml");
         featureKeywordFXMLMapping.put(createKeyword("Tìm kiếm khách hàng", "Tìm kiếm khách hàng, tim kiem khach hang, tkkh, customer_search"), "/iuh/fit/view/features/customer/CustomerSearchingPanel.fxml");
         featureKeywordFXMLMapping.put(createKeyword("Quản lý khách hàng", "Quản lý khách hàng, quan ly khach hang, qlkh, customer_manager"), "/iuh/fit/view/features/customer/CustomerManagerPanel.fxml");
-        featureKeywordFXMLMapping.put(createKeyword("Thống kê doanh thu", "Thống kê doanh thu, thong ke doanh thu, tkdt, revenue_statistics"), "/iuh/fit/view/features/statistics/revenueStatisticalPanel.fxml");
-        featureKeywordFXMLMapping.put(createKeyword("Thống kê tỉ lệ sử dụng phòng", "Thống kê tỉ lệ sử dụng phòng, thong ke ti le su dung phong, tktlsdp, rate_using_room"), "/iuh/fit/view/features/statistics/RateUsingRoomStatisticsPanel.fxml");
+        featureKeywordFXMLMapping.put(createKeyword("Thống kê doanh thu", "Thống kê doanh thu, thong ke doanh thu, tkdt, revenue_statistics"), "/iuh/fit/view/features/statistics/RevenueStatisticalPanel.fxml");
+        featureKeywordFXMLMapping.put(createKeyword("Thống kê tỉ lệ sử dụng phòng", "Thống kê tỉ lệ sử dụng phòng, thong ke ti le su dung phong, tktlsdp, rate_using_room"), "/iuh/fit/view/features/statistics/RateUsingRoomStatisticsTab.fxml");
 
         // Thêm chức năng riêng cho MANAGER
         if (position.equals(Position.MANAGER)) {

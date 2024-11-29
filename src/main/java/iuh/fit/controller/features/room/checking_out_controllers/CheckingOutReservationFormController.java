@@ -8,6 +8,7 @@ import iuh.fit.dao.*;
 import iuh.fit.models.*;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
+import iuh.fit.utils.RoomManagementService;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -230,19 +231,7 @@ public class CheckingOutReservationFormController {
             confirmDialog.onClose(buttonType -> {
                 if (buttonType == ButtonType.YES) {
                     try {
-                        String reservationFormID = roomWithReservation.getReservationForm().getReservationID();
-                        String employeeID = employee.getEmployeeID();
-
-                        double roomCharge = Calculator.calculateRoomCharge(
-                                roomWithReservation.getRoom(),
-                                roomWithReservation.getReservationForm().getCheckInDate(),
-                                roomWithReservation.getReservationForm().getCheckOutDate()
-                        );
-                        double serviceCharge = Calculator.calculateTotalServiceCharge(
-                                roomWithReservation.getReservationForm().getReservationID()
-                        );
-
-                        InvoiceDAO.roomCheckingOut(reservationFormID, employeeID, roomCharge, serviceCharge);
+                        RoomManagementService.handleCheckOut(roomWithReservation, employee);
 
                         dialogPane.showInformation("THÀNH CÔNG", "Check-out và tạo hóa đơn thành công!");
                         navigateToRoomBookingPanel();
