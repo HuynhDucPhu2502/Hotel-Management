@@ -169,7 +169,7 @@ public class MainController {
                 case InvoiceManagerController invoiceManagerController -> {
                     Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
                     invoiceManagerController.setupContext(mainController, employee);
-                }
+                }   `
 
                 case ShiftManagerController shiftManagerController -> {
                     Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
