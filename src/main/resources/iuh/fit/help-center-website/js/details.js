@@ -18,6 +18,17 @@ if (featureData) {
   // Hiển thị câu hỏi và câu trả lời vào accordion
   const accordion = document.getElementById("accordionExample");
   featureData.forEach((item, index) => {
+    const answerContent = item.answer
+      .map((part) => {
+        if (part.type === "text") {
+          return `<p>${part.content}</p>`;
+        } else if (part.type === "image") {
+          return `<img src="${part.content}" alt="Mô tả ảnh" style="max-width: 100%; height: auto;" />`;
+        }
+        return "";
+      })
+      .join("");
+
     accordion.innerHTML += `
       <div class="accordion-item my-2">
         <h2 class="accordion-header" id="heading${index}">
@@ -39,7 +50,7 @@ if (featureData) {
           data-bs-parent="#accordionExample"
         >
           <div class="accordion-body">
-            ${item.answer}
+            ${answerContent}
           </div>
         </div>
       </div>

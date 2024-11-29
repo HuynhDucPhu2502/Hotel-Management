@@ -20,6 +20,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -352,14 +354,21 @@ public class RateUsingRoomStatisticsController implements Initializable {
         return usingRoomDisplayOnTableData.size();
     }
 
-    private void setTotalMoney(String totalMoney){
-        totalMoneyText.setText(totalMoney);
+    private static String formatCurrency(double amount) {
+        NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
+        return formatter.format(amount);
     }
 
-    private double caculateTotalMoney(List<UsingRoomDisplayOnTable> usingRoomDisplayOnTableData){
+    private void setTotalMoney(String totalMoney){
+        totalMoneyText.setText(formatCurrency(Double.valueOf(totalMoney)));
+    }
+
+    private double caculateTotalMoney(List<UsingRoomDisplayOnTable> usingRoomDisplayOnTableData) {
         return usingRoomDisplayOnTableData.stream()
                 .mapToDouble(UsingRoomDisplayOnTable::getNetDue)
                 .sum();
+
+
     }
 
     private void handleResetAction() {
