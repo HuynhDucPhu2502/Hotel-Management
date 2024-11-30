@@ -15,9 +15,7 @@ import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingCo
 import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
 import iuh.fit.dao.CustomerDAO;
 import iuh.fit.dao.ReservationFormDAO;
-import iuh.fit.dao.RoomDialogDAO;
 import iuh.fit.models.*;
-import iuh.fit.models.enums.DialogType;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;

@@ -39,7 +39,8 @@ module iuh.fit {
     opens iuh.fit.models.wrapper to javafx.base, javafx.fxml;
 
     exports iuh.fit;
-
+    exports iuh.fit.utils;
+    exports iuh.fit.dao;
     exports iuh.fit.controller;
     exports iuh.fit.controller.features;
     exports iuh.fit.controller.features.employee_information;

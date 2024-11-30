@@ -46,6 +46,7 @@
             <version>22</version>
         </dependency>
 
+
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -69,12 +70,11 @@
             <version>2.57.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.calendarfx/calendar -->
+        <!-- https://mvnrepository.com/artifact/com.calendarfx/view -->
         <dependency>
             <groupId>com.calendarfx</groupId>
-            <artifactId>calendar</artifactId>
+            <artifactId>view</artifactId>
             <version>11.12.7</version>
-            <type>pom</type>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
