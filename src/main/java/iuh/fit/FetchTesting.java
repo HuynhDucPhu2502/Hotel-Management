@@ -1,15 +1,7 @@
 package iuh.fit;
 
-import iuh.fit.dao.RoomDisplayOnTableDAO;
-import iuh.fit.dao.ServiceDisplayOnTableDAO;
-import iuh.fit.models.enums.Month;
 import iuh.fit.security.PasswordHashing;
 import iuh.fit.utils.PropertiesFile;
-
-import java.io.File;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Properties;
 
 public class FetchTesting {
     public static void main(String[] args) {

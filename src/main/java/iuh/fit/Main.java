@@ -30,27 +30,16 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException, SQLException {
         startWithLogin(primaryStage);
+        //startWithoutLogin(primaryStage);
 
-        // check if db not exist
         if(!RestoreDatabase.isDatabaseExist("HotelDatabase")) return;
 
         try {
             RoomManagementService.startAutoCheckoutScheduler();
         }catch (Exception e){
-            System.out.println("Chua co database");
+            System.out.println("Không tìm thấy database");
         }
 
-
-        //startWithoutLogin(primaryStage);
-
-
-
-        // check if we have 30 backup dif already
-        // if > 30, backupfull with the day nearest the backupfule file
-        // and remove this file
-        // BackupDatabase.checkNumOfBackupFile();
-
-        // handle backup event when slose the app
         primaryStage.setOnCloseRequest(event -> {
             try {
                 BackupDatabase.backupData(primaryStage);
@@ -119,7 +108,6 @@ public class Main extends Application {
             e.printStackTrace();
         }
     }
-
 
     public static void main(String[] args) {
         launch(args);

@@ -37,9 +37,7 @@ public class RestoreDatabase {
                 System.err.println("Errors : " + finalEx.getMessage());
             }
         }
-
     }
-
 
     public static void restoreFull(String backupFullFilePath) throws SQLException {
         String useMasterSQL = "USE master;";

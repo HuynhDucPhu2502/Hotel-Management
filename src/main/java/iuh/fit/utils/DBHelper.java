@@ -8,7 +8,7 @@ public class DBHelper {
 
     private static final String USER_NAME = "sa";
     private static final String USER_PASSWORD = "sapassword";
-    private static final String DATABASE_NAME = "HotelDatabase";
+    private static String DATABASE_NAME = "HotelDatabase";
     private static final String DATABASE_URL =
             """
             jdbc:sqlserver://localhost;
@@ -45,6 +45,16 @@ public class DBHelper {
         return null;
     }
 
+    public static Connection getConnection(String dbName)
+            throws SQLException
+    {
+        return getConnection(
+                dbName,
+                USER_NAME,
+                USER_PASSWORD
+        );
+    }
+
     public static Connection getConnection()
             throws SQLException
     {
@@ -57,5 +67,9 @@ public class DBHelper {
 
     public static Connection getConnectWhenNoDB() throws SQLException {
         return DriverManager.getConnection(URL_NO_DB, USER_NAME, USER_PASSWORD);
+    }
+
+    public static void setDatabaseName(String databaseName) {
+        DATABASE_NAME = databaseName;
     }
 }
