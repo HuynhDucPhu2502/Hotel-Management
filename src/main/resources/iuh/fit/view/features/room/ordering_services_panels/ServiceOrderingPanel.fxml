@@ -395,6 +395,13 @@
                                              <font>
                                                 <Font name="System Bold" size="16.0" />
                                              </font>
+                                             <graphic>
+                                                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../../../icons/room_booking_menu_icons/ic_check_room_dialog.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
                                           </Button>
                                        </children>
                                     </VBox>

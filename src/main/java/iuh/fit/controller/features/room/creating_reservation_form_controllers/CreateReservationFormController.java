@@ -9,6 +9,7 @@ import com.dlsc.gemsfx.daterange.DateRange;
 import com.dlsc.gemsfx.daterange.DateRangePicker;
 import com.dlsc.gemsfx.daterange.DateRangePreset;
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.room.ReservationFormDialogViewController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
@@ -32,6 +33,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -42,6 +44,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class CreateReservationFormController {
     // ==================================================================================================================
@@ -53,7 +56,7 @@ public class CreateReservationFormController {
     private Button navigateToReservationListBtn, navigateToServiceOrdering,
             navigateToRoomChanging;
 
-    @FXML private Button addBtn, reservationCheckDateBtn;
+    @FXML private Button addBtn, reservationCheckDateBtn, roomDialogBtn;
 
     @FXML private Label roomNumberLabel, categoryNameLabel;
     @FXML private DateRangePicker bookDateRangePicker;
@@ -133,6 +136,7 @@ public class CreateReservationFormController {
         navigateToCreateCustomerBtn.setOnAction(e -> navigateToAddCustomerPanel());
         addBtn.setOnAction(e -> handleCreateReservationRoom());
         reservationCheckDateBtn.setOnAction(e -> openCalendarViewStage());
+        roomDialogBtn.setOnAction(e -> handleShowRoomInformationAction());
     }
 
     // ==================================================================================================================
@@ -427,7 +431,7 @@ public class CreateReservationFormController {
     // ==================================================================================================================
     private void openCalendarViewStage() {
         CalendarView calendarView = new CalendarView();
-        List<ReservationForm> reservations = ReservationFormDAO.getUpcomingReservations(room.getRoomID());
+        List<ReservationForm> reservations = ReservationFormDAO.getReservationsWithinLastMonth(room.getRoomID());
         Calendar<String> calendar = new Calendar<>("Lịch Đặt Phòng");
 
         reservations.forEach(res -> {
@@ -444,6 +448,33 @@ public class CreateReservationFormController {
         Stage stage = new Stage();
         stage.setScene(new Scene(calendarView, 800, 800));
         stage.show();
+    }
+
+    // ==================================================================================================================
+    // 10. Chức năng hiện nhật ký
+    // ==================================================================================================================
+    private void handleShowRoomInformationAction() {
+        try {
+            String source = "/iuh/fit/view/features/room/ReservationFormDialogView.fxml";
+
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
+            AnchorPane layout = loader.load();
+
+            ReservationFormDialogViewController reservationFormDialogViewController = loader.getController();
+            reservationFormDialogViewController.setReservationForm(roomWithReservation.getReservationForm());
+
+            Scene scene = new Scene(layout);
+
+            Stage stage = new Stage();
+            String iconPath = "/iuh/fit/icons/menu_icons/ic_room.png";
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath))));
+            stage.setTitle("Nhật ký phiếu đặt phòng");
+
+            stage.setScene(scene);
+            stage.show();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
 

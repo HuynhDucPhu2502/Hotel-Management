@@ -1,9 +1,8 @@
-package iuh.fit.controller.features.invoice.invoice_controllers;
+package iuh.fit.controller.features.invoice;
 
 import com.dlsc.gemsfx.DialogPane;
 import com.itextpdf.text.DocumentException;
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.invoice.InvoiceManagerController;
 import iuh.fit.dao.HistoryCheckOutDAO;
 import iuh.fit.dao.HistoryCheckinDAO;
 import iuh.fit.dao.RoomUsageServiceDAO;
