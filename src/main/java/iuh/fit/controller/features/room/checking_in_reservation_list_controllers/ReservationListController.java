@@ -203,6 +203,12 @@ public class ReservationListController {
                         row++;
                     }
                 }
+
+                reservationFormGidPane.setVisible(true);
+                reservationFormGidPane.setManaged(true);
+                emptyLabelContainer.setVisible(false);
+                emptyLabelContainer.setManaged(false);
+                reservationFormsListContainer.setAlignment(Pos.TOP_CENTER);
             } catch (IOException e) {
                 e.printStackTrace();
             }

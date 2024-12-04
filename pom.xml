@@ -166,6 +166,7 @@
                     <noManPages>true</noManPages>
                     <stripDebug>true</stripDebug>
                     <noHeaderFiles>true</noHeaderFiles>
+
                 </configuration>
                 <executions>
                     <execution>
@@ -191,15 +192,12 @@
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>iuh.fit.Main</mainClass>
                                 </transformer>
-                                <!-- Hợp nhất các file NOTICE -->
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>META-INF/NOTICE</resource>
                                 </transformer>
-                                <!-- Hợp nhất các file LICENSE -->
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
                                     <resource>META-INF/LICENSE</resource>
                                 </transformer>
-                                <!-- Hợp nhất các dịch vụ trong META-INF/services -->
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
                             <filters>

@@ -7,27 +7,26 @@ import iuh.fit.utils.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException, SQLException {
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/iuh/fit/imgs/hotel_logo.png")).toString()));
+
         startWithLogin(primaryStage);
         //startWithoutLogin(primaryStage);
 
         if(!RestoreDatabase.isDatabaseExist("HotelDatabase")) return;
-
-        try {
-            RoomManagementService.startAutoCheckoutScheduler();
-        }catch (Exception e){
-            System.out.println("Không tìm thấy database");
-        }
+        else RoomManagementService.startAutoCheckoutScheduler();
 
         primaryStage.setOnCloseRequest(event -> {
             try {
