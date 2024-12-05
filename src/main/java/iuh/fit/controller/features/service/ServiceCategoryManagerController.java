@@ -120,7 +120,23 @@ public class ServiceCategoryManagerController {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
-                setGraphic(empty ? null : hBox);
+
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                    return;
+                }
+
+                ServiceCategory serviceCategory = getTableRow().getItem();
+                if (serviceCategory == null) {
+                    setGraphic(null);
+                    return;
+                }
+
+                boolean hasRoomInUse = ServiceCategoryDAO.hasRoomWithStatus(serviceCategory.getServiceCategoryID());
+                updateButton.setDisable(hasRoomInUse);
+                deleteButton.setDisable(hasRoomInUse);
+
+                setGraphic(hBox);
             }
         });
     }
