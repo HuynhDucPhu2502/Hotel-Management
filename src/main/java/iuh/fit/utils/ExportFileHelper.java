@@ -50,7 +50,6 @@ public class ExportFileHelper {
                 contentRow.createCell(5).setCellValue(inv.getDeposit());
                 contentRow.createCell(6).setCellValue(inv.getServiceCharge());
                 contentRow.createCell(7).setCellValue(inv.getRoomCharge());
-                contentRow.createCell(8).setCellValue(inv.getTax());
                 contentRow.createCell(9).setCellValue(inv.getNetDue());
             }
 
