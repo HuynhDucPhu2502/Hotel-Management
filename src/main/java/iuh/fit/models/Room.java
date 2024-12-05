@@ -11,13 +11,9 @@ import java.util.Objects;
 
 public class Room {
     private String roomID;
-
     private RoomStatus roomStatus;
-
     private LocalDateTime dateOfCreation;
-
     private RoomCategory roomCategory;
-
     private ObjectStatus objectStatus;
 
     public Room(String roomID, RoomStatus roomStatus, LocalDateTime dateOfCreation, RoomCategory roomCategory, ObjectStatus objectStatus) {
@@ -87,7 +83,6 @@ public class Room {
         return roomID.substring(2);
     }
 
-    //Thêm phương thức lấy mã phòng từ class Phòng, phục vụ cho RoomManagerController load số giường vào tableView thông qua PropertyValueFactory
     public int getNumberOfBed() {
         return roomCategory != null ? roomCategory.getNumberOfBed() : 0; // Handle null case
     }
