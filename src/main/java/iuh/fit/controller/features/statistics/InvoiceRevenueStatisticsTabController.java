@@ -121,7 +121,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
         setDeposit(formatCurrency(calculateDeposit(data)));
         setServiceCharge(formatCurrency(calculateServiceCharge(data)));
         setRoomCharge(formatCurrency(calculateRoomCharge(data)));
-        setTax(formatCurrency(calculateTax(data)));
     }
 
     // handle event for quarter filter
@@ -138,7 +137,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
         setDeposit(formatCurrency(calculateDeposit(data)));
         setServiceCharge(formatCurrency(calculateServiceCharge(data)));
         setRoomCharge(formatCurrency(calculateRoomCharge(data)));
-        setTax(formatCurrency(calculateTax(data)));
     }
 
     // handle event for employee filter
@@ -167,7 +165,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
         setDeposit(formatCurrency(calculateDeposit(data)));
         setServiceCharge(formatCurrency(calculateServiceCharge(data)));
         setRoomCharge(formatCurrency(calculateRoomCharge(data)));
-        setTax(formatCurrency(calculateTax(data)));
     }
 
     // handle event for statistic all the time
@@ -184,7 +181,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
             setDeposit(formatCurrency(calculateDeposit(FXCollections.observableArrayList(currentData))));
             setServiceCharge(formatCurrency(calculateServiceCharge(FXCollections.observableArrayList(currentData))));
             setRoomCharge(formatCurrency(calculateRoomCharge(FXCollections.observableArrayList(currentData))));
-            setTax(formatCurrency(calculateTax(FXCollections.observableArrayList(currentData))));
             employeeNameCombobox.setValue(NONE_VALUE_EMPLOYEE_NAME);
             showDataToChartView(2);
         }
@@ -418,15 +414,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
             }
         });
 
-        taxColumn.setCellValueFactory(new PropertyValueFactory<>("tax"));
-        taxColumn.setCellFactory(column -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double amount, boolean empty) {
-                super.updateItem(amount, empty);
-                setText(empty || amount == null ? null : formatCurrency(amount));
-            }
-        });
-
         netDueColumn.setCellValueFactory(new PropertyValueFactory<>("netDue"));
         netDueColumn.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -459,7 +446,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
         setDeposit(formatCurrency(calculateDeposit(data)));
         setServiceCharge(formatCurrency(calculateServiceCharge(data)));
         setRoomCharge(formatCurrency(calculateRoomCharge(data)));
-        setTax(formatCurrency(calculateTax(data)));
         showDataToChartView(1);
     }
 
@@ -927,16 +913,4 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
                 .mapToDouble(InvoiceDisplayOnTable::getRoomCharge)
                 .sum();
     }
-
-    private void setTax(String totalTax){
-        taxText.setText(totalTax);
-    }
-
-    private double calculateTax(ObservableList<InvoiceDisplayOnTable> invoiceDisplayOnTableData){
-        return invoiceDisplayOnTableData.stream()
-                .mapToDouble(InvoiceDisplayOnTable::getTax)
-                .sum();
-    }
-
-
 }
