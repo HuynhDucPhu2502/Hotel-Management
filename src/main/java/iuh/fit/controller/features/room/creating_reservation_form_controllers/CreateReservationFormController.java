@@ -9,11 +9,7 @@ import com.dlsc.gemsfx.daterange.DateRange;
 import com.dlsc.gemsfx.daterange.DateRangePicker;
 import com.dlsc.gemsfx.daterange.DateRangePreset;
 import iuh.fit.controller.MainController;
-
-import iuh.fit.controller.features.NotificationButtonController;
-
 import iuh.fit.controller.features.room.ReservationFormDialogViewController;
-
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
@@ -87,11 +83,7 @@ public class CreateReservationFormController {
 
     private LocalDateTime checkInTime, checkOutTime;
     private Customer customer;
-    private static NotificationButtonController topBarController;
 
-    public static void setController(NotificationButtonController controller){
-        topBarController = controller;
-    }
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
@@ -103,13 +95,11 @@ public class CreateReservationFormController {
 
     public void setupContext(MainController mainController, Employee employee,
                              RoomWithReservation roomWithReservation, Customer customer,
-                             LocalDateTime checkInTime, LocalDateTime checkOutTime,
-                             NotificationButtonController controller) {
+                             LocalDateTime checkInTime, LocalDateTime checkOutTime) {
         this.mainController = mainController;
         this.employee = employee;
         this.roomWithReservation = roomWithReservation;
         this.room = roomWithReservation.getRoom();
-        setController(controller);
 
         titledPane.setText("Quản lý đặt phòng " + room.getRoomNumber());
 
@@ -194,15 +184,15 @@ public class CreateReservationFormController {
             T controller = loader.getController();
 
             if (controller instanceof RoomBookingController rbc)
-                rbc.setupContext(mainController, employee, topBarController);
+                rbc.setupContext(mainController, employee);
             else if (controller instanceof AddCustomerController acc)
-                acc.setupContext(mainController, employee, roomWithReservation, checkInTime, checkOutTime, topBarController);
+                acc.setupContext(mainController, employee, roomWithReservation, checkInTime, checkOutTime);
             else if (controller instanceof  ReservationListController rlc)
-                rlc.setupContext(mainController, employee, roomWithReservation, topBarController);
+                rlc.setupContext(mainController, employee, roomWithReservation);
             else if (controller instanceof RoomChangingController rcc)
-                rcc.setupContext(mainController, employee, roomWithReservation, topBarController);
+                rcc.setupContext(mainController, employee, roomWithReservation);
             else if (controller instanceof ServiceOrderingController soc)
-                soc.setupContext(mainController, employee, roomWithReservation, topBarController);
+                soc.setupContext(mainController, employee, roomWithReservation);
 
 
             mainController.getMainPanel().getChildren().setAll(layout.getChildren());

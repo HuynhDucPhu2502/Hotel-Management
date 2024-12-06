@@ -3,7 +3,6 @@ package iuh.fit.controller.features.room.creating_reservation_form_controllers;
 import com.dlsc.gemsfx.CalendarPicker;
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.dao.CustomerDAO;
 import iuh.fit.models.Customer;
@@ -56,12 +55,6 @@ public class AddCustomerController {
     private LocalDateTime checkOutTime;
     private Customer customer;
 
-    private static NotificationButtonController topBarController;
-
-    public static void setController(NotificationButtonController controller){
-        topBarController = controller;
-    }
-
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
@@ -72,13 +65,11 @@ public class AddCustomerController {
 
     public void setupContext(
             MainController mainController, Employee employee, RoomWithReservation roomWithReservation,
-            LocalDateTime checkInTime, LocalDateTime checkOutTime,
-            NotificationButtonController controller
+            LocalDateTime checkInTime, LocalDateTime checkOutTime
     ) {
         this.mainController = mainController;
         this.employee = employee;
         this.roomWithReservation = roomWithReservation;
-        setController(controller);
         Room room = roomWithReservation.getRoom();
 
         titledPane.setText("Quản lý đặt phòng " + room.getRoomNumber());
@@ -109,7 +100,7 @@ public class AddCustomerController {
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setupContext(mainController, employee,  topBarController);
+            roomBookingController.setupContext(mainController, employee);
 
             mainController.getMainPanel().getChildren().clear();
             mainController.getMainPanel().getChildren().addAll(layout.getChildren());
@@ -125,7 +116,7 @@ public class AddCustomerController {
 
             CreateReservationFormController createReservationFormController = loader.getController();
             createReservationFormController.setupContext(
-                    mainController, employee, roomWithReservation, customer, checkInTime, checkOutTime, topBarController
+                    mainController, employee, roomWithReservation, customer, checkInTime, checkOutTime
             );
 
             mainController.getMainPanel().getChildren().clear();

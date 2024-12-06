@@ -1,7 +1,6 @@
 package iuh.fit.controller.features.room.creating_reservation_form_controllers;
 
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
@@ -42,12 +41,6 @@ public class RoomOnUseItemController {
 
     private Timeline timeline;
 
-
-    private static NotificationButtonController topBarController;
-    public static void setupController(NotificationButtonController controller){
-        topBarController = controller;
-    }
-
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
@@ -84,7 +77,7 @@ public class RoomOnUseItemController {
                         timeline.stop();
                         TimelineManager.getInstance().removeTimeline(timelineKey);
                         if (MainController.isRoomBookingLoaded()) navigateToRoomBookingPanel(false);
-                        else RoomManagementService.autoCheckoutOverdueRooms(topBarController);
+                        else RoomManagementService.autoCheckoutOverdueRooms();
                     }
                 })
         );
@@ -117,7 +110,7 @@ public class RoomOnUseItemController {
             CreateReservationFormController createReservationFormController = loader.getController();
             createReservationFormController.setupContext(
                     mainController, employee, roomWithReservation,
-                    null, null, null, topBarController
+                    null, null, null
             );
 
             mainController.getMainPanel().getChildren().clear();
@@ -134,7 +127,7 @@ public class RoomOnUseItemController {
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setupContext(mainController, employee, topBarController);
+            roomBookingController.setupContext(mainController, employee);
             if (isError)
                 roomBookingController.getDialogPane().showInformation(
                         "Không thể thực hiện thao tác",

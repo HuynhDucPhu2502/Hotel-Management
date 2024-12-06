@@ -2,7 +2,6 @@ package iuh.fit.controller.features.room.room_changing_controllers;
 
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.ReservationFormDialogViewController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
@@ -94,11 +93,7 @@ public class RoomChangingController {
     private Employee employee;
 
     private List<Room> availableRooms;
-    private static NotificationButtonController topBarController;
 
-    public static void setController(NotificationButtonController controller){
-        topBarController = controller;
-    }
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
@@ -109,12 +104,10 @@ public class RoomChangingController {
     }
 
     public void setupContext(MainController mainController, Employee employee,
-                             RoomWithReservation roomWithReservation,
-                             NotificationButtonController controller) {
+                             RoomWithReservation roomWithReservation) {
         this.mainController = mainController;
         this.employee = employee;
         this.roomWithReservation = roomWithReservation;
-        setController(controller);
         titledPane.setText("Quản lý đặt phòng " + roomWithReservation.getRoom().getRoomNumber());
         roomAvailableTitle.setText("Danh sách phòng trống từ hiện tại đến ngày " +
                 dateTimeFormatter.format(roomWithReservation.getReservationForm().getCheckOutDate()));
@@ -209,7 +202,7 @@ public class RoomChangingController {
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setupContext(mainController, employee, topBarController);
+            roomBookingController.setupContext(mainController, employee);
             if (isError)
                 roomBookingController
                         .getDialogPane()
@@ -231,7 +224,7 @@ public class RoomChangingController {
 
             ReservationListController reservationListController = loader.getController();
             reservationListController.setupContext(
-                    mainController, employee, roomWithReservation,topBarController
+                    mainController, employee, roomWithReservation
             );
 
             mainController.getMainPanel().getChildren().clear();
@@ -251,8 +244,7 @@ public class RoomChangingController {
                     mainController, employee, roomWithReservation,
                     null,
                     null,
-                    null,
-                    topBarController
+                    null
             );
 
             mainController.getMainPanel().getChildren().clear();
@@ -269,7 +261,7 @@ public class RoomChangingController {
 
             ServiceOrderingController serviceOrderingController = loader.getController();
             serviceOrderingController.setupContext(
-                    mainController, employee, roomWithReservation, topBarController
+                    mainController, employee, roomWithReservation
             );
 
             mainController.getMainPanel().getChildren().clear();
