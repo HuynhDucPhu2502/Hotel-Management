@@ -1,25 +1,24 @@
 package iuh.fit;
 
 import iuh.fit.controller.LoginController;
-import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.NotificationButtonController;
-import iuh.fit.dao.AccountDAO;
-import iuh.fit.models.Account;
-import iuh.fit.utils.*;
+import iuh.fit.utils.BackupDatabase;
+import iuh.fit.utils.RestoreDatabase;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Objects;
 
-@SuppressWarnings("unused")
-public class Application extends javafx.application.Application {
-
+/**
+*@created 06/12/2024 - 9:55 PM
+*@project HotelManagement
+*@package iuh.fit
+*@author Le Tran Gia Huy
+*/public class Application extends javafx.application.Application{
     private NotificationButtonController topBarController;
     private boolean isNotificationControllerSet = false;
 

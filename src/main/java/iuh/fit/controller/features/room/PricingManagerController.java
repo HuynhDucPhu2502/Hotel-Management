@@ -4,8 +4,10 @@ import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.dao.PricingDAO;
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.models.Pricing;
+import iuh.fit.models.Room;
 import iuh.fit.models.RoomCategory;
 import iuh.fit.models.enums.PriceUnit;
+import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.ErrorMessages;
 import javafx.application.Platform;
@@ -22,6 +24,7 @@ import javafx.util.Callback;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PricingManagerController {
     // Search Fields
@@ -88,7 +91,9 @@ public class PricingManagerController {
 
     // Phương thức load dữ liệu lên giao diện
     private void loadData() {
-        unitCBox.getItems().setAll(List.of("Ngày", "Giờ"));
+        unitCBox.getItems().setAll(
+                Stream.of(PriceUnit.values()).map(Enum::name).toList()
+        );
         unitCBox.getSelectionModel().selectFirst();
 
         List<String> comboBoxItems = RoomCategoryDAO.getRoomCategory()
@@ -117,7 +122,7 @@ public class PricingManagerController {
         pricingIDColumn.setCellValueFactory(new PropertyValueFactory<>("pricingID"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         unitColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getPriceUnit().toString()));
+                new SimpleStringProperty(data.getValue().getPriceUnit().name()));
         roomCategoryColumn.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getRoomCategory().getRoomCategoryName()));
 
@@ -198,15 +203,10 @@ public class PricingManagerController {
             String roomCategoryID = selectedRoomCategory.split(" ")[0];
             RoomCategory roomCategory = RoomCategoryDAO.getDataByID(roomCategoryID);
 
-            PriceUnit priceUnit;
-            if (unitCBox.getSelectionModel().getSelectedItem().equalsIgnoreCase("Ngày"))
-                priceUnit = PriceUnit.DAY;
-            else
-                priceUnit = PriceUnit.HOUR;
 
             Pricing pricing = new Pricing(
                     pricingIDTextField.getText(),
-                    priceUnit,
+                    ConvertHelper.priceUnitConverter(unitCBox.getSelectionModel().getSelectedItem()),
                     ConvertHelper.doubleConverter(priceTextField.getText(), ErrorMessages.PRICING_INVALID_FORMAT),
                     roomCategory
             );
@@ -214,7 +214,6 @@ public class PricingManagerController {
             PricingDAO.createData(pricing);
             handleResetAction();
             loadData();
-            dialogPane.showInformation("Thành công", "Thêm giá phòng mới thành công");
         } catch (IllegalArgumentException e) {
             dialogPane.showWarning("LỖI", e.getMessage());
         }
@@ -229,7 +228,6 @@ public class PricingManagerController {
                 PricingDAO.deleteData(pricing.getPricingID());
                 handleResetAction();
                 loadData();
-                dialogPane.showInformation("Thành công", "Xóa giá phòng thành công");
             }
         });
     }
@@ -240,12 +238,7 @@ public class PricingManagerController {
         pricingIDTextField.setText(pricing.getPricingID());
         priceTextField.setText(String.valueOf(pricing.getPrice()));
 
-        PriceUnit priceUnit;
-        if (pricing.getPriceUnit().toString().equalsIgnoreCase("Ngày"))
-            priceUnit = PriceUnit.DAY;
-        else
-            priceUnit = PriceUnit.HOUR;
-        unitCBox.getSelectionModel().select(priceUnit.toString());
+        unitCBox.getSelectionModel().select(pricing.getPriceUnit().name());
 
         String roomCategoryDisplay = pricing.getRoomCategory().getRoomCategoryID() + " " +
                 pricing.getRoomCategory().getRoomCategoryName();
@@ -264,15 +257,9 @@ public class PricingManagerController {
             String roomCategoryID = selectedRoomCategory.split(" ")[0];
             RoomCategory roomCategory = RoomCategoryDAO.getDataByID(roomCategoryID);
 
-            PriceUnit priceUnit;
-            if (unitCBox.getSelectionModel().getSelectedItem().equalsIgnoreCase("Ngày"))
-                priceUnit = PriceUnit.DAY;
-            else
-                priceUnit = PriceUnit.HOUR;
-
             Pricing updatedPricing = new Pricing(
                     pricingIDTextField.getText(),
-                    priceUnit,
+                    ConvertHelper.priceUnitConverter(unitCBox.getSelectionModel().getSelectedItem()),
                     ConvertHelper.doubleConverter(priceTextField.getText(), ErrorMessages.PRICING_INVALID_FORMAT),
                     roomCategory
             );
@@ -288,7 +275,6 @@ public class PricingManagerController {
                             handleResetAction();
                             loadData();
                         });
-                        dialogPane.showInformation("Thành công", "Cập nhật giá phòng thành công");
                     } catch (IllegalArgumentException e) {
                         dialogPane.showWarning("LỖI", e.getMessage());
                     }
@@ -320,6 +306,7 @@ public class PricingManagerController {
             }
         }
 
+        // Cập nhật lại bảng với dữ liệu tìm kiếm
         items.setAll(pricingList);
         pricingTableView.setItems(items);
     }

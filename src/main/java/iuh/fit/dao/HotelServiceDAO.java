@@ -23,11 +23,32 @@ public class HotelServiceDAO {
                     "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName, b.icon " +
                     "FROM HotelService a LEFT JOIN ServiceCategory b " +
                     "ON a.serviceCategoryID = b.serviceCategoryID " +
-                    "WHERE a.isActivate = 'ACTIVATE'";
+                    "WHERE a.isActivate = 'ACTIVATE' AND b.serviceCategoryID IS NOT NULL";
             ResultSet rs = statement.executeQuery(sql);
 
             while (rs.next()) {
-                data.add(extractData(rs));
+                HotelService hotelService = new HotelService();
+
+                hotelService.setServiceId(rs.getString(1));
+                hotelService.setServiceName(rs.getString(2));
+                hotelService.setDescription(rs.getString(3));
+                hotelService.setServicePrice(rs.getDouble(4));
+
+                String serviceCategoryID = rs.getString(5);
+                String serviceCategoryName = rs.getString(6);
+                String icon = rs.getString(7);
+
+                if (serviceCategoryID != null) {
+                    ServiceCategory serviceCategory = new ServiceCategory();
+                    serviceCategory.setServiceCategoryID(serviceCategoryID);
+                    serviceCategory.setServiceCategoryName(serviceCategoryName);
+                    serviceCategory.setIcon(icon);
+                    hotelService.setServiceCategory(serviceCategory);
+                } else {
+                    hotelService.setServiceCategory(null);
+                }
+
+                data.add(hotelService);
             }
 
         } catch (Exception exception) {
@@ -39,11 +60,12 @@ public class HotelServiceDAO {
     }
 
     public static HotelService getDataByID(String hotelServiceId) {
+
         String SQLQueryStatement = "SELECT a.hotelServiceId, a.serviceName, a.description, " +
-                "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName, b.icon " +
-                "FROM HotelService a LEFT JOIN ServiceCategory b " +
+                "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
+                "FROM HotelService a inner join ServiceCategory b " +
                 "ON a.serviceCategoryID = b.serviceCategoryID " +
-                "WHERE a.hotelServiceId = ? AND a.isActivate = 'ACTIVATE'";
+                "WHERE hotelServiceId = ?  AND a.isActivate = 'ACTIVATE'";
 
         try (
                 Connection con = DBHelper.getConnection();
@@ -54,7 +76,26 @@ public class HotelServiceDAO {
             ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.next()) {
-                return extractData(rs);
+                HotelService hotelService = new HotelService();
+
+                hotelService.setServiceId(rs.getString(1));
+                hotelService.setServiceName(rs.getString(2));
+                hotelService.setDescription(rs.getString(3));
+                hotelService.setServicePrice(rs.getDouble(4));
+
+                String serviceCategoryID = rs.getString(5);
+                String serviceCategoryName = rs.getString(6);
+
+                if (serviceCategoryID != null) {
+                    ServiceCategory serviceCategory = new ServiceCategory();
+                    serviceCategory.setServiceCategoryID(serviceCategoryID);
+                    serviceCategory.setServiceCategoryName(serviceCategoryName);
+                    hotelService.setServiceCategory(serviceCategory);
+                } else {
+                    hotelService.setServiceCategory(null);
+                }
+
+                return hotelService;
             }
 
         } catch (Exception e) {
@@ -160,17 +201,36 @@ public class HotelServiceDAO {
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(
                         "SELECT a.hotelServiceId, a.serviceName, a.description, " +
-                                "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName, b.icon " +
+                                "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
                                 "FROM HotelService a LEFT JOIN ServiceCategory b " +
                                 "ON a.serviceCategoryID = b.serviceCategoryID " +
-                                "WHERE LOWER(a.hotelServiceID) LIKE ? AND a.isActivate = 'ACTIVATE'"
+                                "WHERE LOWER(hotelServiceID) LIKE ?  AND a.isActivate = 'ACTIVATE'"
                 )
         ) {
             preparedStatement.setString(1, "%" + input + "%");
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {
-                data.add(extractData(rs));
+                HotelService hotelService = new HotelService();
+
+                hotelService.setServiceId(rs.getString(1));
+                hotelService.setServiceName(rs.getString(2));
+                hotelService.setDescription(rs.getString(3));
+                hotelService.setServicePrice(rs.getDouble(4));
+
+                String serviceCategoryID = rs.getString(5);
+                String serviceCategoryName = rs.getString(6);
+
+                if (serviceCategoryID != null) {
+                    ServiceCategory serviceCategory = new ServiceCategory();
+                    serviceCategory.setServiceCategoryID(serviceCategoryID);
+                    serviceCategory.setServiceCategoryName(serviceCategoryName);
+                    hotelService.setServiceCategory(serviceCategory);
+                } else {
+                    hotelService.setServiceCategory(null);
+                }
+
+                data.add(hotelService);
             }
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -236,7 +296,7 @@ public class HotelServiceDAO {
         List<HotelService> data = new ArrayList<>();
 
         String sql = "SELECT a.hotelServiceID, a.serviceName, a.description, " +
-                "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName, b.icon " +
+                "a.servicePrice, a.serviceCategoryID, b.serviceCategoryName " +
                 "FROM HotelService a " +
                 "LEFT JOIN ServiceCategory b ON a.serviceCategoryID = b.serviceCategoryID " +
                 "WHERE (a.hotelServiceID LIKE ? OR ? IS NULL) AND " +
@@ -251,9 +311,9 @@ public class HotelServiceDAO {
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
 
-            preparedStatement.setString(1, hotelServiceID != null ? "%" + hotelServiceID + "%" : null);
+            preparedStatement.setString(1, "%" + hotelServiceID + "%");
             preparedStatement.setString(2, hotelServiceID);
-            preparedStatement.setString(3, serviceName != null ? "%" + serviceName + "%" : null);
+            preparedStatement.setString(3, "%" + serviceName + "%");
             preparedStatement.setString(4, serviceName);
             preparedStatement.setObject(5, minPrice);
             preparedStatement.setObject(6, minPrice);
@@ -266,7 +326,25 @@ public class HotelServiceDAO {
 
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
-                data.add(extractData(rs));
+                HotelService hotelService = new HotelService();
+                hotelService.setServiceId(rs.getString("hotelServiceID"));
+                hotelService.setServiceName(rs.getString("serviceName"));
+                hotelService.setDescription(rs.getString("description"));
+                hotelService.setServicePrice(rs.getDouble("servicePrice"));
+
+                String categoryId = rs.getString("serviceCategoryID");
+                String categoryName = rs.getString("serviceCategoryName");
+
+                if (categoryId != null) {
+                    ServiceCategory category = new ServiceCategory();
+                    category.setServiceCategoryID(categoryId);
+                    category.setServiceCategoryName(categoryName);
+                    hotelService.setServiceCategory(category);
+                } else {
+                    hotelService.setServiceCategory(null);
+                }
+
+                data.add(hotelService);
             }
 
         } catch (Exception e) {
@@ -277,58 +355,7 @@ public class HotelServiceDAO {
         return data;
     }
 
-    public static boolean isHotelServiceInUse(String hotelServiceId) {
-        String sql =
-            """
-            SELECT 1
-            FROM HotelService hs
-            JOIN RoomUsageService rus ON hs.hotelServiceId = rus.hotelServiceId
-            JOIN ReservationForm rf ON rf.reservationFormID = rus.reservationFormID
-            JOIN Room r ON r.roomID = rf.roomID
-            WHERE hs.hotelServiceId = ?
-            AND r.roomStatus IN ('ON_USE', 'OVERDUE')
-            """;
 
-        try (
-                Connection connection = DBHelper.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(sql)
-        ) {
-            preparedStatement.setString(1, hotelServiceId);
-
-            ResultSet rs = preparedStatement.executeQuery();
-            return rs.next();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-
-
-    private static HotelService extractData(ResultSet rs) throws Exception {
-        HotelService hotelService = new HotelService();
-        hotelService.setServiceId(rs.getString("hotelServiceId"));
-        hotelService.setServiceName(rs.getString("serviceName"));
-        hotelService.setDescription(rs.getString("description"));
-        hotelService.setServicePrice(rs.getDouble("servicePrice"));
-
-        String serviceCategoryID = rs.getString("serviceCategoryID");
-        String serviceCategoryName = rs.getString("serviceCategoryName");
-        String icon = rs.getString("icon");
-
-        if (serviceCategoryID != null) {
-            ServiceCategory serviceCategory = new ServiceCategory();
-            serviceCategory.setServiceCategoryID(serviceCategoryID);
-            serviceCategory.setServiceCategoryName(serviceCategoryName);
-            serviceCategory.setIcon(icon);
-            hotelService.setServiceCategory(serviceCategory);
-        } else {
-            hotelService.setServiceCategory(null);
-        }
-
-        return hotelService;
-    }
 
 
 

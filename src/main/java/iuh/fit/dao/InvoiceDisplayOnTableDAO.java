@@ -37,6 +37,7 @@ public class InvoiceDisplayOnTableDAO {
                 invoiceDisplayOnTable.setDeposit(rs.getDouble(6));
                 invoiceDisplayOnTable.setServiceCharge(rs.getDouble(7));
                 invoiceDisplayOnTable.setRoomCharge(rs.getDouble(8));
+                invoiceDisplayOnTable.setTax(0);
                 invoiceDisplayOnTable.setNetDue(rs.getDouble(9));
 
                 data.add(invoiceDisplayOnTable);
@@ -77,6 +78,7 @@ public class InvoiceDisplayOnTableDAO {
                 invoiceDisplayOnTable.setDeposit(rs.getDouble(6));
                 invoiceDisplayOnTable.setServiceCharge(rs.getDouble(7));
                 invoiceDisplayOnTable.setRoomCharge(rs.getDouble(8));
+                invoiceDisplayOnTable.setTax(0);
                 invoiceDisplayOnTable.setNetDue(rs.getDouble(9));
 
                 data.add(invoiceDisplayOnTable);

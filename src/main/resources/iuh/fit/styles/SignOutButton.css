@@ -1,0 +1,15 @@
+.button-with-image .image-view {
+    -fx-opacity: 1.0; /* Bình thường */
+}
+
+.button-with-image:hover .image-view {
+    -fx-opacity: 0.8; /* Giảm opacity khi hover để làm màu đậm hơn */
+}
+
+.image-view{
+    -fx-opacity: 1.0; /* Bình thường */
+}
+
+.image-view:hover {
+    -fx-opacity: 0.8; /* Giảm opacity khi hover để làm màu đậm hơn */
+}

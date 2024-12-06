@@ -1,13 +1,11 @@
 package iuh.fit.controller.features.room;
 
-import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.RoomWithReservationDAO;
 import iuh.fit.models.Account;
 import iuh.fit.models.Room;
-import iuh.fit.models.enums.Position;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import javafx.application.Platform;
@@ -28,18 +26,17 @@ import java.util.stream.Stream;
 
 public class RoomSearchingController {
 
-    // Dialog Pane
-    @FXML
-    private DialogPane dialogPane;
-
     // Search Fields
     @FXML
     private TextField roomIDSearchField;
     @FXML
-    private ComboBox<String> roomStatusSearchField, roomCategorySearchField;
+    private ComboBox<String> roomStatusSearchField;
     @FXML
-    private DatePicker dateOfCreationLowerBoundSearchField,
-            dateOfCreationUpperBoundSearchField;
+    private DatePicker dateOfCreationLowerBoundSearchField;
+    @FXML
+    private DatePicker dateOfCreationUpperBoundSearchField;
+    @FXML
+    private ComboBox<String> roomCategorySearchField;
 
     // Table
     @FXML
@@ -55,7 +52,10 @@ public class RoomSearchingController {
 
     // Buttons
     @FXML
-    private Button searchBtn, resetBtn;
+    private Button searchBtn;
+    @FXML
+    private Button resetBtn;
+
     private ObservableList<Room> items;
 
     private MainController mainController;
@@ -64,16 +64,15 @@ public class RoomSearchingController {
     public void setupContext(MainController mainController, Account account) {
         this.mainController = mainController;
         this.account = account;
-
-        loadData();
-        setupTable();
-        roomTableView.setFixedCellSize(25);
     }
 
     public void initialize() {
+        loadData();
+        setupTable();
+        roomTableView.setFixedCellSize(25);
+
         searchBtn.setOnAction(e -> handleSearchAction());
         resetBtn.setOnAction(e -> handleResetAction());
-        dialogPane.toFront();
     }
 
     private void loadData() {
@@ -125,10 +124,21 @@ public class RoomSearchingController {
     private void setupTableContextMenu() {
         ContextMenu contextMenu = new ContextMenu();
 
-        MenuItem roomManageMenuItem = new MenuItem("Chỉnh sửa");
-        MenuItem roomReservationManageMenuItem = new MenuItem("Quản lý đặt phòng");
+        MenuItem editMenuItem = new MenuItem("Chỉnh sửa");
+        MenuItem editMenuItem1 = new MenuItem("Quản lý đặt phòng");
 
-        roomReservationManageMenuItem.setOnAction(event -> {
+        editMenuItem.setOnAction(event -> {
+            Room room = roomTableView.getSelectionModel().getSelectedItem();
+            if (room != null) {
+                try {
+                    handleEditRoom(room);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        editMenuItem1.setOnAction(event -> {
             Room room = roomTableView.getSelectionModel().getSelectedItem();
             if (room != null) {
                 try {
@@ -138,30 +148,11 @@ public class RoomSearchingController {
                 }
             }
         });
-        contextMenu.getItems().add(roomReservationManageMenuItem);
-
-        if (account.getEmployee().getPosition() == Position.MANAGER) {
-            roomManageMenuItem.setOnAction(event -> {
-                Room room = roomTableView.getSelectionModel().getSelectedItem();
-                if (room != null) {
-                    try {
-                        handleEditRoom(room);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            contextMenu.getItems().add(roomManageMenuItem);
-        }
-
+        contextMenu.getItems().addAll(editMenuItem, editMenuItem1);
         roomTableView.setContextMenu(contextMenu);
     }
 
     private void handleEditRoom(Room room) throws IOException {
-        if (room.getRoomStatus() != RoomStatus.AVAILABLE) {
-            dialogPane.showInformation("LỖI", "Phòng này đang được sử dụng");
-            return;
-        }
         mainController.loadPanelRoomManagerController("/iuh/fit/view/features/room/RoomManagerPanel.fxml", room);
     }
 
