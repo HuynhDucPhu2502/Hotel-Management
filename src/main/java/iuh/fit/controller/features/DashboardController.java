@@ -40,8 +40,8 @@ public class DashboardController {
     public void initialize() {
     }
 
-    public void setupContext(Account accoun, MainController mainController) {
-        this.account = accoun;
+    public void setupContext(Account account, MainController mainController) {
+        this.account = account;
         this.mainController = mainController;
 
         loadData();

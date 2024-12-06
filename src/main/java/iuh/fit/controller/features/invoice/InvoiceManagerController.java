@@ -2,6 +2,7 @@ package iuh.fit.controller.features.invoice;
 
 import com.dlsc.gemsfx.daterange.DateRangePicker;
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.invoice.invoice_controllers.InvoiceItemController;
 import iuh.fit.dao.InvoiceDAO;
 import iuh.fit.models.Employee;
@@ -34,6 +35,11 @@ public class InvoiceManagerController {
     private Employee employee;
     private List<Invoice> invoiceList;
 
+    private static NotificationButtonController topBarController;
+    public static void setupController(NotificationButtonController controller){
+        topBarController = controller;
+    }
+
     public void initialize() {
         setupSearchListeners();
     }
@@ -49,7 +55,7 @@ public class InvoiceManagerController {
         Task<List<Invoice>> loadDataTask = new Task<>() {
             @Override
             protected List<Invoice> call() {
-                RoomManagementService.autoCheckoutOverdueRooms();
+                RoomManagementService.autoCheckoutOverdueRooms(topBarController);
 
                 return InvoiceDAO.getAllInvoices();
             }
