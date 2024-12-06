@@ -371,8 +371,6 @@ public class RoomManagerController {
     public void setInformation(Room room){
         Platform.runLater(() -> {
             roomIDSearchField.setValue(room.getRoomID());
-        });
-        Platform.runLater(() -> {
             handleUpdateBtn(room);
         });
     }

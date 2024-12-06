@@ -7,6 +7,7 @@ import iuh.fit.dao.ServiceCategoryDAO;
 import iuh.fit.models.Account;
 import iuh.fit.models.HotelService;
 import iuh.fit.models.ServiceCategory;
+import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.ErrorMessages;
 import javafx.beans.property.SimpleStringProperty;
@@ -61,17 +62,16 @@ public class HotelServiceSearchingController {
     public void setupContext(MainController mainController, Account account) {
         this.mainController = mainController;
         this.account = account;
-    }
 
-    public void initialize() {
         loadData();
         setupTable();
         hotelServiceTableView.setFixedCellSize(40);
+    }
 
-        dialogPane.toFront();
-
+    public void initialize() {
         searchBtn.setOnAction(e -> handleSearchAction());
         resetBtn.setOnAction(e -> handleResetAction());
+        dialogPane.toFront();
     }
 
     // Phương thức load dữ liệu lên giao diện
@@ -187,20 +187,22 @@ public class HotelServiceSearchingController {
     private void setupTableContextMenu() {
         ContextMenu contextMenu = new ContextMenu();
 
-        MenuItem editMenuItem = new MenuItem("Chỉnh sửa");
+        MenuItem hotelServiceManageMenuItem = new MenuItem("Chỉnh sửa");
 
-        editMenuItem.setOnAction(event -> {
-            HotelService service = hotelServiceTableView.getSelectionModel().getSelectedItem();
-            if (service != null) {
-                try {
-                    handleEditService(service);
-                } catch (IOException e) {
-                    e.printStackTrace();
+        if (account.getEmployee().getPosition() == Position.MANAGER) {
+            hotelServiceManageMenuItem.setOnAction(event -> {
+                HotelService service = hotelServiceTableView.getSelectionModel().getSelectedItem();
+                if (service != null) {
+                    try {
+                        handleEditService(service);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
+            });
+            contextMenu.getItems().add(hotelServiceManageMenuItem);
+        }
 
-        contextMenu.getItems().addAll(editMenuItem);
         hotelServiceTableView.setContextMenu(contextMenu);
     }
 
