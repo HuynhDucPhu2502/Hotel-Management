@@ -50,11 +50,11 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </VBox>
-      <AnchorPane layoutY="199.2" minHeight="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="199.0">
+      <AnchorPane layoutY="199.2" minHeight="428.0" prefHeight="505.0" prefWidth="254.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="199.0">
          <children>
-            <ScrollPane fx:id="scrollPane" style="-fx-background-radius: 10; -fx-border-radius: 10;" styleClass="scrollPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <ScrollPane fx:id="scrollPane" prefHeight="523.0" prefWidth="254.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" styleClass="scrollPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <content>
-                  <VBox prefHeight="288.0" prefWidth="249.0" style="-fx-background-radius: 10;">
+                  <VBox prefHeight="423.0" prefWidth="246.0" style="-fx-background-radius: 10;">
                      <children>
                         <VBox prefHeight="32.0" prefWidth="200.0">
                            <children>
@@ -90,9 +90,9 @@
                                              <Image url="@../../icons/menu_icons/ic_employee.png" />
                                           </image>
                                        </ImageView>
-                  
+
                                        <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Nhân viên" textFill="WHITE" />
-                  
+
                                        <ImageView fx:id="arrowUpForEmpBtn" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="20">
                                           <image>
                                              <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
@@ -195,9 +195,9 @@
                                              <Image url="@../../icons/menu_icons/ic_room.png" />
                                           </image>
                                        </ImageView>
-            
+
                                              <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Phòng" textFill="WHITE" />
-            
+
                                              <ImageView fx:id="arrowUpForRoom" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="55">
                                           <image>
                                              <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
@@ -299,6 +299,77 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </HBox>
+                              <VBox prefHeight="32.0" prefWidth="293.0">
+                                 <children>
+                                    <Button fx:id="statisticsBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="248.0" styleClass="menu-bar-parent">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <graphic>
+                                          <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
+                                             <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true">
+                                                <image>
+                                                   <Image url="@../../icons/menu_icons/ic_statistics.png" />
+                                                </image>
+                                             </ImageView>
+      
+                                                   <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Thống kê" textFill="WHITE" />
+      
+                                                   <ImageView fx:id="arrowUpForStatistics" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="28">
+                                                <image>
+                                                   <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
+                                                </image>
+                                             </ImageView>
+                                          </HBox>
+                                       </graphic>
+                                    </Button>
+                                    <HBox fx:id="revenueStatisticsContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
+                                       <children>
+      
+                                          <Path fill="transparent" stroke="WHITE" strokeWidth="1">
+                                             <elements>
+                                                <MoveTo x="10" y="25" />
+                                                <LineTo x="10" y="40" />
+                                                <LineTo x="20" y="40" />
+                                                <MoveTo x="10" y="40" />
+                                                <LineTo x="10" y="55" />
+                                             </elements>
+                                          </Path>
+      
+                                          <Button fx:id="revenueStatisticsButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 5;" styleClass="menu-bar-child" text="Thống kê doanh thu" />
+                                       </children>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </HBox>
+                                    <HBox fx:id="rateUsingRoomContainer" managed="false" prefHeight="46" prefWidth="300.0" style="-fx-padding: 0 0 0 20;" visible="false">
+                                       <Path fill="transparent" stroke="WHITE" strokeWidth="1">
+                                          <elements>
+                                             <MoveTo x="10" y="25" />
+                                             <LineTo x="10" y="40" />
+                                             <LineTo x="20" y="40" />
+                                          </elements>
+                                       </Path>
+                                       <children>
+                                          <Button fx:id="rateUsingRoomButton" mnemonicParsing="false" prefHeight="37" prefWidth="300.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 5;" styleClass="menu-bar-child" text="Thống kê tỉ lệ sử dụng phòng" />
+                                       </children>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </HBox>
+                                    <HBox fx:id="buttonThreeContainer2111" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
+                                       <children>
+                                          <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
+                                       </children>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </HBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </VBox>
                            </children>
                            <VBox.margin>
                               <Insets />
@@ -338,9 +409,9 @@
                                              <Image url="@../../icons/menu_icons/ic_service.png" />
                                           </image>
                                        </ImageView>
-            
+
                                              <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Dịch vụ" textFill="WHITE" />
-            
+
                                              <ImageView fx:id="arrowUpForService" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="45">
                                           <image>
                                              <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
@@ -426,9 +497,9 @@
                                              <Image url="@../../icons/menu_icons/ic_customer.png" />
                                           </image>
                                        </ImageView>
-            
+
                                              <Label prefHeight="110.0" prefWidth="110.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Khách hàng" textFill="WHITE" />
-            
+
                                              <ImageView fx:id="arrowUpForCustomer" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="6">
                                           <image>
                                              <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
@@ -478,77 +549,6 @@
                         </VBox>
                         <VBox prefHeight="32.0" prefWidth="293.0">
                            <children>
-                              <Button fx:id="statisticsBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="248.0" styleClass="menu-bar-parent">
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                                 <graphic>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="165.0" spacing="10">
-                                       <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true">
-                                          <image>
-                                             <Image url="@../../icons/menu_icons/ic_statistics.png" />
-                                          </image>
-                                       </ImageView>
-            
-                                             <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Thống kê" textFill="WHITE" />
-            
-                                             <ImageView fx:id="arrowUpForStatistics" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="28">
-                                          <image>
-                                             <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
-                                          </image>
-                                       </ImageView>
-                                    </HBox>
-                                 </graphic>
-                              </Button>
-                              <HBox fx:id="revenueStatisticsContainer" managed="false" prefHeight="46.0" prefWidth="200.0" style="-fx-padding: 0 0 0 20;" visible="false">
-                                 <children>
-
-                                    <Path fill="transparent" stroke="WHITE" strokeWidth="1">
-                                       <elements>
-                                          <MoveTo x="10" y="25" />
-                                          <LineTo x="10" y="40" />
-                                          <LineTo x="20" y="40" />
-                                          <MoveTo x="10" y="40" />
-                                          <LineTo x="10" y="55" />
-                                       </elements>
-                                    </Path>
-
-                                    <Button fx:id="revenueStatisticsButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="180.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 5;" styleClass="menu-bar-child" text="Thống kê doanh thu" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </HBox>
-                              <HBox fx:id="rateUsingRoomContainer" managed="false" prefHeight="46" prefWidth="300.0" style="-fx-padding: 0 0 0 20;" visible="false">
-                                 <Path fill="transparent" stroke="WHITE" strokeWidth="1">
-                                    <elements>
-                                       <MoveTo x="10" y="25" />
-                                       <LineTo x="10" y="40" />
-                                       <LineTo x="20" y="40" />
-                                    </elements>
-                                 </Path>
-                                 <children>
-                                    <Button fx:id="rateUsingRoomButton" mnemonicParsing="false" prefHeight="37" prefWidth="300.0" style="-fx-alignment: CENTER_LEFT; -fx-padding: 0 0 0 5;" styleClass="menu-bar-child" text="Thống kê tỉ lệ sử dụng phòng" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </HBox>
-                              <HBox fx:id="buttonThreeContainer2111" managed="false" prefHeight="46.0" prefWidth="200.0" visible="false">
-                                 <children>
-                                    <Button mnemonicParsing="false" prefHeight="37.0" prefWidth="202.0" style="-fx-alignment: BASELINE_LEFT;" styleClass="menu-bar-child" text="Button" />
-                                 </children>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </HBox>
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </VBox>
-                        <VBox prefHeight="32.0" prefWidth="293.0">
-                           <children>
                               <Button fx:id="settingBtn" alignment="TOP_CENTER" mnemonicParsing="false" prefHeight="30.0" prefWidth="248.0" styleClass="menu-bar-parent">
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
@@ -562,7 +562,7 @@
                                              </image>
                                           </ImageView>
                                           <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Thiết lập" textFill="WHITE" />
-                                          <ImageView fx:id="arrowUpForSetting" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="28">
+                                          <ImageView fx:id="arrowUpForSetting" fitHeight="9.0" fitWidth="14.0" pickOnBounds="true" translateX="33.0">
                                              <image>
                                                 <Image url="@../../icons/menu_icons/ic_arrow_down.png" />
                                              </image>
@@ -617,6 +617,24 @@
                               </Button>
                            </children>
                         </VBox>
+                        <Button fx:id="informationBtn" mnemonicParsing="false" prefHeight="34.0" prefWidth="22.0" style="-fx-background-color: transparent;">
+                           <VBox.margin>
+                              <Insets left="11.0" top="25.0" />
+                           </VBox.margin>
+                           <graphic>
+                              <ImageView fitHeight="25.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <image>
+                                    <Image url="@../../icons/menu_icons/ic_information.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
                      </children>
                   </VBox>
                </content>

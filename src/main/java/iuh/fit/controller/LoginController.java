@@ -1,6 +1,8 @@
 package iuh.fit.controller;
 
 import com.dlsc.gemsfx.DialogPane;
+import iuh.fit.Main;
+import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.dao.ShiftDAO;
@@ -35,8 +37,6 @@ import javafx.scene.control.PasswordField;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -81,11 +81,14 @@ public class LoginController {
     @FXML private Button cancelRestoreButton;
     @FXML private Button confirmPassRestoreButton;
     @FXML private Button restoreDataButton;
+    private static NotificationButtonController topBarController;
 
+    private Main main;
 
     @FXML
-    private void initialize() {
+    public void initialize(Main main) {
         dialogPane.toFront();
+        this.main = main;
         registerEventEnterKey();
         hiddenPasswordField.textProperty().bindBidirectional(visiblePasswordField.textProperty());
         passRestorePasswordField.textProperty().bindBidirectional(passRestoreTextField.textProperty());
@@ -173,18 +176,21 @@ public class LoginController {
     private void signIn() throws SQLException {
         if(!RestoreDatabase.isDatabaseExist("HotelDatabase")) {
             errorMessage.setText("Chua co du lieu");
+            System.out.println(errorMessage);
             return;
         };
 
         String userName = userNameField.getText();
         if (userName.isEmpty()) {
             errorMessage.setText(ErrorMessages.LOGIN_INVALID_USERNAME);
+            System.out.println(errorMessage);
             return;
         }
 
         String password = hiddenPasswordField.getText();
         if (password.isEmpty()) {
             errorMessage.setText(ErrorMessages.LOGIN_INVALID_PASSWORD);
+            System.out.println(errorMessage);
             return;
         }
 
@@ -193,6 +199,7 @@ public class LoginController {
         // Kiểm tra tài khoản có tồn tại
         if (account == null) {
             errorMessage.setText(ErrorMessages.LOGIN_INVALID_ACCOUNT);
+            System.out.println(errorMessage);
             return;
         }
 
@@ -220,9 +227,25 @@ public class LoginController {
                         "Nhân viên không thuộc ca làm việc hiện tại\n" +
                                 "Không thể đăng nhập"
                 );
-            else loadMainUI(account, currentShift);
+            else {
+                loadMainUI(account, currentShift);
+                main.setNotificationControllerForMain(topBarController);
+                System.out.println("KET QUA NOTIFYCONTROLLER (5): "+topBarController);
+                try {
+                    RoomManagementService.startAutoCheckoutScheduler(topBarController);
+                }catch (Exception e){
+                    System.out.println("Không tìm thấy database");
+                }
+            }
         } else if (position.equals(Position.MANAGER)) {
             loadMainUI(account, currentShift);
+            main.setNotificationControllerForMain(topBarController);
+            System.out.println("KET QUA NOTIFYCONTROLLER (5): "+topBarController);
+            try {
+                RoomManagementService.startAutoCheckoutScheduler(topBarController);
+            }catch (Exception e){
+                System.out.println("Không tìm thấy database");
+            }
         }
     }
 
@@ -233,7 +256,10 @@ public class LoginController {
 
             MainController mainController = fxmlLoader.getController();
 
-            mainController.setAccount(account);
+            mainController.initialize(main);
+            mainController.setContext(account);
+            topBarController = mainController.getNotificationController();
+            System.out.println("KET QUA NOTIFYCONTROLLER (4): "+topBarController);
             mainController.setShift(currentShift);
 
 
@@ -251,6 +277,7 @@ public class LoginController {
             currentStage.show();
         } catch (Exception e) {
             errorMessage.setText(e.getMessage());
+            e.printStackTrace();
         }
     }
 

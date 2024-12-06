@@ -1,16 +1,21 @@
 ﻿-- Tạo cơ sở dữ liệu HotelDatabase
 USE master;
 GO
+
+-- Kiểm tra và xóa cơ sở dữ liệu nếu tồn tại
+IF EXISTS (SELECT name FROM sys.databases WHERE name = 'HotelDatabase')
+BEGIN
+    DROP DATABASE HotelDatabase;
+END
+GO
+
+-- Tạo cơ sở dữ liệu mới
 CREATE DATABASE HotelDatabase;
 GO
 
 -- Sử dụng cơ sở dữ liệu HotelDatabase
 USE HotelDatabase;
 GO
-
--- Xóa cơ sở dữ liệu
---USE master
---DROP DATABASE HotelDatabase
 
 -- ===================================================================================
 -- 1. TẠO BẢNG
@@ -253,6 +258,16 @@ CREATE TABLE RoomDialog (
     FOREIGN KEY (reservationFormID) REFERENCES ReservationForm(reservationFormID)
         ON DELETE SET NULL
         ON UPDATE CASCADE
+);
+GO
+
+CREATE TABLE Notifications (
+    NotificationID INT IDENTITY PRIMARY KEY, -- ID duy nhất của thông báo
+    EntityID VARCHAR(10),                    -- (Tùy chọn) ID của người nhận thông báo
+    Title NVARCHAR(125),                      -- Tiêu đề thông báo
+    Content NVARCHAR(255),                   -- Nội dung thông báo
+    CreatedAt DATETIME DEFAULT GETDATE(), -- Thời điểm tạo thông báo
+    IsRead BIT DEFAULT 0                  -- Trạng thái đã đọc
 );
 GO
 
@@ -1258,7 +1273,7 @@ GO
 
 -- Phiếu 4: đã checkin và gần tới giờ checkout (trong 5 phút nữa)
 INSERT INTO ReservationForm (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit, isActivate)
-VALUES ('RF-000110', DATEADD(DAY, -1, GETDATE()), DATEADD(HOUR, -23, GETDATE()), DATEADD(MINUTE, 5, GETDATE()), 'EMP-000004', 'V2206', 'CUS-000004', 500000, 'ACTIVATE');
+VALUES ('RF-000110', DATEADD(DAY, -1, GETDATE()), DATEADD(HOUR, -23, GETDATE()), DATEADD(MINUTE, 2, GETDATE()), 'EMP-000004', 'V2206', 'CUS-000004', 500000, 'ACTIVATE');
 
 INSERT INTO HistoryCheckin (historyCheckInID, checkInDate, reservationFormID, employeeID)
 VALUES ('HCI-000003', DATEADD(HOUR, -23, GETDATE()), 'RF-000110', 'EMP-000004');
@@ -1275,7 +1290,7 @@ GO
 
 -- Phiếu 5: Check-in đã được thực hiện, gần quá 2 tiếng thời gian checkout (còn 3 phút nữa để quá 2 tiếng)
 INSERT INTO ReservationForm (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit, isActivate)
-VALUES ('RF-000111', DATEADD(DAY, -2, GETDATE()), DATEADD(DAY, -1, GETDATE()), DATEADD(HOUR, -2, DATEADD(MINUTE, 3, GETDATE())), 'EMP-000005', 'V2304', 'CUS-000005', 600000, 'ACTIVATE');
+VALUES ('RF-000111', DATEADD(DAY, -2, GETDATE()), DATEADD(DAY, -1, GETDATE()), DATEADD(HOUR, -2, DATEADD(MINUTE, 1, GETDATE())), 'EMP-000005', 'V2304', 'CUS-000005', 600000, 'ACTIVATE');
 
 -- Thêm thông tin vào HistoryCheckin
 INSERT INTO HistoryCheckin (historyCheckInID, checkInDate, reservationFormID, employeeID)
