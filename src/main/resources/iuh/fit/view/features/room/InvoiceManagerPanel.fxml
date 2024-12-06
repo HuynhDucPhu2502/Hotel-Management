@@ -15,13 +15,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="850.0" minWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.invoice.InvoiceManagerController">
+<AnchorPane minHeight="1000.0" minWidth="1150.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.invoice.InvoiceManagerController">
    <children>
+      <DialogPane fx:id="dialogPane" animationDuration="200.0ms" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <ScrollPane fitToHeight="true" fitToWidth="true" minWidth="1200.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" stylesheets="@../../../styles/Button.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
             <AnchorPane>
                <children>
-                  <DialogPane fx:id="dialogPane" animationDuration="200.0ms" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                   <TitledPane collapsible="false" style="-fx-border-radius: 50; -fx-background-radius: 50; -fx-background-color: rgb(255,255,255);" stylesheets="@../../../styles/TitlePanel.css" text="Quản Lý Hóa Đơn" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <font>
                         <Font name="System Bold" size="20.0" />
@@ -29,58 +29,47 @@
                      <content>
                         <VBox spacing="30.0">
                            <children>
-                              <AnchorPane style="-fx-background-color: rgb(255,255,255); -fx-border-color: rgb(0,0,0);">
+                              <AnchorPane minHeight="160.0" style="-fx-background-color: rgb(255,255,255); -fx-border-color: rgb(0,0,0);">
                                  <children>
-                                    <VBox alignment="CENTER" minWidth="650.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <GridPane hgap="30.0" layoutX="11.199999809265137" layoutY="11.199999809265137" minHeight="120.0" vgap="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.topAnchor="10.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="285.199951171875" minWidth="10.0" prefWidth="132.39991760253906" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="447.60008239746094" minWidth="10.0" prefWidth="447.60008239746094" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
                                        <children>
-                                          <GridPane minHeight="120.0" vgap="30.0">
-                                            <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="285.199951171875" minWidth="10.0" prefWidth="132.39991760253906" />
-                                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="447.60008239746094" minWidth="10.0" prefWidth="447.60008239746094" />
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                              <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                                              <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
+                                          <Text fill="#2190d1" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày tạo hóa đơn">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <Text fill="#2190d1" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã phiếu" GridPane.rowIndex="1">
+                                             <font>
+                                                <Font name="System Bold" size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <AnchorPane GridPane.columnIndex="1">
                                              <children>
-                                                <Text fill="#2190d1" strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày tạo hóa đơn">
-                                                   <font>
-                                                      <Font name="System Bold" size="16.0" />
-                                                   </font>
-                                                </Text>
-                                                <Text fill="#2190d1" strokeType="OUTSIDE" strokeWidth="0.0" text="Mã phiếu" GridPane.rowIndex="1">
-                                                   <font>
-                                                      <Font name="System Bold" size="16.0" />
-                                                   </font>
-                                                </Text>
-                                                <AnchorPane GridPane.columnIndex="1">
-                                                   <children>
-                                                      <DateRangePicker fx:id="invoiceDateRangeSearchField" layoutX="-23.0" layoutY="3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                   </children>
-                                                </AnchorPane>
-                                                <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                                   <children>
-                                                      <TextField fx:id="invoiceIDSearchField" layoutX="8.0" layoutY="1.0" prefHeight="46.0" prefWidth="385.0" style="-fx-background-color: white; -fx-border-color: gray; -fx-border-radius: 5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                   </children>
-                                                </AnchorPane>
+                                                <DateRangePicker fx:id="invoiceDateRangeSearchField" layoutX="-23.0" layoutY="3.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                                              </children>
-                                          </GridPane>
+                                          </AnchorPane>
+                                          <AnchorPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                             <children>
+                                                <TextField fx:id="invoiceIDSearchField" layoutX="8.0" layoutY="1.0" prefHeight="46.0" prefWidth="385.0" style="-fx-background-color: white; -fx-border-color: gray; -fx-border-radius: 5;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                             </children>
+                                          </AnchorPane>
                                        </children>
-                                       <padding>
-                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                       </padding>
-                                    </VBox>
-                                    <HBox alignment="CENTER_LEFT" minWidth="100.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="650.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                       <padding>
-                                          <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                       </padding>
-                                    </HBox>
+                                    </GridPane>
                                  </children>
                               </AnchorPane>
-                              <ScrollPane prefHeight="561.0" prefWidth="1326.0">
+                              <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="800.0">
                                  <content>
-                                    <HBox alignment="TOP_CENTER" fillHeight="false" minHeight="800.0" style="-fx-border-color: black;">
+                                    <VBox fx:id="invoiceListContainer" alignment="TOP_CENTER" minHeight="800.0" minWidth="1050.0" style="-fx-border-color: black;">
                                        <children>
+                                          <HBox fx:id="emptyLabelContainer" alignment="CENTER" managed="false" prefHeight="100.0" prefWidth="200.0" visible="false" />
                                           <GridPane fx:id="invoiceGridPane" hgap="10.0" vgap="10.0">
                                             <columnConstraints>
                                                 <ColumnConstraints hgrow="SOMETIMES" minWidth="370.0" prefWidth="100.0" />
@@ -97,7 +86,7 @@
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
-                                    </HBox>
+                                    </VBox>
                                  </content>
                               </ScrollPane>
                            </children>

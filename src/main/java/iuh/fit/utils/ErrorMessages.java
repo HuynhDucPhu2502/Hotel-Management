@@ -153,6 +153,9 @@ public class ErrorMessages {
     // Room Dialog
     public static final String ROOM_DIALOG_TYPE_INVALID = "Loại nhật ký không phù hợp";
 
+    // Room Checking In
+    public static final String ROOM_CHECKING_IN_INVALID_RESERVATION = "Phiếu đặt phòng không hợp lệ hoặc không tồn tại.";
+    public static final String ROOM_CHECKING_IN_TIME_INVALID = "Thời gian check-in không nằm trong khoảng cho phép.";
 
 
 

@@ -150,9 +150,9 @@ public class RoomReservationDetailDAO {
             // Xử lý thông báo trả về
             switch (message) {
                 case "ROOM_CHECKING_IN_INVALID_RESERVATION":
-                    throw new IllegalArgumentException("Phiếu đặt phòng không hợp lệ hoặc không tồn tại.");
+                    throw new IllegalArgumentException(ErrorMessages.ROOM_CHECKING_IN_INVALID_RESERVATION);
                 case "ROOM_CHECKING_IN_TIME_INVALID":
-                    throw new IllegalArgumentException("Thời gian check-in không nằm trong khoảng cho phép.");
+                    throw new IllegalArgumentException(ErrorMessages.ROOM_CHECKING_IN_TIME_INVALID);
                 case "ROOM_CHECKING_IN_SUCCESS":
                     HistoryCheckinDAO.incrementAndUpdateNextID();
                     incrementAndUpdateNextID();
@@ -162,7 +162,45 @@ public class RoomReservationDetailDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Lỗi khi thực thi RoomCheckingIn", e);
+            System.exit(1);
+        }
+    }
+
+    public static void roomEarlyCheckingIn(String reservationFormID, String employeeID) {
+        String callProcedure = "{CALL RoomEarlyCheckingIn(?, ?, ?)}";
+
+        try (Connection connection = DBHelper.getConnection();
+             CallableStatement callableStatement = connection.prepareCall(callProcedure)) {
+
+            // Thiết lập tham số đầu vào cho Stored Procedure
+            callableStatement.setString(1, reservationFormID);
+            callableStatement.setString(2, employeeID);
+
+            // Đăng ký tham số đầu ra
+            callableStatement.registerOutParameter(3, Types.VARCHAR);
+
+            // Thực thi Stored Procedure
+            callableStatement.execute();
+
+            // Lấy thông báo từ Stored Procedure
+            String message = callableStatement.getString(3);
+
+            // Xử lý thông báo trả về
+            switch (message) {
+                case "ROOM_CHECKING_IN_INVALID_RESERVATION":
+                    throw new IllegalArgumentException(ErrorMessages.ROOM_CHECKING_IN_INVALID_RESERVATION);
+                case "ROOM_CHECKING_IN_TIME_INVALID":
+                    throw new IllegalArgumentException(ErrorMessages.ROOM_CHECKING_IN_TIME_INVALID);
+                case "ROOM_CHECKING_IN_SUCCESS":
+                    HistoryCheckinDAO.incrementAndUpdateNextID();
+                    incrementAndUpdateNextID();
+                    break;
+                default:
+                    throw new IllegalArgumentException(ErrorMessages.STORE_PROCEDURE_ERROR);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
         }
     }
 

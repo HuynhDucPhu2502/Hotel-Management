@@ -650,6 +650,126 @@ BEGIN
 END;
 GO
 
+-- Tạo procedure nhận phòng sớm
+-- (procedure không hỗ trợ sinh nextID mới)
+CREATE PROCEDURE RoomEarlyCheckingIn(
+    @reservationFormID NVARCHAR(15),
+    @employeeID NVARCHAR(15),
+    @message NVARCHAR(255) OUTPUT
+)
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        DECLARE @roomID NVARCHAR(15);
+        DECLARE @currentTime DATETIME = GETDATE();
+        DECLARE @checkInTime DATETIME;
+        DECLARE @earlyCheckInStart DATETIME;
+        DECLARE @earlyCheckInEnd DATETIME;
+        DECLARE @roomReservationDetailID NVARCHAR(15);
+        DECLARE @historyCheckInID NVARCHAR(15);
+        DECLARE @roomDialogID NVARCHAR(15);
+        DECLARE @roomBookingDeposit FLOAT;
+
+        -- Lấy thời gian check-in từ ReservationForm
+        SELECT @checkInTime = checkInDate
+        FROM ReservationForm
+        WHERE reservationFormID = @reservationFormID;
+
+        -- Xác định khoảng thời gian cho Early Check-In
+        SET @earlyCheckInStart = DATEADD(MINUTE, -30, @checkInTime);
+        SET @earlyCheckInEnd = DATEADD(SECOND, -10, @checkInTime);
+
+        -- Kiểm tra thời gian hiện tại có hợp lệ để Early Check-In
+        IF NOT (@currentTime BETWEEN @earlyCheckInStart AND @earlyCheckInEnd)
+        BEGIN
+            SET @message = 'ROOM_CHECKING_IN_TIME_INVALID';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        -- Kiểm tra ReservationForm hợp lệ và chưa được check-in
+        IF NOT EXISTS (
+            SELECT 1
+            FROM ReservationForm
+            WHERE reservationFormID = @reservationFormID
+              AND NOT EXISTS (
+                  SELECT 1
+                  FROM HistoryCheckin
+                  WHERE reservationFormID = @reservationFormID
+              )
+        )
+        BEGIN
+            SET @message = 'ROOM_CHECKING_IN_INVALID_RESERVATION';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        -- Lấy roomID từ ReservationForm
+        SELECT @roomID = roomID
+        FROM ReservationForm
+        WHERE reservationFormID = @reservationFormID;
+
+        -- Lấy nextID từ GlobalSequence
+        SELECT @roomReservationDetailID = nextID
+        FROM GlobalSequence
+        WHERE tableName = 'RoomReservationDetail';
+
+        SELECT @historyCheckInID = nextID
+        FROM GlobalSequence
+        WHERE tableName = 'HistoryCheckin';
+
+        SELECT @roomDialogID = nextID
+        FROM GlobalSequence
+        WHERE tableName = 'RoomDialog';
+
+        -- Thêm dữ liệu vào bảng HistoryCheckin
+        INSERT INTO HistoryCheckin (historyCheckInID, checkInDate, reservationFormID, employeeID)
+        VALUES (@historyCheckInID, @currentTime, @reservationFormID, @employeeID);
+
+        -- Thêm dữ liệu vào bảng RoomReservationDetail
+        INSERT INTO RoomReservationDetail (roomReservationDetailID, dateChanged, roomID, reservationFormID, employeeID)
+        VALUES (@roomReservationDetailID, @currentTime, @roomID, @reservationFormID, @employeeID);
+
+        -- Lấy RoomBookingDeposit từ ReservationForm
+        SELECT @roomBookingDeposit = RoomBookingDeposit
+        FROM ReservationForm
+        WHERE reservationFormID = @reservationFormID;
+
+        -- Cập nhật checkInDate và RoomBookingDeposit trong một câu lệnh
+        UPDATE ReservationForm
+        SET
+            checkInDate = @currentTime,
+            RoomBookingDeposit = @roomBookingDeposit + 50000
+        WHERE reservationFormID = @reservationFormID;
+
+        -- Thêm dữ liệu vào bảng RoomDialog
+        INSERT INTO RoomDialog (roomID, reservationFormID, dialog, dialogType, timestamp)
+        VALUES (
+            @roomID,
+            @reservationFormID,
+            CONCAT(N'Check-in sớm tại phòng ', @roomID),
+            'CHECKIN',
+            @currentTime
+        );
+
+        -- Cập nhật trạng thái phòng thành ON_USE
+        UPDATE Room
+        SET roomStatus = 'ON_USE'
+        WHERE roomID = @roomID;
+
+        COMMIT TRANSACTION;
+        SET @message = 'ROOM_CHECKING_IN_SUCCESS';
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        SET @message = ERROR_MESSAGE();
+    END CATCH
+END;
+GO
+
+
 -- Tạo procedure trả phòng
 -- (procedure không hỗ trợ sinh nextID mới)
 CREATE PROCEDURE roomCheckingOut(
@@ -1190,3 +1310,6 @@ GO
 INSERT INTO ReservationForm (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit, isActivate)
 VALUES ('RF-000112', DATEADD(HOUR, -2, DATEADD(MINUTE, 3, GETDATE())), DATEADD(HOUR, -2, DATEADD(MINUTE, 3, GETDATE())), DATEADD(DAY, 1, GETDATE()), 'EMP-000001', 'T1203', 'CUS-000010', 700000, 'ACTIVATE');
 GO
+
+
+

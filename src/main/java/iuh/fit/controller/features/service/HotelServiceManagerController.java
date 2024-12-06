@@ -129,10 +129,6 @@ public class HotelServiceManagerController {
 
         loadDataTask.setOnRunning(e -> setButtonsDisabled(true));
         loadDataTask.setOnSucceeded(e -> setButtonsDisabled(false));
-        loadDataTask.setOnFailed(e -> {
-            setButtonsDisabled(false);
-            dialogPane.showWarning("LỖI", "Failed to load data.");
-        });
 
         new Thread(loadDataTask).start();
     }
@@ -206,45 +202,44 @@ public class HotelServiceManagerController {
     // setup cho cột thao tác
     // THAM KHẢO
     private void setupActionColumn() {
-        Callback<TableColumn<HotelService, Void>, TableCell<HotelService, Void>> cellFactory = new Callback<>() {
+        Callback<TableColumn<HotelService, Void>, TableCell<HotelService, Void>> cellFactory = param -> new TableCell<>() {
+            private final Button updateButton = new Button("Cập nhật");
+            private final Button deleteButton = new Button("Xóa");
+            private final HBox hBox = new HBox(10);
+
+            {
+                updateButton.getStyleClass().add("button-update");
+                deleteButton.getStyleClass().add("button-delete");
+
+                hBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/Button.css")).toExternalForm());
+
+                hBox.setAlignment(Pos.CENTER);
+                hBox.getChildren().addAll(updateButton, deleteButton);
+            }
+
             @Override
-            public TableCell<HotelService, Void> call(final TableColumn<HotelService, Void> param) {
-                return new TableCell<>() {
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
 
-                    private final Button updateButton = new Button("Cập nhật");
-                    private final Button deleteButton = new Button("Xóa");
-                    private final HBox hBox = new HBox(10);
+                if (empty || getTableView() == null || getTableRow() == null) {
+                    setGraphic(null);
+                    return;
+                }
 
-                    {
-                        updateButton.getStyleClass().add("button-update");
-                        deleteButton.getStyleClass().add("button-delete");
+                HotelService hotelService = getTableRow().getItem();
+                if (hotelService == null) {
+                    setGraphic(null);
+                    return;
+                }
 
-                        hBox.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/iuh/fit/styles/Button.css")).toExternalForm());
+                updateButton.setOnAction(event -> handleUpdateBtn(hotelService));
+                deleteButton.setOnAction(event -> handleDeleteAction(hotelService));
 
-                        updateButton.setOnAction(event -> {
-                            HotelService hotelService = getTableView().getItems().get(getIndex());
-                            handleUpdateBtn(hotelService);
-                        });
+                boolean hasRoomInUse = HotelServiceDAO.isHotelServiceInUse(hotelService.getServiceId());
+                updateButton.setDisable(hasRoomInUse);
+                deleteButton.setDisable(hasRoomInUse);
 
-                        deleteButton.setOnAction(event -> {
-                            HotelService hotelService = getTableView().getItems().get(getIndex());
-                            handleDeleteAction(hotelService);
-                        });
-
-                        hBox.setAlignment(Pos.CENTER);
-                        hBox.getChildren().addAll(updateButton, deleteButton);
-                    }
-
-                    @Override
-                    protected void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(hBox);
-                        }
-                    }
-                };
+                setGraphic(hBox);
             }
         };
 
@@ -296,10 +291,6 @@ public class HotelServiceManagerController {
                 handleResetAction();
                 loadData();
             }));
-            addTask.setOnFailed(e -> {
-                setButtonsDisabled(false);
-                dialogPane.showWarning("LỖI", "Failed to add data.");
-            });
 
             new Thread(addTask).start();
         } catch (Exception e) {
@@ -325,10 +316,6 @@ public class HotelServiceManagerController {
                     handleResetAction();
                     loadData();
                 }));
-                deleteTask.setOnFailed(e -> {
-                    setButtonsDisabled(false);
-                    dialogPane.showWarning("LỖI", "Failed to delete data.");
-                });
 
                 new Thread(deleteTask).start();
             }
@@ -393,10 +380,6 @@ public class HotelServiceManagerController {
                         toggleAddUpdateButtons();
                         setButtonsDisabled(false);
                     }));
-                    updateTask.setOnFailed(e -> {
-                        setButtonsDisabled(false);
-                        System.exit(1);
-                    });
 
                     new Thread(updateTask).start();
                 }
@@ -461,7 +444,9 @@ public class HotelServiceManagerController {
     }
 
     public void setInformation(HotelService service){
-        Platform.runLater(() -> hotelServiceIDSearchField.setValue(service.getServiceId()));
-        Platform.runLater(() -> handleUpdateBtn(service));
+        Platform.runLater(() -> {
+            hotelServiceIDSearchField.setValue(service.getServiceId());
+            handleUpdateBtn(service);
+        });
     }
 }

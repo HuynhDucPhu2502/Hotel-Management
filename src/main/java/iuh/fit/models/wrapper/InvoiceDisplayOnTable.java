@@ -12,7 +12,6 @@ public class InvoiceDisplayOnTable {
     private double deposit;
     private double serviceCharge;
     private double roomCharge;
-    private double tax;
     private double netDue;
 
     public InvoiceDisplayOnTable(String invoiceID, String cusName, String roomID, String empName, LocalDateTime createDate, double deposit, double serviceCharge, double roomCharge, double tax, double netDue) {
@@ -24,7 +23,6 @@ public class InvoiceDisplayOnTable {
         this.deposit = deposit;
         this.serviceCharge = serviceCharge;
         this.roomCharge = roomCharge;
-        this.setTax(tax);
         this.netDue = netDue;
     }
 
@@ -99,13 +97,6 @@ public class InvoiceDisplayOnTable {
         this.roomCharge = roomCharge;
     }
 
-    public double getTax() {
-        return tax;
-    }
-
-    public void setTax(double tax) {
-        this.tax = tax * (this.serviceCharge + this.roomCharge);
-    }
 
     public double getNetDue() {
         return netDue;
@@ -139,7 +130,6 @@ public class InvoiceDisplayOnTable {
                 ", deposit=" + deposit +
                 ", serviceCharge=" + serviceCharge +
                 ", roomCharge=" + roomCharge +
-                ", tax=" + tax +
                 ", netDue=" + netDue +
                 '}';
     }

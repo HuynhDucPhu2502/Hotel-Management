@@ -64,7 +64,7 @@ public class EmployeeDAO {
                     "idCardNumber, dob, position, isActivate " +
                     "FROM Employee e " +
                     "LEFT JOIN ShiftAssignment s ON e.employeeID = s.employeeId " +
-                    "WHERE e.isActivate = 'ACTIVATE' AND s.employeeId IS NULL";
+                    "WHERE e.isActivate = 'ACTIVATE' AND s.employeeId IS NULL AND employeeID != 'EMP-000000'";
             ResultSet rs = statement.executeQuery(sql);
 
 
@@ -110,7 +110,7 @@ public class EmployeeDAO {
                                 		FROM ShiftAssignment
                                 		WHERE shiftId = ?
                                 	)
-                                )
+                                ) AND employeeID != 'EMP-000000'
                         """)
         ){
             statement.setString(1, shift.getShiftID());
@@ -146,7 +146,7 @@ public class EmployeeDAO {
     public static Employee getDataByID(String employeeID) {
         String SQLQueryStatement = "SELECT employeeID, fullName, phoneNumber, email, address, gender, idCardNumber, dob, position, isActivate "
                 + "FROM Employee " +
-                "WHERE employeeID = ?";
+                "WHERE employeeID = ? AND employeeID != 'EMP-000000'";
         try (
                 Connection con = DBHelper.getConnection();
                 PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement)
@@ -301,7 +301,7 @@ public class EmployeeDAO {
     public static List<String> getTopThreeID() {
         ArrayList<String> data = new ArrayList<>();
 
-        String query = "SELECT TOP 3 employeeID FROM Employee ORDER BY employeeID DESC";
+        String query = "SELECT TOP 3 employeeID FROM Employee WHERE employeeID != 'EMP-000000' ORDER BY employeeID DESC";
 
         try (
                 Connection connection = DBHelper.getConnection();
@@ -326,7 +326,7 @@ public class EmployeeDAO {
                     "email, address, gender, " +
                     "idCardNumber, dob, position " +
                     "FROM Employee " +
-                    "WHERE LOWER(employeeID) LIKE ? AND isActivate = 'ACTIVATE'";
+                    "WHERE LOWER(employeeID) LIKE ? AND isActivate = 'ACTIVATE' AND employeeID != 'EMP-000000'";
 
             try (
                     Connection connection = DBHelper.getConnection();
@@ -452,7 +452,8 @@ public class EmployeeDAO {
                 "(idCardNumber like ? or ? is null) and " +
                 "(gender = ? OR ? IS NULL) and " +
                 "(dob = ? OR ? IS NULL) and " +
-                "(position = ? OR ? IS NULL) and isActivate = 'ACTIVATE'";
+                "(position = ? OR ? IS NULL) and isActivate = 'ACTIVATE' and " +
+                "employeeID != 'EMP-000000'";
 
         try (
                 Connection connection = DBHelper.getConnection();

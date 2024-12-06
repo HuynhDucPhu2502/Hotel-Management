@@ -41,6 +41,33 @@ public class ServiceCategoryDAO {
         return data;
     }
 
+    public static boolean isServiceCategoryInUse(String serviceCategoryId) {
+        String sql =
+                """
+                SELECT 1
+                FROM HotelService hs
+                JOIN RoomUsageService rus ON hs.hotelServiceId = rus.hotelServiceId
+                JOIN ReservationForm rf ON rf.reservationFormID = rus.reservationFormID
+                JOIN Room r ON r.roomID = rf.roomID
+                WHERE hs.serviceCategoryID = ?
+                AND r.roomStatus IN ('ON_USE', 'OVERDUE')
+                """;
+
+        try (
+                Connection connection = DBHelper.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            preparedStatement.setString(1, serviceCategoryId);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     public static ServiceCategory getDataByID(String serviceCategoryID) {
 
         String SQLQueryStatement = "SELECT serviceCategoryID, serviceCategoryName, icon "

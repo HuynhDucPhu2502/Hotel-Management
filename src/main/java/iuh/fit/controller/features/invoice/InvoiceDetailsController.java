@@ -1,9 +1,8 @@
-package iuh.fit.controller.features.invoice.invoice_controllers;
+package iuh.fit.controller.features.invoice;
 
 import com.dlsc.gemsfx.DialogPane;
 import com.itextpdf.text.DocumentException;
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.invoice.InvoiceManagerController;
 import iuh.fit.dao.HistoryCheckOutDAO;
 import iuh.fit.dao.HistoryCheckinDAO;
 import iuh.fit.dao.RoomUsageServiceDAO;
@@ -134,7 +133,7 @@ public class InvoiceDetailsController {
         LocalDateTime actualCheckOutDate = HistoryCheckOutDAO.getActualCheckOutDate(reservationForm.getReservationID());
 
         roomNumberLabel.setText(reservationFormRoom.getRoomNumber());
-        roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
+        roomCategoryLabel.setText(reservationFormRoom.getRoomCategory().getRoomCategoryName());
         checkInDateLabel.setText(dateTimeFormatter.format(actualCheckInDate != null ? actualCheckInDate : reservationForm.getCheckInDate()));
         checkOutDateLabel.setText(dateTimeFormatter.format(actualCheckOutDate != null ? actualCheckOutDate : reservationForm.getCheckOutDate()));
         stayLengthLabel.setText(Calculator.calculateStayLengthToString(
