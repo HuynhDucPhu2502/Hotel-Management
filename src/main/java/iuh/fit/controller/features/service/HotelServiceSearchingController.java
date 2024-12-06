@@ -1,5 +1,6 @@
 package iuh.fit.controller.features.service;
 
+import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.dao.HotelServiceDAO;
 import iuh.fit.dao.ServiceCategoryDAO;
@@ -23,15 +24,14 @@ import java.util.stream.Collectors;
 
 public class HotelServiceSearchingController {
 
+    // Dialog Pane
+    @FXML
+    private DialogPane dialogPane;
+
     // Search Field
     @FXML
-    private TextField serviceIDSearchField;
-    @FXML
-    private TextField serviceNameSearchField;
-    @FXML
-    private TextField priceLowerBoundSearchField;
-    @FXML
-    private TextField priceUpperBoundSearchField;
+    private TextField serviceIDSearchField, serviceNameSearchField,
+            priceLowerBoundSearchField, priceUpperBoundSearchField;
     @FXML
     private ComboBox<String> serviceCategorySearchField;
 
@@ -51,9 +51,7 @@ public class HotelServiceSearchingController {
 
     // Buttons
     @FXML
-    private Button searchBtn;
-    @FXML
-    private Button resetBtn;
+    private Button searchBtn, resetBtn;
 
     private ObservableList<HotelService> items;
 
@@ -69,6 +67,8 @@ public class HotelServiceSearchingController {
         loadData();
         setupTable();
         hotelServiceTableView.setFixedCellSize(40);
+
+        dialogPane.toFront();
 
         searchBtn.setOnAction(e -> handleSearchAction());
         resetBtn.setOnAction(e -> handleResetAction());
@@ -113,17 +113,10 @@ public class HotelServiceSearchingController {
             resetBtn.setDisable(false);
         });
 
-        loadDataTask.setOnFailed(e -> {
-            searchBtn.setDisable(false);
-            resetBtn.setDisable(false);
-            System.err.println("Failed to load data");
-        });
-
         Thread loadThread = new Thread(loadDataTask);
         loadThread.setDaemon(true);
         loadThread.start();
     }
-
 
     // Phương thức đổ dữ liệu vào bảng
     private void setupTable() {
@@ -212,6 +205,11 @@ public class HotelServiceSearchingController {
     }
 
     private void handleEditService(HotelService service) throws IOException {
+        if (HotelServiceDAO.isHotelServiceInUse(service.getServiceId())) {
+            dialogPane.showInformation("LỖI", "Dịch vụ đang được sử dụng");
+            return;
+        }
+
         mainController.loadPanelHotelServiceManagerController("/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml", service);
     }
 
@@ -253,12 +251,6 @@ public class HotelServiceSearchingController {
 
             searchBtn.setDisable(false);
             resetBtn.setDisable(false);
-        });
-
-        searchTask.setOnFailed(e -> {
-            searchBtn.setDisable(false);
-            resetBtn.setDisable(false);
-            System.err.println("Failed to execute search");
         });
 
         Thread searchThread = new Thread(searchTask);

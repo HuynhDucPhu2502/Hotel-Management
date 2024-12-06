@@ -132,7 +132,7 @@ public class ServiceCategoryManagerController {
                     return;
                 }
 
-                boolean hasRoomInUse = ServiceCategoryDAO.hasRoomWithStatus(serviceCategory.getServiceCategoryID());
+                boolean hasRoomInUse = ServiceCategoryDAO.isServiceCategoryInUse(serviceCategory.getServiceCategoryID());
                 updateButton.setDisable(hasRoomInUse);
                 deleteButton.setDisable(hasRoomInUse);
 
@@ -207,11 +207,6 @@ public class ServiceCategoryManagerController {
                 loadData();
             });
 
-            addTask.setOnFailed(e -> {
-                addBtn.setDisable(false);
-                updateBtn.setDisable(false);
-                dialogPane.showWarning("LỖI", "Failed to add data.");
-            });
 
             Thread addThread = new Thread(addTask);
             addThread.setDaemon(true);
@@ -243,12 +238,6 @@ public class ServiceCategoryManagerController {
                     addBtn.setDisable(false);
                     updateBtn.setDisable(false);
                     loadData();
-                });
-
-                deleteTask.setOnFailed(e -> {
-                    addBtn.setDisable(false);
-                    updateBtn.setDisable(false);
-                    dialogPane.showWarning("LỖI", "Failed to delete data.");
                 });
 
                 Thread deleteThread = new Thread(deleteTask);
@@ -308,12 +297,6 @@ public class ServiceCategoryManagerController {
                         loadData();
                     });
 
-                    updateTask.setOnFailed(e -> {
-                        addBtn.setDisable(false);
-                        updateBtn.setDisable(false);
-                        dialogPane.showWarning("LỖI", "Failed to update data.");
-                    });
-
                     Thread updateThread = new Thread(updateTask);
                     updateThread.setDaemon(true);
                     updateThread.start();
@@ -350,8 +333,6 @@ public class ServiceCategoryManagerController {
                 serviceCategoryNameSearchField.setText(null);
             }
         });
-
-        searchTask.setOnFailed(e -> dialogPane.showWarning("Error", "Failed to search data"));
 
         Thread searchThread = new Thread(searchTask);
         searchThread.setDaemon(true);

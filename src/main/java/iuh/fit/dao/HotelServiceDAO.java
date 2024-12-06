@@ -277,7 +277,7 @@ public class HotelServiceDAO {
         return data;
     }
 
-    public static boolean hasRoomWithStatus(String hotelServiceId) {
+    public static boolean isHotelServiceInUse(String hotelServiceId) {
         String sql =
             """
             SELECT 1

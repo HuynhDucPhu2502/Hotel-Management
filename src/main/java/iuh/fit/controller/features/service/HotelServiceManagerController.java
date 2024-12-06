@@ -129,10 +129,6 @@ public class HotelServiceManagerController {
 
         loadDataTask.setOnRunning(e -> setButtonsDisabled(true));
         loadDataTask.setOnSucceeded(e -> setButtonsDisabled(false));
-        loadDataTask.setOnFailed(e -> {
-            setButtonsDisabled(false);
-            dialogPane.showWarning("LỖI", "Failed to load data.");
-        });
 
         new Thread(loadDataTask).start();
     }
@@ -239,7 +235,7 @@ public class HotelServiceManagerController {
                 updateButton.setOnAction(event -> handleUpdateBtn(hotelService));
                 deleteButton.setOnAction(event -> handleDeleteAction(hotelService));
 
-                boolean hasRoomInUse = HotelServiceDAO.hasRoomWithStatus(hotelService.getServiceId());
+                boolean hasRoomInUse = HotelServiceDAO.isHotelServiceInUse(hotelService.getServiceId());
                 updateButton.setDisable(hasRoomInUse);
                 deleteButton.setDisable(hasRoomInUse);
 
@@ -295,10 +291,6 @@ public class HotelServiceManagerController {
                 handleResetAction();
                 loadData();
             }));
-            addTask.setOnFailed(e -> {
-                setButtonsDisabled(false);
-                dialogPane.showWarning("LỖI", "Failed to add data.");
-            });
 
             new Thread(addTask).start();
         } catch (Exception e) {
@@ -324,10 +316,6 @@ public class HotelServiceManagerController {
                     handleResetAction();
                     loadData();
                 }));
-                deleteTask.setOnFailed(e -> {
-                    setButtonsDisabled(false);
-                    dialogPane.showWarning("LỖI", "Failed to delete data.");
-                });
 
                 new Thread(deleteTask).start();
             }
@@ -392,10 +380,6 @@ public class HotelServiceManagerController {
                         toggleAddUpdateButtons();
                         setButtonsDisabled(false);
                     }));
-                    updateTask.setOnFailed(e -> {
-                        setButtonsDisabled(false);
-                        System.exit(1);
-                    });
 
                     new Thread(updateTask).start();
                 }
@@ -460,7 +444,9 @@ public class HotelServiceManagerController {
     }
 
     public void setInformation(HotelService service){
-        Platform.runLater(() -> hotelServiceIDSearchField.setValue(service.getServiceId()));
-        Platform.runLater(() -> handleUpdateBtn(service));
+        Platform.runLater(() -> {
+            hotelServiceIDSearchField.setValue(service.getServiceId());
+            handleUpdateBtn(service);
+        });
     }
 }

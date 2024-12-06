@@ -41,7 +41,7 @@ public class ServiceCategoryDAO {
         return data;
     }
 
-    public static boolean hasRoomWithStatus(String serviceCategoryId) {
+    public static boolean isServiceCategoryInUse(String serviceCategoryId) {
         String sql =
                 """
                 SELECT 1
