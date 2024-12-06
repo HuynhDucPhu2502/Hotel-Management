@@ -400,7 +400,7 @@ public class EmployeeDAO {
         String sql = "SELECT e.employeeID, e.fullName, e.phoneNumber, e.email, e.address, " +
                 "e.gender, e.idCardNumber, e.dob, e.position " +
                 "FROM Employee e " +
-                "WHERE e.employeeID = ? AND e.isActivate = 'ACTIVATE' AND employeeID != 'EMP-000000'";
+                "WHERE e.employeeID = ? AND e.isActivate = 'ACTIVATE'";
 
         try (
                 Connection connection = DBHelper.getConnection();

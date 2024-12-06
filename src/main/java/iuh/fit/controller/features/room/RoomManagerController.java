@@ -31,7 +31,9 @@ import java.util.stream.Collectors;
 public class RoomManagerController {
     // Input Fields
     @FXML
-    private TextField roomIDTextField, floorNumbTextField;
+    private TextField roomIDTextField;
+    @FXML
+    private Spinner<Integer> floorNumbSpinner;
     @FXML
     private ComboBox<RoomCategory> roomCategoryComboBox;
     @FXML
@@ -79,6 +81,8 @@ public class RoomManagerController {
         updateBtn.setOnAction(e -> handleUpdateAction());
         roomIDSearchField.setOnKeyReleased((keyEvent) -> handleSearchAction());
         roomIDSearchField.setOnAction(event -> handleSearchAction());
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1,10,1); // min=1, max=10, default=1
+        floorNumbSpinner.setValueFactory(valueFactory);
     }
 
     // Phương thức load dữ liệu lên giao diện
@@ -176,8 +180,8 @@ public class RoomManagerController {
     // Chức năng 1: Làm mới
     private void handleResetAction() {
         roomIDTextField.clear();
-        floorNumbTextField.clear();
-        floorNumbTextField.setDisable(false);
+        floorNumbSpinner.getValueFactory().setValue(1);
+        floorNumbSpinner.setDisable(false);
         roomCategoryComboBox.getSelectionModel().selectFirst();
         roomStateComboBox.getSelectionModel().selectFirst();
 
@@ -188,38 +192,34 @@ public class RoomManagerController {
         updateBtn.setManaged(false);
         updateBtn.setVisible(false);
 
-        floorNumbTextField.requestFocus();
+        floorNumbSpinner.requestFocus();
     }
 
     // Chức năng 2: Thêm
     private void handleAddAction() {
-        if(floorNumbTextField.getText().equalsIgnoreCase("") ){
-            dialogPane.showInformation("Thông báo", "Không để trống số tầng");
-        }else{
-            try {
-                String newRoomID = handleRoomIDGenerate();
-                Room room = new Room(
-                        newRoomID,
-                        roomStateComboBox.getSelectionModel().getSelectedItem(),
-                        LocalDateTime.now(),
-                        roomCategoryComboBox.getSelectionModel().getSelectedItem(),
-                        ObjectStatus.ACTIVATE
-                );
+        try {
+            String newRoomID = handleRoomIDGenerate();
+            Room room = new Room(
+                    newRoomID,
+                    roomStateComboBox.getSelectionModel().getSelectedItem(),
+                    LocalDateTime.now(),
+                    roomCategoryComboBox.getSelectionModel().getSelectedItem(),
+                    ObjectStatus.ACTIVATE
+            );
 
-                RoomDAO.createData(room);
+            RoomDAO.createData(room);
 
-                dialogPane.showInformation("Thông báo", "Phòng mới được tạo thành công với mã phòng: " + newRoomID);
+            dialogPane.showInformation("Thông báo", "Phòng mới được tạo thành công với mã phòng: " + newRoomID);
 
-                loadData();
-            } catch (Exception e) {
-                dialogPane.showWarning("LỖI", e.getMessage());
-            }
+            loadData();
+        } catch (Exception e) {
+            dialogPane.showWarning("LỖI", e.getMessage());
         }
     }
 
     private String handleRoomIDGenerate() {
         RoomCategory roomCategorySelected = roomCategoryComboBox.getSelectionModel().getSelectedItem();
-        int floorNumb = Integer.parseInt(floorNumbTextField.getText());
+        int floorNumb = floorNumbSpinner.getValue();
 
         return RoomDAO.roomIDGenerate(floorNumb, roomCategorySelected);
     }
@@ -228,8 +228,8 @@ public class RoomManagerController {
         roomIDTextField.setText(room.getRoomID());
         roomCategoryComboBox.setValue(room.getRoomCategory());
         flagCategory = room.getRoomCategory().getRoomCategoryID();
-        floorNumbTextField.setText(room.getRoomID().substring(2, 3));
-        floorNumbTextField.setDisable(true);
+        floorNumbSpinner.getValueFactory().setValue(Integer.parseInt(room.getRoomID().substring(2, 3)));
+        floorNumbSpinner.setDisable(true);
         roomStateComboBox.setValue(room.getRoomStatus());
 
 
