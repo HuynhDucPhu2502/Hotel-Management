@@ -7,6 +7,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.Cursor?>
 <AnchorPane prefHeight="0.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.TopController">
    <children>
       <HBox minHeight="50.0" minWidth="800.0" style="-fx-background-color: RGB(70, 130, 180); -fx-alignment: center;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -15,11 +18,22 @@
                <font>
                   <Font name="System Bold" size="20.0" />
                </font></Label>
-            <HBox prefHeight="100.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-            <Button fx:id="logoutBtn" mnemonicParsing="false" style="-fx-cursor: HAND; -fx-background-color: rgb(204, 51, 51); -fx-background-radius: 30;" text="Đăng Xuất" textFill="#fffefe">
-               <padding>
-                  <Insets bottom="10.0" left="50.0" right="50.0" top="10.0" />
-               </padding>
+            <HBox fx:id="HboxForButton" styleClass="HboxForButton" HBox.hgrow="ALWAYS" />
+            <fx:include fx:id="buttonPanel" source="../features/NotificationButton.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Button fx:id="logoutBtn" mnemonicParsing="false" style="-fx-background-color: transparent;" styleClass="button-with-image">
+               <graphic>
+                  <ImageView fx:id="img" fitHeight="39.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true" styleClass="image-view">
+                     <image>
+                        <Image url="@../../icons/top_bar_icon/sign_out.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Button>
          </children>
          <padding>
