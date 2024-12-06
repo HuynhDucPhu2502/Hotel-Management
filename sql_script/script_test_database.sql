@@ -829,6 +829,7 @@ VALUES
     ('V2210', N'AVAILABLE', '2024-09-28 10:00:00', 'RC-000004');
 GO
 
+
 -- Thêm dữ liệu vào bảng Shift
 INSERT INTO Shift (shiftID, startTime, endTime, modifiedDate, numberOfHour, shiftDaysSchedule)
 VALUES
@@ -883,6 +884,7 @@ VALUES
     ('CUS-000029', N'Pham Thi AC', '0912345706', 'phamthiac@gmail.com', N'456 Duong VWX, Quan 2, TP HCM', N'FEMALE', '001099012998', '1994-03-03'),
     ('CUS-000030', N'Hoang Van AD', '0912345707', 'hoangvanad@gmail.com', N'567 Duong YZA, Quan 3, TP HCM', N'MALE', '001099013000', '1992-06-06');
 GO
+
 
 -- Thêm dữ liệu vào bảng ReservationForm
 INSERT INTO ReservationForm(reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit)

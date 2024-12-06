@@ -1,13 +1,11 @@
 package iuh.fit.controller.features.service;
 
-import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.dao.HotelServiceDAO;
 import iuh.fit.dao.ServiceCategoryDAO;
 import iuh.fit.models.Account;
 import iuh.fit.models.HotelService;
 import iuh.fit.models.ServiceCategory;
-import iuh.fit.models.enums.Position;
 import iuh.fit.utils.ConvertHelper;
 import iuh.fit.utils.ErrorMessages;
 import javafx.beans.property.SimpleStringProperty;
@@ -25,14 +23,15 @@ import java.util.stream.Collectors;
 
 public class HotelServiceSearchingController {
 
-    // Dialog Pane
-    @FXML
-    private DialogPane dialogPane;
-
     // Search Field
     @FXML
-    private TextField serviceIDSearchField, serviceNameSearchField,
-            priceLowerBoundSearchField, priceUpperBoundSearchField;
+    private TextField serviceIDSearchField;
+    @FXML
+    private TextField serviceNameSearchField;
+    @FXML
+    private TextField priceLowerBoundSearchField;
+    @FXML
+    private TextField priceUpperBoundSearchField;
     @FXML
     private ComboBox<String> serviceCategorySearchField;
 
@@ -52,7 +51,9 @@ public class HotelServiceSearchingController {
 
     // Buttons
     @FXML
-    private Button searchBtn, resetBtn;
+    private Button searchBtn;
+    @FXML
+    private Button resetBtn;
 
     private ObservableList<HotelService> items;
 
@@ -62,16 +63,15 @@ public class HotelServiceSearchingController {
     public void setupContext(MainController mainController, Account account) {
         this.mainController = mainController;
         this.account = account;
-
-        loadData();
-        setupTable();
-        hotelServiceTableView.setFixedCellSize(40);
     }
 
     public void initialize() {
+        loadData();
+        setupTable();
+        hotelServiceTableView.setFixedCellSize(40);
+
         searchBtn.setOnAction(e -> handleSearchAction());
         resetBtn.setOnAction(e -> handleResetAction());
-        dialogPane.toFront();
     }
 
     // Phương thức load dữ liệu lên giao diện
@@ -113,10 +113,17 @@ public class HotelServiceSearchingController {
             resetBtn.setDisable(false);
         });
 
+        loadDataTask.setOnFailed(e -> {
+            searchBtn.setDisable(false);
+            resetBtn.setDisable(false);
+            System.err.println("Failed to load data");
+        });
+
         Thread loadThread = new Thread(loadDataTask);
         loadThread.setDaemon(true);
         loadThread.start();
     }
+
 
     // Phương thức đổ dữ liệu vào bảng
     private void setupTable() {
@@ -187,31 +194,24 @@ public class HotelServiceSearchingController {
     private void setupTableContextMenu() {
         ContextMenu contextMenu = new ContextMenu();
 
-        MenuItem hotelServiceManageMenuItem = new MenuItem("Chỉnh sửa");
+        MenuItem editMenuItem = new MenuItem("Chỉnh sửa");
 
-        if (account.getEmployee().getPosition() == Position.MANAGER) {
-            hotelServiceManageMenuItem.setOnAction(event -> {
-                HotelService service = hotelServiceTableView.getSelectionModel().getSelectedItem();
-                if (service != null) {
-                    try {
-                        handleEditService(service);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+        editMenuItem.setOnAction(event -> {
+            HotelService service = hotelServiceTableView.getSelectionModel().getSelectedItem();
+            if (service != null) {
+                try {
+                    handleEditService(service);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            });
-            contextMenu.getItems().add(hotelServiceManageMenuItem);
-        }
+            }
+        });
 
+        contextMenu.getItems().addAll(editMenuItem);
         hotelServiceTableView.setContextMenu(contextMenu);
     }
 
     private void handleEditService(HotelService service) throws IOException {
-        if (HotelServiceDAO.isHotelServiceInUse(service.getServiceId())) {
-            dialogPane.showInformation("LỖI", "Dịch vụ đang được sử dụng");
-            return;
-        }
-
         mainController.loadPanelHotelServiceManagerController("/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml", service);
     }
 
@@ -253,6 +253,12 @@ public class HotelServiceSearchingController {
 
             searchBtn.setDisable(false);
             resetBtn.setDisable(false);
+        });
+
+        searchTask.setOnFailed(e -> {
+            searchBtn.setDisable(false);
+            resetBtn.setDisable(false);
+            System.err.println("Failed to execute search");
         });
 
         Thread searchThread = new Thread(searchTask);

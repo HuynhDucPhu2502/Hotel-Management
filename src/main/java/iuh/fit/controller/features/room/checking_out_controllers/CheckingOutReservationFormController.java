@@ -2,12 +2,14 @@ package iuh.fit.controller.features.room.checking_out_controllers;
 
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.RoomBookingController;
 
 import iuh.fit.dao.*;
 import iuh.fit.models.*;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
+import iuh.fit.utils.GlobalMessage;
 import iuh.fit.utils.RoomManagementService;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -21,6 +23,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -82,6 +85,12 @@ public class CheckingOutReservationFormController {
     private RoomWithReservation roomWithReservation;
     private Employee employee;
 
+    private static NotificationButtonController topBarController;
+
+    public static void setupController(NotificationButtonController controller){
+        topBarController = controller;
+    }
+
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
@@ -137,7 +146,7 @@ public class CheckingOutReservationFormController {
         LocalDateTime actualCheckInDate = HistoryCheckinDAO.getActualCheckInDate(reservationForm.getReservationID());
 
         roomNumberLabel.setText(reservationFormRoom.getRoomNumber());
-        roomCategoryLabel.setText(reservationFormRoom.getRoomCategory().getRoomCategoryName());
+        roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
         checkInDateLabel.setText(dateTimeFormatter.format(actualCheckInDate != null ? actualCheckInDate : reservationForm.getCheckInDate()));
         checkOutDateLabel.setText(dateTimeFormatter.format(reservationForm.getCheckOutDate()));
         stayLengthLabel.setText(Calculator.calculateStayLengthToString(
@@ -160,7 +169,7 @@ public class CheckingOutReservationFormController {
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setupContext(mainController, employee);
+            roomBookingController.setupContext(mainController, employee, topBarController);
 
 
             mainController.getMainPanel().getChildren().clear();
@@ -234,6 +243,8 @@ public class CheckingOutReservationFormController {
                         RoomManagementService.handleCheckOut(roomWithReservation, employee);
 
                         dialogPane.showInformation("THÀNH CÔNG", "Check-out và tạo hóa đơn thành công!");
+                        System.out.println("\nCHECKOUT, phong: +"+ roomWithReservation.getRoom().getRoomID() +"\n");
+                        topBarController.getInfo(GlobalMessage.MANUALLY_CHECKOUT, "Phòng "+roomWithReservation.getRoom().getRoomID()+" đã được checkout thủ công");
                         navigateToRoomBookingPanel();
                     } catch (Exception ex) {
                         ex.printStackTrace();

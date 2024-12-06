@@ -115,14 +115,15 @@
                     <TableView fx:id="invoiceDataTableView" prefHeight="343.0" prefWidth="1251.0" stylesheets="@../../../styles/TableView.css">
                         <columns>
                             <TableColumn fx:id="invoiceIDColumn" prefWidth="111.99999696016312" text="Mã hóa đơn" />
-                            <TableColumn fx:id="customerNameColumn" prefWidth="175.19994354248047" text="Khách hàng" />
-                            <TableColumn fx:id="roomIDColumn" minWidth="0.0" prefWidth="156.0" text="Mã phòng" />
-                            <TableColumn fx:id="employeeNameColumn" prefWidth="137.60003662109375" text="Nhân viên" />
-                            <TableColumn fx:id="invoiceDateColumn" prefWidth="146.4000244140625" text="Ngày lập" />
-                            <TableColumn fx:id="depositColumn" prefWidth="130.4000244140625" text="Tiền cọc" />
-                            <TableColumn fx:id="serviceChargeColumn" prefWidth="98.39996337890625" text="Dịch vụ" />
-                            <TableColumn fx:id="roomChargeColumn" prefWidth="126.39996337890625" text="Tiền phòng" />
-                            <TableColumn fx:id="netDueColumn" prefWidth="150.4000244140625" text="Tổng tiền" />
+                            <TableColumn fx:id="customerNameColumn" prefWidth="108.79995727539062" text="Khách hàng" />
+                            <TableColumn fx:id="roomIDColumn" minWidth="0.0" prefWidth="99.19996643066406" text="Mã phòng" />
+                            <TableColumn fx:id="employeeNameColumn" prefWidth="138.39999389648438" text="Nhân viên" />
+                            <TableColumn fx:id="invoiceDateColumn" prefWidth="195.99996948242188" text="Ngày lập" />
+                            <TableColumn fx:id="depositColumn" prefWidth="120.800048828125" text="Tiền cọc" />
+                            <TableColumn fx:id="serviceChargeColumn" prefWidth="100.79998779296875" text="Dịch vụ" />
+                            <TableColumn fx:id="roomChargeColumn" prefWidth="110.4000244140625" text="Tiền phòng" />
+                            <TableColumn fx:id="taxColumn" prefWidth="104.800048828125" text="Thuế" />
+                            <TableColumn fx:id="netDueColumn" prefWidth="136.0" text="Tổng tiền" />
                         </columns>
                         <VBox.margin>
                             <Insets top="10.0" />

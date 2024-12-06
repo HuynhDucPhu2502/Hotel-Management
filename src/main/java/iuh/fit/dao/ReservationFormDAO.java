@@ -199,45 +199,6 @@ public class ReservationFormDAO {
         return reservations;
     }
 
-    public static List<ReservationForm> getReservationsWithinLastMonth(String roomID) {
-        List<ReservationForm> reservations = new ArrayList<>();
-
-        String sql = """
-        SELECT a.reservationFormID, a.reservationDate, a.checkInDate, a.checkOutDate, a.roomBookingDeposit,
-               a.employeeID, a.roomID, a.customerID,
-               b.fullName AS employeeFullName, b.phoneNumber AS employeePhoneNumber, b.email AS employeeEmail,
-               b.address AS employeeAddress, b.gender AS employeeGender, b.idCardNumber AS employeeIDCardNumber,
-               b.dob AS employeeDob, b.position AS employeePosition,
-               c.roomStatus, c.dateOfCreation, c.roomCategoryID,
-               d.fullName AS customerFullName, d.phoneNumber AS customerPhoneNumber, d.email AS customerEmail,
-               d.address AS customerAddress, d.gender AS customerGender, d.idCardNumber AS customerIDCardNumber,
-               d.dob AS customerDob,
-               e.roomCategoryName, e.numberOfBed
-        FROM ReservationForm a
-        INNER JOIN Employee b ON a.employeeID = b.employeeID
-        INNER JOIN Room c ON a.roomID = c.roomID
-        INNER JOIN Customer d ON a.customerID = d.customerID
-        INNER JOIN RoomCategory e ON c.roomCategoryID = e.roomCategoryID
-        WHERE a.roomID = ?
-          AND a.checkInDate >= DATEADD(MONTH, -1, GETDATE())
-        ORDER BY a.checkInDate
-        """;
-
-        try (Connection connection = DBHelper.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, roomID);
-
-            ResultSet rs = preparedStatement.executeQuery();
-
-            while (rs.next()) {
-                reservations.add(extractData(rs));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return reservations;
-    }
-
     public static List<ReservationForm> getReservationFormByCustomerID(String customerID) {
         List<ReservationForm> data = new ArrayList<>();
 
