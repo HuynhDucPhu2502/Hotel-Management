@@ -4,7 +4,7 @@ import com.dlsc.gemsfx.daterange.DateRangePicker;
 import iuh.fit.controller.MainController;
 
 import iuh.fit.controller.features.NotificationButtonController;
-import iuh.fit.controller.features.invoice.invoice_controllers.InvoiceItemController;
+import iuh.fit.controller.features.invoice.InvoiceItemController;
 
 import iuh.fit.dao.InvoiceDAO;
 import iuh.fit.models.Employee;
