@@ -133,7 +133,7 @@ public class InvoiceDetailsController {
         LocalDateTime actualCheckOutDate = HistoryCheckOutDAO.getActualCheckOutDate(reservationForm.getReservationID());
 
         roomNumberLabel.setText(reservationFormRoom.getRoomNumber());
-        roomCategoryLabel.setText(reservationFormRoom.getRoomNumber());
+        roomCategoryLabel.setText(reservationFormRoom.getRoomCategory().getRoomCategoryName());
         checkInDateLabel.setText(dateTimeFormatter.format(actualCheckInDate != null ? actualCheckInDate : reservationForm.getCheckInDate()));
         checkOutDateLabel.setText(dateTimeFormatter.format(actualCheckOutDate != null ? actualCheckOutDate : reservationForm.getCheckOutDate()));
         stayLengthLabel.setText(Calculator.calculateStayLengthToString(

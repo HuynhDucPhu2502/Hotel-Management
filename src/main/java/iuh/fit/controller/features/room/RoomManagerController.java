@@ -293,6 +293,7 @@ public class RoomManagerController {
 
                     handleResetAction();
                     loadData();
+                    dialogPane.showInformation("Thành công", "Cập nhật phòng thành công");
                 }
             });
         }catch (Exception e){
@@ -314,6 +315,7 @@ public class RoomManagerController {
                     RoomDAO.deleteData(room.getRoomID());
                     handleResetAction();
                     loadData();
+                    dialogPane.showInformation("Thành công", "Xóa phòng thành công");
                 }
             });
 
