@@ -1,5 +1,6 @@
 package iuh.fit.controller.features;
 
+import iuh.fit.Application;
 import iuh.fit.Main;
 import iuh.fit.controller.LoginController;
 import iuh.fit.controller.MainController;
@@ -53,9 +54,9 @@ public class TopController {
 
     private NotificationButtonController topBarController;
 
-    private Main main;
+    private Application main;
 
-    public NotificationButtonController initialize(Account account, MainController mainController, Main main) {
+    public NotificationButtonController initialize(Account account, MainController mainController, Application main) {
         setupContext(account, mainController, main);
         // clock
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateClock()));
@@ -71,7 +72,7 @@ public class TopController {
         return topBarController;
     }
 
-    public void setupContext(Account account, MainController mainController, Main main) {
+    public void setupContext(Account account, MainController mainController, Application main) {
         this.currentAccount = account;
         this.mainController = mainController;
         this.main = main;

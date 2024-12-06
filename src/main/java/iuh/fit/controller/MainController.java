@@ -1,5 +1,6 @@
 package iuh.fit.controller;
 
+import iuh.fit.Application;
 import iuh.fit.Main;
 import iuh.fit.controller.features.DashboardController;
 import iuh.fit.controller.features.MenuController;
@@ -54,10 +55,10 @@ public class MainController {
 
     private static NotificationButtonController topBarController;
 
-    private Main main;
+    private Application main;
 
     // Không xóa
-    public void initialize(Main main) {
+    public void initialize(Application main) {
         Locale locale = new Locale("vi", "VN");
         Locale.setDefault(locale);
         this.main = main;

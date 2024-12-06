@@ -1,6 +1,7 @@
 package iuh.fit.controller;
 
 import com.dlsc.gemsfx.DialogPane;
+import iuh.fit.Application;
 import iuh.fit.Main;
 import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.dao.AccountDAO;
@@ -83,10 +84,10 @@ public class LoginController {
     @FXML private Button restoreDataButton;
     private static NotificationButtonController topBarController;
 
-    private Main main;
+    private Application main;
 
     @FXML
-    public void initialize(Main main) {
+    public void initialize(Application main) {
         dialogPane.toFront();
         this.main = main;
         registerEventEnterKey();
