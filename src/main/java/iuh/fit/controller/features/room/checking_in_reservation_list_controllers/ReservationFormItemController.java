@@ -1,6 +1,7 @@
 package iuh.fit.controller.features.room.checking_in_reservation_list_controllers;
 
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
@@ -28,6 +29,11 @@ public class ReservationFormItemController {
     private Employee employee;
     private RoomWithReservation roomWithReservation;
 
+    private static NotificationButtonController topBarController;
+
+    public static void setupController(NotificationButtonController controller){
+        topBarController = controller;
+    }
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
@@ -35,12 +41,14 @@ public class ReservationFormItemController {
             MainController mainController,
             ReservationForm reservationForm,
             Employee employee,
-            RoomWithReservation roomWithReservation
+            RoomWithReservation roomWithReservation,
+            NotificationButtonController controller
     ) {
         this.mainController = mainController;
         this.reservationForm = reservationForm;
         this.employee = employee;
         this.roomWithReservation = roomWithReservation;
+        setupController(controller);
 
         Customer customer = reservationForm.getCustomer();
         Employee reservationFormEmployee = reservationForm.getEmployee();
@@ -65,7 +73,7 @@ public class ReservationFormItemController {
 
             ReservationFormDetailsController reservationFormDetailsController = loader.getController();
             reservationFormDetailsController.setupContext(
-                    mainController, reservationForm, employee, roomWithReservation
+                    mainController, reservationForm, employee, roomWithReservation, topBarController
             );
 
             mainController.getMainPanel().getChildren().clear();

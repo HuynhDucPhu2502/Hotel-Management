@@ -1,8 +1,11 @@
 package iuh.fit.controller;
 
+import iuh.fit.Application;
 import iuh.fit.controller.features.DashboardController;
 import iuh.fit.controller.features.MenuController;
 
+import iuh.fit.controller.features.NotificationButtonController;
+import iuh.fit.controller.features.TopController;
 import iuh.fit.controller.features.customer.CustomerManagerController;
 import iuh.fit.controller.features.customer.CustomerSearchingController;
 import iuh.fit.controller.features.employee.EmployeeManagerController;
@@ -26,6 +29,8 @@ import iuh.fit.utils.TimelineManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.Locale;
@@ -38,13 +43,22 @@ public class MainController {
     private AnchorPane menuBar;
     @FXML
     private AnchorPane mainPanel;
+    @FXML
+    private AnchorPane topPanel;
+
+    private Button informationBtn;
 
     private MenuController menuController;
 
     private static boolean ROOM_BOOKING_LOADED = true;
 
+    private static NotificationButtonController topBarController;
+
+    private Application main;
+
+
     // Không xóa
-    public void initialize() {
+    public void initialize(Application main) {
         Locale locale = new Locale("vi", "VN");
         Locale.setDefault(locale);
     }
@@ -55,10 +69,15 @@ public class MainController {
         this.account = account;
         initializeDashboard();
         initializeMenuBar();
+        initializeTopBar();
     }
 
     public void setShift(Shift shift){
         this.shift = shift;
+    }
+
+    public NotificationButtonController getNotificationController(){
+        return  topBarController;
     }
 
     public void initializeDashboard() {
@@ -94,8 +113,26 @@ public class MainController {
         }
     }
 
+    public void initializeTopBar() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/TopPanel.fxml"));
+            AnchorPane topLayout = loader.load();
+
+            TopController topController = loader.getController();
+            topBarController = topController.initialize(account, this, main);
+
+            topPanel.getChildren().clear();
+            topPanel.getChildren().addAll(topLayout.getChildren());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void setupMenuButtons() {
         Position position = account.getEmployee().getPosition();
+        informationBtn = menuController.getInformationBtn();
+        handleTooltips();
 
         // Tắt các button menu không thuộc về lễ tân
         if (position.equals(Position.RECEPTIONIST)) {
@@ -129,6 +166,9 @@ public class MainController {
         // Employee Information
         menuController.getEmployeeInformationContainer().setOnMouseClicked(event -> loadPanel("/iuh/fit/view/features/employee_information/EmployeeInformationPanel.fxml", this, account));
 
+        informationBtn.setOnAction(event -> loadPanelInformation("/iuh/fit/view/features/InformationPanel.fxml"));
+
+
         // Thêm các sự kiện xử lý giao diện cho quản lý
         if (position.equals(Position.MANAGER)) {
             // Employee
@@ -155,6 +195,16 @@ public class MainController {
         }
     }
 
+    private void handleTooltips() {
+        // Tạo Tooltip
+        Tooltip tooltip = new Tooltip("Về phần mềm");
+        Tooltip.install(informationBtn, tooltip); // Gắn Tooltip vào Button
+
+        // Thêm Tooltip bằng cách setTooltip
+        informationBtn.setTooltip(tooltip);
+        tooltip.setShowDelay(javafx.util.Duration.millis(400));
+    }
+
     public void loadPanel(String fxmlPath, MainController mainController, Account account) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -164,7 +214,7 @@ public class MainController {
 
             switch (controller) {
                 case RoomBookingController roomBookingController ->
-                        roomBookingController.setupContext(mainController, account.getEmployee());
+                        roomBookingController.setupContext(mainController, account.getEmployee(), topBarController);
 
                 case InvoiceManagerController invoiceManagerController -> {
                     Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
@@ -261,7 +311,7 @@ public class MainController {
             MainController.setRoomBookingLoaded(false);
             Platform.runLater(() -> controller.setupContext(
                     mainController, account.getEmployee(), room,
-                    null, null, null
+                    null, null, null, topBarController
             ));
 
         } catch (Exception e) {
@@ -296,6 +346,18 @@ public class MainController {
             mainPanel.getChildren().clear();
             mainPanel.getChildren().addAll(layout.getChildren());
             Platform.runLater(() -> controller.setInformation(customer));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadPanelInformation(String fxmlPath){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            AnchorPane layout = loader.load();
+
+            mainPanel.getChildren().clear();
+            mainPanel.getChildren().addAll(layout.getChildren());
         } catch (Exception e) {
             e.printStackTrace();
         }

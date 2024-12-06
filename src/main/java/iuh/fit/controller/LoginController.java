@@ -1,6 +1,8 @@
 package iuh.fit.controller;
 
 import com.dlsc.gemsfx.DialogPane;
+import iuh.fit.Application;
+import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.dao.ShiftDAO;
@@ -81,11 +83,13 @@ public class LoginController {
     @FXML private Button cancelRestoreButton;
     @FXML private Button confirmPassRestoreButton;
     @FXML private Button restoreDataButton;
-
+    private static NotificationButtonController topBarController;
+    private Application main;
 
     @FXML
-    private void initialize() {
+    public void initialize(Application main) {
         dialogPane.toFront();
+        this.main = main;
         registerEventEnterKey();
         hiddenPasswordField.textProperty().bindBidirectional(visiblePasswordField.textProperty());
         passRestorePasswordField.textProperty().bindBidirectional(passRestoreTextField.textProperty());
@@ -220,9 +224,23 @@ public class LoginController {
                         "Nhân viên không thuộc ca làm việc hiện tại\n" +
                                 "Không thể đăng nhập"
                 );
-            else loadMainUI(account, currentShift);
+            else {
+                loadMainUI(account, currentShift);
+                main.setNotificationControllerForMain(topBarController);
+                try {
+                    RoomManagementService.startAutoCheckoutScheduler(topBarController);
+                }catch (Exception e){
+                    System.out.println("Không tìm thấy database");
+                }
+            }
         } else if (position.equals(Position.MANAGER)) {
             loadMainUI(account, currentShift);
+            main.setNotificationControllerForMain(topBarController);
+            try {
+                RoomManagementService.startAutoCheckoutScheduler(topBarController);
+            }catch (Exception e){
+                System.out.println("Không tìm thấy database");
+            }
         }
     }
 
@@ -234,6 +252,7 @@ public class LoginController {
             MainController mainController = fxmlLoader.getController();
 
             mainController.setAccount(account);
+            topBarController = mainController.getNotificationController();
             mainController.setShift(currentShift);
 
 

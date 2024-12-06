@@ -182,6 +182,9 @@ public class MenuController {
 //  =====================================================
 
     @FXML
+    private Button informationBtn;
+
+    @FXML
     private ScrollPane scrollPane;
 
     private final Map<String, Boolean> buttonStates = new HashMap<>();
@@ -336,5 +339,7 @@ public class MenuController {
     public Button getInvoiceBtn() {
         return invoiceBtn;
     }
+
+    public Button getInformationBtn(){return informationBtn;}
 }
 

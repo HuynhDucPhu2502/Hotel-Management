@@ -1,6 +1,7 @@
 package iuh.fit.controller.features.room.creating_reservation_form_controllers;
 
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Room;
 import iuh.fit.models.wrapper.RoomWithReservation;
@@ -23,13 +24,20 @@ public class RoomAvailableItemController {
     private Employee employee;
     private RoomWithReservation roomWithReservation;
 
+    private static NotificationButtonController topBarController;
+    public static void setupController(NotificationButtonController controller){
+        topBarController = controller;
+    }
+
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
-    public void setupContext(MainController mainController, Employee employee, RoomWithReservation roomWithReservation) {
+    public void setupContext(MainController mainController, Employee employee, RoomWithReservation roomWithReservation
+            , NotificationButtonController controller) {
         this.mainController = mainController;
         this.employee = employee;
         this.roomWithReservation = roomWithReservation;
+        setupController(controller);
 
         Room room = roomWithReservation.getRoom();
         roomCategoryNameLabel.setText(room.getRoomCategory().getRoomCategoryName());
@@ -49,7 +57,7 @@ public class RoomAvailableItemController {
             CreateReservationFormController createReservationFormController = loader.getController();
             createReservationFormController.setupContext(
                     mainController, employee, roomWithReservation,
-                    null, null, null
+                    null, null, null, topBarController
             );
 
             mainController.getMainPanel().getChildren().clear();
