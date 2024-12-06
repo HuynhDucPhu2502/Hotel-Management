@@ -76,17 +76,17 @@
 }
 
 .button-check-in {
-    -fx-background-color: rgb(253, 139, 81);
+    -fx-background-color: RGB(135, 162, 255);
     -fx-text-fill: white;
     -fx-min-width: 200px;
 }
 
 .button-check-in:hover {
-    -fx-background-color: rgb(255, 156, 115);
+    -fx-background-color: RGB(63, 162, 246);
 }
 
 .button-check-in:pressed {
-    -fx-background-color: RGB(150, 0, 0);
+    -fx-background-color: RGB(70, 130, 180);
 }
 
 /* ========================================================== */
@@ -212,7 +212,6 @@
     -fx-border-color: transparent;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
-
 }
 
 .button-reservation-selected:hover {
@@ -258,23 +257,22 @@
     -fx-background-color: RGB(150, 0, 0);
 }
 
-/* refresh and export excel button*/
 .button-excel {
-    -fx-background-color: #4CAF50; /* Xanh lá đậm */
-    -fx-text-fill: white;          /* Màu chữ trắng */
-    -fx-background-radius: 5;      /* Bo góc cho nút */
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
 }
 
 .button-excel:hover {
-    -fx-background-color: #388E3C; /* Màu xanh lá đậm hơn khi hover */
+    -fx-background-color: #388E3C;
 }
 
 .button-refresh {
-    -fx-background-color: #03A9F4; /* Xanh dương nhạt */
-    -fx-text-fill: white;          /* Màu chữ trắng */
-    -fx-background-radius: 5;      /* Bo góc cho nút */
+    -fx-background-color: #03A9F4;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
 }
 
 .button-refresh:hover {
-    -fx-background-color: #0288D1; /* Màu xanh dương đậm hơn khi hover */
+    -fx-background-color: #0288D1;
 }
