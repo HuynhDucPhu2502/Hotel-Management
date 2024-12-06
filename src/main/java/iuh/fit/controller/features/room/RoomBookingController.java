@@ -2,7 +2,6 @@ package iuh.fit.controller.features.room;
 
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomAvailableItemController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOnUseItemController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOverDueController;
@@ -56,10 +55,6 @@ public class RoomBookingController {
     private Button activeButton;
     private RoomStatus selectedStatus = null;
 
-    private static NotificationButtonController topBarController;
-    public static void setupController(NotificationButtonController controller){
-        topBarController = controller;
-    }
 
     public void initialize() {
         dialogPane.toFront();
@@ -70,10 +65,9 @@ public class RoomBookingController {
 
     }
 
-    public void setupContext(MainController mainController, Employee employeee, NotificationButtonController topBarController) {
+    public void setupContext(MainController mainController, Employee employeee) {
         this.mainController = mainController;
         this.employee = employeee;
-        setupController(topBarController);
         loadData();
         setupEventHandlers();
 
@@ -107,7 +101,7 @@ public class RoomBookingController {
                     roomFloorNumberCBox.getSelectionModel().selectFirst();
                 });
 
-                RoomManagementService.autoCheckoutOverdueRooms(topBarController);
+                RoomManagementService.autoCheckoutOverdueRooms();
                 return RoomWithReservationDAO.getRoomWithReservation().stream()
                         .sorted(Comparator.comparing(r -> r.getRoom().getRoomNumber()))
                         .toList();
@@ -122,8 +116,7 @@ public class RoomBookingController {
         });
 
         loadDataTask.setOnFailed(event -> {
-//            throw new IllegalArgumentException(loadDataTask.getException().getMessage());
-            loadDataTask.getException().printStackTrace();
+            throw new IllegalArgumentException(loadDataTask.getException().getMessage());
         });
 
         new Thread(loadDataTask).start();
@@ -172,7 +165,7 @@ public class RoomBookingController {
                 roomItem = loader.load();
 
                 RoomAvailableItemController controller = loader.getController();
-                controller.setupContext(mainController, employee, roomWithReservation, topBarController);
+                controller.setupContext(mainController, employee, roomWithReservation);
             }
             case ON_USE -> {
                 loader = new FXMLLoader(getClass().getResource(
@@ -284,7 +277,7 @@ public class RoomBookingController {
             AnchorPane layout = loader.load();
 
             GroupBookingController groupBookingController = loader.getController();
-            groupBookingController.setupContext(mainController, employee, topBarController);
+            groupBookingController.setupContext(mainController, employee);
 
 
             mainController.getMainPanel().getChildren().clear();

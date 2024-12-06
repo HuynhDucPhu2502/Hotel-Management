@@ -4,6 +4,6 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.MainController">
    <fx:include fx:id="menuBar" minHeight="600.0" source="../features/MenuPanel.fxml" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="7.0" AnchorPane.topAnchor="70.0" />
-   <fx:include fx:id="topPanel" minHeight="50.0" minWidth="800.0" source="../features/TopPanel.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+   <fx:include minHeight="50.0" minWidth="800.0" source="../features/TopPanel.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    <fx:include fx:id="mainPanel" source="../features/DashboardPanel.fxml" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="270.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="70.0" />
 </AnchorPane>

@@ -117,6 +117,7 @@ public class RoomManagerController {
     }
 
     // setup cho cột thao tác
+    // THAM KHẢO
     private void setupActionColumn() {
         Callback<TableColumn<Room, Void>, TableCell<Room, Void>> cellFactory = param -> new TableCell<>() {
             private final Button updateButton = new Button("Cập nhật");
