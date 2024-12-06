@@ -2,7 +2,6 @@ package iuh.fit.controller.features.room.checking_in_reservation_list_controller
 
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.dao.*;
 import iuh.fit.models.*;
@@ -59,11 +58,6 @@ public class ReservationFormDetailsController {
     private ReservationForm reservationForm;
     private RoomWithReservation roomWithReservation;
     private Employee employee;
-    private static NotificationButtonController topBarController;
-
-    public static void setController(NotificationButtonController controller ){
-        topBarController = controller;
-    }
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
@@ -74,13 +68,12 @@ public class ReservationFormDetailsController {
 
     public void setupContext(
             MainController mainController, ReservationForm reservationForm,
-            Employee employee, RoomWithReservation roomWithReservation,
-            NotificationButtonController controller) {
+            Employee employee, RoomWithReservation roomWithReservation) {
         this.mainController = mainController;
         this.reservationForm = reservationForm;
         this.roomWithReservation = roomWithReservation;
         this.employee = employee;
-        setController(controller);
+
         titledPane.setText("Quản lý đặt phòng " + roomWithReservation.getRoom().getRoomNumber());
 
         setupReservationForm();
@@ -152,7 +145,7 @@ public class ReservationFormDetailsController {
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setupContext(mainController, employee, topBarController);
+            roomBookingController.setupContext(mainController, employee);
 
             mainController.getMainPanel().getChildren().clear();
             mainController.getMainPanel().getChildren().addAll(layout.getChildren());
@@ -170,7 +163,7 @@ public class ReservationFormDetailsController {
             ReservationListController reservationListController = loader.getController();
             reservationListController.getDialogPane().showInformation("Thông Báo", message);
             reservationListController.setupContext(
-                    mainController, employee, roomWithReservation, topBarController
+                    mainController, employee, roomWithReservation
             );
 
             mainController.getMainPanel().getChildren().clear();
@@ -188,7 +181,7 @@ public class ReservationFormDetailsController {
 
             ReservationListController reservationListController = loader.getController();
             reservationListController.setupContext(
-                    mainController, employee, roomWithReservation, topBarController
+                    mainController, employee, roomWithReservation
             );
 
             mainController.getMainPanel().getChildren().clear();

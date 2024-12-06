@@ -1,7 +1,6 @@
 package iuh.fit.controller.features.room.creating_reservation_form_controllers;
 
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.checking_out_controllers.CheckingOutReservationFormController;
 import iuh.fit.models.Customer;
@@ -43,11 +42,6 @@ public class RoomOverDueController {
 
     private java.time.Duration duration;
     private Timeline timeline;
-
-    private static NotificationButtonController topBarController;
-    public static void setupController(NotificationButtonController controller){
-        topBarController = controller;
-    }
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
@@ -103,9 +97,7 @@ public class RoomOverDueController {
         if (hours >= 2) {
             if (timeline != null) {
                 if (MainController.isRoomBookingLoaded()) navigateToRoomBookingPanel(false);
-                else{
-                    RoomManagementService.autoCheckoutOverdueRooms(topBarController);
-                }
+                else RoomManagementService.autoCheckoutOverdueRooms();
                 TimelineManager.getInstance().removeTimeline(roomWithReservation.getRoom().getRoomID() + RoomStatus.OVERDUE.name());
             }
 
@@ -147,7 +139,7 @@ public class RoomOverDueController {
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setupContext(mainController, employee, topBarController);
+            roomBookingController.setupContext(mainController, employee);
             if (isError)
                 roomBookingController.getDialogPane().showInformation(
                         "Không thể thực hiện thao tác",

@@ -369,7 +369,6 @@ public class EmployeeDAO {
                 Connection connection = DBHelper.getConnection();
                 PreparedStatement preparedStatement = connection.prepareStatement(sql)
         ) {
-            System.out.println(accountID);
             preparedStatement.setString(1, accountID);
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
@@ -386,7 +385,6 @@ public class EmployeeDAO {
                     employee.setDob(ConvertHelper.localDateConverter(rs.getDate(8)));
                     employee.setPosition(ConvertHelper.positionConverter(rs.getString(9)));
 
-                    System.out.println(employee.toString());
                     return employee;
                 }
             }
@@ -394,6 +392,7 @@ public class EmployeeDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return null;
     }
 
