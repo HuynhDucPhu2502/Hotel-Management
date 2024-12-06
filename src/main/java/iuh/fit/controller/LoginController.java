@@ -35,8 +35,6 @@ import javafx.scene.control.PasswordField;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -174,7 +172,7 @@ public class LoginController {
         if(!RestoreDatabase.isDatabaseExist("HotelDatabase")) {
             errorMessage.setText("Chua co du lieu");
             return;
-        };
+        }
 
         String userName = userNameField.getText();
         if (userName.isEmpty()) {
@@ -444,30 +442,44 @@ public class LoginController {
     @FXML
     void confirmPassRestore() {
         final String key = "7523C62ABDB7628C5A9DAD8F97D8D8C5C040EDE36535E531A8A3748B6CAE7E00";
-        final String filePath = "E201065D0554652615C320C00A1D5BC8EDCA469D72C2790E24152D0C1E2B6189.properties";
-        String userPassInput =passRestorePasswordField.getText();
-        if(userPassInput == null || userPassInput.isBlank()){
+        final String resourcePath = "/iuh/fit/security/E201065D0554652615C320C00A1D5BC8EDCA469D72C2790E24152D0C1E2B6189.properties";
+
+        String userPassInput = passRestorePasswordField.getText();
+
+        // Kiểm tra mật khẩu người dùng nhập
+        if (userPassInput == null || userPassInput.isBlank()) {
             showMessage(
                     Alert.AlertType.INFORMATION,
-                    "Thong bao",
-                    "nhap pass di",
-                    "nhan ok de xac nhan"
+                    "Thông báo",
+                    "Vui lòng nhập mật khẩu",
+                    "Nhấn OK để xác nhận"
             ).show();
             return;
         }
 
-        if(PasswordHashing.hashPassword(userPassInput)
-                .equalsIgnoreCase(PropertiesFile.readFile(filePath, key))){
-            switchFromPassPanelToRestorePanel(false, true);
-        }else{
+        // Kiểm tra file và xác thực mật khẩu
+        try {
+            String storedHash = PropertiesFile.readFileFromResources(resourcePath, key);
+            if (PasswordHashing.hashPassword(userPassInput).equalsIgnoreCase(storedHash)) {
+                switchFromPassPanelToRestorePanel(false, true);
+            } else {
+                showMessage(
+                        Alert.AlertType.INFORMATION,
+                        "Sai mật khẩu",
+                        "Mật khẩu không đúng, vui lòng thử lại.",
+                        "Nhấn OK để xác nhận"
+                ).show();
+            }
+        } catch (Exception e) {
             showMessage(
-                    Alert.AlertType.INFORMATION,
-                    "sai mat khau",
-                   "sai pass roi nha bro",
-                    "nhan ok de xac nhan"
+                    Alert.AlertType.ERROR,
+                    "Lỗi",
+                    "Đã xảy ra lỗi khi đọc file từ resources.",
+                    "Vui lòng kiểm tra lại file và thử lại."
             ).show();
         }
     }
+
 
     private void switchFromPassPanelToRestorePanel(boolean passPanelShow, boolean restorePanelShow){
         passTitleText.setVisible(passPanelShow);
@@ -524,74 +536,74 @@ public class LoginController {
     @FXML
     void confirmRestoreData() throws SQLException {
         String filePath = filePathRestoreTextField.getText();
-        if(filePath == null || filePath.isBlank()){
+        if (filePath == null || filePath.isBlank()) {
             showMessage(
                     Alert.AlertType.INFORMATION,
-                    "Thong bao",
-                    "Hay chon tep du lieu de khoi phuc",
-                    "Nhan ok de xac nhan"
+                    "Thông báo",
+                    "Hãy chọn tệp dữ liệu để khôi phục.",
+                    "Nhấn OK để xác nhận."
             ).show();
             return;
         }
 
         String[] parts = filePath.split("\\\\");
         String fileName = parts[parts.length - 1];
-        if(!fileName.contains(".bak")){
+        if (!fileName.contains(".bak")) {
             showMessage(
                     Alert.AlertType.INFORMATION,
-                    "Thong bao",
-                    "Sai loai tep, tep phai co duoi .bak",
-                    "Nhan ok de xac nhan"
+                    "Thông báo",
+                    "Sai loại tệp, tệp phải có đuôi .bak.",
+                    "Nhấn OK để xác nhận."
             ).show();
             return;
         }
 
         String databaseName = "HotelDatabase";
-        if(RestoreDatabase.isDatabaseExist(databaseName)) {
+        if (RestoreDatabase.isDatabaseExist(databaseName)) {
             Optional<ButtonType> optional = showMessage(
                     Alert.AlertType.CONFIRMATION,
-                    "Thong bao",
-                    "Du lieu da ton tai, co muon ghi de khong",
-                    "Nhan ok de ghi de, cancel de huy"
+                    "Thông báo",
+                    "Dữ liệu đã tồn tại. Bạn có muốn ghi đè không?",
+                    "Nhấn OK để ghi đè, Cancel để hủy."
             ).showAndWait();
 
-            if(optional.isPresent() && optional.get().equals(ButtonType.OK)){
+            if (optional.isPresent() && optional.get().equals(ButtonType.OK)) {
                 try {
                     RestoreDatabase.restoreFullWhenNoDB(filePath);
                     System.out.println("Database restored successfully!");
-                }catch (Exception e){
+                } catch (Exception e) {
                     showMessage(
                             Alert.AlertType.INFORMATION,
-                            "Thong bao",
-                            "Tep du lieu phuc hoi rong",
-                            "Nhan ok de xac nhan"
+                            "Thông báo",
+                            "Tệp dữ liệu phục hồi rỗng.",
+                            "Nhấn OK để xác nhận."
                     ).show();
                 }
-
             }
-        }else{
+        } else {
             try {
                 RestoreDatabase.restoreFullWhenNoDB(filePath);
                 System.out.println("Database restored successfully!");
-            }catch (Exception e){
+            } catch (Exception e) {
                 showMessage(
                         Alert.AlertType.INFORMATION,
-                        "Thong bao",
-                        "Tep du lieu phuc hoi rong",
-                        "Nhan ok de xac nhan"
+                        "Thông báo",
+                        "Tệp dữ liệu phục hồi rỗng.",
+                        "Nhấn OK để xác nhận."
                 ).show();
             }
         }
     }
 
+
     @FXML
-    void cancelRestore(ActionEvent event) {
+    void cancelRestore() {
         switchFromPassPanelToRestorePanel(true, false);
         filePathRestoreTextField.setText("");
     }
 
     @FXML
-    void researchFileRestore(ActionEvent event) {
+    void researchFileRestore() {
 
     }
 
