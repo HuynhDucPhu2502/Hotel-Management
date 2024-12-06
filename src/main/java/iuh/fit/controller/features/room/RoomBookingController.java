@@ -2,6 +2,7 @@ package iuh.fit.controller.features.room;
 
 import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomAvailableItemController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOnUseItemController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOverDueController;
@@ -55,6 +56,10 @@ public class RoomBookingController {
     private Button activeButton;
     private RoomStatus selectedStatus = null;
 
+    private static NotificationButtonController topBarController;
+    public static void setupController(NotificationButtonController controller){
+        topBarController = controller;
+    }
 
     public void initialize() {
         dialogPane.toFront();
@@ -65,9 +70,10 @@ public class RoomBookingController {
 
     }
 
-    public void setupContext(MainController mainController, Employee employeee) {
+    public void setupContext(MainController mainController, Employee employeee, NotificationButtonController topBarController) {
         this.mainController = mainController;
         this.employee = employeee;
+        setupController(topBarController);
         loadData();
         setupEventHandlers();
 
@@ -101,7 +107,7 @@ public class RoomBookingController {
                     roomFloorNumberCBox.getSelectionModel().selectFirst();
                 });
 
-                RoomManagementService.autoCheckoutOverdueRooms();
+                RoomManagementService.autoCheckoutOverdueRooms(topBarController);
                 return RoomWithReservationDAO.getRoomWithReservation().stream()
                         .sorted(Comparator.comparing(r -> r.getRoom().getRoomNumber()))
                         .toList();
@@ -165,7 +171,7 @@ public class RoomBookingController {
                 roomItem = loader.load();
 
                 RoomAvailableItemController controller = loader.getController();
-                controller.setupContext(mainController, employee, roomWithReservation);
+                controller.setupContext(mainController, employee, roomWithReservation, topBarController);
             }
             case ON_USE -> {
                 loader = new FXMLLoader(getClass().getResource(
@@ -277,7 +283,7 @@ public class RoomBookingController {
             AnchorPane layout = loader.load();
 
             GroupBookingController groupBookingController = loader.getController();
-            groupBookingController.setupContext(mainController, employee);
+            groupBookingController.setupContext(mainController, employee, topBarController);
 
 
             mainController.getMainPanel().getChildren().clear();

@@ -6,6 +6,7 @@ import com.dlsc.gemsfx.daterange.DateRange;
 import com.dlsc.gemsfx.daterange.DateRangePicker;
 import com.dlsc.gemsfx.daterange.DateRangePreset;
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.models.Employee;
@@ -68,6 +69,10 @@ public class GroupBookingController {
 
     private final List<ReservationForm> reservationFormsList = new ArrayList<>();
 
+    private static NotificationButtonController topBarController;
+    public static void setupController(NotificationButtonController controller){
+        topBarController = controller;
+    }
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
@@ -77,9 +82,10 @@ public class GroupBookingController {
         setupTimeComponents();
     }
 
-    public void setupContext(MainController mainController, Employee employee) {
+    public void setupContext(MainController mainController, Employee employee, NotificationButtonController controller) {
         this.mainController = mainController;
         this.employee = employee;
+        setupController(controller);
 
         setupButtonActions();
     }
@@ -102,7 +108,7 @@ public class GroupBookingController {
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setupContext(mainController, employee);
+            roomBookingController.setupContext(mainController, employee, topBarController);
 
             mainController.getMainPanel().getChildren().clear();
             mainController.getMainPanel().getChildren().addAll(layout.getChildren());
