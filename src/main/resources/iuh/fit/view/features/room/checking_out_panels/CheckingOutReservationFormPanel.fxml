@@ -342,6 +342,16 @@
                                        <font>
                                           <Font size="16.0" />
                                        </font>
+                                       <graphic>
+                                          <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../../icons/room_booking_menu_icons/ic_checkout_btn.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
                                     </Button>
                                  </children>
                               </HBox>

@@ -64,7 +64,7 @@
 .button-delete-reservation-form {
     -fx-background-color: RGB(200, 120, 120);
     -fx-text-fill: white;
-    -fx-min-width: 200px;
+    -fx-min-width: 300px;
 }
 
 .button-delete-reservation-form:hover {
@@ -78,7 +78,7 @@
 .button-check-in {
     -fx-background-color: RGB(135, 162, 255);
     -fx-text-fill: white;
-    -fx-min-width: 200px;
+    -fx-min-width: 300px;
 }
 
 .button-check-in:hover {
@@ -207,15 +207,15 @@
     -fx-background-color: RGB(70, 130, 180);
 }
 
+.button-reservation:hover {
+    -fx-background-color: RGB(70, 130, 180);
+}
+
 .button-reservation-selected {
     -fx-background-color: rgb(253, 139, 81);
     -fx-border-color: transparent;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
-}
-
-.button-reservation-selected:hover {
-    -fx-background-color: rgb(253, 139, 81);
 }
 
 .button-reservation:disabled {
@@ -228,22 +228,6 @@
 /* ========================================================== */
 /* Add ReservationForm Btn */
 /* ========================================================== */
-.button-add-reservation {
-    -fx-background-color: rgb(136, 194, 115);
-    -fx-border-color: transparent;
-    -fx-border-width: 2px;
-    -fx-border-radius: 5px;
-}
-
-.button-add-reservation:hover {
-    -fx-background-color: rgb(79, 111, 82);
-    -fx-border-color: rgb(65, 176, 110);
-}
-
-.button-add-reservation:pressed {
-    -fx-background-color: RGB(0, 255, 0);
-}
-
 .button-delete-reservation-form-2 {
     -fx-background-color: RGB(200, 120, 120);
     -fx-text-fill: white;
@@ -257,6 +241,9 @@
     -fx-background-color: RGB(150, 0, 0);
 }
 
+/* ========================================================== */
+/* Statistics Button */
+/* ========================================================== */
 .button-excel {
     -fx-background-color: #4CAF50;
     -fx-text-fill: white;

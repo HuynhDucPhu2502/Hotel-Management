@@ -411,12 +411,12 @@
                               </TitledPane>
                               <HBox alignment="CENTER" spacing="20.0" stylesheets="@../../../../styles/Button.css">
                                  <children>
-                                    <Button fx:id="deleteReservationFormBtn" minWidth="200.0" mnemonicParsing="false" styleClass="button-delete-reservation-form" text="Xóa Phiếu" textFill="WHITE">
+                                    <Button fx:id="deleteReservationFormBtn" mnemonicParsing="false" styleClass="button-delete-reservation-form" text="Xóa Phiếu" textFill="WHITE">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
                                        <graphic>
-                                          <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../../../../icons/room_booking_menu_icons/ic_delete.png" />
                                              </image>
@@ -428,9 +428,9 @@
                                           <Font size="16.0" />
                                        </font>
                                        <graphic>
-                                          <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../../../../icons/room_booking_menu_icons/ic_checkin.png" />
+                                                <Image url="@../../../../icons/room_booking_menu_icons/ic_checkin_btn.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -440,9 +440,9 @@
                                           <Font size="16.0" />
                                        </font>
                                        <graphic>
-                                          <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@../../../../icons/room_booking_menu_icons/ic_checkin.png" />
+                                                <Image url="@../../../../icons/room_booking_menu_icons/ic_checkin_btn.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
