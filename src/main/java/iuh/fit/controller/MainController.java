@@ -231,7 +231,7 @@ public class MainController {
                         employeeInformationController.setupContext(account.getEmployee(), mainController);
 
                 case DashboardController dashboardController ->
-                        dashboardController.setupContext(account, mainController);
+                    dashboardController.setupContext(account, mainController);
 
                 case EmployeeSearchingController employeeSearchingController ->
                         employeeSearchingController.setupContext(this);
@@ -248,7 +248,10 @@ public class MainController {
                 default -> {}
             }
 
-            if (!fxmlPath.contains("RoomBookingPanel")) TimelineManager.getInstance().stopAllTimelines();
+            if (!fxmlPath.contains("RoomBookingPanel") && !fxmlPath.contains("DashBoardPanel")) {
+                TimelineManager.getInstance().removeTimeline("REALTIME_DASHBOARD");
+                TimelineManager.getInstance().stopAllTimelines();
+            }
             ROOM_BOOKING_LOADED = fxmlPath.contains("RoomBookingPanel");
 
             mainPanel.getChildren().clear();
