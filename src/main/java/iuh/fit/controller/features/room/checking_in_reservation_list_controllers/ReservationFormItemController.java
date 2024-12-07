@@ -28,12 +28,8 @@ public class ReservationFormItemController {
     private ReservationForm reservationForm;
     private Employee employee;
     private RoomWithReservation roomWithReservation;
+    private NotificationButtonController notificationButtonController;
 
-    private static NotificationButtonController topBarController;
-
-    public static void setupController(NotificationButtonController controller){
-        topBarController = controller;
-    }
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
@@ -42,13 +38,13 @@ public class ReservationFormItemController {
             ReservationForm reservationForm,
             Employee employee,
             RoomWithReservation roomWithReservation,
-            NotificationButtonController controller
+            NotificationButtonController notificationButtonController
     ) {
         this.mainController = mainController;
         this.reservationForm = reservationForm;
         this.employee = employee;
         this.roomWithReservation = roomWithReservation;
-        setupController(controller);
+        this.notificationButtonController = notificationButtonController;
 
         Customer customer = reservationForm.getCustomer();
         Employee reservationFormEmployee = reservationForm.getEmployee();
@@ -73,7 +69,7 @@ public class ReservationFormItemController {
 
             ReservationFormDetailsController reservationFormDetailsController = loader.getController();
             reservationFormDetailsController.setupContext(
-                    mainController, reservationForm, employee, roomWithReservation, topBarController
+                    mainController, reservationForm, employee, roomWithReservation, notificationButtonController
             );
 
             mainController.getMainPanel().getChildren().clear();

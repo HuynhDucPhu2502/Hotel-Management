@@ -83,7 +83,6 @@ public class CheckingOutReservationFormController {
     private MainController mainController;
     private RoomWithReservation roomWithReservation;
     private Employee employee;
-
     private NotificationButtonController notificationButtonController;
 
     // ==================================================================================================================

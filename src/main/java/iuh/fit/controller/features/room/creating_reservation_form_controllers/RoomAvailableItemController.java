@@ -24,20 +24,19 @@ public class RoomAvailableItemController {
     private Employee employee;
     private RoomWithReservation roomWithReservation;
 
-    private static NotificationButtonController topBarController;
-    public static void setupController(NotificationButtonController controller){
-        topBarController = controller;
-    }
+    private NotificationButtonController notificationButtonController;
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
-    public void setupContext(MainController mainController, Employee employee, RoomWithReservation roomWithReservation
-            , NotificationButtonController controller) {
+    public void setupContext(MainController mainController,
+                             Employee employee,
+                             RoomWithReservation roomWithReservation,
+                             NotificationButtonController notificationButtonController) {
         this.mainController = mainController;
         this.employee = employee;
         this.roomWithReservation = roomWithReservation;
-        setupController(controller);
+        this.notificationButtonController = notificationButtonController;
 
         Room room = roomWithReservation.getRoom();
         roomCategoryNameLabel.setText(room.getRoomCategory().getRoomCategoryName());
@@ -57,7 +56,7 @@ public class RoomAvailableItemController {
             CreateReservationFormController createReservationFormController = loader.getController();
             createReservationFormController.setupContext(
                     mainController, employee, roomWithReservation,
-                    null, null, null, topBarController
+                    null, null, null, notificationButtonController
             );
 
             mainController.getMainPanel().getChildren().clear();

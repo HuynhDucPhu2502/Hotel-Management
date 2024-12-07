@@ -54,12 +54,8 @@ public class ReservationListController {
     private Room room;
     private List<ReservationForm> reservationForms;
     private RoomWithReservation roomWithReservation;
+    private NotificationButtonController notificationButtonController;
 
-    private static NotificationButtonController topBarController;
-
-    public static void setController(NotificationButtonController controller){
-        topBarController = controller;
-    }
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
@@ -71,13 +67,13 @@ public class ReservationListController {
     public void setupContext(
             MainController mainController, Employee employee,
             RoomWithReservation roomWithReservation,
-            NotificationButtonController controller
+            NotificationButtonController notificationButtonController
     ) {
         this.mainController = mainController;
         this.employee = employee;
         this.roomWithReservation = roomWithReservation;
         this.room = roomWithReservation.getRoom();
-        setController(controller);
+        this.notificationButtonController = notificationButtonController;
 
         titledPane.setText("Quản lý đặt phòng " + room.getRoomNumber());
 
@@ -123,7 +119,7 @@ public class ReservationListController {
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setupContext(mainController, employee, topBarController);
+            roomBookingController.setupContext(mainController, employee, notificationButtonController);
 
             mainController.getMainPanel().getChildren().clear();
             mainController.getMainPanel().getChildren().addAll(layout.getChildren());
@@ -143,7 +139,7 @@ public class ReservationListController {
                     null,
                     null,
                     null,
-                    topBarController
+                    notificationButtonController
             );
 
             mainController.getMainPanel().getChildren().clear();
@@ -160,7 +156,7 @@ public class ReservationListController {
 
             RoomChangingController roomChangingController = loader.getController();
             roomChangingController.setupContext(
-                    mainController, employee, roomWithReservation, topBarController
+                    mainController, employee, roomWithReservation, notificationButtonController
             );
 
             mainController.getMainPanel().getChildren().clear();
@@ -177,7 +173,7 @@ public class ReservationListController {
 
             ServiceOrderingController serviceOrderingController = loader.getController();
             serviceOrderingController.setupContext(
-                    mainController, employee, roomWithReservation, topBarController
+                    mainController, employee, roomWithReservation, notificationButtonController
             );
 
             mainController.getMainPanel().getChildren().clear();
@@ -194,7 +190,7 @@ public class ReservationListController {
 
             CheckingOutEarlyReservationFormController checkingOutEarlyReservationFormController = loader.getController();
             checkingOutEarlyReservationFormController.setupContext(
-                    mainController, employee, roomWithReservation, topBarController
+                    mainController, employee, roomWithReservation, notificationButtonController
             );
 
             mainController.getMainPanel().getChildren().clear();
@@ -223,7 +219,8 @@ public class ReservationListController {
                     reservationFormItem = loader.load();
 
                     ReservationFormItemController controller = loader.getController();
-                    controller.setupContext(mainController, reservationForm, employee, roomWithReservation, topBarController);
+                    controller.setupContext(mainController, reservationForm, employee,
+                            roomWithReservation, notificationButtonController);
 
                     reservationFormGidPane.add(reservationFormItem, col, row);
 
