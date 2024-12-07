@@ -44,18 +44,17 @@ public class RoomOverDueController {
     private java.time.Duration duration;
     private Timeline timeline;
 
-    private static NotificationButtonController topBarController;
-    public static void setupController(NotificationButtonController controller){
-        topBarController = controller;
-    }
+    private NotificationButtonController notificationButtonController;
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
-    public void setupContext(MainController mainController, Employee employee, RoomWithReservation roomWithReservation) {
+    public void setupContext(MainController mainController, Employee employee,
+                             RoomWithReservation roomWithReservation, NotificationButtonController notificationButtonController) {
         this.mainController = mainController;
         this.employee = employee;
         this.roomWithReservation = roomWithReservation;
+        this.notificationButtonController = notificationButtonController;
 
         Room room = roomWithReservation.getRoom();
         Customer customer = roomWithReservation.getReservationForm().getCustomer();
@@ -103,7 +102,7 @@ public class RoomOverDueController {
         if (hours >= 2) {
             if (timeline != null) {
                 if (MainController.isRoomBookingLoaded()) navigateToRoomBookingPanel(false);
-                else RoomManagementService.autoCheckoutOverdueRooms(topBarController);
+                else RoomManagementService.autoCheckoutOverdueRooms(notificationButtonController);
                 TimelineManager.getInstance().removeTimeline(roomWithReservation.getRoom().getRoomID() + RoomStatus.OVERDUE.name());
             }
 
@@ -127,7 +126,7 @@ public class RoomOverDueController {
 
             CheckingOutReservationFormController checkingOutReservationFormController = loader.getController();
             checkingOutReservationFormController.setupContext(
-                    mainController, employee, roomWithReservation
+                    mainController, employee, roomWithReservation, notificationButtonController
             );
 
 
@@ -145,7 +144,7 @@ public class RoomOverDueController {
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setupContext(mainController, employee, topBarController);
+            roomBookingController.setupContext(mainController, employee, notificationButtonController);
             if (isError)
                 roomBookingController.getDialogPane().showInformation(
                         "Không thể thực hiện thao tác",

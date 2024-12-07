@@ -42,18 +42,17 @@ public class RoomOnUseItemController {
 
     private Timeline timeline;
 
-    private static NotificationButtonController topBarController;
-    public static void setupController(NotificationButtonController controller){
-        topBarController = controller;
-    }
-
+    private  NotificationButtonController notificationButtonController;
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
     // ==================================================================================================================
-    public void setupContext(MainController mainController, Employee employee, RoomWithReservation roomWithReservation) {
+    public void setupContext(MainController mainController, Employee employee,
+                             RoomWithReservation roomWithReservation, NotificationButtonController notificationButtonController) {
         this.mainController = mainController;
         this.employee = employee;
         this.roomWithReservation = roomWithReservation;
+        this.notificationButtonController = notificationButtonController;
+
         Room room = roomWithReservation.getRoom();
         Customer customer = roomWithReservation.getReservationForm().getCustomer();
         ReservationForm reservationForm = roomWithReservation.getReservationForm();
@@ -83,7 +82,7 @@ public class RoomOnUseItemController {
                         timeline.stop();
                         TimelineManager.getInstance().removeTimeline(timelineKey);
                         if (MainController.isRoomBookingLoaded()) navigateToRoomBookingPanel(false);
-                        else RoomManagementService.autoCheckoutOverdueRooms(topBarController);
+                        else RoomManagementService.autoCheckoutOverdueRooms(notificationButtonController);
                     }
                 })
         );
@@ -116,7 +115,7 @@ public class RoomOnUseItemController {
             CreateReservationFormController createReservationFormController = loader.getController();
             createReservationFormController.setupContext(
                     mainController, employee, roomWithReservation,
-                    null, null, null, topBarController
+                    null, null, null, notificationButtonController
             );
 
             mainController.getMainPanel().getChildren().clear();
@@ -133,7 +132,7 @@ public class RoomOnUseItemController {
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setupContext(mainController, employee, topBarController);
+            roomBookingController.setupContext(mainController, employee, notificationButtonController);
             if (isError)
                 roomBookingController.getDialogPane().showInformation(
                         "Không thể thực hiện thao tác",

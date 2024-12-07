@@ -4,8 +4,9 @@ import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.RoomBookingController;
-
-import iuh.fit.dao.*;
+import iuh.fit.dao.HistoryCheckinDAO;
+import iuh.fit.dao.RoomReservationDetailDAO;
+import iuh.fit.dao.RoomUsageServiceDAO;
 import iuh.fit.models.*;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class CheckingOutReservationFormController {
+public class CheckingOutEarlyReservationFormController {
     // ==================================================================================================================
     // 1. Các biến
     // ==================================================================================================================
@@ -84,7 +85,7 @@ public class CheckingOutReservationFormController {
     private RoomWithReservation roomWithReservation;
     private Employee employee;
 
-    private NotificationButtonController notificationButtonController;
+    private static NotificationButtonController notificationButtonController;
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
@@ -166,7 +167,7 @@ public class CheckingOutReservationFormController {
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setupContext(mainController, employee, topBarController);
+            roomBookingController.setupContext(mainController, employee, notificationButtonController);
 
 
             mainController.getMainPanel().getChildren().clear();
@@ -229,7 +230,7 @@ public class CheckingOutReservationFormController {
     // ==================================================================================================================
     private void handleCheckOut() {
         try {
-            com.dlsc.gemsfx.DialogPane.Dialog<ButtonType> confirmDialog = dialogPane.showConfirmation(
+            DialogPane.Dialog<ButtonType> confirmDialog = dialogPane.showConfirmation(
                     "XÁC NHẬN CHECK-OUT",
                     "Bạn có chắc chắn muốn thực hiện check-out cho phòng này không?"
             );
@@ -240,7 +241,7 @@ public class CheckingOutReservationFormController {
                         RoomManagementService.handleCheckOut(roomWithReservation, employee);
 
                         dialogPane.showInformation("THÀNH CÔNG", "Check-out và tạo hóa đơn thành công!");
-                        topBarController.getInfo(
+                        notificationButtonController.getInfo(
                                 GlobalMessage.MANUALLY_CHECKOUT,
                                 "Phòng " + roomWithReservation.getRoom().getRoomID() + " đã được checkout thủ công"
                         );

@@ -42,18 +42,17 @@ public class InvoiceManagerController {
     private Employee employee;
     private List<Invoice> invoiceList;
 
-    private static NotificationButtonController topBarController;
-    public static void setupController(NotificationButtonController controller){
-        topBarController = controller;
-    }
+    private static NotificationButtonController notificationButtonController;
 
     public void initialize() {
         setupSearchListeners();
     }
 
-    public void setupContext(MainController mainController, Employee employee) {
+    public void setupContext(MainController mainController, Employee employee,
+                             NotificationButtonController notificationButtonController) {
         this.mainController = mainController;
         this.employee = employee;
+        this.notificationButtonController = notificationButtonController;
 
         loadData();
     }
@@ -62,7 +61,7 @@ public class InvoiceManagerController {
         Task<List<Invoice>> loadDataTask = new Task<>() {
             @Override
             protected List<Invoice> call() {
-                RoomManagementService.autoCheckoutOverdueRooms(topBarController);
+                RoomManagementService.autoCheckoutOverdueRooms(notificationButtonController);
 
                 return InvoiceDAO.getAllInvoices();
             }

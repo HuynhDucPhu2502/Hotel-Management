@@ -4,6 +4,7 @@ import com.dlsc.gemsfx.DialogPane;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.RoomBookingController;
+import iuh.fit.controller.features.room.checking_out_controllers.CheckingOutEarlyReservationFormController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
 import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
@@ -103,6 +104,7 @@ public class ReservationListController {
         } else {
             navigateToRoomChangingBtn.setOnAction(e -> navigateToRoomChangingPanel());
             navigateToServiceOrdering.setOnAction(e -> navigateToServiceOrderingPanel());
+            navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutEarlyReservationFormPanel());
         }
 
 
@@ -175,6 +177,23 @@ public class ReservationListController {
 
             ServiceOrderingController serviceOrderingController = loader.getController();
             serviceOrderingController.setupContext(
+                    mainController, employee, roomWithReservation, topBarController
+            );
+
+            mainController.getMainPanel().getChildren().clear();
+            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void navigateToCheckingOutEarlyReservationFormPanel() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/checking_out_panels/CheckingOutEarlyReservationFormPanel.fxml"));
+            AnchorPane layout = loader.load();
+
+            CheckingOutEarlyReservationFormController checkingOutEarlyReservationFormController = loader.getController();
+            checkingOutEarlyReservationFormController.setupContext(
                     mainController, employee, roomWithReservation, topBarController
             );
 

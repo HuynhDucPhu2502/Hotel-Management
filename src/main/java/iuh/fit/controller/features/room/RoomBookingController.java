@@ -56,10 +56,7 @@ public class RoomBookingController {
     private Button activeButton;
     private RoomStatus selectedStatus = null;
 
-    private static NotificationButtonController topBarController;
-    public static void setupController(NotificationButtonController controller){
-        topBarController = controller;
-    }
+    private NotificationButtonController notificationButtonController;
 
     public void initialize() {
         dialogPane.toFront();
@@ -67,13 +64,13 @@ public class RoomBookingController {
         setActiveButtonStyle(allBtn);
         MainController.setRoomBookingLoaded(true);
 
-
     }
 
-    public void setupContext(MainController mainController, Employee employeee, NotificationButtonController topBarController) {
+    public void setupContext(MainController mainController, Employee employee,
+                             NotificationButtonController notificationButtonController) {
         this.mainController = mainController;
-        this.employee = employeee;
-        setupController(topBarController);
+        this.employee = employee;
+        this.notificationButtonController = notificationButtonController;
         loadData();
         setupEventHandlers();
 
@@ -107,7 +104,7 @@ public class RoomBookingController {
                     roomFloorNumberCBox.getSelectionModel().selectFirst();
                 });
 
-                RoomManagementService.autoCheckoutOverdueRooms(topBarController);
+                RoomManagementService.autoCheckoutOverdueRooms(notificationButtonController);
                 return RoomWithReservationDAO.getRoomWithReservation().stream()
                         .sorted(Comparator.comparing(r -> r.getRoom().getRoomNumber()))
                         .toList();
@@ -171,7 +168,7 @@ public class RoomBookingController {
                 roomItem = loader.load();
 
                 RoomAvailableItemController controller = loader.getController();
-                controller.setupContext(mainController, employee, roomWithReservation, topBarController);
+                controller.setupContext(mainController, employee, roomWithReservation, notificationButtonController);
             }
             case ON_USE -> {
                 loader = new FXMLLoader(getClass().getResource(
@@ -187,7 +184,7 @@ public class RoomBookingController {
                 roomItem = loader.load();
 
                 RoomOverDueController controller = loader.getController();
-                controller.setupContext(mainController, employee, roomWithReservation);
+                controller.setupContext(mainController, employee, roomWithReservation, notificationButtonController);
             }
             default -> throw new IllegalStateException("Unexpected value: " + room.getRoomStatus());
         }
@@ -283,7 +280,7 @@ public class RoomBookingController {
             AnchorPane layout = loader.load();
 
             GroupBookingController groupBookingController = loader.getController();
-            groupBookingController.setupContext(mainController, employee, topBarController);
+            groupBookingController.setupContext(mainController, employee, notificationButtonController);
 
 
             mainController.getMainPanel().getChildren().clear();

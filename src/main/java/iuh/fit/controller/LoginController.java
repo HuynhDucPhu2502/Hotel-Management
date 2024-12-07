@@ -1,7 +1,6 @@
 package iuh.fit.controller;
 
 import com.dlsc.gemsfx.DialogPane;
-import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.dao.ShiftDAO;
@@ -80,7 +79,6 @@ public class LoginController {
     @FXML private Button cancelRestoreButton;
     @FXML private Button confirmPassRestoreButton;
     @FXML private Button restoreDataButton;
-    private static NotificationButtonController topBarController;
 
     @FXML
     public void initialize() {
@@ -222,11 +220,9 @@ public class LoginController {
                 );
             else {
                 loadMainUI(account, currentShift);
-                RoomManagementService.startAutoCheckoutScheduler(topBarController);
             }
         } else if (position.equals(Position.MANAGER)) {
             loadMainUI(account, currentShift);
-            RoomManagementService.startAutoCheckoutScheduler(topBarController);
         }
     }
 
@@ -238,7 +234,6 @@ public class LoginController {
             MainController mainController = fxmlLoader.getController();
 
             mainController.setAccount(account);
-            topBarController = mainController.getNotificationController();
             mainController.setShift(currentShift);
 
 

@@ -24,6 +24,7 @@ import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.*;
 import iuh.fit.models.enums.Position;
 import iuh.fit.models.wrapper.RoomWithReservation;
+import iuh.fit.utils.RoomManagementService;
 import iuh.fit.utils.TimelineManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -73,10 +74,6 @@ public class MainController {
         this.shift = shift;
     }
 
-    public NotificationButtonController getNotificationController(){
-        return  topBarController;
-    }
-
     public void initializeDashboard() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/DashboardPanel.fxml"));
@@ -117,6 +114,8 @@ public class MainController {
 
             TopController topController = loader.getController();
             topBarController = topController.initialize(account, this);
+
+            RoomManagementService.startAutoCheckoutScheduler(topBarController);
 
             topPanel.getChildren().clear();
             topPanel.getChildren().addAll(topLayout.getChildren());

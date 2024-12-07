@@ -1,10 +1,5 @@
 package iuh.fit.controller.features;
 
-import iuh.fit.controller.features.invoice.InvoiceManagerController;
-import iuh.fit.controller.features.room.RoomBookingController;
-import iuh.fit.controller.features.room.checking_out_controllers.CheckingOutReservationFormController;
-import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOnUseItemController;
-import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOverDueController;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.dao.MessageDAO;
 import iuh.fit.models.Account;
@@ -55,7 +50,6 @@ public class NotificationButtonController {
     public NotificationButtonController initialize(Account account){
         createEmptyNotification();
         createDeleteButton();
-        createEventListener();
         setupContext(account);
         createPopupMessage();
         Platform.runLater(this::drawingBeforeShowing);
@@ -67,7 +61,6 @@ public class NotificationButtonController {
 
     public void setupContext(Account account){
         this.currentAccount = account;
-        createEventListener();
     }
 
     private void drawingBeforeShowing(){
@@ -269,11 +262,4 @@ public class NotificationButtonController {
         checkNotification();
     }
 
-    private void createEventListener(){
-        CheckingOutReservationFormController.setupController(this);
-        RoomOverDueController.setupController(this);
-        InvoiceManagerController.setupController(this);
-        RoomBookingController.setupController(this);
-        RoomOnUseItemController.setupController(this);
-    }
 }
