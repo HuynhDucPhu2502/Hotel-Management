@@ -1269,7 +1269,7 @@ GO
 
 -- Phiếu 4: đã checkin và gần tới giờ checkout (trong 5 phút nữa)
 INSERT INTO ReservationForm (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit, isActivate)
-VALUES ('RF-000110', DATEADD(DAY, -1, GETDATE()), DATEADD(HOUR, -23, GETDATE()), DATEADD(MINUTE, 2, GETDATE()), 'EMP-000004', 'V2206', 'CUS-000004', 500000, 'ACTIVATE');
+VALUES ('RF-000110', DATEADD(DAY, -1, GETDATE()), DATEADD(HOUR, -23, GETDATE()), DATEADD(MINUTE, 3, GETDATE()), 'EMP-000004', 'V2206', 'CUS-000004', 500000, 'ACTIVATE');
 
 INSERT INTO HistoryCheckin (historyCheckInID, checkInDate, reservationFormID, employeeID)
 VALUES ('HCI-000003', DATEADD(HOUR, -23, GETDATE()), 'RF-000110', 'EMP-000004');
