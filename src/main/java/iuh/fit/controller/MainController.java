@@ -119,7 +119,7 @@ public class MainController {
             AnchorPane topLayout = loader.load();
 
             TopController topController = loader.getController();
-            topBarController = topController.initialize(account, this, main);
+            topBarController = topController.initialize(account, this);
 
             topPanel.getChildren().clear();
             topPanel.getChildren().addAll(topLayout.getChildren());

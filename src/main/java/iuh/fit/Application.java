@@ -1,7 +1,6 @@
 package iuh.fit;
 
 import iuh.fit.controller.LoginController;
-import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.utils.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -39,7 +38,6 @@ public class Application extends javafx.application.Application {
             AnchorPane root = loader.load();
 
             LoginController controller = loader.getController();
-            controller.initialize(this);
 
             Scene scene = new Scene(root);
 

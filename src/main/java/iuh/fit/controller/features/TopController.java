@@ -1,7 +1,5 @@
 package iuh.fit.controller.features;
 
-import iuh.fit.Application;
-import iuh.fit.controller.LoginController;
 import iuh.fit.controller.MainController;
 import iuh.fit.models.Account;
 import javafx.animation.KeyFrame;
@@ -37,11 +35,9 @@ public class TopController {
 
     private NotificationButtonController topBarController;
 
-    private Application main;
-
     @FXML
-    public NotificationButtonController initialize(Account account, MainController mainController, Application main) {
-        setupContext(account, mainController, main);
+    public NotificationButtonController initialize(Account account, MainController mainController) {
+        setupContext(account, mainController);
         // clock
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateClock()));
         timeline.setCycleCount(Timeline.INDEFINITE); //
@@ -55,10 +51,9 @@ public class TopController {
         return topBarController;
     }
 
-    public void setupContext(Account account, MainController mainController, Application main) {
+    public void setupContext(Account account, MainController mainController) {
         this.currentAccount = account;
         this.mainController = mainController;
-        this.main = main;
     }
 
     private void updateClock() {
@@ -70,9 +65,6 @@ public class TopController {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/LoginUI.fxml"));
             AnchorPane loginPane = fxmlLoader.load();
-
-            LoginController controller = fxmlLoader.getController();
-            controller.initialize(main);
 
             Stage currentStage = (Stage) (logoutBtn.getScene().getWindow());
 
@@ -94,11 +86,9 @@ public class TopController {
     }
 
     private void handleTooltips() {
-        // Tạo Tooltip
         Tooltip tooltip = new Tooltip("Đăng xuất");
-        Tooltip.install(logoutBtn, tooltip); // Gắn Tooltip vào Button
+        Tooltip.install(logoutBtn, tooltip);
 
-        // Thêm Tooltip bằng cách setTooltip
         logoutBtn.setTooltip(tooltip);
         tooltip.setShowDelay(javafx.util.Duration.millis(400));
     }

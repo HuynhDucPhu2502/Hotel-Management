@@ -1,6 +1,5 @@
 package iuh.fit.controller.features;
 
-import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.invoice.InvoiceManagerController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.checking_out_controllers.CheckingOutReservationFormController;
@@ -51,7 +50,8 @@ public class NotificationButtonController {
     private final Popup popup = new Popup();
     private final ScrollPane contentScrollPane = new ScrollPane();
     private final VBox messageListContainer = new VBox();
-
+  
+  
     public NotificationButtonController initialize(Account account){
         createEmptyNotification();
         createDeleteButton();
