@@ -224,7 +224,6 @@ public class LoginController {
                 );
             else {
                 loadMainUI(account, currentShift);
-//                main.setNotificationControllerForMain(topBarController);
                 try {
                     RoomManagementService.startAutoCheckoutScheduler(topBarController);
                 }catch (Exception e){
@@ -233,7 +232,6 @@ public class LoginController {
             }
         } else if (position.equals(Position.MANAGER)) {
             loadMainUI(account, currentShift);
-//            main.setNotificationControllerForMain(topBarController);
             try {
                 RoomManagementService.startAutoCheckoutScheduler(topBarController);
             }catch (Exception e){

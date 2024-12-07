@@ -17,9 +17,6 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public class Application extends javafx.application.Application {
 
-//    private NotificationButtonController topBarController;
-//    private boolean isNotificationControllerSet = false;
-
     @Override
     public void start(Stage primaryStage) throws IOException, SQLException {
         primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/iuh/fit/imgs/hotel_logo.png")).toString()));
@@ -27,11 +24,6 @@ public class Application extends javafx.application.Application {
         startWithLogin(primaryStage);
         //startWithoutLogin(primaryStage);
     }
-
-//    public void setNotificationControllerForMain(NotificationButtonController controller){
-//        this.topBarController = controller;
-//        isNotificationControllerSet = true;
-//    }
 
     public void startWithLogin(Stage primaryStage) throws SQLException {
         loadUI(primaryStage);
