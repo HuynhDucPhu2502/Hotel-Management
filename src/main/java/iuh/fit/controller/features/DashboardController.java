@@ -76,7 +76,6 @@ public class DashboardController {
     }
 
     private void getNumbersOfRoomInformation(){
-        System.out.println("Kiem tra xem coi timeline co hoat dong hay khong");
         HashMap<RoomStatus, Integer> roomStatusCount = RoomDAO.getRoomStatusCount();
         roomAvailabelCountLabel.setText(String.valueOf(roomStatusCount.get(RoomStatus.AVAILABLE)));
         roomOnUseCountLabel.setText(String.valueOf(roomStatusCount.get(RoomStatus.ON_USE)));
