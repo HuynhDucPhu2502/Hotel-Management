@@ -5,12 +5,17 @@ import iuh.fit.dao.RoomDAO;
 import iuh.fit.models.Account;
 import iuh.fit.models.enums.Position;
 import iuh.fit.models.enums.RoomStatus;
+import iuh.fit.utils.TimelineManager;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.util.Duration;
 
 import java.util.HashMap;
 
@@ -40,8 +45,8 @@ public class DashboardController {
     public void initialize() {
     }
 
-    public void setupContext(Account accoun, MainController mainController) {
-        this.account = accoun;
+    public void setupContext(Account account, MainController mainController) {
+        this.account = account;
         this.mainController = mainController;
 
         loadData();
@@ -51,14 +56,30 @@ public class DashboardController {
         String empName = account.getEmployee().getFullName();
         welcomeLabel.setText("Xin chào, " + empName);
 
+        loadDataIntoKeywords();
+        loadFeaturesIntoGridPane();
+        bindSearchFunctionality();
+        Platform.runLater(this::loadNumberOfRoomInformation);
+    }
+
+    private void loadNumberOfRoomInformation(){
+        TimelineManager.getInstance().removeTimeline("REALTIME_DASHBOARD");
+        getNumbersOfRoomInformation();
+        Timeline timeline =  new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            getNumbersOfRoomInformation();
+        }));
+
+        timeline.setCycleCount(Timeline.INDEFINITE); // Lặp vô hạn
+        timeline.play(); // Bắt đầu chạy
+
+        TimelineManager.getInstance().addTimeline("REALTIME_DASHBOARD", timeline);
+    }
+
+    private void getNumbersOfRoomInformation(){
         HashMap<RoomStatus, Integer> roomStatusCount = RoomDAO.getRoomStatusCount();
         roomAvailabelCountLabel.setText(String.valueOf(roomStatusCount.get(RoomStatus.AVAILABLE)));
         roomOnUseCountLabel.setText(String.valueOf(roomStatusCount.get(RoomStatus.ON_USE)));
         roomOverdueCountLabel.setText(String.valueOf(roomStatusCount.get(RoomStatus.OVERDUE)));
-
-        loadDataIntoKeywords();
-        loadFeaturesIntoGridPane();
-        bindSearchFunctionality();
     }
 
     private void loadDataIntoKeywords() {
