@@ -1,6 +1,5 @@
 package iuh.fit.controller.features;
 
-import iuh.fit.Main;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.invoice.InvoiceManagerController;
 import iuh.fit.controller.features.room.RoomBookingController;
@@ -11,7 +10,6 @@ import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.dao.MessageDAO;
 import iuh.fit.models.Account;
 import iuh.fit.models.misc.Notifications;
-import iuh.fit.utils.RoomManagementService;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -33,34 +31,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * @author Le Tran Gia Huy
- * @created 05/12/2024 - 3:48 PM
- * @project HotelManagement
- * @package iuh.fit.controller.features
- */
 public class NotificationButtonController {
     @FXML
     private Button messageBtn;
     @FXML
-    private Circle notifCircle;
+    private Circle notifyCircle;
     @FXML
-    private Label notifNumber;
+    private Label notifyNumber;
     @FXML
     private ImageView img;
 
-    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private Account currentAccount;
-    private List<Notifications> notificationList = new ArrayList<Notifications>();
+    private List<Notifications> notificationList = new ArrayList<>();
     private AnchorPane emptyNotification;
     private AnchorPane buttonPane;
-    Button deleteAllBtn = new Button("Xóa tất cả thông báo");
-    // Tạo formatter với định dạng dd/MM/yyyy HH:mm:ss
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    private final Button deleteAllBtn = new Button("Xóa tất cả thông báo");
 
-    Popup popup = new Popup();
-    ScrollPane contentScrollPane = new ScrollPane();
-    VBox messageList = new VBox();
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    private final Popup popup = new Popup();
+    private final ScrollPane contentScrollPane = new ScrollPane();
+    private final VBox messageListContainer = new VBox();
 
     private MainController mainController;
 
@@ -74,7 +64,6 @@ public class NotificationButtonController {
         loadData();
         handelButton();
 
-        System.out.println("KET QUA NOTIFYCONTROLLER (1): "+this);
         return this;
     }
 
@@ -102,50 +91,48 @@ public class NotificationButtonController {
             popup.getContent().add(contentScrollPane);
         }
         contentScrollPane.setStyle("-fx-background-color: lightgray; -fx-padding: 10; -fx-border-radius: 10; -fx-background-radius: 10;");
-        contentScrollPane.setContent(messageList);
+        contentScrollPane.setContent(messageListContainer);
         contentScrollPane.setFocusTraversable(false);
-        messageList.setSpacing(10);
-        messageList.setStyle("-fx-background-color: lightgray;");
+        messageListContainer.setSpacing(10);
+        messageListContainer.setStyle("-fx-background-color: lightgray;");
         contentScrollPane.setFitToWidth(true);
     }
 
     private void checkNotification(){
         if(notificationList.isEmpty()){
-            if(messageList.getChildren().contains(emptyNotification)){
-                notifCircle.setVisible(false);
-                notifNumber.setVisible(false);
+            if(messageListContainer.getChildren().contains(emptyNotification)){
+                notifyCircle.setVisible(false);
+                notifyNumber.setVisible(false);
             }else{
-                messageList.getChildren().add(emptyNotification);
-                notifCircle.setVisible(false);
-                notifNumber.setVisible(false);
+                messageListContainer.getChildren().add(emptyNotification);
+                notifyCircle.setVisible(false);
+                notifyNumber.setVisible(false);
             }
             checkSize();
         }else if(notificationList.stream().filter(Notifications::isRead).count() == notificationList.size()){
-            messageList.getChildren().remove(emptyNotification);
-            notifCircle.setVisible(false);
-            notifNumber.setVisible(false);
+            messageListContainer.getChildren().remove(emptyNotification);
+            notifyCircle.setVisible(false);
+            notifyNumber.setVisible(false);
             checkSize();
-            if(!messageList.getChildren().contains(buttonPane)){
-                messageList.getChildren().addLast(buttonPane);
+            if(!messageListContainer.getChildren().contains(buttonPane)){
+                messageListContainer.getChildren().addLast(buttonPane);
             }
         }else{
-            messageList.getChildren().remove(emptyNotification);
-            notifCircle.setVisible(true);
-            notifNumber.setVisible(true);
-            Platform.runLater(()->{
-                notifNumber.setText(String.valueOf(notificationList.stream().filter(x-> !x.isRead()).count()));
-            });
+            messageListContainer.getChildren().remove(emptyNotification);
+            notifyCircle.setVisible(true);
+            notifyNumber.setVisible(true);
+            Platform.runLater(()-> notifyNumber.setText(String.valueOf(notificationList.stream().filter(x-> !x.isRead()).count())));
             checkSize();
-            if(!messageList.getChildren().contains(buttonPane)){
-                messageList.getChildren().addLast(buttonPane);
+            if(!messageListContainer.getChildren().contains(buttonPane)){
+                messageListContainer.getChildren().addLast(buttonPane);
             }
         }
     }
 
     private void checkSize(){
-        if(messageList.getChildren().size() <= 1 && messageList.getChildren().contains(emptyNotification)){
+        if(messageListContainer.getChildren().size() <= 1 && messageListContainer.getChildren().contains(emptyNotification)){
             contentScrollPane.setPrefSize(400, 68.5);
-        }else if(messageList.getChildren().size() <= 2){
+        }else if(messageListContainer.getChildren().size() <= 2){
             contentScrollPane.setPrefSize(400, 177.6);
         }else{
             contentScrollPane.setPrefSize(400, 200);
@@ -153,10 +140,8 @@ public class NotificationButtonController {
     }
 
     private void insertNotify(){
-        messageList.getChildren().clear();
-        notificationList.forEach(x->{
-            messageList.getChildren().addFirst(createTextMessage(x));
-        });
+        messageListContainer.getChildren().clear();
+        notificationList.forEach(x-> messageListContainer.getChildren().addFirst(createTextMessage(x)));
         checkNotification();
     }
 
@@ -201,8 +186,8 @@ public class NotificationButtonController {
                 } else {
                     contentScrollPane.setFocusTraversable(false);
                     popup.hide();
-                    notifCircle.setVisible(false);
-                    notifNumber.setVisible(false);
+                    notifyCircle.setVisible(false);
+                    notifyNumber.setVisible(false);
                 }
             });
 
@@ -219,9 +204,7 @@ public class NotificationButtonController {
                 }
             });
 
-            deleteAllBtn.setOnAction(event->{
-                handelDeleteAllNotification();
-            });
+            deleteAllBtn.setOnAction(event-> handelDeleteAllNotification());
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -284,18 +267,13 @@ public class NotificationButtonController {
     }
 
     private void handelDeleteAllNotification(){
-        notificationList.forEach(x->{
-            MessageDAO.deleteData(x.getNotificationID());
-        });
+        notificationList.forEach(x-> MessageDAO.deleteData(x.getNotificationID()));
         notificationList.clear();
-        messageList.getChildren().clear();
+        messageListContainer.getChildren().clear();
         checkNotification();
     }
 
     private void createEventListener(){
-//        Main.setupController(this);
-//        MainController.setupController(this);
-        RoomManagementService.setupController(this);
         CheckingOutReservationFormController.setupController(this);
         RoomOverDueController.setupController(this);
         InvoiceManagerController.setupController(this);

@@ -28,12 +28,12 @@
                     <Cursor fx:constant="HAND" />
                 </cursor>
             </Button>
-            <Circle fx:id="notifCircle" fill="#ff381f" radius="7.9" stroke="#ff381f" strokeType="INSIDE">
+            <Circle fx:id="notifyCircle" fill="#ff381f" radius="7.9" stroke="#ff381f" strokeType="INSIDE">
                 <StackPane.margin>
                     <Insets left="30.0" top="-20.0" />
                 </StackPane.margin>
             </Circle>
-            <Label fx:id="notifNumber" text="2" textFill="WHITE">
+            <Label fx:id="notifyNumber" text="2" textFill="WHITE">
                 <StackPane.margin>
                     <Insets left="31.0" top="-20.0" />
                 </StackPane.margin>
