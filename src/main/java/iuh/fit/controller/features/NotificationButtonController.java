@@ -50,8 +50,8 @@ public class NotificationButtonController {
     private final Popup popup = new Popup();
     private final ScrollPane contentScrollPane = new ScrollPane();
     private final VBox messageListContainer = new VBox();
-
-
+  
+  
     public NotificationButtonController initialize(Account account){
         createEmptyNotification();
         createDeleteButton();
@@ -234,7 +234,6 @@ public class NotificationButtonController {
         content.getChildren().add(alignment);
         content.setStyle("-fx-background-color: white; -fx-padding: 10; -fx-border-radius: 10; -fx-background-radius: 10;");
         content.setPrefWidth(260);
-        System.out.println(content.getHeight());
 
         return content;
     }
