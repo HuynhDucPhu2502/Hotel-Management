@@ -131,7 +131,7 @@ public class TopController {
             AnchorPane buttonLayout = loader.load();
 
             NotificationButtonController notificationButtonController = loader.getController();
-            topBarController = notificationButtonController.initialize(currentAccount, mainController);
+            topBarController = notificationButtonController.initialize(currentAccount);
             buttonPanel.getChildren().clear();
             buttonPanel.getChildren().addAll(buttonLayout.getChildren());
         } catch (Exception e) {

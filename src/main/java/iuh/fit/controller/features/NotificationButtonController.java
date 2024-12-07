@@ -52,13 +52,11 @@ public class NotificationButtonController {
     private final ScrollPane contentScrollPane = new ScrollPane();
     private final VBox messageListContainer = new VBox();
 
-    private MainController mainController;
-
-    public NotificationButtonController initialize(Account account, MainController mainController){
+    public NotificationButtonController initialize(Account account){
         createEmptyNotification();
         createDeleteButton();
         createEventListener();
-        setupContext(account, mainController);
+        setupContext(account);
         createPopupMessage();
         Platform.runLater(this::drawingBeforeShowing);
         loadData();
@@ -67,9 +65,8 @@ public class NotificationButtonController {
         return this;
     }
 
-    public void setupContext(Account account, MainController mainController){
+    public void setupContext(Account account){
         this.currentAccount = account;
-        this.mainController = mainController;
         createEventListener();
     }
 
@@ -237,7 +234,6 @@ public class NotificationButtonController {
         content.getChildren().add(alignment);
         content.setStyle("-fx-background-color: white; -fx-padding: 10; -fx-border-radius: 10; -fx-background-radius: 10;");
         content.setPrefWidth(260);
-        System.out.println(content.getHeight());
 
         return content;
     }
