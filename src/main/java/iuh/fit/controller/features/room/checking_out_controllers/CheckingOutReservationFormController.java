@@ -32,7 +32,7 @@ public class CheckingOutReservationFormController {
     // 1. Các biến
     // ==================================================================================================================
     @FXML
-    private Button backBtn, bookingRoomNavigate, checkOutBtn;
+    private Button backBtn, bookingRoomNavigateLabel, checkOutBtn;
 
     @FXML
     private Label roomNumberLabel, roomCategoryLabel, checkInDateLabel,
@@ -126,7 +126,7 @@ public class CheckingOutReservationFormController {
     private void setupButtonActions() {
         // Label Navigate Button
         backBtn.setOnAction(e -> navigateToRoomBookingPanel());
-        bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
+        bookingRoomNavigateLabel.setOnAction(e -> navigateToRoomBookingPanel());
 
         // Current Panel Button
         checkOutBtn.setOnAction(e -> handleCheckOut());

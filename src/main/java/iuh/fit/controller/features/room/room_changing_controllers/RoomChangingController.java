@@ -5,6 +5,7 @@ import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.ReservationFormDialogViewController;
 import iuh.fit.controller.features.room.RoomBookingController;
+import iuh.fit.controller.features.room.checking_out_controllers.CheckingOutEarlyReservationFormController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
@@ -40,10 +41,11 @@ public class RoomChangingController {
     // 1. Các biến
     // ==================================================================================================================
    @FXML
-   private Button backBtn, bookingRoomNavigate;
+   private Button backBtn, bookingRoomNavigateLabel;
    @FXML
    private Button navigateToCreateReservationFormBtn,
-           navigateToReservationListBtn, navigateToServiceOrderingBtn;
+           navigateToReservationListBtn, navigateToServiceOrderingBtn,
+           navigateToRoomCheckingOutBtn;
     @FXML
     private Button roomDialogBtn;
 
@@ -181,12 +183,13 @@ public class RoomChangingController {
     private void setupButtonActions() {
         // Label Navigate Button
         backBtn.setOnAction(e -> navigateToRoomBookingPanel(false));
-        bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel(false));
+        bookingRoomNavigateLabel.setOnAction(e -> navigateToRoomBookingPanel(false));
 
         // Box Navigate Button
         navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
         navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
         navigateToServiceOrderingBtn.setOnAction(e -> navigateToServiceOrderingPanel());
+        navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutEarlyReservationFormPanel());
 
         // Current Panel Button
         floorNumberCBox.setOnAction(e -> filterAvailableRoomsByFloor());
@@ -269,6 +272,23 @@ public class RoomChangingController {
 
             ServiceOrderingController serviceOrderingController = loader.getController();
             serviceOrderingController.setupContext(
+                    mainController, employee, roomWithReservation, notificationButtonController
+            );
+
+            mainController.getMainPanel().getChildren().clear();
+            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void navigateToCheckingOutEarlyReservationFormPanel() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/checking_out_panels/CheckingOutEarlyReservationFormPanel.fxml"));
+            AnchorPane layout = loader.load();
+
+            CheckingOutEarlyReservationFormController checkingOutEarlyReservationFormController = loader.getController();
+            checkingOutEarlyReservationFormController.setupContext(
                     mainController, employee, roomWithReservation, notificationButtonController
             );
 

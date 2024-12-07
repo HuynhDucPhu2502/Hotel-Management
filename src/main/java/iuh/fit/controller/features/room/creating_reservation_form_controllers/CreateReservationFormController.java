@@ -52,10 +52,10 @@ public class CreateReservationFormController {
     // ==================================================================================================================
     // 1. Các biến
     // ==================================================================================================================
-    @FXML private Button backBtn, bookingRoomNavigate, navigateToCreateCustomerBtn;
+    @FXML private Button backBtn, bookingRoomNavigateLabel, createCustomerNavigateLabel;
 
     @FXML
-    private Button navigateToReservationListBtn, navigateToServiceOrdering,
+    private Button navigateToReservationListBtn, navigateToServiceOrderingBtn,
             navigateToRoomChangingBtn, navigateToRoomCheckingOutBtn;
 
     @FXML private Button addBtn, reservationCheckDateBtn, roomDialogBtn;
@@ -125,23 +125,23 @@ public class CreateReservationFormController {
     private void setupButtonActions() {
         // Label Navigate Button
         backBtn.setOnAction(e -> navigateToRoomBookingPanel());
-        bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
+        bookingRoomNavigateLabel.setOnAction(e -> navigateToRoomBookingPanel());
 
         // Box Navigate Button
         navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
 
         if (room.getRoomStatus() == RoomStatus.AVAILABLE) {
-            navigateToServiceOrdering.setDisable(true);
+            navigateToServiceOrderingBtn.setDisable(true);
             navigateToRoomChangingBtn.setDisable(true);
             navigateToRoomCheckingOutBtn.setDisable(true);
         } else {
             navigateToRoomChangingBtn.setOnAction(e -> navigateToRoomChangingPanel());
-            navigateToServiceOrdering.setOnAction(e -> navigateToServiceOrderingPanel());
+            navigateToServiceOrderingBtn.setOnAction(e -> navigateToServiceOrderingPanel());
             navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutEarlyReservationFormPanel());
         }
 
         // Current Panel Button
-        navigateToCreateCustomerBtn.setOnAction(e -> navigateToAddCustomerPanel());
+        createCustomerNavigateLabel.setOnAction(e -> navigateToAddCustomerPanel());
         addBtn.setOnAction(e -> handleCreateReservationRoom());
         reservationCheckDateBtn.setOnAction(e -> openCalendarViewStage());
         roomDialogBtn.setOnAction(e -> handleShowRoomInformationAction());

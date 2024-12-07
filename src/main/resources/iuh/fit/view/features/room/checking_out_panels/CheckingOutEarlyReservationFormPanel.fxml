@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.dlsc.gemsfx.DialogPane?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -27,7 +28,7 @@
          <content>
             <AnchorPane minHeight="-Infinity">
                <children>
-                  <TitledPane fx:id="titledPane" collapsible="false" style="-fx-border-radius: 50; -fx-background-radius: 50;" stylesheets="@../../../../styles/TitlePanel.css" text="Quản lý đặt phòng" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TitledPane fx:id="titledPane" collapsible="false" style="-fx-border-radius: 50; -fx-background-radius: 50;" text="Quản lý đặt phòng" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
                         <VBox fx:id="upperBox" spacing="30.0">
                            <children>
@@ -47,7 +48,7 @@
                                     </Button>
                                     <AnchorPane>
                                        <children>
-                                          <Button fx:id="bookingRoomNavigate" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Đặt Phòng" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <Button fx:id="bookingRoomNavigateLabel" mnemonicParsing="false" style="-fx-background-color: transparent;" text="Đặt Phòng" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                              <font>
                                                 <Font size="20.0" />
                                              </font>
@@ -79,6 +80,140 @@
                                           </Button>
                                        </children>
                                     </AnchorPane>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" spacing="10.0">
+                                 <children>
+                                    <Button fx:id="navigateToCreateReservationFormBtn" minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
+                                       <graphic>
+                                          <AnchorPane>
+                                             <children>
+                                                <HBox alignment="CENTER" layoutX="-15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../../../icons/room_booking_menu_icons/ic_create_reservation_form.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER" layoutY="128.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
+                                                   <children>
+                                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Tạo phiếu đặt phòng cho phòng này" textAlignment="CENTER" wrappingWidth="170.0">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="navigateToReservationListBtn" minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
+                                       <graphic>
+                                          <AnchorPane>
+                                             <children>
+                                                <HBox alignment="CENTER" layoutX="-15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../../../icons/room_booking_menu_icons/ic_view_reservation_form.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER" layoutY="128.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
+                                                   <children>
+                                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Xem phiếu đặt phòng thuộc phòng này" textAlignment="CENTER" wrappingWidth="170.0">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="navigateToServiceOrderingBtn" minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
+                                       <graphic>
+                                          <AnchorPane>
+                                             <children>
+                                                <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../../../icons/room_booking_menu_icons/ic_add_services.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER" layoutY="128.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
+                                                   <children>
+                                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Gọi Dịch Vụ">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="navigateToRoomChangingBtn" minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
+                                       <graphic>
+                                          <AnchorPane>
+                                             <children>
+                                                <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../../../icons/room_booking_menu_icons/ic_room_changing.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER" layoutY="128.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
+                                                   <children>
+                                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Chuyển Phòng">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="navigateToRoomCheckingOutBtn" minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation-selected">
+                                       <graphic>
+                                          <AnchorPane>
+                                             <children>
+                                                <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../../../icons/room_booking_menu_icons/ic_checkout.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER" layoutY="128.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
+                                                   <children>
+                                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Trả Phòng">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </graphic>
+                                    </Button>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER">
@@ -340,7 +475,7 @@
                                  <children>
                                     <Button fx:id="checkOutBtn" mnemonicParsing="false" prefHeight="37.0" prefWidth="401.0" text="Check Out" textFill="WHITE">
                                        <font>
-                                          <Font size="16.0" />
+                                          <Font name="System Bold" size="16.0" />
                                        </font>
                                        <graphic>
                                           <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
@@ -364,6 +499,10 @@
                      <font>
                         <Font name="System Bold" size="20.0" />
                      </font>
+                     <stylesheets>
+                        <URL value="@../../../../styles/TitlePanel.css" />
+                        <URL value="@../../../../styles/Button.css" />
+                     </stylesheets>
                   </TitledPane>
                </children>
             </AnchorPane>

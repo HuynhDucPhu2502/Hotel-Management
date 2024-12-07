@@ -30,10 +30,10 @@ public class ReservationListController {
     // 1. Các biến
     // ==================================================================================================================
     @FXML
-    private Button backBtn, bookingRoomNavigate;
+    private Button backBtn, bookingRoomNavigateLabel;
 
     @FXML
-    private Button navigateToCreateReservationFormBtn, navigateToServiceOrdering,
+    private Button navigateToCreateReservationFormBtn, navigateToServiceOrderingBtn,
             navigateToRoomChangingBtn, navigateToRoomCheckingOutBtn;
 
     @FXML
@@ -77,9 +77,6 @@ public class ReservationListController {
 
         titledPane.setText("Quản lý đặt phòng " + room.getRoomNumber());
 
-        navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
-        backBtn.setOnAction(e -> navigateToRoomBookingPanel());
-
         loadData();
         displayFilteredRooms(reservationForms);
         setupButtonActions();
@@ -87,19 +84,19 @@ public class ReservationListController {
 
     private void setupButtonActions() {
         // Label Navigate Button
-        navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
+        bookingRoomNavigateLabel.setOnAction(e -> navigateToRoomBookingPanel());
         backBtn.setOnAction(e -> navigateToRoomBookingPanel());
 
         // Box Navigate Button
-        bookingRoomNavigate.setOnAction(e -> navigateToRoomBookingPanel());
+        navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
 
         if (room.getRoomStatus() == RoomStatus.AVAILABLE) {
-            navigateToServiceOrdering.setDisable(true);
+            navigateToServiceOrderingBtn.setDisable(true);
             navigateToRoomChangingBtn.setDisable(true);
             navigateToRoomCheckingOutBtn.setDisable(true);
         } else {
             navigateToRoomChangingBtn.setOnAction(e -> navigateToRoomChangingPanel());
-            navigateToServiceOrdering.setOnAction(e -> navigateToServiceOrderingPanel());
+            navigateToServiceOrderingBtn.setOnAction(e -> navigateToServiceOrderingPanel());
             navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutEarlyReservationFormPanel());
         }
 
