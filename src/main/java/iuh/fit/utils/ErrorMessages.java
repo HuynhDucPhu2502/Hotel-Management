@@ -15,6 +15,7 @@ public class ErrorMessages {
     public static final String NULL_ROOM = "Phòng không được để trống";
     public static final String NULL_RESERVATIONFORM = "Phiếu đặt phòng không được để trống";
     public static final String NULL_INVOICE = "Hóa đơn không được để trống";
+    public static final String NULL_POSITION = "Chức vụ của nhân viên không được để trống";
 
     public static final String STORE_PROCEDURE_ERROR = "Lỗi không xác định từ Stored Procedure.";
 
@@ -157,6 +158,8 @@ public class ErrorMessages {
     public static final String ROOM_CHECKING_IN_INVALID_RESERVATION = "Phiếu đặt phòng không hợp lệ hoặc không tồn tại.";
     public static final String ROOM_CHECKING_IN_TIME_INVALID = "Thời gian check-in không nằm trong khoảng cho phép.";
 
+    // Database
+    public static final String DATABASE_NOT_FOUND = "Không tìm thấy database";
 
 
 }

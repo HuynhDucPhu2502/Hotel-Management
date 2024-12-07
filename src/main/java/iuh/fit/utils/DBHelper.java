@@ -90,5 +90,7 @@ public class DBHelper {
         DATABASE_NAME = databaseName;
     }
 
-
+    public static String getDatabaseName() {
+        return DATABASE_NAME;
+    }
 }

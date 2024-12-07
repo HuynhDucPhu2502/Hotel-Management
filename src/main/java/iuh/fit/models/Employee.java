@@ -94,6 +94,7 @@ public class Employee {
     }
 
     public void setPosition(Position position) {
+        if (position == null) throw new IllegalArgumentException(ErrorMessages.NULL_POSITION);
         this.position = position;
     }
 

@@ -1,7 +1,6 @@
 package iuh.fit.controller;
 
 import com.dlsc.gemsfx.DialogPane;
-import iuh.fit.Application;
 import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.dao.AccountDAO;
 import iuh.fit.dao.EmployeeDAO;
@@ -82,12 +81,10 @@ public class LoginController {
     @FXML private Button confirmPassRestoreButton;
     @FXML private Button restoreDataButton;
     private static NotificationButtonController topBarController;
-    private Application main;
 
     @FXML
-    public void initialize(Application main) {
+    public void initialize() {
         dialogPane.toFront();
-        this.main = main;
         registerEventEnterKey();
         hiddenPasswordField.textProperty().bindBidirectional(visiblePasswordField.textProperty());
         passRestorePasswordField.textProperty().bindBidirectional(passRestoreTextField.textProperty());
@@ -96,6 +93,7 @@ public class LoginController {
             PasswordVisibility();
             changeButtonIconForShowPasswordBtn();
         });
+
         signInButton.setOnAction(event -> {
             try {
                 signIn();
@@ -173,26 +171,25 @@ public class LoginController {
     }
 
     private void signIn() throws SQLException {
-        if(!RestoreDatabase.isDatabaseExist("HotelDatabase")) {
-            errorMessage.setText("Chua co du lieu");
+        if(!RestoreDatabase.isDatabaseExist(DBHelper.getDatabaseName())) {
+            errorMessage.setText(ErrorMessages.DATABASE_NOT_FOUND);
             return;
         }
 
         String userName = userNameField.getText();
+        String password = hiddenPasswordField.getText();
+
         if (userName.isEmpty()) {
             errorMessage.setText(ErrorMessages.LOGIN_INVALID_USERNAME);
             return;
         }
 
-        String password = hiddenPasswordField.getText();
         if (password.isEmpty()) {
             errorMessage.setText(ErrorMessages.LOGIN_INVALID_PASSWORD);
             return;
         }
 
         Account account = AccountDAO.getLogin(userName, password);
-
-        // Kiểm tra tài khoản có tồn tại
         if (account == null) {
             errorMessage.setText(ErrorMessages.LOGIN_INVALID_ACCOUNT);
             return;
@@ -215,6 +212,7 @@ public class LoginController {
         Position position = account.getEmployee().getPosition();
         Shift currentShift = ShiftDAO.getCurrentShiftForLogin(account.getEmployee());
 
+
         if (position.equals(Position.RECEPTIONIST)) {
             if (currentShift == null)
                 dialogPane.showInformation(
@@ -224,19 +222,11 @@ public class LoginController {
                 );
             else {
                 loadMainUI(account, currentShift);
-                try {
-                    RoomManagementService.startAutoCheckoutScheduler(topBarController);
-                }catch (Exception e){
-                    System.out.println("Không tìm thấy database");
-                }
+                RoomManagementService.startAutoCheckoutScheduler(topBarController);
             }
         } else if (position.equals(Position.MANAGER)) {
             loadMainUI(account, currentShift);
-            try {
-                RoomManagementService.startAutoCheckoutScheduler(topBarController);
-            }catch (Exception e){
-                System.out.println("Không tìm thấy database");
-            }
+            RoomManagementService.startAutoCheckoutScheduler(topBarController);
         }
     }
 
