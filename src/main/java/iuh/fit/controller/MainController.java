@@ -54,13 +54,15 @@ public class MainController {
 
     private static NotificationButtonController topBarController;
 
-    private Application main;
+
+
 
 
     // Không xóa
     public void initialize(Application main) {
         Locale locale = new Locale("vi", "VN");
         Locale.setDefault(locale);
+
     }
 
     public void setAccount(Account account) {

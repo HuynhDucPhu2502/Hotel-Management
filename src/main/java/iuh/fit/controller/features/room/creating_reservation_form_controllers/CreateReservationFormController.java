@@ -55,7 +55,7 @@ public class CreateReservationFormController {
 
     @FXML
     private Button navigateToReservationListBtn, navigateToServiceOrdering,
-            navigateToRoomChanging;
+            navigateToRoomChangingBtn, navigateToRoomCheckingOutBtn;
 
     @FXML private Button addBtn, reservationCheckDateBtn, roomDialogBtn;
 
@@ -135,9 +135,10 @@ public class CreateReservationFormController {
 
         if (room.getRoomStatus() == RoomStatus.AVAILABLE) {
             navigateToServiceOrdering.setDisable(true);
-            navigateToRoomChanging.setDisable(true);
+            navigateToRoomChangingBtn.setDisable(true);
+            navigateToRoomCheckingOutBtn.setDisable(true);
         } else {
-            navigateToRoomChanging.setOnAction(e -> navigateToRoomChangingPanel());
+            navigateToRoomChangingBtn.setOnAction(e -> navigateToRoomChangingPanel());
             navigateToServiceOrdering.setOnAction(e -> navigateToServiceOrderingPanel());
         }
 

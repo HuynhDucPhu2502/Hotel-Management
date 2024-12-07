@@ -241,8 +241,11 @@ public class CheckingOutReservationFormController {
                         RoomManagementService.handleCheckOut(roomWithReservation, employee);
 
                         dialogPane.showInformation("THÀNH CÔNG", "Check-out và tạo hóa đơn thành công!");
-                        System.out.println("\nCHECKOUT, phong: +"+ roomWithReservation.getRoom().getRoomID() +"\n");
-                        topBarController.getInfo(GlobalMessage.MANUALLY_CHECKOUT, "Phòng "+roomWithReservation.getRoom().getRoomID()+" đã được checkout thủ công");
+                        topBarController.getInfo(
+                                GlobalMessage.MANUALLY_CHECKOUT,
+                                "Phòng " + roomWithReservation.getRoom().getRoomID() + " đã được checkout thủ công"
+                        );
+
                         navigateToRoomBookingPanel();
                     } catch (Exception ex) {
                         ex.printStackTrace();
