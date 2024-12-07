@@ -33,13 +33,13 @@ import java.util.Objects;
 
 public class NotificationButtonController {
     @FXML
-    private Button messageBtn;
+    private Button notifyButton;
     @FXML
     private Circle notifyCircle;
     @FXML
     private Label notifyNumber;
     @FXML
-    private ImageView img;
+    private ImageView notifyLogo;
 
     private Account currentAccount;
     private List<Notifications> notificationList = new ArrayList<>();
@@ -75,7 +75,7 @@ public class NotificationButtonController {
 
     private void drawingBeforeShowing(){
         Platform.runLater(()->{
-            popup.show(messageBtn.getScene().getWindow(), 0, 0);
+            popup.show(notifyButton.getScene().getWindow(), 0, 0);
             popup.hide();
         });
     }
@@ -154,29 +154,29 @@ public class NotificationButtonController {
         hoverEffect2.setBrightness(-0.2); // Làm màu đậm hơn
 
         // Khi hover vào button
-        messageBtn.setOnMouseEntered(event -> img.setEffect(hoverEffect));
+        notifyButton.setOnMouseEntered(event -> notifyLogo.setEffect(hoverEffect));
 
         // Khi rời chuột khỏi button
-        messageBtn.setOnMouseExited(event -> img.setEffect(null));
+        notifyButton.setOnMouseExited(event -> notifyLogo.setEffect(null));
 
-        messageBtn.setOnMousePressed(event -> img.setEffect(hoverEffect2));
+        notifyButton.setOnMousePressed(event -> notifyLogo.setEffect(hoverEffect2));
 
-        messageBtn.setOnMouseReleased(event -> img.setEffect(null));
+        notifyButton.setOnMouseReleased(event -> notifyLogo.setEffect(null));
 
         try{
-            messageBtn.setOnAction(event -> {
+            notifyButton.setOnAction(event -> {
                 if (!popup.isShowing()) {
                     contentScrollPane.setFocusTraversable(false);
                     contentScrollPane.setVvalue(0);
                     double popupWidth = contentScrollPane.getWidth(); // Lấy chiều rộng thực tế
 
                     // Định vị popup ngay dưới nút
-                    Point2D screenCoords = messageBtn.localToScreen(messageBtn.getLayoutBounds().getMinX(), messageBtn.getLayoutBounds().getMaxY());
+                    Point2D screenCoords = notifyButton.localToScreen(notifyButton.getLayoutBounds().getMinX(), notifyButton.getLayoutBounds().getMaxY());
                     double x = screenCoords.getX() - popupWidth + 35; // Tính toán vị trí popup
                     double y = screenCoords.getY();
 
                     // Hiển thị popup ở vị trí đã tính toán
-                    Window mainWindow = messageBtn.getScene().getWindow();
+                    Window mainWindow = notifyButton.getScene().getWindow();
                     popup.show(mainWindow, x, y);
                     notificationList.forEach(notify->{
                         notify.setRead(true);
@@ -193,11 +193,11 @@ public class NotificationButtonController {
 
             // Lắng nghe sự kiện chuột trên toàn bộ cửa sổ (hoặc root node của scene)
             Platform.runLater(() -> {
-                if (messageBtn.getScene() != null) {
+                if (notifyButton.getScene() != null) {
                     contentScrollPane.setFocusTraversable(false);
-                    messageBtn.getScene().getWindow().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+                    notifyButton.getScene().getWindow().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
                         // Kiểm tra nếu con trỏ chuột không nằm trong popup và không phải là nút thông báo
-                        if (!contentScrollPane.isHover() && !messageBtn.isHover()) {
+                        if (!contentScrollPane.isHover() && !notifyButton.isHover()) {
                             popup.hide();  // Ẩn popup nếu chuột không ở trong popup hay nút
                         }
                     });

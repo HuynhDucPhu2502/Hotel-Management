@@ -13,9 +13,9 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="38.0" prefWidth="13.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.NotificationButtonController">
     <StackPane prefHeight="38.0" prefWidth="13.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <children>
-            <Button fx:id="messageBtn" mnemonicParsing="false" prefHeight="42.0" prefWidth="129.0" style="-fx-background-color: transparent;">
+            <Button fx:id="notifyButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="129.0" style="-fx-background-color: transparent;">
                 <graphic>
-                    <ImageView fx:id="img" fitHeight="32.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                    <ImageView fx:id="notifyLogo" fitHeight="32.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                         <image>
                             <Image url="@../../icons/top_bar_icon/alert_and_message_icon.png" />
                         </image>
