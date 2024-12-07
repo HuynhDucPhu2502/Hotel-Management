@@ -1,6 +1,7 @@
 package iuh.fit.controller.features.invoice;
 
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Invoice;
 import javafx.fxml.FXML;
@@ -27,6 +28,7 @@ public class InvoiceItemController {
     private MainController mainController;
     private Employee employee;
     private Invoice invoice;
+    private NotificationButtonController notificationButtonController;
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
@@ -35,10 +37,12 @@ public class InvoiceItemController {
 
     }
 
-    public void setupContext(MainController mainController, Employee employee, Invoice invoice) {
+    public void setupContext(MainController mainController, Employee employee,
+                             Invoice invoice, NotificationButtonController notificationButtonController) {
         this.mainController = mainController;
         this.employee = employee;
         this.invoice = invoice;
+        this.notificationButtonController = notificationButtonController;
 
         invoiceIDText.setText(invoice.getInvoiceID());
         customerNameLabel.setText(invoice.getReservationForm().getCustomer().getFullName());
@@ -57,7 +61,7 @@ public class InvoiceItemController {
 
             InvoiceDetailsController invoiceDetailsController = loader.getController();
             invoiceDetailsController.setupContext(
-                    mainController, employee, invoice
+                    mainController, employee, invoice, notificationButtonController
             );
 
             mainController.getMainPanel().getChildren().clear();

@@ -176,7 +176,7 @@ public class RoomBookingController {
                 roomItem = loader.load();
 
                 RoomOnUseItemController controller = loader.getController();
-                controller.setupContext(mainController, employee, roomWithReservation);
+                controller.setupContext(mainController, employee, roomWithReservation, notificationButtonController);
             }
             case OVERDUE -> {
                 loader = new FXMLLoader(getClass().getResource(

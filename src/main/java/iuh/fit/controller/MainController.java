@@ -52,7 +52,7 @@ public class MainController {
 
     private static boolean ROOM_BOOKING_LOADED = true;
 
-    private static NotificationButtonController topBarController;
+    private static NotificationButtonController notificationButtonController;
 
     // Không xóa
     public void initialize() {
@@ -113,9 +113,9 @@ public class MainController {
             AnchorPane topLayout = loader.load();
 
             TopController topController = loader.getController();
-            topBarController = topController.initialize(account, this);
+            notificationButtonController = topController.initialize(account, this);
 
-            RoomManagementService.startAutoCheckoutScheduler(topBarController);
+            RoomManagementService.startAutoCheckoutScheduler(notificationButtonController);
 
             topPanel.getChildren().clear();
             topPanel.getChildren().addAll(topLayout.getChildren());
@@ -210,11 +210,11 @@ public class MainController {
 
             switch (controller) {
                 case RoomBookingController roomBookingController ->
-                        roomBookingController.setupContext(mainController, account.getEmployee(), topBarController);
+                        roomBookingController.setupContext(mainController, account.getEmployee(), notificationButtonController);
 
                 case InvoiceManagerController invoiceManagerController -> {
                     Employee employee = EmployeeDAO.getEmployeeByAccountID(account.getAccountID());
-                    invoiceManagerController.setupContext(mainController, employee);
+                    invoiceManagerController.setupContext(mainController, employee, notificationButtonController);
                 }
 
                 case ShiftManagerController shiftManagerController -> {
@@ -310,7 +310,7 @@ public class MainController {
             MainController.setRoomBookingLoaded(false);
             Platform.runLater(() -> controller.setupContext(
                     mainController, account.getEmployee(), room,
-                    null, null, null, topBarController
+                    null, null, null, notificationButtonController
             ));
 
         } catch (Exception e) {

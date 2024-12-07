@@ -166,7 +166,7 @@ public class CheckingOutReservationFormController {
             AnchorPane layout = loader.load();
 
             RoomBookingController roomBookingController = loader.getController();
-            roomBookingController.setupContext(mainController, employee, topBarController);
+            roomBookingController.setupContext(mainController, employee, notificationButtonController);
 
 
             mainController.getMainPanel().getChildren().clear();
@@ -240,7 +240,7 @@ public class CheckingOutReservationFormController {
                         RoomManagementService.handleCheckOut(roomWithReservation, employee);
 
                         dialogPane.showInformation("THÀNH CÔNG", "Check-out và tạo hóa đơn thành công!");
-                        topBarController.getInfo(
+                        notificationButtonController.getInfo(
                                 GlobalMessage.MANUALLY_CHECKOUT,
                                 "Phòng " + roomWithReservation.getRoom().getRoomID() + " đã được checkout thủ công"
                         );

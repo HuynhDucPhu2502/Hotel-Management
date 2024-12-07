@@ -130,7 +130,7 @@ public class InvoiceManagerController {
         Pane invoiceItem = loader.load();
 
         InvoiceItemController controller = loader.getController();
-        controller.setupContext(mainController, employee, invoice);
+        controller.setupContext(mainController, employee, invoice, notificationButtonController);
 
         return invoiceItem;
     }

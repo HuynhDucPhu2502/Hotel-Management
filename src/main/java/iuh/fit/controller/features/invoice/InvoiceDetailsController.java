@@ -3,6 +3,7 @@ package iuh.fit.controller.features.invoice;
 import com.dlsc.gemsfx.DialogPane;
 import com.itextpdf.text.DocumentException;
 import iuh.fit.controller.MainController;
+import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.dao.HistoryCheckOutDAO;
 import iuh.fit.dao.HistoryCheckinDAO;
 import iuh.fit.dao.RoomUsageServiceDAO;
@@ -74,6 +75,7 @@ public class InvoiceDetailsController {
     private MainController mainController;
     private Employee employee;
     private Invoice invoice;
+    private NotificationButtonController notificationButtonController;
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
@@ -83,10 +85,12 @@ public class InvoiceDetailsController {
         setupRoomUsageServiceTableView();
     }
 
-    public void setupContext(MainController mainController, Employee employee, Invoice invoice) {
+    public void setupContext(MainController mainController, Employee employee,
+                             Invoice invoice, NotificationButtonController notificationButtonController) {
         this.mainController = mainController;
         this.employee = employee;
         this.invoice = invoice;
+        this.notificationButtonController = notificationButtonController;
 
         titledPane.setText("Quản Lý Hóa Đơn " + invoice.getInvoiceID());
 
@@ -169,7 +173,7 @@ public class InvoiceDetailsController {
             AnchorPane layout = loader.load();
 
             InvoiceManagerController invoiceManagerController = loader.getController();
-            invoiceManagerController.setupContext(mainController, employee);
+            invoiceManagerController.setupContext(mainController, employee, notificationButtonController);
 
 
             mainController.getMainPanel().getChildren().clear();
