@@ -598,15 +598,18 @@
                               </TitledPane>
                               <HBox alignment="CENTER" prefHeight="37.0" prefWidth="887.0">
                                  <children>
-                                    <AnchorPane minWidth="790.0">
-                                       <children>
-                                          <Button fx:id="addBtn" mnemonicParsing="false" text="TẠO PHIẾU ĐẶT PHÒNG" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <font>
-                                                <Font name="System Bold" size="16.0" />
-                                             </font>
-                                          </Button>
-                                       </children>
-                                    </AnchorPane>
+                                    <Button fx:id="addBtn" mnemonicParsing="false" text="TẠO PHIẾU ĐẶT PHÒNG" textFill="WHITE">
+                                       <font>
+                                          <Font name="System Bold" size="16.0" />
+                                       </font>
+                                       <graphic>
+                                          <ImageView fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../../icons/room_booking_menu_icons/ic_create_reservation_form_btn.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
                                  </children>
                                  <VBox.margin>
                                     <Insets left="40.0" right="40.0" />
