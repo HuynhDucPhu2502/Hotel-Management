@@ -189,6 +189,32 @@
                                           </AnchorPane>
                                        </graphic>
                                     </Button>
+                                    <Button fx:id="navigateToRoomCheckingOutBtn" minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
+                                       <graphic>
+                                          <AnchorPane>
+                                             <children>
+                                                <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../../../icons/room_booking_menu_icons/ic_checkout.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER" layoutY="128.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
+                                                   <children>
+                                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Trả Phòng">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </graphic>
+                                    </Button>
                                  </children>
                               </HBox>
                               <TitledPane text="Phiếu đặt phòng của khách đang sử dụng phòng">
@@ -423,7 +449,7 @@
                                                 </Text>
                                              </children>
                                           </HBox>
-                                          <TableView fx:id="roomUsageServiceTableView" minHeight="300.0" prefHeight="295.0" prefWidth="1172.0" stylesheets="@../../../../styles/TableView.css">
+                                          <TableView fx:id="roomUsageServiceTableView" minHeight="300.0" stylesheets="@../../../../styles/TableView.css">
                                              <columnResizePolicy>
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                              </columnResizePolicy>

@@ -32,8 +32,8 @@ public class ReservationListController {
     private Button backBtn, bookingRoomNavigate;
 
     @FXML
-    private Button navigateToCreateReservationFormBtn,
-            navigateToServiceOrdering, navigateToRoomChanging;
+    private Button navigateToCreateReservationFormBtn, navigateToServiceOrdering,
+            navigateToRoomChangingBtn, navigateToRoomCheckingOutBtn;
 
     @FXML
     private TitledPane titledPane;
@@ -98,9 +98,10 @@ public class ReservationListController {
 
         if (room.getRoomStatus() == RoomStatus.AVAILABLE) {
             navigateToServiceOrdering.setDisable(true);
-            navigateToRoomChanging.setDisable(true);
+            navigateToRoomChangingBtn.setDisable(true);
+            navigateToRoomCheckingOutBtn.setDisable(true);
         } else {
-            navigateToRoomChanging.setOnAction(e -> navigateToRoomChangingPanel());
+            navigateToRoomChangingBtn.setOnAction(e -> navigateToRoomChangingPanel());
             navigateToServiceOrdering.setOnAction(e -> navigateToServiceOrderingPanel());
         }
 

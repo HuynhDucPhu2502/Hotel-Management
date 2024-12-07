@@ -22,7 +22,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane minHeight="1000.0" minWidth="1124.0" stylesheets="@../../../../styles/Button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController">
+<AnchorPane minHeight="1000.0" minWidth="1200.0" stylesheets="@../../../../styles/Button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController">
    <children>
       <DialogPane fx:id="dialogPane" animationDuration="200.0ms" maximizedPadding="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <ScrollPane fitToHeight="true" fitToWidth="true" layoutY="107.0" style="-fx-background-radius: 5; -fx-border-radius: 5;" stylesheets="@../../../../styles/Button.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -162,7 +162,7 @@
                                           </AnchorPane>
                                        </graphic>
                                     </Button>
-                                    <Button fx:id="navigateToRoomChanging" minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
+                                    <Button fx:id="navigateToRoomChangingBtn" minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
                                        <graphic>
                                           <AnchorPane>
                                              <children>
@@ -178,6 +178,32 @@
                                                 <HBox alignment="CENTER" layoutY="128.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
                                                    <children>
                                                       <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Chuyển Phòng">
+                                                         <font>
+                                                            <Font name="System Bold" size="16.0" />
+                                                         </font>
+                                                      </Text>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </AnchorPane>
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="navigateToRoomCheckingOutBtn" minHeight="200.0" minWidth="200.0" mnemonicParsing="false" styleClass="button-reservation">
+                                       <graphic>
+                                          <AnchorPane>
+                                             <children>
+                                                <HBox alignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <ImageView fitHeight="128.0" fitWidth="1111.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../../../../icons/room_booking_menu_icons/ic_checkout.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER" layoutY="128.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="128.0">
+                                                   <children>
+                                                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Trả Phòng">
                                                          <font>
                                                             <Font name="System Bold" size="16.0" />
                                                          </font>
