@@ -65,7 +65,7 @@ public class DashboardController {
     private void loadNumberOfRoomInformation(){
         TimelineManager.getInstance().removeTimeline("REALTIME_DASHBOARD");
         getNumbersOfRoomInformation();
-        Timeline timeline =  new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+        Timeline timeline =  new Timeline(new KeyFrame(Duration.seconds(60), event -> {
             getNumbersOfRoomInformation();
         }));
 
