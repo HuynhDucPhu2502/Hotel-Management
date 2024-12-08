@@ -5,7 +5,7 @@ import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.ReservationFormDialogViewController;
 import iuh.fit.controller.features.room.RoomBookingController;
-import iuh.fit.controller.features.room.checking_out_controllers.CheckingOutEarlyReservationFormController;
+import iuh.fit.controller.features.room.checking_out_controllers.CheckingOutReservationFormController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
@@ -189,7 +189,7 @@ public class RoomChangingController {
         navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
         navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
         navigateToServiceOrderingBtn.setOnAction(e -> navigateToServiceOrderingPanel());
-        navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutEarlyReservationFormPanel());
+        navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutReservationFormPanel());
 
         // Current Panel Button
         floorNumberCBox.setOnAction(e -> filterAvailableRoomsByFloor());
@@ -282,13 +282,13 @@ public class RoomChangingController {
         }
     }
 
-    private void navigateToCheckingOutEarlyReservationFormPanel() {
+    private void navigateToCheckingOutReservationFormPanel() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/checking_out_panels/CheckingOutEarlyReservationFormPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/checking_out_panels/CheckingOutReservationFormPanel.fxml"));
             AnchorPane layout = loader.load();
 
-            CheckingOutEarlyReservationFormController checkingOutEarlyReservationFormController = loader.getController();
-            checkingOutEarlyReservationFormController.setupContext(
+            CheckingOutReservationFormController checkingOutReservationFormController = loader.getController();
+            checkingOutReservationFormController.setupContext(
                     mainController, employee, roomWithReservation, notificationButtonController
             );
 

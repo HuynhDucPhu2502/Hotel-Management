@@ -5,7 +5,7 @@ import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.ReservationFormDialogViewController;
 import iuh.fit.controller.features.room.RoomBookingController;
-import iuh.fit.controller.features.room.checking_out_controllers.CheckingOutEarlyReservationFormController;
+import iuh.fit.controller.features.room.checking_out_controllers.CheckingOutReservationFormController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
@@ -146,7 +146,7 @@ public class ServiceOrderingController {
         navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
         navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
         navigateToRoomChangingBtn.setOnAction(e -> navigateToRoomChangingPanel());
-        navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutEarlyReservationFormPanel());
+        navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutReservationFormPanel());
 
         // Current Panel Button
         serviceCategoryCBox.setOnAction(e -> filterServicesByCategory());
@@ -279,6 +279,23 @@ public class ServiceOrderingController {
         }
     }
 
+    private void navigateToCheckingOutReservationFormPanel() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/checking_out_panels/CheckingOutReservationFormPanel.fxml"));
+            AnchorPane layout = loader.load();
+
+            CheckingOutReservationFormController checkingOutReservationFormController = loader.getController();
+            checkingOutReservationFormController.setupContext(
+                    mainController, employee, roomWithReservation, notificationButtonController
+            );
+
+            mainController.getMainPanel().getChildren().clear();
+            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // ==================================================================================================================
     // 4.  Đẩy dữ liệu lên giao diện
     // ==================================================================================================================
@@ -353,23 +370,6 @@ public class ServiceOrderingController {
             emptyLabelContainer.setManaged(true);
 
             serviceListContainer.setAlignment(Pos.CENTER);
-        }
-    }
-
-    private void navigateToCheckingOutEarlyReservationFormPanel() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/checking_out_panels/CheckingOutEarlyReservationFormPanel.fxml"));
-            AnchorPane layout = loader.load();
-
-            CheckingOutEarlyReservationFormController checkingOutEarlyReservationFormController = loader.getController();
-            checkingOutEarlyReservationFormController.setupContext(
-                    mainController, employee, roomWithReservation, notificationButtonController
-            );
-
-            mainController.getMainPanel().getChildren().clear();
-            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

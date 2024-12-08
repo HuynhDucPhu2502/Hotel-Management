@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class CheckingOutEarlyReservationFormController {
+public class CheckingOutReservationFormController {
     // ==================================================================================================================
     // 1. Các biến
     // ==================================================================================================================

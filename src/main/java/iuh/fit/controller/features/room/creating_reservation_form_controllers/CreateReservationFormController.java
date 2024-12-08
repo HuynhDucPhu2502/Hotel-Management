@@ -13,7 +13,7 @@ import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.ReservationFormDialogViewController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.controller.features.room.checking_in_reservation_list_controllers.ReservationListController;
-import iuh.fit.controller.features.room.checking_out_controllers.CheckingOutEarlyReservationFormController;
+import iuh.fit.controller.features.room.checking_out_controllers.CheckingOutReservationFormController;
 import iuh.fit.controller.features.room.room_changing_controllers.RoomChangingController;
 import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrderingController;
 import iuh.fit.dao.CustomerDAO;
@@ -138,14 +138,14 @@ public class CreateReservationFormController {
                 navigateToRoomCheckingOutBtn.setDisable(true);
             }
             case OVERDUE -> {
-                navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutEarlyReservationFormPanel());
+                navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutReservationFormPanel());
                 navigateToServiceOrderingBtn.setDisable(true);
                 navigateToRoomChangingBtn.setDisable(true);
             }
             case ON_USE -> {
                 navigateToRoomChangingBtn.setOnAction(e -> navigateToRoomChangingPanel());
                 navigateToServiceOrderingBtn.setOnAction(e -> navigateToServiceOrderingPanel());
-                navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutEarlyReservationFormPanel());
+                navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutReservationFormPanel());
             }
         }
 
@@ -194,8 +194,8 @@ public class CreateReservationFormController {
         loadPanel("/iuh/fit/view/features/room/ordering_services_panels/ServiceOrderingPanel.fxml", RoomChangingController.class);
     }
 
-    private void navigateToCheckingOutEarlyReservationFormPanel() {
-        loadPanel("/iuh/fit/view/features/room/checking_out_panels/CheckingOutEarlyReservationFormPanel.fxml", CheckingOutEarlyReservationFormController.class);
+    private void navigateToCheckingOutReservationFormPanel() {
+        loadPanel("/iuh/fit/view/features/room/checking_out_panels/CheckingOutReservationFormPanel.fxml", CheckingOutReservationFormController.class);
     }
 
     private <T> void loadPanel(String path, Class<T> ignoredControllerClass) {
@@ -214,8 +214,8 @@ public class CreateReservationFormController {
                 rcc.setupContext(mainController, employee, roomWithReservation, notificationButtonController);
             else if (controller instanceof ServiceOrderingController soc)
                 soc.setupContext(mainController, employee, roomWithReservation, notificationButtonController);
-            else if (controller instanceof CheckingOutEarlyReservationFormController coec)
-                coec.setupContext(mainController, employee, roomWithReservation, notificationButtonController);
+            else if (controller instanceof CheckingOutReservationFormController corfc)
+                corfc.setupContext(mainController, employee, roomWithReservation, notificationButtonController);
 
             mainController.getMainPanel().getChildren().setAll(layout.getChildren());
         } catch (Exception e) {
