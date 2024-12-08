@@ -89,17 +89,25 @@ public class ReservationListController {
 
         // Box Navigate Button
         navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
+        RoomStatus roomStatus = room.getRoomStatus();
 
-        if (room.getRoomStatus() == RoomStatus.AVAILABLE) {
-            navigateToServiceOrderingBtn.setDisable(true);
-            navigateToRoomChangingBtn.setDisable(true);
-            navigateToRoomCheckingOutBtn.setDisable(true);
-        } else {
-            navigateToRoomChangingBtn.setOnAction(e -> navigateToRoomChangingPanel());
-            navigateToServiceOrderingBtn.setOnAction(e -> navigateToServiceOrderingPanel());
-            navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutEarlyReservationFormPanel());
+        switch (roomStatus) {
+            case AVAILABLE -> {
+                navigateToServiceOrderingBtn.setDisable(true);
+                navigateToRoomChangingBtn.setDisable(true);
+                navigateToRoomCheckingOutBtn.setDisable(true);
+            }
+            case OVERDUE -> {
+                navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutEarlyReservationFormPanel());
+                navigateToServiceOrderingBtn.setDisable(true);
+                navigateToRoomChangingBtn.setDisable(true);
+            }
+            case ON_USE -> {
+                navigateToRoomChangingBtn.setOnAction(e -> navigateToRoomChangingPanel());
+                navigateToServiceOrderingBtn.setOnAction(e -> navigateToServiceOrderingPanel());
+                navigateToRoomCheckingOutBtn.setOnAction(e -> navigateToCheckingOutEarlyReservationFormPanel());
+            }
         }
-
 
     }
 

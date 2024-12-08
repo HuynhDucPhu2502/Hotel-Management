@@ -419,7 +419,7 @@
                               </TitledPane>
                               <TitledPane text="Chi tiết dịch vụ &amp; chuyển phòng">
                                  <content>
-                                    <VBox spacing="30.0" style="-fx-background-color: white;">
+                                    <VBox spacing="30.0">
                                        <children>
                                           <HBox>
                                              <children>

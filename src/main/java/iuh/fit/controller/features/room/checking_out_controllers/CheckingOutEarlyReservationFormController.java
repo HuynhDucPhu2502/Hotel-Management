@@ -12,6 +12,7 @@ import iuh.fit.dao.HistoryCheckinDAO;
 import iuh.fit.dao.RoomReservationDetailDAO;
 import iuh.fit.dao.RoomUsageServiceDAO;
 import iuh.fit.models.*;
+import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.Calculator;
 import iuh.fit.utils.GlobalMessage;
@@ -94,7 +95,7 @@ public class CheckingOutEarlyReservationFormController {
     private RoomWithReservation roomWithReservation;
     private Employee employee;
 
-    private static NotificationButtonController notificationButtonController;
+    private NotificationButtonController notificationButtonController;
 
     // ==================================================================================================================
     // 2. Khởi tạo và nạp dữ liệu vào giao diện
@@ -142,6 +143,18 @@ public class CheckingOutEarlyReservationFormController {
         // Box Navigate Button
         navigateToReservationListBtn.setOnAction(e -> navigateToReservationListPanel());
         navigateToCreateReservationFormBtn.setOnAction(e -> navigateToCreateReservationFormPanel());
+        RoomStatus roomStatus = roomWithReservation.getRoom().getRoomStatus();
+
+        switch (roomStatus) {
+            case OVERDUE -> {
+                navigateToServiceOrderingBtn.setDisable(true);
+                navigateToRoomChangingBtn.setDisable(true);
+            }
+            case ON_USE -> {
+                navigateToRoomChangingBtn.setOnAction(e -> navigateToRoomChangingPanel());
+                navigateToServiceOrderingBtn.setOnAction(e -> navigateToServiceOrderingPanel());
+            }
+        }
         navigateToRoomChangingBtn.setOnAction(e -> navigateToRoomChangingPanel());
         navigateToServiceOrderingBtn.setOnAction(e -> navigateToServiceOrderingPanel());
 

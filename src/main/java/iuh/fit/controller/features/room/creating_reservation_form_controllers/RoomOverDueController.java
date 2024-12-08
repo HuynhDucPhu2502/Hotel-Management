@@ -3,7 +3,7 @@ package iuh.fit.controller.features.room.creating_reservation_form_controllers;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.RoomBookingController;
-import iuh.fit.controller.features.room.checking_out_controllers.CheckingOutReservationFormController;
+import iuh.fit.controller.features.room.checking_out_controllers.CheckingOutEarlyReservationFormController;
 import iuh.fit.models.Customer;
 import iuh.fit.models.Employee;
 import iuh.fit.models.ReservationForm;
@@ -121,11 +121,11 @@ public class RoomOverDueController {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                    "/iuh/fit/view/features/room/checking_out_panels/CheckingOutReservationFormPanel.fxml"));
+                    "/iuh/fit/view/features/room/checking_out_panels/CheckingOutEarlyReservationFormPanel.fxml"));
             AnchorPane layout = loader.load();
 
-            CheckingOutReservationFormController checkingOutReservationFormController = loader.getController();
-            checkingOutReservationFormController.setupContext(
+            CheckingOutEarlyReservationFormController checkingOutEarlyReservationFormController = loader.getController();
+            checkingOutEarlyReservationFormController.setupContext(
                     mainController, employee, roomWithReservation, notificationButtonController
             );
 
