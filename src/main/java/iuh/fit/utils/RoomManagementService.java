@@ -27,7 +27,7 @@ public class RoomManagementService {
         SCHEDULER.scheduleAtFixedRate(
                 () -> RoomManagementService.autoCheckoutOverdueRooms(topBarController),
                 0,
-                5,
+                60,
                 TimeUnit.SECONDS
         );
     }

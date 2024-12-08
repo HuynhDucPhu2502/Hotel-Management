@@ -64,7 +64,7 @@ public class EmployeeDAO {
                     "idCardNumber, dob, position, isActivate " +
                     "FROM Employee e " +
                     "LEFT JOIN ShiftAssignment s ON e.employeeID = s.employeeId " +
-                    "WHERE e.isActivate = 'ACTIVATE' AND s.employeeId IS NULL AND employeeID != 'EMP-000000'";
+                    "WHERE e.isActivate = 'ACTIVATE' AND s.employeeId IS NULL AND e.employeeID != 'EMP-000000'";
             ResultSet rs = statement.executeQuery(sql);
 
 
@@ -104,14 +104,15 @@ public class EmployeeDAO {
                                 idCardNumber, dob, position, isActivate\s
                                 FROM Employee e\s
                                 LEFT JOIN ShiftAssignment s ON e.employeeID = s.employeeId\s
-                                WHERE e.isActivate = 'ACTIVATE' AND (s.shiftId IS NULL OR e.employeeID NOT IN
+                                WHERE e.isActivate = 'ACTIVATE' AND e.employeeID != 'EMP-000000' AND (s.shiftId IS NULL OR e.employeeID NOT IN
                                 	(
                                 		SELECT employeeID
                                 		FROM ShiftAssignment
                                 		WHERE shiftId = ?
                                 	)
-                                ) AND employeeID != 'EMP-000000'
-                        """)
+                                ) 
+                            """
+                )
         ){
             statement.setString(1, shift.getShiftID());
 
