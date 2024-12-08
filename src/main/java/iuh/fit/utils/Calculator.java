@@ -24,6 +24,8 @@ public class Calculator {
             LocalDateTime checkIn,
             LocalDateTime checkOut
     ) {
+        double result;
+
         List<Pricing> pricingList = PricingDAO.findDataByCategoryID(room.getRoomCategory().getRoomCategoryID());
 
         Pricing hourPricing = extractPricingBasedOnPriceUnit(pricingList, PriceUnit.HOUR);
@@ -33,11 +35,14 @@ public class Calculator {
 
 
         if (hours < 12) {
-            return hours * hourPricing.getPrice();
+            result = hours * hourPricing.getPrice();
         } else {
             double roundedDays = roundToNearestHalfDay(hours / 24);
-            return roundedDays * dayPricing.getPrice();
+            result = roundedDays * dayPricing.getPrice();
         }
+
+        if (result <= 0) return hourPricing.getPrice();
+        else return result;
     }
 
     // 2. Tính tiền đặt cọc theo số ngày lưu trú

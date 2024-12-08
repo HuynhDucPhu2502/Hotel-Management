@@ -41,13 +41,13 @@ public class Invoice {
     }
 
     public void setTotalDue(double totalDue) {
-        if (totalDue <= 0)
+        if (totalDue < 0)
             throw new IllegalArgumentException(ErrorMessages.INVOICE_INVALID_TOTALDUE);
         this.totalDue = totalDue;
     }
 
     public void setNetDue(double netDue) {
-        if (netDue <= 0)
+        if (netDue < 0)
             throw new IllegalArgumentException(ErrorMessages.INVOICE_INVALID_NETDUE);
         this.netDue = netDue;
     }

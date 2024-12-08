@@ -382,10 +382,10 @@ public class CheckingOutReservationFormController {
                         RoomManagementService.handleCheckoutEarly(roomWithReservation, employee);
 
                         dialogPane.showInformation("THÀNH CÔNG", "Check-out và tạo hóa đơn thành công!");
-//                        notificationButtonController.getInfo(
-//                                GlobalMessage.MANUALLY_CHECKOUT,
-//                                "Phòng " + roomWithReservation.getRoom().getRoomID() + " đã được checkout SỚM thủ công"
-//                        );
+                        notificationButtonController.getInfo(
+                                GlobalMessage.MANUALLY_CHECKOUT,
+                                "Phòng " + roomWithReservation.getRoom().getRoomID() + " đã được checkout SỚM thủ công"
+                        );
 
                         navigateToRoomBookingPanel();
                     } catch (Exception ex) {
