@@ -62,13 +62,13 @@ public class InvoiceManagerController {
             @Override
             protected List<Invoice> call() {
                 RoomManagementService.autoCheckoutOverdueRooms(notificationButtonController);
-
                 return InvoiceDAO.getAllInvoices();
             }
         };
 
         loadDataTask.setOnSucceeded(event -> {
             invoiceList = loadDataTask.getValue();
+            invoiceList.forEach(System.out::println);
             displayInvoices(invoiceList);
             EditDateRangePicker.editDateRangePicker(invoiceDateRangeSearchField);
             invoiceDateRangeSearchField
@@ -76,6 +76,14 @@ public class InvoiceManagerController {
                     .presetTitleProperty()
                     .set("Thời điểm tạo hóa đơn");
         });
+
+        loadDataTask.setOnFailed(event -> {
+            Throwable exception = loadDataTask.getException();
+            if (exception != null) {
+                exception.printStackTrace();
+            }
+        });
+
 
         new Thread(loadDataTask).start();
     }

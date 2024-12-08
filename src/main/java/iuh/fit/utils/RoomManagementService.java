@@ -116,6 +116,28 @@ public class RoomManagementService {
         }
     }
 
+    public static void handleCheckoutEarly(RoomWithReservation roomWithReservation, Employee employee) {
+        try {
+            double roomCharge = Calculator.calculateRoomCharge(
+                    roomWithReservation.getRoom(),
+                    roomWithReservation.getReservationForm().getCheckInDate(),
+                    LocalDateTime.now()
+            );
+            double serviceCharge = Calculator.calculateTotalServiceCharge(
+                    roomWithReservation.getReservationForm().getReservationID()
+            );
+
+            InvoiceDAO.roomCheckingOutEarly(
+                    roomWithReservation.getReservationForm().getReservationID(),
+                    employee.getEmployeeID(),
+                    roomCharge,
+                    serviceCharge
+            );
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
 
 

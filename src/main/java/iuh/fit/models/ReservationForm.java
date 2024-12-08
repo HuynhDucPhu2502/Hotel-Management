@@ -114,7 +114,7 @@ public class ReservationForm {
     }
 
     public void setRoomBookingDeposit(double roomBookingDeposit) {
-        if (roomBookingDeposit <= 0)
+        if (roomBookingDeposit < 0)
             throw new IllegalArgumentException(ErrorMessages.RESERVATION_FORM_INVALID_ROOM_BOOKING_DEPOSIT_AMOUNT);
         this.roomBookingDeposit = roomBookingDeposit;
     }

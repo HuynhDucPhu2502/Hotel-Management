@@ -104,4 +104,17 @@ public class Invoice {
     public int hashCode() {
         return Objects.hash(invoiceID);
     }
+
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "invoiceID='" + invoiceID + '\'' +
+                ", invoiceDate=" + invoiceDate +
+                ", roomCharge=" + roomCharge +
+                ", servicesCharge=" + servicesCharge +
+                ", netDue=" + netDue +
+                ", totalDue=" + totalDue +
+                ", reservationForm=" + reservationForm +
+                '}';
+    }
 }

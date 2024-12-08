@@ -16,7 +16,7 @@ public class InvoiceDAO {
         String sql =
                 """
                 SELECT i.invoiceID, i.invoiceDate, i.roomCharge, i.servicesCharge,
-                       i.totalDue, i.netDue, -- Thêm hai cột computed vào SELECT
+                       i.totalDue, i.netDue, 
                        rf.reservationFormID, rf.reservationDate, rf.checkInDate, rf.checkOutDate, rf.roomBookingDeposit,
                        e.employeeID, e.fullName AS employeeName, e.position,
                        c.customerID, c.fullName AS customerName, c.phoneNumber, c.email, c.idCardNumber,
@@ -52,7 +52,48 @@ public class InvoiceDAO {
     public static void roomCheckingOut(String reservationFormID, String employeeID,
                                        double roomCharge, double serviceCharge)
     {
-        String callProcedure = "{CALL roomCheckingOut(?, ?, ?, ?, ?)}";
+        String callProcedure = "{CALL RoomCheckingOut(?, ?, ?, ?, ?)}";
+
+        try (Connection connection = DBHelper.getConnection();
+             CallableStatement callableStatement = connection.prepareCall(callProcedure)) {
+
+            // Thiết lập tham số đầu vào
+            callableStatement.setString(1, reservationFormID);
+            callableStatement.setString(2, employeeID);
+            callableStatement.setDouble(3, roomCharge);
+            callableStatement.setDouble(4, serviceCharge);
+
+            // Đăng ký tham số đầu ra
+            callableStatement.registerOutParameter(5, Types.VARCHAR);
+
+            // Thực thi stored procedure
+            callableStatement.execute();
+
+            // Lấy thông báo từ stored procedure
+            String message = callableStatement.getString(5);
+
+            // Xử lý thông báo trả về
+            switch (message) {
+                case "RESERVATION_FORM_NOT_FOUND":
+                    throw new IllegalArgumentException(ErrorMessages.NULL_RESERVATIONFORM);
+                case "ROOM_CHECKOUT_SUCCESS":
+                    HistoryCheckOutDAO.incrementAndUpdateNextID();
+                    incrementAndUpdateNextID();
+                    break;
+                default:
+                    throw new IllegalArgumentException(ErrorMessages.STORE_PROCEDURE_ERROR);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+    }
+
+    public static void roomCheckingOutEarly(String reservationFormID, String employeeID,
+                                       double roomCharge, double serviceCharge)
+    {
+        String callProcedure = "{CALL RoomCheckingOutEarly(?, ?, ?, ?, ?)}";
 
         try (Connection connection = DBHelper.getConnection();
              CallableStatement callableStatement = connection.prepareCall(callProcedure)) {

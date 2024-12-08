@@ -370,7 +370,35 @@ public class CheckingOutReservationFormController {
     }
 
     private void handleCheckOutEarly() {
+        try {
+            DialogPane.Dialog<ButtonType> confirmDialog = dialogPane.showConfirmation(
+                    "XÁC NHẬN CHECK-OUT",
+                    "Bạn có chắc chắn muốn thực hiện check-out SỚM cho phòng này không?"
+            );
 
+            confirmDialog.onClose(buttonType -> {
+                if (buttonType == ButtonType.YES) {
+                    try {
+                        RoomManagementService.handleCheckoutEarly(roomWithReservation, employee);
+
+                        dialogPane.showInformation("THÀNH CÔNG", "Check-out và tạo hóa đơn thành công!");
+//                        notificationButtonController.getInfo(
+//                                GlobalMessage.MANUALLY_CHECKOUT,
+//                                "Phòng " + roomWithReservation.getRoom().getRoomID() + " đã được checkout SỚM thủ công"
+//                        );
+
+                        navigateToRoomBookingPanel();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        dialogPane.showInformation("LỖI", ex.getMessage());
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            dialogPane.showInformation("LỖI", "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại!");
+        }
     }
 
     // ==================================================================================================================
