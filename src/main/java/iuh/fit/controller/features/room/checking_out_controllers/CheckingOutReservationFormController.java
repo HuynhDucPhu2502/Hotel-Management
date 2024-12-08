@@ -38,12 +38,15 @@ public class CheckingOutReservationFormController {
     // 1. Các biến
     // ==================================================================================================================
     @FXML
-    private Button backBtn, bookingRoomNavigateLabel, checkOutBtn;
+    private Button backBtn, bookingRoomNavigateLabel;
 
     @FXML
     private Button navigateToCreateReservationFormBtn,
             navigateToReservationListBtn, navigateToRoomChangingBtn,
             navigateToServiceOrderingBtn;
+
+    @FXML
+    private Button checkOutBtn, checkOutEarlyBtn;
 
     @FXML
     private Label roomNumberLabel, roomCategoryLabel, checkInDateLabel,
@@ -159,8 +162,14 @@ public class CheckingOutReservationFormController {
         navigateToServiceOrderingBtn.setOnAction(e -> navigateToServiceOrderingPanel());
 
         // Current Panel Button
-        checkOutBtn.setOnAction(e -> handleCheckOut());
+        if (!isOverdueTime()) {
+            checkOutBtn.setDisable(true);
+            checkOutEarlyBtn.setOnAction(e -> handleCheckOutEarly());
+        } else {
+            checkOutEarlyBtn.setDisable(true);
+            checkOutBtn.setOnAction(e -> handleCheckOut());
 
+        }
     }
 
     private void setupReservationForm() {
@@ -358,5 +367,18 @@ public class CheckingOutReservationFormController {
             e.printStackTrace();
             dialogPane.showInformation("LỖI", "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại!");
         }
+    }
+
+    private void handleCheckOutEarly() {
+
+    }
+
+    // ==================================================================================================================
+    // 6. Kiểm tra thời gian có phù hợp
+    // ==================================================================================================================
+    private boolean isOverdueTime() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime checkOutDate = roomWithReservation.getReservationForm().getCheckOutDate();
+        return now.isAfter(checkOutDate);
     }
 }
