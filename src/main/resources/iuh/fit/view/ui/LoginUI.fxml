@@ -386,15 +386,6 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="researchFileRestoreButton" layoutX="52.0" mnemonicParsing="false" onAction="#researchFileRestore" prefHeight="26.0" visible="false">
-                                 <graphic>
-                                    <ImageView fitHeight="17.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../../icons/backup_restore_icons/search-interface-symbol.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
                            </children>
                         </AnchorPane>
                      </children>

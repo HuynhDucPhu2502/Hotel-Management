@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
@@ -26,10 +25,9 @@
                  <content>
                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="169.0" prefWidth="554.0">
                         <children>
-                           <CheckBox fx:id="compressFileCheckBox" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#compressFile" text="Nén dữ liệu sau khi sao lưu" />
-                           <Text layoutX="14.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Thư mục sao lưu" />
-                           <TextField fx:id="fileAddressAutoBackupText" editable="false" layoutX="132.0" layoutY="56.0" prefHeight="26.0" prefWidth="348.0" AnchorPane.leftAnchor="122.0" AnchorPane.topAnchor="36.0" />
-                           <Button layoutX="489.0" layoutY="45.0" mnemonicParsing="false" onAction="#setFileAddressForAutoBackup" prefHeight="26.0" prefWidth="30.0" textAlignment="CENTER">
+                           <Text layoutX="14.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Thư mục sao lưu" />
+                           <TextField fx:id="fileAddressAutoBackupText" editable="false" layoutX="125.0" layoutY="18.0" prefHeight="26.0" prefWidth="348.0" />
+                           <Button layoutX="481.0" layoutY="18.0" mnemonicParsing="false" onAction="#setFileAddressForAutoBackup" prefHeight="26.0" prefWidth="30.0" textAlignment="CENTER">
                               <graphic>
                                  <ImageView fitHeight="17.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
@@ -37,11 +35,11 @@
                                     </image>
                                  </ImageView>
                               </graphic></Button>
-                           <RadioButton fx:id="autoBackUpRadioButton" layoutX="14.0" layoutY="84.0" mnemonicParsing="false" onAction="#backupForm" selected="true" text="Tự động sao lưu khi kết thúc chương trình">
+                           <RadioButton fx:id="autoBackUpRadioButton" layoutX="14.0" layoutY="66.0" mnemonicParsing="false" onAction="#backupForm" selected="true" text="Tự động sao lưu khi kết thúc chương trình">
                               <toggleGroup>
                                  <ToggleGroup fx:id="backupFormToggle" />
                               </toggleGroup></RadioButton>
-                           <RadioButton fx:id="warningBackUpRadioButton" layoutX="14.0" layoutY="110.0" mnemonicParsing="false" onAction="#backupForm" text="Cảnh báo sao lưu khi kết thúc chương trình" toggleGroup="$backupFormToggle" />
+                           <RadioButton fx:id="warningBackUpRadioButton" layoutX="14.0" layoutY="102.0" mnemonicParsing="false" onAction="#backupForm" text="Cảnh báo sao lưu khi kết thúc chương trình" toggleGroup="$backupFormToggle" />
                            <RadioButton fx:id="noBackUpRadioButton" layoutX="14.0" layoutY="137.0" mnemonicParsing="false" onAction="#backupForm" text="Không sao lưu" toggleGroup="$backupFormToggle" />
                         </children>
                      </AnchorPane>
@@ -68,7 +66,7 @@
                                        <AnchorPane prefHeight="38.0" prefWidth="565.0">
                                           <children>
                                              <Text layoutX="14.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tên tệp dữ liệu " />
-                                             <TextField fx:id="fileNameHandBackupText" layoutX="123.0" layoutY="5.0" prefHeight="26.0" prefWidth="343.0" AnchorPane.leftAnchor="122.0" />
+                                             <TextField fx:id="fileNameHandBackupText" editable="false" layoutX="123.0" layoutY="5.0" prefHeight="26.0" prefWidth="343.0" AnchorPane.leftAnchor="122.0" />
                                           </children>
                                        </AnchorPane>
                                     </children>
@@ -93,18 +91,14 @@
                                  </HBox>
                                  <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
-                                       <AnchorPane prefHeight="38.0" prefWidth="558.0">
-                                          <children>
-                                             <CheckBox fx:id="compressFileCheckBox1" layoutX="120.0" layoutY="10.0" mnemonicParsing="false" onAction="#compressFile" text="Nén dữ liệu sau khi sao lưu" />
-                                          </children>
-                                       </AnchorPane>
+                                       <AnchorPane prefHeight="38.0" prefWidth="558.0" />
                                     </children>
                                  </HBox>
                                  <HBox prefHeight="100.0" prefWidth="200.0">
                                     <children>
                                        <AnchorPane prefHeight="38.0" prefWidth="658.0">
                                           <children>
-                                             <Button layoutX="365.0" layoutY="5.0" mnemonicParsing="false" onAction="#restoreDataByHand" prefHeight="26.0" prefWidth="100.0" text="Sao lưu" />
+                                             <Button layoutX="365.0" layoutY="5.0" mnemonicParsing="false" onAction="#backupDataByHand" prefHeight="26.0" prefWidth="100.0" text="Sao lưu" />
                                           </children>
                                        </AnchorPane>
                                     </children>
@@ -129,14 +123,6 @@
                                     </image>
                                  </ImageView>
                               </graphic></Button>
-                           <Button layoutX="592.0" layoutY="10.0" mnemonicParsing="false" prefHeight="26.0" visible="false">
-                              <graphic>
-                                 <ImageView fitHeight="17.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                       <Image url="@../../../icons/backup_restore_icons/search-interface-symbol.png" />
-                                    </image>
-                                 </ImageView>
-                              </graphic></Button>
                            <TableView fx:id="tableData" layoutX="14.0" layoutY="58.0" prefHeight="259.0" prefWidth="1116.0" stylesheets="@../../../styles/TableView.css">
                              <columns>
                                <TableColumn fx:id="fileNameColumn" prefWidth="223.2" text="Tên dữ liệu" />
@@ -149,7 +135,7 @@
                            <Button layoutX="1030.0" layoutY="329.0" mnemonicParsing="false" onAction="#restore" prefHeight="26.0" prefWidth="100.0" text="Phục hồi" />
                            <Text layoutX="14.0" layoutY="344.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Số lượng file : " AnchorPane.bottomAnchor="16.0" AnchorPane.topAnchor="325.0" />
                            <Text fx:id="fileNum" layoutX="96.0" layoutY="347.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="96.0" AnchorPane.topAnchor="325.0" />
-                           <Button layoutX="642.0" layoutY="10.0" mnemonicParsing="false" onAction="#refreshhRestoreFolder" prefHeight="26.0">
+                           <Button layoutX="584.0" layoutY="10.0" mnemonicParsing="false" onAction="#refreshhRestoreFolder" prefHeight="26.0">
                               <graphic>
                                  <ImageView fitHeight="17.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                                     <image>

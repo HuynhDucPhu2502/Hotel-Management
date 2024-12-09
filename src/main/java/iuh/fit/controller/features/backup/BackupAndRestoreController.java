@@ -33,7 +33,6 @@ public class BackupAndRestoreController {
     @FXML private TextField fileAddressHandBackupText;
     @FXML private TextField fileNameHandBackupText;
     @FXML private Text currentUsingDataText;
-    @FXML private CheckBox compressFileCheckBox;
     @FXML private TextField fileAddressRestoreText;
     @FXML private Text fileNum;
     @FXML private Text warningText;
@@ -79,24 +78,24 @@ public class BackupAndRestoreController {
     @FXML
     void restore() throws SQLException {
 
-        Stage stage = createNewStage(progressbarScene, "Phuc hoi du lieu");
+        Stage stage = createNewStage(progressbarScene, "Phục hồi dữ liệu");
         FileDisplayOnTable displayOnTableTableRow = tableData.getSelectionModel().getSelectedItem();
 
         if(displayOnTableTableRow == null){
             showMessage(
                     Alert.AlertType.ERROR,
-                    "Canh bao",
-                    "Chua chon bang du lieu hoi phuc",
-                    "Nhan ok de thoat"
+                    "Chưa chọn dữ liệu",
+                    "Hãy chọn dữ liệu để phục hồi",
+                    "Nhấn OK để xác nhận"
             ).show();
             return;
         }
 
         Optional<ButtonType> optional = showMessage(
                 Alert.AlertType.CONFIRMATION,
-                "Khoi phuc du lieu",
-                "Ban co muon khoi phuc du lieu",
-                "Nhan ok de khoi phuc, cancel de huy"
+                "Khôi phục dữ liệu",
+                "Bạn có muốn sao lưu dữ liệu?",
+                "Nhấn OK để xác nhận, Cancel để hủy"
         ).showAndWait();
 
         if(optional.isPresent() && optional.get() == ButtonType.OK){
@@ -111,14 +110,33 @@ public class BackupAndRestoreController {
 
                 File fullBackup = Arrays.stream(files).filter(x -> x.getName().contains("FULL"))
                         .findFirst().orElse(null);
-                if(fullBackup == null) return;
+                if(fullBackup == null) {
+                    showMessage(
+                            Alert.AlertType.ERROR,
+                            "Khôi phục thất bại",
+                            "Thư mục phải chứa tệp dữ liệu phục hồi đầy đủ (FULL) đi kèm",
+                            "Nhấn OK để xác nhận"
+                    ).show();
+                    return;
+                }
+                LocalDateTime fullBackUpDateCreated = convertLastModifiedDateToLocalDateTime(fullBackup);
+
+                if(fullBackUpDateCreated.isAfter(displayOnTableTableRow.getDateCreated())) {
+                    showMessage(
+                            Alert.AlertType.ERROR,
+                            "Khôi phục thất bại",
+                            "Tệp dữ liệu phục hồi đầy đủ (FULL) phải được tạo trước tệp dữ liệu bạn muốn phục hồi",
+                            "Nhấn OK để xác nhận"
+                    ).show();
+                    return;
+                }
 
                 if(dataIsUsing(displayOnTableTableRow.getFilePath())){
                     showMessage(
                             Alert.AlertType.ERROR,
-                            "Canh bao",
-                            "Du lieu da va dang duoc su dung!!!",
-                            "Nhan ok de xac nhan")
+                            "Dữ liệu đã sử dụng",
+                            "Dữ liệu bạn muốn khôi phục đã và đang được sử dụng",
+                            "Nhấn OK để xác nhận")
                             .show();
                     tableData.getSelectionModel().clearSelection();
                     return;
@@ -131,49 +149,51 @@ public class BackupAndRestoreController {
                 if(!f.exists()) {
                     showMessage(
                             Alert.AlertType.INFORMATION,
-                            "Thong bao",
-                            "Tep du lieu phuc hoi rong",
-                            "Nhan ok de xac nhan"
+                            "Dường dẫn dữ liệu rỗng",
+                            "Dữ liệu muốn phục hồi không tồn tại, làm mới bảng dữ liệu và thử lại",
+                            "Nhấn OK để xác nhận"
                     ).show();
+                    tableData.getSelectionModel().clearSelection();
                     return;
                 }
 
                 stage.show();
-
-                progressController.setProgress(0.3);
 
                 try {
                     RestoreDatabase.restoreDif(fullBackup.getAbsolutePath(), filePath);
                 }catch (Exception e){
                     showMessage(
                             Alert.AlertType.INFORMATION,
-                            "Thong bao",
-                            "Tep du lieu phuc hoi rong",
-                            "Nhan ok de xac nhan"
+                            "Khôi phục thất bại",
+                            "Dữ liệu muốn phục hồi không tồn tại, làm mới bảng dữ liệu và thử lại",
+                            "Nhấn OK để xác nhận"
                     ).show();
                 }
-
-                progressController.setProgress(0.5);
 
                 FilePathManager.savePath(
                         PreferencesKey.CURRENT_USING_DATA,
                         filePath);
                 currentUsingDataText.setText(filePath);
-                progressController.setProgress(1);
+
+                showMessage(
+                        Alert.AlertType.INFORMATION,
+                        "Phục hồi dữ liệu thành công",
+                        "Dữ liệu đã phục hồi thành công",
+                        "Nhấn OK để xác nhận"
+                ).show();
             }
             else if (displayOnTableTableRow.getFilePath().contains("FULL")){
                 if(dataIsUsing(displayOnTableTableRow.getFilePath())){
                     showMessage(
                             Alert.AlertType.ERROR,
-                            "Canh bao",
-                            "Du lieu da va dang duoc su dung!!!",
-                            "Nhan ok de xac nhan")
+                            "Dữ liệu đã sử dụng",
+                            "Dữ liệu bạn muốn khôi phục đã và đang được sử dụng",
+                            "Nhấn OK để xác nhận"
+                    )
                             .show();
                     tableData.getSelectionModel().clearSelection();
                     return;
                 }
-
-
 
                 String filePath = displayOnTableTableRow.getFilePath();
                 File f = new File(filePath);
@@ -182,50 +202,44 @@ public class BackupAndRestoreController {
                 if(!f.exists()) {
                     showMessage(
                             Alert.AlertType.INFORMATION,
-                            "Thong bao",
-                            "Tep du lieu phuc hoi rong",
-                            "Nhan ok de xac nhan"
+                            "Khôi phục thất bại",
+                            "Dữ liệu muốn phục hồi không tồn tại, làm mới bảng dữ liệu và thử lại",
+                            "Nhấn OK để xác nhận"
                     ).show();
                     return;
                 }
 
                 stage.show();
 
-                progressController.setProgress(0.3);
-
                 RestoreDatabase.restoreFull(filePath);
 
-                progressController.setProgress(0.5);
                 FilePathManager.savePath(
                         PreferencesKey.CURRENT_USING_DATA,
                         filePath);
                 currentUsingDataText.setText(filePath);
-                progressController.setProgress(1);
 
                 showMessage(
                         Alert.AlertType.INFORMATION,
-                        "Phu hoi du lieu thanh cong",
-                        "Du lieu da duoc phuc hoi thanh cong",
-                        "Nhan ok de Xac nhan"
+                        "Phục hồi dữ liệu thành công",
+                        "Dữ liệu đã phục hồi thành công",
+                        "Nhấn OK để xác nhận"
                 ).show();
             }
 
             stage.close();
-
-            progressController.setProgress(0);
         }
         tableData.getSelectionModel().clearSelection();
     }
 
     @FXML
-    void restoreDataByHand() throws SQLException, IOException, InterruptedException {
-        Stage stage = createNewStage(progressbarScene, "Sao luu du lieu");
+    void backupDataByHand() throws SQLException, IOException, InterruptedException {
+        Stage stage = createNewStage(progressbarScene, "Sao lưu dữ liệu");
 
         Alert alert = showMessage(
                 Alert.AlertType.CONFIRMATION,
-                "Sao luu du lieu",
-                "Ban co muon sao luu du lieu",
-                "nhan ok de xac nhan, cancel de huy"
+                "Sao lưu dữ liệu",
+                "Bạn có muốn sao lưu dữ liệu?",
+                "Nhấn OK để xác nhận, Cancel để hủy"
         );
         Optional<ButtonType> optional = alert.showAndWait();
         if(optional.isPresent() && optional.get() == ButtonType.OK){
@@ -234,28 +248,20 @@ public class BackupAndRestoreController {
             File file = new File(filePath);
             if(file.exists()) file.delete();
 
-            progressController.setProgress(0.3);
-
             String option = backupWaysCombobox.getSelectionModel().getSelectedItem();
             if(option.equalsIgnoreCase("Toàn bộ")) BackupDatabase.backupFullDatabase(filePath);
             if(option.equalsIgnoreCase("Ngày hôm nay")) BackupDatabase.backupDifDatabase(filePath);
 
-            progressController.setProgress(0.5);
-
             setDataOnTable();
-
-            progressController.setProgress(1);
 
             stage.close();
 
             showMessage(
                     Alert.AlertType.INFORMATION,
-                    "Sao luu thanh cong",
-                    "Du lieu da duoc sao luu thanh cong",
-                    "Nhan ok de Xac nhan"
+                    "Sao lưu thành công!!!",
+                    "Dữ liệu đã được sao lưu thành công!!!",
+                    "Nhấn OK để xác nhận"
             ).show();
-
-            progressController.setProgress(0.1);
         }
     }
 
@@ -311,17 +317,6 @@ public class BackupAndRestoreController {
     }
 
     @FXML
-    void compressFile() throws IOException {
-        // 1 that means compress
-        // 0 that means not compress
-        if(compressFileCheckBox.isSelected()){
-            FilePathManager.savePath(PreferencesKey.BACKUP_COMPRESS_FILE, "1");
-        }else{
-            FilePathManager.savePath(PreferencesKey.BACKUP_COMPRESS_FILE, "0");
-        }
-    }
-
-    @FXML
     void setFileAddressForRestore() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File file = directoryChooser.showDialog(null);
@@ -361,10 +356,7 @@ public class BackupAndRestoreController {
                 String fileName = f.getName().split("\\.")[0];
                 fileDisplayOnTable.setName(fileName);
 
-                Date date = new Date(f.lastModified());
-                Instant instant = Instant.ofEpochMilli(date.getTime());
-                ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh"); // Múi giờ Việt Nam
-                LocalDateTime dateCreated = LocalDateTime.ofInstant(instant, zoneId);
+                LocalDateTime dateCreated = convertLastModifiedDateToLocalDateTime(f);
                 fileDisplayOnTable.setDateCreated(dateCreated);
 
                 fileDisplayOnTable.setSize((double) f.length() / 1024);
@@ -431,10 +423,6 @@ public class BackupAndRestoreController {
                 .equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_WARNING_VALUE))
             warningBackUpRadioButton.setSelected(true);
         else noBackUpRadioButton.setSelected(true);
-
-        // compress file
-        compressFileCheckBox.setSelected(FilePathManager.getPath(PreferencesKey.BACKUP_COMPRESS_FILE, "None")
-                .equalsIgnoreCase("1"));
 
         // using fuction for the fisrt time
         // 1 is yes
@@ -535,6 +523,13 @@ public class BackupAndRestoreController {
         File currentUsingFile = new File(currentUsingDataText.getText());
         File checkingFile = new File(dataFilePath);
         return currentUsingFile.equals(checkingFile);
+    }
+
+    private LocalDateTime convertLastModifiedDateToLocalDateTime(File f){
+        Date date = new Date(f.lastModified());
+        Instant instant = Instant.ofEpochMilli(date.getTime());
+        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh"); // Múi giờ Việt Nam
+        return LocalDateTime.ofInstant(instant, zoneId);
     }
 }
 

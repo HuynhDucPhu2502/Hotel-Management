@@ -69,7 +69,7 @@ public class RestoreDatabase {
 
             String restoreQuery = "RESTORE DATABASE " + databaseName + " " +
                     "FROM DISK = '" + backupFullFilePath + "' " +
-                    "WITH REPLACE;";
+                    "WITH REPLACE, RECOVERY;";
 
             stmt.execute(restoreQuery);
         }

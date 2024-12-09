@@ -7,7 +7,7 @@
 
 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="77.0" prefWidth="604.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.backup.ProgressController">
    <children>
-      <ProgressBar fx:id="progressBar" layoutX="37.0" layoutY="14.0" prefHeight="29.0" prefWidth="530.0" progress="0.1" />
+      <ProgressBar fx:id="progressBar" layoutX="37.0" layoutY="14.0" prefHeight="29.0" prefWidth="530.0" />
       <Text layoutX="37.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lưu ý : tiến trình có thể mất thời gian">
          <font>
             <Font name="System Italic" size="12.0" />
