@@ -118,6 +118,7 @@ public class InvoiceDAO {
                 case "RESERVATION_FORM_NOT_FOUND":
                     throw new IllegalArgumentException(ErrorMessages.NULL_RESERVATIONFORM);
                 case "ROOM_CHECKOUT_SUCCESS":
+                    System.out.println("test");
                     HistoryCheckOutDAO.incrementAndUpdateNextID();
                     incrementAndUpdateNextID();
                     break;

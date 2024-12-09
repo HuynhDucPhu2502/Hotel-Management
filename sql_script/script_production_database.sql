@@ -769,7 +769,7 @@ GO
 
 -- Tạo procedure trả phòng
 -- (procedure không hỗ trợ sinh nextID mới)
-CREATE PROCEDURE roomCheckingOut(
+CREATE PROCEDURE RoomCheckingOut(
     @reservationFormID NVARCHAR(15),
     @employeeID NVARCHAR(15),
     @roomCharge MONEY,
@@ -844,6 +844,92 @@ BEGIN
     END CATCH
 END;
 GO
+
+-- Tạo procedure trả phòng sớm
+-- (procedure không hỗ trợ sinh nextID mới)
+CREATE PROCEDURE RoomCheckingOutEarly(
+    @reservationFormID NVARCHAR(15),
+    @employeeID NVARCHAR(15),
+    @roomCharge MONEY,
+    @serviceCharge MONEY,
+    @message NVARCHAR(255) OUTPUT
+)
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Kiểm tra phiếu đặt phòng hợp lệ
+        IF NOT EXISTS (
+            SELECT 1
+            FROM ReservationForm
+            WHERE reservationFormID = @reservationFormID
+              AND isActivate = 'ACTIVATE'
+        )
+        BEGIN
+            SET @message = 'RESERVATION_FORM_NOT_FOUND';
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+
+        -- Lấy thông tin roomID từ ReservationForm
+        DECLARE @roomID NVARCHAR(15);
+        SELECT @roomID = roomID
+        FROM ReservationForm
+        WHERE reservationFormID = @reservationFormID;
+
+        -- Lấy nextID từ GlobalSequence
+        DECLARE @historyCheckOutID NVARCHAR(15);
+        DECLARE @invoiceID NVARCHAR(15);
+
+        SELECT @historyCheckOutID = nextID
+        FROM GlobalSequence
+        WHERE tableName = 'HistoryCheckOut';
+
+        SELECT @invoiceID = nextID
+        FROM GlobalSequence
+        WHERE tableName = 'Invoice';
+
+        -- Thêm dữ liệu vào bảng HistoryCheckOut
+        INSERT INTO HistoryCheckOut (historyCheckOutID, checkOutDate, reservationFormID, employeeID)
+        VALUES (@historyCheckOutID, GETDATE(), @reservationFormID, @employeeID);
+
+        -- Thêm dữ liệu vào bảng Invoice
+        INSERT INTO Invoice (invoiceID, invoiceDate, roomCharge, servicesCharge, reservationFormID)
+        VALUES (@invoiceID, GETDATE(), @roomCharge, @serviceCharge, @reservationFormID);
+
+        -- Cập nhật trạng thái phòng thành AVAILABLE
+        UPDATE Room
+        SET roomStatus = 'AVAILABLE'
+        WHERE roomID = @roomID;
+
+        -- Cập nhật ReservationForm: đặt `RoomBookingDeposit` về 0 và cập nhật `checkOutDate`
+        UPDATE ReservationForm
+        SET
+            RoomBookingDeposit = 0,
+            checkOutDate = GETDATE()
+        WHERE reservationFormID = @reservationFormID;
+
+        -- Thêm dữ liệu vào bảng RoomDialog
+        INSERT INTO RoomDialog (roomID, reservationFormID, dialog, dialogType, timestamp)
+        VALUES (
+            @roomID,
+            @reservationFormID,
+            CONCAT(N'Check-out sớm thành công cho phòng ', @roomID),
+            'CHECKOUT',
+            GETDATE()
+        );
+
+        COMMIT TRANSACTION;
+        SET @message = 'ROOM_CHECKOUT_SUCCESS';
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        SET @message = ERROR_MESSAGE();
+    END CATCH
+END;
+GO
+
 -- ===================================================================================
 -- 3. THÊM DỮ LIỆU
 -- ===================================================================================
