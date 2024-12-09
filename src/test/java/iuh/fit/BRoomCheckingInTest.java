@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -46,11 +47,8 @@ public class BRoomCheckingInTest {
                     LocalDateTime.now(),
                     LocalDateTime.now(),
                     LocalDateTime.now().plusDays(3),
-                    "EMP-000001",
                     "V2304",
-                    "CUS-000004",
-                    500000,
-                    "ACTIVATE"
+                    "CUS-000004"
             );
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,7 +58,7 @@ public class BRoomCheckingInTest {
         ReservationForm reservationForm = ReservationFormDAO.getDataByID("RF-999999");
         Employee employee = EmployeeDAO.getDataByID("EMP-000001");
 
-        RoomReservationDetailDAO.roomCheckingIn(reservationForm.getReservationID(), employee.getEmployeeID());
+        RoomReservationDetailDAO.roomCheckingIn(Objects.requireNonNull(reservationForm).getReservationID(), Objects.requireNonNull(employee).getEmployeeID());
 
         RoomWithReservation roomWithReservation = RoomWithReservationDAO.getRoomWithReservationByID(
                 reservationForm.getReservationID(),
@@ -83,11 +81,8 @@ public class BRoomCheckingInTest {
                     LocalDateTime.now(),
                     LocalDateTime.now().plusHours(3),
                     LocalDateTime.now().plusDays(3),
-                    "EMP-000001",
                     "T1105",
-                    "CUS-000005",
-                    500000,
-                    "ACTIVATE"
+                    "CUS-000005"
             );
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,9 +94,7 @@ public class BRoomCheckingInTest {
 
         IllegalArgumentException thrown = assertThrows(
                 IllegalArgumentException.class,
-                () -> {
-                    RoomReservationDetailDAO.roomCheckingIn(reservationForm.getReservationID(), employee.getEmployeeID());
-                }
+                () -> RoomReservationDetailDAO.roomCheckingIn(Objects.requireNonNull(reservationForm).getReservationID(), Objects.requireNonNull(employee).getEmployeeID())
         );
 
         // Kiểm tra kết quả
@@ -116,11 +109,8 @@ public class BRoomCheckingInTest {
                     LocalDateTime.now(),
                     LocalDateTime.now().plusMinutes(10),
                     LocalDateTime.now().plusDays(3),
-                    "EMP-000001",
                     "V2206",
-                    "CUS-000006",
-                    500000,
-                    "ACTIVATE"
+                    "CUS-000006"
             );
         } catch (Exception e) {
             e.printStackTrace();
@@ -130,7 +120,7 @@ public class BRoomCheckingInTest {
         ReservationForm reservationForm = ReservationFormDAO.getDataByID("RF-999997");
         Employee employee = EmployeeDAO.getDataByID("EMP-000001");
 
-        RoomReservationDetailDAO.roomEarlyCheckingIn(reservationForm.getReservationID(), employee.getEmployeeID());
+        RoomReservationDetailDAO.roomEarlyCheckingIn(Objects.requireNonNull(reservationForm).getReservationID(), Objects.requireNonNull(employee).getEmployeeID());
         RoomWithReservation roomWithReservation = RoomWithReservationDAO.getRoomWithReservationByID(
                 reservationForm.getReservationID(),
                 reservationForm.getRoom().getRoomID()
@@ -149,14 +139,14 @@ public class BRoomCheckingInTest {
     // 3. Các phương thức hỗ trợ
     // ==================================================================================================================
     private void insertReservableReservationForm(String reservationFormID, LocalDateTime reservationDate,
-                                                 LocalDateTime checkInDate, LocalDateTime checkOutDate, String employeeID,
-                                                 String roomID, String customerID, double roomBookingDeposit,
-                                                 String isActivate) throws SQLException {
-        String sql = """
-        INSERT INTO ReservationForm 
+                                                 LocalDateTime checkInDate, LocalDateTime checkOutDate,
+                                                 String roomID, String customerID) throws SQLException {
+        String sql =
+        """
+        INSERT INTO ReservationForm\s
         (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit, isActivate)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
-        """;
+       \s""";
 
         try (Connection connection = DBHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -164,11 +154,11 @@ public class BRoomCheckingInTest {
             preparedStatement.setTimestamp(2, Timestamp.valueOf(reservationDate));
             preparedStatement.setTimestamp(3, Timestamp.valueOf(checkInDate));
             preparedStatement.setTimestamp(4, Timestamp.valueOf(checkOutDate));
-            preparedStatement.setString(5, employeeID);
+            preparedStatement.setString(5, "EMP-000001");
             preparedStatement.setString(6, roomID);
             preparedStatement.setString(7, customerID);
-            preparedStatement.setDouble(8, roomBookingDeposit);
-            preparedStatement.setString(9, isActivate);
+            preparedStatement.setDouble(8, 500000);
+            preparedStatement.setString(9, "ACTIVATE");
             preparedStatement.executeUpdate();
         }
     }

@@ -71,6 +71,8 @@ public class RoomUsageServiceDAO {
 
             // Kiểm tra kết quả trả về từ Stored Procedure
             switch (message) {
+                case "ROOM_SERVICE_ORDERING_RESERVATION_NOT_FOUND_OR_EXPIRED":
+                    throw new IllegalArgumentException("Phiếu đặt phòng không tồn tại hoặc đã hết hạn.");
                 case "SERVICE_ORDERING_INVALID_QUANTITY":
                     throw new IllegalArgumentException(ErrorMessages.SERVICE_ORDERING_INVALID_QUANTITY);
                 case "SERVICE_ORDERING_SUCCESS":

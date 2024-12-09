@@ -1,11 +1,9 @@
 package iuh.fit;
 
-import iuh.fit.dao.RoomDAO;
-import iuh.fit.dao.RoomReservationDetailDAO;
-import iuh.fit.dao.RoomWithReservationDAO;
-import iuh.fit.models.Room;
+import iuh.fit.dao.*;
+import iuh.fit.models.HotelService;
+import iuh.fit.models.RoomUsageService;
 import iuh.fit.models.enums.RoomStatus;
-import iuh.fit.models.wrapper.RoomWithReservation;
 import iuh.fit.utils.DBHelper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -17,12 +15,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class CRoomChangingTest {
+public class DServiceOrderingTest {
     // ==================================================================================================================
     // 1. Setup cho Test
     // ==================================================================================================================
@@ -41,109 +39,127 @@ public class CRoomChangingTest {
     // 2. Các testcase
     // ==================================================================================================================
     @Test
-    void testChangingRoom() {
+    void testServiceOrdering() {
         try {
             insertCheckedInReservationForm(
-                    "RF-999996",
+                    "RF-999994",
                     LocalDateTime.now().minusDays(2),
                     LocalDateTime.now().minusDays(1),
                     LocalDateTime.now().plusDays(3),
-                    "EMP-000002",
-                    "T1307"
+                    "EMP-000003",
+                    "V2311",
+                    "CUS-000008",
+                    500000,
+                    "ACTIVATE"
             );
+
             insertHistoryCheckIn(
-                    "HCI-999996",
-                    LocalDateTime.now().minusDays(1),
-                    "RF-999996",
-                    "EMP-000002"
+                    "HCI-999994",
+                    LocalDateTime.now().minusDays(4),
+                    "RF-999994",
+                    "EMP-000003"
             );
             insertRoomReservationDetail(
-                    "RRD-999996",
-                    LocalDateTime.now().minusDays(1),
-                    "T1307",
-                    "RF-999996",
-                    "EMP-000002"
+                    "RRD-999994",
+                    LocalDateTime.now().minusDays(4),
+                    "V2311",
+                    "RF-999994",
+                    "EMP-000003"
             );
-            updateRoomStatus("T1307", RoomStatus.ON_USE);
+            updateRoomStatus("V2311", RoomStatus.AVAILABLE);
         } catch (Exception e) {
             e.printStackTrace();
-            System.exit(1);
+            Assertions.fail("Test failed due to unexpected error.");
         }
 
-        RoomReservationDetailDAO.changingRoom(
-                "T1307",
-                "V2408",
-                "RF-999996",
-                "EMP-000002"
+        HotelService hotelService = HotelServiceDAO.getDataByID("HS-000001");
+
+        RoomUsageService roomUsageService = new RoomUsageService(
+                1,
+                hotelService.getServicePrice(),
+                hotelService,
+                ReservationFormDAO.getDataByID("RF-999994"),
+                EmployeeDAO.getDataByID("EMP-000003"),
+                LocalDateTime.now()
         );
+        RoomUsageServiceDAO.serviceOrdering(roomUsageService);
 
-        RoomWithReservation roomWithReservation = RoomWithReservationDAO.getRoomWithReservationByID("RF-999996", "V2408");
-        Room oldRoom = RoomDAO.getDataByID("T1307");
-        Room newRoom = RoomDAO.getDataByID("V2408");
+        ArrayList<RoomUsageService> serviceArrayList =
+                (ArrayList<RoomUsageService>) RoomUsageServiceDAO.getByReservationFormID("RF-999994");
 
-        Assertions.assertEquals(roomWithReservation.getRoom().getRoomID(), "V2408");
-        Assertions.assertEquals(Objects.requireNonNull(newRoom).getRoomStatus(), RoomStatus.ON_USE);
-        Assertions.assertEquals(Objects.requireNonNull(oldRoom).getRoomStatus(), RoomStatus.AVAILABLE);
+         HotelService usedService =  serviceArrayList.getFirst().getHotelService();
+
+        assertEquals(hotelService.getServiceId(), usedService.getServiceId());
     }
 
     @Test
-    void testOverdueChangingRoom() {
+    void testOverdueServiceOrdering() {
         try {
             insertCheckedInReservationForm(
-                    "RF-999995",
+                    "RF-999993",
                     LocalDateTime.now().minusDays(5),
                     LocalDateTime.now().minusDays(4),
                     LocalDateTime.now().minusHours(1),
                     "EMP-000003",
-                    "T1109"
+                    "V2312",
+                    "CUS-000009",
+                    500000,
+                    "ACTIVATE"
             );
 
             insertHistoryCheckIn(
-                    "HCI-999995",
+                    "HCI-999993",
                     LocalDateTime.now().minusDays(4),
-                    "RF-999995",
+                    "RF-999993",
                     "EMP-000003"
             );
             insertRoomReservationDetail(
-                    "RRD-999995",
+                    "RRD-999993",
                     LocalDateTime.now().minusDays(4),
-                    "T1109",
-                    "RF-999995",
+                    "V2312",
+                    "RF-999993",
                     "EMP-000003"
             );
-            updateRoomStatus("T1109", RoomStatus.OVERDUE);
+            updateRoomStatus("V2312", RoomStatus.OVERDUE);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
         }
 
+        HotelService hotelService = HotelServiceDAO.getDataByID("HS-000001");
+
+        RoomUsageService roomUsageService = new RoomUsageService(
+                1,
+                hotelService.getServicePrice(),
+                hotelService,
+                ReservationFormDAO.getDataByID("RF-999993"),
+                EmployeeDAO.getDataByID("EMP-000003"),
+                LocalDateTime.now()
+        );
+
+
         IllegalArgumentException thrown = assertThrows(
                 IllegalArgumentException.class,
-                () -> RoomReservationDetailDAO.changingRoom(
-                        "T1109",
-                        "V2210",
-                        "RF-999995",
-                        "EMP-000002"
-                )
+                () -> {
+                    RoomUsageServiceDAO.serviceOrdering(roomUsageService);
+                }
         );
 
         assertEquals("Phiếu đặt phòng không tồn tại hoặc đã hết hạn.", thrown.getMessage());
     }
-
-
-
     // ==================================================================================================================
     // 3. Các phương thức hỗ trợ
     // ==================================================================================================================
     private void insertCheckedInReservationForm(String reservationFormID, LocalDateTime reservationDate,
                                                 LocalDateTime checkInDate, LocalDateTime checkOutDate,
-                                                String employeeID, String roomID) throws SQLException {
+                                                String employeeID, String roomID, String customerID,
+                                                double roomBookingDeposit, String isActivate) throws SQLException {
         String sql =
-        """
-        INSERT INTO ReservationForm\s
-        (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit, isActivate)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
-       \s""";
+                """
+                INSERT INTO ReservationForm 
+                (reservationFormID, reservationDate, checkInDate, checkOutDate, employeeID, roomID, customerID, roomBookingDeposit, isActivate)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+                """;
 
         try (Connection connection = DBHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -153,9 +169,9 @@ public class CRoomChangingTest {
             preparedStatement.setTimestamp(4, Timestamp.valueOf(checkOutDate));
             preparedStatement.setString(5, employeeID);
             preparedStatement.setString(6, roomID);
-            preparedStatement.setString(7, "CUS-000007");
-            preparedStatement.setDouble(8, 500000);
-            preparedStatement.setString(9, "ACTIVATE");
+            preparedStatement.setString(7, customerID);
+            preparedStatement.setDouble(8, roomBookingDeposit);
+            preparedStatement.setString(9, isActivate);
             preparedStatement.executeUpdate();
         }
     }
@@ -163,11 +179,11 @@ public class CRoomChangingTest {
     private void insertHistoryCheckIn(String historyCheckInID, LocalDateTime checkInDate,
                                       String reservationFormID, String employeeID) throws SQLException {
         String sql =
-        """
-        INSERT INTO HistoryCheckin\s
-        (historyCheckInID, checkInDate, reservationFormID, employeeID)
-        VALUES (?, ?, ?, ?);
-       \s""";
+                """
+                INSERT INTO HistoryCheckin 
+                (historyCheckInID, checkInDate, reservationFormID, employeeID)
+                VALUES (?, ?, ?, ?);
+                """;
 
         try (Connection connection = DBHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -183,11 +199,11 @@ public class CRoomChangingTest {
                                              String roomID, String reservationFormID,
                                              String employeeID) throws SQLException {
         String sql =
-        """
-        INSERT INTO RoomReservationDetail\s
-        (roomReservationDetailID, dateChanged, roomID, reservationFormID, employeeID)
-        VALUES (?, ?, ?, ?, ?);
-       \s""";
+                """
+                INSERT INTO RoomReservationDetail 
+                (roomReservationDetailID, dateChanged, roomID, reservationFormID, employeeID)
+                VALUES (?, ?, ?, ?, ?);
+                """;
 
         try (Connection connection = DBHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -202,11 +218,11 @@ public class CRoomChangingTest {
 
     private void updateRoomStatus(String roomID, RoomStatus roomStatus) throws SQLException {
         String sql =
-        """
-        UPDATE Room
-        SET roomStatus = ?
-        WHERE roomID = ?;
-        """;
+                """
+                UPDATE Room
+                SET roomStatus = ?
+                WHERE roomID = ?;
+                """;
 
         try (Connection connection = DBHelper.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
@@ -215,5 +231,4 @@ public class CRoomChangingTest {
             preparedStatement.executeUpdate();
         }
     }
-
 }

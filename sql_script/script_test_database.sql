@@ -414,6 +414,19 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
+        -- Kiểm tra nếu phiếu đặt phòng không tồn tại hoặc đã quá hạn
+                IF NOT EXISTS (
+                    SELECT 1
+                    FROM ReservationForm
+                    WHERE reservationFormID = @reservationFormID
+                      AND checkOutDate >= GETDATE()
+                )
+                BEGIN
+                    SET @message = 'ROOM_SERVICE_ORDERING_RESERVATION_NOT_FOUND_OR_EXPIRED';
+                    ROLLBACK TRANSACTION;
+                    RETURN;
+                END
+
         -- Kiểm tra nếu số lượng nhỏ hơn hoặc bằng 0
         IF @quantity <= 0
         BEGIN
