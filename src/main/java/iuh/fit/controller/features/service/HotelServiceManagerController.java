@@ -31,7 +31,7 @@ public class HotelServiceManagerController {
     @FXML
     private ComboBox<String> hotelServiceIDSearchField;
     @FXML
-    private TextField hotelSerivceNameSearchField;
+    private TextField hotelServiceNameSearchField;
     @FXML
     private TextField priceSearchField;
     @FXML
@@ -288,6 +288,7 @@ public class HotelServiceManagerController {
 
             addTask.setOnRunning(e -> setButtonsDisabled(true));
             addTask.setOnSucceeded(e -> Platform.runLater(() -> {
+                dialogPane.showInformation("Thêm thành công", "Dịch vụ đã được thêm");
                 handleResetAction();
                 loadData();
             }));
@@ -315,6 +316,7 @@ public class HotelServiceManagerController {
                 deleteTask.setOnSucceeded(e -> Platform.runLater(() -> {
                     handleResetAction();
                     loadData();
+                    dialogPane.showInformation("Xóa thành công", "Dịch vụ đã được xóa");
                 }));
 
                 new Thread(deleteTask).start();
@@ -379,6 +381,7 @@ public class HotelServiceManagerController {
                         handleResetAction();
                         toggleAddUpdateButtons();
                         setButtonsDisabled(false);
+                        dialogPane.showInformation("Cập nhật thành công", "Dịch vụ đã được cập nhật");
                     }));
 
                     new Thread(updateTask).start();
@@ -410,14 +413,14 @@ public class HotelServiceManagerController {
 
             if (items.size() == 1) {
                 HotelService hotelService = items.getFirst();
-                hotelSerivceNameSearchField.setText(hotelService.getServiceName());
+                hotelServiceNameSearchField.setText(hotelService.getServiceName());
                 priceSearchField.setText(String.valueOf(hotelService.getServicePrice()));
                 serviceCategoryNameSearchField.setText(hotelService.getServiceCategory() != null
                         ? hotelService.getServiceCategory().getServiceCategoryName()
                         : "KHÔNG CÓ");
                 descriptionSearchField.setText(hotelService.getDescription());
             } else {
-                hotelSerivceNameSearchField.clear();
+                hotelServiceNameSearchField.clear();
                 priceSearchField.clear();
                 serviceCategoryNameSearchField.clear();
                 descriptionSearchField.clear();

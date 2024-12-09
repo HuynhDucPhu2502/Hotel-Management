@@ -205,6 +205,7 @@ public class ServiceCategoryManagerController {
                 updateBtn.setDisable(false);
                 handleResetAction();
                 loadData();
+                dialogPane.showInformation("Thêm thành công", "Loại dịch vụ đã được thêm");
             });
 
 
@@ -238,6 +239,7 @@ public class ServiceCategoryManagerController {
                     addBtn.setDisable(false);
                     updateBtn.setDisable(false);
                     loadData();
+                    dialogPane.showInformation("Xóa thành công", "Loại dịch vụ đã được xóa");
                 });
 
                 Thread deleteThread = new Thread(deleteTask);
@@ -295,6 +297,7 @@ public class ServiceCategoryManagerController {
                         updateBtn.setDisable(false);
                         handleResetAction();
                         loadData();
+                        dialogPane.showInformation("Cập nhật thành công", "Loại dịch vụ đã được cập nhật");
                     });
 
                     Thread updateThread = new Thread(updateTask);

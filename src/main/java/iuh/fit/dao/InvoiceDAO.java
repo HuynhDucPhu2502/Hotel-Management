@@ -16,7 +16,7 @@ public class InvoiceDAO {
         String sql =
                 """
                 SELECT i.invoiceID, i.invoiceDate, i.roomCharge, i.servicesCharge,
-                       i.totalDue, i.netDue, 
+                       i.totalDue, i.netDue,\s
                        rf.reservationFormID, rf.reservationDate, rf.checkInDate, rf.checkOutDate, rf.roomBookingDeposit,
                        e.employeeID, e.fullName AS employeeName, e.position,
                        c.customerID, c.fullName AS customerName, c.phoneNumber, c.email, c.idCardNumber,
@@ -33,7 +33,7 @@ public class InvoiceDAO {
                 ) AND EXISTS (
                     SELECT 1 FROM HistoryCheckOut hco WHERE hco.reservationFormID = rf.reservationFormID
                 );
-                """;
+               \s""";
 
         try (Connection connection = DBHelper.getConnection();
              Statement statement = connection.createStatement();
@@ -47,6 +47,42 @@ public class InvoiceDAO {
             e.printStackTrace();
         }
         return invoices;
+    }
+
+    public static Invoice getInvoiceByReservationFormID(String reservationFormID) {
+        String sql =
+                """
+                SELECT i.invoiceID, i.invoiceDate, i.roomCharge, i.servicesCharge,
+                       i.totalDue, i.netDue,\s
+                       rf.reservationFormID, rf.reservationDate, rf.checkInDate, rf.checkOutDate, rf.roomBookingDeposit,
+                       e.employeeID, e.fullName AS employeeName, e.position,
+                       c.customerID, c.fullName AS customerName, c.phoneNumber, c.email, c.idCardNumber,
+                       r.roomID, r.roomStatus, r.dateOfCreation AS roomDateOfCreation,
+                       rc.roomCategoryID, rc.roomCategoryName, rc.numberOfBed
+                FROM Invoice i
+                LEFT JOIN ReservationForm rf ON i.reservationFormID = rf.reservationFormID
+                LEFT JOIN Employee e ON rf.employeeID = e.employeeID
+                LEFT JOIN Customer c ON rf.customerID = c.customerID
+                LEFT JOIN Room r ON rf.roomID = r.roomID
+                LEFT JOIN RoomCategory rc ON r.roomCategoryID = rc.roomCategoryID
+                WHERE EXISTS (
+                    SELECT 1 FROM HistoryCheckIn hci WHERE hci.reservationFormID = rf.reservationFormID
+                ) AND EXISTS (
+                    SELECT 1 FROM HistoryCheckOut hco WHERE hco.reservationFormID = rf.reservationFormID
+                ) AND rf.reservationFormID = ?;
+               \s""";
+
+        try (Connection connection = DBHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+
+            preparedStatement.setString(1,  reservationFormID);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) return extractData(rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public static void roomCheckingOut(String reservationFormID, String employeeID,
