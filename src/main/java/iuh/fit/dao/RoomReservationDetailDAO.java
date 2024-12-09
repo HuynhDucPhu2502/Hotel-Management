@@ -151,8 +151,6 @@ public class RoomReservationDetailDAO {
             switch (message) {
                 case "ROOM_CHECKING_IN_INVALID_RESERVATION":
                     throw new IllegalArgumentException(ErrorMessages.ROOM_CHECKING_IN_INVALID_RESERVATION);
-                case "ROOM_CHECKING_IN_TIME_INVALID":
-                    throw new IllegalArgumentException(ErrorMessages.ROOM_CHECKING_IN_TIME_INVALID);
                 case "ROOM_CHECKING_IN_SUCCESS":
                     HistoryCheckinDAO.incrementAndUpdateNextID();
                     incrementAndUpdateNextID();

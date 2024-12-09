@@ -67,25 +67,6 @@ public class DBHelper {
         return DriverManager.getConnection(URL_NO_DB, USER_NAME, USER_PASSWORD);
     }
 
-    public static String getNextID(String tableName) {
-        String selectQuery = "SELECT nextID FROM GlobalSequence WHERE tableName = 'ReservationForm'";
-
-        try (Connection connection = DBHelper.getConnection("HotelTestDatabase");
-             PreparedStatement selectStatement = connection.prepareStatement(selectQuery)
-        ) {
-            ResultSet resultSet = selectStatement.executeQuery();
-
-            if (resultSet.next()) {
-                return resultSet.getString("nextID");
-            } else throw new IllegalArgumentException("Không tìm thấy nextID");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-        return null;
-    }
-
     public static void setDatabaseName(String databaseName) {
         DATABASE_NAME = databaseName;
     }
