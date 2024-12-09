@@ -73,7 +73,6 @@ public class LoginController {
 
     @FXML private Button showPassRestoreButton;
     @FXML private Button filePathRestoreButton;
-    @FXML private Button researchFileRestoreButton;
 
     @FXML private Button refreshPassRestoreButton;
     @FXML private Button cancelRestoreButton;
@@ -439,6 +438,7 @@ public class LoginController {
         switchFromPassPanelToRestorePanel(true, false);
         passRestorePasswordField.setText("");
         filePathRestoreTextField.setText("");
+        errorMessage.setText("");
     }
 
     @FXML
@@ -500,8 +500,6 @@ public class LoginController {
         showPassRestoreButton.setManaged(passPanelShow);
         filePathRestoreButton.setVisible(restorePanelShow);
         filePathRestoreButton.setManaged(restorePanelShow);
-        researchFileRestoreButton.setVisible(restorePanelShow);
-        researchFileRestoreButton.setManaged(restorePanelShow);
 
         refreshPassRestoreButton.setVisible(passPanelShow);
         refreshPassRestoreButton.setManaged(passPanelShow);
@@ -572,12 +570,19 @@ public class LoginController {
             if (optional.isPresent() && optional.get().equals(ButtonType.OK)) {
                 try {
                     RestoreDatabase.restoreFullWhenNoDB(filePath);
-                    System.out.println("Database restored successfully!");
-                } catch (Exception e) {
                     showMessage(
                             Alert.AlertType.INFORMATION,
-                            "Thông báo",
-                            "Tệp dữ liệu phục hồi rỗng.",
+                            "Phục hồi dữ liệu thành công",
+                            "Dữ liệu đã phục hồi thành công",
+                            "Nhấn OK để xác nhận"
+                    ).show();
+                    backToLoginPanel();
+                } catch (Exception e) {
+                    showMessage(
+                            Alert.AlertType.ERROR,
+                            "Khôi phục thất bại",
+                            "Tệp dữ liệu không hợp lệ. " +
+                                    "Hãy kiểm tra lại đường dẫn, chỉ có thể dụng tệp dữ liệu toàn bộ (FULL) và là dữ liệu của ứng dụng",
                             "Nhấn OK để xác nhận."
                     ).show();
                 }
@@ -585,12 +590,19 @@ public class LoginController {
         } else {
             try {
                 RestoreDatabase.restoreFullWhenNoDB(filePath);
-                System.out.println("Database restored successfully!");
-            } catch (Exception e) {
                 showMessage(
                         Alert.AlertType.INFORMATION,
-                        "Thông báo",
-                        "Tệp dữ liệu phục hồi rỗng.",
+                        "Phục hồi dữ liệu thành công",
+                        "Dữ liệu đã phục hồi thành công",
+                        "Nhấn OK để xác nhận"
+                ).show();
+                backToLoginPanel();
+            } catch (Exception e) {
+                showMessage(
+                        Alert.AlertType.ERROR,
+                        "Khôi phục thất bại",
+                        "Tệp dữ liệu không hợp lệ. " +
+                                "Hãy kiểm tra lại đường dẫn, chỉ có thể dụng tệp dữ liệu toàn bộ (FULL) và là dữ liệu của ứng dụng",
                         "Nhấn OK để xác nhận."
                 ).show();
             }
@@ -602,11 +614,6 @@ public class LoginController {
     void cancelRestore() {
         switchFromPassPanelToRestorePanel(true, false);
         filePathRestoreTextField.setText("");
-    }
-
-    @FXML
-    void researchFileRestore() {
-
     }
 
     @FXML
@@ -625,4 +632,5 @@ public class LoginController {
         alert.setContentText(content);
         return alert;
     }
+
 }

@@ -9,6 +9,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -21,29 +22,39 @@ public class BackupDatabase {
 
     public static void backupDifDatabase(String filePath) throws SQLException {
         Connection connection = DBHelper.getConnection();
-        String backupQuery = "BACKUP DATABASE [HotelDatabase] TO DISK = '" + filePath + "' " + " WITH DIFFERENTIAL ";
-        if(connection == null) throw new IllegalArgumentException("Connection is NULL!!!");
-        try{
-            PreparedStatement preparedStatement = connection.prepareStatement(backupQuery);
-            preparedStatement.executeQuery();
-            System.out.println("Backup completed: " + filePath);
-        }catch (Exception ignored){
+        String backupQuery = "BACKUP DATABASE [HotelDatabase] TO DISK = '" + filePath + "' WITH DIFFERENTIAL ";
 
+        if(connection == null) throw new IllegalArgumentException("Connection is NULL!!!");
+
+        try {
+            Statement statement = connection.createStatement();
+            statement.execute(backupQuery);  // Sử dụng execute() thay vì executeQuery()
+            System.out.println("Backup completed: " + filePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            connection.close();
         }
     }
+
 
     public static void backupFullDatabase(String filePath) throws SQLException {
         Connection connection = DBHelper.getConnection();
+
         String backupQuery = "BACKUP DATABASE [HotelDatabase] TO DISK = '" + filePath + "' ";
         if(connection == null) throw new IllegalArgumentException("Connection is NULL!!!");
-        try{
-            PreparedStatement preparedStatement = connection.prepareStatement(backupQuery);
-            preparedStatement.executeQuery();
-            System.out.println("Backup completed: " + filePath);
-        }catch (Exception ignored){
 
+        try {
+            Statement statement = connection.createStatement();
+            statement.execute(backupQuery);
+            System.out.println("Backup completed: " + filePath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            connection.close();
         }
     }
+
 
     // handle backup event when slose the app
     public static void backupData(Stage primaryStage) throws SQLException {
@@ -79,9 +90,9 @@ public class BackupDatabase {
                 }
                 showMessage(
                         Alert.AlertType.INFORMATION,
-                        "Sao luu thanh cong",
-                        "Du lieu da duoc sao luu thanh cong",
-                        "Nhan ok de Xac nhan"
+                        "Sao lưu thành công",
+                        "Dữ liệu đã được sao lưu thành công",
+                        "Nhấn OK để xác nhận"
                 ).showAndWait();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -89,9 +100,9 @@ public class BackupDatabase {
         else if(FilePathManager.getPath(PreferencesKey.BACK_UP_FORM_KEY, PreferencesKey.DEFAULT_FILE_PATH)
                 .equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_WARNING_VALUE)){
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Sao luu du lieu");
-            alert.setHeaderText("Ban co muon sao luu du lieu cua ngay hom nay khong");
-            alert.setContentText("Nhan ok de LUU, cancel thi KHONG");
+            alert.setTitle("Sao lưu dữ liệu");
+            alert.setHeaderText("Bạn có muốn sao lưu dữ liệu của ngày hôm nay không?");
+            alert.setContentText("Nhấn OK để lưu, Cancel để hủy");
 
             if(alert.showAndWait().get() == ButtonType.OK){
                 try {
@@ -104,9 +115,9 @@ public class BackupDatabase {
                     }
                     showMessage(
                             Alert.AlertType.INFORMATION,
-                            "Sao luu thanh cong",
-                            "Du lieu da duoc sao luu thanh cong",
-                            "Nhan ok de Xac nhan"
+                            "Sao lưu thành công",
+                            "Dữ liệu đã được sao lưu thành công",
+                            "Nhấn OK để xác nhận"
                     ).showAndWait();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);

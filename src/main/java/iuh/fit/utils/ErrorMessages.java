@@ -159,7 +159,7 @@ public class ErrorMessages {
     public static final String ROOM_CHECKING_IN_TIME_INVALID = "Thời gian check-in không nằm trong khoảng cho phép.";
 
     // Database
-    public static final String DATABASE_NOT_FOUND = "Không tìm thấy database";
+    public static final String DATABASE_NOT_FOUND = "Không tìm thấy cơ sở dữ liệu!!!";
 
 
 }
