@@ -66,7 +66,6 @@ public class InvoiceRevenueStatisticsTabController implements Initializable {
     @FXML private Text depositText;
     @FXML private Text serviceChargeText;
     @FXML private Text roomChargeText;
-    @FXML private Text taxText;
     @FXML private Text numOfInvoiceText;
     @FXML private Pagination invoicePagination;
     @FXML private Button statisticAllTheTimeButton;
