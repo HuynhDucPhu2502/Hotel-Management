@@ -90,7 +90,7 @@ public class DashboardController {
         featureKeywordFXMLMapping.put(createKeyword("Trang chủ", "Trang chủ, trang chu, tc, dashboard"), "/iuh/fit/view/features/DashboardPanel.fxml");
         featureKeywordFXMLMapping.put(createKeyword("Tìm kiếm phòng", "Tìm kiếm phòng, tim kiem phong, tkp, room_search"), "/iuh/fit/view/features/room/RoomSearchingPanel.fxml");
         featureKeywordFXMLMapping.put(createKeyword("Đặt phòng", "Đặt phòng, dat phong, dp, room_booking"), "/iuh/fit/view/features/room/RoomBookingPanel.fxml");
-        featureKeywordFXMLMapping.put(createKeyword("Quản lý hóa đơn", "Quản lý hóa đơn, quan ly hoa don, qlhd, invoice_manager"), "/iuh/fit/view/features/room/InvoiceManagerPanel.fxml");
+        featureKeywordFXMLMapping.put(createKeyword("Quản lý hóa đơn", "Quản lý hóa đơn, quan ly hoa don, qlhd, invoice_manager"), "/iuh/fit/view/features/invoice/InvoiceManagerPanel.fxml");
         featureKeywordFXMLMapping.put(createKeyword("Tìm kiếm dịch vụ", "Tìm kiếm dịch vụ, tim kiem dich vu, tkdv, hotel_service_search"), "/iuh/fit/view/features/service/HotelServiceSearchingPanel.fxml");
         featureKeywordFXMLMapping.put(createKeyword("Tìm kiếm khách hàng", "Tìm kiếm khách hàng, tim kiem khach hang, tkkh, customer_search"), "/iuh/fit/view/features/customer/CustomerSearchingPanel.fxml");
         featureKeywordFXMLMapping.put(createKeyword("Quản lý khách hàng", "Quản lý khách hàng, quan ly khach hang, qlkh, customer_manager"), "/iuh/fit/view/features/customer/CustomerManagerPanel.fxml");

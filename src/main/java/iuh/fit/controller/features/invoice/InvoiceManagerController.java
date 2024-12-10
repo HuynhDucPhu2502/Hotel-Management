@@ -134,7 +134,7 @@ public class InvoiceManagerController {
     }
 
     private Pane loadInvoiceItem(Invoice invoice) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/invoice_panels/InvoiceItem.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/invoice/InvoiceItem.fxml"));
         Pane invoiceItem = loader.load();
 
         InvoiceItemController controller = loader.getController();

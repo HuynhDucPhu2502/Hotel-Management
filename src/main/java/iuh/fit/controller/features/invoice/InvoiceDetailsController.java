@@ -1,7 +1,6 @@
 package iuh.fit.controller.features.invoice;
 
 import com.dlsc.gemsfx.DialogPane;
-import com.itextpdf.text.DocumentException;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.dao.HistoryCheckOutDAO;
@@ -21,7 +20,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -29,7 +27,7 @@ import java.util.Locale;
 
 public class InvoiceDetailsController {
     @FXML
-    private Button backBtn, invoiceManagerNavigateBtn, exportPDFBtn;
+    private Button backBtn, invoiceManagerNavigateBtn, exportPDFBtn, printPDFBtn;
 
     @FXML
     private Label roomNumberLabel, roomCategoryLabel, checkInDateLabel,
@@ -115,12 +113,17 @@ public class InvoiceDetailsController {
         // Current Panel Button
         exportPDFBtn.setOnAction(e -> {
             try {
-                PDFHelper.createInvoicePDF(invoice);
-            } catch (DocumentException | IOException ex) {
-                ex.printStackTrace();
-                dialogPane.showInformation("Lỗi", "Đã xảy ra lỗi trong quá trình xuất PDF. Vui lòng thử lại!");
-            } catch (IllegalArgumentException ex) {
-                dialogPane.showInformation("Hủy", ex.getMessage());
+                PDFHelper.createAndOpenInvoicePDF(invoice);
+            } catch (Exception exception) {
+                dialogPane.showWarning("LỖI", exception.getMessage());
+            }
+        });
+
+        printPDFBtn.setOnAction(e -> {
+            try {
+                PDFHelper.createAndPrintInvoicePDF(invoice);
+            } catch (Exception exception) {
+                dialogPane.showWarning("LỖI", exception.getMessage());
             }
         });
 
@@ -169,7 +172,7 @@ public class InvoiceDetailsController {
     // ==================================================================================================================
     private void navigateToInvoiceManagerPanel() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/InvoiceManagerPanel.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/invoice/InvoiceManagerPanel.fxml"));
             AnchorPane layout = loader.load();
 
             InvoiceManagerController invoiceManagerController = loader.getController();

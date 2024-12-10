@@ -56,7 +56,7 @@ public class InvoiceItemController {
     private void navigateToInvoiceDetailsPanel() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                    "/iuh/fit/view/features/room/invoice_panels/InvoiceDetailsPanel.fxml"));
+                    "/iuh/fit/view/features/invoice/InvoiceDetailsPanel.fxml"));
             AnchorPane layout = loader.load();
 
             InvoiceDetailsController invoiceDetailsController = loader.getController();

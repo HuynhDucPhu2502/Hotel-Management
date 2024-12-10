@@ -1,6 +1,8 @@
 package iuh.fit.utils;
 
 import com.itextpdf.text.*;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.*;
 import iuh.fit.dao.RoomUsageServiceDAO;
 import iuh.fit.models.Invoice;
@@ -8,6 +10,7 @@ import iuh.fit.models.RoomUsageService;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,14 +20,14 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class PDFHelper {
-    public static void createInvoicePDF(Invoice invoice) throws DocumentException, IOException {
+    private static File createInvoicePDF(Invoice invoice) throws DocumentException, IOException {
         ArrayList<RoomUsageService> roomUsageServices = (ArrayList<RoomUsageService>) RoomUsageServiceDAO
                 .getByReservationFormID(invoice.getReservationForm().getReservationID());
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Lưu hóa đơn PDF");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-        fileChooser.setInitialFileName("HoaDon.pdf");
+        fileChooser.setInitialFileName("HoaDon-" + invoice.getInvoiceID() + ".pdf");
         File file = fileChooser.showSaveDialog(new Stage());
 
         if (file == null) {
@@ -193,6 +196,33 @@ public class PDFHelper {
         document.add(totalTable);
 
         document.close();
+
+        if (Desktop.isDesktopSupported() && file.exists()) {
+            Desktop.getDesktop().open(file);
+        } else {
+            throw new IllegalArgumentException("Không thể mở file PDF.");
+        }
+
+        return file;
+    }
+
+    public static void createAndOpenInvoicePDF(Invoice invoice) throws Exception {
+        File file = createInvoicePDF(invoice);
+
+        if (!file.exists())
+            throw new IllegalArgumentException("File PDF không tồn tại");
+
+        if (Desktop.isDesktopSupported()) Desktop.getDesktop().open(file);
+        else throw new IllegalArgumentException("Không thể mở file PDF.");
+    }
+
+    public static void createAndPrintInvoicePDF(Invoice invoice) throws Exception {
+        File file = createInvoicePDF(invoice);
+
+        if (!file.exists()) throw new IllegalArgumentException("File PDF không tồn tại");
+
+        if (Desktop.isDesktopSupported()) Desktop.getDesktop().print(file);
+        else throw new IllegalArgumentException("Không thể mở file PDF.");
     }
 
     // Hàm phụ
@@ -315,7 +345,6 @@ public class PDFHelper {
 
         return totalTable;
     }
-
 
     private static PdfPCell createAlignedCell(String text, Font font, int alignment) {
         PdfPCell cell = new PdfPCell(new Phrase(text, font));
