@@ -16,7 +16,7 @@ public class InvoiceDAO {
         String sql =
                 """
                 SELECT i.invoiceID, i.invoiceDate, i.roomCharge, i.servicesCharge,
-                       i.totalDue, i.netDue,\s
+                       i.totalDue, i.netDue,
                        rf.reservationFormID, rf.reservationDate, rf.checkInDate, rf.checkOutDate, rf.roomBookingDeposit,
                        e.employeeID, e.fullName AS employeeName, e.position,
                        c.customerID, c.fullName AS customerName, c.phoneNumber, c.email, c.idCardNumber,
