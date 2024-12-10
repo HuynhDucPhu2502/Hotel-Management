@@ -7,17 +7,17 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 public class TopController {
     @FXML
@@ -31,13 +31,13 @@ public class TopController {
 
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
     private Account currentAccount;
-    private MainController mainController;
+//    private MainController mainController;
 
     private NotificationButtonController topBarController;
 
     @FXML
-    public NotificationButtonController initialize(Account account, MainController mainController) {
-        setupContext(account, mainController);
+    public NotificationButtonController initialize(Account account) {
+        setupContext(account);
         // clock
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateClock()));
         timeline.setCycleCount(Timeline.INDEFINITE); //
@@ -51,9 +51,8 @@ public class TopController {
         return topBarController;
     }
 
-    public void setupContext(Account account, MainController mainController) {
+    public void setupContext(Account account) {
         this.currentAccount = account;
-        this.mainController = mainController;
     }
 
     private void updateClock() {
@@ -61,26 +60,38 @@ public class TopController {
         clockLabel.setText(currentTime);
     }
 
-    public void logout() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/LoginUI.fxml"));
-            AnchorPane loginPane = fxmlLoader.load();
+    public void logout() throws IOException {
+        try{
+            // Create a confirmation alert
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Đăng xuất");
+            alert.setHeaderText("Xác nhận đăng xuất");
+            alert.setContentText("Bạn có muốn đăng xuất và bàn giao lại ca?");
 
-            Stage currentStage = (Stage) (logoutBtn.getScene().getWindow());
+            // Show the dialog and wait for a response
+            Optional<ButtonType> result = alert.showAndWait();
 
-            Scene loginScene = new Scene(loginPane);
+            // Check the user's response
+            if (((java.util.Optional<?>) result).isPresent() && result.get() == ButtonType.OK) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/LoginUI.fxml"));
+                AnchorPane loginPane = fxmlLoader.load();
 
-            currentStage.setScene(loginScene);
+                Stage currentStage = (Stage) (logoutBtn.getScene().getWindow());
 
-            currentStage.setResizable(false);
-            currentStage.setWidth(610);
-            currentStage.setHeight(400);
-            currentStage.setMaximized(false);
-            currentStage.centerOnScreen();
+                Scene loginScene = new Scene(loginPane);
 
-            currentStage.show();
-            currentStage.centerOnScreen();
-        } catch (Exception e) {
+                currentStage.setScene(loginScene);
+
+                currentStage.setResizable(false);
+                currentStage.setWidth(610);
+                currentStage.setHeight(400);
+                currentStage.setMaximized(false);
+                currentStage.centerOnScreen();
+
+                currentStage.show();
+                currentStage.centerOnScreen();
+            }
+        }catch(Exception e){
             e.printStackTrace();
         }
     }
@@ -112,7 +123,13 @@ public class TopController {
         logoutBtn.setOnMouseReleased(event -> img.setEffect(null));
 
         // logout
-        logoutBtn.setOnAction(e -> logout());
+        logoutBtn.setOnAction(e -> {
+            try {
+                logout();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 
     public void initializeNotificationButton() {

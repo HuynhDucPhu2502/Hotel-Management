@@ -113,7 +113,7 @@ public class MainController {
             AnchorPane topLayout = loader.load();
 
             TopController topController = loader.getController();
-            notificationButtonController = topController.initialize(account, this);
+            notificationButtonController = topController.initialize(account);
 
             RoomManagementService.startAutoCheckoutScheduler(notificationButtonController);
 
