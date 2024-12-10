@@ -13,6 +13,7 @@ module iuh.fit {
     requires java.prefs;
     requires zip4j;
     requires javafx.web;
+    requires org.apache.pdfbox;
 
 
     opens iuh.fit to javafx.fxml;

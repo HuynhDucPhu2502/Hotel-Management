@@ -9,15 +9,25 @@ import iuh.fit.models.Invoice;
 import iuh.fit.models.RoomUsageService;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.rendering.PDFRenderer;
 
+import javax.print.*;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.MediaSizeName;
 import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.printing.PDFPageable;
+
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import java.awt.print.PrinterJob;
+import java.io.File;
 
 public class PDFHelper {
     private static File createInvoicePDF(Invoice invoice) throws DocumentException, IOException {
@@ -194,14 +204,7 @@ public class PDFHelper {
 
         PdfPTable totalTable = createTotalTable(invoice, invoice.getReservationForm().getRoomBookingDeposit(), headerFont, font);
         document.add(totalTable);
-
         document.close();
-
-        if (Desktop.isDesktopSupported() && file.exists()) {
-            Desktop.getDesktop().open(file);
-        } else {
-            throw new IllegalArgumentException("Không thể mở file PDF.");
-        }
 
         return file;
     }
@@ -216,14 +219,31 @@ public class PDFHelper {
         else throw new IllegalArgumentException("Không thể mở file PDF.");
     }
 
+
     public static void createAndPrintInvoicePDF(Invoice invoice) throws Exception {
         File file = createInvoicePDF(invoice);
 
-        if (!file.exists()) throw new IllegalArgumentException("File PDF không tồn tại");
+        if (!file.exists()) throw new IllegalArgumentException("File PDF không tồn tại.");
 
-        if (Desktop.isDesktopSupported()) Desktop.getDesktop().print(file);
-        else throw new IllegalArgumentException("Không thể mở file PDF.");
+        try (PDDocument document = Loader.loadPDF(file)) {
+            PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
+            if (printServices.length == 0) throw new IllegalArgumentException("Không tìm thấy máy in nào trên hệ thống.");
+
+            PrintService selectedPrinter = printServices[0];
+
+            PrinterJob printerJob = PrinterJob.getPrinterJob();
+            printerJob.setPrintService(selectedPrinter);
+            printerJob.setPageable(new PDFPageable(document));
+
+            if (printerJob.printDialog()) {
+                printerJob.print();
+            } else throw new IllegalArgumentException("Không tìm thấy lệnh in.");
+        } catch (Exception e) {
+            throw new Exception("Có lỗi xảy ra khi in: " + e.getMessage(), e);
+        }
     }
+
+
 
     // Hàm phụ
     private static PdfPTable getPdfPTable(Invoice invoice, Font titleFont, Font font) {
