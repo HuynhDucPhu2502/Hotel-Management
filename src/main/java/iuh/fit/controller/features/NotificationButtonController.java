@@ -89,14 +89,11 @@ public class NotificationButtonController {
 
     private void checkNotification(){
         if(notificationList.isEmpty()){
-            if(messageListContainer.getChildren().contains(emptyNotification)){
-                notifyCircle.setVisible(false);
-                notifyNumber.setVisible(false);
-            }else{
+            if (!messageListContainer.getChildren().contains(emptyNotification)) {
                 messageListContainer.getChildren().add(emptyNotification);
-                notifyCircle.setVisible(false);
-                notifyNumber.setVisible(false);
             }
+            notifyCircle.setVisible(false);
+            notifyNumber.setVisible(false);
             checkSize();
         }else if(notificationList.stream().filter(Notifications::isRead).count() == notificationList.size()){
             messageListContainer.getChildren().remove(emptyNotification);

@@ -3,7 +3,6 @@ package iuh.fit.utils;
 import iuh.fit.security.PreferencesKey;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.sql.Connection;
@@ -57,13 +56,14 @@ public class BackupDatabase {
 
 
     // handle backup event when slose the app
-    public static void backupData(Stage primaryStage) throws SQLException {
+    public static void backupData() {
         String autoBackupOption = PropertiesFile.readFile(settingFilePath, PreferencesKey.BACK_UP_OPTION_KEY);
-        if(autoBackupOption == null || autoBackupOption.equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_NO_VALUE)) {
-            if(primaryStage != null){
-                System.exit(0);
-            }
-        }
+
+        if(
+                autoBackupOption == null
+                || autoBackupOption.equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_NO_VALUE)
+        ) return;
+
 
         String defaultBackupName = "\\HotelBackup-" + LocalDate.now().format(dateTimeFormatter) + "-DIF.bak";
 
@@ -79,35 +79,24 @@ public class BackupDatabase {
 
         if(autoBackupOption.equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_AUTO_VALUE))
             try {
-                if(primaryStage == null){
-                    if(new File(filePath).exists()) new File(filePath).delete();
-                    BackupDatabase.backupDifDatabase(filePath);
-                    showMessage(
-                            Alert.AlertType.INFORMATION,
-                            "Sao lưu thành công",
-                            "Dữ liệu đã được sao lưu thành công",
-                            "Nhấn OK để xác nhận"
-                    ).showAndWait();
-                }else{
-                    if(new File(filePath).exists()) new File(filePath).delete();
-                    BackupDatabase.backupDifDatabase(filePath);
-                    showMessage(
-                            Alert.AlertType.INFORMATION,
-                            "Sao lưu thành công",
-                            "Dữ liệu đã được sao lưu thành công",
-                            "Nhấn OK để xác nhận"
-                    ).showAndWait();
-                }
+                if(new File(filePath).exists()) new File(filePath).delete();
+                BackupDatabase.backupDifDatabase(filePath);
+                showMessage(
+                        Alert.AlertType.INFORMATION,
+                        "Sao lưu thành công",
+                        "Dữ liệu đã được sao lưu thành công",
+                        "Nhấn OK để xác nhận"
+                ).showAndWait();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        else if(autoBackupOption.equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_WARNING_VALUE)){
+        else if (autoBackupOption.equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_WARNING_VALUE)) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Sao lưu dữ liệu");
             alert.setHeaderText("Bạn có muốn sao lưu dữ liệu của ngày hôm nay không?");
             alert.setContentText("Nhấn OK để lưu, Cancel để hủy");
 
-            if(alert.showAndWait().get() == ButtonType.OK){
+            if (alert.showAndWait().get() == ButtonType.OK){
                 try {
                     if(new File(filePath).exists()) new File(filePath).delete();
                     BackupDatabase.backupDifDatabase(filePath);
@@ -120,14 +109,7 @@ public class BackupDatabase {
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-            }else{
-                if(primaryStage != null){
-                    System.exit(0);
-                }
             }
-        }
-        if(primaryStage != null){
-            System.exit(0);
         }
     }
 

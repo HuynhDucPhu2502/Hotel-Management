@@ -78,7 +78,7 @@ public class TopController {
             Optional<ButtonType> result = alert.showAndWait();
 
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                BackupDatabase.backupData(mainStage);
+                BackupDatabase.backupData();
 
                 String source = "/iuh/fit/view/features/statistics/AnalyzeBeforeLogOut.fxml";
 
@@ -105,6 +105,8 @@ public class TopController {
 
     public void analyzeBeforeLogout() throws IOException {
         try{
+            BackupDatabase.backupData();
+
             String source = "/iuh/fit/view/features/statistics/AnalyzeBeforeLogOut.fxml";
 
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
