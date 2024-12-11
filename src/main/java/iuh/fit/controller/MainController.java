@@ -190,9 +190,6 @@ public class MainController {
             // Settings
 
             menuController.getBackupBtn().setOnAction(event -> loadPanel("/iuh/fit/view/features/backup_restore_database/Backup_Restore_Panel.fxml", this, account));
-
-
-
         }
     }
 

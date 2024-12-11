@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
@@ -19,6 +18,7 @@ import java.util.Date;
 public class BackupDatabase {
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private static final String settingFilePath = "setting.properties";
 
     public static void backupDifDatabase(String filePath) throws SQLException {
         Connection connection = DBHelper.getConnection();
@@ -58,36 +58,25 @@ public class BackupDatabase {
 
     // handle backup event when slose the app
     public static void backupData(Stage primaryStage) throws SQLException {
-        if(FilePathManager.getPath(PreferencesKey.BACK_UP_FORM_KEY, PreferencesKey.DEFAULT_VALUE)
-                .equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_NO_VALUE)) System.exit(0);
+        String autoBackupOption = PropertiesFile.readFile(settingFilePath, PreferencesKey.BACK_UP_OPTION_KEY);
+        if(autoBackupOption == null || autoBackupOption.equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_NO_VALUE)) System.exit(0);
 
-        String defaultFullBackupName = "\\HotelBackup-" + LocalDate.now().format(dateTimeFormatter) + "-FULL.bak";
         String defaultBackupName = "\\HotelBackup-" + LocalDate.now().format(dateTimeFormatter) + "-DIF.bak";
-        String defaultZipBackupName = "\\HotelBackup-" + LocalDate.now().format(dateTimeFormatter) + "-DIF.zip";
-        String zipFilePath;
-        String filePath = FilePathManager.getPath(
-                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
-                PreferencesKey.DEFAULT_FILE_PATH);
-        if(filePath.equalsIgnoreCase(PreferencesKey.DEFAULT_FILE_PATH)){
-            System.out.println("Chon dia chi di");
-            return;
-        } else{
-            filePath = filePath + defaultBackupName;
-            zipFilePath = FilePathManager.getPath(
-                    PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
-                    PreferencesKey.DEFAULT_FILE_PATH) + defaultZipBackupName;
-        }
 
-        if(FilePathManager.getPath(PreferencesKey.BACK_UP_FORM_KEY, PreferencesKey.DEFAULT_FILE_PATH)
-                .equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_AUTO_VALUE))
+        String filePath = PropertiesFile.readFile(
+                settingFilePath,
+                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY);
+        if(filePath == null || filePath.equalsIgnoreCase(PreferencesKey.DEFAULT_FILE_PATH)) return;
+
+        File file = new File(filePath);
+        if(!file.exists()) file.mkdirs();
+
+        filePath = filePath + defaultBackupName;
+
+        if(autoBackupOption.equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_AUTO_VALUE))
             try {
                 if(new File(filePath).exists()) new File(filePath).delete();
                 BackupDatabase.backupDifDatabase(filePath);
-                if(FilePathManager.getPath(PreferencesKey.BACKUP_COMPRESS_FILE, PreferencesKey.DEFAULT_VALUE)
-                        .equalsIgnoreCase("1")){
-                    CompressFile.compressWithPassword(filePath, zipFilePath, null);
-                    new File(filePath).delete();
-                }
                 showMessage(
                         Alert.AlertType.INFORMATION,
                         "Sao lưu thành công",
@@ -97,8 +86,7 @@ public class BackupDatabase {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        else if(FilePathManager.getPath(PreferencesKey.BACK_UP_FORM_KEY, PreferencesKey.DEFAULT_FILE_PATH)
-                .equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_WARNING_VALUE)){
+        else if(autoBackupOption.equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_WARNING_VALUE)){
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Sao lưu dữ liệu");
             alert.setHeaderText("Bạn có muốn sao lưu dữ liệu của ngày hôm nay không?");
@@ -108,11 +96,6 @@ public class BackupDatabase {
                 try {
                     if(new File(filePath).exists()) new File(filePath).delete();
                     BackupDatabase.backupDifDatabase(filePath);
-                    if(FilePathManager.getPath(PreferencesKey.BACKUP_COMPRESS_FILE, PreferencesKey.DEFAULT_VALUE)
-                            .equalsIgnoreCase("1")){
-                        CompressFile.compressWithPassword(filePath, zipFilePath, null);
-                        new File(filePath).delete();
-                    }
                     showMessage(
                             Alert.AlertType.INFORMATION,
                             "Sao lưu thành công",

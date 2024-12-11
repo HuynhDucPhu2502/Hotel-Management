@@ -35,12 +35,12 @@
                                     </image>
                                  </ImageView>
                               </graphic></Button>
-                           <RadioButton fx:id="autoBackUpRadioButton" layoutX="24.0" layoutY="56.0" mnemonicParsing="false" onAction="#backupForm" selected="true" text="Tự động sao lưu khi kết thúc chương trình">
+                           <RadioButton fx:id="autoBackUpRadioButton" layoutX="24.0" layoutY="56.0" mnemonicParsing="false" onAction="#autoBackupSetting" selected="true" text="Tự động sao lưu khi kết thúc chương trình">
                               <toggleGroup>
                                  <ToggleGroup fx:id="backupFormToggle" />
                               </toggleGroup></RadioButton>
-                           <RadioButton fx:id="warningBackUpRadioButton" layoutX="24.0" layoutY="93.0" mnemonicParsing="false" onAction="#backupForm" text="Cảnh báo sao lưu khi kết thúc chương trình" toggleGroup="$backupFormToggle" />
-                           <RadioButton fx:id="noBackUpRadioButton" layoutX="24.0" layoutY="129.0" mnemonicParsing="false" onAction="#backupForm" text="Không sao lưu" toggleGroup="$backupFormToggle" />
+                           <RadioButton fx:id="warningBackUpRadioButton" layoutX="24.0" layoutY="93.0" mnemonicParsing="false" onAction="#autoBackupSetting" text="Cảnh báo sao lưu khi kết thúc chương trình" toggleGroup="$backupFormToggle" />
+                           <RadioButton fx:id="noBackUpRadioButton" layoutX="24.0" layoutY="129.0" mnemonicParsing="false" onAction="#autoBackupSetting" text="Không sao lưu" toggleGroup="$backupFormToggle" />
                         </children>
                      </AnchorPane>
                  </content>
