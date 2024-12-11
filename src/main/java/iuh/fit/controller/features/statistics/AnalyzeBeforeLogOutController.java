@@ -55,13 +55,14 @@ public class AnalyzeBeforeLogOutController {
     private Stage PrevStage;
     private TopController topController;
     private List<ShiftDetailForInvoice> shiftDetailForInvoiceList;
+    private Stage loginStage;
 
     private DecimalFormat df = new DecimalFormat("#.##");
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
-    public void initialize(Button button, MainController mainController, TopController topController){
-        if(button != null && topController != null){
-            setupController(mainController, topController, button);
+    public void initialize(MainController mainController, TopController topController){
+        if(topController != null){
+            setupController(mainController, topController);
             setupTable();
             setupContext();
             loadData();
@@ -80,19 +81,25 @@ public class AnalyzeBeforeLogOutController {
             logOutBtn.setText("Thoát");
             logOutBtn.setOnAction(e->{
                 Stage currentStage = (Stage) logOutBtn.getScene().getWindow();
-                Stage mainStage = (Stage) mainController.getMainPanel().getScene().getWindow(); // Lấy `Stage` chứa `scheduleLabel`
+                Stage mainStage = (Stage) (mainController.getMainPanel().getScene().getWindow()); // Lấy `Stage` chứa `scheduleLabel`
+                if(mainStage != null){
+                    mainStage.close();
+                }
+                if(loginStage != null){
+                    loginStage.close();
+                }
                 currentStage.close();
-                mainStage.close();
+
                 Platform.exit();
                 System.exit(0);
             });
         }
     }
 
-    public void setupController(MainController mainController, TopController topController, Button button){
+    public void setupController(MainController mainController, TopController topController){
         this.mainController = mainController;
         this.topController = topController;
-        eventBtn = button;
+//        eventBtn = button;
     }
 
     public void setupContext(){
@@ -159,7 +166,9 @@ public class AnalyzeBeforeLogOutController {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/LoginUI.fxml"));
         AnchorPane loginPane = fxmlLoader.load();
 
-        Stage currentStage = (Stage) (eventBtn.getScene().getWindow());
+        Stage currentStage = (Stage) (mainController.getMainPanel().getScene().getWindow());
+
+        this.loginStage = currentStage;
 
         Scene loginScene = new Scene(loginPane);
 
@@ -173,6 +182,10 @@ public class AnalyzeBeforeLogOutController {
 
         currentStage.show();
         currentStage.centerOnScreen();
+        currentStage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
     public void getComponentFormController(){

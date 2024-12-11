@@ -79,6 +79,8 @@ public class LoginController {
     @FXML private Button confirmPassRestoreButton;
     @FXML private Button restoreDataButton;
 
+    private Stage primaryStage;
+
     @FXML
     public void initialize() {
         dialogPane.toFront();
@@ -106,6 +108,10 @@ public class LoginController {
         loginBtn.setOnMouseClicked(event -> login());
         confirmBtn.setOnAction(event -> changePassword());
         resetBtn.setOnAction(event -> resetAction());
+    }
+
+    public void setPrimaryStage(Stage stage){
+        this.primaryStage = stage;
     }
 
     private void registerEventEnterKey() {

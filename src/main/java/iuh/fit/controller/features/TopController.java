@@ -93,7 +93,7 @@ public class TopController {
                 AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
 
                 AnalyzeBeforeLogOutController analyzeBeforeLogOutController = loader.getController();
-                analyzeBeforeLogOutController.initialize(logoutBtn, mainController, this);
+                analyzeBeforeLogOutController.initialize(mainController, this);
 
                 Scene scene = new Scene(layout);
 
@@ -119,7 +119,7 @@ public class TopController {
             AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
 
             AnalyzeBeforeLogOutController analyzeBeforeLogOutController = loader.getController();
-            analyzeBeforeLogOutController.initialize(logoutBtn, mainController, this);
+            analyzeBeforeLogOutController.initialize(mainController, this);
 
             Scene scene = new Scene(layout);
 
@@ -204,6 +204,10 @@ public class TopController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Button getBLoginButton(){
+        return logoutBtn;
     }
 
 }

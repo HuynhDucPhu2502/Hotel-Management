@@ -106,7 +106,7 @@ public class MainController {
             }
 
             AnalyzeBeforeLogOutController analyzeBeforeLogOutController = loader.getController();
-            analyzeBeforeLogOutController.initialize(null, this, null);
+            analyzeBeforeLogOutController.initialize(this, null);
 
             Scene scene = new Scene(layout);
 
