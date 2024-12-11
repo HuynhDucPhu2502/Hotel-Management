@@ -59,7 +59,11 @@ public class BackupDatabase {
     // handle backup event when slose the app
     public static void backupData(Stage primaryStage) throws SQLException {
         String autoBackupOption = PropertiesFile.readFile(settingFilePath, PreferencesKey.BACK_UP_OPTION_KEY);
-        if(autoBackupOption == null || autoBackupOption.equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_NO_VALUE)) System.exit(0);
+        if(autoBackupOption == null || autoBackupOption.equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_NO_VALUE)) {
+            if(primaryStage != null){
+                System.exit(0);
+            }
+        }
 
         String defaultBackupName = "\\HotelBackup-" + LocalDate.now().format(dateTimeFormatter) + "-DIF.bak";
 
