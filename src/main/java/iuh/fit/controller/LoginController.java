@@ -173,9 +173,6 @@ public class LoginController {
             return;
         }
 
-        userNameField.setText("huynhducphu");
-        hiddenPasswordField.setText("test123@");
-
         String userName = userNameField.getText();
         String password = hiddenPasswordField.getText();
 
