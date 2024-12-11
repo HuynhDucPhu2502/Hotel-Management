@@ -617,24 +617,31 @@
                               </Button>
                            </children>
                         </VBox>
-                        <Button fx:id="informationBtn" mnemonicParsing="false" prefHeight="34.0" prefWidth="22.0" style="-fx-background-color: transparent;">
+                        <HBox alignment="CENTER">
                            <VBox.margin>
-                              <Insets left="11.0" top="25.0" />
+                              <Insets top="25.0" />
                            </VBox.margin>
-                           <graphic>
-                              <ImageView fitHeight="25.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                           <children>
+                              <Button fx:id="informationBtn" mnemonicParsing="false" prefHeight="34.0" prefWidth="173.0" style="-fx-background-color: transparent;" styleClass="menu-bar-child" text="Phiên Bản 1.0" textAlignment="CENTER" textFill="WHITE">
+                                 <graphic>
+                                    <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <image>
+                                          <Image url="@../../icons/menu_icons/ic_information.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
-                                 <image>
-                                    <Image url="@../../icons/menu_icons/ic_information.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Button>
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </content>
