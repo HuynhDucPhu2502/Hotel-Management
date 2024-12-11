@@ -504,6 +504,16 @@ public class BackupAndRestoreController {
                             PreferencesKey.CURRENT_USING_DATA,
                             fullBackup.getAbsolutePath()
                     );
+            } else {
+                String defaultDifBackupName = "\\HotelBackup-" + LocalDate.now().format(dateTimeFormatter) + "-FULL.bak";
+                String filePath = restoreFolder + defaultDifBackupName;
+                BackupDatabase.backupFullDatabase(filePath);
+
+                PropertiesFile.writeFile(
+                        settingFilePath,
+                        PreferencesKey.CURRENT_USING_DATA,
+                        filePath
+                );
             }
         }
 
