@@ -261,12 +261,12 @@ CREATE TABLE RoomDialog (
 GO
 
 CREATE TABLE Notifications (
-    NotificationID INT IDENTITY PRIMARY KEY, -- ID duy nhất của thông báo
-    EntityID VARCHAR(10),                    -- (Tùy chọn) ID của người nhận thông báo
-    Title NVARCHAR(125),                      -- Tiêu đề thông báo
-    Content NVARCHAR(255),                   -- Nội dung thông báo
-    CreatedAt DATETIME DEFAULT GETDATE(), -- Thời điểm tạo thông báo
-    IsRead BIT DEFAULT 0                  -- Trạng thái đã đọc
+    NotificationID INT IDENTITY PRIMARY KEY,
+    EntityID VARCHAR(10),
+    Title NVARCHAR(125),
+    Content NVARCHAR(255),
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    IsRead BIT DEFAULT 0
 );
 GO
 

@@ -456,7 +456,6 @@ public class ShiftManagerController {
         ShiftDetailForEachEmployeeDialogController shiftDetailForEachEmployeeDialogController = loader.getController();
         shiftDetailForEachEmployeeDialogController.setController(this);
         shiftDetailForEachEmployeeDialogController.getData(shift, func, shiftID);
-        shiftDetailForEachEmployeeDialogController.setEmployee(employee);
 
         Scene scene = new Scene(layout);
 
@@ -496,7 +495,7 @@ public class ShiftManagerController {
         AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
 
         ShiftChangingController shiftChangingController = loader.getController();
-        shiftChangingController.initialize(shift, currentShift, currentEmployee);
+        shiftChangingController.initialize(shift, currentEmployee);
 
         Scene scene = new Scene(layout);
 

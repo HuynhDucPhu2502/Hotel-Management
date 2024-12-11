@@ -34,7 +34,7 @@
                <graphic>
                   <ImageView fx:id="imgForAnalyzeBtn" fitHeight="30.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../icons/top_bar_icon/ic_analyzeShift.jpg" />
+                        <Image url="@../../icons/top_bar_icon/ic_analyzeShift.png" />
                      </image>
                      <cursor>
                         <Cursor fx:constant="HAND" />

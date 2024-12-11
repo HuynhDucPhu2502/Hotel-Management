@@ -22,12 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * @author Le Tran Gia Huy
- * @created 18/11/2024 - 4:29 PM
- * @project HotelManagement
- * @package iuh.fit.controller.features.employee
- */
 public class ShiftChangingController {
     @FXML
     private TextField shiftIDTextField;
@@ -87,20 +81,17 @@ public class ShiftChangingController {
 
     private ObservableList<CheckedEmployee> employeeItems;
     private ObservableList<Shift> shiftItems;
-    private CheckBox checkBox;
-    ArrayList<CheckedEmployee> checkedEmployees = new ArrayList<CheckedEmployee>();
-    ArrayList<Shift> shifts = new ArrayList<Shift>();
+    ArrayList<CheckedEmployee> checkedEmployees = new ArrayList<>();
+    ArrayList<Shift> shifts = new ArrayList<>();
 
     private Shift chosenShift;
-    private Shift currentShift;
     private Employee currentEmployee;
 
-    public void initialize(Shift shift, Shift currentShift, Employee currentEmployee){
+    public void initialize(Shift shift, Employee currentEmployee){
         dialogPane.toFront();
         setFocusTraverse();
 
         this.chosenShift = shift;
-        this.currentShift = currentShift;
         this.currentEmployee = currentEmployee;
 
 
@@ -140,9 +131,7 @@ public class ShiftChangingController {
         ArrayList<Employee> employees = (ArrayList<Employee>) ShiftDAO.getEmployeeListByShift(shift.getShiftID());
         employees.remove(currentEmployee);
 
-        employees.forEach(x->{
-            checkedEmployees.add(new CheckedEmployee(x, false));
-        });
+        employees.forEach(x-> checkedEmployees.add(new CheckedEmployee(x, false)));
 
         employeeItems = FXCollections.observableArrayList(checkedEmployees);
         employeeTableView.setItems(employeeItems);
@@ -226,13 +215,11 @@ public class ShiftChangingController {
     private void handelCheckedEmployee(CheckedEmployee checkedEmployee, CheckBox checkBox){
         if(checkBox.isSelected()){
             checkedEmployees.stream().filter(x-> x.equals(checkedEmployee)).forEach(x->x.setChecked(true));
-            resetEmployeeTableView();
-            cancelBtn.requestFocus();
         }else{
             checkedEmployees.stream().filter(x-> x.equals(checkedEmployee)).forEach(x->x.setChecked(false));
-            resetEmployeeTableView();
-            cancelBtn.requestFocus();
         }
+        resetEmployeeTableView();
+        cancelBtn.requestFocus();
     }
 
     public void resetEmployeeTableView(){
@@ -267,7 +254,7 @@ public class ShiftChangingController {
     }
 
     private void handleChangeShiftAction(Shift currentShift) {
-        if(checkedEmployees.stream().noneMatch(x -> x.isChecked())){
+        if(checkedEmployees.stream().noneMatch(CheckedEmployee::isChecked)){
             dialogPane.showInformation("Thông báo","Vui lòng chọn ít nhất một nhân viên để chuyển ca làm");
         }else if(shiftTableView.getSelectionModel().getSelectedItem() == null){
             dialogPane.showInformation("Thông báo","Vui lòng chọn một ca làm");
@@ -281,16 +268,12 @@ public class ShiftChangingController {
                 dialog.onClose(buttonType -> {
                     if (buttonType == ButtonType.YES) {
                         Shift theShift = shiftTableView.getSelectionModel().getSelectedItem();
-                        checkedEmployees.stream().filter(CheckedEmployee::isChecked).forEach(x->{
-                            ShiftAssignmentDAO.updateShiftAssignmentForOneEmployee(currentShift, theShift, x.getEmployee());
-                        });
+                        checkedEmployees.stream().filter(CheckedEmployee::isChecked).forEach(x-> ShiftAssignmentDAO.updateShiftAssignmentForOneEmployee(currentShift, theShift, x.getEmployee()));
                         DialogPane.Dialog<ButtonType> dialog2 = dialogPane.showInformation(
                                 "XÁC NHẬN",
                                 "Đã chuyển ca thành công"
                         );
-                        dialog2.setOnClose(x->{
-                            handleCancelAction();
-                        });
+                        dialog2.setOnClose(x-> handleCancelAction());
                     }
                 });
 

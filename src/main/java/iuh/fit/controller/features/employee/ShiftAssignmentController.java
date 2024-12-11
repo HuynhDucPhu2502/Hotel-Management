@@ -25,12 +25,6 @@ import java.util.Objects;
 
 import static iuh.fit.dao.ShiftAssignmentDAO.createNextShiftAssignmentID;
 
-/**
- * @author Le Tran Gia Huy
- * @created 10/11/2024 - 8:06 PM
- * @project HotelManagement
- * @package iuh.fit.controller.features.employee
- */
 public class ShiftAssignmentController {
     @FXML
     private TextField shiftIDTextField;
@@ -75,8 +69,7 @@ public class ShiftAssignmentController {
     private AnchorPane anchorPane;
 
     private ObservableList<CheckedEmployee> items;
-    private CheckBox checkBox;
-    ArrayList<CheckedEmployee> checkedEmployees = new ArrayList<CheckedEmployee>();
+    ArrayList<CheckedEmployee> checkedEmployees = new ArrayList<>();
 
     public void initialize(Shift shift) {
         dialogPane.toFront();
@@ -124,10 +117,6 @@ public class ShiftAssignmentController {
         }
     }
 
-//    public void setupContext(Employee employeee) {
-//        this.employee = employeee;
-//    }
-
 //  Phương thức load dữ liệu lên giao diện
     public void loadData(ArrayList<Employee> employeeList) {
         if(!employeeList.isEmpty()){
@@ -148,10 +137,6 @@ public class ShiftAssignmentController {
             employeeTableView.setItems(items);
             employeeTableView.refresh();
         }
-    }
-
-    public void deleteAllTable(){
-        employeeTableView.getItems().clear();
     }
 
     public void resetTableView(){
@@ -236,13 +221,11 @@ public class ShiftAssignmentController {
     private void handelCheckedEmployee(CheckedEmployee checkedEmployee, CheckBox checkBox){
         if(checkBox.isSelected()){
             checkedEmployees.stream().filter(x-> x.equals(checkedEmployee)).forEach(x->x.setChecked(true));
-            resetTableView();
-            cancelBtn.requestFocus();
         }else{
             checkedEmployees.stream().filter(x-> x.equals(checkedEmployee)).forEach(x->x.setChecked(false));
-            resetTableView();
-            cancelBtn.requestFocus();
         }
+        resetTableView();
+        cancelBtn.requestFocus();
     }
 
     private void handleSearchAction() {
@@ -302,9 +285,7 @@ public class ShiftAssignmentController {
                                 createNextShiftAssignmentID(currentID);
                             });
                             DialogPane.Dialog<ButtonType> dialog2 = dialogPane.showInformation("Thông báo", "Đã phân công thành công " );
-                            dialog2.onClose(btn->{
-                                handleCancelAction();
-                            });
+                            dialog2.onClose(btn-> handleCancelAction());
                         }
                     }
                 }

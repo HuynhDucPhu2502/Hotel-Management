@@ -5,7 +5,6 @@ import iuh.fit.dao.ShiftDAO;
 import iuh.fit.models.Employee;
 import iuh.fit.models.Shift;
 import iuh.fit.models.enums.Position;
-import iuh.fit.models.wrapper.CheckedEmployee;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,15 +14,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
-
-/**
- * @author Le Tran Gia Huy
- * @created 28/11/2024 - 4:48 PM
- * @project HotelManagement
- * @package iuh.fit.controller.features.employee
- */
 
 public class ShiftInformationViewCotroller {
 

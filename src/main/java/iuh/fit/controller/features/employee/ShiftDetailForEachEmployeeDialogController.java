@@ -65,19 +65,13 @@ public class ShiftDetailForEachEmployeeDialogController {
     private ShiftManagerController shiftManagerControllerReferences;
     @FXML
     private DialogPane dialogPane;
-    private Employee employee;
-
-    private Stage PrevStage;
 
     public void setController(ShiftManagerController shiftManagerController) {
         this.shiftManagerControllerReferences = shiftManagerController;
     }
-    public void setEmployee(Employee employee){
-        this.employee = employee;
-    }
+
 
     public void getComponentFormController(){
-        PrevStage = shiftManagerControllerReferences.getStage();
     }
 
     public void getData(Shift shift, String func, String shiftID){
@@ -95,7 +89,7 @@ public class ShiftDetailForEachEmployeeDialogController {
 
         if(func.equals("delete")){
             handelDelete();
-            updateBtn.setOnAction(e->handelUpdateForAllEmployeeWhenDelete(shift, employee));
+            updateBtn.setOnAction(e->handelUpdateForAllEmployeeWhenDelete(shift));
             forceDeteleBtn.setOnAction(e->handelForceDeleteShift(shift));
             cancelBtn.setOnAction(e->handeCancel());
         }else{
@@ -151,7 +145,7 @@ public class ShiftDetailForEachEmployeeDialogController {
         employeeTable.setItems(items);
     }
 
-    private void handelUpdateForAllEmployeeWhenDelete(Shift currentShift, Employee employee){
+    private void handelUpdateForAllEmployeeWhenDelete(Shift currentShift){
         Shift newShift = shiftComboBox.getSelectionModel().getSelectedItem();
         try{
 
