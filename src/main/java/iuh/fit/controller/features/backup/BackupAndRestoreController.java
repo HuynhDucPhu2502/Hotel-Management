@@ -131,16 +131,16 @@ public class BackupAndRestoreController {
                     return;
                 }
 
-                if(dataIsUsing(displayOnTableTableRow.getFilePath())){
-                    showMessage(
-                            Alert.AlertType.ERROR,
-                            "Dữ liệu đã sử dụng",
-                            "Dữ liệu bạn muốn khôi phục đã và đang được sử dụng",
-                            "Nhấn OK để xác nhận")
-                            .show();
-                    tableData.getSelectionModel().clearSelection();
-                    return;
-                }
+//                if(dataIsUsing(displayOnTableTableRow.getFilePath())){
+//                    showMessage(
+//                            Alert.AlertType.ERROR,
+//                            "Dữ liệu đã sử dụng",
+//                            "Dữ liệu bạn muốn khôi phục đã và đang được sử dụng",
+//                            "Nhấn OK để xác nhận")
+//                            .show();
+//                    tableData.getSelectionModel().clearSelection();
+//                    return;
+//                }
 
                 String filePath = displayOnTableTableRow.getFilePath();
                 File f = new File(filePath);
@@ -185,17 +185,17 @@ public class BackupAndRestoreController {
                 ).show();
             }
             else if (displayOnTableTableRow.getFilePath().contains("FULL")){
-                if(dataIsUsing(displayOnTableTableRow.getFilePath())){
-                    showMessage(
-                            Alert.AlertType.ERROR,
-                            "Dữ liệu đã sử dụng",
-                            "Dữ liệu bạn muốn khôi phục đã và đang được sử dụng",
-                            "Nhấn OK để xác nhận"
-                    )
-                            .show();
-                    tableData.getSelectionModel().clearSelection();
-                    return;
-                }
+//                if(dataIsUsing(displayOnTableTableRow.getFilePath())){
+//                    showMessage(
+//                            Alert.AlertType.ERROR,
+//                            "Dữ liệu đã sử dụng",
+//                            "Dữ liệu bạn muốn khôi phục đã và đang được sử dụng",
+//                            "Nhấn OK để xác nhận"
+//                    )
+//                            .show();
+//                    tableData.getSelectionModel().clearSelection();
+//                    return;
+//                }
 
                 String filePath = displayOnTableTableRow.getFilePath();
                 File f = new File(filePath);
