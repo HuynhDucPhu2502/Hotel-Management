@@ -9,6 +9,7 @@ import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
 import iuh.fit.models.misc.ShiftDetail;
 import iuh.fit.models.misc.ShiftDetailForInvoice;
+import iuh.fit.utils.BackupDatabase;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -183,6 +185,11 @@ public class AnalyzeBeforeLogOutController {
         currentStage.show();
         currentStage.centerOnScreen();
         currentStage.setOnCloseRequest(event -> {
+            try {
+                BackupDatabase.backupData(currentStage);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             Platform.exit();
             System.exit(0);
         });
