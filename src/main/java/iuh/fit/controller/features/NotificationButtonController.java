@@ -47,7 +47,7 @@ public class NotificationButtonController {
     private final VBox messageListContainer = new VBox();
   
   
-    public NotificationButtonController initialize(Account account){
+    public void initialize(Account account){
         createEmptyNotification();
         createDeleteButton();
         setupContext(account);
@@ -56,7 +56,6 @@ public class NotificationButtonController {
         loadData();
         handelButton();
 
-        return this;
     }
 
     public void setupContext(Account account){

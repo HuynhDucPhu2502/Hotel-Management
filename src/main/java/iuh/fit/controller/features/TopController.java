@@ -1,9 +1,7 @@
 package iuh.fit.controller.features;
 
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.employee.ShiftDetailForEachEmployeeDialogController;
 import iuh.fit.controller.features.statistics.AnalyzeBeforeLogOutController;
-import iuh.fit.models.Account;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -37,38 +35,33 @@ public class TopController {
     private ImageView img, imgForAnalyzeBtn;
 
     private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-    private Account currentAccount;
     private MainController mainController;
 
-    private NotificationButtonController topBarController;
+    private NotificationButtonController notificationButtonController;
     private Stage stage;
 
     @FXML
-    public NotificationButtonController initialize(Account account, MainController mainController) {
-        setupContext(account,mainController);
+    public void initialize() {
         // clock
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateClock()));
         timeline.setCycleCount(Timeline.INDEFINITE); //
         timeline.play();
+    }
+
+    public void setupContext(MainController mainController, Stage stage) {
+        this.mainController = mainController;
+        this.stage = stage;
 
         initializeNotificationButton();
         handleTooltips();
         handleButtons();
-
-        // logout
-        return topBarController;
-    }
-
-    public void setupContext(Account account, MainController mainController) {
-        this.currentAccount = account;
-        this.mainController = mainController;
     }
 
     private void updateClock() {
         String currentTime = LocalTime.now().format(timeFormatter);
         LocalDate localDate = LocalDate.now();
         String currentDate = localDate.getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("vi", "VN"))+", "+
-                +localDate.getDayOfMonth()+"/"+localDate.getMonthValue()+"/"+localDate.getYear();
+                localDate.getDayOfMonth() +"/"+localDate.getMonthValue()+"/"+localDate.getYear();
         clockLabel.setText(currentTime);
         dateLabel.setText("  "+currentDate);
     }
@@ -93,7 +86,7 @@ public class TopController {
                 AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
 
                 AnalyzeBeforeLogOutController analyzeBeforeLogOutController = loader.getController();
-                analyzeBeforeLogOutController.initialize(logoutBtn, mainController, this);
+                analyzeBeforeLogOutController.initialize(logoutBtn, mainController, this, (Stage) logoutBtn.getScene().getWindow());
 
                 Scene scene = new Scene(layout);
 
@@ -119,12 +112,10 @@ public class TopController {
             AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
 
             AnalyzeBeforeLogOutController analyzeBeforeLogOutController = loader.getController();
-            analyzeBeforeLogOutController.initialize(logoutBtn, mainController, this);
+            analyzeBeforeLogOutController.initialize(logoutBtn, mainController, this, (Stage) logoutBtn.getScene().getWindow());
 
             Scene scene = new Scene(layout);
 
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Thống kê ca làm");
             stage.setScene(scene);
             stage.setResizable(false);
@@ -197,8 +188,7 @@ public class TopController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/NotificationButton.fxml"));
             AnchorPane buttonLayout = loader.load();
 
-            NotificationButtonController notificationButtonController = loader.getController();
-            topBarController = notificationButtonController.initialize(currentAccount);
+            this.notificationButtonController = loader.getController();
             buttonPanel.getChildren().clear();
             buttonPanel.getChildren().addAll(buttonLayout.getChildren());
         } catch (Exception e) {
@@ -206,4 +196,7 @@ public class TopController {
         }
     }
 
+    public NotificationButtonController getNotificationButtonController() {
+        return notificationButtonController;
+    }
 }

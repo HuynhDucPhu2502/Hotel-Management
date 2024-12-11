@@ -79,24 +79,17 @@ public class LoginController {
     @FXML private Button confirmPassRestoreButton;
     @FXML private Button restoreDataButton;
 
+    private Stage stage;
+
     @FXML
     public void initialize() {
         dialogPane.toFront();
-        registerEventEnterKey();
         hiddenPasswordField.textProperty().bindBidirectional(visiblePasswordField.textProperty());
         passRestorePasswordField.textProperty().bindBidirectional(passRestoreTextField.textProperty());
 
         ShowPasswordBtn.setOnAction(event -> {
             PasswordVisibility();
             changeButtonIconForShowPasswordBtn();
-        });
-
-        signInButton.setOnAction(event -> {
-            try {
-                signIn();
-            } catch (SQLException ignored) {
-
-            }
         });
 
         Image defaultIcon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/iuh/fit/icons/login_panel_icons/ic_show_password.png")));
@@ -108,11 +101,25 @@ public class LoginController {
         resetBtn.setOnAction(event -> resetAction());
     }
 
+    public void setupContext(Stage stage) {
+        this.stage = stage;
+
+        signInButton.setOnAction(event -> {
+            try {
+                signIn(stage);
+            } catch (SQLException ignored) {
+
+            }
+        });
+
+        registerEventEnterKey();
+    }
+
     private void registerEventEnterKey() {
         userNameField.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
                 try {
-                    signIn();
+                    signIn(stage);
                 } catch (SQLException ignored) {
 
                 }
@@ -122,7 +129,7 @@ public class LoginController {
         hiddenPasswordField.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
                 try {
-                    signIn();
+                    signIn(stage);
                 } catch (SQLException ignored) {
 
                 }
@@ -132,7 +139,7 @@ public class LoginController {
         visiblePasswordField.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
                 try {
-                    signIn();
+                    signIn(stage);
                 } catch (SQLException ignored) {
 
                 }
@@ -167,7 +174,7 @@ public class LoginController {
         }
     }
 
-    private void signIn() throws SQLException {
+    private void signIn(Stage stage) throws SQLException {
         if(!RestoreDatabase.isDatabaseExist(DBHelper.getDatabaseName())) {
             errorMessage.setText(ErrorMessages.DATABASE_NOT_FOUND);
             return;
@@ -218,21 +225,21 @@ public class LoginController {
                                 "Không thể đăng nhập"
                 );
             else {
-                loadMainUI(account, currentShift);
+                loadMainUI(account, currentShift, stage);
             }
         } else if (position.equals(Position.MANAGER)) {
-            loadMainUI(account, currentShift);
+            loadMainUI(account, currentShift, stage);
         }
     }
 
-    private void loadMainUI(Account account, Shift currentShift) {
+    private void loadMainUI(Account account, Shift currentShift, Stage stage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/MainUI.fxml"));
             AnchorPane mainPanel = fxmlLoader.load();
 
             MainController mainController = fxmlLoader.getController();
 
-            mainController.setAccount(account);
+            mainController.setupContext(account, stage);
             mainController.setShift(currentShift);
 
 

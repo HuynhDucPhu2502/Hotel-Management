@@ -32,9 +32,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -57,6 +55,7 @@ public class MainController {
     private AnchorPane mainPanel;
     @FXML
     private AnchorPane topPanel;
+    private Stage stage;
 
     private Button informationBtn;
 
@@ -64,7 +63,7 @@ public class MainController {
 
     private static boolean ROOM_BOOKING_LOADED = true;
 
-    private static NotificationButtonController notificationButtonController;
+    private NotificationButtonController notificationButtonController;
 
     private int shiftDetailID;
 
@@ -75,13 +74,15 @@ public class MainController {
 
     }
 
-    public void setAccount(Account account) {
+    public void setupContext(Account account, Stage stage) {
         if (account == null) throw new IllegalArgumentException("Tài khoản không tồn tại");
 
         this.account = account;
+        this.stage = stage;
+        initializeTopBar();
         initializeDashboard();
         initializeMenuBar();
-        initializeTopBar();
+
         shiftDetailID = createStartingPoint();
 
         Platform.runLater(this::handelCloseEvent);
@@ -98,7 +99,7 @@ public class MainController {
             String source = "/iuh/fit/view/features/statistics/AnalyzeBeforeLogOut.fxml";
 
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
-            AnchorPane layout = null; // Gọi load() trước khi getController()
+            AnchorPane layout; // Gọi load() trước khi getController()
             try {
                 layout = loader.load();
             } catch (IOException ex) {
@@ -106,7 +107,7 @@ public class MainController {
             }
 
             AnalyzeBeforeLogOutController analyzeBeforeLogOutController = loader.getController();
-            analyzeBeforeLogOutController.initialize(null, this, null);
+            analyzeBeforeLogOutController.initialize(null, this, null, (Stage) informationBtn.getScene().getWindow());
 
             Scene scene = new Scene(layout);
 
@@ -115,12 +116,8 @@ public class MainController {
             stage.setTitle("Thống kê ca làm");
             stage.setScene(scene);
             stage.setResizable(false);
-            setStage(stage);
             stage.show();
         });
-    }
-
-    private void setStage(Stage stage) {
     }
 
     public void setShift(Shift shift){
@@ -166,7 +163,8 @@ public class MainController {
             AnchorPane topLayout = loader.load();
 
             TopController topController = loader.getController();
-            notificationButtonController = topController.initialize(account, this);
+            this.notificationButtonController = topController.getNotificationButtonController();
+            topController.setupContext(this, stage);
 
             RoomManagementService.startAutoCheckoutScheduler(notificationButtonController, this);
 
@@ -307,7 +305,6 @@ public class MainController {
             e.printStackTrace();
         }
     }
-
 
     public void loadPanelEmployeeManagerController(String fxmlPath, Employee emp){
         try {

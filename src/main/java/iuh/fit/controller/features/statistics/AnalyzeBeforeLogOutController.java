@@ -1,5 +1,6 @@
 package iuh.fit.controller.features.statistics;
 
+import iuh.fit.controller.LoginController;
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.TopController;
 import iuh.fit.dao.EmployeeDAO;
@@ -52,14 +53,17 @@ public class AnalyzeBeforeLogOutController {
     private Button eventBtn;
     private MainController mainController;
     private Account currentAccount;
-    private Stage PrevStage;
+    private Stage prevStage;
     private TopController topController;
     private List<ShiftDetailForInvoice> shiftDetailForInvoiceList;
 
     private DecimalFormat df = new DecimalFormat("#.##");
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
-    public void initialize(Button button, MainController mainController, TopController topController){
+
+    public void initialize(Button button, MainController mainController, TopController topController, Stage stage){
+        this.prevStage = stage;
+
         if(button != null && topController != null){
             setupController(mainController, topController, button);
             setupTable();
@@ -67,7 +71,7 @@ public class AnalyzeBeforeLogOutController {
             loadData();
             logOutBtn.setOnAction(e-> {
                 try {
-                    handelLogOut();
+                    handelLogOut(prevStage);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -79,10 +83,6 @@ public class AnalyzeBeforeLogOutController {
             loadData();
             logOutBtn.setText("Thoát");
             logOutBtn.setOnAction(e->{
-                Stage currentStage = (Stage) logOutBtn.getScene().getWindow();
-                Stage mainStage = (Stage) mainController.getMainPanel().getScene().getWindow(); // Lấy `Stage` chứa `scheduleLabel`
-                currentStage.close();
-                mainStage.close();
                 Platform.exit();
                 System.exit(0);
             });
@@ -151,32 +151,26 @@ public class AnalyzeBeforeLogOutController {
         invoiceTableView.setItems(data);
     }
 
-    private void handelLogOut() throws IOException {
-        // Tắt cửa sổ hiện tại
-        Stage stage = (Stage) logOutBtn.getScene().getWindow(); // Lấy `Stage` chứa `scheduleLabel`
-        stage.close();
+    private void handelLogOut(Stage primaryStage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/LoginUI.fxml"));
+        AnchorPane root = loader.load();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/LoginUI.fxml"));
-        AnchorPane loginPane = fxmlLoader.load();
+        Scene scene = new Scene(root);
 
-        Stage currentStage = (Stage) (eventBtn.getScene().getWindow());
+        primaryStage.setTitle("Quản Lý Khách Sạn");
 
-        Scene loginScene = new Scene(loginPane);
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.setWidth(610);
+        primaryStage.setHeight(400);
+        primaryStage.setMaximized(false);
+        primaryStage.centerOnScreen();
 
-        currentStage.setScene(loginScene);
-
-        currentStage.setResizable(false);
-        currentStage.setWidth(610);
-        currentStage.setHeight(400);
-        currentStage.setMaximized(false);
-        currentStage.centerOnScreen();
-
-        currentStage.show();
-        currentStage.centerOnScreen();
+        primaryStage.show();
     }
 
     public void getComponentFormController(){
-        PrevStage = topController.getStage();
+        prevStage = topController.getStage();
     }
 
 }

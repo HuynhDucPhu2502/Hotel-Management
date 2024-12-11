@@ -3,7 +3,6 @@ package iuh.fit.controller.features.backup;
 import iuh.fit.models.wrapper.FileDisplayOnTable;
 import iuh.fit.security.PreferencesKey;
 import iuh.fit.utils.BackupDatabase;
-import iuh.fit.utils.FilePathManager;
 import iuh.fit.utils.PropertiesFile;
 import iuh.fit.utils.RestoreDatabase;
 import javafx.collections.FXCollections;
@@ -50,8 +49,6 @@ public class BackupAndRestoreController {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private final String settingFilePath = "setting.properties";
 
-    // progress bar controller
-    private FXMLLoader progressPanelFXML;
     private Scene progressbarScene;
 
     @FXML
@@ -621,8 +618,9 @@ public class BackupAndRestoreController {
     }
 
     private void loadingProgressBarPanel() throws IOException {
-        this.progressPanelFXML = getProgressPanelFXML();
-        this.progressPanelFXML.load();
+        // progress bar controller
+        FXMLLoader progressPanelFXML = getProgressPanelFXML();
+        progressPanelFXML.load();
         this.progressbarScene = new Scene(progressPanelFXML.getRoot());
     }
 

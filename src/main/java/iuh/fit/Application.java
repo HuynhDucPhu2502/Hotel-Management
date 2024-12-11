@@ -1,14 +1,12 @@
 package iuh.fit;
 
 import iuh.fit.controller.LoginController;
-import iuh.fit.controller.features.statistics.AnalyzeBeforeLogOutController;
 import iuh.fit.utils.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -39,12 +37,12 @@ public class Application extends javafx.application.Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/LoginUI.fxml"));
             AnchorPane root = loader.load();
 
-            LoginController controller = loader.getController();
-
             Scene scene = new Scene(root);
 
-            primaryStage.setTitle("Quản Lý Khách Sạn");
+            LoginController loginController = loader.getController();
+            loginController.setupContext(primaryStage);
 
+            primaryStage.setTitle("Quản Lý Khách Sạn");
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
             primaryStage.setWidth(610);
