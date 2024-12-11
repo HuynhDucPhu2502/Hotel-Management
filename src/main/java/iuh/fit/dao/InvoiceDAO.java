@@ -49,6 +49,39 @@ public class InvoiceDAO {
         return invoices;
     }
 
+    public static Invoice getInvoiceByInvoiceID(String invoiceID) {
+        String sql =
+                """
+                SELECT i.invoiceID, i.invoiceDate, i.roomCharge, i.servicesCharge,
+                       i.totalDue, i.netDue, i.reservationFormID
+                FROM Invoice i
+                WHERE invoiceID = ?
+                """;
+        Invoice invoice = null;
+
+        try (Connection connection = DBHelper.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            preparedStatement.setString(1, invoiceID);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()){
+                invoice = new Invoice(
+                        rs.getString(1),
+                        ConvertHelper.localDateTimeConverter(rs.getTimestamp(2)),
+                        rs.getDouble(3),
+                        rs.getDouble(4),
+                        rs.getDouble(5),
+                        rs.getDouble(6),
+                        ReservationFormDAO.getDataByID(rs.getString(7))
+                );
+            };
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return invoice;
+    }
+
     public static Invoice getInvoiceByReservationFormID(String reservationFormID) {
         String sql =
                 """

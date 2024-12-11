@@ -270,6 +270,23 @@ CREATE TABLE Notifications (
 );
 GO
 
+CREATE TABLE ShiftDetail (
+    SDTID INT IDENTITY PRIMARY KEY,
+    CreatedAt DATETIME,
+    NumbOfPreOrderRoom INT,
+	NumbOfCheckOutRoom INT,
+	NumbOfCheckInRoom INT
+);
+GO
+
+CREATE TABLE ShiftDetailForInvoice (
+    FIID INT IDENTITY PRIMARY KEY,
+	SDTID INT NOT NULL,
+    InvoiceID NVARCHAR(15) NOT NULL,
+	FOREIGN KEY (SDTID) REFERENCES ShiftDetail(SDTID) ON UPDATE CASCADE
+);
+GO
+
 -- ===================================================================================
 -- 2. TRIGGER - FUNCTION - STORE PROCEDURE
 -- ===================================================================================

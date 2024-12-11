@@ -82,7 +82,7 @@ public class RoomOnUseItemController {
                         timeline.stop();
                         TimelineManager.getInstance().removeTimeline(timelineKey);
                         if (MainController.isRoomBookingLoaded()) navigateToRoomBookingPanel(false);
-                        else RoomManagementService.autoCheckoutOverdueRooms(notificationButtonController);
+                        else RoomManagementService.autoCheckoutOverdueRooms(notificationButtonController, mainController);
                     }
                 })
         );

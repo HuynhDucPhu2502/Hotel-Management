@@ -61,7 +61,7 @@ public class InvoiceManagerController {
         Task<List<Invoice>> loadDataTask = new Task<>() {
             @Override
             protected List<Invoice> call() {
-                RoomManagementService.autoCheckoutOverdueRooms(notificationButtonController);
+                RoomManagementService.autoCheckoutOverdueRooms(notificationButtonController, mainController);
                 return InvoiceDAO.getAllInvoices();
             }
         };

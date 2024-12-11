@@ -11,6 +11,8 @@ import iuh.fit.controller.features.room.service_ordering_controllers.ServiceOrde
 import iuh.fit.dao.HistoryCheckinDAO;
 import iuh.fit.dao.RoomReservationDetailDAO;
 import iuh.fit.dao.RoomUsageServiceDAO;
+import iuh.fit.dao.misc.ShiftDetailDAO;
+import iuh.fit.dao.misc.ShiftDetailForInvoiceDAO;
 import iuh.fit.models.*;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
@@ -354,7 +356,8 @@ public class CheckingOutReservationFormController {
                                 GlobalMessage.MANUALLY_CHECKOUT,
                                 "Phòng " + roomWithReservation.getRoom().getRoomID() + " đã được checkout thủ công"
                         );
-
+                        ShiftDetailDAO.updateNumbOfCheckOutRoom(mainController.getShiftDetailID());
+                        ShiftDetailForInvoiceDAO.addInvoiceID(mainController.getShiftDetailID(), roomWithReservation.getReservationForm().getReservationID());
                         navigateToRoomBookingPanel();
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -386,7 +389,8 @@ public class CheckingOutReservationFormController {
                                 GlobalMessage.MANUALLY_CHECKOUT,
                                 "Phòng " + roomWithReservation.getRoom().getRoomID() + " đã được checkout SỚM thủ công"
                         );
-
+                        ShiftDetailDAO.updateNumbOfCheckOutRoom(mainController.getShiftDetailID());
+                        ShiftDetailForInvoiceDAO.addInvoiceID(mainController.getShiftDetailID(), roomWithReservation.getReservationForm().getReservationID());
                         navigateToRoomBookingPanel();
                     } catch (Exception ex) {
                         ex.printStackTrace();

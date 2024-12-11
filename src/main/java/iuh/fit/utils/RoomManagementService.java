@@ -1,7 +1,10 @@
 package iuh.fit.utils;
 
+import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.dao.*;
+import iuh.fit.dao.misc.ShiftDetailDAO;
+import iuh.fit.dao.misc.ShiftDetailForInvoiceDAO;
 import iuh.fit.models.*;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
@@ -23,16 +26,16 @@ public class RoomManagementService {
             EmployeeDAO.getEmployeeByEmployeeID("EMP-000000");
     private static final Set<Room> notifiedOverdueRooms = new HashSet<>();
 
-    public static void startAutoCheckoutScheduler(NotificationButtonController topBarController) {
+    public static void startAutoCheckoutScheduler(NotificationButtonController topBarController, MainController mainController) {
         SCHEDULER.scheduleAtFixedRate(
-                () -> RoomManagementService.autoCheckoutOverdueRooms(topBarController),
+                () -> RoomManagementService.autoCheckoutOverdueRooms(topBarController, mainController),
                 0,
                 60,
                 TimeUnit.SECONDS
         );
     }
 
-    public static void autoCheckoutOverdueRooms(NotificationButtonController topBarController) {
+    public static void autoCheckoutOverdueRooms(NotificationButtonController topBarController, MainController mainController) {
         List<RoomWithReservation> overdueRooms =
                 RoomWithReservationDAO.getRoomOverDueWithLatestReservation();
 
@@ -40,7 +43,8 @@ public class RoomManagementService {
             checkAndUpdateRoomStatus(
                     roomWithReservation,
                     SYSTEM_EMPLOYEE,
-                    topBarController
+                    topBarController,
+                    mainController
             );
         }
 
@@ -51,7 +55,8 @@ public class RoomManagementService {
             checkAndUpdateRoomStatus(
                     roomWithReservation,
                     SYSTEM_EMPLOYEE,
-                    topBarController
+                    topBarController,
+                    mainController
             );
         }
     }
@@ -59,7 +64,8 @@ public class RoomManagementService {
     public static void checkAndUpdateRoomStatus(
             RoomWithReservation roomWithReservation,
             Employee employee,
-            NotificationButtonController topBarController
+            NotificationButtonController topBarController,
+            MainController mainController
     ) {
         ReservationForm reservationForm = roomWithReservation.getReservationForm();
         Room room = roomWithReservation.getRoom();
@@ -79,6 +85,8 @@ public class RoomManagementService {
 
                 topBarController.getInfo(GlobalMessage.AUTO_CHECKOUT, "Phòng " + room.getRoomID() + " đã được tự động checkout do quá hạn quá 2h");
                 notifiedOverdueRooms.remove(room);
+                ShiftDetailDAO.updateNumbOfCheckOutRoom(mainController.getShiftDetailID());
+                ShiftDetailForInvoiceDAO.addInvoiceID(mainController.getShiftDetailID(), roomWithReservation.getReservationForm().getReservationID());
             } else {
                 RoomDAO.updateRoomStatus(room.getRoomID(), RoomStatus.OVERDUE);
                 room.setRoomStatus(RoomStatus.OVERDUE);
