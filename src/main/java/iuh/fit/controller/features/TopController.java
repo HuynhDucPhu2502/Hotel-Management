@@ -41,21 +41,22 @@ public class TopController {
     private Stage stage;
 
     @FXML
-    public void initialize() {
-        // clock
-        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateClock()));
-        timeline.setCycleCount(Timeline.INDEFINITE); //
-        timeline.play();
-    }
-
-    public void setupContext(MainController mainController, Stage stage) {
+    public void initialize(MainController mainController, Stage stage) {
         this.mainController = mainController;
         this.stage = stage;
 
         initializeNotificationButton();
+
+        // clock
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateClock()));
+        timeline.setCycleCount(Timeline.INDEFINITE); //
+        timeline.play();
+
+
         handleTooltips();
         handleButtons();
     }
+
 
     private void updateClock() {
         String currentTime = LocalTime.now().format(timeFormatter);
@@ -187,12 +188,15 @@ public class TopController {
             AnchorPane buttonLayout = loader.load();
 
             this.notificationButtonController = loader.getController();
+            notificationButtonController.initialize(mainController.getAccount());
+
             buttonPanel.getChildren().clear();
             buttonPanel.getChildren().addAll(buttonLayout.getChildren());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     public NotificationButtonController getNotificationButtonController() {
         return notificationButtonController;

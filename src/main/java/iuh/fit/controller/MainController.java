@@ -61,27 +61,21 @@ public class MainController {
     private int shiftDetailID;
 
     // Không xóa
-    public void initialize() {
-        Locale locale = new Locale("vi", "VN");
-        Locale.setDefault(locale);
-
-    }
-
-    public void setupContext(Account account, Stage stage) {
+    public void initialize(Account account, Stage stage, Shift shift) {
         if (account == null) throw new IllegalArgumentException("Tài khoản không tồn tại");
 
         this.account = account;
         this.stage = stage;
+        this.shift = shift;
+
+        Locale locale = new Locale("vi", "VN");
+        Locale.setDefault(locale);
+
         initializeTopBar();
         initializeDashboard();
         initializeMenuBar();
 
         shiftDetailID = createStartingPoint();
-
-    }
-
-    public void setShift(Shift shift){
-        this.shift = shift;
     }
 
     public void initializeDashboard() {
@@ -123,8 +117,8 @@ public class MainController {
             AnchorPane topLayout = loader.load();
 
             TopController topController = loader.getController();
+            topController.initialize(this, stage);
             this.notificationButtonController = topController.getNotificationButtonController();
-            topController.setupContext(this, stage);
 
             RoomManagementService.startAutoCheckoutScheduler(notificationButtonController, this);
 

@@ -238,23 +238,19 @@ public class LoginController {
             AnchorPane mainPanel = fxmlLoader.load();
 
             MainController mainController = fxmlLoader.getController();
-
-            mainController.setupContext(account, stage);
-            mainController.setShift(currentShift);
-
+            mainController.initialize(account, stage, currentShift);
 
             Scene scene = new Scene(mainPanel);
-            Stage currentStage = (Stage) signInButton.getScene().getWindow();
 
-            currentStage.setWidth(1200);
-            currentStage.setHeight(680);
-            currentStage.setScene(scene);
-            currentStage.setResizable(true);
-            currentStage.setMaximized(true);
+            stage.setWidth(1200);
+            stage.setHeight(680);
+            stage.setScene(scene);
+            stage.setResizable(true);
+            stage.setMaximized(true);
 
-            currentStage.centerOnScreen();
+            stage.centerOnScreen();
 
-            currentStage.show();
+            stage.show();
         } catch (Exception e) {
             errorMessage.setText(e.getMessage());
         }
