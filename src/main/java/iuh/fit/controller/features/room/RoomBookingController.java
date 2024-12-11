@@ -104,7 +104,7 @@ public class RoomBookingController {
                     roomFloorNumberCBox.getSelectionModel().selectFirst();
                 });
 
-                RoomManagementService.autoCheckoutOverdueRooms(notificationButtonController);
+                RoomManagementService.autoCheckoutOverdueRooms(notificationButtonController, mainController);
                 return RoomWithReservationDAO.getRoomWithReservation().stream()
                         .sorted(Comparator.comparing(r -> r.getRoom().getRoomNumber()))
                         .toList();

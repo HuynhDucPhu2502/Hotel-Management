@@ -62,8 +62,7 @@ module iuh.fit {
     exports iuh.fit.models.enums;
     exports iuh.fit.models.wrapper;
     exports iuh.fit.models.misc;
-
-
+    exports iuh.fit.dao.misc;
 
 
 }
