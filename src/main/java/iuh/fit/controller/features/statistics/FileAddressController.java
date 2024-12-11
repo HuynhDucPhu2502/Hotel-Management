@@ -2,12 +2,14 @@ package iuh.fit.controller.features.statistics;
 
 import iuh.fit.security.PreferencesKey;
 import iuh.fit.utils.FilePathManager;
+import iuh.fit.utils.PropertiesFile;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.Properties;
 
 public class FileAddressController {
 
@@ -17,8 +19,10 @@ public class FileAddressController {
     private Stage stage;
     private String preferencesKey;
 
+    private static final String settingFilePath = "setting.properties";
+
     public void initialize(String preferencesKey) {
-        fileAddressText.setText(FilePathManager.getPath(preferencesKey, PreferencesKey.DEFAULT_FILE_PATH));
+        fileAddressText.setText(PropertiesFile.readFile(settingFilePath, preferencesKey));
     }
 
     @FXML
@@ -38,7 +42,11 @@ public class FileAddressController {
     @FXML
     void comfirm() {
         if(fileParth != null && !fileParth.isEmpty())
-            FilePathManager.savePath(preferencesKey, fileParth);
+            PropertiesFile.writeFile(
+                    settingFilePath,
+                    preferencesKey,
+                    fileParth
+            );
         stage.close();
     }
 

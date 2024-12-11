@@ -4,6 +4,7 @@ import iuh.fit.models.wrapper.FileDisplayOnTable;
 import iuh.fit.security.PreferencesKey;
 import iuh.fit.utils.BackupDatabase;
 import iuh.fit.utils.FilePathManager;
+import iuh.fit.utils.PropertiesFile;
 import iuh.fit.utils.RestoreDatabase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,7 +24,6 @@ import java.text.NumberFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.prefs.Preferences;
 
 public class BackupAndRestoreController {
     @FXML private RadioButton noBackUpRadioButton;
@@ -47,18 +47,17 @@ public class BackupAndRestoreController {
     @FXML private TableColumn<FileDisplayOnTable, Double> sizeColumn;
     @FXML private TableColumn<FileDisplayOnTable, String> filePathColumn;
 
-    private final Preferences prefs = Preferences.userNodeForPackage(BackupAndRestoreController.class);
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    private final String settingFilePath = "setting.properties";
 
     // progress bar controller
     private FXMLLoader progressPanelFXML;
     private Scene progressbarScene;
-    private ProgressController progressController;
 
     @FXML
-    public void initialize() throws IOException {
+    public void initialize() throws IOException, SQLException {
         this.loadSettingData();
         this.setDataOnTable();
-        this.setDefaultValueForHandBackup();
         this.setValueForBackupWayCombobox();
         this.loadingProgressBarPanel();
     }
@@ -101,10 +100,11 @@ public class BackupAndRestoreController {
         if(optional.isPresent() && optional.get() == ButtonType.OK){
 
             if(displayOnTableTableRow.getFilePath().contains("DIF")){
-                File[] files = new File(FilePathManager.getPath(
-                        PreferencesKey.RESTORE_FILE,
-                        PreferencesKey.DEFAULT_FILE_PATH
-                )).listFiles();
+                String fileAddressRestore = PropertiesFile.readFile(
+                        settingFilePath,
+                        PreferencesKey.RESTORE_FILE
+                );
+                File[] files = new File(fileAddressRestore).listFiles();
 
                 if (files == null || files.length == 0) return;
 
@@ -170,9 +170,11 @@ public class BackupAndRestoreController {
                     ).show();
                 }
 
-                FilePathManager.savePath(
+                PropertiesFile.writeFile(
+                        settingFilePath,
                         PreferencesKey.CURRENT_USING_DATA,
-                        filePath);
+                        filePath
+                );
                 currentUsingDataText.setText(filePath);
 
                 showMessage(
@@ -213,9 +215,11 @@ public class BackupAndRestoreController {
 
                 RestoreDatabase.restoreFull(filePath);
 
-                FilePathManager.savePath(
+                PropertiesFile.writeFile(
+                        settingFilePath,
                         PreferencesKey.CURRENT_USING_DATA,
-                        filePath);
+                        filePath
+                );
                 currentUsingDataText.setText(filePath);
 
                 showMessage(
@@ -244,8 +248,12 @@ public class BackupAndRestoreController {
         Optional<ButtonType> optional = alert.showAndWait();
         if(optional.isPresent() && optional.get() == ButtonType.OK){
             stage.show();
-            String filePath = fileAddressHandBackupText.getText()+ "\\" + fileNameHandBackupText.getText()  + ".bak";
+            String filePath = fileAddressHandBackupText.getText();
             File file = new File(filePath);
+            if(!file.exists()) file.mkdirs();
+
+            filePath = fileAddressHandBackupText.getText()+ "\\" + fileNameHandBackupText.getText()  + ".bak";
+            file = new File(filePath);
             if(file.exists()) file.delete();
 
             String option = backupWaysCombobox.getSelectionModel().getSelectedItem();
@@ -266,19 +274,25 @@ public class BackupAndRestoreController {
     }
 
     @FXML
-    void backupForm() {
-        if(autoBackUpRadioButton.isSelected())
-            FilePathManager.savePath(
-                PreferencesKey.BACK_UP_FORM_KEY,
-                PreferencesKey.BACK_UP_FORM_AUTO_VALUE);
-        else if(warningBackUpRadioButton.isSelected())
-            FilePathManager.savePath(
-                    PreferencesKey.BACK_UP_FORM_KEY,
+    void autoBackupSetting() {
+        if(autoBackUpRadioButton.isSelected()) {
+            PropertiesFile.writeFile(
+                    settingFilePath,
+                    PreferencesKey.BACK_UP_OPTION_KEY,
+                    PreferencesKey.BACK_UP_FORM_AUTO_VALUE);
+        }
+        else if(warningBackUpRadioButton.isSelected()) {
+            PropertiesFile.writeFile(
+                    settingFilePath,
+                    PreferencesKey.BACK_UP_OPTION_KEY,
                     PreferencesKey.BACK_UP_FORM_WARNING_VALUE);
-        else
-            FilePathManager.savePath(
-                    PreferencesKey.BACK_UP_FORM_KEY,
+        }
+        else {
+            PropertiesFile.writeFile(
+                    settingFilePath,
+                    PreferencesKey.BACK_UP_OPTION_KEY,
                     PreferencesKey.BACK_UP_FORM_NO_VALUE);
+        }
     }
 
     @FXML
@@ -287,22 +301,33 @@ public class BackupAndRestoreController {
         DirectoryChooser fileChooser = new DirectoryChooser();
         File file = fileChooser.showDialog(null);
         if(file == null) return;
+
         fileAddressAutoBackupText.setText(file.getAbsolutePath());
-        FilePathManager.savePath(PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY, file.getAbsolutePath());
+        PropertiesFile.writeFile(
+                settingFilePath,
+                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
+                file.getAbsolutePath());
 
         // check if not exist full backup file
         this.checkFullBackupExistion();
 
         this.setValueForRestoreView(file);
 
-        if(FilePathManager.getPath(PreferencesKey.USING_BACKUP_FUCTION, "None").equalsIgnoreCase("0")){
+        // use backup funciton for the first time
+        String useBackupFirstTime = PropertiesFile.readFile(
+                settingFilePath,
+                PreferencesKey.USING_BACKUP_FUCTION
+        );
+
+        if(useBackupFirstTime.equalsIgnoreCase("1")){
             this.warningPapaText.setVisible(false);
             this.warningText.setVisible(false);
             this.currenFileUsingText.setVisible(true);
             this.currentUsingDataText.setVisible(true);
-            FilePathManager.savePath(
+            PropertiesFile.writeFile(
+                    settingFilePath,
                     PreferencesKey.USING_BACKUP_FUCTION,
-                    "1"
+                    "0"
             );
         }
     }
@@ -313,7 +338,11 @@ public class BackupAndRestoreController {
         File file = fileChooser.showDialog(null);
         if(file == null) return;
         fileAddressHandBackupText.setText(file.getAbsolutePath());
-        FilePathManager.savePath(PreferencesKey.BACK_UP_FULL_HAND_ADDRESS_KEY, file.getAbsolutePath());
+        PropertiesFile.writeFile(
+                settingFilePath,
+                PreferencesKey.BACK_UP_FULL_HAND_ADDRESS_KEY,
+                file.getAbsolutePath()
+        );
     }
 
     @FXML
@@ -330,9 +359,10 @@ public class BackupAndRestoreController {
     }
 
     private void setDataOnTable(){
-        String restoreFolder = FilePathManager.getPath(
-                PreferencesKey.RESTORE_FILE,
-                PreferencesKey.DEFAULT_FILE_PATH);
+        String restoreFolder = PropertiesFile.readFile(
+                settingFilePath,
+                PreferencesKey.RESTORE_FILE
+        );
 
         if (restoreFolder.equalsIgnoreCase(PreferencesKey.DEFAULT_FILE_PATH)) return;
 
@@ -403,57 +433,118 @@ public class BackupAndRestoreController {
         tableData.getSelectionModel().clearSelection();
     }
 
-    private void loadSettingData(){
-        //fileAddressAutoBackupText.setText(ConfigManager.get("key1", "C:/Users/Default"));
-        fileAddressAutoBackupText.setText(FilePathManager.getPath(
-                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
-                PreferencesKey.DEFAULT_FILE_PATH));
-        fileAddressRestoreText.setText(FilePathManager.getPath(
-                PreferencesKey.RESTORE_FILE,
-                PreferencesKey.DEFAULT_FILE_PATH));
-        currentUsingDataText.setText(FilePathManager.getPath(
-                PreferencesKey.CURRENT_USING_DATA,
-                PreferencesKey.DEFAULT_FILE_PATH));
-
-        // backup form
-        if(FilePathManager.getPath(PreferencesKey.BACK_UP_FORM_KEY, "None")
-                .equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_AUTO_VALUE))
-            autoBackUpRadioButton.setSelected(true);
-        else if(FilePathManager.getPath(PreferencesKey.BACK_UP_FORM_KEY, "None")
-                .equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_WARNING_VALUE))
-            warningBackUpRadioButton.setSelected(true);
-        else noBackUpRadioButton.setSelected(true);
-
+    private void loadSettingData() throws SQLException {
         // using fuction for the fisrt time
         // 1 is yes
         // 0 is no
-        if(FilePathManager.getPath(PreferencesKey.USING_BACKUP_FUCTION, "None")
-                .equalsIgnoreCase("1")){
-            this.warningPapaText.setVisible(false);
-            this.warningText.setVisible(false);
-            this.currenFileUsingText.setVisible(true);
-            this.currentUsingDataText.setVisible(true);
-            FilePathManager.savePath(
+
+        String fileBackUpAddress = PropertiesFile.readFile(
+                settingFilePath,
+                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY
+        );
+
+        if(fileBackUpAddress.equalsIgnoreCase(PreferencesKey.DEFAULT_FILE_PATH)){
+            PropertiesFile.writeFile(
+                    settingFilePath,
                     PreferencesKey.USING_BACKUP_FUCTION,
                     "1"
             );
         }
-        if(warningText.isVisible())
-            FilePathManager.savePath(
-                    PreferencesKey.USING_BACKUP_FUCTION,
-                    "0"
+
+        String useBackupFirstTime = PropertiesFile.readFile(
+                settingFilePath,
+                PreferencesKey.USING_BACKUP_FUCTION
+        );
+
+        if(useBackupFirstTime.equalsIgnoreCase("1")){
+            this.warningPapaText.setVisible(true);
+            this.warningText.setVisible(true);
+            this.currenFileUsingText.setVisible(false);
+            this.currentUsingDataText.setVisible(false);
+        } else {
+            this.warningPapaText.setVisible(false);
+            this.warningText.setVisible(false);
+            this.currenFileUsingText.setVisible(true);
+            this.currentUsingDataText.setVisible(true);
+        }
+
+        // check restore folder was created and contained the full backup
+        String addressRestore = PropertiesFile.readFile(
+                settingFilePath,
+                PreferencesKey.RESTORE_FILE
+        );
+        fileAddressRestoreText.setText(addressRestore);
+
+        File restoreFolder = new File(addressRestore);
+        if(!restoreFolder.exists()) {
+            restoreFolder.mkdirs();
+            String defaultDifBackupName = "\\HotelBackup-" + LocalDate.now().format(dateTimeFormatter) + "-FULL.bak";
+            String filePath = restoreFolder + defaultDifBackupName;
+            BackupDatabase.backupFullDatabase(filePath);
+
+            PropertiesFile.writeFile(
+                    settingFilePath,
+                    PreferencesKey.CURRENT_USING_DATA,
+                    filePath
             );
+        }else{
+            File[] files = restoreFolder.listFiles();
+            if(files == null) return;
+            File fullBackup = Arrays.stream(files).filter(x -> x.getName().contains("FULL"))
+                    .findFirst().orElse(null);
+
+            if(fullBackup != null) {
+                String currentFile = PropertiesFile.readFile(
+                        settingFilePath,
+                        PreferencesKey.CURRENT_USING_DATA
+                );
+                if(currentFile == null || currentFile.isBlank())
+                    PropertiesFile.writeFile(
+                            settingFilePath,
+                            PreferencesKey.CURRENT_USING_DATA,
+                            fullBackup.getAbsolutePath()
+                    );
+            }
+        }
+
+
+        // set file address for all
+        String addressForAutoBackup = PropertiesFile.readFile(
+                settingFilePath,
+                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY
+        );
+        fileAddressAutoBackupText.setText(addressForAutoBackup);
+
+        String addressForHandBackup = PropertiesFile.readFile(
+                settingFilePath,
+                PreferencesKey.BACK_UP_FULL_HAND_ADDRESS_KEY
+        );
+        fileAddressHandBackupText.setText(addressForHandBackup);
+
+        String currentUsingData = PropertiesFile.readFile(
+                settingFilePath,
+                PreferencesKey.CURRENT_USING_DATA
+        );
+        currentUsingDataText.setText(currentUsingData);
+
+        // backup form
+        String autoBackupOption = PropertiesFile.readFile(settingFilePath, PreferencesKey.BACK_UP_OPTION_KEY);
+        if(autoBackupOption == null || autoBackupOption.isBlank()) {
+            noBackUpRadioButton.setSelected(true);
+            return;
+        }
+
+        if(autoBackupOption.equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_AUTO_VALUE))
+            autoBackUpRadioButton.setSelected(true);
+        else if(autoBackupOption.equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_WARNING_VALUE))
+            warningBackUpRadioButton.setSelected(true);
+        else noBackUpRadioButton.setSelected(true);
     }
 
     private void setValueForBackupWayCombobox() {
         this.backupWaysCombobox.getItems().setAll(Arrays.asList("Ngày hôm nay", "Toàn bộ"));
         this.backupWaysCombobox.setValue("Ngày hôm nay");
         setBackupWay();
-    }
-
-    private void setDefaultValueForHandBackup(){
-        fileAddressHandBackupText.setText(FilePathManager
-                .getPath(PreferencesKey.BACK_UP_FULL_HAND_ADDRESS_KEY, PreferencesKey.DEFAULT_FILE_PATH));
     }
 
     private Alert showMessage(Alert.AlertType alertType, String title, String header, String content){
@@ -466,16 +557,21 @@ public class BackupAndRestoreController {
 
     private void setValueForRestoreView(File file){
         fileAddressRestoreText.setText(file.getAbsolutePath());
-        FilePathManager.savePath(PreferencesKey.RESTORE_FILE, file.getAbsolutePath());
+        PropertiesFile.writeFile(
+                settingFilePath,
+                PreferencesKey.RESTORE_FILE,
+                file.getAbsolutePath()
+        );
         setDataOnTable();
     }
 
     private void checkFullBackupExistion() throws SQLException {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String defaultFullBackupName = "\\HotelBackup-" + LocalDate.now().format(dateTimeFormatter) + "-FULL.bak";
-        String backupFolderAddress = FilePathManager.getPath(
-                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY,
-                PreferencesKey.DEFAULT_FILE_PATH);
+
+        String backupFolderAddress = PropertiesFile.readFile(
+                settingFilePath,
+                PreferencesKey.BACK_UP_DATA_FILE_ADDRESS_KEY);
 
         File[] files = new File(backupFolderAddress).listFiles();
         if(files != null){
@@ -486,9 +582,11 @@ public class BackupAndRestoreController {
                 String filePath = backupFolderAddress + defaultFullBackupName;
                 BackupDatabase.backupFullDatabase(filePath);
                 currentUsingDataText.setText(filePath);
-                FilePathManager.savePath(
+                PropertiesFile.writeFile(
+                        settingFilePath,
                         PreferencesKey.CURRENT_USING_DATA,
-                        filePath);
+                        filePath
+                );
             }
         }
     }
@@ -516,7 +614,6 @@ public class BackupAndRestoreController {
         this.progressPanelFXML = getProgressPanelFXML();
         this.progressPanelFXML.load();
         this.progressbarScene = new Scene(progressPanelFXML.getRoot());
-        this.progressController = progressPanelFXML.getController();
     }
 
     private boolean dataIsUsing(String dataFilePath){

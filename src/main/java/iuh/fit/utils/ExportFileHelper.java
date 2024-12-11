@@ -28,6 +28,8 @@ import java.util.Objects;
 public class ExportFileHelper {
     private static final String DATA_LOCATED = "D://Thống kê doanh thu";
 
+    private static final String settingFilePath = "setting.properties";
+
     public static void createInvoiceExcelFile(TableView<InvoiceDisplayOnTable> tableView, String filePath, int numOfInvoice, double totalMoney){
         try {
             Workbook workbook = new XSSFWorkbook();
@@ -264,7 +266,9 @@ public class ExportFileHelper {
     public static void exportInvoiceExcelFile(TableView<InvoiceDisplayOnTable> tableView, ExportExcelCategory type, boolean forEmployee, DateRange date, int numOfInvoice, double totalMoney){
         FileChooser fileChooser = new FileChooser();
 
-        String fileAddress = FilePathManager.getPath(PreferencesKey.EXPORT_INVOICE_STATISTIC, PreferencesKey.DEFAULT_FILE_PATH);
+        String fileAddress = PropertiesFile.readFile(
+                settingFilePath,
+                PreferencesKey.EXPORT_INVOICE_STATISTIC);
 
         fileChooser.setTitle("Save Excel File");
         fileChooser.getExtensionFilters().addAll(
@@ -566,7 +570,9 @@ public class ExportFileHelper {
     public static void exportServiceExcelFile(TableView<ServiceDisplayOnTable> tableView, ExportExcelCategory type, boolean forEmployee, boolean forService, DateRange date, int numOfInvoice, double totalMoney) throws IOException {
         FileChooser fileChooser = new FileChooser();
 
-        String fileAddress = FilePathManager.getPath(PreferencesKey.EXPORT_SERVICE_STATISTIC, PreferencesKey.DEFAULT_FILE_PATH);
+        String fileAddress = PropertiesFile.readFile(
+                settingFilePath,
+                PreferencesKey.EXPORT_SERVICE_STATISTIC);
 
         fileChooser.setTitle("Save Excel File");
         fileChooser.getExtensionFilters().addAll(
@@ -1012,7 +1018,9 @@ public class ExportFileHelper {
     public static void exportRoomExcelFile(TableView<RoomDisplayOnTable> tableView, ExportExcelCategory type, boolean forRoomCategory, DateRange date, int numOfInvoice, double totalMoney) throws IOException {
         FileChooser fileChooser = new FileChooser();
 
-        String fileAddress = FilePathManager.getPath(PreferencesKey.EXPORT_ROOM_STATISTIC, PreferencesKey.DEFAULT_FILE_PATH);
+        String fileAddress = PropertiesFile.readFile(
+                settingFilePath,
+                PreferencesKey.EXPORT_ROOM_STATISTIC);
 
         fileChooser.setTitle("Save Excel File");
         fileChooser.getExtensionFilters().addAll(

@@ -4,12 +4,12 @@ public class PreferencesKey {
     // default value when user have not ever choosed file path
     public static final String  DEFAULT_VALUE = "None";
     // file path default when user have not ever choosed file path
-    public static final String  DEFAULT_FILE_PATH = "C:/Users/Default";
+    public static final String  DEFAULT_FILE_PATH = "Chưa chọn thư mục lưu trữ";
     // key for backup data address
     public static final String BACK_UP_DATA_FILE_ADDRESS_KEY = "BACK_UP_DATA";
     public static final String BACK_UP_FULL_HAND_ADDRESS_KEY = "BACK_UP_FULL_HAND_DATA";
 
-    public static final String BACK_UP_FORM_KEY = "BACK_UP_FORM";
+    public static final String BACK_UP_OPTION_KEY = "BACK_UP_OPTION";
     public static final String BACK_UP_FORM_AUTO_VALUE = "AUTO";
     public static final String BACK_UP_FORM_WARNING_VALUE = "WARNING";
     public static final String BACK_UP_FORM_NO_VALUE = "NO";
