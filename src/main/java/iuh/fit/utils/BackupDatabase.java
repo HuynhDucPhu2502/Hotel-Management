@@ -75,14 +75,25 @@ public class BackupDatabase {
 
         if(autoBackupOption.equalsIgnoreCase(PreferencesKey.BACK_UP_FORM_AUTO_VALUE))
             try {
-                if(new File(filePath).exists()) new File(filePath).delete();
-                BackupDatabase.backupDifDatabase(filePath);
-                showMessage(
-                        Alert.AlertType.INFORMATION,
-                        "Sao lưu thành công",
-                        "Dữ liệu đã được sao lưu thành công",
-                        "Nhấn OK để xác nhận"
-                ).showAndWait();
+                if(primaryStage == null){
+                    if(new File(filePath).exists()) new File(filePath).delete();
+                    BackupDatabase.backupDifDatabase(filePath);
+                    showMessage(
+                            Alert.AlertType.INFORMATION,
+                            "Sao lưu thành công",
+                            "Dữ liệu đã được sao lưu thành công",
+                            "Nhấn OK để xác nhận"
+                    ).showAndWait();
+                }else{
+                    if(new File(filePath).exists()) new File(filePath).delete();
+                    BackupDatabase.backupDifDatabase(filePath);
+                    showMessage(
+                            Alert.AlertType.INFORMATION,
+                            "Sao lưu thành công",
+                            "Dữ liệu đã được sao lưu thành công",
+                            "Nhấn OK để xác nhận"
+                    ).showAndWait();
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -106,10 +117,14 @@ public class BackupDatabase {
                     throw new RuntimeException(e);
                 }
             }else{
-                System.exit(0);
+                if(primaryStage != null){
+                    System.exit(0);
+                }
             }
         }
-        System.exit(0);
+        if(primaryStage != null){
+            System.exit(0);
+        }
     }
 
     public static void checkNumOfBackupFile() throws SQLException {
