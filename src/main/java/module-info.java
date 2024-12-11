@@ -14,6 +14,7 @@ module iuh.fit {
     requires zip4j;
     requires javafx.web;
     requires org.apache.pdfbox;
+    requires org.slf4j;
 
 
     opens iuh.fit to javafx.fxml;

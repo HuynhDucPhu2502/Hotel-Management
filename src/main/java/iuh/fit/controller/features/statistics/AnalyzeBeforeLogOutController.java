@@ -9,17 +9,17 @@ import iuh.fit.models.Account;
 import iuh.fit.models.Employee;
 import iuh.fit.models.misc.ShiftDetail;
 import iuh.fit.models.misc.ShiftDetailForInvoice;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -33,6 +33,7 @@ import java.util.List;
  * @package iuh.fit.controller.features.statistics
  */
 public class AnalyzeBeforeLogOutController {
+    private static final Logger log = LoggerFactory.getLogger(AnalyzeBeforeLogOutController.class);
     @FXML
     private Label employeeIDLabel, fullNameLabel, phoneNumberLabel;
     @FXML
@@ -59,17 +60,33 @@ public class AnalyzeBeforeLogOutController {
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
     public void initialize(Button button, MainController mainController, TopController topController){
-        setupController(mainController, topController, button);
-        setupTable();
-        setupContext();
-        loadData();
-        logOutBtn.setOnAction(e-> {
-            try {
-                handelLogOut();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
+        if(button != null && topController != null){
+            setupController(mainController, topController, button);
+            setupTable();
+            setupContext();
+            loadData();
+            logOutBtn.setOnAction(e-> {
+                try {
+                    handelLogOut();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+        }else{
+            this.mainController = mainController;
+            setupTable();
+            setupContext();
+            loadData();
+            logOutBtn.setText("Thoát");
+            logOutBtn.setOnAction(e->{
+                Stage currentStage = (Stage) logOutBtn.getScene().getWindow();
+                Stage mainStage = (Stage) mainController.getMainPanel().getScene().getWindow(); // Lấy `Stage` chứa `scheduleLabel`
+                currentStage.close();
+                mainStage.close();
+                Platform.exit();
+                System.exit(0);
+            });
+        }
     }
 
     public void setupController(MainController mainController, TopController topController, Button button){

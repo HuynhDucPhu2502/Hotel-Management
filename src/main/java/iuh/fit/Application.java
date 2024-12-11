@@ -1,12 +1,14 @@
 package iuh.fit;
 
 import iuh.fit.controller.LoginController;
+import iuh.fit.controller.features.statistics.AnalyzeBeforeLogOutController;
 import iuh.fit.utils.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
