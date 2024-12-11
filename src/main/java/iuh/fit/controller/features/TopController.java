@@ -85,19 +85,19 @@ public class TopController {
                 FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
                 AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
 
+                Stage newStage = new Stage();
+
                 AnalyzeBeforeLogOutController analyzeBeforeLogOutController = loader.getController();
-                analyzeBeforeLogOutController.initialize(logoutBtn, mainController, this, (Stage) logoutBtn.getScene().getWindow());
+                analyzeBeforeLogOutController.initialize(logoutBtn, mainController,
+                        this, stage, newStage);
 
                 Scene scene = new Scene(layout);
 
-                Stage stage = new Stage();
-                stage.initModality(Modality.APPLICATION_MODAL);
-                stage.setTitle("Thống kê ca làm");
-                stage.setScene(scene);
-                stage.setResizable(false);
-                setStage(stage);
-                analyzeBeforeLogOutController.getComponentFormController();
-                stage.show();
+                newStage.initModality(Modality.APPLICATION_MODAL);
+                newStage.setTitle("Thống kê ca làm");
+                newStage.setScene(scene);
+                newStage.setResizable(false);
+                newStage.show();
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -111,24 +111,22 @@ public class TopController {
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
             AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
 
+            Stage newStage = new Stage();
+
             AnalyzeBeforeLogOutController analyzeBeforeLogOutController = loader.getController();
-            analyzeBeforeLogOutController.initialize(logoutBtn, mainController, this, (Stage) logoutBtn.getScene().getWindow());
+            analyzeBeforeLogOutController.initialize(logoutBtn, mainController,
+                    this, stage, newStage);
 
             Scene scene = new Scene(layout);
 
-            stage.setTitle("Thống kê ca làm");
-            stage.setScene(scene);
-            stage.setResizable(false);
-            setStage(stage);
-            analyzeBeforeLogOutController.getComponentFormController();
-            stage.show();
+            newStage.initModality(Modality.APPLICATION_MODAL);
+            newStage.setTitle("Thống kê ca làm");
+            newStage.setScene(scene);
+            newStage.setResizable(false);
+            newStage.show();
         }catch(Exception e){
             e.printStackTrace();
         }
-    }
-
-    public void setStage (Stage stage){
-        this.stage = stage;
     }
 
     public Stage getStage(){

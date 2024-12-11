@@ -27,14 +27,9 @@ import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-/**
- * @author Le Tran Gia Huy
- * @created 10/12/2024 - 9:59 AM
- * @project HotelManagement
- * @package iuh.fit.controller.features.statistics
- */
 public class AnalyzeBeforeLogOutController {
     private static final Logger log = LoggerFactory.getLogger(AnalyzeBeforeLogOutController.class);
+
     @FXML
     private Label employeeIDLabel, fullNameLabel, phoneNumberLabel;
     @FXML
@@ -50,28 +45,29 @@ public class AnalyzeBeforeLogOutController {
     @FXML
     private Button logOutBtn;
 
-    private Button eventBtn;
     private MainController mainController;
+
     private Account currentAccount;
-    private Stage prevStage;
-    private TopController topController;
+    private Stage tempStage;
+
     private List<ShiftDetailForInvoice> shiftDetailForInvoiceList;
 
-    private DecimalFormat df = new DecimalFormat("#.##");
-    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+    private final DecimalFormat df = new DecimalFormat("#.##");
+    private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
 
-    public void initialize(Button button, MainController mainController, TopController topController, Stage stage){
-        this.prevStage = stage;
+    public void initialize(Button button, MainController mainController,
+                           TopController topController, Stage mainStage, Stage tempStage){
+        this.tempStage = tempStage;
 
         if(button != null && topController != null){
-            setupController(mainController, topController, button);
+            setupController(mainController);
             setupTable();
             setupContext();
             loadData();
             logOutBtn.setOnAction(e-> {
                 try {
-                    handelLogOut(prevStage);
+                    handelLogOut(mainStage);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -89,10 +85,8 @@ public class AnalyzeBeforeLogOutController {
         }
     }
 
-    public void setupController(MainController mainController, TopController topController, Button button){
+    public void setupController(MainController mainController){
         this.mainController = mainController;
-        this.topController = topController;
-        eventBtn = button;
     }
 
     public void setupContext(){
@@ -152,11 +146,15 @@ public class AnalyzeBeforeLogOutController {
     }
 
     private void handelLogOut(Stage primaryStage) throws IOException {
+        tempStage.close();
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/LoginUI.fxml"));
         AnchorPane root = loader.load();
 
         Scene scene = new Scene(root);
 
+        LoginController loginController = loader.getController();
+        loginController.setupContext(primaryStage);
         primaryStage.setTitle("Quản Lý Khách Sạn");
 
         primaryStage.setScene(scene);
@@ -167,10 +165,6 @@ public class AnalyzeBeforeLogOutController {
         primaryStage.centerOnScreen();
 
         primaryStage.show();
-    }
-
-    public void getComponentFormController(){
-        prevStage = topController.getStage();
     }
 
 }

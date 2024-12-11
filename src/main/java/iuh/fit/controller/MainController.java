@@ -20,28 +20,21 @@ import iuh.fit.controller.features.room.RoomSearchingController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.CreateReservationFormController;
 import iuh.fit.controller.features.service.HotelServiceManagerController;
 import iuh.fit.controller.features.service.HotelServiceSearchingController;
-import iuh.fit.controller.features.statistics.AnalyzeBeforeLogOutController;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.models.*;
 import iuh.fit.models.enums.Position;
 import iuh.fit.models.wrapper.RoomWithReservation;
-import iuh.fit.utils.BackupDatabase;
 import iuh.fit.utils.RoomManagementService;
 import iuh.fit.utils.TimelineManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Locale;
-import java.util.Objects;
 
 import static iuh.fit.dao.misc.ShiftDetailDAO.createStartingPoint;
 
@@ -85,39 +78,6 @@ public class MainController {
 
         shiftDetailID = createStartingPoint();
 
-        Platform.runLater(this::handelCloseEvent);
-    }
-
-    private void handelCloseEvent(){
-        mainPanel.getScene().getWindow().setOnCloseRequest(e->{
-            e.consume();
-            try {
-                BackupDatabase.backupData(null);
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-            String source = "/iuh/fit/view/features/statistics/AnalyzeBeforeLogOut.fxml";
-
-            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
-            AnchorPane layout; // Gọi load() trước khi getController()
-            try {
-                layout = loader.load();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-
-            AnalyzeBeforeLogOutController analyzeBeforeLogOutController = loader.getController();
-            analyzeBeforeLogOutController.initialize(null, this, null, (Stage) informationBtn.getScene().getWindow());
-
-            Scene scene = new Scene(layout);
-
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Thống kê ca làm");
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
-        });
     }
 
     public void setShift(Shift shift){
