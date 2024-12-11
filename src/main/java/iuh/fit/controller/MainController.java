@@ -35,6 +35,8 @@ import javafx.scene.layout.AnchorPane;
 
 import java.util.Locale;
 
+import static iuh.fit.dao.misc.ShiftDetailDAO.createStartingPoint;
+
 public class MainController {
     private Account account;
     private Shift shift;
@@ -54,6 +56,8 @@ public class MainController {
 
     private static NotificationButtonController notificationButtonController;
 
+    private int shiftDetailID;
+
     // Không xóa
     public void initialize() {
         Locale locale = new Locale("vi", "VN");
@@ -68,6 +72,7 @@ public class MainController {
         initializeDashboard();
         initializeMenuBar();
         initializeTopBar();
+        shiftDetailID = createStartingPoint();
     }
 
     public void setShift(Shift shift){
@@ -113,9 +118,9 @@ public class MainController {
             AnchorPane topLayout = loader.load();
 
             TopController topController = loader.getController();
-            notificationButtonController = topController.initialize(account);
+            notificationButtonController = topController.initialize(account, this);
 
-            RoomManagementService.startAutoCheckoutScheduler(notificationButtonController);
+            RoomManagementService.startAutoCheckoutScheduler(notificationButtonController, this);
 
             topPanel.getChildren().clear();
             topPanel.getChildren().addAll(topLayout.getChildren());
@@ -368,6 +373,14 @@ public class MainController {
 
     public Account getAccount() {
         return account;
+    }
+
+    public Shift getShift(){
+        return shift;
+    }
+
+    public int getShiftDetailID(){
+        return shiftDetailID;
     }
 
     public static boolean isRoomBookingLoaded() {

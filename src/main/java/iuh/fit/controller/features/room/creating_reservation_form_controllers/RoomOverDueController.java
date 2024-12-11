@@ -102,7 +102,7 @@ public class RoomOverDueController {
         if (hours >= 2) {
             if (timeline != null) {
                 if (MainController.isRoomBookingLoaded()) navigateToRoomBookingPanel(false);
-                else RoomManagementService.autoCheckoutOverdueRooms(notificationButtonController);
+                else RoomManagementService.autoCheckoutOverdueRooms(notificationButtonController, mainController);
                 TimelineManager.getInstance().removeTimeline(roomWithReservation.getRoom().getRoomID() + RoomStatus.OVERDUE.name());
             }
 

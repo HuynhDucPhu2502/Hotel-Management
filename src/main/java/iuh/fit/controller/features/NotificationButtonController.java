@@ -111,7 +111,14 @@ public class NotificationButtonController {
             messageListContainer.getChildren().remove(emptyNotification);
             notifyCircle.setVisible(true);
             notifyNumber.setVisible(true);
-            Platform.runLater(()-> notifyNumber.setText(String.valueOf(notificationList.stream().filter(x-> !x.isRead()).count())));
+            Platform.runLater(()-> {
+                long tempNumb = notificationList.stream().filter(x-> !x.isRead()).count();
+                if(tempNumb>9){
+                    notifyNumber.setText("9+");
+                }else{
+                    notifyNumber.setText(String.valueOf(tempNumb));
+                }
+            });
             checkSize();
             if(!messageListContainer.getChildren().contains(buttonPane)){
                 messageListContainer.getChildren().addLast(buttonPane);

@@ -5,6 +5,7 @@ import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.RoomBookingController;
 import iuh.fit.dao.*;
+import iuh.fit.dao.misc.ShiftDetailDAO;
 import iuh.fit.models.*;
 import iuh.fit.models.enums.RoomStatus;
 import iuh.fit.models.wrapper.RoomWithReservation;
@@ -210,6 +211,7 @@ public class ReservationFormDetailsController {
                 if (buttonType == ButtonType.YES) {
                     ReservationFormDAO.deleteData(reservationForm.getReservationID());
                     navigateToReservationListPanel();
+
                 }
             });
 
@@ -231,6 +233,7 @@ public class ReservationFormDetailsController {
             roomWithReservation = RoomWithReservationDAO
                     .getRoomWithReservationByID(reservationForm.getReservationID(), roomWithReservation.getRoom().getRoomID());
 
+            ShiftDetailDAO.updateNumbOfCheckInRoom(mainController.getShiftDetailID());
             navigateToReservationListPanel("Check-in thành công tại phòng đã đặt.");
         } catch (Exception e) {
             navigateToReservationListPanel(e.getMessage());
@@ -248,6 +251,7 @@ public class ReservationFormDetailsController {
                 roomWithReservation = RoomWithReservationDAO
                         .getRoomWithReservationByID(reservationForm.getReservationID(), roomWithReservation.getRoom().getRoomID());
 
+                ShiftDetailDAO.updateNumbOfCheckInRoom(mainController.getShiftDetailID());
                 navigateToReservationListPanel("Check-in thành công tại phòng đã đặt.");
             } catch (Exception e) {
                 navigateToReservationListPanel(e.getMessage());
