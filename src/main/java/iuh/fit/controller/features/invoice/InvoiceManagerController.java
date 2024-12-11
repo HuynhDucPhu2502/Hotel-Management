@@ -68,7 +68,6 @@ public class InvoiceManagerController {
 
         loadDataTask.setOnSucceeded(event -> {
             invoiceList = loadDataTask.getValue();
-            invoiceList.forEach(System.out::println);
             displayInvoices(invoiceList);
             EditDateRangePicker.editDateRangePicker(invoiceDateRangeSearchField);
             invoiceDateRangeSearchField
