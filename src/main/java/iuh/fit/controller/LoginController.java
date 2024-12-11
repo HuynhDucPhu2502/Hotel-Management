@@ -79,7 +79,7 @@ public class LoginController {
     @FXML private Button confirmPassRestoreButton;
     @FXML private Button restoreDataButton;
 
-    private Stage stage;
+    private Stage mainStage;
 
     @FXML
     public void initialize() {
@@ -101,12 +101,12 @@ public class LoginController {
         resetBtn.setOnAction(event -> resetAction());
     }
 
-    public void setupContext(Stage stage) {
-        this.stage = stage;
+    public void setupContext(Stage mainStage) {
+        this.mainStage = mainStage;
 
         signInButton.setOnAction(event -> {
             try {
-                signIn(stage);
+                signIn(this.mainStage);
             } catch (SQLException ignored) {
 
             }
@@ -119,7 +119,7 @@ public class LoginController {
         userNameField.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
                 try {
-                    signIn(stage);
+                    signIn(mainStage);
                 } catch (SQLException ignored) {
 
                 }
@@ -129,7 +129,7 @@ public class LoginController {
         hiddenPasswordField.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
                 try {
-                    signIn(stage);
+                    signIn(mainStage);
                 } catch (SQLException ignored) {
 
                 }
@@ -139,7 +139,7 @@ public class LoginController {
         visiblePasswordField.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.ENTER) {
                 try {
-                    signIn(stage);
+                    signIn(mainStage);
                 } catch (SQLException ignored) {
 
                 }
@@ -174,7 +174,7 @@ public class LoginController {
         }
     }
 
-    private void signIn(Stage stage) throws SQLException {
+    private void signIn(Stage mainStage) throws SQLException {
         if(!RestoreDatabase.isDatabaseExist(DBHelper.getDatabaseName())) {
             errorMessage.setText(ErrorMessages.DATABASE_NOT_FOUND);
             return;
@@ -225,32 +225,32 @@ public class LoginController {
                                 "Không thể đăng nhập"
                 );
             else {
-                loadMainUI(account, currentShift, stage);
+                loadMainUI(account, currentShift, mainStage);
             }
         } else if (position.equals(Position.MANAGER)) {
-            loadMainUI(account, currentShift, stage);
+            loadMainUI(account, currentShift, mainStage);
         }
     }
 
-    private void loadMainUI(Account account, Shift currentShift, Stage stage) {
+    private void loadMainUI(Account account, Shift currentShift, Stage mainStage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/MainUI.fxml"));
             AnchorPane mainPanel = fxmlLoader.load();
 
             MainController mainController = fxmlLoader.getController();
-            mainController.initialize(account, stage, currentShift);
+            mainController.initialize(account, mainStage, currentShift);
 
             Scene scene = new Scene(mainPanel);
 
-            stage.setWidth(1200);
-            stage.setHeight(680);
-            stage.setScene(scene);
-            stage.setResizable(true);
-            stage.setMaximized(true);
+            mainStage.setWidth(1200);
+            mainStage.setHeight(680);
+            mainStage.setScene(scene);
+            mainStage.setResizable(true);
+            mainStage.setMaximized(true);
 
-            stage.centerOnScreen();
+            mainStage.centerOnScreen();
 
-            stage.show();
+            mainStage.show();
         } catch (Exception e) {
             errorMessage.setText(e.getMessage());
         }

@@ -2,6 +2,7 @@ package iuh.fit.controller.features;
 
 import iuh.fit.controller.MainController;
 import iuh.fit.controller.features.statistics.AnalyzeBeforeLogOutController;
+import iuh.fit.utils.BackupDatabase;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -38,12 +39,12 @@ public class TopController {
     private MainController mainController;
 
     private NotificationButtonController notificationButtonController;
-    private Stage stage;
+    private Stage mainStage;
 
     @FXML
     public void initialize(MainController mainController, Stage stage) {
         this.mainController = mainController;
-        this.stage = stage;
+        this.mainStage = stage;
 
         initializeNotificationButton();
 
@@ -69,28 +70,25 @@ public class TopController {
 
     public void logout() throws IOException {
         try{
-            // Create a confirmation alert
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Đăng xuất");
             alert.setHeaderText("Xác nhận đăng xuất");
             alert.setContentText("Bạn có muốn đăng xuất và bàn giao lại ca?");
 
-            // Show the dialog and wait for a response
             Optional<ButtonType> result = alert.showAndWait();
 
-            // Check the user's response
             if (result.isPresent() && result.get() == ButtonType.OK) {
+                BackupDatabase.backupData(mainStage);
 
                 String source = "/iuh/fit/view/features/statistics/AnalyzeBeforeLogOut.fxml";
 
                 FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
-                AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
+                AnchorPane layout = loader.load();
 
                 Stage newStage = new Stage();
 
                 AnalyzeBeforeLogOutController analyzeBeforeLogOutController = loader.getController();
-                analyzeBeforeLogOutController.initialize(logoutBtn, mainController,
-                        this, stage, newStage);
+                analyzeBeforeLogOutController.initialize(mainController, mainStage, newStage);
 
                 Scene scene = new Scene(layout);
 
@@ -100,7 +98,7 @@ public class TopController {
                 newStage.setResizable(false);
                 newStage.show();
             }
-        }catch(Exception e){
+        } catch(Exception e){
             e.printStackTrace();
         }
     }
@@ -110,13 +108,12 @@ public class TopController {
             String source = "/iuh/fit/view/features/statistics/AnalyzeBeforeLogOut.fxml";
 
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(source)));
-            AnchorPane layout = loader.load(); // Gọi load() trước khi getController()
+            AnchorPane layout = loader.load();
 
             Stage newStage = new Stage();
 
             AnalyzeBeforeLogOutController analyzeBeforeLogOutController = loader.getController();
-            analyzeBeforeLogOutController.initialize(logoutBtn, mainController,
-                    this, stage, newStage);
+            analyzeBeforeLogOutController.initialize(mainController, mainStage, newStage);
 
             Scene scene = new Scene(layout);
 
@@ -128,10 +125,6 @@ public class TopController {
         }catch(Exception e){
             e.printStackTrace();
         }
-    }
-
-    public Stage getStage(){
-        return stage;
     }
 
     private void handleTooltips() {

@@ -34,6 +34,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import static iuh.fit.dao.misc.ShiftDetailDAO.createStartingPoint;
@@ -48,7 +49,7 @@ public class MainController {
     private AnchorPane mainPanel;
     @FXML
     private AnchorPane topPanel;
-    private Stage stage;
+    private Stage mainStage;
 
     private Button informationBtn;
 
@@ -65,7 +66,7 @@ public class MainController {
         if (account == null) throw new IllegalArgumentException("Tài khoản không tồn tại");
 
         this.account = account;
-        this.stage = stage;
+        this.mainStage = stage;
         this.shift = shift;
 
         Locale locale = new Locale("vi", "VN");
@@ -117,13 +118,23 @@ public class MainController {
             AnchorPane topLayout = loader.load();
 
             TopController topController = loader.getController();
-            topController.initialize(this, stage);
+            topController.initialize(this, mainStage);
             this.notificationButtonController = topController.getNotificationButtonController();
 
             RoomManagementService.startAutoCheckoutScheduler(notificationButtonController, this);
 
             topPanel.getChildren().clear();
             topPanel.getChildren().addAll(topLayout.getChildren());
+
+            mainStage.setOnCloseRequest(e -> {
+                e.consume();
+
+                try {
+                    topController.logout();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();

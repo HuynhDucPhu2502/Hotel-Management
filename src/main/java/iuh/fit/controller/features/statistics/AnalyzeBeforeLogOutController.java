@@ -2,7 +2,6 @@ package iuh.fit.controller.features.statistics;
 
 import iuh.fit.controller.LoginController;
 import iuh.fit.controller.MainController;
-import iuh.fit.controller.features.TopController;
 import iuh.fit.dao.EmployeeDAO;
 import iuh.fit.dao.misc.ShiftDetailDAO;
 import iuh.fit.dao.misc.ShiftDetailForInvoiceDAO;
@@ -19,8 +18,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -28,8 +25,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class AnalyzeBeforeLogOutController {
-    private static final Logger log = LoggerFactory.getLogger(AnalyzeBeforeLogOutController.class);
-
     @FXML
     private Label employeeIDLabel, fullNameLabel, phoneNumberLabel;
     @FXML
@@ -56,42 +51,26 @@ public class AnalyzeBeforeLogOutController {
     private final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
 
-    public void initialize(Button button, MainController mainController,
-                           TopController topController, Stage mainStage, Stage tempStage){
+    public void initialize(MainController mainController,
+                           Stage mainStage,
+                           Stage tempStage
+    ){
         this.tempStage = tempStage;
-
-        if(button != null && topController != null){
-            setupController(mainController);
-            setupTable();
-            setupContext();
-            loadData();
-            logOutBtn.setOnAction(e-> {
-                try {
-                    handelLogOut(mainStage);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
-            });
-        }else{
-            this.mainController = mainController;
-            setupTable();
-            setupContext();
-            loadData();
-            logOutBtn.setText("Thoát");
-            logOutBtn.setOnAction(e->{
-                Platform.exit();
-                System.exit(0);
-            });
-        }
-    }
-
-    public void setupController(MainController mainController){
         this.mainController = mainController;
+        this.currentAccount = mainController.getAccount();
+
+        setupTable();
+        loadData();
+
+        logOutBtn.setOnAction(e-> {
+            try {
+                handleLogout(mainStage);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
     }
 
-    public void setupContext(){
-        currentAccount = mainController.getAccount();
-    }
 
     private void loadData(){
         Employee employee = EmployeeDAO.getEmployeeByAccountID(currentAccount.getAccountID());
@@ -145,7 +124,7 @@ public class AnalyzeBeforeLogOutController {
         invoiceTableView.setItems(data);
     }
 
-    private void handelLogOut(Stage primaryStage) throws IOException {
+    private void handleLogout(Stage primaryStage) throws IOException {
         tempStage.close();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/LoginUI.fxml"));
@@ -163,6 +142,11 @@ public class AnalyzeBeforeLogOutController {
         primaryStage.setHeight(400);
         primaryStage.setMaximized(false);
         primaryStage.centerOnScreen();
+
+        primaryStage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
 
         primaryStage.show();
     }

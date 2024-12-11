@@ -1,7 +1,6 @@
 package iuh.fit;
 
 import iuh.fit.controller.LoginController;
-import iuh.fit.utils.*;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -24,15 +23,11 @@ public class Application extends javafx.application.Application {
         //startWithoutLogin(primaryStage);
     }
 
-    public void startWithLogin(Stage primaryStage) throws SQLException {
+    public void startWithLogin(Stage primaryStage) {
         loadUI(primaryStage);
-
-        if(!RestoreDatabase.isDatabaseExist("HotelDatabase")) return;
-
-        handelCloseButton(primaryStage);
     }
 
-    private void loadUI(Stage primaryStage){
+    private void loadUI(Stage mainStage){
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/LoginUI.fxml"));
             AnchorPane root = loader.load();
@@ -40,35 +35,25 @@ public class Application extends javafx.application.Application {
             Scene scene = new Scene(root);
 
             LoginController loginController = loader.getController();
-            loginController.setupContext(primaryStage);
+            loginController.setupContext(mainStage);
 
-            primaryStage.setTitle("Quản Lý Khách Sạn");
-            primaryStage.setScene(scene);
-            primaryStage.setResizable(false);
-            primaryStage.setWidth(610);
-            primaryStage.setHeight(400);
-            primaryStage.setMaximized(false);
-            primaryStage.centerOnScreen();
+            mainStage.setTitle("Quản Lý Khách Sạn");
+            mainStage.setScene(scene);
+            mainStage.setResizable(false);
+            mainStage.setWidth(610);
+            mainStage.setHeight(400);
+            mainStage.setMaximized(false);
+            mainStage.centerOnScreen();
 
-            primaryStage.show();
+            mainStage.show();
 
-            primaryStage.setOnCloseRequest(event -> {
+            mainStage.setOnCloseRequest(event -> {
                 Platform.exit();
                 System.exit(0);
             });
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void handelCloseButton(Stage primaryStage) {
-        primaryStage.setOnCloseRequest(event -> {
-            try {
-                BackupDatabase.backupData(primaryStage);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        });
     }
 
     public static void main(String[] args) {
