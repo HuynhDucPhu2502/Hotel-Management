@@ -74,18 +74,17 @@ public class PasswordChangingController {
             dialogPane.showWarning("Lỗi", "Mật khẩu xác nhận không khớp với mật khẩu mới.");
             return;
         }
-        System.out.println(newPassword);
         String hashedNewPassword = PasswordHashing.hashPassword(newPassword);
         account.setPassword(hashedNewPassword);
-        System.out.println(hashedNewPassword);
 
         try {
             AccountDAO.updateData(account);
-            Platform.runLater(() -> dialogPane.showInformation("Thành công", "Đã đổi mật khẩu thành công"));
-            navigateToEmployeeInformationPanel();
+            dialogPane.showInformation("Thành công", "Đã đổi mật khẩu thành công");
+            currentPasswordField.setText("");
+            newPasswordField.setText("");
+            confirmNewPasswordField.setText("");
         } catch (Exception e) {
             dialogPane.showWarning("Lỗi", "Có lỗi xảy ra khi cập nhật mật khẩu.");
-            e.printStackTrace();
         }
     }
 

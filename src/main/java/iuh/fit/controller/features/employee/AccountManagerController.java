@@ -342,7 +342,7 @@ public class AccountManagerController {
             Account account = AccountDAO.getAccountByEmployeeID(employeeIDCBox.getText());
 
             if (account.getEmployee().getPosition().name().equals("MANAGER")){
-                dialogPane.showWarning("LỖI", "Không thể cập nhật mật khẩu cho QUẢN LÝ!!! Chỉ cho phép cập nhật mật khẩu cho LỄ TÂN");
+                dialogPane.showWarning("LỖI", "Không thể cập nhật thông tin cho QUẢN LÝ!!! Chỉ cho phép cập nhật thông tin cho LỄ TÂN");
                 return;
             }
 

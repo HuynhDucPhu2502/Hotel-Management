@@ -36,6 +36,31 @@ public class AccountDAO {
         return data;
     }
 
+    public static Account getDataByID(String accountID) {
+        String SQLQueryStatement = "SELECT a.accountID, a.userName, a.password, " +
+                "a.status, b.employeeID, b.fullName, " +
+                "b.phoneNumber, b.email, b.address, " +
+                "b.gender, b.idCardNumber, b.dob, " +
+                "b.position " +
+                "FROM Account a INNER JOIN Employee b " +
+                "ON a.employeeID = b.employeeID " +
+                "WHERE accountID = ?";
+
+        try (Connection con = DBHelper.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement)) {
+
+            preparedStatement.setString(1, accountID);
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    return extractData(rs);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static Account getLogin(String username, String password) {
         String SQLQueryStatement = "SELECT a.accountID, a.userName, a.password, " +
                 "a.status, b.employeeID, b.fullName, " +
@@ -55,32 +80,7 @@ public class AccountDAO {
                     String inputHashedPassword = PasswordHashing.hashPassword(password);
 
                     if (hashedPassword.equals(inputHashedPassword)) return extractData(rs);
-                    else throw new IllegalArgumentException(ErrorMessages.LOGIN_INVALID_ACCOUNT);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static Account getDataByID(String accountID) {
-        String SQLQueryStatement = "SELECT a.accountID, a.userName, a.password, " +
-                "a.status, b.employeeID, b.fullName, " +
-                "b.phoneNumber, b.email, b.address, " +
-                "b.gender, b.idCardNumber, b.dob, " +
-                "b.position " +
-                "FROM Account a INNER JOIN Employee b " +
-                "ON a.employeeID = b.employeeID " +
-                "WHERE accountID = ?";
-
-        try (Connection con = DBHelper.getConnection();
-             PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement)) {
-
-            preparedStatement.setString(1, accountID);
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                if (rs.next()) {
-                    return extractData(rs);
+                    else return null;
                 }
             }
         } catch (Exception e) {
