@@ -53,7 +53,8 @@ public class AnalyzeBeforeLogOutController {
 
     public void initialize(MainController mainController,
                            Stage mainStage,
-                           Stage tempStage
+                           Stage tempStage,
+                           boolean isExit
     ){
         this.tempStage = tempStage;
         this.mainController = mainController;
@@ -64,7 +65,7 @@ public class AnalyzeBeforeLogOutController {
 
         logOutBtn.setOnAction(e-> {
             try {
-                handleLogout(mainStage);
+                handleLogout(mainStage, isExit);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -124,31 +125,36 @@ public class AnalyzeBeforeLogOutController {
         invoiceTableView.setItems(data);
     }
 
-    private void handleLogout(Stage primaryStage) throws IOException {
+    private void handleLogout(Stage primaryStage, boolean isExit) throws IOException {
         tempStage.close();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/LoginUI.fxml"));
-        AnchorPane root = loader.load();
-
-        Scene scene = new Scene(root);
-
-        LoginController loginController = loader.getController();
-        loginController.setupContext(primaryStage);
-        primaryStage.setTitle("Quản Lý Khách Sạn");
-
-        primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
-        primaryStage.setWidth(610);
-        primaryStage.setHeight(400);
-        primaryStage.setMaximized(false);
-        primaryStage.centerOnScreen();
-
-        primaryStage.setOnCloseRequest(event -> {
+        if (isExit) {
             Platform.exit();
             System.exit(0);
-        });
+        } else {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/ui/LoginUI.fxml"));
+            AnchorPane root = loader.load();
 
-        primaryStage.show();
+            Scene scene = new Scene(root);
+
+            LoginController loginController = loader.getController();
+            loginController.setupContext(primaryStage);
+            primaryStage.setTitle("Quản Lý Khách Sạn");
+
+            primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
+            primaryStage.setWidth(610);
+            primaryStage.setHeight(400);
+            primaryStage.setMaximized(false);
+            primaryStage.centerOnScreen();
+
+            primaryStage.setOnCloseRequest(event -> {
+                Platform.exit();
+                System.exit(0);
+            });
+
+            primaryStage.show();
+        }
     }
 
 }

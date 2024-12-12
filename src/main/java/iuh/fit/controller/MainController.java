@@ -130,7 +130,7 @@ public class MainController {
                 e.consume();
 
                 try {
-                    topController.logout();
+                    topController.logout(true);
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }

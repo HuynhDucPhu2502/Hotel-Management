@@ -68,7 +68,7 @@ public class TopController {
         dateLabel.setText("  "+currentDate);
     }
 
-    public void logout() throws IOException {
+    public void logout(boolean isExit) throws IOException {
         try{
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Đăng xuất");
@@ -88,7 +88,7 @@ public class TopController {
                 Stage newStage = new Stage();
 
                 AnalyzeBeforeLogOutController analyzeBeforeLogOutController = loader.getController();
-                analyzeBeforeLogOutController.initialize(mainController, mainStage, newStage);
+                analyzeBeforeLogOutController.initialize(mainController, mainStage, newStage, isExit);
 
                 Scene scene = new Scene(layout);
 
@@ -103,7 +103,7 @@ public class TopController {
         }
     }
 
-    public void analyzeBeforeLogout() throws IOException {
+    public void analyzeBeforeLogout(boolean isExit) throws IOException {
         try{
             BackupDatabase.backupData();
 
@@ -115,7 +115,7 @@ public class TopController {
             Stage newStage = new Stage();
 
             AnalyzeBeforeLogOutController analyzeBeforeLogOutController = loader.getController();
-            analyzeBeforeLogOutController.initialize(mainController, mainStage, newStage);
+            analyzeBeforeLogOutController.initialize(mainController, mainStage, newStage, isExit);
 
             Scene scene = new Scene(layout);
 
@@ -162,7 +162,7 @@ public class TopController {
         // logout
         logoutBtn.setOnAction(e -> {
             try {
-                logout();
+                logout(false);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -170,7 +170,7 @@ public class TopController {
 
         analyzeShiftBtn.setOnAction(e->{
             try {
-                analyzeBeforeLogout();
+                analyzeBeforeLogout(false);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
