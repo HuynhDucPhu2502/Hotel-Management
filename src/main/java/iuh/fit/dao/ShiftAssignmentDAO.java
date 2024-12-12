@@ -129,6 +129,35 @@ public class ShiftAssignmentDAO {
         return null;
     }
 
+    public static List<Shift> getShiftIDByEmployeeID(String employeeID) {
+        List<Shift> tempList = new ArrayList<>();
+        String SQLQueryStatement = "SELECT shiftId " +
+                "FROM ShiftAssignment " +
+                "WHERE employeeID = ?";
+
+        try (
+                Connection con = DBHelper.getConnection();
+                PreparedStatement preparedStatement = con.prepareStatement(SQLQueryStatement)
+        ) {
+
+            preparedStatement.setString(1, employeeID);
+
+            try (ResultSet rs = preparedStatement.executeQuery()) {
+                if (rs.next()) {
+                    String shiftID = rs.getString(1);
+                    Shift shift = ShiftDAO.getDataByID(shiftID);
+
+                    tempList.add(shift);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return tempList;
+    }
+
     public static void createData(ShiftAssignment shiftAssignment) {
         try (
                 Connection connection = DBHelper.getConnection();

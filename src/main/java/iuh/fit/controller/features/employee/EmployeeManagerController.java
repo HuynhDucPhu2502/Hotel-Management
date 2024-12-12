@@ -455,7 +455,7 @@ public class EmployeeManagerController {
         topBorder.setStyle("-fx-background-color: #F39C12; -fx-border-radius: 20 20 0 0;");
 
         // Tạo Rectangle để bo góc cho cửa sổ
-        Rectangle clip = new Rectangle(836, 470);
+        Rectangle clip = new Rectangle(836, 694);
         clip.setArcHeight(20);  // Tùy chỉnh chiều cao bo góc
         clip.setArcWidth(20);   // Tùy chỉnh chiều rộng bo góc
         layout.setClip(clip);

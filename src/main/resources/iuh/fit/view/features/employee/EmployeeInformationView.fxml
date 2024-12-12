@@ -2,6 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -13,13 +15,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="469.0" prefWidth="836.0" style="-fx-background-color: white;" stylesheets="@../../../styles/Button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.employee.EmployeeInformationViewController">
+<AnchorPane prefHeight="694.0" prefWidth="836.0" style="-fx-background-color: white;" stylesheets="@../../../styles/Button.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="iuh.fit.controller.features.employee.EmployeeInformationViewController">
     <children>
-        <VBox alignment="TOP_CENTER" layoutX="50.400001525878906" layoutY="25.0" prefHeight="481.0" prefWidth="836.0" spacing="20.0" AnchorPane.bottomAnchor="-23.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <VBox alignment="TOP_CENTER" layoutX="50.400001525878906" layoutY="25.0" prefHeight="706.0" prefWidth="836.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <Label text="THÔNG TIN NHÂN VIÊN">
                     <font>
-                        <Font name="System Bold" size="40.0" />
+                        <Font name="System Bold" size="24.0" />
                     </font>
                 </Label>
                 <GridPane hgap="20.0" minHeight="300.0" minWidth="740.0" prefHeight="303.0" prefWidth="814.0" vgap="20.0">
@@ -100,11 +102,7 @@
                         </AnchorPane>
                         <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="3">
                      <children>
-                        <AnchorPane layoutX="-14.0" layoutY="-86.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <TextField fx:id="shiftIDTextField" editable="false" layoutX="22.0" layoutY="2.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                           </children>
-                        </AnchorPane>
+                        <AnchorPane layoutX="-14.0" layoutY="-86.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                         </AnchorPane>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Chức vụ" GridPane.rowIndex="4">
@@ -146,37 +144,31 @@
                            </VBox.margin></TextField>
                      </children>
                   </VBox>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Mã ca làm" wrappingWidth="76.85119247436523" GridPane.columnIndex="3" GridPane.rowIndex="3">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="4">
-                     <children>
-                        <Text layoutX="19.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Giờ làm việc" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </AnchorPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="4">
                      <children>
-                        <HBox layoutX="-60.0" layoutY="-36.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <TextField fx:id="startTimeTextField" editable="false" prefHeight="26.0" prefWidth="146.0" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="-">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Text>
-                              <TextField fx:id="endTimeTextField" editable="false" />
-                           </children>
-                        </HBox>
+                        <HBox layoutX="-60.0" layoutY="-36.0" prefHeight="100.0" prefWidth="200.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
                     </children>
                 </GridPane>
+            <Label text="Danh sách ca làm của nhân viên">
+               <font>
+                  <Font name="System Italic" size="14.0" />
+               </font>
+            </Label>
+            <TableView fx:id="shiftTableView" prefHeight="208.0" prefWidth="815.0">
+              <columns>
+                <TableColumn fx:id="shiftIDColumn" prefWidth="108.000030875206" text="Mã ca làm" />
+                <TableColumn fx:id="startTimeColumn" prefWidth="168.7999267578125" text="Giờ bắt đầu" />
+                  <TableColumn fx:id="hourOfWorkColumn" prefWidth="146.40008544921875" text="Số giờ làm việc" />
+                  <TableColumn fx:id="endTimeColumn" prefWidth="180.79998779296875" text="Giờ kết thúc" />
+                  <TableColumn fx:id="scheduleColumn" prefWidth="204.800048828125" text="Ngày trong tuần" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
             </children>
             <opaqueInsets>
                 <Insets />

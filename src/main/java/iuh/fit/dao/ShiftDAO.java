@@ -235,7 +235,7 @@ public class ShiftDAO {
             preparedStatement.setTimestamp(4, ConvertHelper.localDateTimeToSQLConverter(shift.getUpdatedDate()));
             preparedStatement.setDouble(5, shift.getNumberOfHour());
             preparedStatement.setString(6, ConvertHelper.shiftDaysScheduleToSQLConverter(shift.getShiftDaysSchedule()));
-            preparedStatement.setString(7, oldID);
+            preparedStatement.setString(7, shift.getShiftID());
 
 
             preparedStatement.executeUpdate();
