@@ -38,7 +38,7 @@
                         <Font name="System Bold" size="36.0" />
                      </font>
                   </Label>
-                  <Label prefHeight="20.0" prefWidth="236.0" text="Phiên bản: PRE-RELEASE 1.0 (LV2)" GridPane.rowIndex="2">
+                  <Label prefHeight="20.0" prefWidth="236.0" text="Phiên bản: RELEASE 1.0 (LV3)" GridPane.rowIndex="2">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -101,11 +101,6 @@
                   </Label>
                </children>
             </GridPane>
-            <Label layoutX="14.0" layoutY="375.0" text="Ghi chú: ứng dụng vẫn trong giai đoạn phát triển và có thể phát sinh ra nhiều lỗi!">
-               <font>
-                  <Font name="System Italic" size="14.0" />
-               </font>
-            </Label>
          </children>
       </AnchorPane>
       <AnchorPane layoutX="6.0" layoutY="8.0" prefHeight="54.0" prefWidth="793.0" style="-fx-background-color: #4682b4;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />

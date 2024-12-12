@@ -304,7 +304,7 @@ public class ShiftManagerController {
                 String endTimeString = endTime.format(formatter);
                 endTimeTextField.setText(endTimeString);
             }catch (Exception e){
-                dialogPane.showWarning("LỖI", e.getMessage());
+                dialogPane.showWarning("LỖI", "Vui lòng nhập số giờ");
             }
         }
     }
