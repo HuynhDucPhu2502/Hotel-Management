@@ -62,26 +62,6 @@ public class DashboardController {
         Platform.runLater(this::loadNumberOfRoomInformation);
     }
 
-    private void loadNumberOfRoomInformation(){
-        TimelineManager.getInstance().removeTimeline("REALTIME_DASHBOARD");
-        getNumbersOfRoomInformation();
-        Timeline timeline =  new Timeline(new KeyFrame(Duration.seconds(60), event -> {
-            getNumbersOfRoomInformation();
-        }));
-
-        timeline.setCycleCount(Timeline.INDEFINITE); // Lặp vô hạn
-        timeline.play(); // Bắt đầu chạy
-
-        TimelineManager.getInstance().addTimeline("REALTIME_DASHBOARD", timeline);
-    }
-
-    private void getNumbersOfRoomInformation(){
-        HashMap<RoomStatus, Integer> roomStatusCount = RoomDAO.getRoomStatusCount();
-        roomAvailabelCountLabel.setText(String.valueOf(roomStatusCount.get(RoomStatus.AVAILABLE)));
-        roomOnUseCountLabel.setText(String.valueOf(roomStatusCount.get(RoomStatus.ON_USE)));
-        roomOverdueCountLabel.setText(String.valueOf(roomStatusCount.get(RoomStatus.OVERDUE)));
-    }
-
     private void loadDataIntoKeywords() {
         featureKeywordFXMLMapping = new HashMap<>();
         Position position = account.getEmployee().getPosition();
@@ -136,35 +116,36 @@ public class DashboardController {
             featureKeywordFXMLMapping.put(createKeyword("Xóa dịch vụ", "Xóa dịch vụ, xoa dich vu, xdv"), "/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml");
             featureKeywordFXMLMapping.put(createKeyword("Cập nhật dịch vụ", "Cập nhật dịch vụ, cap nhat dich vu, cndv"), "/iuh/fit/view/features/service/HotelServiceManagerPanel.fxml");
 
-            featureKeywordFXMLMapping.put(createKeyword("Sao lưu dữ liệu", "Sao lưu dữ liệu, sao luu du lieu, backup"), "/iuh/fit/view/features/backup/BackupPanel.fxml");
+            featureKeywordFXMLMapping.put(createKeyword("Sao lưu dữ liệu", "Sao lưu dữ liệu, sao luu du lieu, backup"), "/iuh/fit/view/features/backup_restore_database/Backup_Restore_Panel.fxml");
         }
+    }
+
+    private void loadNumberOfRoomInformation(){
+        TimelineManager.getInstance().removeTimeline("REALTIME_DASHBOARD");
+        getNumbersOfRoomInformation();
+        Timeline timeline =  new Timeline(new KeyFrame(Duration.seconds(60), event -> {
+            getNumbersOfRoomInformation();
+        }));
+
+        timeline.setCycleCount(Timeline.INDEFINITE); // Lặp vô hạn
+        timeline.play(); // Bắt đầu chạy
+
+        TimelineManager.getInstance().addTimeline("REALTIME_DASHBOARD", timeline);
+    }
+
+
+
+    private void getNumbersOfRoomInformation(){
+        HashMap<RoomStatus, Integer> roomStatusCount = RoomDAO.getRoomStatusCount();
+        roomAvailabelCountLabel.setText(String.valueOf(roomStatusCount.get(RoomStatus.AVAILABLE)));
+        roomOnUseCountLabel.setText(String.valueOf(roomStatusCount.get(RoomStatus.ON_USE)));
+        roomOverdueCountLabel.setText(String.valueOf(roomStatusCount.get(RoomStatus.OVERDUE)));
     }
 
     private HashMap<String, String> createKeyword(String functionName, String keyword) {
         HashMap<String, String> map = new HashMap<>();
         map.put(functionName, keyword);
         return map;
-    }
-
-    private void loadFeaturesIntoGridPane() {
-        featureGridPane.getChildren().clear();
-        int row = 0;
-        int col = 0;
-
-        for (HashMap<String, String> featureMap : featureKeywordFXMLMapping.keySet()) {
-            String functionName = featureMap.keySet().iterator().next();
-            String fxmlPath = featureKeywordFXMLMapping.get(featureMap);
-
-            HBox featureBox = createFeatureBox(functionName, fxmlPath);
-
-            featureGridPane.add(featureBox, col, row);
-
-            col++;
-            if (col == 4) {
-                col = 0;
-                row++;
-            }
-        }
     }
 
     private HBox createFeatureBox(String functionName, String fxmlPath) {
@@ -188,6 +169,26 @@ public class DashboardController {
         return featureBox;
     }
 
+    private void loadFeaturesIntoGridPane() {
+        featureGridPane.getChildren().clear();
+        int row = 0;
+        int col = 0;
+
+        for (HashMap<String, String> featureMap : featureKeywordFXMLMapping.keySet()) {
+            String functionName = featureMap.keySet().iterator().next();
+            String fxmlPath = featureKeywordFXMLMapping.get(featureMap);
+
+            HBox featureBox = createFeatureBox(functionName, fxmlPath);
+
+            featureGridPane.add(featureBox, col, row);
+
+            col++;
+            if (col == 4) {
+                col = 0;
+                row++;
+            }
+        }
+    }
 
     private void bindSearchFunctionality() {
         inputTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -220,8 +221,5 @@ public class DashboardController {
             }
         });
     }
-
-
-
 
 }
