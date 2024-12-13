@@ -20,7 +20,6 @@ public class Application extends javafx.application.Application {
         primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/iuh/fit/imgs/hotel_logo.png")).toString()));
 
         startWithLogin(primaryStage);
-        //startWithoutLogin(primaryStage);
     }
 
     public void startWithLogin(Stage primaryStage) {
