@@ -14,14 +14,13 @@ public class HelpCenterWebController {
 
     private WebEngine engine;
 
+    private final String WEBSITE_PATH =
+            "https://huynhducphu2502.github.io/Hotel-Management-HelpCenter/index.html";
+
     @FXML
     private void initialize() {
-        String helpFilePath = Objects.requireNonNull(getClass().getResource(
-                "/iuh/fit/help-center-website/html/index.html"
-        )).toExternalForm();
-
         engine = webView.getEngine();
-        engine.load(helpFilePath);
+        engine.load(WEBSITE_PATH);
 
         locationLabel.textProperty().bind(engine.locationProperty());
     }
