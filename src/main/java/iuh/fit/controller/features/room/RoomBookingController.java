@@ -6,7 +6,6 @@ import iuh.fit.controller.features.NotificationButtonController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomAvailableItemController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOnUseItemController;
 import iuh.fit.controller.features.room.creating_reservation_form_controllers.RoomOverDueController;
-import iuh.fit.controller.features.room.group_booking_controllers.GroupBookingController;
 import iuh.fit.dao.RoomCategoryDAO;
 import iuh.fit.dao.RoomDAO;
 import iuh.fit.dao.RoomWithReservationDAO;
@@ -22,7 +21,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
@@ -43,8 +41,7 @@ public class RoomBookingController {
 
     @FXML
     private Button allBtn, availableBtn,
-            onUseBtn, overDueBtn,
-            groupBookingBtn;
+            onUseBtn, overDueBtn;
 
     @FXML
     private DialogPane dialogPane;
@@ -74,7 +71,6 @@ public class RoomBookingController {
         loadData();
         setupEventHandlers();
 
-        groupBookingBtn.setOnAction(e -> navigateToGroupBookingPanel());
     }
 
     private List<String> getRoomCategories() {
@@ -274,21 +270,6 @@ public class RoomBookingController {
         }
     }
 
-    private void navigateToGroupBookingPanel() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/iuh/fit/view/features/room/group_booking_panels/GroupBookingPanel.fxml"));
-            AnchorPane layout = loader.load();
-
-            GroupBookingController groupBookingController = loader.getController();
-            groupBookingController.setupContext(mainController, employee, notificationButtonController);
-
-
-            mainController.getMainPanel().getChildren().clear();
-            mainController.getMainPanel().getChildren().addAll(layout.getChildren());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public DialogPane getDialogPane() {
         return dialogPane;
